@@ -1,0 +1,6 @@
+# Description: Environment variables for the application
+
+	# Postgres configuration
+	POSTGRES_USER=
+	POSTGRES_PASSWORD=
+	POSTGRES_DB=

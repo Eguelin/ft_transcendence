@@ -1,0 +1,27 @@
+services:
+
+  # PostgreSQL service
+  postgres:
+    image: postgres:16.3
+    container_name: postgres
+    env_file:
+      - .env
+    networks:
+      - transcendence
+
+  # Nginx service
+  nginx:
+    build: src/nginx/
+    image: nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    networks:
+      - transcendence
+
+networks:
+
+  # Transcendence network
+  transcendence:
+    name: transcendence
+    driver: bridge
