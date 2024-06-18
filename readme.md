@@ -16,7 +16,7 @@ You need to have Docker installed on your machine.
 ### Installation
 
 1. Clone the repo
-  ```sh
-  git clone https://github.com/Eguelin/ft_transcendence.git
-  ```
+    ```sh
+    git clone https://github.com/Eguelin/ft_transcendence.git
+    ```
 
