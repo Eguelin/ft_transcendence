@@ -19,6 +19,16 @@ services:
     networks:
       - transcendence
 
+  # Django service
+  django:
+    build: src/django/
+    image: django
+    container_name: django
+    env_file:
+      - .env
+    networks:
+      - transcendence
+
 networks:
 
   # Transcendence network
