@@ -19,9 +19,9 @@ You need to have Docker installed on your machine.
     ```sh
     git clone https://github.com/Eguelin/ft_transcendence.git
     ```
-2. Create an .env file from .envTemplate and complete it
+2. Create an .env file from .env-example and complete it
     ```sh
-    cp .envTemplate .env
+    cp .env-example .env
     ```
 3. Build the docker compose
     ```sh
