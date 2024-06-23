@@ -7,20 +7,21 @@ services:
     env_file:
       - .env
     volumes:
-      - ./src/postgres/data:/var/lib/postgresql/data
+      - ./src/db/data:/var/lib/postgresql/data
     networks:
       - transcendence
     restart: always
 
   # web server service
   webserver:
-    build: src/nginx/
+    build: src/webserver/
     image: webserver
     container_name: webserver
     volumes:
-      - ./src/nginx/conf:/etc/nginx/conf.d
-      - ./src/nginx/html:/usr/share/nginx/html
+      - ./src/webserver/conf:/etc/nginx/conf.d
+      - ./src/webserver/html:/usr/share/nginx/html
     ports:
+      - "49300:443"
       - "443:443"
     networks:
       - transcendence
@@ -30,13 +31,13 @@ services:
 
   # transcendence backend service
   transcendence:
-    build: src/django/
+    build: src/transcendence
     image: transcendence
     container_name: transcendence
     env_file:
       - .env
     volumes:
-      - ./src/django/app:/app
+      - ./src/transcendence/app:/app
     command: python manage.py runserver 0.0.0.0:8000 # use this command for development
     # command: gunicorn --bind 0.0.0.0:8000 transcendence.wsgi:application # use this command for production
     networks:

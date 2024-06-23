@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ft-transcendence</title>
+</head>
+<body>
+    <h1>ft-transcendence</h1>
+    <script>
+        fetch('/api/admin/')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Traitez les données ici
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    </script>
+</body>
+</html>
