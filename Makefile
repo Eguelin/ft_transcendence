@@ -6,7 +6,7 @@
 #    By: eguelin <eguelin@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/28 17:47:48 by eguelin           #+#    #+#              #
-#    Updated: 2024/06/23 15:12:43 by eguelin          ###   ########.fr        #
+#    Updated: 2024/06/23 16:54:31 by eguelin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ DC		= docker compose
 COMPOSE_FILE	= docker-compose.yml
 
 SRCS_DIR		= src/
-DB_DIR		= $(SRCS_DIR)db/data
+DB_DIR		= $(SRCS_DIR)db/
 
 # **************************************************************************** #
 #                                     Rules                                    #
@@ -35,7 +35,7 @@ DB_DIR		= $(SRCS_DIR)db/data
 
 all: $(NAME)
 
-$(NAME): $(VOLUMES_DIR)
+$(NAME): $(DB_DIR)
 	$(DC) -f $(COMPOSE_FILE) up --build
 
 down:
@@ -49,9 +49,9 @@ clean:
 fclean: clean
 	docker system prune --force --all;
 	docker volume prune -f;
-	sudo rm -rf $(DB_DIR)
+	sudo rm -rf $(DB_DIR)data
 
 re: fclean all
 
-$(VOLUMES_DIR):
-	mkdir -p $(MARIADB_DIR) $(WORDPRESS_DIR)
+$(DB_DIR):
+	mkdir -p $@
