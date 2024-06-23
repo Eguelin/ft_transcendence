@@ -6,7 +6,7 @@
 #    By: eguelin <eguelin@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/28 17:47:48 by eguelin           #+#    #+#              #
-#    Updated: 2024/06/23 16:54:31 by eguelin          ###   ########.fr        #
+#    Updated: 2024/06/23 17:05:30 by eguelin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ DC		= docker compose
 COMPOSE_FILE	= docker-compose.yml
 
 SRCS_DIR		= src/
-DB_DIR		= $(SRCS_DIR)db/
+DB_DIR			= $(SRCS_DIR)db/
 
 # **************************************************************************** #
 #                                     Rules                                    #
