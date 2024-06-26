@@ -18,7 +18,6 @@ services:
     image: webserver
     container_name: webserver
     volumes:
-      - ./src/webserver/conf:/etc/nginx/conf.d
       - ./src/webserver/html:/usr/share/nginx/html
     ports:
       - "49300:443"
@@ -38,8 +37,8 @@ services:
       - .env
     volumes:
       - ./src/transcendence/app:/app
-    command: python manage.py runserver 0.0.0.0:8000 # use this command for development
-    # command: gunicorn --bind 0.0.0.0:8000 transcendence.wsgi:application # use this command for production
+    command: wait-for-postgres $POSTGRES_HOST:$POSTGRES_PORT python manage.py runserver 0.0.0.0:8000 # use this command for development
+    # command: wait-for-postgres $POSTGRES_HOST:$POSTGRES_PORT gunicorn --bind 0.0.0.0:8000 transcendence.wsgi:application # use this command for production
     networks:
       - transcendence
     depends_on:
