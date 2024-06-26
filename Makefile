@@ -6,7 +6,7 @@
 #    By: eguelin <eguelin@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/28 17:47:48 by eguelin           #+#    #+#              #
-#    Updated: 2024/06/26 16:21:05 by eguelin          ###   ########.fr        #
+#    Updated: 2024/06/26 19:26:08 by eguelin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ DB_DIR	= ~/goinfre/db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-	$(DC) up --build
+	$(DC) up --build -d
 
 down:
 	$(DC) down
