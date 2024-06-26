@@ -6,7 +6,7 @@
 #    By: eguelin <eguelin@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/28 17:47:48 by eguelin           #+#    #+#              #
-#    Updated: 2024/06/23 17:05:30 by eguelin          ###   ########.fr        #
+#    Updated: 2024/06/26 16:21:05 by eguelin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,10 +24,7 @@ DC		= docker compose
 #                                    Sources                                   #
 # **************************************************************************** #
 
-COMPOSE_FILE	= docker-compose.yml
-
-SRCS_DIR		= src/
-DB_DIR			= $(SRCS_DIR)db/
+DB_DIR	= ~/goinfre/db/
 
 # **************************************************************************** #
 #                                     Rules                                    #
@@ -36,20 +33,20 @@ DB_DIR			= $(SRCS_DIR)db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-	$(DC) -f $(COMPOSE_FILE) up --build
+	$(DC) up --build
 
 down:
-	$(DC) -f $(COMPOSE_FILE) down
+	$(DC) down
 
 restart: down all
 
 clean:
-	$(DC) -f $(COMPOSE_FILE) down --volumes --rmi all
+	$(DC) down --volumes --rmi all
 
 fclean: clean
 	docker system prune --force --all;
 	docker volume prune -f;
-	sudo rm -rf $(DB_DIR)data
+	sudo rm -rf $(DB_DIR)
 
 re: fclean all
 
