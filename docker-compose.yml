@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./src/db/data:/var/lib/postgresql/data
+      - ~/goinfre/db/data:/var/lib/postgresql/data
     networks:
       - transcendence
     restart: always
