@@ -46,7 +46,6 @@ clean:
 fclean: clean
 	docker system prune --force --all;
 	docker volume prune -f;
-	sudo rm -rf $(DB_DIR)
 
 re: fclean all
 

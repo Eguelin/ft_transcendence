@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ~/goinfre/db/data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     networks:
       - transcendence
     restart: always
@@ -21,7 +21,6 @@ services:
       - ./src/webserver/html:/usr/share/nginx/html
     ports:
       - "49300:443"
-      - "443:443"
     networks:
       - transcendence
     depends_on:
@@ -44,6 +43,11 @@ services:
     depends_on:
       - db
     restart: always
+
+volumes:
+  db_data:
+    name: db_data
+    driver: local
 
 networks:
 
