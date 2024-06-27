@@ -45,6 +45,8 @@ services:
     restart: always
 
 volumes:
+
+  # database data volume
   db_data:
     name: db_data
     driver: local
