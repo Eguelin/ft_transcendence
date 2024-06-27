@@ -1,0 +1,262 @@
+@font-face{
+	font-family: 'pong';
+/*	src: url('fonts/PRNumber3.ttf'); */
+	src: url('fonts/PrintChar21.ttf');
+}
+
+body{
+	font-family:'pong';
+	background-color: #110026;
+	height: 100%;
+}
+
+h1{
+	color: #FDFDFB;
+	height: inherit;
+	font-size: 10vh;
+	font-style: italic;
+	margin-top: 5vh;
+	margin-bottom: 5vh;
+}
+
+.options {
+	text-align: center;
+	color: #FDFDFB;
+	font-size: 7vh;
+	font-style:italic;
+	font-weight:thin;	
+	padding-top:2vh;
+	margin-left:auto;
+	margin-right:auto;
+	width:fit-content;
+}
+
+.options:hover{
+	color: #FFDBDE;
+}
+
+input{
+	font-family:'pong';
+	border: 0.2px solid #FFDBDE;
+	color: #FFDBDE;
+	background-color: #3A3053;
+	border-radius: 1.5vw;
+	font-size: 1vh;
+	padding-top:1.5vh;
+	padding-left: 1vw;
+	padding-bottom: 1.5vh;
+	padding-right: 1vw;
+	width: 18vw;
+}
+
+input:focus{
+	outline: none;
+}
+
+.forms {
+	text-align: center;
+	color: #FDFDFB;
+	font-style:italic;
+	font-weight:thin;	
+	margin-left:auto;
+	margin-right:auto;
+	padding-top: 5vh;
+	width:20vw;
+}
+
+#forgotPassword{
+	width:18vw;
+   	text-align: left; 
+	padding-top:0; 
+	color:#3A3053; 
+	font-size:1vh; 
+	padding-top:1vh;
+	display: block flex;
+}
+
+#forgotPassword a{
+	width: inherit;
+	flex: auto;
+}
+
+.loginBtn {
+	text-align: center;
+	background-color: #3a3053;
+	color: #FDFDFB;
+	font-weight: thin;	
+	font-family: "pong";
+	font-size: 4vh;
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid #FFDBDE;
+	border-radius: 1.5vw;
+}
+
+#loginOpt{
+	text-align: center;
+	color: #FDFDFB;
+	font-size: 3vh;
+	font-weight:thin;
+	padding-top:2vh;
+	margin-left:auto;
+	margin-right:auto;
+	width:fit-content;
+}
+
+#externalLogin {
+	margin-left:auto;
+	margin-right:auto;
+	margin-top: 1vh;
+	width:20vw;
+	height: 5vh;
+	display: flex;
+}
+
+#fortyTwoLogin{
+	mask-image:url("svg/42.svg");
+	background:#FDFDFB;
+	height:10vh;
+	width:5vw;
+	top:5vh;
+	left:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	flex: 1;
+}
+
+#githubLogin{
+	mask-image:url("svg/github.svg");
+	background:#FDFDFB;
+	height:10vh;
+	width:5vw;
+	top:5vh;
+	left:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	flex: 1;
+}
+
+#googleLogin{
+	background-image:url("svg/google.svg");
+	height:10vh;
+	width:5vw;
+	top:5vh;
+	left:5vw;
+	background-size:contain;
+	background-position:center;
+	background-repeat:no-repeat;
+	flex: 1;
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+#goHomeButton{
+	mask-image:url("svg/left_arrow.svg");
+	background:#fdfdfb;
+	height:10vh;
+	width:5vw;
+	position:absolute;
+	top:5vh;
+	left:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+#themeButton{
+	mask-image:url("svg/button-night-mode.svg");
+	background:#fdfdfb;
+	height:10vh;
+	width:5vw;
+	position:absolute;
+	top:5vh;
+	right:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+.dropDownBtn {
+	text-align: left;
+	background-color: #3a3053;
+	color: #FDFDFB;
+	font-style: italic;
+	font-weight: thin;	
+	font-family: "pong";
+	font-size: 4vh;
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0;
+}
+
+.dropDown{
+	position: relative;
+	display: inline-block;
+	border: 0.2vh solid;
+	border-color: #FFDBDE;
+	background-color: #3A3053;
+	margin: 2vh 0 0 25vw;
+	padding-right: 0.1vw;
+	width: fit-content;
+}
+
+.dropDownArrow{
+	mask-image:url("svg/right_arrow.svg");
+	background:#fdfdfb;
+	height:5vh;
+	width:5vw;
+	position:absolute;
+	top:0.5vh;
+	right:0vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+.dropDown:hover .dropDownArrow{
+	transform: rotate(90deg);	
+	right: 12.5vw;
+}
+
+.dropDown:hover .dropDownBtn{
+	display: inline-block;
+	width: 50vw;
+}
+
+.dropDown:hover .dropDownContent{
+	border: 0.2vh solid #FFDBDE;
+	border-block-start: #3A3053;
+	width:29vw;
+	margin-left: 21vw;
+	margin-right: 20vw;
+	position: absolute;
+	display: block;
+	z-index: 1;
+}
+
+.dropDownContent{
+	display: none;
+	background-color: #3a3053;
+	width: 20vw;
+}
+
+
+.dropDownContent a{
+	text-align: center;
+	color: inherit;
+	text-decoration: inherit;
+	font-size: 4vh;
+	padding: 1vh 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 20vw;
+	display: block;
+}
+.dropDownContent a:hover{
+	color: #fdfdfb;
+}

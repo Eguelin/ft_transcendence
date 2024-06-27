@@ -1,0 +1,34 @@
+<div style="height:fit-content; text-align: center;">
+	<div onclick="changeToHome()" id="goHomeButton"></div>
+	<h1>LOGIN</h1>
+	<div onclick="changeTheme()" id="themeButton"></div>
+</div>
+<div style="height:fit-content; text-align: center;">
+	<div id="loginOpt">
+		<a>Login with credentials</a>
+	</div>
+	<div class="forms">
+		<input type="text" id="username" name="username" placeholder="Username"/>
+	</div>
+	<div class="forms">
+		<input type="password" id="password" name="password" placeholder="Password"/>
+	</div>
+	<div class="forms" id="forgotPassword">
+		<a style="text-align: left;">Forgot password</a>
+		<a onclick="changeToRegister()" style="text-align: right;">register</a>
+	</div>
+
+	<div class="forms">
+		<button onclick="changeToHome()" class="loginBtn">LOGIN</button>
+	</div>
+	<div id="loginOpt" style="margin-top:3vh;">
+		<a>Other login options</a>
+	</div>
+	<div id="externalLogin">
+		<div id="fortyTwoLogin"></div>
+		<div style="flex:1;"></div>
+		<div id="githubLogin"></div>
+		<div style="flex:1;"></div>
+		<div id="googleLogin"></div>
+	</div>
+</div>
