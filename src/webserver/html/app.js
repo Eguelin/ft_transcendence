@@ -113,11 +113,6 @@ function getCurrentUser() {
 		}
 		console.log("Failed to get user")
 	})
-	.then(data => {
-		console.log('User ID:', data.id);
-		console.log('Username:', data.username);
-		console.log('Email:', data.email);
-	})
 	.catch(error => {
 		console.error('There was a problem with the fetch operation:', error);
 	});
