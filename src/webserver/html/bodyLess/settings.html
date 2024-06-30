@@ -1,15 +1,15 @@
 <div style="height:fit-content; text-align: center;">
 	<div onclick="loadPage('home')" id="goHomeButton"></div>
 	<h1>SETTINGS</h1>
-	<div onclick="changeTheme()" id="themeButton"></div>
+	<div onclick="switchTheme()" id="themeButton"></div>
 </div>
 <div style="height:fit-content;">
 	<div class="dropDown">
 		<button class="dropDownBtn">Themes</button>
 		<div class="dropDownArrow"></div>
 		<div class="dropDownContent">
-			<a onclick="changeToLightMode()">Light</a>
-			<a onclick="changeToDarkMode()">Dark</a>
+			<a onclick="loadTheme('light')">Light</a>
+			<a onclick="loadTheme('dark')">Dark</a>
 		</div>
 	</div>
 </div>

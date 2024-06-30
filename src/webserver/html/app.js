@@ -9,7 +9,7 @@ async function loadPage(wanted){
 
 }
 
-async function changeTheme(){
+async function switchTheme(){
 	const style = document.getElementById("style");
 	const href = style.getAttribute('href');
 	if (href == "lightMode.css")
@@ -18,12 +18,7 @@ async function changeTheme(){
 		style.setAttribute('href', "lightMode.css");
 }
 
-async function changeToDarkMode(){
+async function loadTheme(wanted){
 	const style = document.getElementById("style");
-	style.setAttribute('href', "darkMode.css");
-}
-
-async function changeToLightMode(){
-	const style = document.getElementById("style");
-	style.setAttribute('href', "lightMode.css");
+	style.setAttribute('href', wanted+"Mode.css");
 }
