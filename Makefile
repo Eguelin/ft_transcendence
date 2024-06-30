@@ -33,7 +33,7 @@ DB_DIR	= ~/goinfre/db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-	$(DC) up --build -d
+	$(DC) up --build
 
 down:
 	$(DC) down
