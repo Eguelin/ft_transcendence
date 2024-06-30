@@ -1,35 +1,12 @@
-changeToLogin();
+loadPage('login');
 
-async function changeToLogin(){
-	const contain = document.getElementById("container");
-	const response = await fetch("bodyLess/login.html");
-	const txt = await response.text();
-	
-	contain.innerHTML=txt;
-}
 
-async function changeToRegister(){
+async function loadPage(wanted){
 	const contain = document.getElementById("container");
-	const response = await fetch("bodyLess/register.html");
+	const response = await fetch("bodyLess/"+wanted+".html");
 	const txt = await response.text();
-	
 	contain.innerHTML=txt;
-}
 
-async function changeToSettings(){
-	const contain = document.getElementById("container");
-	const response = await fetch("bodyLess/settings.html");
-	const txt = await response.text();
-	
-	contain.innerHTML=txt;
-}
-
-async function changeToHome(){
-	const contain = document.getElementById("container");
-	const response = await fetch("bodyLess/home.html");
-	const txt = await response.text();
-	
-	contain.innerHTML=txt;
 }
 
 async function changeTheme(){
