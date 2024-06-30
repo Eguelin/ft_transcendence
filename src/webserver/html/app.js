@@ -20,10 +20,7 @@ window.addEventListener("popstate", (event) => {
 async function switchTheme(){
 	const style = document.getElementById("style");
 	const href = style.getAttribute('href');
-	if (href == "lightMode.css")
-		style.setAttribute('href', "darkMode.css");
-	else
-		style.setAttribute('href', "lightMode.css");
+	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
 }
 
 async function loadTheme(wanted){
