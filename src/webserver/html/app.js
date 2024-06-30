@@ -5,9 +5,17 @@ async function loadPage(wanted){
 	const contain = document.getElementById("container");
 	const response = await fetch("bodyLess/"+wanted+".html");
 	const txt = await response.text();
+	history.pushState(txt, wanted);
 	contain.innerHTML=txt;
 
 }
+
+window.addEventListener("popstate", (event) => {
+	if (event.state){
+		const contain = document.getElementById("container");
+		contain.innerHTML = event.state;
+	}
+});
 
 async function switchTheme(){
 	const style = document.getElementById("style");
