@@ -3,9 +3,9 @@ loadPage('login');
 
 async function loadPage(wanted){
 	const contain = document.getElementById("container");
-	const response = await fetch("bodyLess/"+wanted+".html");
+	const response = await fetch(`bodyLess/${wanted}.html`);
 	const txt = await response.text();
-	history.pushState(txt, wanted);
+	history.pushState(txt, "");
 	contain.innerHTML=txt;
 
 }
@@ -28,5 +28,5 @@ async function switchTheme(){
 
 async function loadTheme(wanted){
 	const style = document.getElementById("style");
-	style.setAttribute('href', wanted+"Mode.css");
+	style.setAttribute('href', `${wanted}Mode.css`);
 }
