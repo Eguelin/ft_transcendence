@@ -1,19 +1,17 @@
-loadPage('login', false);
+loadPage('login');
 
-async function loadPage(wanted, save){
+async function loadPage(wanted){
 	const contain = document.getElementById("container");
 	const response = await fetch(`bodyLess/${wanted}.html`);
 	const txt = await response.text();
-	contain.innerHTML=txt;
-	console.log(`addstate ${save}: ${txt}`);
-	if (save == true)
+	if (contain.innerHTML != "")
 		history.pushState(txt, "");
 	else
 		history.replaceState(txt,"");
+	contain.innerHTML=txt;
 }
 
 window.addEventListener("popstate", (event) => {
-	console.log(`popstate: ${event.state}`);
 	if (event.state){
 		const contain = document.getElementById("container");
 		contain.innerHTML = event.state;
