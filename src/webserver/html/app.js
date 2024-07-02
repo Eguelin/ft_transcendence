@@ -1,4 +1,5 @@
-loadPage('login');
+//loadPage('login');
+loadPage('register');
 
 async function loadPage(wanted){
 	const contain = document.getElementById("container");
@@ -51,6 +52,21 @@ function loginUser(username, password)
 	.catch(error => {
 		console.error('There was a problem with the fetch operation:', error);
 	});
+}
+
+function registerUser(){
+	email = document.getElementById('mail').value;
+	username = document.getElementById('username').value;
+	pw = document.getElementById('password').value;
+	cpw = document.getElementById('cPassword').value;
+	if (pw != cpw)
+		return ;
+	if (email == "")
+		return ;
+	if (username == "")
+		return ;
+	createUser(username, pw);
+	loadPage('home');
 }
 
 function createUser(username, password)
