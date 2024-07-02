@@ -1,5 +1,4 @@
-//loadPage('login');
-loadPage('register');
+loadPage('login');
 
 async function loadPage(wanted){
 	const contain = document.getElementById("container");
@@ -28,6 +27,16 @@ async function switchTheme(){
 async function loadTheme(wanted){
 	const style = document.getElementById("style");
 	style.setAttribute('href', `${wanted}Mode.css`);
+}
+
+function login(){
+	username = document.getElementById('username').value;
+	pw = document.getElementById('password').value;
+	if (pw == "")
+		return ;
+	if (username == "")
+		return ;
+	loginUser(username, pw);
 }
 
 function loginUser(username, password)
@@ -59,7 +68,7 @@ function registerUser(){
 	username = document.getElementById('username').value;
 	pw = document.getElementById('password').value;
 	cpw = document.getElementById('cPassword').value;
-	if (pw != cpw)
+	if (pw != cpw || pw == "")
 		return ;
 	if (email == "")
 		return ;
