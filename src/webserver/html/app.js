@@ -32,11 +32,30 @@ async function loadTheme(wanted){
 function login(){
 	username = document.getElementById('username').value;
 	pw = document.getElementById('password').value;
-	if (pw == "")
-		return ;
-	if (username == "")
-		return ;
-	loginUser(username, pw);
+	if (pw == "" || username == ""){
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "Field can't be empty";
+		
+		if (pw == "" && document.getElementById("warningEmptyPassword") == null){
+			warningP = warning.cloneNode(true);
+			warningP.id = "warningEmptyPassword";
+			document.getElementById("password").before(warningP);
+		}
+		else if (pw != "" && document.getElementById("warningEmptyPassword")){
+			document.getElementById("warningEmptyPassword").remove();
+		}
+		
+		if (username == "" && document.getElementById("warningEmptyUsername") == null){
+			warning.id = "warningEmptyUsername";
+			document.getElementById("username").before(warning);
+		}
+		else if (username != "" && document.getElementById("warningEmptyUsername")){
+			document.getElementById("warningEmptyUsername").remove();
+		}
+	}
+	else
+		loginUser(username, pw);
 }
 
 function loginUser(username, password)
