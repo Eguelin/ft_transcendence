@@ -87,14 +87,50 @@ function registerUser(){
 	username = document.getElementById('username').value;
 	pw = document.getElementById('password').value;
 	cpw = document.getElementById('cPassword').value;
-	if (pw != cpw || pw == "")
+	if (pw == "" || cpw == "" || username == "" || email == ""){
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "Field can't be empty";
+		
+		if (pw == "" && document.getElementById("warningEmptyPassword") == null){
+			warningP = warning.cloneNode(true);
+			warningP.id = "warningEmptyPassword";
+			document.getElementById("password").before(warningP);
+		}
+		else if (pw != "" && document.getElementById("warningEmptyPassword")){
+			document.getElementById("warningEmptyPassword").remove();
+		}
+		
+		if (cpw == "" && document.getElementById("warningEmptyCPassword") == null){
+			warningCP = warning.cloneNode(true);
+			warningCP.id = "warningEmptyCPassword";
+			document.getElementById("cPassword").before(warningCP);
+		}
+		else if (cpw != "" && document.getElementById("warningEmptyCPassword")){
+			document.getElementById("warningEmptyCPassword").remove();
+		}
+		
+		if (email == "" && document.getElementById("warningEmptyMail") == null){
+			warningM = warning.cloneNode(true);
+			warningM.id = "warningEmptyMail";
+			document.getElementById("mail").before(warningM);
+		}
+		else if (email != "" && document.getElementById("warningEmptyMail")){
+			document.getElementById("warningEmptyMail").remove();
+		}
+		
+		if (username == "" && document.getElementById("warningEmptyUsername") == null){
+			warning.id = "warningEmptyUsername";
+			document.getElementById("username").before(warning);
+		}
+		else if (username != "" && document.getElementById("warningEmptyUsername")){
+			document.getElementById("warningEmptyUsername").remove();
+		}
+	}
+	else if (pw != cpw)
 		return ;
-	if (email == "")
-		return ;
-	if (username == "")
-		return ;
-	createUser(username, pw);
-	loadPage('home');
+	else
+		createUser(username, pw);
 }
 
 function createUser(username, password)
@@ -111,7 +147,7 @@ function createUser(username, password)
 	.then(response => {
 		if (response.ok) {
 			console.log('User created successfully');
-			loadPage('login');
+			loadPage('home');
 		} else {
 			console.log("Failed to create user")
 		}
