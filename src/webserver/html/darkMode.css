@@ -158,6 +158,12 @@ a {
 .warning {
 	color: #FF0000;
 	font-size: 0.9vh;
+	position: relative;
+	bottom: 2vh;
+	text-align: left;
+	display: block;
+	height: 0;
+	left: 1vw;
 }
 
 #goHomeButton{
