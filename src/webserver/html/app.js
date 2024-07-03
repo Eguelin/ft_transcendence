@@ -127,8 +127,21 @@ function registerUser(){
 			document.getElementById("warningEmptyUsername").remove();
 		}
 	}
-	else if (pw != cpw)
-		return ;
+	else if (pw != cpw){
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "Passwords do not match";
+		if (document.getElementById("warningEmptyCPassword"))
+			document.getElementById("warningEmptyCPassword").remove();
+		
+		if (document.getElementById("warningPasswordDoNotMatch") == null){
+			warning.id = "warningPasswordDoNotMatch";
+			document.getElementById("cPassword").before(warning);
+		}
+		else if (cpw != "" && document.getElementById("warningEmptyCPassword")){
+			document.getElementById("warningEmptyCPassword").remove();
+		}
+	}
 	else
 		createUser(username, pw);
 }
