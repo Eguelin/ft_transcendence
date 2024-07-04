@@ -160,6 +160,7 @@ function createUser(username, password)
 	.then(response => {
 		if (response.ok) {
 			console.log('User created successfully');
+			console.log(response.json())
 			loadPage('home');
 		} else {
 			console.log("Failed to create user")

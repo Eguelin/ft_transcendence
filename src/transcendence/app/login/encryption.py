@@ -123,7 +123,4 @@ def md5(s: bytes) -> bytes:
 	state = md5State()
 	state.process(BytesIO(s))
 	state.finalise()
-	print(state.hex_digest())
-	return (state.digest())
-	
-md5(b"hello")
+	return (state.hex_digest())

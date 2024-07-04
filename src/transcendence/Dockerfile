@@ -10,6 +10,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+#for encryption, temporary
+RUN pip install numpy 
+
 # Copy script
 COPY script/ /bin/
 RUN chmod 777 /bin/wait-for-postgres
