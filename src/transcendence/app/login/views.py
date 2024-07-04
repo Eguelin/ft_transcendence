@@ -1,6 +1,7 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from login import encryption
 import json
 
 def create_user(request):
@@ -8,12 +9,14 @@ def create_user(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	data = json.loads(request.body)
 	username = data['username']
-	password = data['password']
+	password = encryption.md5(bytes(data['password'], 'utf'))
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	user = User.objects.create_user(username=username, password=password)
 	user.save()
-	return JsonResponse({'message': 'User created'})
+	#return JsonResponse({'message': 'User created'})
+	
+	return JsonResponse({'message': 'User created', 'id' : user.id, 'password' : password}) # for debuging
 	
 def user_login(request):
 	if request.method != 'POST':
@@ -21,7 +24,7 @@ def user_login(request):
 
 	data = json.loads(request.body)
 	username = data['username']
-	password = data['password']
+	password = encryption.md5(bytes(data['password'], 'utf'))
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 
