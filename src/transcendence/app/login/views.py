@@ -9,14 +9,14 @@ def create_user(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	data = json.loads(request.body)
 	username = data['username']
-	password = encryption.md5(bytes(data['password'], 'utf'))
+	password = data['password']
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	user = User.objects.create_user(username=username, password=password)
 	user.save()
 	#return JsonResponse({'message': 'User created'})
 	
-	return JsonResponse({'message': 'User created', 'id' : user.id, 'password' : password}) # for debuging
+	return JsonResponse({'message': 'User created', 'id' : user.id, 'password' : user.password}) # for debuging
 	
 def user_login(request):
 	if request.method != 'POST':
