@@ -1,5 +1,5 @@
-//loadPage('login');
-loadPage('register');
+loadPage('login');
+//loadPage('register');
 
 async function loadPage(wanted){
 	const contain = document.getElementById("container");
@@ -37,6 +37,9 @@ function login(){
 	warning = document.createElement("a");
 	warning.className = "warning";
 	warning.text = "Field can't be empty";
+	btn = document.getElementById('loginBtn');
+	if (btn.previousElementSibling)
+		btn.previousElementSibling.remove();
 	for (i=0;i<inputs.length;i++){
 		if (inputs[i].value == "" && !inputs[i].previousElementSibling){
 			warningTmp = warning.cloneNode(true);
@@ -50,10 +53,10 @@ function login(){
 		loginUser(username, pw);
 }
 
-function loginUser(username, password)
+async function loginUser(username, password)
 {
 	const data = {username: username, password: password};
-	fetch('/api/user/login', {
+	let txt = await fetch('/api/user/login', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -65,13 +68,20 @@ function loginUser(username, password)
 		if (response.ok) {
 			console.log('User logged in successfully');
 			loadPage('home');
+			return ("");
 		} else {
 			console.log("Failed to login user")
+			return response.json().then((text => {
+				return (text.message);
+			}));
 		}
 	})
-	.catch(error => {
-		console.error('There was a problem with the fetch operation:', error);
-	});
+	warning = (document.createElement("a"));
+	warning.className = "warning";
+	warning.text = txt;
+	btn = document.getElementById('loginBtn');
+	if (!btn.previousElementSibling)
+		btn.before(warning);
 }
 
 function registerUser(){
