@@ -1,4 +1,5 @@
-loadPage('login');
+//loadPage('login');
+loadPage('register');
 
 async function loadPage(wanted){
 	const contain = document.getElementById("container");
@@ -32,29 +33,20 @@ async function loadTheme(wanted){
 function login(){
 	username = document.getElementById('username').value;
 	pw = document.getElementById('password').value;
-	if (pw == "" || username == ""){
-		warning = document.createElement("a");
-		warning.className = "warning";
-		warning.text = "Field can't be empty";
-		
-		if (pw == "" && document.getElementById("warningEmptyPassword") == null){
-			warningP = warning.cloneNode(true);
-			warningP.id = "warningEmptyPassword";
-			document.getElementById("password").before(warningP);
+	inputs = document.getElementsByClassName('formInput');
+	warning = document.createElement("a");
+	warning.className = "warning";
+	warning.text = "Field can't be empty";
+	for (i=0;i<inputs.length;i++){
+		if (inputs[i].value == "" && !inputs[i].previousElementSibling){
+			warningTmp = warning.cloneNode(true);
+			inputs[i].before(warningTmp);
 		}
-		else if (pw != "" && document.getElementById("warningEmptyPassword")){
-			document.getElementById("warningEmptyPassword").remove();
-		}
-		
-		if (username == "" && document.getElementById("warningEmptyUsername") == null){
-			warning.id = "warningEmptyUsername";
-			document.getElementById("username").before(warning);
-		}
-		else if (username != "" && document.getElementById("warningEmptyUsername")){
-			document.getElementById("warningEmptyUsername").remove();
+		if (inputs[i].value != "" && inputs[i].previousElementSibling){
+			inputs[i].previousElementSibling.remove();
 		}
 	}
-	else
+	if (username != "" && pw != "")
 		loginUser(username, pw);
 }
 
@@ -84,65 +76,39 @@ function loginUser(username, password)
 
 function registerUser(){
 	email = document.getElementById('mail').value;
+	var lock = 0;
 	username = document.getElementById('username').value;
 	pw = document.getElementById('password').value;
 	cpw = document.getElementById('cPassword').value;
-	if (pw == "" || cpw == "" || username == "" || email == ""){
-		warning = document.createElement("a");
-		warning.className = "warning";
-		warning.text = "Field can't be empty";
-		
-		if (pw == "" && document.getElementById("warningEmptyPassword") == null){
-			warningP = warning.cloneNode(true);
-			warningP.id = "warningEmptyPassword";
-			document.getElementById("password").before(warningP);
-		}
-		else if (pw != "" && document.getElementById("warningEmptyPassword")){
-			document.getElementById("warningEmptyPassword").remove();
-		}
-		
-		if (cpw == "" && document.getElementById("warningEmptyCPassword") == null){
-			warningCP = warning.cloneNode(true);
-			warningCP.id = "warningEmptyCPassword";
-			document.getElementById("cPassword").before(warningCP);
-		}
-		else if (cpw != "" && document.getElementById("warningEmptyCPassword")){
-			document.getElementById("warningEmptyCPassword").remove();
-		}
-		
-		if (email == "" && document.getElementById("warningEmptyMail") == null){
-			warningM = warning.cloneNode(true);
-			warningM.id = "warningEmptyMail";
-			document.getElementById("mail").before(warningM);
-		}
-		else if (email != "" && document.getElementById("warningEmptyMail")){
-			document.getElementById("warningEmptyMail").remove();
-		}
-		
-		if (username == "" && document.getElementById("warningEmptyUsername") == null){
-			warning.id = "warningEmptyUsername";
-			document.getElementById("username").before(warning);
-		}
-		else if (username != "" && document.getElementById("warningEmptyUsername")){
-			document.getElementById("warningEmptyUsername").remove();
+	inputs = document.getElementsByClassName('formInput');
+	warning = document.createElement("a");
+	warning.className = "warning";
+	warning.text = "Field can't be empty";
+	for (i=0;i<inputs.length;i++){
+		if (inputs[i].previousElementSibling)
+			inputs[i].previousElementSibling.remove();
+		if (inputs[i].value == "" && !inputs[i].previousElementSibling){
+			warningTmp = warning.cloneNode(true);
+			inputs[i].before(warningTmp);
+			lock = 1;
 		}
 	}
-	else if (pw != cpw){
+	
+	if (pw != cpw){
 		warning = document.createElement("a");
 		warning.className = "warning";
 		warning.text = "Passwords do not match";
-		if (document.getElementById("warningEmptyCPassword"))
-			document.getElementById("warningEmptyCPassword").remove();
-		
-		if (document.getElementById("warningPasswordDoNotMatch") == null){
-			warning.id = "warningPasswordDoNotMatch";
+		if (document.getElementById('cPassword').previousElementSibling && document.getElementById('cPassword').previousElementSibling.text == "Field can't be empty"){
+			document.getElementById('cPassword').previousElementSibling.remove();
+		}
+		if (!document.getElementById('cPassword').previousElementSibling || document.getElementById('cPassword').previousElementSibling.text != "Passwords do not match"){
 			document.getElementById("cPassword").before(warning);
 		}
-		else if (cpw != "" && document.getElementById("warningEmptyCPassword")){
-			document.getElementById("warningEmptyCPassword").remove();
+		else if (cpw != "" && document.getElementById('cPassword').previousElementSibling.text == "Field can't be empty"){
+			document.getElementById('cPassword').previousElementSibling.remove();
 		}
 	}
-	else
+	else if (lock)
 		createUser(username, pw);
 }
 
