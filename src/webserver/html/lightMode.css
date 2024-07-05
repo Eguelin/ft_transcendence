@@ -182,11 +182,11 @@ a {
 #themeButton{
 	mask-image:url("svg/button-light-mode.svg");
 	background:#110026;
-	height:10vh;
+	height:5vw;
 	width:5vw;
-	position:absolute;
+	/*position:absolute;
 	top:5vh;
-	right:5vw;
+	right:5vw;*/
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -270,4 +270,28 @@ a {
 }
 .dropDownContent a:hover{
 	color: #fdfdfb;
+}
+
+
+.profilePicture {
+	height: 4vw;
+	width: 4vw;
+	margin-left: 1vw;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: 50% 50%;
+	
+	border-radius: 50%;
+	background-image: url(https://cdn.intra.42.fr/users/a42d9d3633c955300a9b5d1c12c67156/llevasse.jpg);
+
+}
+
+.quickSettingContainer{
+	position: absolute;
+	right: 5vw;
+	top: 5vh;
+	display: flex;
 }
