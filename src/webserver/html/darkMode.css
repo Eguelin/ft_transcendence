@@ -289,3 +289,10 @@ a {
 	background-image: url(https://cdn.intra.42.fr/users/a42d9d3633c955300a9b5d1c12c67156/llevasse.jpg);
 
 }
+
+.quickSettingContainer{
+	position: absolute;
+	right: 5vw;
+	top: 5vh;
+	display: flex;
+}
