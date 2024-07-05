@@ -118,7 +118,7 @@ function registerUser(){
 			document.getElementById('cPassword').previousElementSibling.remove();
 		}
 	}
-	else if (lock)
+	else if (lock == 0)
 		createUser(username, pw);
 }
 
