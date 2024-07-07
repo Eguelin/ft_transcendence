@@ -24,3 +24,48 @@ window.addEventListener("popstate", (event) => {
 		contain.innerHTML = event.state;
 	}
 });
+
+// MOST OF THAT STUFF NOT BE ON PROD
+
+function createUser(username, password)
+{
+	const data = {username: username, password: password};
+	fetch('/api/user/create', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include',
+		body: JSON.stringify(data)
+	})
+	.then(response => {
+		if (response.ok) {
+			console.log('User created successfully');
+			loadPage('home');
+		} else {
+			console.log("Failed to create user")
+		}
+	})
+	.catch(error => {
+		console.error('There was a problem with the fetch operation:', error);
+	});
+}
+
+function getCurrentUser() {
+	fetch('/api/user/current', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	})
+	.then(response => {
+		if (response.ok) {
+			return response.json();
+		}
+		console.log("Failed to get user")
+	})
+	.catch(error => {
+		console.error('There was a problem with the fetch operation:', error);
+	});
+}
