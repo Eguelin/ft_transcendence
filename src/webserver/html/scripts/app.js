@@ -1,22 +1,17 @@
-loadPage('login');
-//loadPage('register');
-
-async function loadPage(wanted){
-	const contain = document.getElementById("container");
-	const response = await fetch(`bodyLess/${wanted}.html`);
-	const txt = await response.text();
-	if (contain.innerHTML != "")
-		history.pushState(txt, "");
-	else
-		history.replaceState(txt,"");
-	contain.innerHTML=txt;
-	document.getElementById("script").remove();
-	var s = document.createElement("script");
-	s.setAttribute('id', 'script');
-	s.setAttribute('src', `scripts/${wanted}.js`);
-	document.body.appendChild(s);
-	//document.getElementById("script").setAttribute('src', `scripts/${wanted}.js`);
-}
+fetch ('bodyLess/login.html').then((response) => {
+	return (response.text().then(response => {
+		if (container.innerHTML != "")
+			history.pushState(response, "");
+		else
+			history.replaceState(response,"");
+		container.innerHTML = response;
+		document.getElementById("script").remove();
+		var s = document.createElement("script");
+		s.setAttribute('id', 'script');
+		s.setAttribute('src', `scripts/login.js`);
+		document.body.appendChild(s);
+	}))
+});
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
