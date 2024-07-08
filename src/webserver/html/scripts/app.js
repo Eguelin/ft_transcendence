@@ -1,17 +1,59 @@
-fetch ('bodyLess/login.html').then((response) => {
-	return (response.text().then(response => {
-		if (container.innerHTML != "")
-			history.pushState(response, "");
-		else
-			history.replaceState(response,"");
-		container.innerHTML = response;
-		document.getElementById("script").remove();
-		var s = document.createElement("script");
-		s.setAttribute('id', 'script');
-		s.setAttribute('src', `scripts/login.js`);
-		document.body.appendChild(s);
-	}))
+var username = "";
+var user = fetch('/api/user/current', {
+	method: 'GET',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	credentials: 'include'
+})
+.then(response => {
+	if (response.ok) {
+		return response.json();
+	}
+	console.log("Failed to get user")
+	return (null);
+})
+.catch(error => {
+	console.error('There was a problem with the fetch operation:', error);
+	return (null);
 });
+
+user.then((text) => {
+	username = text.username;
+	if (username != null){
+		fetch ('bodyLess/home.html').then((response) => {
+			return (response.text().then(response => {
+				if (container.innerHTML != "")
+					history.pushState(response, "");
+				else
+					history.replaceState(response,"");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `scripts/home.js`);
+				document.body.appendChild(s);
+			}))
+		});	
+	}
+	else{
+		fetch ('bodyLess/login.html').then((response) => {
+			return (response.text().then(response => {
+				if (container.innerHTML != "")
+					history.pushState(response, "");
+				else
+					history.replaceState(response,"");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `scripts/login.js`);
+			}))
+				document.body.appendChild(s);
+		});	
+	}
+})
+
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
