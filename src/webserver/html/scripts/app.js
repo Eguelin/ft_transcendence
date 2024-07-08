@@ -27,6 +27,8 @@ window.addEventListener("popstate", (event) => {
 
 // MOST OF THAT STUFF NOT BE ON PROD
 
+
+/*
 function createUser(username, password)
 {
 	const data = {username: username, password: password};
@@ -69,3 +71,4 @@ function getCurrentUser() {
 		console.error('There was a problem with the fetch operation:', error);
 	});
 }
+*/
