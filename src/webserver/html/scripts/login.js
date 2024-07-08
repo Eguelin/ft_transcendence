@@ -70,13 +70,15 @@ loginBtn.addEventListener("click", (e) => {
 				
 			} else {
 				console.log("Failed to login user")
-				return response.json().then((text => {
-					warning.text = text.message;
-					if (!loginBtn.previousElementSibling)
-						loginBtn.before(warning.cloneNode(true));
-				
-					return (text.message);
-				}));
+				if (response.status != 500){
+					return response.json().then((text => {
+						warning.text = text.message;
+						if (!loginBtn.previousElementSibling)
+							loginBtn.before(warning.cloneNode(true));
+					
+						return (text.message);
+					}));
+				}
 			}
 		})
 	}
