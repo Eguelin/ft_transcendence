@@ -1,13 +1,6 @@
-async function loadPage(wanted){
-	const contain = document.getElementById("container");
-	const response = await fetch(`bodyLess/${wanted}.html`);
-	const txt = await response.text();
-	if (contain.innerHTML != "")
-		history.pushState(txt, "");
-	else
-		history.replaceState(txt,"");
-	contain.innerHTML=txt;
-}
+container = document.getElementById("container");
+registerBtn = document.getElementById("registerBtn");
+swichTheme = document.getElementById("themeButton");
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
@@ -16,18 +9,7 @@ window.addEventListener("popstate", (event) => {
 	}
 });
 
-async function switchTheme(){
-	const style = document.getElementById("style");
-	const href = style.getAttribute('href');
-	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
-}
-
-async function loadTheme(wanted){
-	const style = document.getElementById("style");
-	style.setAttribute('href', `${wanted}Mode.css`);
-}
-
-function registerUser(){
+registerBtn.addEventListener("click", (e) => {
 	email = document.getElementById('mail').value;
 	var lock = 0;
 	username = document.getElementById('username').value;
@@ -61,33 +43,66 @@ function registerUser(){
 			document.getElementById('cPassword').previousElementSibling.remove();
 		}
 	}
-	else if (lock == 0)
-		createUser(username, pw);
-}
+	else if (lock == 0){
+		const data = {username: username, password: pw};
+		fetch('/api/user/create', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include',
+			body: JSON.stringify(data)
+		})
+		.then(response => {
+			if (response.ok) {
+				console.log('User created successfully');
+				fetch ('bodyLess/home.html').then((response) => {
+					return (response.text().then(response => {
+						if (container.innerHTML != "")
+							history.pushState(response, "");
+						else
+							history.replaceState(response,"");
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/home.js`);
+						document.body.appendChild(s);
+					}))
+					
+					var user = fetch('/api/user/current', {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						credentials: 'include'
+					})
+					.then(response => {
+						if (response.ok) {
+							return response.json();
+						}
+						console.log("Failed to get user")
+						return (null);
+					})
+					user.then((text) => {
+						document.getElementById("username").innerHTML = text.username;
+					})
+				});
+			} else {
+				console.log("Failed to create user")
+			}
+		})
+		.catch(error => {
+			console.error('There was a problem with the fetch operation:', error);
+		});
+	}
+})
 
-function createUser(username, password)
-{
-	const data = {username: username, password: password};
-	fetch('/api/user/create', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include',
-		body: JSON.stringify(data)
-	})
-	.then(response => {
-		if (response.ok) {
-			console.log('User created successfully');
-			loadPage('home');
-		} else {
-			console.log("Failed to create user")
-		}
-	})
-	.catch(error => {
-		console.error('There was a problem with the fetch operation:', error);
-	});
-}
+swichTheme.addEventListener("click", () => {
+	const style = document.getElementById("style");
+	const href = style.getAttribute('href');
+	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+})
 
 function getCurrentUser() {
 	fetch('/api/user/current', {
