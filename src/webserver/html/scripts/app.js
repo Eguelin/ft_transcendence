@@ -48,8 +48,8 @@ user.then((text) => {
 				var s = document.createElement("script");
 				s.setAttribute('id', 'script');
 				s.setAttribute('src', `scripts/login.js`);
-			}))
 				document.body.appendChild(s);
+			}))
 		});	
 	}
 })
