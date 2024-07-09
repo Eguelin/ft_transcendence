@@ -11,8 +11,11 @@ def create_user(request):
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
-	username = data['username']
-	password = data['password']
+	try:
+		username = data['username']
+		password = data['password']
+	except Exception as e:
+		return JsonResponse({'message': str(e)}, status=400)
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	try:
@@ -32,8 +35,8 @@ def user_login(request):
 
 	try:
 		data = json.loads(request.body)
-		username = data('username')
-		password = data('password')
+		username = data['username']
+		password = data['password']
 		if not username or not password:
 			return JsonResponse({'message': 'Username and password are required'}, status=400)
 		user = authenticate(request, username=username, password=password)
