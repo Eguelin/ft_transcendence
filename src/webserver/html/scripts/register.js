@@ -57,7 +57,7 @@ registerBtn.addEventListener("click", (e) => {
 			if (response.ok) {
 				console.log('User created successfully');
 				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
+					(response.text().then(response => {
 						if (container.innerHTML != "")
 							history.pushState(response, "");
 						else
@@ -85,7 +85,7 @@ registerBtn.addEventListener("click", (e) => {
 						return (null);
 					})
 					user.then((text) => {
-						document.getElementById("username").innerHTML = text.username;
+						document.getElementById("usernameBtn").innerHTML = text.username;
 					})
 				});
 			} else {

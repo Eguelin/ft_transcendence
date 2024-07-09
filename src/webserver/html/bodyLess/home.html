@@ -1,8 +1,14 @@
 <div style="height:fit-content; text-align: center;">
 	<h1>PONG</h1>
-	<div class="quickSettingContainer">
+	<div id="quickSettingContainer">
 		<div id="themeButton"></div>
-		<span id="username"></span>
+		<div tabindex="0" id="dropDownUser">
+			<span id="usernameBtn"></span>
+			<div class="dropDownUserContent">
+				<a>Account settings</a>
+				<a id="logOutBtn">Log out</a>
+			</div>
+		</div>
 		<div class="profilePicture"></div>
 	</div>
 </div>
@@ -13,8 +19,5 @@
 	</div>
 	<div class="options" id="settingsBtn">
 		<a>Settings</a>
-	</div>
-	<div class="options" id="logOutBtn">
-		<a >Log out</a>
 	</div>
 </div>
