@@ -1,22 +1,79 @@
-loadPage('login');
-//loadPage('register');
+var username = "";
+var user = fetch('/api/user/current', {
+	method: 'GET',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	credentials: 'include'
+})
+.then(response => {
+	if (response.ok) {
+		return response.json();
+	}
+	console.log("Failed to get user")
+	return (null);
+})
+.catch(error => {
+	console.error('There was a problem with the fetch operation:', error);
+	return (null);
+});
 
-async function loadPage(wanted){
-	const contain = document.getElementById("container");
-	const response = await fetch(`bodyLess/${wanted}.html`);
-	const txt = await response.text();
-	if (contain.innerHTML != "")
-		history.pushState(txt, "");
-	else
-		history.replaceState(txt,"");
-	contain.innerHTML=txt;
-	document.getElementById("script").remove();
-	var s = document.createElement("script");
-	s.setAttribute('id', 'script');
-	s.setAttribute('src', `scripts/${wanted}.js`);
-	document.body.appendChild(s);
-	//document.getElementById("script").setAttribute('src', `scripts/${wanted}.js`);
-}
+user.then((text) => {
+	username = text.username;
+	if (username != null){
+		fetch ('bodyLess/home.html').then((response) => {
+			return (response.text().then(response => {
+				if (container.innerHTML != "")
+					history.pushState(response, "");
+				else
+					history.replaceState(response,"");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `scripts/home.js`);
+				document.body.appendChild(s);
+				
+							
+			
+				var user = fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
+				.then(response => {
+					if (response.ok) {
+						return response.json();
+					}
+					console.log("Failed to get user")
+					return (null);
+				})
+				user.then((text) => {
+					document.getElementById("username").innerHTML = text.username;
+				})
+			}))
+		});	
+	}
+	else{
+		fetch ('bodyLess/login.html').then((response) => {
+			return (response.text().then(response => {
+				if (container.innerHTML != "")
+					history.pushState(response, "");
+				else
+					history.replaceState(response,"");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `scripts/login.js`);
+				document.body.appendChild(s);
+			}))
+		});	
+	}
+})
+
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
@@ -27,6 +84,8 @@ window.addEventListener("popstate", (event) => {
 
 // MOST OF THAT STUFF NOT BE ON PROD
 
+
+/*
 function createUser(username, password)
 {
 	const data = {username: username, password: password};
@@ -69,3 +128,4 @@ function getCurrentUser() {
 		console.error('There was a problem with the fetch operation:', error);
 	});
 }
+*/

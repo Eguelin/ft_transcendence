@@ -19,6 +19,13 @@ h1{
 	margin-bottom: 5vh;
 }
 
+.quickSettingContainer #username {
+	color: #FDFDFB;
+	font-size: 3vh;
+	line-height: 10vh;
+	margin-left: 1vw;
+}
+
 .options {
 	text-align: center;
 	color: #FDFDFB;
