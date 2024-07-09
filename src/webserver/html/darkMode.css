@@ -298,7 +298,7 @@ a {
 }
 
 #usernameBtn {
-	color: #FDFDFB;
+	color: #FFDBDE;
 	font-size: 3vh;
 	line-height: 10vh;
 	display: block;
@@ -343,6 +343,6 @@ a {
 	font-size: 2vh;
 	width: inherit;
 }
-.dropDownUserContent a:focus{
+.dropDownUserContent a:hover{
 	color: #fdfdfb;
 }

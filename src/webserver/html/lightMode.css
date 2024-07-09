@@ -302,3 +302,62 @@ a {
 	top: 5vh;
 	display: flex;
 }
+
+
+
+#quickSettingContainer{
+	position: absolute;
+	right: 5vw;
+	top: 5vh;
+	display: flex;
+}
+
+#usernameBtn {
+	color: #110026;
+	font-size: 3vh;
+	line-height: 10vh;
+	display: block;
+	text-align: right;
+}
+
+#dropDownUser {
+	position: relative;
+	display: inline-block;
+	padding-right: 0.1vw;
+	margin-left: 1vw;
+}
+
+.dropDownUserContent{
+	display: none;
+	background-color: #FFDBDE;
+}
+
+#dropDownUser:focus{
+	border: 0.2vh solid;
+	border-color: #110026;
+	background-color: #FFDBDE;
+	width: 10vw;
+}
+
+#dropDownUser:focus #usernameBtn {
+	text-align: center;
+}
+
+#dropDownUser:focus .dropDownUserContent{
+	border-block-start: #FFDBDE;
+	width: inherit;
+	display: block;
+	z-index: 1;
+}
+
+.dropDownUserContent a{
+	text-align: center;
+	color: inherit;
+	text-decoration: inherit;
+	display: block;
+	font-size: 2vh;
+	width: inherit;
+}
+.dropDownUserContent a:hover{
+	color: #FFDBDE;
+}
