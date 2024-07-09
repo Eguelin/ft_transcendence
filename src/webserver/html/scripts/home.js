@@ -22,7 +22,7 @@ settingsBtn.addEventListener("click", (e) => {
 
 logOutBtn.addEventListener("click", (e) => {
 	fetch('/api/user/logout', {
-		method: 'GET',
+		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
