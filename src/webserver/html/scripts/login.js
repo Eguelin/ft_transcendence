@@ -81,7 +81,7 @@ loginBtn.addEventListener("click", (e) => {
 							return (null);
 						})
 						user.then((text) => {
-							document.getElementById("username").innerHTML = text.username;
+							document.getElementById("usernameBtn").innerHTML = text.username;
 						})
 					}))
 				});

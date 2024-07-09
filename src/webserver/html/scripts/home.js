@@ -2,6 +2,8 @@ container = document.getElementById("container");
 settingsBtn = document.getElementById("settingsBtn");
 logOutBtn = document.getElementById('logOutBtn');
 swichTheme = document.getElementById("themeButton");
+userBtn = document.getElementById("usernameBtn");
+dpUserBtn = document.getElementById("dropDownUser");
 
 settingsBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/settings.html').then((response) => {
@@ -50,4 +52,8 @@ swichTheme.addEventListener("click", () => {
 	const style = document.getElementById("style");
 	const href = style.getAttribute('href');
 	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+})
+
+dpUserBtn.addEventListener("click", (e) => {
+	e.focus();
 })
