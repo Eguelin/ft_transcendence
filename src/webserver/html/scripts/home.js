@@ -32,6 +32,26 @@ dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
 })
 
+{
+	var user = fetch('/api/user/current', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	})
+	.then(response => {
+		if (response.ok) {
+			return (response.json());
+		}
+		console.log("Failed to get user")
+		return (null);
+	})
+	user.then((text) => {
+		document.getElementById("usernameBtn").innerHTML = text.username;
+	})
+}
+
 logOutBtn.addEventListener("click", (e) => {
 	fetch('/api/user/logout', {
 		method: 'POST',
