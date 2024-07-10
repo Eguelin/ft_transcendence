@@ -1,5 +1,5 @@
-var username = "";
-var user = fetch('/api/user/current', {
+container = document.getElementById("container");
+fetch('/api/user/current', {
 	method: 'GET',
 	headers: {
 		'Content-Type': 'application/json',
@@ -8,39 +8,33 @@ var user = fetch('/api/user/current', {
 })
 .then(response => {
 	if (response.ok) {
-		return response.json();
-	}
-	console.log("Failed to get user")
-	return (null);
-})
-.catch(error => {
-	console.error('There was a problem with the fetch operation:', error);
-	return (null);
-});
+		(response.json()).then((text) => {
+			fetch ('bodyLess/home.html').then((response) => {
+				(response.text().then(response => {
+					if (container.innerHTML != "")
+						history.pushState(response, "");
+					else
+						history.replaceState(response,"");
+					container.innerHTML = response;
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/home.js`);
+					document.body.appendChild(s);
+					document.getElementById("usernameBtn").innerHTML = text.username;
+					history.replaceState(container.innerHTML, "");
+				}))
+			});	
 
-user.then((text) => {
-	username = text.username;
-	if (username != null){
-		fetch ('bodyLess/home.html').then((response) => {
-			return (response.text().then(response => {
-				if (container.innerHTML != "")
-					history.pushState(response, "");
-				else
-					history.replaceState(response,"");
-				container.innerHTML = response;
-				document.getElementById("script").remove();
-				var s = document.createElement("script");
-				s.setAttribute('id', 'script');
-				s.setAttribute('src', `scripts/home.js`);
-				document.body.appendChild(s);
-			}))
-		});	
+		});
 	}
-	else{
+	else {
+		console.log("Failed to get user")
+		
 		fetch ('bodyLess/login.html').then((response) => {
-			return (response.text().then(response => {
+			(response.text().then(response => {
 				if (container.innerHTML != "")
-					history.pushState(response, "");
+						history.pushState(response, "");
 				else
 					history.replaceState(response,"");
 				container.innerHTML = response;
@@ -49,17 +43,48 @@ user.then((text) => {
 				s.setAttribute('id', 'script');
 				s.setAttribute('src', `scripts/login.js`);
 				document.body.appendChild(s);
+				history.replaceState(container.innerHTML, "");
 			}))
-		});	
+		});
 	}
+	return (null);
 })
-
+.catch(error => {
+	console.error('There was a problem with the fetch operation:', error);
+	return (null);
+});
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
 		const contain = document.getElementById("container");
 		contain.innerHTML = event.state;
 	}
+	fetch('/api/user/current', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	})
+	.then(response => {
+		if (!response.ok) {
+			fetch ('bodyLess/login.html').then((response) => {
+				(response.text().then(response => {
+					if (container.innerHTML != "")
+						history.pushState(response, "");
+					else
+						history.replaceState(response,"");
+					container.innerHTML = response;
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/login.js`);
+					document.body.appendChild(s);
+					history.replaceState(container.innerHTML, "");
+				}))
+			});
+		}
+	})
 });
 
 // MOST OF THAT STUFF NOT BE ON PROD
