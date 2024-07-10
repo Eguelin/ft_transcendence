@@ -60,4 +60,4 @@ def current_user(request):
 	if request.user.is_authenticated:
 		return JsonResponse({'username': request.user.username})
 	else:
-		return JsonResponse({'username': None})
+		return JsonResponse({'username': None}, status=400)

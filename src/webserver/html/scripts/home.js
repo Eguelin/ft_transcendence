@@ -32,8 +32,8 @@ dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
 })
 
-{
-	var user = fetch('/api/user/current', {
+window.addEventListener("load", () => {
+	fetch('/api/user/current', {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
@@ -42,14 +42,69 @@ dpUserBtn.addEventListener("click", (e) => {
 	})
 	.then(response => {
 		if (response.ok) {
-			return (response.json());
+			(response.json()).then((text) => {
+				document.getElementById("usernameBtn").innerHTML = text.username;
+				history.replaceState(container.innerHTML, "");
+			});
 		}
-		console.log("Failed to get user")
+		else {
+			console.log("Failed to get user")
+			
+			fetch ('bodyLess/login.html').then((response) => {
+				(response.text().then(response => {
+					if (container.innerHTML != "")
+						history.pushState(response, "");
+					else
+						history.replaceState(response,"");
+					container.innerHTML = response;
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/login.js`);
+					document.body.appendChild(s);
+					history.replaceState(container.innerHTML, "");
+				}))
+			});	
+		}
 		return (null);
 	})
-	user.then((text) => {
-		document.getElementById("usernameBtn").innerHTML = text.username;
-		history.replaceState(container.innerHTML, "");
+})
+
+{
+	fetch('/api/user/current', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	})
+	.then(response => {
+		if (response.ok) {
+			(response.json()).then((text) => {
+				document.getElementById("usernameBtn").innerHTML = text.username;
+				history.replaceState(container.innerHTML, "");
+			});
+		}
+		else {
+			console.log("Failed to get user")
+			
+			fetch ('bodyLess/login.html').then((response) => {
+				(response.text().then(response => {
+					if (container.innerHTML != "")
+						history.pushState(response, "");
+					else
+						history.replaceState(response,"");
+					container.innerHTML = response;
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/login.js`);
+					document.body.appendChild(s);
+					history.replaceState(container.innerHTML, "");
+				}))
+			});	
+		}
+		return (null);
 	})
 }
 
