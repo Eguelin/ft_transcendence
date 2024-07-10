@@ -2,7 +2,46 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError, IntegrityError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json
+from requests.auth import HTTPBasicAuth
+import json, os, requests
+
+def fortytwo(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	data = json.loads(request.body)
+
+	code = data['code']
+	if not code:
+		return JsonResponse({'message': 'Invalid request Code'}, status=400)
+
+	client_id = os.getenv('PUBLIC')
+	client_secret = os.getenv('SECRET')
+	redirect_uri = os.getenv('REDIRECT_URI')
+	url = 'https://api.intra.42.fr/oauth/token'
+
+	payload = {
+		'grant_type': 'client_credentials',
+		'client_id': client_id,
+		'client_secret': client_secret,
+		'code': code,
+		'redirect_uri': redirect_uri,
+	}
+	response = requests.post(url, data=payload)
+	if response.status_code != 200:
+		return JsonResponse(response.json(), status=response.status_code)
+
+	access_token = response.json()['access_token']
+	url = 'https://api.intra.42.fr/v2/me'
+	headers = {
+		'Authorization': f'Bearer {access_token}'
+	}
+
+	response = requests.get(url, headers=headers)
+
+	if response.status_code != 200:
+		return JsonResponse(response.json(), status=response.status_code)
+	return JsonResponse(response.json())
+
 
 def create_user(request):
 	if request.method != 'POST' :
