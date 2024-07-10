@@ -49,6 +49,7 @@ dpUserBtn.addEventListener("click", (e) => {
 	})
 	user.then((text) => {
 		document.getElementById("usernameBtn").innerHTML = text.username;
+		history.replaceState(container.innerHTML, "");
 	})
 }
 
