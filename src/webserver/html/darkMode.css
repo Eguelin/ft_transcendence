@@ -25,14 +25,32 @@ h1{
 	font-size: 7vh;
 	font-style:italic;
 	font-weight:thin;	
-	padding-top:2vh;
+	margin-top:5vh;
 	margin-left:auto;
 	margin-right:auto;
 	width:fit-content;
 }
 
-.options:hover{
+.options button:hover{
 	color: #FFDBDE;
+}
+
+.options button:focus{
+	color: #FFDBDE;
+}
+
+.options button{
+	text-align: center;
+	color: #FDFDFB;
+	font-size: 7vh;
+	font-style:italic;
+	font-weight:thin;	
+	font-family: "pong";
+	margin-left:auto;
+	margin-right:auto;
+	width:fit-content;
+	background: none;
+	border: none;
 }
 
 input{
@@ -342,6 +360,7 @@ a {
 	display: block;
 	font-size: 2vh;
 	width: inherit;
+	margin: 0.5em 0 0.5em 0;
 }
 .dropDownUserContent a:hover{
 	color: #fdfdfb;
