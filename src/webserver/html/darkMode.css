@@ -32,11 +32,12 @@ h1{
 }
 
 .options button:hover{
-	color: #FFDBDE;
+	color: #3a3053;
 }
 
 .options button:focus{
-	color: #FFDBDE;
+	color: #3a3053;
+	outline: none;
 }
 
 .options button{
@@ -346,6 +347,19 @@ a {
 	text-align: center;
 }
 
+
+#dropDownUser:focus-within{
+	border: 0.2vh solid;
+	border-color: #FFDBDE;
+	background-color: #3A3053;
+	width: 10vw;
+}
+
+#dropDownUser:focus-within #usernameBtn {
+	text-align: center;
+}
+
+
 #dropDownUser:focus .dropDownUserContent{
 	border-block-start: #3A3053;
 	width: inherit;
@@ -353,7 +367,14 @@ a {
 	z-index: 1;
 }
 
-.dropDownUserContent a{
+#dropDownUser:focus-within .dropDownUserContent{
+	border-block-start: #3A3053;
+	width: inherit;
+	display: block;
+	z-index: 1;
+}
+
+.dropDownUserContent button{
 	text-align: center;
 	color: inherit;
 	text-decoration: inherit;
@@ -361,7 +382,16 @@ a {
 	font-size: 2vh;
 	width: inherit;
 	margin: 0.5em 0 0.5em 0;
+	border: none;
+	background: none;
+	font-family: "pong";
 }
-.dropDownUserContent a:hover{
+.dropDownUserContent button:hover{
 	color: #fdfdfb;
 }
+
+.dropDownUserContent button:focus{
+	color: #fdfdfb;
+	outline: none;
+}
+

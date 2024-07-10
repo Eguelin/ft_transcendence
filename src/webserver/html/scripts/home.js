@@ -22,6 +22,16 @@ settingsBtn.addEventListener("click", (e) => {
 	});
 })
 
+swichTheme.addEventListener("click", () => {
+	const style = document.getElementById("style");
+	const href = style.getAttribute('href');
+	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+})
+
+dpUserBtn.addEventListener("click", (e) => {
+	document.getElementById("dropDownUser").focus();
+})
+
 logOutBtn.addEventListener("click", (e) => {
 	fetch('/api/user/logout', {
 		method: 'POST',
@@ -45,15 +55,4 @@ logOutBtn.addEventListener("click", (e) => {
 			document.body.appendChild(s);
 		}))
 	});
-})
-
-
-swichTheme.addEventListener("click", () => {
-	const style = document.getElementById("style");
-	const href = style.getAttribute('href');
-	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
-})
-
-dpUserBtn.addEventListener("click", (e) => {
-	e.focus();
-})
+});		
