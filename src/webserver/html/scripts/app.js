@@ -33,26 +33,6 @@ user.then((text) => {
 				s.setAttribute('id', 'script');
 				s.setAttribute('src', `scripts/home.js`);
 				document.body.appendChild(s);
-				
-							
-			
-				var user = fetch('/api/user/current', {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					credentials: 'include'
-				})
-				.then(response => {
-					if (response.ok) {
-						return response.json();
-					}
-					console.log("Failed to get user")
-					return (null);
-				})
-				user.then((text) => {
-					document.getElementById("usernameBtn").innerHTML = text.username;
-				})
 			}))
 		});	
 	}
