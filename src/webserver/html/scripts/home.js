@@ -22,13 +22,13 @@ settingsBtn.addEventListener("click", (e) => {
 
 logOutBtn.addEventListener("click", (e) => {
 	fetch('/api/user/logout', {
-		method: 'GET',
+		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		credentials: 'include'
 	});
-	
+
 	fetch ('bodyLess/login.html').then((response) => {
 		return (response.text().then(response => {
 			if (container.innerHTML != "")
