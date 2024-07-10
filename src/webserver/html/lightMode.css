@@ -32,14 +32,32 @@ h1{
 	font-size: 7vh;
 	font-style:italic;
 	font-weight:thin;	
-	padding-top:2vh;
+	margin-top:5vh;
 	margin-left:auto;
 	margin-right:auto;
 	width:fit-content;
 }
 
-.options:hover{
-	color: #FFDBDE;
+.options button:hover{
+	color: #3A3053;
+}
+
+.options button:focus{
+	color: #3A3053;
+}
+
+.options button{
+	text-align: center;
+	color: #110026;
+	font-size: 7vh;
+	font-style:italic;
+	font-weight:thin;	
+	font-family: "pong";
+	margin-left:auto;
+	margin-right:auto;
+	width:fit-content;
+	background: none;
+	border: none;
 }
 
 input{
@@ -276,7 +294,7 @@ a {
 	display: block;
 }
 .dropDownContent a:hover{
-	color: #fdfdfb;
+	color: #3A3053;
 }
 
 
@@ -344,7 +362,7 @@ a {
 }
 
 #dropDownUser:focus .dropDownUserContent{
-	border-block-start: #FFDBDE;
+	border-block-start: #3A3053;
 	width: inherit;
 	display: block;
 	z-index: 1;
@@ -357,7 +375,8 @@ a {
 	display: block;
 	font-size: 2vh;
 	width: inherit;
+	margin: 0.5em 0 0.5em 0;
 }
 .dropDownUserContent a:hover{
-	color: #FFDBDE;
+	color: #3A3053;
 }
