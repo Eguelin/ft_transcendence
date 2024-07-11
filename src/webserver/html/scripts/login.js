@@ -50,6 +50,7 @@ loginBtn.addEventListener("click", (e) => {
 			credentials: 'include'
 		})
 		.then(response => {
+			console.log(response);
 			if (response.ok) {
 				console.log('User logged in successfully');
 				
