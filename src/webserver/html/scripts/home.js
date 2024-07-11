@@ -46,6 +46,7 @@ window.addEventListener("load", () => {
 		if (response.ok) {
 			(response.json()).then((text) => {
 				document.getElementById("usernameBtn").innerHTML = text.username;
+				document.getElementById("pfp").style.backgroundImage = "url(" + text.pfp + ")";
 				history.replaceState(container.innerHTML, "");
 			});
 		}
@@ -83,11 +84,9 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				if (text.theme == true)
-					document.getElementById("style").setAttribute('href', 'darkMode.css');
-				else
-					document.getElementById("style").setAttribute('href', 'lightMode.css');	
+				document.getElementById("style").setAttribute('href', text.theme == true ? "darkMode.css" : "lightMode.css");
 				document.getElementById("usernameBtn").innerHTML = text.username;
+				document.getElementById("pfp").style.backgroundImage = "url(" + text.pfp + ")";
 				history.replaceState(container.innerHTML, "");
 			});
 		}

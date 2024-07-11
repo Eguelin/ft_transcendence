@@ -72,6 +72,6 @@ def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
-		return JsonResponse({'username': request.user.username, 'theme': request.user.profile.dark_theme})
+		return JsonResponse({'username': request.user.username, 'theme': request.user.profile.dark_theme, 'pfp': request.user.profile.profile_picture.url})
 	else:
 		return JsonResponse({'username': None}, status=400)
