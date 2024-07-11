@@ -118,6 +118,19 @@ input:focus{
 	border-radius: 1.5vw;
 }
 
+.saveBtn {
+	text-align: center;
+	background-color: limegreen;
+	color: #110026;
+	font-weight: thin;	
+	font-family: "pong";
+	font-size: 4vh;
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid #110026;
+	border-radius: 1.5vw;
+}
+
 #loginOpt{
 	text-align: center;
 	color: #110026;
