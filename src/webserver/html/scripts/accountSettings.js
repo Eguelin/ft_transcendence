@@ -54,10 +54,7 @@ saveBtn.addEventListener("click", (e) => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				if (text.theme == true)
-					document.getElementById("style").setAttribute('href', 'darkMode.css');
-				else
-					document.getElementById("style").setAttribute('href', 'lightMode.css');	
+				document.getElementById("style").setAttribute('href', text.theme == true ? "darkMode.css" : "lightMode.css");
 				usernameInput.setAttribute('placeholder', text.username);
 				history.replaceState(container.innerHTML, "");
 			});
@@ -77,10 +74,7 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				if (text.theme == true)
-					document.getElementById("style").setAttribute('href', 'darkMode.css');
-				else
-					document.getElementById("style").setAttribute('href', 'lightMode.css');	
+				document.getElementById("style").setAttribute('href', text.theme == true ? "darkMode.css" : "lightMode.css");
 				username.setAttribute('placeholder', text.username);
 				history.replaceState(container.innerHTML, "");
 			});
