@@ -54,6 +54,17 @@ def user_logout(request):
 	logout(request)
 	return JsonResponse({'message': 'User logged out'})
 
+def profile_update(request):
+	if (request.method == 'POST'):
+		try:
+			data = json.loads(request.body)
+			user = request.user
+			user.profile.dark_theme = data['dark_theme']
+			user.save()
+			return JsonResponse({'message': 'User profile updated'})
+		except json.JSONDecodeError:
+			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
 def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)

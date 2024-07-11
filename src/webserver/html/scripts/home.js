@@ -81,6 +81,10 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
+				if (text.theme == true)
+					document.getElementById("style").setAttribute('href', 'darkMode.css');
+				else
+					document.getElementById("style").setAttribute('href', 'lightMode.css');	
 				document.getElementById("usernameBtn").innerHTML = text.username;
 				history.replaceState(container.innerHTML, "");
 			});

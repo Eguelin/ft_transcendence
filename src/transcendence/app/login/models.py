@@ -6,6 +6,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+
+# IF and WHEN fields are added 'python manage.py makemigrations' AND 'python manage.py migrate' must be executed in the transcendence container
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	dark_theme = models.BooleanField(default=True)

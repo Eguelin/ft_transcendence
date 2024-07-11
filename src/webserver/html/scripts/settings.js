@@ -5,10 +5,28 @@ homeBtn = document.getElementById("goHomeButton");
 
 lightTheme.addEventListener("click", (e) => {
 	document.getElementById("style").setAttribute('href', 'lightMode.css');
+	const data = {dark_theme: 0};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
 })
 
 darkTheme.addEventListener("click", (e) => {
 	document.getElementById("style").setAttribute('href', 'darkMode.css');
+	const data = {dark_theme: 1};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
 })
 
 homeBtn.addEventListener("click", (e) => {
