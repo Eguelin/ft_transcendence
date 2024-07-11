@@ -59,7 +59,10 @@ def profile_update(request):
 		try:
 			data = json.loads(request.body)
 			user = request.user
-			user.profile.dark_theme = data['dark_theme']
+			if "dark_theme" in data:
+				user.profile.dark_theme = data['dark_theme']
+			if "username" in data:
+				user.username = data['username']
 			user.save()
 			return JsonResponse({'message': 'User profile updated'})
 		except json.JSONDecodeError:
