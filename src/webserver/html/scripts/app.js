@@ -9,6 +9,11 @@ fetch('/api/user/current', {
 .then(response => {
 	if (response.ok) {
 		(response.json()).then((text) => {
+			if (text.theme == true)
+				document.getElementById("style").setAttribute('href', 'darkMode.css');
+			else
+				document.getElementById("style").setAttribute('href', 'lightMode.css');
+			
 			fetch ('bodyLess/home.html').then((response) => {
 				(response.text().then(response => {
 					if (container.innerHTML != "")
@@ -109,25 +114,6 @@ function createUser(username, password)
 		} else {
 			console.log("Failed to create user")
 		}
-	})
-	.catch(error => {
-		console.error('There was a problem with the fetch operation:', error);
-	});
-}
-
-function getCurrentUser() {
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-	.then(response => {
-		if (response.ok) {
-			return response.json();
-		}
-		console.log("Failed to get user")
 	})
 	.catch(error => {
 		console.error('There was a problem with the fetch operation:', error);
