@@ -2,7 +2,6 @@ services:
 
   # database service
   db:
-    build: src/postgreSQL/
     image: postgres:16.3
     container_name: db
     env_file:

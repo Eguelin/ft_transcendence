@@ -8,6 +8,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY requirements.txt .
+RUN apk add build-base zlib-dev jpeg-dev
 RUN pip install -r requirements.txt
 
 # Copy script
