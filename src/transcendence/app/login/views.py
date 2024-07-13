@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json
 
+import subprocess
+import base64
+
 def create_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -63,15 +66,24 @@ def profile_update(request):
 				user.profile.dark_theme = data['dark_theme']
 			if "username" in data:
 				user.username = data['username']
+			if "pfp" in data:
+				raw = data['pfp']
+				pfpName = "profilePictures/{0}.jpg".format(user.username)
+				f = open(pfpName, "wb")
+				f.write(base64.b64decode(raw))
+				f.close()
+				user.profile.profile_picture = pfpName								
 			user.save()
 			return JsonResponse({'message': 'User profile updated'})
 		except json.JSONDecodeError:
 			return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
 def current_user(request):
+	ls = subprocess.run(['ls'], stdout=subprocess.PIPE)
+	pwd = subprocess.run(['pwd'], stdout=subprocess.PIPE)
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
-		return JsonResponse({'username': request.user.username, 'theme': request.user.profile.dark_theme, 'pfp': request.user.profile.profile_picture.url})
+		return JsonResponse({'username': request.user.username, 'theme': request.user.profile.dark_theme, 'pfp': request.user.profile.profile_picture})
 	else:
 		return JsonResponse({'username': None}, status=400)

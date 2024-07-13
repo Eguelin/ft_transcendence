@@ -3,6 +3,7 @@ saveBtn = document.getElementById('saveBtn');
 swichTheme = document.getElementById("themeButton");
 homeBtn = document.getElementById("goHomeButton");
 usernameInput = document.getElementById("usernameInput");
+pfpInput = document.getElementById("pfpInput");
 
 
 swichTheme.addEventListener("click", () => {
@@ -33,14 +34,36 @@ saveBtn.addEventListener("click", (e) => {
 	username = usernameInput.value;
 	if (username != "")
 		data['username'] = username;
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
-	})
+	if (pfpInput.value != ""){ // this should always be the last check
+		path = pfpInput.files[0];
+		var blob = new Blob([path]);
+		var reader = new FileReader();
+		
+		reader.readAsDataURL(blob);
+		reader.onloadend = function(){
+			var buf = reader.result;
+			data['pfp'] = buf.substr(buf.indexOf(',') + 1);
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})	
+		}
+		
+	}
+	else {
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+	}
 })
 
 {
