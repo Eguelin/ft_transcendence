@@ -46,7 +46,8 @@ window.addEventListener("load", () => {
 		if (response.ok) {
 			(response.json()).then((text) => {
 				document.getElementById("usernameBtn").innerHTML = text.username;
-				document.getElementById("pfp").style.backgroundImage = "url(" + text.pfp + ")";
+				
+				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
 			});
 		}
@@ -86,7 +87,7 @@ window.addEventListener("load", () => {
 			(response.json()).then((text) => {
 				document.getElementById("style").setAttribute('href', text.theme == true ? "darkMode.css" : "lightMode.css");
 				document.getElementById("usernameBtn").innerHTML = text.username;
-				document.getElementById("pfp").style.backgroundImage = "url(" + text.pfp + ")";
+				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
 			});
 		}
