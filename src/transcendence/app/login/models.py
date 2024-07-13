@@ -14,7 +14,7 @@ def get_image_path(instance, filename):
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	dark_theme = models.BooleanField(default=True)
-	profile_picture = models.TextField(default="profilePicture/default.jpg")
+	profile_picture = models.TextField(default="profilePictures/default.jpg")
 	
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwards):
