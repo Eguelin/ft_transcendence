@@ -10,16 +10,6 @@ fetch('/api/user/current', {
 	console.log(response);
 	if (response.ok) {
 		(response.json()).then((text) => {
-			if (text.theme){
-				document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-				document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-				document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-			}
-			else{
-				document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-				document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-				document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-			}
 			
 			fetch ('bodyLess/home.html').then((response) => {
 				(response.text().then(response => {
@@ -38,6 +28,18 @@ fetch('/api/user/current', {
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
+			if (text.theme){
+				document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+				document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+				document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+				document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
+			}
+			else{
+				document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+				document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+				document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+				document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+			}
 
 		});
 	}

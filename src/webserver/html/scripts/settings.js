@@ -4,7 +4,10 @@ homeBtn = document.getElementById("goHomeButton");
 
 
 lightTheme.addEventListener("click", (e) => {
-	document.getElementById("style").setAttribute('href', 'lightMode.css');
+	document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+	document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+	document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+	document.documentElement.style.setProperty("--is-dark-theme", 0);
 	const data = {dark_theme: 0};
 	fetch('/api/user/update', {
 		method: 'POST',
@@ -17,7 +20,10 @@ lightTheme.addEventListener("click", (e) => {
 })
 
 darkTheme.addEventListener("click", (e) => {
-	document.getElementById("style").setAttribute('href', 'darkMode.css');
+	document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+	document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+	document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+	document.documentElement.style.setProperty("--is-dark-theme", 1);
 	const data = {dark_theme: 1};
 	fetch('/api/user/update', {
 		method: 'POST',

@@ -95,11 +95,13 @@ swichTheme.addEventListener("click", () => {
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
 		document.documentElement.style.setProperty("--is-dark-theme", 1);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
 	}
 	else{
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 	}
 })
