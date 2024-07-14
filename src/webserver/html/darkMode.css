@@ -5,14 +5,16 @@
 }
 
 :root {
+	--page-bg-rgb : #110026; /*#FDFDFB*/
 	--main-text-rgb : #FDFDFB; /*#110026*/
 	--hover-text-rgb :  #3A3053;
+	--input-bg-rgb : #FDFDFB; /*#FFDBDE*/
 }
 
 
 body{
 	font-family:'pong';
-	background-color: #110026;
+	background-color: var(--page-bg-rgb);
 	height: 100%;
 }
 
@@ -64,7 +66,7 @@ input{
 	font-family:'pong';
 	border: 0.2px solid var(--main-text-rgb);
 	color: var(--main-text-rgb);
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	border-radius: 1.5vw;
 	font-size: 1vh;
 	padding-top:1.5vh;
@@ -106,7 +108,7 @@ input:focus{
 
 .loginBtn {
 	text-align: center;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	font-weight: thin;	
 	font-family: "pong";
@@ -232,7 +234,7 @@ a {
 
 .dropDownBtn {
 	text-align: left;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	font-style: italic;
 	font-weight: thin;	
@@ -248,7 +250,7 @@ a {
 	display: inline-block;
 	border: 0.2vh solid;
 	border-color: var(--main-text-rgb);
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	margin: 2vh 0 0 25vw;
 	padding-right: 0.1vw;
 	width: fit-content;
@@ -290,7 +292,7 @@ a {
 
 .dropDownContent{
 	display: none;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	width: 20vw;
 }
 
@@ -352,13 +354,13 @@ a {
 
 .dropDownUserContent{
 	display: none;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 }
 
 #dropDownUser:focus{
 	border: 0.2vh solid;
 	border-color: var(--main-text-rgb);
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	width: 10vw;
 }
 
@@ -370,7 +372,7 @@ a {
 #dropDownUser:focus-within{
 	border: 0.2vh solid;
 	border-color: var(--main-text-rgb);
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	width: 10vw;
 }
 
