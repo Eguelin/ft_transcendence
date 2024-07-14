@@ -346,8 +346,8 @@ a {
 
 #usernameBtn {
 	color: #110026;
-	font-size: 3vh;
-	line-height: 10vh;
+	font-size: 3em;
+	line-height: 5vw;
 	display: block;
 	text-align: right;
 }
@@ -412,9 +412,11 @@ a {
 	background: none;
 	font-family: "pong";
 }
+
 .dropDownUserContent button:hover{
 	color: #3A3053;
 }
+
 .dropDownUserContent button:focus{
 	color: #3A3053;
 	outline: none;

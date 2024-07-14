@@ -331,8 +331,8 @@ a {
 
 #usernameBtn {
 	color: #FFDBDE;
-	font-size: 3vh;
-	line-height: 10vh;
+	font-size: 3em;
+	line-height: 5vw;
 	display: block;
 	text-align: right;
 }
