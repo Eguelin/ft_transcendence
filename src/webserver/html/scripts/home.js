@@ -25,9 +25,18 @@ settingsBtn.addEventListener("click", (e) => {
 })
 
 swichTheme.addEventListener("click", () => {
-	const style = document.getElementById("style");
-	const href = style.getAttribute('href');
-	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
+		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--is-dark-theme", 1);
+	}
+	else{
+		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--is-dark-theme", 0);
+	}
 })
 
 dpUserBtn.addEventListener("click", (e) => {
@@ -46,7 +55,16 @@ window.addEventListener("load", () => {
 		if (response.ok) {
 			(response.json()).then((text) => {
 				document.getElementById("usernameBtn").innerHTML = text.username;
-				
+				if (text.theme){
+					document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+					document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+					document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+				}
+				else{
+					document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+					document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+				}
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
 			});
@@ -85,7 +103,16 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				document.getElementById("style").setAttribute('href', text.theme == true ? "darkMode.css" : "lightMode.css");
+				if (text.theme){
+					document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+					document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+					document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+				}
+				else{
+					document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+					document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+				}
 				document.getElementById("usernameBtn").innerHTML = text.username;
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");

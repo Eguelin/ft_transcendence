@@ -90,26 +90,16 @@ registerBtn.addEventListener("click", (e) => {
 })
 
 swichTheme.addEventListener("click", () => {
-	const style = document.getElementById("style");
-	const href = style.getAttribute('href');
-	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
+		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--is-dark-theme", 1);
+	}
+	else{
+		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--is-dark-theme", 0);
+	}
 })
-
-function getCurrentUser() {
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-	.then(response => {
-		if (response.ok) {
-			return response.json();
-		}
-		console.log("Failed to get user")
-	})
-	.catch(error => {
-		console.error('There was a problem with the fetch operation:', error);
-	});
-}

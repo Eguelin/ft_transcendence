@@ -8,7 +8,8 @@
 	--page-bg-rgb : #110026; /*#FDFDFB*/
 	--main-text-rgb : #FDFDFB; /*#110026*/
 	--hover-text-rgb :  #3A3053;
-	--input-bg-rgb : #FDFDFB; /*#FFDBDE*/
+	--input-bg-rgb : #3A3053; /*#FFDBDE*/
+	--is-dark-theme : 1;
 }
 
 
