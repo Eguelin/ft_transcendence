@@ -63,20 +63,21 @@ registerBtn.addEventListener("click", (e) => {
 					},
 					body: JSON.stringify(data),
 					credentials: 'include'
-				})
-				fetch ('bodyLess/home.html').then((response) => {
-					(response.text().then(response => {
-						if (container.innerHTML != "")
-							history.pushState(response, "");
-						else
-							history.replaceState(response,"");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						document.body.appendChild(s);
-					}))
+				}).then(response => {
+					fetch ('bodyLess/home.html').then((response) => {
+						(response.text().then(response => {
+							if (container.innerHTML != "")
+								history.pushState(response, "");
+							else
+								history.replaceState(response,"");
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/home.js`);
+							document.body.appendChild(s);
+						}))
+					});
 				});
 			} else {
 				console.log("Failed to create user")
