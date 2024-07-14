@@ -24,7 +24,8 @@ def create_user(request):
 	try:
 		user = User.objects.create_user(username=username, password=password)
 		user.save()
-		return JsonResponse({'message': 'User created'}, status=201)
+		user = authenticate(request, username=username, password=password)
+		return JsonResponse({'message': 'User created but not logged in'}, status=201)
 	except IntegrityError:
 		return JsonResponse({'message': 'Username already exists'}, status=409)
 	except DatabaseError:
