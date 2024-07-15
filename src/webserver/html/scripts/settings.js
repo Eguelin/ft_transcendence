@@ -16,6 +16,18 @@ germanBtn.addEventListener("click", (e) => {
 	})
 })
 
+englishBtn.addEventListener("click", (e) => {
+	const data = {language_pack: "lang/EN_US.json"};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
+})
+
 lightTheme.addEventListener("click", (e) => {
 	document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
 	document.documentElement.style.setProperty("--main-text-rgb", "#110026");

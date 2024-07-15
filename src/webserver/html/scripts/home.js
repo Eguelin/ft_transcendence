@@ -69,6 +69,11 @@ window.addEventListener("load", () => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
+				fetch(text.lang).then(response => {
+					response.json().then((text) => {
+						document.getElementById("playBtn").innerHTML = text.homePlayBtn;	
+					})
+				})
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
 			});
@@ -119,6 +124,11 @@ window.addEventListener("load", () => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
+				fetch(text.lang).then(response => {
+					response.json().then((text) => {
+						document.getElementById("playBtn").innerHTML = text.homePlayBtn;	
+					})
+				})
 				document.getElementById("usernameBtn").innerHTML = text.username;
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
