@@ -88,6 +88,6 @@ def current_user(request):
 		f = open(request.user.profile.profile_picture, "rb")
 		raw_img = (base64.b64encode(f.read())).decode('utf-8')
 		
-		return JsonResponse({'username': request.user.username, 'theme': request.user.profile.dark_theme, 'pfp': raw_img})
+		return JsonResponse({'username': request.user.username, 'theme': request.user.profile.dark_theme, 'pfp': raw_img, "lang", request.user.profile.language_pack})
 	else:
 		return JsonResponse({'username': None}, status=400)

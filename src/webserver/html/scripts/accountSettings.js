@@ -1,4 +1,3 @@
-container = document.getElementById("container");
 saveBtn = document.getElementById('saveBtn');
 swichTheme = document.getElementById("themeButton");
 homeBtn = document.getElementById("goHomeButton");

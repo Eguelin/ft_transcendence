@@ -1,7 +1,20 @@
 lightTheme = document.getElementById("loadLight");
 darkTheme = document.getElementById("loadDark");
 homeBtn = document.getElementById("goHomeButton");
+germanBtn = document.getElementById("germanBtn");
+englishBtn = document.getElementById("englishBtn");
 
+germanBtn.addEventListener("click", (e) => {
+	const data = {language_pack: "lang/DE_GE.json"};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
+})
 
 lightTheme.addEventListener("click", (e) => {
 	document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
