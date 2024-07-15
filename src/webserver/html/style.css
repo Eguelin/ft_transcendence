@@ -92,7 +92,7 @@ input:focus{
 	width:20vw;
 }
 
-#forgotPassword{
+#forgotPasswordContainer{
 	width:18vw;
    	text-align: left; 
 	padding-top:0; 
@@ -102,7 +102,7 @@ input:focus{
 	display: block flex;
 }
 
-#forgotPassword a{
+#forgotPasswordContainer a{
 	width: inherit;
 	flex: auto;
 }
@@ -133,7 +133,7 @@ input:focus{
 	border-radius: 1.5vw;
 }
 
-#loginOpt{
+.loginOpt{
 	text-align: center;
 	color: var(--main-text-rgb);
 	font-size: 3vh;

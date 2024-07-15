@@ -25,6 +25,14 @@ fetch('/api/user/current', {
 					document.body.appendChild(s);
 					document.getElementById("usernameBtn").innerHTML = text.username;
 				document.getElementById("pfp").style.backgroundImage = `url(${text.pfp})`;
+					fetch(text.lang).then(response => {
+						response.json().then((text) => {
+							content = text['home'];
+							Object.keys(content).forEach(function(key) {
+								document.getElementById(key).innerHTML = content[key];
+							});
+						})
+					})
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
@@ -58,6 +66,14 @@ fetch('/api/user/current', {
 				s.setAttribute('id', 'script');
 				s.setAttribute('src', `scripts/login.js`);
 				document.body.appendChild(s);
+				fetch(text.lang).then(response => {
+					response.json().then((text) => {
+						content = text['login'];
+						Object.keys(content).forEach(function(key) {
+							document.getElementById(key).innerHTML = content[key];
+						});
+					})
+				})
 				history.replaceState(container.innerHTML, "");
 			}))
 		});
@@ -95,6 +111,14 @@ window.addEventListener("popstate", (event) => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
+					fetch(text.lang).then(response => {
+						response.json().then((text) => {
+							content = text['login'];
+							Object.keys(content).forEach(function(key) {
+								document.getElementById(key).innerHTML = content[key];
+							});
+						})
+					})
 					history.replaceState(container.innerHTML, "");
 				}))
 			});

@@ -19,6 +19,26 @@ settingsBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/settings.js`);
+			fetch('/api/user/current', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			}).then(response => {
+				if (response.ok) {
+					(response.json()).then((text) => {
+						fetch(text.lang).then(response => {
+							response.json().then((text) => {
+								content = text['settings'];
+								Object.keys(content).forEach(function(key) {
+									document.getElementById(key).innerHTML = content[key];
+								});
+							})
+						})
+					})
+				};
+			});
 			document.body.appendChild(s);
 		}))
 	});
@@ -71,7 +91,10 @@ window.addEventListener("load", () => {
 				}
 				fetch(text.lang).then(response => {
 					response.json().then((text) => {
-						document.getElementById("playBtn").innerHTML = text.homePlayBtn;	
+						content = text['home'];
+						Object.keys(content).forEach(function(key) {
+							document.getElementById(key).innerHTML = content[key];
+						});
 					})
 				})
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
@@ -128,7 +151,6 @@ window.addEventListener("load", () => {
 					response.json().then((text) => {
 						content = text['home'];
 						Object.keys(content).forEach(function(key) {
-							console.log(key);
 							document.getElementById(key).innerHTML = content[key];
 						});
 					})
