@@ -1,9 +1,13 @@
 {
-	"loginTitle" : "LOGIN",
-	"loginWCredentials" : "Login with credentials",
-	"homeTitle" : "PONG",
-	"homeAccSettingsBtn" :  "Account settings",
-	"homelogOutBtn" :  "Log out",
-	"homePlayBtn" : "Play",
-	"homeSettingBtn" : "Settings"
+	"home" : {
+		"title" : "PONG",
+		"accountSettingsBtn" :  "Account settings",
+		"logOutBtn" :  "Log out",
+		"playBtn" : "Play",
+		"settingsBtn" : "Settings"
+	},
+	"login" : {
+		"title" : "LOGIN",
+		"loginWCredentials" : "Login with credentials"
+	}
 }
