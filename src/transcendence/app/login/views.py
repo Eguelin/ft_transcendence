@@ -74,6 +74,8 @@ def profile_update(request):
 				f.write(base64.b64decode(raw))
 				f.close()
 				user.profile.profile_picture = pfpName								
+			if ("language_pack" in data):
+				user.profile.language_pack = data['language_pack']
 			user.save()
 			return JsonResponse({'message': 'User profile updated'})
 		except json.JSONDecodeError:
