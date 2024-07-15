@@ -126,7 +126,11 @@ window.addEventListener("load", () => {
 				}
 				fetch(text.lang).then(response => {
 					response.json().then((text) => {
-						document.getElementById("playBtn").innerHTML = text.homePlayBtn;	
+						content = text['home'];
+						Object.keys(content).forEach(function(key) {
+							console.log(key);
+							document.getElementById(key).innerHTML = content[key];
+						});
 					})
 				})
 				document.getElementById("usernameBtn").innerHTML = text.username;
