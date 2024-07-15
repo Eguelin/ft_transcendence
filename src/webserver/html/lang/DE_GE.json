@@ -1,0 +1,9 @@
+{
+	"loginTitle" : "LOGIN",
+	"loginWCredentials" : "Login with credentials",
+	"homeTitle" : "PONG",
+	"homeAccSettingsBtn" :  "Account settings",
+	"homelogOutBtn" :  "Log out",
+	"homePlayBtn" : "Spielen",
+	"homeSettingBtn" : "Settings"
+}
