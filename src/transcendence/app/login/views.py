@@ -43,6 +43,9 @@ def fortytwo(request):
 	return JsonResponse(response.json())
 
 
+import subprocess
+import base64
+
 def create_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -60,7 +63,8 @@ def create_user(request):
 	try:
 		user = User.objects.create_user(username=username, password=password)
 		user.save()
-		return JsonResponse({'message': 'User created'}, status=201)
+		user = authenticate(request, username=username, password=password)
+		return JsonResponse({'message': 'User created but not logged in'}, status=201)
 	except IntegrityError:
 		return JsonResponse({'message': 'Username already exists'}, status=409)
 	except DatabaseError:
@@ -93,10 +97,41 @@ def user_logout(request):
 	logout(request)
 	return JsonResponse({'message': 'User logged out'})
 
+def profile_update(request):
+	if (request.method == 'POST'):
+		try:
+			data = json.loads(request.body)
+			user = request.user
+			if "dark_theme" in data:
+				user.profile.dark_theme = data['dark_theme']
+			if "username" in data:
+				user.username = data['username']
+			if "pfp" in data:
+				raw = data['pfp']
+				pfpName = "profilePictures/{0}.jpg".format(user.username)
+				f = open(pfpName, "wb")
+				f.write(base64.b64decode(raw))
+				f.close()
+				user.profile.profile_picture = pfpName								
+			if ("language_pack" in data):
+				user.profile.language_pack = data['language_pack']
+			user.save()
+			return JsonResponse({'message': 'User profile updated'})
+		except json.JSONDecodeError:
+			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
 def current_user(request):
+	ls = subprocess.run(['ls'], stdout=subprocess.PIPE)
+	pwd = subprocess.run(['pwd'], stdout=subprocess.PIPE)
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
-		return JsonResponse({'username': request.user.username})
+		f = open(request.user.profile.profile_picture, "rb")
+		raw_img = (base64.b64encode(f.read())).decode('utf-8')
+		
+		return JsonResponse({'username': request.user.username,
+			'theme': request.user.profile.dark_theme,
+			'pfp': raw_img,
+			'lang': request.user.profile.language_pack})
 	else:
-		return JsonResponse({'username': None})
+		return JsonResponse({'username': None}, status=400)

@@ -1,0 +1,29 @@
+{
+	"home" : {
+		"title" : "PONG",
+		"accountSettingsBtn" :  "Account settings",
+		"logOutBtn" :  "Log out",
+		"playBtn" : "Play",
+		"settingsBtn" : "Settings"
+	},
+	"login" : {
+		"title" : "LOGIN",
+		"internalLoginOpt" : "Login with credentials",
+		"forgotPassword" : "Forgot password",
+		"registerLink" : "register",
+		"loginBtn" : "LOGIN",
+		"externalLoginOpt" : "Other login options"
+	},
+	"settings" : {
+		"title" : "SETTINGS",
+		"themesDropDown" : "Themes",
+		"loadLight" : "Light",
+		"loadDark" : "Dark",
+		"languagesDropDown" : "Languages",
+		"englishBtn" : "English",
+		"frenchBtn" : "French",
+		"germanBtn" : "German",
+		"italianBtn" : "Italian",
+		"pirateBtn" : "Pirate"
+	}
+}
