@@ -19,29 +19,7 @@ settingsBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/settings.js`);
-			fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			}).then(response => {
-				if (response.ok) {
-					(response.json()).then((text) => {
-						fetch(text.lang).then(response => {
-							response.json().then((text) => {
-								content = text['settings'];
-								Object.keys(content).forEach(function(key) {
-									if (key.startsWith('input'))
-										document.getElementById(key).placeholder = content[key];
-									else
-										document.getElementById(key).innerHTML = content[key];
-								});
-							})
-						})
-					})
-				};
-			});
+			loadCurrentLang("settings");
 			document.body.appendChild(s);
 		}))
 	});
@@ -92,17 +70,7 @@ window.addEventListener("load", () => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
-				fetch(text.lang).then(response => {
-					response.json().then((text) => {
-						content = text['home'];
-						Object.keys(content).forEach(function(key) {
-							if (key.startsWith('input'))
-								document.getElementById(key).placeholder = content[key];
-							else
-								document.getElementById(key).innerHTML = content[key];
-						});
-					})
-				})
+				loadCurrentLang("home");
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
 			});
@@ -153,17 +121,7 @@ window.addEventListener("load", () => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
-				fetch(text.lang).then(response => {
-					response.json().then((text) => {
-						content = text['home'];
-						Object.keys(content).forEach(function(key) {
-							if (key.startsWith('input'))
-								document.getElementById(key).placeholder = content[key];
-							else
-								document.getElementById(key).innerHTML = content[key];
-						});
-					})
-				})
+				loadCurrentLang("home");
 				document.getElementById("usernameBtn").innerHTML = text.username;
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
@@ -229,29 +187,7 @@ accSettingsBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/accountSettings.js`);
-			fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			}).then(response => {
-				if (response.ok) {
-					(response.json()).then((text) => {
-						fetch(text.lang).then(response => {
-							response.json().then((text) => {
-								content = text['accountSettings'];
-								Object.keys(content).forEach(function(key) {
-									if (key.startsWith('input'))
-										document.getElementById(key).placeholder = content[key];
-									else
-										document.getElementById(key).innerHTML = content[key];
-								});
-							})
-						})
-					})
-				};
-			});
+			loadCurrentLang("accountSettings");
 			document.body.appendChild(s);
 		}))
 	});

@@ -36,17 +36,7 @@ fetch('/api/user/current', {
 						document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 						document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 					}
-					fetch(text.lang).then(response => {
-						response.json().then((text) => {
-							content = text['home'];
-							Object.keys(content).forEach(function(key) {
-								if (key.startsWith('input'))
-									document.getElementById(key).placeholder = content[key];
-								else
-									document.getElementById(key).innerHTML = content[key];
-							});
-						})
-					})
+					loadCurrentLang("home");
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
@@ -68,14 +58,7 @@ fetch('/api/user/current', {
 				s.setAttribute('id', 'script');
 				s.setAttribute('src', `scripts/login.js`);
 				document.body.appendChild(s);
-				fetch(text.lang).then(response => {
-					response.json().then((text) => {
-						content = text['login'];
-						Object.keys(content).forEach(function(key) {
-							document.getElementById(key).innerHTML = content[key];
-						});
-					})
-				})
+				loadCurrentLang("login");
 				history.replaceState(container.innerHTML, "");
 			}))
 		});
@@ -113,23 +96,39 @@ window.addEventListener("popstate", (event) => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
-					fetch(text.lang).then(response => {
-						response.json().then((text) => {
-							content = text['login'];
-							Object.keys(content).forEach(function(key) {
-								if (key.startsWith('input'))
-									document.getElementById(key).placeholder = content[key];
-								else
-									document.getElementById(key).innerHTML = content[key];
-							});
-						})
-					})
+					loadCurrentLang("login");
 					history.replaceState(container.innerHTML, "");
 				}))
 			});
 		}
 	})
 });
+
+function loadCurrentLang(page){ //just for better readability before prod, don't care about efficiency
+	fetch('/api/user/current', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	}).then(response => {
+		if (response.ok) {
+			(response.json()).then((text) => {
+				fetch(text.lang).then(response => {
+					response.json().then((text) => {
+						content = text[page];
+						Object.keys(content).forEach(function(key) {
+							if (key.startsWith('input'))
+								document.getElementById(key).placeholder = content[key];
+							else
+								document.getElementById(key).innerHTML = content[key];
+						});
+					})
+				})
+			})
+		};
+	});
+}
 
 // MOST OF THAT STUFF NOT BE ON PROD
 
