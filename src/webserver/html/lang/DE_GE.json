@@ -1,13 +1,46 @@
 {
 	"home" : {
 		"title" : "PONG",
-		"accountSettingsBtn" :  "Account settings",
-		"logOutBtn" :  "Log out",
+		"accountSettingsBtn" :  "Account Einstellungen",
+		"logOutBtn" :  "Ausloggen",
 		"playBtn" : "Spielen",
-		"settingsBtn" : "Settings"
+		"settingsBtn" : "Einstellungen"
 	},
 	"login" : {
-		"title" : "LOGIN",
-		"loginWCredentials" : "Login with credentials"
+		"title" : "ANMELDUNG",
+		"internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
+		"forgotPassword" : "Passwort vergessen",
+		"registerLink" : "registrieren",
+		"loginBtn" : "ANMELDUNG",
+		"externalLoginOpt" : "Weitere anmeldeoptionen",
+		"inputUsername" : "Nutzername",
+		"inputPassword" : "Passwort"
+	},
+	"settings" : {
+		"title" : "EINSTELLUNGEN",
+		"themesDropDown" : "Themen",
+		"loadLight" : "Licht",
+		"loadDark" : "Dunkel",
+		"languagesDropDown" : "Sprachen",
+		"englishBtn" : "Englisch",
+		"frenchBtn" : "Französisch",
+		"germanBtn" : "Deutsch",
+		"italianBtn" : "Italienisch",
+		"pirateBtn" : "Pirat"
+	},
+	"register" : {
+		"title" : "REGISTRIEREN",
+		"createAcc" : "Erstelle deinen Account",
+		"registerBtn" : "REGISTRIEREN",
+		"inputMail" : "E-mail",
+		"inputUsername" : "Nutzername",
+		"inputPassword" : "Passwort",
+		"inputCPassword" : "Bestätige das Passwort"
+	},
+	"accountSettings": {
+		"title" : "Account Einstellungen",
+		"saveBtn" : "SPEICHERN",
+		"inputUsername" : "Nutzername",
+		"inputPfp" : "Profilbild"
 	}
 }
