@@ -6,6 +6,17 @@ englishBtn = document.getElementById("englishBtn");
 
 germanBtn.addEventListener("click", (e) => {
 	const data = {language_pack: "lang/DE_GE.json"};
+	fetch("lang/DE_GE.json").then(response => {
+		response.json().then((text) => {
+			content = text['settings'];
+			Object.keys(content).forEach(function(key) {
+				if (key.startsWith('input'))
+					document.getElementById(key).placeholder = content[key];
+				else
+					document.getElementById(key).innerHTML = content[key];
+			});
+		})
+	})
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
@@ -18,6 +29,17 @@ germanBtn.addEventListener("click", (e) => {
 
 englishBtn.addEventListener("click", (e) => {
 	const data = {language_pack: "lang/EN_US.json"};
+	fetch("lang/EN_US.json").then(response => {
+		response.json().then((text) => {
+			content = text['settings'];
+			Object.keys(content).forEach(function(key) {
+				if (key.startsWith('input'))
+					document.getElementById(key).placeholder = content[key];
+				else
+					document.getElementById(key).innerHTML = content[key];
+			});
+		})
+	})
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
