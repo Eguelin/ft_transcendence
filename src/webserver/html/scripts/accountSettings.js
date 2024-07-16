@@ -33,29 +33,7 @@ homeBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/home.js`);
-			fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			}).then(response => {
-				if (response.ok) {
-					(response.json()).then((text) => {
-						fetch(text.lang).then(response => {
-							response.json().then((text) => {
-								content = text['home'];
-								Object.keys(content).forEach(function(key) {
-									if (key.startsWith('input'))
-										document.getElementById(key).placeholder = content[key];
-									else
-										document.getElementById(key).innerHTML = content[key];
-								});
-							})
-						})
-					})
-				};
-			});
+			loadCurrentLang("home");
 			document.body.appendChild(s);
 		}))
 	});	
@@ -120,6 +98,7 @@ saveBtn.addEventListener("click", (e) => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 				}
 				usernameInput.setAttribute('placeholder', text.username);
+				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
 			});
 		}
@@ -149,6 +128,7 @@ window.addEventListener("load", () => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 				}
 				username.setAttribute('placeholder', text.username);
+				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
 			});
 		}

@@ -64,6 +64,7 @@ loginBtn.addEventListener("click", (e) => {
 						var s = document.createElement("script");
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/home.js`);
+						loadCurrentLang("home");
 						document.body.appendChild(s);
 					}))
 				});
