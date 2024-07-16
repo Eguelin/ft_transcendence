@@ -32,7 +32,10 @@ settingsBtn.addEventListener("click", (e) => {
 							response.json().then((text) => {
 								content = text['settings'];
 								Object.keys(content).forEach(function(key) {
-									document.getElementById(key).innerHTML = content[key];
+									if (key.startsWith('input'))
+										document.getElementById(key).placeholder = content[key];
+									else
+										document.getElementById(key).innerHTML = content[key];
 								});
 							})
 						})
@@ -93,7 +96,10 @@ window.addEventListener("load", () => {
 					response.json().then((text) => {
 						content = text['home'];
 						Object.keys(content).forEach(function(key) {
-							document.getElementById(key).innerHTML = content[key];
+							if (key.startsWith('input'))
+								document.getElementById(key).placeholder = content[key];
+							else
+								document.getElementById(key).innerHTML = content[key];
 						});
 					})
 				})
@@ -151,7 +157,10 @@ window.addEventListener("load", () => {
 					response.json().then((text) => {
 						content = text['home'];
 						Object.keys(content).forEach(function(key) {
-							document.getElementById(key).innerHTML = content[key];
+							if (key.startsWith('input'))
+								document.getElementById(key).placeholder = content[key];
+							else
+								document.getElementById(key).innerHTML = content[key];
 						});
 					})
 				})
@@ -220,6 +229,29 @@ accSettingsBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/accountSettings.js`);
+			fetch('/api/user/current', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			}).then(response => {
+				if (response.ok) {
+					(response.json()).then((text) => {
+						fetch(text.lang).then(response => {
+							response.json().then((text) => {
+								content = text['accountSettings'];
+								Object.keys(content).forEach(function(key) {
+									if (key.startsWith('input'))
+										document.getElementById(key).placeholder = content[key];
+									else
+										document.getElementById(key).innerHTML = content[key];
+								});
+							})
+						})
+					})
+				};
+			});
 			document.body.appendChild(s);
 		}))
 	});

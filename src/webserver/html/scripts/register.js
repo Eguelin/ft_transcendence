@@ -10,11 +10,11 @@ window.addEventListener("popstate", (event) => {
 });
 
 registerBtn.addEventListener("click", (e) => {
-	email = document.getElementById('mail').value;
 	var lock = 0;
-	username = document.getElementById('username').value;
-	pw = document.getElementById('password').value;
-	cpw = document.getElementById('cPassword').value;
+	email = document.getElementById('inputMail').value;
+	username = document.getElementById('inputUsername').value;
+	pw = document.getElementById('inputPassword').value;
+	cpw = document.getElementById('inputCPassword').value;
 	inputs = document.getElementsByClassName('formInput');
 	warning = document.createElement("a");
 	warning.className = "warning";
@@ -33,14 +33,14 @@ registerBtn.addEventListener("click", (e) => {
 		warning = document.createElement("a");
 		warning.className = "warning";
 		warning.text = "Passwords do not match";
-		if (document.getElementById('cPassword').previousElementSibling && document.getElementById('cPassword').previousElementSibling.text == "Field can't be empty"){
-			document.getElementById('cPassword').previousElementSibling.remove();
+		if (document.getElementById('inputCPassword').previousElementSibling && document.getElementById('inputCPassword').previousElementSibling.text == "Field can't be empty"){
+			document.getElementById('inputCPassword').previousElementSibling.remove();
 		}
-		if (!document.getElementById('cPassword').previousElementSibling || document.getElementById('cPassword').previousElementSibling.text != "Passwords do not match"){
-			document.getElementById("cPassword").before(warning);
+		if (!document.getElementById('inputCPassword').previousElementSibling || document.getElementById('inputCPassword').previousElementSibling.text != "Passwords do not match"){
+			document.getElementById("inputCPassword").before(warning);
 		}
-		else if (cpw != "" && document.getElementById('cPassword').previousElementSibling.text == "Field can't be empty"){
-			document.getElementById('cPassword').previousElementSibling.remove();
+		else if (cpw != "" && document.getElementById('inputCPassword').previousElementSibling.text == "Field can't be empty"){
+			document.getElementById('inputCPassword').previousElementSibling.remove();
 		}
 	}
 	else if (lock == 0){
