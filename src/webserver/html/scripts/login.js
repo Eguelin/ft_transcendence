@@ -101,6 +101,7 @@ loginBtn.addEventListener("click", (e) => {
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/home.js`);
 						document.body.appendChild(s);
+<<<<<<< HEAD
 
 						var user = fetch('/api/user/current', {
 							method: 'GET',
@@ -119,6 +120,8 @@ loginBtn.addEventListener("click", (e) => {
 						user.then((text) => {
 							document.getElementById("username").innerHTML = text.username;
 						})
+=======
+>>>>>>> front
 					}))
 				});
 
@@ -138,8 +141,27 @@ loginBtn.addEventListener("click", (e) => {
 	}
 })
 
+<<<<<<< HEAD
 swichTheme.addEventListener("click", () => {
 	const style = document.getElementById("style");
 	const href = style.getAttribute('href');
 	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+=======
+swichTheme.addEventListener("click", (e) => {
+	console.log(window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme"));
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
+		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--is-dark-theme", 1);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")"
+	}
+	else{
+		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--is-dark-theme", 0);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")"
+	}
+>>>>>>> front
 })

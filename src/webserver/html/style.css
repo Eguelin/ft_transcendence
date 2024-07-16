@@ -4,14 +4,23 @@
 	src: url('fonts/PrintChar21.ttf');
 }
 
+:root {
+	--page-bg-rgb : #110026; /*#FDFDFB*/
+	--main-text-rgb : #FDFDFB; /*#110026*/
+	--hover-text-rgb :  #3A3053;
+	--input-bg-rgb : #3A3053; /*#FFDBDE*/
+	--is-dark-theme : 1;
+}
+
+
 body{
 	font-family:'pong';
-	background-color: #FDFDFB;
+	background-color: var(--page-bg-rgb);
 	height: 100%;
 }
 
 h1{
-	color: #110026;
+	color: var(--main-text-rgb);
 	height: inherit;
 	font-size: 10vh;
 	font-style: italic;
@@ -19,35 +28,47 @@ h1{
 	margin-bottom: 5vh;
 }
 
-.quickSettingContainer #username {
-	color: #110026;
-	font-size: 3vh;
-	line-height: 10vh;
-	margin-left: 1vw;
-}
-
 .options {
 	text-align: center;
-	color: #110026;
+	color: var(--main-text-rgb);
 	font-size: 7vh;
 	font-style:italic;
 	font-weight:thin;	
-	padding-top:2vh;
+	margin-top:5vh;
 	margin-left:auto;
 	margin-right:auto;
 	width:fit-content;
 }
 
-.options:hover{
-	color: #FFDBDE;
+.options button:hover{
+	color: var(--hover-text-rgb);
+}
+
+.options button:focus{
+	color: var(--hover-text-rgb);
+	outline: none;
+}
+
+.options button{
+	text-align: center;
+	color: var(--main-text-rgb);
+	font-size: 7vh;
+	font-style:italic;
+	font-weight:thin;	
+	font-family: "pong";
+	margin-left:auto;
+	margin-right:auto;
+	width:fit-content;
+	background: none;
+	border: none;
 }
 
 input{
 	font-family:'pong';
-	border: 0.2px solid #110026;
-	color: #110026;
-	background-color: #FFDBDE;
-	border-radius: 25px;
+	border: 0.2px solid var(--main-text-rgb);
+	color: var(--main-text-rgb);
+	background-color: var(--input-bg-rgb);
+	border-radius: 1.5vw;
 	font-size: 1vh;
 	padding-top:1.5vh;
 	padding-left: 1vw;
@@ -62,7 +83,7 @@ input:focus{
 
 .forms {
 	text-align: center;
-	color: #110026;
+	color: var(--main-text-rgb);
 	font-style:italic;
 	font-weight:thin;	
 	margin-left:auto;
@@ -71,37 +92,50 @@ input:focus{
 	width:20vw;
 }
 
-#forgotPassword{
+#forgotPasswordContainer{
 	width:18vw;
    	text-align: left; 
 	padding-top:0; 
-	color:#FFDBDE; 
+	color:var(--hover-text-rgb); 
 	font-size:1vh; 
 	padding-top:1vh;
 	display: block flex;
 }
 
-#forgotPassword a{
+#forgotPasswordContainer a{
 	width: inherit;
 	flex: auto;
 }
 
 .loginBtn {
 	text-align: center;
-	background-color: #FFDBDE;
-	color: #110026;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
 	font-weight: thin;	
 	font-family: "pong";
 	font-size: 4vh;
 	padding: 1vh 0;
 	width: 20vw;
-	border: 0.2px solid #110026;
+	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
 }
 
-#loginOpt{
+.saveBtn {
 	text-align: center;
-	color: #110026;
+	background-color: limegreen;
+	color: var(--main-text-rgb);
+	font-weight: thin;	
+	font-family: "pong";
+	font-size: 4vh;
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+}
+
+.loginOpt{
+	text-align: center;
+	color: var(--main-text-rgb);
 	font-size: 3vh;
 	font-weight:thin;
 	padding-top:2vh;
@@ -121,7 +155,7 @@ input:focus{
 
 #fortyTwoLogin{
 	mask-image:url("svg/42.svg");
-	background:#110026;
+	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
 	top:5vh;
@@ -134,7 +168,7 @@ input:focus{
 
 #githubLogin{
 	mask-image:url("svg/github.svg");
-	background:#110026;
+	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
 	top:5vh;
@@ -175,7 +209,7 @@ a {
 
 #goHomeButton{
 	mask-image:url("svg/left_arrow.svg");
-	background:#110026;
+	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
 	position:absolute;
@@ -187,13 +221,10 @@ a {
 }
 
 #themeButton{
-	mask-image:url("svg/button-light-mode.svg");
-	background:#110026;
+	mask-image:url("svg/button-night-mode.svg");
+	background:var(--main-text-rgb);
 	height:5vw;
 	width:5vw;
-	/*position:absolute;
-	top:5vh;
-	right:5vw;*/
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -201,8 +232,8 @@ a {
 
 .dropDownBtn {
 	text-align: left;
-	background-color: #FFDBDE;
-	color: #110026;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
 	font-style: italic;
 	font-weight: thin;	
 	font-family: "pong";
@@ -216,8 +247,8 @@ a {
 	position: relative;
 	display: inline-block;
 	border: 0.2vh solid;
-	border-color: #110026;
-	background-color: #FFDBDE;
+	border-color: var(--main-text-rgb);
+	background-color: var(--input-bg-rgb);
 	margin: 2vh 0 0 25vw;
 	padding-right: 0.1vw;
 	width: fit-content;
@@ -225,7 +256,7 @@ a {
 
 .dropDownArrow{
 	mask-image:url("svg/right_arrow.svg");
-	background:#110026;
+	background:var(--main-text-rgb);
 	height:5vh;
 	width:5vw;
 	position:absolute;
@@ -247,8 +278,8 @@ a {
 }
 
 .dropDown:hover .dropDownContent{
-	border: 0.2vh solid #110026;
-	border-block-start: #FFDBDE;
+	border: 0.2vh solid var(--main-text-rgb);
+	border-block-start: var(--hover-text-rgb);
 	width:29vw;
 	margin-left: 21vw;
 	margin-right: 20vw;
@@ -259,7 +290,7 @@ a {
 
 .dropDownContent{
 	display: none;
-	background-color: #FFDBDE;
+	background-color: var(--input-bg-rgb);
 	width: 20vw;
 }
 
@@ -276,8 +307,9 @@ a {
 	display: block;
 }
 .dropDownContent a:hover{
-	color: #fdfdfb;
+	color: var(--main-text-rgb);
 }
+
 
 
 .profilePicture {
@@ -292,13 +324,93 @@ a {
 	background-position: 50% 50%;
 	
 	border-radius: 50%;
-	background-image: url(https://cdn.intra.42.fr/users/a42d9d3633c955300a9b5d1c12c67156/llevasse.jpg);
-
+	/*background-image: url(https://cdn.intra.42.fr/users/a42d9d3633c955300a9b5d1c12c67156/llevasse.jpg);
+*/
 }
 
-.quickSettingContainer{
+#quickSettingContainer{
 	position: absolute;
 	right: 5vw;
 	top: 5vh;
 	display: flex;
 }
+
+#usernameBtn {
+	color: var(--main-text-rgb);
+	font-size: 3em;
+	line-height: 5vw;
+	display: block;
+	text-align: right;
+}
+
+#dropDownUser {
+	position: relative;
+	display: inline-block;
+	padding-right: 0.1vw;
+	margin-left: 1vw;
+}
+
+.dropDownUserContent{
+	display: none;
+	background-color: var(--input-bg-rgb);
+}
+
+#dropDownUser:focus{
+	border: 0.2vh solid;
+	border-color: var(--main-text-rgb);
+	background-color: var(--input-bg-rgb);
+	width: 10vw;
+}
+
+#dropDownUser:focus #usernameBtn {
+	text-align: center;
+}
+
+
+#dropDownUser:focus-within{
+	border: 0.2vh solid;
+	border-color: var(--main-text-rgb);
+	background-color: var(--input-bg-rgb);
+	width: 10vw;
+}
+
+#dropDownUser:focus-within #usernameBtn {
+	text-align: center;
+}
+
+
+#dropDownUser:focus .dropDownUserContent{
+	border-block-start: var(--hover-text-rgb);
+	width: inherit;
+	display: block;
+	z-index: 1;
+}
+
+#dropDownUser:focus-within .dropDownUserContent{
+	border-block-start: var(--hover-text-rgb);
+	width: inherit;
+	display: block;
+	z-index: 1;
+}
+
+.dropDownUserContent button{
+	text-align: center;
+	color: inherit;
+	text-decoration: inherit;
+	display: block;
+	font-size: 2vh;
+	width: inherit;
+	margin: 0.5em 0 0.5em 0;
+	border: none;
+	background: none;
+	font-family: "pong";
+}
+.dropDownUserContent button:hover{
+	color: var(--main-text-rgb);
+}
+
+.dropDownUserContent button:focus{
+	color: var(--main-text-rgb);
+	outline: none;
+}
+
