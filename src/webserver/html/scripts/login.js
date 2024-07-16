@@ -22,8 +22,8 @@ registerLink.addEventListener("click", (e) => {
 });
 
 loginBtn.addEventListener("click", (e) => {
-	username = document.getElementById('username').value;
-	pw = document.getElementById('password').value;
+	username = document.getElementById('inputUsername').value;
+	pw = document.getElementById('inputPassword').value;
 	inputs = document.getElementsByClassName('formInput');
 	warning = document.createElement("a");
 	warning.className = "warning";
