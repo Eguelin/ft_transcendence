@@ -336,6 +336,107 @@ a {
 	}	
 }
 
+@media (max-width:960px){
+	.dropDownBtn {
+		text-align: left;
+		background-color: var(--input-bg-rgb);
+		color: var(--main-text-rgb);
+		font-style: italic;
+		font-weight: thin;	
+		font-family: "pong";
+		font-size: min(4vh, 3vw);
+		padding: 1vh 0;
+		width: 45vw;
+		border: 0;
+	}
+	
+	.dropDown{
+		position: relative;	
+		display: flex;
+		border: 0.2vh solid;
+		border-color: var(--main-text-rgb);
+		background-color: var(--input-bg-rgb);
+		margin: 2vh 0 0 25vw;	
+		width: fit-content;
+		outline: none;
+	}
+	
+	.dropDownArrow{
+		mask-image:url("svg/right_arrow.svg");
+		background:var(--main-text-rgb);
+		height:min(5vh, 5vw);
+		width:5vw;
+		margin: 0.5vh 0vh 0.5vh 0vh;
+		mask-size:contain;
+		mask-position:center;
+		mask-repeat:no-repeat;
+		mask-clip: no-clip;
+	}
+	
+	.dropDownOptionContainer {
+		display: flex;
+		flex-flow: column;
+		background: var(--hover-text-rgb);
+	}
+	
+	.dropDown:hover .dropDownOptionContainer, .dropDown:focus .dropDownOptionContainer{
+		position: absolute;
+		min-width: 25vw;
+		width: max-content;
+		right: -0.2vh;
+		border-right: 0.2vh solid var(--main-text-rgb);
+	}
+	
+	.dropDown:hover .dropDownOptionContainer .dropDownArrow, .dropDown:focus .dropDownOptionContainer .dropDownArrow{
+		/*transform: rotate(90deg);	*/
+		right: 12.5vw;
+		outline: none;
+		width: -webkit-fill-available;
+		border-block-start: var(--hover-text-rgb);
+	}
+	
+	.dropDown:hover .dropDownBtn, .dropDown:focus .dropDownBtn{
+		display: inline-block;
+		width: 50vw;
+		flex: 1;
+		outline: none;
+	}
+	
+	.dropDown:hover .dropDownOptionContainer .dropDownContent, .dropDown:focus .dropDownOptionContainer .dropDownContent{
+		border-left: 0.2vh solid var(--main-text-rgb);
+		border-bottom: 0.2vh solid var(--main-text-rgb);
+		border-block-start: var(--hover-text-rgb);
+		width: -webkit-fill-available;
+		display: block;
+		z-index: 2;
+		flex: 1;
+		outline: none;
+	}	
+
+	.dropDownContent{
+		display: none;
+		background-color: var(--input-bg-rgb);
+		width: 20vw;
+	}
+	
+	
+	.dropDownContent a{
+		text-align: center;
+		color: inherit;
+		text-decoration: inherit;
+		font-size: min(4vh,3vw);
+		padding: 1vh 1vw;
+		margin-left: auto;
+		margin-right: auto;
+		min-width: inherit;
+		display: block;
+	}
+	.dropDownContent a:hover{
+		color: var(--main-text-rgb);
+	}	
+}
+
+
 .profilePicture {
 	height: 4vw;
 	width: 4vw;
@@ -406,14 +507,12 @@ a {
 
 #dropDownUser:focus .dropDownUserContent{
 	border-block-start: var(--hover-text-rgb);
-	width: inherit;
 	display: block;
 	z-index: 1;
 }
 
 #dropDownUser:focus-within .dropDownUserContent{
 	border-block-start: var(--hover-text-rgb);
-	width: inherit;
 	display: block;
 	z-index: 1;
 }
