@@ -12,7 +12,9 @@
 		"forgotPassword" : "Forgot password",
 		"registerLink" : "register",
 		"loginBtn" : "LOGIN",
-		"externalLoginOpt" : "Other login options"
+		"externalLoginOpt" : "Other login options",
+		"inputUsername" : "Username",
+		"inputPassword" : "Password"
 	},
 	"settings" : {
 		"title" : "SETTINGS",
@@ -25,5 +27,20 @@
 		"germanBtn" : "German",
 		"italianBtn" : "Italian",
 		"pirateBtn" : "Pirate"
+	},
+	"register" : {
+		"title" : "REGISTER",
+		"createAcc" : "Create your account",
+		"registerBtn" : "REGISTER",
+		"inputMail" : "E-mail",
+		"inputUsername" : "Username",
+		"inputPassword" : "Password",
+		"inputCPassword" : "Confirm password"
+	},
+	"accountSettings": {
+		"title" : "Account settings",
+		"saveBtn" : "SAVE",
+		"inputUsername" : "Username",
+		"inputPfp" : "Profile picture"
 	}
 }

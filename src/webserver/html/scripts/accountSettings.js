@@ -1,8 +1,8 @@
 saveBtn = document.getElementById('saveBtn');
 swichTheme = document.getElementById("themeButton");
 homeBtn = document.getElementById("goHomeButton");
-usernameInput = document.getElementById("usernameInput");
-pfpInput = document.getElementById("pfpInput");
+usernameInput = document.getElementById("inputUsername");
+pfpInput = document.getElementById("inputPfp");
 
 swichTheme.addEventListener("click", () => {
 	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
@@ -33,6 +33,7 @@ homeBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/home.js`);
+			loadCurrentLang("home");
 			document.body.appendChild(s);
 		}))
 	});	
@@ -59,7 +60,17 @@ saveBtn.addEventListener("click", (e) => {
 				},
 				body: JSON.stringify(data),
 				credentials: 'include'
-			})	
+			}).then(response => {
+				if (!response.ok){
+					warning = document.createElement("a");
+					warning.className = "warning";
+					warning.text = "File is too heavy";
+					if (!pfpInput.previousElementSibling)
+						pfpInput.before(warning);
+				}
+				else if (pfpInput.previousElementSibling)
+					pfpInput.previousElementSibling.remove();
+			})
 		}
 		
 	}
@@ -97,6 +108,7 @@ saveBtn.addEventListener("click", (e) => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 				}
 				usernameInput.setAttribute('placeholder', text.username);
+				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
 			});
 		}
@@ -126,6 +138,7 @@ window.addEventListener("load", () => {
 					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 				}
 				username.setAttribute('placeholder', text.username);
+				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
 			});
 		}
