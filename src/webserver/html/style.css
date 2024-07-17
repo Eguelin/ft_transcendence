@@ -12,7 +12,6 @@
 	--is-dark-theme : 1;
 }
 
-
 body{
 	font-family:'pong';
 	background-color: var(--page-bg-rgb);
@@ -252,7 +251,7 @@ a {
 
 .dropDown{
 	position: relative;
-	display: inline-block;
+	display: flex;
 	border: 0.2vh solid;
 	border-color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
@@ -284,7 +283,29 @@ a {
 	width: 50vw;
 }
 
+.dropDown:focus .dropDownArrow{
+	transform: rotate(90deg);	
+	right: 12.5vw;
+}
+
+.dropDown:focus .dropDownBtn{
+	display: inline-block;
+	width: 50vw;
+}
+
+
 .dropDown:hover .dropDownContent{
+	border: 0.2vh solid var(--main-text-rgb);
+	border-block-start: var(--hover-text-rgb);
+	width:29vw;
+	margin-left: 21vw;
+	margin-right: 20vw;
+	position: absolute;
+	display: block;
+	z-index: 1;
+}
+
+.dropDown:focus .dropDownContent{
 	border: 0.2vh solid var(--main-text-rgb);
 	border-block-start: var(--hover-text-rgb);
 	width:29vw;
@@ -422,4 +443,3 @@ a {
 	color: var(--main-text-rgb);
 	outline: none;
 }
-
