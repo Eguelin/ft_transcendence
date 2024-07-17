@@ -275,17 +275,24 @@ a {
 	
 	.dropDownOptionContainer {
 		display: flex;
+		flex-flow: column;
+		background: var(--hover-text-rgb);
 	}
 	
 	.dropDown:hover .dropDownOptionContainer, .dropDown:focus .dropDownOptionContainer{
-		flex: 1;
+		position: absolute;
+		min-width: 25vw;
+		width: max-content;
+		right: -0.2vh;
+		border-right: 0.2vh solid var(--main-text-rgb);
 	}
 	
 	.dropDown:hover .dropDownOptionContainer .dropDownArrow, .dropDown:focus .dropDownOptionContainer .dropDownArrow{
 		/*transform: rotate(90deg);	*/
 		right: 12.5vw;
-		flex: 1;
 		outline: none;
+		width: -webkit-fill-available;
+		border-block-start: var(--hover-text-rgb);
 	}
 	
 	.dropDown:hover .dropDownBtn, .dropDown:focus .dropDownBtn{
@@ -296,14 +303,13 @@ a {
 	}
 	
 	.dropDown:hover .dropDownOptionContainer .dropDownContent, .dropDown:focus .dropDownOptionContainer .dropDownContent{
-		border: 0.2vh solid var(--main-text-rgb);
+		border-left: 0.2vh solid var(--main-text-rgb);
+		border-bottom: 0.2vh solid var(--main-text-rgb);
 		border-block-start: var(--hover-text-rgb);
-		width: max-content;
-		right: 0px;
-		top: min(5vh, 5vw);
-		position: absolute;
+		width: -webkit-fill-available;
 		display: block;
 		z-index: 2;
+		flex: 1;
 		outline: none;
 	}	
 
