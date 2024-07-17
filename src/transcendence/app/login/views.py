@@ -112,7 +112,7 @@ def profile_update(request):
 				f = open(pfpName, "wb")
 				f.write(base64.b64decode(raw))
 				f.close()
-				user.profile.profile_picture = pfpName								
+				user.profile.profile_picture = pfpName
 			if ("language_pack" in data):
 				user.profile.language_pack = data['language_pack']
 			user.save()
@@ -121,14 +121,12 @@ def profile_update(request):
 			return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
 def current_user(request):
-	ls = subprocess.run(['ls'], stdout=subprocess.PIPE)
-	pwd = subprocess.run(['pwd'], stdout=subprocess.PIPE)
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		f = open(request.user.profile.profile_picture, "rb")
 		raw_img = (base64.b64encode(f.read())).decode('utf-8')
-		
+
 		return JsonResponse({'username': request.user.username,
 			'theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
