@@ -19,6 +19,12 @@ body{
 	height: 100%;
 }
 
+#titleContainer{
+	height:fit-content;
+	text-align: center;
+	display: flex;
+}
+
 h1{
 	color: var(--main-text-rgb);
 	height: inherit;
@@ -26,6 +32,7 @@ h1{
 	margin-top: 5vh;
 	margin-bottom: 5vh;
 	font-size: min(10vh, 7vw);
+	text-align: center;
 }
 
 .options {
@@ -333,6 +340,7 @@ a {
 	margin-right: 5vw;
 	margin-top: 5vh;
 	display: flex;
+	flex: 1;
 }
 
 #usernameBtn {
