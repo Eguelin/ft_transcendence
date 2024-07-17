@@ -65,11 +65,10 @@ saveBtn.addEventListener("click", (e) => {
 					warning = document.createElement("a");
 					warning.className = "warning";
 					warning.text = "File is too heavy";
-					if (!pfpInput.previousElementSibling){
+					if (!pfpInput.previousElementSibling)
 						pfpInput.before(warning);
-					}
 				}
-				else
+				else if (pfpInput.previousElementSibling)
 					pfpInput.previousElementSibling.remove();
 			})
 		}

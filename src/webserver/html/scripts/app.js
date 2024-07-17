@@ -7,7 +7,6 @@ fetch('/api/user/current', {
 	credentials: 'include'
 })
 .then(response => {
-	console.log(response);
 	if (response.ok) {
 		(response.json()).then((text) => {	
 			fetch ('bodyLess/home.html').then((response) => {
@@ -22,8 +21,8 @@ fetch('/api/user/current', {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
+					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 					document.getElementById("usernameBtn").innerHTML = text.username;
-					document.getElementById("pfp").style.backgroundImage = `url(${text.pfp})`;
 					if (text.theme){
 						document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 						document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
