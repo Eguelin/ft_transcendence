@@ -60,7 +60,18 @@ saveBtn.addEventListener("click", (e) => {
 				},
 				body: JSON.stringify(data),
 				credentials: 'include'
-			})	
+			}).then(response => {
+				if (!response.ok){
+					warning = document.createElement("a");
+					warning.className = "warning";
+					warning.text = "File is too heavy";
+					if (!pfpInput.previousElementSibling){
+						pfpInput.before(warning);
+					}
+				}
+				else
+					pfpInput.previousElementSibling.remove();
+			})
 		}
 		
 	}

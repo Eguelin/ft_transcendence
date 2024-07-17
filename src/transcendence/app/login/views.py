@@ -82,8 +82,6 @@ def profile_update(request):
 			return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
 def current_user(request):
-	ls = subprocess.run(['ls'], stdout=subprocess.PIPE)
-	pwd = subprocess.run(['pwd'], stdout=subprocess.PIPE)
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
