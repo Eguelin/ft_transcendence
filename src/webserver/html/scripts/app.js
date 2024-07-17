@@ -7,10 +7,8 @@ fetch('/api/user/current', {
 	credentials: 'include'
 })
 .then(response => {
-	console.log(response);
 	if (response.ok) {
-		(response.json()).then((text) => {
-			
+		(response.json()).then((text) => {	
 			fetch ('bodyLess/home.html').then((response) => {
 				(response.text().then(response => {
 					if (container.innerHTML != "")
@@ -23,31 +21,24 @@ fetch('/api/user/current', {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
+					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 					document.getElementById("usernameBtn").innerHTML = text.username;
-				document.getElementById("pfp").style.backgroundImage = `url(${text.pfp})`;
-					fetch(text.lang).then(response => {
-						response.json().then((text) => {
-							content = text['home'];
-							Object.keys(content).forEach(function(key) {
-								document.getElementById(key).innerHTML = content[key];
-							});
-						})
-					})
+					if (text.theme){
+						document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+						document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+						document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+						document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
+					}
+					else{
+						document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+						document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+						document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+						document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+					}
+					loadCurrentLang("home");
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
-			if (text.theme){
-				document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-				document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-				document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-				document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
-			}
-			else{
-				document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-				document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-				document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-				document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
-			}
 
 		});
 	}
@@ -66,14 +57,7 @@ fetch('/api/user/current', {
 				s.setAttribute('id', 'script');
 				s.setAttribute('src', `scripts/login.js`);
 				document.body.appendChild(s);
-				fetch(text.lang).then(response => {
-					response.json().then((text) => {
-						content = text['login'];
-						Object.keys(content).forEach(function(key) {
-							document.getElementById(key).innerHTML = content[key];
-						});
-					})
-				})
+				loadCurrentLang("login");
 				history.replaceState(container.innerHTML, "");
 			}))
 		});
@@ -111,20 +95,39 @@ window.addEventListener("popstate", (event) => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
-					fetch(text.lang).then(response => {
-						response.json().then((text) => {
-							content = text['login'];
-							Object.keys(content).forEach(function(key) {
-								document.getElementById(key).innerHTML = content[key];
-							});
-						})
-					})
+					loadCurrentLang("login");
 					history.replaceState(container.innerHTML, "");
 				}))
 			});
 		}
 	})
 });
+
+function loadCurrentLang(page){ //just for better readability before prod, don't care about efficiency
+	fetch('/api/user/current', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	}).then(response => {
+		if (response.ok) {
+			(response.json()).then((text) => {
+				fetch(text.lang).then(response => {
+					response.json().then((text) => {
+						content = text[page];
+						Object.keys(content).forEach(function(key) {
+							if (key.startsWith('input'))
+								document.getElementById(key).placeholder = content[key];
+							else
+								document.getElementById(key).innerHTML = content[key];
+						});
+					})
+				})
+			})
+		};
+	});
+}
 
 // MOST OF THAT STUFF NOT BE ON PROD
 

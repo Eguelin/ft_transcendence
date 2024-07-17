@@ -19,19 +19,26 @@ body{
 	height: 100%;
 }
 
+#titleContainer{
+	height:fit-content;
+	text-align: center;
+	display: flex;
+}
+
 h1{
 	color: var(--main-text-rgb);
 	height: inherit;
-	font-size: 10vh;
 	font-style: italic;
 	margin-top: 5vh;
 	margin-bottom: 5vh;
+	font-size: min(10vh, 7vw);
+	text-align: center;
 }
 
 .options {
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-size: 7vh;
+	font-size: min(7vh, 4vw);
 	font-style:italic;
 	font-weight:thin;	
 	margin-top:5vh;
@@ -52,7 +59,7 @@ h1{
 .options button{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-size: 7vh;
+	font-size: min(7vh, 4vw);
 	font-style:italic;
 	font-weight:thin;	
 	font-family: "pong";
@@ -69,7 +76,7 @@ input{
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1.5vw;
-	font-size: 1vh;
+	font-size: min(1vh, 1vw);
 	padding-top:1.5vh;
 	padding-left: 1vw;
 	padding-bottom: 1.5vh;
@@ -97,7 +104,7 @@ input:focus{
    	text-align: left; 
 	padding-top:0; 
 	color:var(--hover-text-rgb); 
-	font-size:1vh; 
+	font-size:min(1vh, 1vw); 
 	padding-top:1vh;
 	display: block flex;
 }
@@ -113,7 +120,7 @@ input:focus{
 	color: var(--main-text-rgb);
 	font-weight: thin;	
 	font-family: "pong";
-	font-size: 4vh;
+	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
@@ -126,7 +133,7 @@ input:focus{
 	color: var(--main-text-rgb);
 	font-weight: thin;	
 	font-family: "pong";
-	font-size: 4vh;
+	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
@@ -136,7 +143,7 @@ input:focus{
 .loginOpt{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-size: 3vh;
+	font-size: min(3vh, 2vw);
 	font-weight:thin;
 	padding-top:2vh;
 	margin-left:auto;
@@ -198,7 +205,7 @@ a {
 
 .warning {
 	color: #FF0000;
-	font-size: 0.9vh;
+	font-size: min(0.9vh, 0.9vw);
 	position: relative;
 	bottom: 2vh;
 	text-align: left;
@@ -237,7 +244,7 @@ a {
 	font-style: italic;
 	font-weight: thin;	
 	font-family: "pong";
-	font-size: 4vh;
+	font-size: min(4vh, 3vw);
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0;
@@ -299,7 +306,7 @@ a {
 	text-align: center;
 	color: inherit;
 	text-decoration: inherit;
-	font-size: 4vh;
+	font-size: min(4vh,3vw);
 	padding: 1vh 0;
 	margin-left: auto;
 	margin-right: auto;
@@ -329,15 +336,16 @@ a {
 }
 
 #quickSettingContainer{
-	position: absolute;
-	right: 5vw;
-	top: 5vh;
+	flex-direction: row-reverse;
+	margin-right: 5vw;
+	margin-top: 5vh;
 	display: flex;
+	flex: 1;
 }
 
 #usernameBtn {
 	color: var(--main-text-rgb);
-	font-size: 3em;
+	font-size: min(4vh, 3vw);
 	line-height: 5vw;
 	display: block;
 	text-align: right;
@@ -359,7 +367,7 @@ a {
 	border: 0.2vh solid;
 	border-color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
-	width: 10vw;
+	width: max-content;
 }
 
 #dropDownUser:focus #usernameBtn {
@@ -371,7 +379,7 @@ a {
 	border: 0.2vh solid;
 	border-color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
-	width: 10vw;
+	width: max-content;
 }
 
 #dropDownUser:focus-within #usernameBtn {
@@ -398,8 +406,9 @@ a {
 	color: inherit;
 	text-decoration: inherit;
 	display: block;
-	font-size: 2vh;
-	width: inherit;
+	font-size: min(2vh, 1vw);
+	min-width: -webkit-fill-available;
+	width: min-content;
 	margin: 0.5em 0 0.5em 0;
 	border: none;
 	background: none;
