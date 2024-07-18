@@ -236,7 +236,15 @@ a {
 	mask-repeat:no-repeat;
 }
 
-@media (min-width:960px){
+.dropDownLandscape{
+	display: none;
+}
+
+.dropDownPortrait{
+	display: none;
+}
+
+@media screen and (orientation:landscape){
 	.dropDownBtn {
 		text-align: left;
 		background-color: var(--input-bg-rgb);
@@ -250,7 +258,7 @@ a {
 		border: 0;
 	}
 	
-	.dropDown{
+	.dropDownLandscape{
 		position: relative;	
 		display: flex;
 		border: 0.2vh solid;
@@ -279,7 +287,7 @@ a {
 		background: var(--hover-text-rgb);
 	}
 	
-	.dropDown:hover .dropDownOptionContainer, .dropDown:focus .dropDownOptionContainer{
+	.dropDownLandscape:hover .dropDownOptionContainer, .dropDownLandscape:focus .dropDownOptionContainer{
 		position: absolute;
 		min-width: 25vw;
 		width: max-content;
@@ -287,7 +295,7 @@ a {
 		border-right: 0.2vh solid var(--main-text-rgb);
 	}
 	
-	.dropDown:hover .dropDownOptionContainer .dropDownArrow, .dropDown:focus .dropDownOptionContainer .dropDownArrow{
+	.dropDownLandscape:hover .dropDownOptionContainer .dropDownArrow, .dropDownLandscape:focus .dropDownOptionContainer .dropDownArrow{
 		/*transform: rotate(90deg);	*/
 		right: 12.5vw;
 		outline: none;
@@ -295,14 +303,14 @@ a {
 		border-block-start: var(--hover-text-rgb);
 	}
 	
-	.dropDown:hover .dropDownBtn, .dropDown:focus .dropDownBtn{
+	.dropDownLandscape:hover .dropDownBtn, .dropDownLandscape:focus .dropDownBtn{
 		display: inline-block;
 		width: 50vw;
 		flex: 1;
 		outline: none;
 	}
 	
-	.dropDown:hover .dropDownOptionContainer .dropDownContent, .dropDown:focus .dropDownOptionContainer .dropDownContent{
+	.dropDownLandscape:hover .dropDownOptionContainer .dropDownContent, .dropDownLandscape:focus .dropDownOptionContainer .dropDownContent{
 		border-left: 0.2vh solid var(--main-text-rgb);
 		border-bottom: 0.2vh solid var(--main-text-rgb);
 		border-block-start: var(--hover-text-rgb);
@@ -336,7 +344,7 @@ a {
 	}	
 }
 
-@media (max-width:960px){
+@media screen and (orientation:portrait){
 	.dropDownBtn {
 		text-align: left;
 		background-color: var(--input-bg-rgb);
@@ -350,9 +358,10 @@ a {
 		border: 0;
 	}
 	
-	.dropDown{
+	.dropDownPortrait{
 		position: relative;	
 		display: flex;
+		flex-flow: column;
 		border: 0.2vh solid;
 		border-color: var(--main-text-rgb);
 		background-color: var(--input-bg-rgb);
@@ -375,37 +384,29 @@ a {
 	
 	.dropDownOptionContainer {
 		display: flex;
-		flex-flow: column;
+		flex-flow: row;
 		background: var(--hover-text-rgb);
 	}
 	
-	.dropDown:hover .dropDownOptionContainer, .dropDown:focus .dropDownOptionContainer{
-		position: absolute;
+	.dropDownPortrait:hover .dropDownOptionContainer, .dropDownPortrait:focus .dropDownOptionContainer{
 		min-width: 25vw;
 		width: max-content;
-		right: -0.2vh;
-		border-right: 0.2vh solid var(--main-text-rgb);
 	}
 	
-	.dropDown:hover .dropDownOptionContainer .dropDownArrow, .dropDown:focus .dropDownOptionContainer .dropDownArrow{
+	.dropDownPortrait:hover .dropDownOptionContainer .dropDownArrow, .dropDownPortrait:focus .dropDownOptionContainer .dropDownArrow{
 		/*transform: rotate(90deg);	*/
 		right: 12.5vw;
 		outline: none;
-		width: -webkit-fill-available;
 		border-block-start: var(--hover-text-rgb);
 	}
 	
-	.dropDown:hover .dropDownBtn, .dropDown:focus .dropDownBtn{
+	.dropDownPortrait:hover .dropDownOptionContainer .dropDownBtn, .dropDownPortrait:focus .dropDownOptionContainer .dropDownBtn{
 		display: inline-block;
-		width: 50vw;
 		flex: 1;
 		outline: none;
 	}
 	
-	.dropDown:hover .dropDownOptionContainer .dropDownContent, .dropDown:focus .dropDownOptionContainer .dropDownContent{
-		border-left: 0.2vh solid var(--main-text-rgb);
-		border-bottom: 0.2vh solid var(--main-text-rgb);
-		border-block-start: var(--hover-text-rgb);
+	.dropDownPortrait:hover .dropDownContent, .dropDownPortrait:focus .dropDownContent{
 		width: -webkit-fill-available;
 		display: block;
 		z-index: 2;
