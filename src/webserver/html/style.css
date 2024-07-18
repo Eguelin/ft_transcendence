@@ -22,6 +22,9 @@ body{
 	height:fit-content;
 	text-align: center;
 	display: flex;
+	position: fixed;
+	width: -webkit-fill-available;
+	top: 0px;
 }
 
 h1{
@@ -475,6 +478,7 @@ a {
 	display: inline-block;
 	padding-right: 0.1vw;
 	margin-left: 1vw;
+	outline: none;
 }
 
 .dropDownUserContent{

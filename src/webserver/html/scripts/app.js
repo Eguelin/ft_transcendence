@@ -117,7 +117,6 @@ function loadCurrentLang(page){ //just for better readability before prod, don't
 					response.json().then((text) => {
 						content = text[page];
 						Object.keys(content).forEach(function(key) {
-							console.log(key);
 							if (key.startsWith('input'))
 								document.getElementById(key).placeholder = content[key];
 							else
