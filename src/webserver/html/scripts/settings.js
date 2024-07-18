@@ -1,86 +1,92 @@
-lightTheme = document.getElementById("loadLight");
-darkTheme = document.getElementById("loadDark");
+lightTheme = document.getElementsByClassName("loadLight");
+darkTheme = document.getElementsByClassName("loadDark");
 homeBtn = document.getElementById("goHomeButton");
-germanBtn = document.getElementById("germanBtn");
-englishBtn = document.getElementById("englishBtn");
+germanBtn = document.getElementsByClassName("germanBtn");
+englishBtn = document.getElementsByClassName("englishBtn");
 
-germanBtn.addEventListener("click", (e) => {
-	const data = {language_pack: "lang/DE_GE.json"};
-	fetch("lang/DE_GE.json").then(response => {
-		response.json().then((text) => {
-			content = text['settings'];
-			Object.keys(content).forEach(function(key) {
-				if (key.startsWith('input'))
-					document.getElementById(key).placeholder = content[key];
-				else
-					document.getElementById(key).innerHTML = content[key];
-			});
+for (var i = 0 ;i < germanBtn.length; i++)
+{
+	germanBtn[i].addEventListener("click", (e) => {
+		const data = {language_pack: "lang/DE_GE.json"};
+		fetch("lang/DE_GE.json").then(response => {
+			response.json().then((text) => {
+				content = text['settings'];
+				Object.keys(content).forEach(function(key) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					else
+						document.getElementById(key).innerHTML = content[key];
+				});
+			})
+		})
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
 		})
 	})
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
-	})
-})
-
-englishBtn.addEventListener("click", (e) => {
-	const data = {language_pack: "lang/EN_US.json"};
-	fetch("lang/EN_US.json").then(response => {
-		response.json().then((text) => {
-			content = text['settings'];
-			Object.keys(content).forEach(function(key) {
-				if (key.startsWith('input'))
-					document.getElementById(key).placeholder = content[key];
-				else
-					document.getElementById(key).innerHTML = content[key];
-			});
+	
+	englishBtn[i].addEventListener("click", (e) => {
+		const data = {language_pack: "lang/EN_US.json"};
+		fetch("lang/EN_US.json").then(response => {
+			response.json().then((text) => {
+				content = text['settings'];
+				Object.keys(content).forEach(function(key) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					else
+						document.getElementById(key).innerHTML = content[key];
+				});
+			})
+		})
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
 		})
 	})
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
-	})
-})
+}
 
-lightTheme.addEventListener("click", (e) => {
-	document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-	document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-	document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-	document.documentElement.style.setProperty("--is-dark-theme", 0);
-	const data = {dark_theme: 0};
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
+for (var i=0; i< lightTheme.length; i++)
+{
+	lightTheme[i].addEventListener("click", (e) => {
+		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--is-dark-theme", 0);
+		const data = {dark_theme: 0};
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
 	})
-})
 
-darkTheme.addEventListener("click", (e) => {
-	document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-	document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-	document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-	document.documentElement.style.setProperty("--is-dark-theme", 1);
-	const data = {dark_theme: 1};
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
+	darkTheme[i].addEventListener("click", (e) => {
+		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--is-dark-theme", 1);
+		const data = {dark_theme: 1};
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
 	})
-})
+}
 
 homeBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/home.html').then((response) => {
