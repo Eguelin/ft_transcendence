@@ -50,6 +50,7 @@
 	"accountSettings": {
 		"title" : "Account Einstellungen",
 		"saveBtn" : "SPEICHERN",
+		"inputDisplayName" : "Anzeigename",
 		"inputUsername" : "Nutzername",
 		"inputPfp" : "Profilbild"
 	}

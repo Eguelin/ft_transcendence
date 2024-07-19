@@ -71,6 +71,8 @@ def profile_update(request):
 				user.profile.dark_theme = data['dark_theme']
 			if "username" in data:
 				user.username = data['username']
+			if "display" in data:
+				user.profile.display_name = data['display']
 			if "pfp" in data:
 				raw = data['pfp']
 				pfpName = "profilePictures/{0}.jpg".format(user.username)
