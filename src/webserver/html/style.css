@@ -18,13 +18,22 @@ body{
 	height: 100%;
 }
 
+#container{
+	display: flex;
+	flex-flow: column;
+}
+
 #titleContainer{
 	height:fit-content;
 	text-align: center;
 	display: flex;
-	position: fixed;
 	width: -webkit-fill-available;
-	top: 0px;
+}
+
+#pageContentContainer {
+	height: fit-content;
+	text-align: center;
+	width: -webkit-fill-available;
 }
 
 h1{
@@ -33,7 +42,7 @@ h1{
 	font-style: italic;
 	margin-top: 5vh;
 	margin-bottom: 5vh;
-	font-size: min(10vh, 7vw);
+	font-size: min(14vh, 11vw);
 	text-align: center;
 }
 
@@ -467,7 +476,7 @@ a {
 
 #usernameBtn {
 	color: var(--main-text-rgb);
-	font-size: min(4vh, 3vw);
+	font-size: min(3vh, 1vw);
 	line-height: 5vw;
 	display: block;
 	text-align: right;
