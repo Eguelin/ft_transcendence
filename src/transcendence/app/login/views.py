@@ -17,12 +17,16 @@ def create_user(request):
 	try:
 		username = data['username']
 		password = data['password']
+		display = data['displayName']
 	except Exception as e:
 		return JsonResponse({'message': str(e)}, status=400)
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	try:
 		user = User.objects.create_user(username=username, password=password)
+		if (len(display) > 15):
+			 user.profile.display_name = display[:15];
+		user.profile.display_name = display;
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created but not logged in'}, status=201)
@@ -89,6 +93,7 @@ def current_user(request):
 		raw_img = (base64.b64encode(f.read())).decode('utf-8')
 		
 		return JsonResponse({'username': request.user.username,
+            'display': request.user.profile.display_name,
 			'theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack})

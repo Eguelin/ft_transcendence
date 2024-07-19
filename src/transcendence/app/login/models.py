@@ -16,6 +16,7 @@ class Profile(models.Model):
 	dark_theme = models.BooleanField(default=True)
 	profile_picture = models.TextField(default="profilePictures/defaults/default.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_US.json")
+	display_name = models.CharField(max_length=15)
 	
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwards):
