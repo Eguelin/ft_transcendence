@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('profile_picture', models.TextField(default='profilePictures/defaults/default.jpg')),
                 ('language_pack', models.CharField(max_length=40, default="lang/EN_US.json")),
+                ('display_name', models.CharField(max_length=15)),
             ],
         ),
     ]

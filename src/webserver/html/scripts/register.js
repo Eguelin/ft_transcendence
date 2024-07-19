@@ -11,7 +11,7 @@ window.addEventListener("popstate", (event) => {
 
 registerBtn.addEventListener("click", (e) => {
 	var lock = 0;
-	email = document.getElementById('inputMail').value;
+	display = document.getElementById('inputDisplayName').value;
 	username = document.getElementById('inputUsername').value;
 	pw = document.getElementById('inputPassword').value;
 	cpw = document.getElementById('inputCPassword').value;
@@ -44,7 +44,7 @@ registerBtn.addEventListener("click", (e) => {
 		}
 	}
 	else if (lock == 0){
-		const data = {username: username, password: pw};
+		const data = {username: username, password: pw, displayName: display};
 		fetch('/api/user/create', {
 			method: 'POST',
 			headers: {

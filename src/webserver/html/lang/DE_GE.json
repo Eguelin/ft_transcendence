@@ -42,7 +42,7 @@
 		"title" : "REGISTRIEREN",
 		"createAcc" : "Erstelle deinen Account",
 		"registerBtn" : "REGISTRIEREN",
-		"inputMail" : "E-mail",
+		"inputDisplayName" : "Anzeigename",
 		"inputUsername" : "Nutzername",
 		"inputPassword" : "Passwort",
 		"inputCPassword" : "Bestätige das Passwort"
