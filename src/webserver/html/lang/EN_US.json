@@ -51,6 +51,7 @@
 		"title" : "Account settings",
 		"saveBtn" : "SAVE",
 		"inputUsername" : "Username",
+		"inputDisplayName" : "Display name",
 		"inputPfp" : "Profile picture"
 	}
 }
