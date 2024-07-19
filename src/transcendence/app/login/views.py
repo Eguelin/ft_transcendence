@@ -26,7 +26,8 @@ def create_user(request):
 		user = User.objects.create_user(username=username, password=password)
 		if (len(display) > 15):
 			 user.profile.display_name = display[:15];
-		user.profile.display_name = display;
+		else:
+			user.profile.display_name = display;
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created but not logged in'}, status=201)
@@ -72,7 +73,10 @@ def profile_update(request):
 			if "username" in data:
 				user.username = data['username']
 			if "display" in data:
-				user.profile.display_name = data['display']
+				if (len(data['display']) > 15):
+					 user.profile.display_name = data['display'][:15];
+				else:
+					user.profile.display_name = data['display']
 			if "pfp" in data:
 				raw = data['pfp']
 				pfpName = "profilePictures/{0}.jpg".format(user.username)
