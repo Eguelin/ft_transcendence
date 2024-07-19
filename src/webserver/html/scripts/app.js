@@ -22,7 +22,7 @@ fetch('/api/user/current', {
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
 					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
-					document.getElementById("usernameBtn").innerHTML = text.username;
+					document.getElementById("usernameBtn").innerHTML = text.display;
 					if (text.theme){
 						document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 						document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");

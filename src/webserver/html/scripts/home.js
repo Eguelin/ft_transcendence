@@ -57,7 +57,6 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				document.getElementById("usernameBtn").innerHTML = text.username;
 				if (text.theme){
 					document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 					document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
@@ -72,6 +71,7 @@ window.addEventListener("load", () => {
 				}
 				loadCurrentLang("home");
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				document.getElementById("usernameBtn").innerHTML = text.display;
 				history.replaceState(container.innerHTML, "");
 			});
 		}
@@ -122,7 +122,7 @@ window.addEventListener("load", () => {
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
 				loadCurrentLang("home");
-				document.getElementById("usernameBtn").innerHTML = text.username;
+				document.getElementById("usernameBtn").innerHTML = text.display;
 				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 				history.replaceState(container.innerHTML, "");
 			});
