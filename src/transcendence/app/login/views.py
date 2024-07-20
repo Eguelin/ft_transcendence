@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json
 
+import os
 import subprocess
 import base64
 
@@ -63,6 +64,9 @@ def user_logout(request):
 	logout(request)
 	return JsonResponse({'message': 'User logged out'})
 
+def file_opener(path, flags):
+	return os.open(path, flags, 0o777)
+
 def profile_update(request):
 	if (request.method == 'POST'):
 		try:
@@ -74,15 +78,14 @@ def profile_update(request):
 				user.username = data['username']
 			if "display" in data:
 				if (len(data['display']) > 15):
-					 user.profile.display_name = data['display'][:15];
+					 user.profile.display_name = data['display'][:15]
 				else:
 					user.profile.display_name = data['display']
 			if "pfp" in data:
 				raw = data['pfp']
 				pfpName = "profilePictures/{0}.jpg".format(user.username)
-				f = open(pfpName, "wb")
-				f.write(base64.b64decode(raw))
-				f.close()
+				with open(pfpName, "wb", opener=file_opener) as f:
+					f.write(base64.b64decode(raw))
 				user.profile.profile_picture = pfpName								
 			if ("language_pack" in data):
 				user.profile.language_pack = data['language_pack']
