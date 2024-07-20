@@ -58,11 +58,7 @@ h1{
 	width:fit-content;
 }
 
-.options button:hover{
-	color: var(--hover-text-rgb);
-}
-
-.options button:focus{
+.options button:hover, .options button:focus{
 	color: var(--hover-text-rgb);
 	outline: none;
 }
@@ -125,6 +121,13 @@ input:focus{
 	flex: auto;
 }
 
+#forgotPasswordContainer a:hover, #forgotPasswordContainer a:focus{
+	width: inherit;
+	flex: auto;
+	outline : none;
+	color: var(--main-text-rgb);
+}
+
 .loginBtn {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
@@ -136,6 +139,12 @@ input:focus{
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
+}
+
+.loginBtn:hover, .loginBtn:focus {
+	color: var(--page-bg-rgb);
+	border-color: var(--page-bg-rgb);
+	outline: none;
 }
 
 .saveBtn {
@@ -212,6 +221,7 @@ input:focus{
 a {
 	color: inherit;
 	text-decoration: inherit;
+	outline: none;
 }
 
 .warning {
