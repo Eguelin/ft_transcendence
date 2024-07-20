@@ -21,6 +21,25 @@ registerLink.addEventListener("click", (e) => {
 	});
 });
 
+registerLink.addEventListener("keyup", (e) => {
+	if (e.keyCode === 13) {
+		fetch ('bodyLess/register.html').then((response) => {
+			return (response.text().then(response => {
+				if (container.innerHTML != "")
+					history.pushState(response, "");
+				else
+					history.replaceState(response,"");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `scripts/register.js`);
+				document.body.appendChild(s);
+			}))
+		});
+	}
+});
+
 loginBtn.addEventListener("click", (e) => {
 	username = document.getElementById('inputUsername').value;
 	pw = document.getElementById('inputPassword').value;
