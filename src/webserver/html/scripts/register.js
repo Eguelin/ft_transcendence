@@ -1,6 +1,10 @@
 container = document.getElementById("container");
 registerBtn = document.getElementById("registerBtn");
 swichTheme = document.getElementById("themeButton");
+displayInput = document.getElementById('inputDisplayName');
+usernameInput = document.getElementById('inputUsername');
+pwInput = document.getElementById('inputPassword');
+cpwInput = document.getElementById('inputCPassword');
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
@@ -11,10 +15,10 @@ window.addEventListener("popstate", (event) => {
 
 registerBtn.addEventListener("click", (e) => {
 	var lock = 0;
-	display = document.getElementById('inputDisplayName').value;
-	username = document.getElementById('inputUsername').value;
-	pw = document.getElementById('inputPassword').value;
-	cpw = document.getElementById('inputCPassword').value;
+	display = displayInput.value;
+	username = usernameInput.value;
+	pw = pwInput.value;
+	cpw = cpwInput.value;
 	inputs = document.getElementsByClassName('formInput');
 	warning = document.createElement("a");
 	warning.className = "warning";
@@ -29,18 +33,28 @@ registerBtn.addEventListener("click", (e) => {
 		}
 	}
 	
+	if (display.length > 15){
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "Display name must not exceed 15 characters";
+		if (!displayInput.previousElementSibling)
+			displayInput.before(warning);
+		lock = 1;
+	}
+	else if (displayInput.previousElementSibling)
+			displayInput.previousElementSibling.remove();
 	if (pw != cpw){
 		warning = document.createElement("a");
 		warning.className = "warning";
 		warning.text = "Passwords do not match";
-		if (document.getElementById('inputCPassword').previousElementSibling && document.getElementById('inputCPassword').previousElementSibling.text == "Field can't be empty"){
-			document.getElementById('inputCPassword').previousElementSibling.remove();
+		if (cpwInput.previousElementSibling && cpwInput.previousElementSibling.text == "Field can't be empty"){
+			cpwInput.previousElementSibling.remove();
 		}
-		if (!document.getElementById('inputCPassword').previousElementSibling || document.getElementById('inputCPassword').previousElementSibling.text != "Passwords do not match"){
-			document.getElementById("inputCPassword").before(warning);
+		if (!cpwInput.previousElementSibling || cpwInput.previousElementSibling.text != "Passwords do not match"){
+			cpwInput.before(warning);
 		}
-		else if (cpw != "" && document.getElementById('inputCPassword').previousElementSibling.text == "Field can't be empty"){
-			document.getElementById('inputCPassword').previousElementSibling.remove();
+		else if (cpw != "" && cpwInput.previousElementSibling.text == "Field can't be empty"){
+			cpwInput.previousElementSibling.remove();
 		}
 	}
 	else if (lock == 0){

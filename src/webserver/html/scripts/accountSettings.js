@@ -42,12 +42,24 @@ homeBtn.addEventListener("click", (e) => {
 
 saveBtn.addEventListener("click", (e) => {
 	var data = {};
-	username = usernameInput.value;
-	display = displayInput.value;
+	var username = usernameInput.value;
+	var display = displayInput.value;
 	if (username != "")
 		data['username'] = username;
-	if (display != "")
-		data['display'] = display;
+	if (display != ""){
+		if (display.length > 15){
+			warning = document.createElement("a");
+			warning.className = "warning";
+			warning.text = "Display name must not exceed 15 characters";
+			if (!displayInput.previousElementSibling)
+				displayInput.before(warning);
+		}
+		else{
+			if (displayInput.previousElementSibling)
+				displayInput.previousElementSibling.remove();
+			data['display'] = display;
+		}
+	}
 	if (pfpInput.value != ""){ // this should always be the last check
 		path = pfpInput.files[0];
 		var blob = new Blob([path]);
