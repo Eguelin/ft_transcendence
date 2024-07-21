@@ -3,26 +3,7 @@ darkTheme = document.getElementsByClassName("loadDark");
 homeBtn = document.getElementById("goHomeButton");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
-dropDownContent = document.getElementsByClassName("dropDownLandscape");
-
-for (var i = 0 ;i < dropDownContent.length; i++){
-	var a = dropDownContent[i].getElementsByTagName('a');
-	var i = 0;
-	dropDownContent[i].addEventListener("keydown", (e) => {
-		if (e.keyCode == 40){
-			console.log(i);
-			if (i == a.length - 1){
-				a[i].classList.remove("dropDownContentAHover");
-				i = 0;
-			}
-			else {
-				a[i].classList.remove("dropDownContentAHover");
-				i += 1;
-			}
-			a[i].classList.add("dropDownContentAHover");	
-		}
-	});
-}
+dropDownContent = document.getElementsByClassName("dropDownPortrait");
 
 for (var i = 0 ;i < germanBtn.length; i++)
 {
@@ -125,3 +106,36 @@ homeBtn.addEventListener("click", (e) => {
 		}))
 	});	
 })
+
+for (const e of dropDownContent) {
+	var a = e.getElementsByTagName('a');
+	var j = 0;
+	e.addEventListener("focus", (even) => {
+		j = 0;
+		a[0].classList.add("dropDownContentAHover");	
+		e.addEventListener("keydown", (ek) => {
+			if (ek.keyCode == 40 || ek.keyCode == 13){
+//				console.log(j);
+				if (j >= a.length)
+					j--;
+				if (ek.keyCode == 13){
+					a[j].click();
+				}
+				else if (j == a.length - 1){
+					a[j].classList.remove("dropDownContentAHover");
+					j = 0;
+				}
+				else {
+					a[j].classList.remove("dropDownContentAHover");
+					j += 1;
+				}
+				a[j].classList.add("dropDownContentAHover");	
+			}
+		});
+
+	});
+	e.addEventListener("focusout", (even) => {
+//		console.log("unfocus");
+		a[j].classList.remove("dropDownContentAHover");
+	});
+}
