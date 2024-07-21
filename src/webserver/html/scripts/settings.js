@@ -3,6 +3,26 @@ darkTheme = document.getElementsByClassName("loadDark");
 homeBtn = document.getElementById("goHomeButton");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
+dropDownContent = document.getElementsByClassName("dropDownLandscape");
+
+for (var i = 0 ;i < dropDownContent.length; i++){
+	var a = dropDownContent[i].getElementsByTagName('a');
+	var i = 0;
+	dropDownContent[i].addEventListener("keydown", (e) => {
+		if (e.keyCode == 40){
+			console.log(i);
+			if (i == a.length - 1){
+				a[i].classList.remove("dropDownContentAHover");
+				i = 0;
+			}
+			else {
+				a[i].classList.remove("dropDownContentAHover");
+				i += 1;
+			}
+			a[i].classList.add("dropDownContentAHover");	
+		}
+	});
+}
 
 for (var i = 0 ;i < germanBtn.length; i++)
 {

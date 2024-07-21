@@ -363,7 +363,7 @@ a {
 	}
 	.dropDownContent a:hover{
 		color: var(--main-text-rgb);
-	}	
+	}
 }
 
 @media screen and (orientation:portrait){
@@ -459,6 +459,9 @@ a {
 	}	
 }
 
+.dropDownContentAHover{
+	color: var(--main-text-rgb);
+}
 
 .profilePicture {
 	height: 4vw;
