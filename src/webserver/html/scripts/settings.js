@@ -3,7 +3,38 @@ darkTheme = document.getElementsByClassName("loadDark");
 homeBtn = document.getElementById("goHomeButton");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
-dropDownContent = document.getElementsByClassName("dropDownPortrait");
+dropDownContent = document.querySelectorAll(".dropDownPortrait");
+
+dropDownContent.forEach(function(button) {
+	var a = button.getElementsByTagName('a');
+	var j = 0;
+	button.addEventListener("focus", (even) => {
+		j = 0;
+		a[0].classList.add("dropDownContentAHover");	
+		button.addEventListener("keydown", (ek) => {
+			if (ek.keyCode == 40 || ek.keyCode == 13){
+				if (j >= a.length)
+					j--;
+				if (ek.keyCode == 13){
+					a[j].click();
+				}
+				else if (j == a.length - 1){
+					a[j].classList.remove("dropDownContentAHover");
+					j = 0;
+				}
+				else {
+					a[j].classList.remove("dropDownContentAHover");
+					j += 1;
+				}
+				a[j].classList.add("dropDownContentAHover");	
+			}
+		});
+
+	});
+	button.addEventListener("focusout", (even) => {
+		a[j].classList.remove("dropDownContentAHover");
+	});
+});
 
 for (var i = 0 ;i < germanBtn.length; i++)
 {
@@ -106,36 +137,3 @@ homeBtn.addEventListener("click", (e) => {
 		}))
 	});	
 })
-
-for (const e of dropDownContent) {
-	var a = e.getElementsByTagName('a');
-	var j = 0;
-	e.addEventListener("focus", (even) => {
-		j = 0;
-		a[0].classList.add("dropDownContentAHover");	
-		e.addEventListener("keydown", (ek) => {
-			if (ek.keyCode == 40 || ek.keyCode == 13){
-//				console.log(j);
-				if (j >= a.length)
-					j--;
-				if (ek.keyCode == 13){
-					a[j].click();
-				}
-				else if (j == a.length - 1){
-					a[j].classList.remove("dropDownContentAHover");
-					j = 0;
-				}
-				else {
-					a[j].classList.remove("dropDownContentAHover");
-					j += 1;
-				}
-				a[j].classList.add("dropDownContentAHover");	
-			}
-		});
-
-	});
-	e.addEventListener("focusout", (even) => {
-//		console.log("unfocus");
-		a[j].classList.remove("dropDownContentAHover");
-	});
-}
