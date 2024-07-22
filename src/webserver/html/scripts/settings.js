@@ -10,29 +10,29 @@ dropDownContent.forEach(function(button) {
 	var j = 0;
 	button.addEventListener("focus", (even) => {
 		j = 0;
-		a[0].classList.add("dropDownContentAHover");	
-		button.addEventListener("keydown", (ek) => {
-			if (ek.keyCode == 40 || ek.keyCode == 13){
-				if (j >= a.length)
-					j--;
-				if (ek.keyCode == 13){
-					a[j].click();
-				}
-				else if (j == a.length - 1){
-					a[j].classList.remove("dropDownContentAHover");
-					j = 0;
-				}
-				else {
-					a[j].classList.remove("dropDownContentAHover");
-					j += 1;
-				}
-				a[j].classList.add("dropDownContentAHover");	
+		a[0].classList.add("dropDownContentAHover");
+	});
+	button.addEventListener("keydown", (ek) => {
+		if (ek.keyCode == 40 || ek.keyCode == 13){
+			if (j >= a.length)
+				j--;
+			if (ek.keyCode == 13){
+				a[j].click();
 			}
-		});
-
+			else if (j == a.length - 1){
+				a[j].classList.remove("dropDownContentAHover");
+				j = 0;
+			}
+			else {
+				a[j].classList.remove("dropDownContentAHover");
+				j += 1;
+			}
+			a[j].classList.add("dropDownContentAHover");	
+		}
 	});
 	button.addEventListener("focusout", (even) => {
 		a[j].classList.remove("dropDownContentAHover");
+		j = 0;
 	});
 });
 
