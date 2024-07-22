@@ -306,7 +306,6 @@ a {
 	.dropDownOptionContainer {
 		display: flex;
 		flex-flow: column;
-		background: var(--hover-text-rgb);
 	}
 	
 	.dropDownLandscape:hover .dropDownOptionContainer, .dropDownLandscape:focus .dropDownOptionContainer{
@@ -342,28 +341,6 @@ a {
 		flex: 1;
 		outline: none;
 	}	
-
-	.dropDownContent{
-		display: none;
-		background-color: var(--input-bg-rgb);
-		width: 20vw;
-	}
-	
-	
-	.dropDownContent a{
-		text-align: center;
-		color: inherit;
-		text-decoration: inherit;
-		font-size: min(4vh,3vw);
-		padding: 1vh 1vw;
-		margin-left: auto;
-		margin-right: auto;
-		min-width: inherit;
-		display: block;
-	}
-	.dropDownContent a:hover{
-		color: var(--main-text-rgb);
-	}
 }
 
 @media screen and (orientation:portrait){
@@ -407,7 +384,6 @@ a {
 	.dropDownOptionContainer {
 		display: flex;
 		flex-flow: row;
-		background: var(--hover-text-rgb);
 	}
 	
 	.dropDownPortrait:hover .dropDownOptionContainer, .dropDownPortrait:focus .dropDownOptionContainer{
@@ -435,33 +411,29 @@ a {
 		flex: 1;
 		outline: none;
 	}	
-
-	.dropDownContent{
-		display: none;
-		background-color: var(--input-bg-rgb);
-		width: 20vw;
-	}
-	
-	
-	.dropDownContent a{
-		text-align: center;
-		color: inherit;
-		text-decoration: inherit;
-		font-size: min(4vh,3vw);
-		padding: 1vh 1vw;
-		margin-left: auto;
-		margin-right: auto;
-		min-width: inherit;
-		display: block;
-	}
-	.dropDownContent a:hover{
-		color: var(--main-text-rgb);
-	}	
 }
 
-.dropDownContentAHover{
+.dropDownContent{
+	display: none;
+	background-color: var(--input-bg-rgb);
+	width: 20vw;
+}
+
+
+.dropDownContent a{
+	text-align: center;
+	color: inherit;
+	text-decoration: inherit;
+	font-size: min(4vh,3vw);
+	padding: 1vh 1vw;
+	margin-left: auto;
+	margin-right: auto;
+	min-width: inherit;
+	display: block;
+}
+.dropDownContent a:hover, .dropDownContentAHover{
 	color: var(--main-text-rgb) !important;
-}
+}	
 
 .profilePicture {
 	height: 4vw;
@@ -475,8 +447,6 @@ a {
 	background-position: 50% 50%;
 	
 	border-radius: 50%;
-	/*background-image: url(https://cdn.intra.42.fr/users/a42d9d3633c955300a9b5d1c12c67156/llevasse.jpg);
-*/
 }
 
 #quickSettingContainer{
