@@ -29,6 +29,18 @@ dropDownContent.forEach(function(button) {
 			}
 			a[j].classList.add("dropDownContentAHover");	
 		}
+		else if (ek.keyCode == 38){
+			if (j == 0){
+				a[j].classList.remove("dropDownContentAHover");
+				j = a.length - 1;
+			}
+			else {
+				a[j].classList.remove("dropDownContentAHover");
+				j--;
+			}
+			a[j].classList.add("dropDownContentAHover");	
+			
+		}
 	});
 	button.addEventListener("focusout", (even) => {
 		a[j].classList.remove("dropDownContentAHover");
