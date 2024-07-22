@@ -32,6 +32,15 @@ swichTheme.addEventListener("click", () => {
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
 		document.documentElement.style.setProperty("--is-dark-theme", 1);
 		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
+		const data = {dark_theme: 1};
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
 	}
 	else{
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
@@ -39,6 +48,15 @@ swichTheme.addEventListener("click", () => {
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+		const data = {dark_theme: 0};
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
 	}
 })
 
