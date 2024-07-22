@@ -3,7 +3,7 @@ darkTheme = document.getElementsByClassName("loadDark");
 homeBtn = document.getElementById("goHomeButton");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
-dropDownContent = document.querySelectorAll(".dropDownPortrait");
+dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandscape");
 
 dropDownContent.forEach(function(button) {
 	var a = button.getElementsByTagName('a');
