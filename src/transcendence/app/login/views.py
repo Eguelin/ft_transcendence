@@ -7,6 +7,7 @@ import json
 import os
 import subprocess
 import base64
+import random
 
 def create_user(request):
 	if request.method != 'POST' :
@@ -26,9 +27,10 @@ def create_user(request):
 	try:
 		user = User.objects.create_user(username=username, password=password)
 		if (len(display) > 15):
-			 user.profile.display_name = display[:15];
+			 user.profile.display_name = display[:15]
 		else:
-			user.profile.display_name = display;
+			user.profile.display_name = display
+		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created but not logged in'}, status=201)
