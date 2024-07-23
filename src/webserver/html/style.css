@@ -535,3 +535,15 @@ a {
 	color: var(--main-text-rgb);
 	outline: none;
 }
+
+#inputPfpLabel {
+	width: inherit;
+	text-align: center;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	font-size: min(1vh, 1vw);
+	padding: 1vh 0;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+	display: block;
+}
