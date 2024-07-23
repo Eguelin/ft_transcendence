@@ -88,7 +88,10 @@ window.addEventListener("load", () => {
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
 				loadCurrentLang("home");
-				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				if (text.pfp != "")
+					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				else
+					document.getElementById("pfp").style.setProperty("display", "none");
 				document.getElementById("usernameBtn").innerHTML = text.display;
 				history.replaceState(container.innerHTML, "");
 			});
@@ -141,7 +144,10 @@ window.addEventListener("load", () => {
 				}
 				loadCurrentLang("home");
 				document.getElementById("usernameBtn").innerHTML = text.display;
-				document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				if (text.pfp != "")
+					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				else
+					document.getElementById("pfp").style.setProperty("display", "none");
 				history.replaceState(container.innerHTML, "");
 			});
 		}
