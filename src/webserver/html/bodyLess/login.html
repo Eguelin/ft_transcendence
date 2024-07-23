@@ -1,30 +1,29 @@
-<div style="height:fit-content; text-align: center;">
-	<h1>LOGIN</h1>
-	<div class="quickSettingContainer">
-		<div id="themeButton"></div>
+<div id="titleContainer">
+	<div style="flex: 1;"></div>
+	<h1 id="title" style="flex: 1;">LOGIN</h1>
+	<div style="flex: 1;">
+		<div id="quickSettingContainer">
+			<div id="themeButton"></div>
+		</div>
 	</div>
 </div>
-<div style="height:fit-content; text-align: center;">
-	<div id="loginOpt">
-		<a>Login with credentials</a>
+<div id="pageContentContainer">
+	<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
+	<div class="forms">
+		<input tabindex="1" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username"/>
 	</div>
 	<div class="forms">
-		<input type="text" id="username" class="formInput" name="username" placeholder="Username"/>
-	</div>
-	<div class="forms">
-		<input type="password" id="password" class="formInput" name="password" placeholder="Password"/>
-		<div class="forms" id="forgotPassword">
-			<a style="text-align: left;">Forgot password</a>
-			<a id="registerLink" style="text-align: right;">register</a>
+		<input tabindex="2" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password"/>
+		<div class="forms" id="forgotPasswordContainer">
+			<a tabindex="3" id="forgotPassword" style="text-align: left;">Forgot password</a>
+			<a tabindex="4" id="registerLink" style="text-align: right;">register</a>
 		</div>
 	</div>
 
 	<div class="forms">
-		<button id="loginBtn" class="loginBtn">LOGIN</button>
+		<button tabindex="5" id="loginBtn" class="loginBtn">LOGIN</button>
 	</div>
-	<div id="loginOpt" style="margin-top:3vh;">
-		<a>Other login options</a>
-	</div>
+	<div class="loginOpt" id="externalLoginOpt" style="margin-top:3vh;">Other login options</div>
 	<div id="externalLogin">
 		<div id="fortyTwoLogin"></div>
 		<div style="flex:1;"></div>

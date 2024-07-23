@@ -1,20 +1,25 @@
-<div style="height:fit-content; text-align: center;">
-	<h1>PONG</h1>
-	<div class="quickSettingContainer">
-		<div id="themeButton"></div>
-		<span id="username"></span>
-		<div class="profilePicture"></div>
+<div id="titleContainer">
+	<div style="flex: 1;"></div>
+	<h1 style="flex: 1;" id="title">PONG</h1>
+	<div style="flex: 1;">
+		<div id="quickSettingContainer">
+			<img id="pfp" class="profilePicture">
+			<div tabindex="1" id="dropDownUser">
+				<span id="usernameBtn"></span>
+				<div class="dropDownUserContent">
+					<button tabindex="2" id="accountSettingsBtn">Account settings</button>
+					<button tabindex="3" id="logOutBtn">Log out</button>
+				</div>
+			</div>
+			<div id="themeButton"></div>
+		</div>
 	</div>
 </div>
-<div style="height:fit-content; text-align: center;">
-	<!-- href to remove -->
-	<div class="options" id="playBtn">
-		<a>Play</a>
+<div id="pageContentContainer">
+	<div class="options">
+		<button id="playBtn" tabindex="4">Play</button>
 	</div>
-	<div class="options" id="settingsBtn">
-		<a>Settings</a>
-	</div>
-	<div class="options" id="logOutBtn">
-		<a >Log out</a>
+	<div class="options">
+		<button id="settingsBtn" tabindex="5">Settings</button>
 	</div>
 </div>
