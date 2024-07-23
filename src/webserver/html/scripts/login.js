@@ -30,11 +30,9 @@ function handleToken() {
 				window.history.replaceState({}, document.title, "/");
 			} else {
 				console.error('Failed to get access token');
-				console.log('Data:', data)
 			}
 		})
 		.catch(error => console.error('Error:', error));
-		console.log('fortytwo')
 	}
 }
 
