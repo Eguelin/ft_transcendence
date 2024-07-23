@@ -19,7 +19,6 @@ function handleToken() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-
 			body: JSON.stringify({ code: code }),
 			credentials: 'include'
 		})
@@ -28,12 +27,27 @@ function handleToken() {
 			if (data.access_token) {
 				console.log('Data:', data)
 				window.history.replaceState({}, document.title, "/");
+				fetch ('bodyLess/home.html').then((response) => {
+					return (response.text().then(response => {
+						if (container.innerHTML != "")
+							history.pushState(response, "");
+						else
+							history.replaceState(response,"");
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/home.js`);
+						loadCurrentLang("home");
+						document.body.appendChild(s);
+					}))
+				});
 			} else {
+				console.log('Data:', data)
 				window.history.replaceState({}, document.title, "/");
 			}
 		})
 		.catch(error => console.error('Error:', error));
-		console.log('fortytwo')
 	}
 }
 
