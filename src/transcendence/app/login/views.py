@@ -39,8 +39,23 @@ def fortytwo(request):
 	response = requests.get(url, headers=headers)
 	if response.status_code != 200:
 		return JsonResponse(response.json(), status=response.status_code)
-	return JsonResponse(response.json())
 
+	user_login = response.json()['login']
+	display = user_login
+	username = "42_" + user_login
+	password = "42_" + user_login
+	try:
+		user = User.objects.get(username=username)
+		user = authenticate(request, username=username, password=password)
+		login(request, user, password)
+		return JsonResponse({'message': 'User logged in'})
+	except User.DoesNotExist:
+		user = User.objects.create_user(username=username, password=password)
+		user.profile.display_name = display
+		user.save()
+		user = authenticate(request, username=username, password=password)
+		login(request, user, password)
+		return JsonResponse({'message': 'User created and logged in'})
 
 def create_user(request):
 	if request.method != 'POST' :
