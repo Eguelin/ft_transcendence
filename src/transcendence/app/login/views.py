@@ -100,9 +100,12 @@ def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
-		f = open(request.user.profile.profile_picture, "rb")
-		raw_img = (base64.b64encode(f.read())).decode('utf-8')
-		
+#		f = open(request.user.profile.profile_picture, "rb")
+		try:
+			f = open("exist.p", "rb")
+			raw_img = (base64.b64encode(f.read())).decode('utf-8')
+		except:
+			raw_img = ""
 		return JsonResponse({'username': request.user.username,
             'display': request.user.profile.display_name,
 			'theme': request.user.profile.dark_theme,
