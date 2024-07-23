@@ -14,7 +14,7 @@ def get_image_path(instance, filename):
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	dark_theme = models.BooleanField(default=True)
-	profile_picture = models.TextField(default="profilePictures/defaults/default.jpg")
+	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_US.json")
 	display_name = models.CharField(max_length=15)
 	
