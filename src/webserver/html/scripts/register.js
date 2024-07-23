@@ -1,6 +1,10 @@
 container = document.getElementById("container");
 registerBtn = document.getElementById("registerBtn");
 swichTheme = document.getElementById("themeButton");
+displayInput = document.getElementById('inputDisplayName');
+usernameInput = document.getElementById('inputUsername');
+pwInput = document.getElementById('inputPassword');
+cpwInput = document.getElementById('inputCPassword');
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
@@ -10,11 +14,11 @@ window.addEventListener("popstate", (event) => {
 });
 
 registerBtn.addEventListener("click", (e) => {
-	email = document.getElementById('mail').value;
 	var lock = 0;
-	username = document.getElementById('username').value;
-	pw = document.getElementById('password').value;
-	cpw = document.getElementById('cPassword').value;
+	display = displayInput.value;
+	username = usernameInput.value;
+	pw = pwInput.value;
+	cpw = cpwInput.value;
 	inputs = document.getElementsByClassName('formInput');
 	warning = document.createElement("a");
 	warning.className = "warning";
@@ -29,22 +33,32 @@ registerBtn.addEventListener("click", (e) => {
 		}
 	}
 	
+	if (display.length > 15){
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "Display name must not exceed 15 characters";
+		if (!displayInput.previousElementSibling)
+			displayInput.before(warning);
+		lock = 1;
+	}
+	else if (displayInput.previousElementSibling)
+			displayInput.previousElementSibling.remove();
 	if (pw != cpw){
 		warning = document.createElement("a");
 		warning.className = "warning";
 		warning.text = "Passwords do not match";
-		if (document.getElementById('cPassword').previousElementSibling && document.getElementById('cPassword').previousElementSibling.text == "Field can't be empty"){
-			document.getElementById('cPassword').previousElementSibling.remove();
+		if (cpwInput.previousElementSibling && cpwInput.previousElementSibling.text == "Field can't be empty"){
+			cpwInput.previousElementSibling.remove();
 		}
-		if (!document.getElementById('cPassword').previousElementSibling || document.getElementById('cPassword').previousElementSibling.text != "Passwords do not match"){
-			document.getElementById("cPassword").before(warning);
+		if (!cpwInput.previousElementSibling || cpwInput.previousElementSibling.text != "Passwords do not match"){
+			cpwInput.before(warning);
 		}
-		else if (cpw != "" && document.getElementById('cPassword').previousElementSibling.text == "Field can't be empty"){
-			document.getElementById('cPassword').previousElementSibling.remove();
+		else if (cpw != "" && cpwInput.previousElementSibling.text == "Field can't be empty"){
+			cpwInput.previousElementSibling.remove();
 		}
 	}
 	else if (lock == 0){
-		const data = {username: username, password: pw};
+		const data = {username: username, password: pw, displayName: display};
 		fetch('/api/user/create', {
 			method: 'POST',
 			headers: {
@@ -56,37 +70,29 @@ registerBtn.addEventListener("click", (e) => {
 		.then(response => {
 			if (response.ok) {
 				console.log('User created successfully');
-				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
-						if (container.innerHTML != "")
-							history.pushState(response, "");
-						else
-							history.replaceState(response,"");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						document.body.appendChild(s);
-					}))
-					
-					var user = fetch('/api/user/current', {
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						credentials: 'include'
-					})
-					.then(response => {
-						if (response.ok) {
-							return response.json();
-						}
-						console.log("Failed to get user")
-						return (null);
-					})
-					user.then((text) => {
-						document.getElementById("username").innerHTML = text.username;
-					})
+				fetch('/api/user/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data),
+					credentials: 'include'
+				}).then(response => {
+					fetch ('bodyLess/home.html').then((response) => {
+						(response.text().then(response => {
+							if (container.innerHTML != "")
+								history.pushState(response, "");
+							else
+								history.replaceState(response,"");
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/home.js`);
+							loadCurrentLang("home");
+							document.body.appendChild(s);
+						}))
+					});
 				});
 			} else {
 				console.log("Failed to create user")
@@ -99,26 +105,18 @@ registerBtn.addEventListener("click", (e) => {
 })
 
 swichTheme.addEventListener("click", () => {
-	const style = document.getElementById("style");
-	const href = style.getAttribute('href');
-	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
+		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--is-dark-theme", 1);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
+	}
+	else{
+		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--is-dark-theme", 0);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+	}
 })
-
-function getCurrentUser() {
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-	.then(response => {
-		if (response.ok) {
-			return response.json();
-		}
-		console.log("Failed to get user")
-	})
-	.catch(error => {
-		console.error('There was a problem with the fetch operation:', error);
-	});
-}

@@ -29,8 +29,7 @@ function handleToken() {
 				console.log('Data:', data)
 				window.history.replaceState({}, document.title, "/");
 			} else {
-				console.error('Failed to get access token');
-				console.log('Data:', data)
+				window.history.replaceState({}, document.title, "/");
 			}
 		})
 		.catch(error => console.error('Error:', error));
@@ -57,9 +56,28 @@ registerLink.addEventListener("click", (e) => {
 	});
 });
 
+registerLink.addEventListener("keyup", (e) => {
+	if (e.keyCode === 13) {
+		fetch ('bodyLess/register.html').then((response) => {
+			return (response.text().then(response => {
+				if (container.innerHTML != "")
+					history.pushState(response, "");
+				else
+					history.replaceState(response,"");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `scripts/register.js`);
+				document.body.appendChild(s);
+			}))
+		});
+	}
+});
+
 loginBtn.addEventListener("click", (e) => {
-	username = document.getElementById('username').value;
-	pw = document.getElementById('password').value;
+	username = document.getElementById('inputUsername').value;
+	pw = document.getElementById('inputPassword').value;
 	inputs = document.getElementsByClassName('formInput');
 	warning = document.createElement("a");
 	warning.className = "warning";
@@ -100,25 +118,8 @@ loginBtn.addEventListener("click", (e) => {
 						var s = document.createElement("script");
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/home.js`);
+						loadCurrentLang("home");
 						document.body.appendChild(s);
-
-						var user = fetch('/api/user/current', {
-							method: 'GET',
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							credentials: 'include'
-						})
-						.then(response => {
-							if (response.ok) {
-								return response.json();
-							}
-							console.log("Failed to get user")
-							return (null);
-						})
-						user.then((text) => {
-							document.getElementById("username").innerHTML = text.username;
-						})
 					}))
 				});
 
@@ -138,8 +139,20 @@ loginBtn.addEventListener("click", (e) => {
 	}
 })
 
-swichTheme.addEventListener("click", () => {
-	const style = document.getElementById("style");
-	const href = style.getAttribute('href');
-	style.setAttribute('href', href == "lightMode.css" ? "darkMode.css" : "lightMode.css");
+swichTheme.addEventListener("click", (e) => {
+	console.log(window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme"));
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
+		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--is-dark-theme", 1);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")"
+	}
+	else{
+		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--is-dark-theme", 0);
+		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")"
+	}
 })

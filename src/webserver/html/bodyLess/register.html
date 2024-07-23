@@ -1,24 +1,25 @@
-<div style="height:fit-content; text-align: center;">
-	<h1>REGISTER</h1>
-	<div class="quickSettingContainer">
-		<div onclick="switchTheme()" id="themeButton"></div>
+<div id="titleContainer">
+	<div style="flex: 1;"></div>
+	<h1 id="title" style="flex: 1;">REGISTER</h1>
+	<div style="flex: 1;">
+		<div id="quickSettingContainer">
+			<div onclick="switchTheme()" id="themeButton"></div>
+		</div>
 	</div>
 </div>
-<div style="height:fit-content; text-align: center;"> <!-- form -->
-	<div style="text-align: center;	color: #FDFDFB;	font-size: 3vh; font-weight:thin; padding-top:2vh; margin-left:auto; margin-right:auto; width:fit-content;">
-		<a>Create your account</a>
+<div id="pageContentContainer">
+	<div id="createAcc" style="text-align: center;	color: #FDFDFB;	font-size: 3vh; font-weight:thin; padding-top:2vh; margin-left:auto; margin-right:auto; width:fit-content;">Create your account</div>
+	<div class="forms">
+		<input type="text" id="inputDisplayName" name="displayName" class="formInput" placeholder="Display name"/>
 	</div>
 	<div class="forms">
-		<input type="text" id="mail" name="mail" class="formInput" placeholder="E-mail"/>
+		<input type="text" id="inputUsername" name="username" class="formInput" placeholder="Username"/>
 	</div>
 	<div class="forms">
-		<input type="text" id="username" name="username" class="formInput" placeholder="Username"/>
+		<input type="password" id="inputPassword" name="password" class="formInput" placeholder="Password"/>
 	</div>
 	<div class="forms">
-		<input type="password" id="password" name="password" class="formInput" placeholder="Password"/>
-	</div>
-	<div class="forms">
-		<input type="password" id="cPassword" name="cPassword" class="formInput" placeholder="Confirm password"/>
+		<input type="password" id="inputCPassword" name="cPassword" class="formInput" placeholder="Confirm password"/>
 	</div>
 	<div class="forms">
 		<button id="registerBtn" class="loginBtn">REGISTER</button>

@@ -23,4 +23,5 @@ urlpatterns = [
     path('user/logout', views.user_logout),
     path('user/current', views.current_user),
 	path('user/fortyTwo/login', views.fortytwo),
+    path('user/update', views.profile_update),
 ]

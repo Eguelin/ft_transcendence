@@ -1,0 +1,57 @@
+{
+	"home" : {
+		"title" : "PONG",
+		"accountSettingsBtn" :  "Account Einstellungen",
+		"logOutBtn" :  "Ausloggen",
+		"playBtn" : "Spielen",
+		"settingsBtn" : "Einstellungen"
+	},
+	"login" : {
+		"title" : "ANMELDUNG",
+		"internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
+		"forgotPassword" : "Passwort vergessen",
+		"registerLink" : "registrieren",
+		"loginBtn" : "ANMELDUNG",
+		"externalLoginOpt" : "Weitere anmeldeoptionen",
+		"inputUsername" : "Nutzername",
+		"inputPassword" : "Passwort"
+	},
+	"settings" : {
+		"title" : "EINSTELLUNGEN",
+		"themesDropDownL" : "Themen",
+		"themesDropDownP" : "Themen",
+		"loadLightL" : "Licht",
+		"loadDarkL" : "Dunkel",
+		"loadLightP" : "Licht",
+		"loadDarkP" : "Dunkel",
+		"languagesDropDownL" : "Sprachen",
+		"languagesDropDownP" : "Sprachen",
+		"englishBtnL" : "Englisch",
+		"frenchBtnL" : "Französisch",
+		"germanBtnL" : "Deutsch",
+		"italianBtnL" : "Italienisch",
+		"pirateBtnL" : "Pirat",
+		"englishBtnP" : "Englisch",
+		"frenchBtnP" : "Französisch",
+		"germanBtnP" : "Deutsch",
+		"italianBtnP" : "Italienisch",
+		"pirateBtnP" : "Pirat"
+
+	},
+	"register" : {
+		"title" : "REGISTRIEREN",
+		"createAcc" : "Erstelle deinen Account",
+		"registerBtn" : "REGISTRIEREN",
+		"inputDisplayName" : "Anzeigename",
+		"inputUsername" : "Nutzername",
+		"inputPassword" : "Passwort",
+		"inputCPassword" : "Bestätige das Passwort"
+	},
+	"accountSettings": {
+		"title" : "Account Einstellungen",
+		"saveBtn" : "SPEICHERN",
+		"inputDisplayName" : "Anzeigename",
+		"inputUsername" : "Nutzername",
+		"inputPfp" : "Profilbild"
+	}
+}
