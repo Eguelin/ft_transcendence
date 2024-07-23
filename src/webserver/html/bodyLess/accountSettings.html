@@ -11,17 +11,18 @@
 </div>
 <div style="height:fit-content; text-align: center;">
 	<div class="forms">
-		<input type="text" id="inputDisplayName" name="displayName" class="formInput" placeholder="Display name"/>
+		<input tabindex="1" type="text" id="inputDisplayName" name="displayName" class="formInput" placeholder="Display name"/>
 	</div>
 	<div class="forms">
-		<input type="text" id="inputUsername" class="formInput" name="username" placeholder="Username"/>
+		<input tabindex="2" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username"/>
 	</div>
 	
 	<div class="forms">
-		<input type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
+		<label tabindex="3" for="inputPfp" id="inputPfpLabel">Profile picture</label>
+		<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
 	</div>
 
 	<div class="forms">
-		<button id="saveBtn" class="saveBtn">SAVE</button>
+		<button tabindex="4" id="saveBtn" class="saveBtn">SAVE</button>
 	</div>
 </div>

@@ -4,6 +4,7 @@ homeBtn = document.getElementById("goHomeButton");
 usernameInput = document.getElementById("inputUsername");
 displayInput = document.getElementById("inputDisplayName");
 pfpInput = document.getElementById("inputPfp");
+pfpInputLabel = document.getElementById("inputPfpLabel");
 
 swichTheme.addEventListener("click", () => {
 	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
@@ -37,6 +38,12 @@ swichTheme.addEventListener("click", () => {
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
+	}
+})
+
+pfpInputLabel.addEventListener("keydown", (ek) => {
+	if (ek.keyCode == 13){
+		pfpInput.click();
 	}
 })
 
@@ -99,11 +106,11 @@ saveBtn.addEventListener("click", (e) => {
 					warning = document.createElement("a");
 					warning.className = "warning";
 					warning.text = "File is too heavy";
-					if (!pfpInput.previousElementSibling)
-						pfpInput.before(warning);
+					if (!pfpInputLabel.previousElementSibling)
+						pfpInputLabel.before(warning);
 				}
-				else if (pfpInput.previousElementSibling)
-					pfpInput.previousElementSibling.remove();
+				else if (pfpInputLabel.previousElementSibling)
+					pfpInputLabel.previousElementSibling.remove();
 			})
 		}
 		
