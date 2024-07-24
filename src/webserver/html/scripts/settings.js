@@ -150,6 +150,11 @@ homeBtn.addEventListener("click", (e) => {
 	});	
 })
 
+homeBtn.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13)
+		homeBtn.click();
+})
+
 {
 	fetch('/api/user/current', {
 		method: 'GET',

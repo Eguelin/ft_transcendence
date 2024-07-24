@@ -121,3 +121,9 @@ swichTheme.addEventListener("click", (e) => {
 		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")"
 	}
 })
+
+swichTheme.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13){
+		swichTheme.click();
+	}
+})

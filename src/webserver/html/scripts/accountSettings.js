@@ -41,6 +41,11 @@ swichTheme.addEventListener("click", () => {
 	}
 })
 
+swichTheme.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13)
+		swichTheme.click();
+})
+
 pfpInputLabel.addEventListener("keydown", (ek) => {
 	if (ek.keyCode == 13){
 		pfpInput.click();
@@ -63,6 +68,11 @@ homeBtn.addEventListener("click", (e) => {
 			document.body.appendChild(s);
 		}))
 	});	
+})
+
+homeBtn.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13)
+		homeBtn.click();
 })
 
 saveBtn.addEventListener("click", (e) => {
