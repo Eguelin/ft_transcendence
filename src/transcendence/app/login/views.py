@@ -2,10 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError, IntegrityError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests
-import os
-import base64
-import random
+import json, os, requests, base64, random
 
 def fortytwo(request):
 	if request.method != 'POST':
@@ -48,14 +45,20 @@ def fortytwo(request):
 	try:
 		user = User.objects.get(username=username)
 		user = authenticate(request, username=username, password=password)
-		login(request, user, password)
+		if user is not None:
+			login(request, user)
+		else:
+			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 		return JsonResponse({'message': 'User logged in'})
 	except User.DoesNotExist:
 		user = User.objects.create_user(username=username, password=password)
 		user.profile.display_name = display
 		user.save()
 		user = authenticate(request, username=username, password=password)
-		login(request, user, password)
+		if user is not None:
+			login(request, user)
+		else:
+			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 		return JsonResponse({'message': 'User created and logged in'})
 
 def create_user(request):
