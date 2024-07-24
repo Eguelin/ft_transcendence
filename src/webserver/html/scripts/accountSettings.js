@@ -41,6 +41,11 @@ swichTheme.addEventListener("click", () => {
 	}
 })
 
+swichTheme.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13)
+		swichTheme.click();
+})
+
 pfpInputLabel.addEventListener("keydown", (ek) => {
 	if (ek.keyCode == 13){
 		pfpInput.click();
@@ -63,6 +68,11 @@ homeBtn.addEventListener("click", (e) => {
 			document.body.appendChild(s);
 		}))
 	});	
+})
+
+homeBtn.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13)
+		homeBtn.click();
 })
 
 saveBtn.addEventListener("click", (e) => {
@@ -153,6 +163,25 @@ saveBtn.addEventListener("click", (e) => {
 				history.replaceState(container.innerHTML, "");
 			});
 		}
+		else {
+			console.log("Failed to get user")
+			
+			fetch ('bodyLess/login.html').then((response) => {
+				(response.text().then(response => {
+					if (container.innerHTML != "")
+						history.pushState(response, "");
+					else
+						history.replaceState(response,"");
+					container.innerHTML = response;
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/login.js`);
+					document.body.appendChild(s);
+					history.replaceState(container.innerHTML, "");
+				}))
+			});	
+		}
 	})
 }
 
@@ -182,6 +211,25 @@ window.addEventListener("load", () => {
 				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
 			});
+		}
+		else {
+			console.log("Failed to get user")
+			
+			fetch ('bodyLess/login.html').then((response) => {
+				(response.text().then(response => {
+					if (container.innerHTML != "")
+						history.pushState(response, "");
+					else
+						history.replaceState(response,"");
+					container.innerHTML = response;
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/login.js`);
+					document.body.appendChild(s);
+					history.replaceState(container.innerHTML, "");
+				}))
+			});	
 		}
 	})
 })

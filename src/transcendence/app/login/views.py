@@ -5,6 +5,7 @@ from django.http import JsonResponse
 import json, os, requests
 import os
 import base64
+import random
 
 def fortytwo(request):
 	if request.method != 'POST':
@@ -75,9 +76,10 @@ def create_user(request):
 	try:
 		user = User.objects.create_user(username=username, password=password)
 		if (len(display) > 15):
-			user.profile.display_name = display[15]
+			user.profile.display_name = display[:15]
 		else:
 			user.profile.display_name = display
+		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created but not logged in'}, status=201)
@@ -126,7 +128,7 @@ def profile_update(request):
 				user.username = data['username']
 			if "display" in data:
 				if (len(data['display']) > 15):
-					user.profile.display_name = data['display'][15]
+					user.profile.display_name = data['display'][:15]
 				else:
 					user.profile.display_name = data['display']
 			if "pfp" in data:
@@ -146,9 +148,11 @@ def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
-		f = open(request.user.profile.profile_picture, "rb")
-		raw_img = (base64.b64encode(f.read())).decode('utf-8')
-
+		try:
+			f = open(request.user.profile.profile_picture, "rb")
+			raw_img = (base64.b64encode(f.read())).decode('utf-8')
+		except:
+			raw_img = ""
 		return JsonResponse({'username': request.user.username,
 			'display': request.user.profile.display_name,
 			'theme': request.user.profile.dark_theme,

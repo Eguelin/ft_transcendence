@@ -24,7 +24,6 @@ function handleToken() {
 		})
 		.then(response => response.json())
 		.then(data => {
-			if (data.access_token) {
 				console.log('Data:', data)
 				window.history.replaceState({}, document.title, "/");
 				fetch ('bodyLess/home.html').then((response) => {
@@ -42,10 +41,6 @@ function handleToken() {
 						document.body.appendChild(s);
 					}))
 				});
-			} else {
-				console.log('Data:', data)
-				window.history.replaceState({}, document.title, "/");
-			}
 		})
 		.catch(error => console.error('Error:', error));
 	}
@@ -68,6 +63,12 @@ registerLink.addEventListener("click", (e) => {
 			document.body.appendChild(s);
 		}))
 	});
+});
+
+fortyTwoLogin.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13){
+		fortyTwoLogin.click()
+	}
 });
 
 registerLink.addEventListener("keyup", (e) => {
@@ -168,5 +169,11 @@ swichTheme.addEventListener("click", (e) => {
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")"
+	}
+})
+
+swichTheme.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13){
+		swichTheme.click();
 	}
 })
