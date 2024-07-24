@@ -93,8 +93,13 @@ window.addEventListener("load", () => {
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
 				loadCurrentLang("home");
-				if (text.pfp != "")
-					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				if (text.pfp != ""){
+					var rawPfp = text.pfp;
+					if (rawPfp.startsWith('https://'))
+						document.getElementById("pfp").setAttribute("src", `${rawPfp}`);
+					else
+						document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+				}
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
 				document.getElementById("usernameBtn").innerHTML = text.display;
@@ -149,8 +154,13 @@ window.addEventListener("load", () => {
 				}
 				loadCurrentLang("home");
 				document.getElementById("usernameBtn").innerHTML = text.display;
-				if (text.pfp != "")
-					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				if (text.pfp != ""){
+					var rawPfp = text.pfp;
+					if (rawPfp.startsWith('https://'))
+						document.getElementById("pfp").setAttribute("src", `${rawPfp}`);
+					else
+						document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+				}
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
 				history.replaceState(container.innerHTML, "");
