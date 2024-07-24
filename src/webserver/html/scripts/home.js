@@ -60,6 +60,11 @@ swichTheme.addEventListener("click", () => {
 	}
 })
 
+swichTheme.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13)
+		swichTheme.click();
+})
+
 dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
 })
