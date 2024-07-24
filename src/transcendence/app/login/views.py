@@ -38,7 +38,9 @@ def fortytwo(request):
 	if response.status_code != 200:
 		return JsonResponse(response.json(), status=response.status_code)
 
-	user_login = response.json()['login']
+	user_json = response.json()
+	user_login = user_json['login']
+	pfp_url = user_json['image']['versions']['small']
 	display = user_login
 	username = "42_" + user_login
 	password = "42_" + user_login
@@ -49,17 +51,18 @@ def fortytwo(request):
 			login(request, user)
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
-		return JsonResponse({'message': 'User logged in'})
+		return JsonResponse({'message': 'User logged in', 'content' : pfp_url})
 	except User.DoesNotExist:
 		user = User.objects.create_user(username=username, password=password)
 		user.profile.display_name = display
+		user.profile.profile_picture = pfp_url
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			login(request, user)
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
-		return JsonResponse({'message': 'User created and logged in'})
+		return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
 
 def create_user(request):
 	if request.method != 'POST' :
@@ -152,8 +155,11 @@ def current_user(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		try:
-			f = open(request.user.profile.profile_picture, "rb")
-			raw_img = (base64.b64encode(f.read())).decode('utf-8')
+			if (request.user.profile.profile_picture.startswith("https://")):
+				raw_img = request.user.profile.profile_picture
+			else:
+				f = open(request.user.profile.profile_picture, "rb")
+				raw_img = (base64.b64encode(f.read())).decode('utf-8')
 		except:
 			raw_img = ""
 		return JsonResponse({'username': request.user.username,
