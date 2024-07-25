@@ -1,29 +1,9 @@
 container = document.getElementById("container");
-settingsBtn = document.getElementById("settingsBtn");
 logOutBtn = document.getElementById('logOutBtn');
 swichTheme = document.getElementById("themeButton");
 userBtn = document.getElementById("usernameBtn");
 dpUserBtn = document.getElementById("dropDownUser");
 accSettingsBtn = document.getElementById("accountSettingsBtn");
-
-
-settingsBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/settings.html').then((response) => {
-		return (response.text().then(response => {
-			if (container.innerHTML != "")
-				history.pushState(response, "");
-			else
-				history.replaceState(response,"");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/settings.js`);
-			loadCurrentLang("settings");
-			document.body.appendChild(s);
-		}))
-	});
-})
 
 swichTheme.addEventListener("click", () => {
 	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
