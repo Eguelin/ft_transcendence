@@ -23,18 +23,7 @@ fetch('/api/user/current', {
 					document.body.appendChild(s);
 					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 					document.getElementById("usernameBtn").innerHTML = text.display;
-					if (text.theme){
-						document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-						document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-						document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-						document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
-					}
-					else{
-						document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-						document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-						document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-						document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
-					}
+					switchTheme(text.theme);
 					loadCurrentLang("home");
 					history.replaceState(container.innerHTML, "");
 				}))
@@ -68,6 +57,27 @@ fetch('/api/user/current', {
 	console.error('There was a problem with the fetch operation:', error);
 	return (null);
 });
+
+function switchTheme(darkTheme){
+	console.log(darkTheme);
+	if (!darkTheme){
+		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
+		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		if (document.getElementById("themeButton"))
+			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
+	}
+	else{
+		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FDFDFB");
+		if (document.getElementById("themeButton"))
+			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+	}
+	document.documentElement.style.setProperty("--is-dark-theme", !darkTheme);
+}
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
@@ -128,32 +138,3 @@ function loadCurrentLang(page){ //just for better readability before prod, don't
 		};
 	});
 }
-
-// MOST OF THAT STUFF NOT BE ON PROD
-
-
-/*
-function createUser(username, password)
-{
-	const data = {username: username, password: password};
-	fetch('/api/user/create', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include',
-		body: JSON.stringify(data)
-	})
-	.then(response => {
-		if (response.ok) {
-			console.log('User created successfully');
-			loadPage('home');
-		} else {
-			console.log("Failed to create user")
-		}
-	})
-	.catch(error => {
-		console.error('There was a problem with the fetch operation:', error);
-	});
-}
-*/

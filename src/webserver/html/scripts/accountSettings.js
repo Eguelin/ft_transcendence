@@ -11,14 +11,8 @@ germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
 dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandscape");
 
-
 swichTheme.addEventListener("click", () => {
 	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
-		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-		document.documentElement.style.setProperty("--is-dark-theme", 1);
-		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")"
 		const data = {dark_theme: 1};
 		fetch('/api/user/update', {
 			method: 'POST',
@@ -30,11 +24,6 @@ swichTheme.addEventListener("click", () => {
 		})
 	}
 	else{
-		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-		document.documentElement.style.setProperty("--is-dark-theme", 0);
-		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")"
 		const data = {dark_theme: 0};
 		fetch('/api/user/update', {
 			method: 'POST',
@@ -45,6 +34,7 @@ swichTheme.addEventListener("click", () => {
 			credentials: 'include'
 		})
 	}
+	switchTheme(window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme"));
 })
 
 swichTheme.addEventListener("keydown", (e) => {
@@ -154,16 +144,7 @@ saveBtn.addEventListener("click", (e) => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				if (text.theme){
-					document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-					document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-					document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-				}
-				else{
-					document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-					document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-				}
+				switchTheme(text.theme);
 				usernameInput.setAttribute('placeholder', text.username);
 				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
@@ -203,16 +184,7 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				if (text.theme){
-					document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-					document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-					document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-				}
-				else{
-					document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-					document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-					document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-				}
+				switchTheme(text.theme);
 				username.setAttribute('placeholder', text.username);
 				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
@@ -337,10 +309,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 for (var i=0; i< lightTheme.length; i++)
 {
 	lightTheme[i].addEventListener("click", (e) => {
-		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-		document.documentElement.style.setProperty("--is-dark-theme", 0);
+		switchTheme(0);
 		const data = {dark_theme: 0};
 		fetch('/api/user/update', {
 			method: 'POST',
@@ -353,10 +322,7 @@ for (var i=0; i< lightTheme.length; i++)
 	})
 
 	darkTheme[i].addEventListener("click", (e) => {
-		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-		document.documentElement.style.setProperty("--is-dark-theme", 1);
+		switchTheme(1);
 		const data = {dark_theme: 1};
 		fetch('/api/user/update', {
 			method: 'POST',
