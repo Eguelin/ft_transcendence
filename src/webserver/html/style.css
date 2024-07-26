@@ -257,6 +257,10 @@ a {
 	mask-repeat:no-repeat;
 }
 
+#goHomeButton:focus, #goHomeButton:hover{
+	background: var(--hover-text-rgb);
+}
+
 #themeButton{
 	mask-image:url("svg/button-night-mode.svg");
 	background:var(--main-text-rgb);
@@ -265,6 +269,10 @@ a {
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+}
+
+#themeButton:focus, #themeButton:hover{
+	background: var(--hover-text-rgb);
 }
 
 .dropDownLandscape{
