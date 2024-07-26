@@ -1,29 +1,9 @@
 container = document.getElementById("container");
-settingsBtn = document.getElementById("settingsBtn");
 logOutBtn = document.getElementById('logOutBtn');
 swichTheme = document.getElementById("themeButton");
 userBtn = document.getElementById("usernameBtn");
 dpUserBtn = document.getElementById("dropDownUser");
 accSettingsBtn = document.getElementById("accountSettingsBtn");
-
-
-settingsBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/settings.html').then((response) => {
-		return (response.text().then(response => {
-			if (container.innerHTML != "")
-				history.pushState(response, "");
-			else
-				history.replaceState(response,"");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/settings.js`);
-			loadCurrentLang("settings");
-			document.body.appendChild(s);
-		}))
-	});
-})
 
 swichTheme.addEventListener("click", () => {
 	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
@@ -93,8 +73,13 @@ window.addEventListener("load", () => {
 					document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 				}
 				loadCurrentLang("home");
-				if (text.pfp != "")
-					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				if (text.pfp != ""){
+					var rawPfp = text.pfp;
+					if (rawPfp.startsWith('https://'))
+						document.getElementById("pfp").setAttribute("src", `${rawPfp}`);
+					else
+						document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+				}
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
 				document.getElementById("usernameBtn").innerHTML = text.display;
@@ -149,8 +134,13 @@ window.addEventListener("load", () => {
 				}
 				loadCurrentLang("home");
 				document.getElementById("usernameBtn").innerHTML = text.display;
-				if (text.pfp != "")
-					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
+				if (text.pfp != ""){
+					var rawPfp = text.pfp;
+					if (rawPfp.startsWith('https://'))
+						document.getElementById("pfp").setAttribute("src", `${rawPfp}`);
+					else
+						document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+				}
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
 				history.replaceState(container.innerHTML, "");
