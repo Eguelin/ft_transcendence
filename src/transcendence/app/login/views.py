@@ -42,6 +42,7 @@ def fortytwo(request):
 	display = user_login
 	username = "42_" + user_login
 	password = "42_" + user_login
+	id42 = response.json()['id']
 	try:
 		user = User.objects.get(username=username)
 		user = authenticate(request, username=username, password=password)
@@ -51,7 +52,7 @@ def fortytwo(request):
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 		return JsonResponse({'message': 'User logged in'})
 	except User.DoesNotExist:
-		user = User.objects.create_user(username=username, password=password)
+		user = User.objects.create_user(username=username, password=password, id=id42)
 		user.profile.display_name = display
 		user.save()
 		user = authenticate(request, username=username, password=password)
