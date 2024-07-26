@@ -18,6 +18,25 @@
 	},
 	"settings" : {
 		"title" : "SETTINGS",
+
+	},
+	"register" : {
+		"title" : "REGISTER",
+		"createAcc" : "Create your account",
+		"registerBtn" : "REGISTER",
+		"inputDisplayName" : "Display name",
+		"inputUsername" : "Username",
+		"inputPassword" : "Password",
+		"inputCPassword" : "Confirm password"
+	},
+	"accountSettings": {
+		"title" : "Settings",
+		"accountTitle" : "Account",
+		"accessibilityTitle" : "Accessibility",
+		"saveBtn" : "SAVE",
+		"inputUsername" : "Username",
+		"inputDisplayName" : "Display name",
+		"inputPfp" : "Profile picture",
 		"themesDropDownL" : "Themes",
 		"themesDropDownP" : "Themes",
 		"loadLightL" : "Light",
@@ -36,22 +55,5 @@
 		"germanBtnP" : "German",
 		"italianBtnP" : "Italian",
 		"pirateBtnP" : "Pirate"
-
-	},
-	"register" : {
-		"title" : "REGISTER",
-		"createAcc" : "Create your account",
-		"registerBtn" : "REGISTER",
-		"inputDisplayName" : "Display name",
-		"inputUsername" : "Username",
-		"inputPassword" : "Password",
-		"inputCPassword" : "Confirm password"
-	},
-	"accountSettings": {
-		"title" : "Account settings",
-		"saveBtn" : "SAVE",
-		"inputUsername" : "Username",
-		"inputDisplayName" : "Display name",
-		"inputPfp" : "Profile picture"
 	}
 }
