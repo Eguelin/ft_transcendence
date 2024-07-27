@@ -62,6 +62,7 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--option-hover-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
 		if (document.getElementById("themeButton"))
 			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
@@ -70,6 +71,7 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--option-hover-text-rgb", "#FFDBDE");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FDFDFB");
 		if (document.getElementById("themeButton"))
 			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
