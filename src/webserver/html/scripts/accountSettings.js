@@ -263,7 +263,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 		const data = {language_pack: "lang/DE_GE.json"};
 		fetch("lang/DE_GE.json").then(response => {
 			response.json().then((text) => {
-				content = text['settings'];
+				content = text['accountSettings'];
 				Object.keys(content).forEach(function(key) {
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
@@ -286,7 +286,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 		const data = {language_pack: "lang/EN_US.json"};
 		fetch("lang/EN_US.json").then(response => {
 			response.json().then((text) => {
-				content = text['settings'];
+				content = text['accountSettings'];
 				Object.keys(content).forEach(function(key) {
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
