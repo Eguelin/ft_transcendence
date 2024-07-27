@@ -8,6 +8,7 @@
 	--page-bg-rgb : #110026; /*#FDFDFB*/
 	--main-text-rgb : #FDFDFB; /*#110026*/
 	--hover-text-rgb :  #3A3053;
+	--option-hover-text-rgb :  #110026;
 	--input-bg-rgb : #3A3053; /*#FFDBDE*/
 	--is-dark-theme : 1;
 }
@@ -272,6 +273,7 @@ a {
 }
 
 #themeButton:focus, #themeButton:hover{
+	outline: none;
 	background: var(--hover-text-rgb);
 }
 
@@ -439,7 +441,7 @@ a {
 
 .dropDownContent a{
 	text-align: center;
-	color: inherit;
+	color: var(--main-text-rgb);
 	text-decoration: inherit;
 	font-size: min(4vh,3vw);
 	padding: 1vh 1vw;
@@ -449,7 +451,7 @@ a {
 	display: block;
 }
 .dropDownContent a:hover, .dropDownContentAHover{
-	color: var(--main-text-rgb) !important;
+	color: var(--option-hover-text-rgb) !important;
 }	
 
 .profilePicture {
@@ -533,7 +535,7 @@ a {
 
 .dropDownUserContent button{
 	text-align: center;
-	color: inherit;
+	color: var(--main-text-rgb);
 	text-decoration: inherit;
 	display: block;
 	font-size: min(2vh, 1vw);
@@ -544,12 +546,9 @@ a {
 	background: none;
 	font-family: "pong";
 }
-.dropDownUserContent button:hover{
-	color: var(--main-text-rgb);
-}
 
-.dropDownUserContent button:focus{
-	color: var(--main-text-rgb);
+.dropDownUserContent button:focus, .dropDownUserContent button:hover{
+	color: var(--option-hover-text-rgb);
 	outline: none;
 }
 

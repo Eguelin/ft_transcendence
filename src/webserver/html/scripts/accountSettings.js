@@ -309,7 +309,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 for (var i=0; i< lightTheme.length; i++)
 {
 	lightTheme[i].addEventListener("click", (e) => {
-		switchTheme(0);
+		switchTheme(1);
 		const data = {dark_theme: 0};
 		fetch('/api/user/update', {
 			method: 'POST',
@@ -322,7 +322,7 @@ for (var i=0; i< lightTheme.length; i++)
 	})
 
 	darkTheme[i].addEventListener("click", (e) => {
-		switchTheme(1);
+		switchTheme(0);
 		const data = {dark_theme: 1};
 		fetch('/api/user/update', {
 			method: 'POST',
