@@ -6,7 +6,7 @@ dpUserBtn = document.getElementById("dropDownUser");
 accSettingsBtn = document.getElementById("accountSettingsBtn");
 
 swichTheme.addEventListener("click", () => {
-	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme")
+	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme");
 	const data = {dark_theme: theme};
 	fetch('/api/user/update', {
 		method: 'POST',
