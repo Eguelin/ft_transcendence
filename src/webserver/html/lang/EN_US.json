@@ -3,8 +3,7 @@
 		"title" : "PONG",
 		"accountSettingsBtn" :  "Account settings",
 		"logOutBtn" :  "Log out",
-		"playBtn" : "Play",
-		"settingsBtn" : "Settings"
+		"playBtn" : "Play"
 	},
 	"login" : {
 		"title" : "LOGIN",
@@ -15,10 +14,6 @@
 		"externalLoginOpt" : "Other login options",
 		"inputUsername" : "Username",
 		"inputPassword" : "Password"
-	},
-	"settings" : {
-		"title" : "SETTINGS",
-
 	},
 	"register" : {
 		"title" : "REGISTER",

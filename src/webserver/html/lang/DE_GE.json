@@ -1,10 +1,9 @@
 {
 	"home" : {
 		"title" : "PONG",
-		"accountSettingsBtn" :  "Account Einstellungen",
+		"accountSettingsBtn" :  "Einstellungen",
 		"logOutBtn" :  "Ausloggen",
-		"playBtn" : "Spielen",
-		"settingsBtn" : "Einstellungen"
+		"playBtn" : "Spielen"
 	},
 	"login" : {
 		"title" : "ANMELDUNG",
@@ -16,8 +15,23 @@
 		"inputUsername" : "Nutzername",
 		"inputPassword" : "Passwort"
 	},
-	"settings" : {
-		"title" : "EINSTELLUNGEN",
+	"register" : {
+		"title" : "REGISTRIEREN",
+		"createAcc" : "Erstelle deinen Account",
+		"registerBtn" : "REGISTRIEREN",
+		"inputDisplayName" : "Anzeigename",
+		"inputUsername" : "Nutzername",
+		"inputPassword" : "Passwort",
+		"inputCPassword" : "Bestätige das Passwort"
+	},
+	"accountSettings": {
+		"title" : "Einstellungen",
+		"accountTitle" : "Account",
+		"accessibilityTitle" : "Barrierefreiheit",
+		"saveBtn" : "SPEICHERN",
+		"inputDisplayName" : "Anzeigename",
+		"inputUsername" : "Nutzername",
+		"inputPfp" : "Profilbild",
 		"themesDropDownL" : "Themen",
 		"themesDropDownP" : "Themen",
 		"loadLightL" : "Licht",
@@ -36,22 +50,5 @@
 		"germanBtnP" : "Deutsch",
 		"italianBtnP" : "Italienisch",
 		"pirateBtnP" : "Pirat"
-
-	},
-	"register" : {
-		"title" : "REGISTRIEREN",
-		"createAcc" : "Erstelle deinen Account",
-		"registerBtn" : "REGISTRIEREN",
-		"inputDisplayName" : "Anzeigename",
-		"inputUsername" : "Nutzername",
-		"inputPassword" : "Passwort",
-		"inputCPassword" : "Bestätige das Passwort"
-	},
-	"accountSettings": {
-		"title" : "Account Einstellungen",
-		"saveBtn" : "SPEICHERN",
-		"inputDisplayName" : "Anzeigename",
-		"inputUsername" : "Nutzername",
-		"inputPfp" : "Profilbild"
 	}
 }
