@@ -21,7 +21,6 @@ fetch('/api/user/current', {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
-					document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${text.pfp}`);
 					document.getElementById("usernameBtn").innerHTML = text.display;
 					switchTheme(text.theme);
 					loadCurrentLang("home");
@@ -59,8 +58,7 @@ fetch('/api/user/current', {
 });
 
 function switchTheme(darkTheme){
-	console.log(darkTheme);
-	if (!darkTheme){
+	if (darkTheme == 0){
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
@@ -76,7 +74,7 @@ function switchTheme(darkTheme){
 		if (document.getElementById("themeButton"))
 			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 	}
-	document.documentElement.style.setProperty("--is-dark-theme", !darkTheme);
+	document.documentElement.style.setProperty("--is-dark-theme", darkTheme == 0 ? 1 : 0);
 }
 
 window.addEventListener("popstate", (event) => {
