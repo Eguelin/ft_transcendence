@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError, IntegrityError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random
+import json, os, requests, base64, random, string
 
 def fortytwo(request):
 	if request.method != 'POST':
@@ -42,28 +42,34 @@ def fortytwo(request):
 	user_login = user_json['login']
 	pfp_url = user_json['image']['versions']['small']
 	display = user_login
-	username = "42_" + user_login
-	password = "42_" + user_login
 	id42 = response.json()['id']
 	try:
-		user = User.objects.get(username=username)
-		user = authenticate(request, username=username, password=password)
+		user = User.objects.get(id=id42)
+		user = authenticate(request, username=display, password=display)
 		if user is not None:
 			login(request, user)
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 		return JsonResponse({'message': 'User logged in', 'content' : pfp_url})
 	except User.DoesNotExist:
-		user = User.objects.create_user(username=username, password=password, id=id42)
-		user.profile.display_name = display
-		user.profile.profile_picture = pfp_url
-		user.save()
-		user = authenticate(request, username=username, password=password)
-		if user is not None:
-			login(request, user)
-		else:
-			return JsonResponse({'message': 'Invalid credentials'}, status=400)
-		return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
+		try:
+			user = User.objects.get(username=user_login)
+			if user.id == 0:
+				username = generate_unique_username
+				user = User.objects.create_user(username=username, password=display, id=id42)
+			else:
+				user = User.objects.create_user(username=display, password=display, id=id42)
+			user.profile.display_name = display
+			user.profile.profile_picture = pfp_url
+			user.save()
+			user = authenticate(request, username=display, password=display)
+			if user is not None:
+				login(request, user)
+			else:
+				return JsonResponse({'message': 'Invalid credentials'}, status=400)
+			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
+		except Exception as e:
+			return JsonResponse({'message': str(e)}, status=500)
 
 def create_user(request):
 	if request.method != 'POST' :
@@ -80,6 +86,9 @@ def create_user(request):
 		return JsonResponse({'message': str(e)}, status=400)
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
+	user = User.objects.get(username=username)
+	if user.id != 0:
+		return JsonResponse({'message': 'Username already exists'}, status=409)
 	try:
 		user = User.objects.create_user(username=username, password=password)
 		if (len(display) > 15):
@@ -87,8 +96,9 @@ def create_user(request):
 		else:
 			user.profile.display_name = display
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+		id=0
 		user.save()
-		user = authenticate(request, username=username, password=password)
+		user = authenticate(request, username=username, password=password, id=id)
 		return JsonResponse({'message': 'User created but not logged in'}, status=201)
 	except IntegrityError:
 		return JsonResponse({'message': 'Username already exists'}, status=409)
@@ -106,6 +116,9 @@ def user_login(request):
 		password = data['password']
 		if not username or not password:
 			return JsonResponse({'message': 'Username and password are required'}, status=400)
+		user = User.objects.get(username=username)
+		if user.id != 0:
+			return JsonResponse({'message': 'User does not exist'}, status=404)
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			login(request, user)
@@ -170,3 +183,16 @@ def current_user(request):
 			'lang': request.user.profile.language_pack})
 	else:
 		return JsonResponse({'username': None}, status=400)
+
+def generate_unique_username(base_username):
+	def random_suffix(length=5):
+		letters_and_digits = string.ascii_letters + string.digits
+		return ''.join(random.choice(letters_and_digits) for i in range(length))
+
+	unique_username = base_username
+	suffix_length = 5
+	while User.objects.filter(username=unique_username).exists():
+		unique_username = f"{base_username}_{random_suffix(suffix_length)}"
+		suffix_length += 1
+
+	return unique_username
