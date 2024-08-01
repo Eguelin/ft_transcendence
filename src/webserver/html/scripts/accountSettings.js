@@ -10,6 +10,28 @@ darkTheme = document.getElementsByClassName("loadDark");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
 dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandscape");
+settingsSlides = document.querySelectorAll(".settingSlide");
+
+var slideIdx = 0;
+for (i = 0; i < settingsSlides.length; i++)
+	settingsSlides[i].style.display = "none";
+settingsSlides[slideIdx].style.display = "block";
+window.addEventListener("keydown", (e) => {
+	let i;
+	if (e.keyCode == 37 || e.keyCode == 39){
+		if (e.keyCode == 37)
+			slideIdx -= 1;
+		else
+			slideIdx += 1;
+		if (slideIdx > settingsSlides.length - 1) 
+			slideIdx = 0;
+		if (slideIdx < 0) 
+			slideIdx = settingsSlides.length - 1;
+		for (i = 0; i < settingsSlides.length; i++)
+			settingsSlides[i].style.display = "none";
+		settingsSlides[slideIdx].style.display = "block";
+	}
+})
 
 swichTheme.addEventListener("click", () => {
 	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
