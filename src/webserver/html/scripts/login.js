@@ -60,6 +60,7 @@ registerLink.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/register.js`);
+			loadCurrentLang("register");
 			document.body.appendChild(s);
 		}))
 	});
@@ -73,20 +74,7 @@ fortyTwoLogin.addEventListener("keydown", (e) => {
 
 registerLink.addEventListener("keyup", (e) => {
 	if (e.keyCode === 13) {
-		fetch ('bodyLess/register.html').then((response) => {
-			return (response.text().then(response => {
-				if (container.innerHTML != "")
-					history.pushState(response, "");
-				else
-					history.replaceState(response,"");
-				container.innerHTML = response;
-				document.getElementById("script").remove();
-				var s = document.createElement("script");
-				s.setAttribute('id', 'script');
-				s.setAttribute('src', `scripts/register.js`);
-				document.body.appendChild(s);
-			}))
-		});
+		registerLink.click();
 	}
 });
 
@@ -151,31 +139,5 @@ loginBtn.addEventListener("click", (e) => {
 				}
 			}
 		})
-	}
-})
-
-swichTheme.addEventListener("click", (e) => {
-	console.log(window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme"));
-	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
-		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-		document.documentElement.style.setProperty("--is-dark-theme", 1);
-		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")"
-	}
-	else{
-		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-		document.documentElement.style.setProperty("--is-dark-theme", 0);
-		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")"
-	}
-	swichTheme.blur();
-})
-
-swichTheme.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13){
-		swichTheme.click();
-		swichTheme.focus();
 	}
 })
