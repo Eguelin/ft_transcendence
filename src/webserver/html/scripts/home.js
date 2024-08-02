@@ -5,28 +5,6 @@ userBtn = document.getElementById("usernameBtn");
 dpUserBtn = document.getElementById("dropDownUser");
 accSettingsBtn = document.getElementById("accountSettingsBtn");
 
-swichTheme.addEventListener("click", () => {
-	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme");
-	const data = {dark_theme: theme};
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
-	})
-	switchTheme(theme);
-	swichTheme.blur();
-})
-
-swichTheme.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13){
-		swichTheme.click();
-		swichTheme.focus();
-	}
-})
-
 dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
 })
@@ -94,6 +72,8 @@ window.addEventListener("load", () => {
 				switchTheme(text.theme);
 				loadCurrentLang("home");
 				document.getElementById("usernameBtn").innerHTML = text.display;
+				document.getElementById("pfp").style.setProperty("display", "block");
+				document.getElementById("dropDownUser").style.setProperty("display", "block");
 				if (text.pfp != ""){
 					var rawPfp = text.pfp;
 					if (rawPfp.startsWith('https://'))
@@ -121,6 +101,8 @@ window.addEventListener("load", () => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
+					document.getElementById("pfp").style.setProperty("display", "none");
+					document.getElementById("dropDownUser").style.setProperty("display", "none");
 					history.replaceState(container.innerHTML, "");
 				}))
 			});
@@ -149,7 +131,10 @@ logOutBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/login.js`);
+			loadCurrentLang("login");
 			document.body.appendChild(s);
+			document.getElementById("pfp").style.setProperty("display", "none");
+			document.getElementById("dropDownUser").style.setProperty("display", "none");
 		}))
 	});
 });
@@ -168,6 +153,9 @@ accSettingsBtn.addEventListener("click", (e) => {
 			s.setAttribute('src', `scripts/accountSettings.js`);
 			loadCurrentLang("accountSettings");
 			document.body.appendChild(s);
+			document.getElementById("pfp").style.setProperty("display", "none");
+			document.getElementById("dropDownUser").style.setProperty("display", "none");
+			document.getElementById("goHomeButton").style.setProperty("display", "block");
 		}))
 	});
 })

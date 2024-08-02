@@ -1,4 +1,7 @@
 container = document.getElementById("container");
+homeBtn = document.getElementById("goHomeButton");
+swichTheme = document.getElementById("themeButton");
+
 fetch('/api/user/current', {
 	method: 'GET',
 	headers: {
@@ -21,7 +24,6 @@ fetch('/api/user/current', {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
-					document.getElementById("usernameBtn").innerHTML = text.display;
 					switchTheme(text.theme);
 					loadCurrentLang("home");
 					history.replaceState(container.innerHTML, "");
@@ -56,6 +58,30 @@ fetch('/api/user/current', {
 	console.error('There was a problem with the fetch operation:', error);
 	return (null);
 });
+
+homeBtn.addEventListener("click", (e) => {
+	fetch ('bodyLess/home.html').then((response) => {
+		return (response.text().then(response => {
+			if (container.innerHTML != "")
+				history.pushState(response, "");
+			else
+				history.replaceState(response,"");
+			container.innerHTML = response;
+			document.getElementById("script").remove();
+			var s = document.createElement("script");
+			s.setAttribute('id', 'script');
+			s.setAttribute('src', `scripts/home.js`);
+			loadCurrentLang("home");
+			document.body.appendChild(s);
+			homeBtn.style.setProperty("display", "none");
+		}))
+	});	
+})
+
+homeBtn.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13)
+		homeBtn.click();
+})
 
 function switchTheme(darkTheme){
 	if (darkTheme == 0){
@@ -135,6 +161,42 @@ function loadCurrentLang(page){ //just for better readability before prod, don't
 					})
 				})
 			})
-		};
+		}
+		else{
+			fetch("lang/EN_US.json").then(response => {
+				response.json().then((text) => {
+					content = text[page];
+					Object.keys(content).forEach(function(key) {
+						if (key.startsWith('input'))
+							document.getElementById(key).placeholder = content[key];
+						else
+							document.getElementById(key).innerHTML = content[key];
+					});
+				})
+			})
+		}
 	});
 }
+
+swichTheme.addEventListener("click", () => {
+	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme");
+	const data = {dark_theme: theme};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
+	switchTheme(theme);
+	swichTheme.blur();
+})
+
+swichTheme.addEventListener("keydown", (e) => {
+	if (e.keyCode == 13){
+		swichTheme.click();
+		swichTheme.focus();
+	}
+})
+

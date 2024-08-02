@@ -57,55 +57,10 @@ leftSlideBtn.addEventListener("click", () => {
 	settingsSlides[slideIdx].style.display = "block";
 });
 
-swichTheme.addEventListener("click", () => {
-	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme");
-	const data = {dark_theme: theme};
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
-	})
-	switchTheme(window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme"));
-	swichTheme.blur();
-})
-
-swichTheme.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13){
-		swichTheme.click();
-		swichTheme.focus();
-	}
-})
-
 pfpInputLabel.addEventListener("keydown", (ek) => {
 	if (ek.keyCode == 13){
 		pfpInput.click();
 	}
-})
-
-homeBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/home.html').then((response) => {
-		return (response.text().then(response => {
-			if (container.innerHTML != "")
-				history.pushState(response, "");
-			else
-				history.replaceState(response,"");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/home.js`);
-			loadCurrentLang("home");
-			document.body.appendChild(s);
-		}))
-	});	
-})
-
-homeBtn.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13)
-		homeBtn.click();
 })
 
 saveBtn.addEventListener("click", (e) => {
