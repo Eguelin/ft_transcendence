@@ -119,9 +119,12 @@ swichTheme.addEventListener("click", () => {
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 		document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
 	}
+	swichTheme.blur();
 })
 
 swichTheme.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13)
+	if (e.keyCode == 13){
 		swichTheme.click();
+		swichTheme.focus();
+	}
 })

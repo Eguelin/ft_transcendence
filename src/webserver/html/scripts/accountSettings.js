@@ -58,34 +58,25 @@ leftSlideBtn.addEventListener("click", () => {
 });
 
 swichTheme.addEventListener("click", () => {
-	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 0){
-		const data = {dark_theme: 1};
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-	}
-	else{
-		const data = {dark_theme: 0};
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-	}
+	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme");
+	const data = {dark_theme: theme};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
 	switchTheme(window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme"));
+	swichTheme.blur();
 })
 
 swichTheme.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13)
+	if (e.keyCode == 13){
 		swichTheme.click();
+		swichTheme.focus();
+	}
 })
 
 pfpInputLabel.addEventListener("keydown", (ek) => {
