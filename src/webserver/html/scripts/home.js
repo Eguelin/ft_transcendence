@@ -17,11 +17,14 @@ swichTheme.addEventListener("click", () => {
 		credentials: 'include'
 	})
 	switchTheme(theme);
+	swichTheme.blur();
 })
 
 swichTheme.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13)
+	if (e.keyCode == 13){
 		swichTheme.click();
+		swichTheme.focus();
+	}
 })
 
 dpUserBtn.addEventListener("click", (e) => {
