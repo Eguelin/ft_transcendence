@@ -247,6 +247,10 @@ dropDownContent.forEach(function(button) {
 		a[j].classList.remove("dropDownContentAHover");
 		j = 0;
 	});
+	button.addEventListener("blur", (even) => {
+		a[j].classList.remove("dropDownContentAHover");
+		j = 0;
+	});
 });
 
 for (var i = 0 ;i < germanBtn.length; i++)
@@ -272,6 +276,10 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
+		for (var j=0; j< germanBtn.length; j++){
+			germanBtn[j].classList.remove("dropDownContentAHover");
+			englishBtn[j].classList.remove("dropDownContentAHover");
+		}
 	})
 	
 	englishBtn[i].addEventListener("click", (e) => {
@@ -295,6 +303,10 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
+		for (var j=0; j< germanBtn.length; j++){
+			germanBtn[j].classList.remove("dropDownContentAHover");
+			englishBtn[j].classList.remove("dropDownContentAHover");
+		}
 	})
 }
 
@@ -311,6 +323,7 @@ for (var i=0; i< lightTheme.length; i++)
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
+		e.srcElement.classList.remove("dropDownContentAHover");
 	})
 
 	darkTheme[i].addEventListener("click", (e) => {
@@ -324,5 +337,6 @@ for (var i=0; i< lightTheme.length; i++)
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
+		e.srcElement.classList.remove("dropDownContentAHover");
 	})
 }

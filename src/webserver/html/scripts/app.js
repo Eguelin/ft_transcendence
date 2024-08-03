@@ -82,7 +82,6 @@ homeBtn.addEventListener("keydown", (e) => {
 })
 
 function switchTheme(darkTheme){
-	console.log(darkTheme);
 	if (darkTheme == 1 || darkTheme == true){
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
