@@ -9,6 +9,7 @@
 	--main-text-rgb : #FDFDFB; /*#110026*/
 	--hover-text-rgb :  #3A3053;
 	--option-hover-text-rgb :  #110026;
+	--option-text-rgb :  #FDFDFB;
 	--input-bg-rgb : #3A3053; /*#FFDBDE*/
 	--is-dark-theme : 1;
 }
@@ -468,7 +469,7 @@ a {
 
 .dropDownContent a{
 	text-align: center;
-	color: var(--main-text-rgb);
+	color: var(--option-text-rgb);
 	text-decoration: inherit;
 	font-size: min(4vh,3vw);
 	padding: 1vh 1vw;
@@ -524,37 +525,18 @@ a {
 	background-color: var(--input-bg-rgb);
 }
 
-#dropDownUser:focus{
+#dropDownUser:focus, #dropDownUser:focus-within{
 	border: 0.2vh solid;
 	border-color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	width: max-content;
 }
 
-#dropDownUser:focus #usernameBtn {
+#dropDownUser:focus #usernameBtn, #dropDownUser:focus-within #usernameBtn{
 	text-align: center;
 }
 
-
-#dropDownUser:focus-within{
-	border: 0.2vh solid;
-	border-color: var(--main-text-rgb);
-	background-color: var(--input-bg-rgb);
-	width: max-content;
-}
-
-#dropDownUser:focus-within #usernameBtn {
-	text-align: center;
-}
-
-
-#dropDownUser:focus .dropDownUserContent{
-	border-block-start: var(--hover-text-rgb);
-	display: block;
-	z-index: 1;
-}
-
-#dropDownUser:focus-within .dropDownUserContent{
+#dropDownUser:focus .dropDownUserContent, #dropDownUser:focus-within .dropDownUserContent{
 	border-block-start: var(--hover-text-rgb);
 	display: block;
 	z-index: 1;
@@ -562,7 +544,7 @@ a {
 
 .dropDownUserContent button{
 	text-align: center;
-	color: var(--main-text-rgb);
+	color: var(--option-text-rgb);
 	text-decoration: inherit;
 	display: block;
 	font-size: min(2vh, 1vw);
