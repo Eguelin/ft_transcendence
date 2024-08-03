@@ -136,7 +136,7 @@ saveBtn.addEventListener("click", (e) => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				switchTheme(text.theme);
+				switchTheme(text.is_dark_theme);
 				usernameInput.setAttribute('placeholder', text.username);
 				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
@@ -176,7 +176,7 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				switchTheme(text.theme);
+				switchTheme(text.is_dark_theme);
 				username.setAttribute('placeholder', text.username);
 				loadCurrentLang("accountSettings");
 				history.replaceState(container.innerHTML, "");
@@ -301,8 +301,8 @@ for (var i = 0 ;i < germanBtn.length; i++)
 for (var i=0; i< lightTheme.length; i++)
 {
 	lightTheme[i].addEventListener("click", (e) => {
-		switchTheme(1);
-		const data = {dark_theme: 0};
+		switchTheme(0);
+		const data = {is_dark_theme: 0};
 		fetch('/api/user/update', {
 			method: 'POST',
 			headers: {
@@ -314,8 +314,8 @@ for (var i=0; i< lightTheme.length; i++)
 	})
 
 	darkTheme[i].addEventListener("click", (e) => {
-		switchTheme(0);
-		const data = {dark_theme: 1};
+		switchTheme(1);
+		const data = {is_dark_theme: 1};
 		fetch('/api/user/update', {
 			method: 'POST',
 			headers: {

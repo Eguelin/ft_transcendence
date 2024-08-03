@@ -129,8 +129,8 @@ def profile_update(request):
 			try:
 				data = json.loads(request.body)
 				user = request.user
-				if "dark_theme" in data:
-					user.profile.dark_theme = data['dark_theme']
+				if "is_dark_theme" in data:
+					user.profile.dark_theme = data['is_dark_theme']
 				if "username" in data:
 					user.username = data['username']
 				if "display" in data:
@@ -166,7 +166,7 @@ def current_user(request):
 			raw_img = ""
 		return JsonResponse({'username': request.user.username,
 			'display': request.user.profile.display_name,
-			'theme': request.user.profile.dark_theme,
+			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack})
 	else:

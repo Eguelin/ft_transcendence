@@ -20,7 +20,7 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				switchTheme(text.theme);
+				switchTheme(text.is_dark_theme);
 				loadCurrentLang("home");
 				if (text.pfp != ""){
 					var rawPfp = text.pfp;
@@ -69,7 +69,7 @@ window.addEventListener("load", () => {
 	.then(response => {
 		if (response.ok) {
 			(response.json()).then((text) => {
-				switchTheme(text.theme);
+				switchTheme(text.is_dark_theme);
 				loadCurrentLang("home");
 				document.getElementById("usernameBtn").innerHTML = text.display;
 				document.getElementById("pfp").style.setProperty("display", "block");

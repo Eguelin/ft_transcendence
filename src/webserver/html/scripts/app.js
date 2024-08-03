@@ -24,8 +24,6 @@ fetch('/api/user/current', {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
-					switchTheme(text.theme);
-					loadCurrentLang("home");
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
@@ -84,13 +82,15 @@ homeBtn.addEventListener("keydown", (e) => {
 })
 
 function switchTheme(darkTheme){
-	if (darkTheme == 0){
+	console.log(darkTheme);
+	if (darkTheme == 1 || darkTheme == true){
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
 		document.documentElement.style.setProperty("--option-hover-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
+		document.documentElement.style.setProperty("--is-dark-theme", 1);
 		if (document.getElementById("themeButton"))
 			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
 	}
@@ -103,8 +103,8 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		if (document.getElementById("themeButton"))
 			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+		document.documentElement.style.setProperty("--is-dark-theme", 0);
 	}
-	document.documentElement.style.setProperty("--is-dark-theme", darkTheme == 0 ? 1 : 0);
 }
 
 window.addEventListener("popstate", (event) => {
@@ -181,8 +181,8 @@ function loadCurrentLang(page){ //just for better readability before prod, don't
 }
 
 swichTheme.addEventListener("click", () => {
-	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme");
-	const data = {dark_theme: theme};
+	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
+	const data = {is_dark_theme: theme};
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
