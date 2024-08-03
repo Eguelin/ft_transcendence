@@ -124,31 +124,33 @@ def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
 
 def profile_update(request):
-	if (request.method == 'POST'):
-		try:
-			data = json.loads(request.body)
-			user = request.user
-			if "dark_theme" in data:
-				user.profile.dark_theme = data['dark_theme']
-			if "username" in data:
-				user.username = data['username']
-			if "display" in data:
-				if (len(data['display']) > 15):
-					user.profile.display_name = data['display'][:15]
-				else:
-					user.profile.display_name = data['display']
-			if "pfp" in data:
-				raw = data['pfp']
-				pfpName = "profilePictures/{0}.jpg".format(user.username)
-				with open(pfpName, "wb", opener=file_opener) as f:
-					f.write(base64.b64decode(raw))
-				user.profile.profile_picture = pfpName
-			if ("language_pack" in data):
-				user.profile.language_pack = data['language_pack']
-			user.save()
-			return JsonResponse({'message': 'User profile updated'})
-		except json.JSONDecodeError:
-			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+	if (request.user.is_authenticated):
+		if (request.method == 'POST'):
+			try:
+				data = json.loads(request.body)
+				user = request.user
+				if "dark_theme" in data:
+					user.profile.dark_theme = data['dark_theme']
+				if "username" in data:
+					user.username = data['username']
+				if "display" in data:
+					if (len(data['display']) > 15):
+						user.profile.display_name = data['display'][:15]
+					else:
+						user.profile.display_name = data['display']
+				if "pfp" in data:
+					raw = data['pfp']
+					pfpName = "profilePictures/{0}.jpg".format(user.username)
+					with open(pfpName, "wb", opener=file_opener) as f:
+						f.write(base64.b64decode(raw))
+					user.profile.profile_picture = pfpName
+				if ("language_pack" in data):
+					user.profile.language_pack = data['language_pack']
+				user.save()
+				return JsonResponse({'message': 'User profile updated'})
+			except json.JSONDecodeError:
+				return JsonResponse({'message': 'Invalid JSON'}, status=400)
+	return JsonResponse({'message': 'Can\'t update user profile'})
 
 def current_user(request):
 	if request.method != 'GET':
