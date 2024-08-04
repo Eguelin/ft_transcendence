@@ -1,7 +1,7 @@
 {
 	"home" : {
 		"title" : "PONG",
-		"accountSettingsBtn" :  "Einstellungen",
+		"settingsBtn" :  "Einstellungen",
 		"logOutBtn" :  "Ausloggen",
 		"playBtn" : "Spielen"
 	},
@@ -24,7 +24,7 @@
 		"inputPassword" : "Passwort",
 		"inputCPassword" : "Bestätige das Passwort"
 	},
-	"accountSettings": {
+	"settings": {
 		"title" : "Einstellungen",
 		"accountTitle" : "Account",
 		"accessibilityTitle" : "Barrierefreiheit",

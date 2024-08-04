@@ -138,7 +138,7 @@ saveBtn.addEventListener("click", (e) => {
 			(response.json()).then((text) => {
 				switchTheme(text.is_dark_theme);
 				usernameInput.setAttribute('placeholder', text.username);
-				loadCurrentLang("accountSettings");
+				loadCurrentLang("settings");
 				history.replaceState(container.innerHTML, "");
 			});
 		}
@@ -178,7 +178,7 @@ window.addEventListener("load", () => {
 			(response.json()).then((text) => {
 				switchTheme(text.is_dark_theme);
 				username.setAttribute('placeholder', text.username);
-				loadCurrentLang("accountSettings");
+				loadCurrentLang("settings");
 				history.replaceState(container.innerHTML, "");
 			});
 		}
@@ -259,7 +259,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 		const data = {language_pack: "lang/DE_GE.json"};
 		fetch("lang/DE_GE.json").then(response => {
 			response.json().then((text) => {
-				content = text['accountSettings'];
+				content = text['settings'];
 				Object.keys(content).forEach(function(key) {
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
@@ -286,7 +286,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 		const data = {language_pack: "lang/EN_US.json"};
 		fetch("lang/EN_US.json").then(response => {
 			response.json().then((text) => {
-				content = text['accountSettings'];
+				content = text['settings'];
 				Object.keys(content).forEach(function(key) {
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
