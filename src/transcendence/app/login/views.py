@@ -2,7 +2,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError, IntegrityError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random
+import json, os, requests, base64, random, string
+import login.models as customModels
 
 def fortytwo(request):
 	if request.method != 'POST':
@@ -86,7 +87,14 @@ def create_user(request):
 		else:
 			user.profile.display_name = display
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
-		user.save()
+		for count in range (0, 0x7fffffff):
+			friend_code = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
+			user.profile.friend_code = friend_code
+			try:
+				user.save()
+				break
+			except:
+				continue
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created but not logged in'}, status=201)
 	except IntegrityError:
@@ -168,6 +176,7 @@ def current_user(request):
 			'display': request.user.profile.display_name,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
-			'lang': request.user.profile.language_pack})
+			'lang': request.user.profile.language_pack,
+			'friend_code': request.user.profile.friend_code})
 	else:
 		return JsonResponse({'username': None}, status=400)
