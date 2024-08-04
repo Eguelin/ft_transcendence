@@ -3,7 +3,7 @@ logOutBtn = document.getElementById('logOutBtn');
 swichTheme = document.getElementById("themeButton");
 userBtn = document.getElementById("usernameBtn");
 dpUserBtn = document.getElementById("dropDownUser");
-accSettingsBtn = document.getElementById("accountSettingsBtn");
+accSettingsBtn = document.getElementById("settingsBtn");
 
 dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
@@ -140,7 +140,7 @@ logOutBtn.addEventListener("click", (e) => {
 });
 
 accSettingsBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/accountSettings.html').then((response) => {
+	fetch ('bodyLess/settings.html').then((response) => {
 		return (response.text().then(response => {
 			if (container.innerHTML != "")
 				history.pushState(response, "");
@@ -150,8 +150,8 @@ accSettingsBtn.addEventListener("click", (e) => {
 			document.getElementById("script").remove();
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/accountSettings.js`);
-			loadCurrentLang("accountSettings");
+			s.setAttribute('src', `scripts/settings.js`);
+			loadCurrentLang("settings");
 			document.body.appendChild(s);
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");

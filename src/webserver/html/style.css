@@ -458,7 +458,6 @@ a {
 	}
 	
 	.dropDownPortrait:hover .dropDownOptionContainer .dropDownArrow, .dropDownPortrait:focus .dropDownOptionContainer .dropDownArrow{
-		/*transform: rotate(90deg);	*/
 		right: 12.5vw;
 		outline: none;
 		border-block-start: var(--hover-text-rgb);
