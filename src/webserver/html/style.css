@@ -316,7 +316,7 @@ a {
 @media screen and (orientation:landscape){
 	.dropDownBtn {
 		text-align: left;
-		background-color: var(--input-bg-rgb);
+		background-color: transparent;
 		color: var(--main-text-rgb);
 		font-style: italic;
 		font-weight: thin;	
@@ -336,10 +336,12 @@ a {
 		margin: 2vh 0 0 25vw;	
 		width: fit-content;
 		outline: none;
+		border-radius: 25px;
 	}
 	
 	.dropDownLandscape:focus, .dropDownLandscape:hover{
 		border-right: 0;
+		border-radius: 25px 0px 0px 25px;
 	}
 	
 	.dropDownArrow{
@@ -367,6 +369,7 @@ a {
 		border-right: 0.2px solid var(--main-text-rgb);
 		border-top: 0.2px solid var(--main-text-rgb);
 		background: var(--input-bg-rgb);
+		border-radius: 0px 25px 25px;
 		top: -1px;
 	}
 	
@@ -394,13 +397,14 @@ a {
 		z-index: 2;
 		flex: 1;
 		outline: none;
+		border-radius: 0px 0px 25px 25px;
 	}	
 }
 
 @media screen and (orientation:portrait){
 	.dropDownBtn {
 		text-align: left;
-		background-color: var(--input-bg-rgb);
+		background-color: transparent;
 		color: var(--main-text-rgb);
 		font-style: italic;
 		font-weight: thin;	
@@ -415,12 +419,17 @@ a {
 		position: relative;	
 		display: flex;
 		flex-flow: column;
-		border: 0.2px solid;
-		border-color: var(--main-text-rgb);
+		border: 0.2px solid var(--main-text-rgb);
 		background-color: var(--input-bg-rgb);
 		margin: 2vh 0 0 25vw;	
 		width: fit-content;
 		outline: none;
+		border-radius: 25px;
+	}
+
+	.dropDownPortrait:focus, .dropDownPortrait:hover{
+		border: 0px;
+		border-radius: 25px 25px 25px 25px;
 	}
 	
 	.dropDownArrow{
@@ -443,6 +452,9 @@ a {
 	.dropDownPortrait:hover .dropDownOptionContainer, .dropDownPortrait:focus .dropDownOptionContainer{
 		min-width: 25vw;
 		width: max-content;
+		border-radius: 25px 25px 0px 0px;
+		border: 0.2px solid var(--main-text-rgb);
+		border-bottom: 0px;
 	}
 	
 	.dropDownPortrait:hover .dropDownOptionContainer .dropDownArrow, .dropDownPortrait:focus .dropDownOptionContainer .dropDownArrow{
@@ -464,12 +476,14 @@ a {
 		z-index: 2;
 		flex: 1;
 		outline: none;
+		border-radius: 0px 0px 25px 25px;
+		border: 0.2px solid var(--main-text-rgb);
+		border-top: 0px;
 	}	
 }
 
 .dropDownContent{
 	display: none;
-	background-color: var(--input-bg-rgb);
 	width: 20vw;
 }
 
