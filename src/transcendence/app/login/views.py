@@ -5,100 +5,94 @@ from django.http import JsonResponse
 import json, os, requests, base64, random, string
 
 def generate_unique_username(base_username):
-    username = base_username
-    counter = 1
-    while User.objects.filter(username=username).exists():
-        username = f"{base_username}{counter}"
-        counter += 1
-    return username
+	username = base_username
+	counter = 1
+	while User.objects.filter(username=username).exists():
+		username = f"{base_username}{counter}"
+		counter += 1
+	return username
 
 def fortytwo(request):
-    if request.method != 'POST':
-        return JsonResponse({'message': 'Invalid request'}, status=400)
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
 
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({'message': 'Invalid JSON'}, status=400)
+	try:
+		data = json.loads(request.body)
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
-    code = data.get('code')
-    if not code:
-        return JsonResponse({'message': 'Invalid request Code'}, status=400)
+	code = data.get('code')
+	if not code:
+		return JsonResponse({'message': 'Invalid request Code'}, status=400)
+	client_id = os.getenv('PUBLIC')
+	client_secret = os.getenv('SECRET')
+	redirect_uri = os.getenv('REDIRECT_URI')
+	url = 'https://api.intra.42.fr/oauth/token'
+	payload = {
+		'grant_type': 'authorization_code',
+		'client_id': client_id,
+		'client_secret': client_secret,
+		'code': code,
+		'redirect_uri': redirect_uri,
+	}
+	response = requests.post(url, data=payload)
+	if response.status_code != 200:
+		return JsonResponse(response.json(), status=response.status_code)
 
-    client_id = os.getenv('PUBLIC')
-    client_secret = os.getenv('SECRET')
-    redirect_uri = os.getenv('REDIRECT_URI')
-    url = 'https://api.intra.42.fr/oauth/token'
-
-    payload = {
-        'grant_type': 'authorization_code',
-        'client_id': client_id,
-        'client_secret': client_secret,
-        'code': code,
-        'redirect_uri': redirect_uri,
-    }
-    response = requests.post(url, data=payload)
-    if response.status_code != 200:
-        return JsonResponse(response.json(), status=response.status_code)
-
-    access_token = response.json().get('access_token')
-    if not access_token:
-        return JsonResponse({'message': 'Failed to retrieve access token'}, status=400)
-
-    url = 'https://api.intra.42.fr/v2/me'
-    headers = {
-        'Authorization': f'Bearer {access_token}'
-    }
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        return JsonResponse(response.json(), status=response.status_code)
-
-    user_json = response.json()
-    user_login = user_json.get('login')
-    pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
-    display = user_login
-    id42 = user_json.get('id')
-
-    if not user_login or id42 is None:
-        return JsonResponse({'message': 'Failed to retrieve user data'}, status=400)
-
-    try:
-        user = User.objects.get(profile__id42=id42)
-        user = authenticate(request, username=user.username, password=user.username)
-        if user is not None:
-            login(request, user)
-            return JsonResponse({'message': 'User logged in', 'content': pfp_url})
-        else:
-            return JsonResponse({'message': 'Invalid credentials'}, status=400)
-    except User.DoesNotExist:
-        user, created = User.objects.get_or_create(username=user_login)
-        if created:
-            user.set_password(user.username)
-            user.save()
-            user.profile.display_name = display
-            user.profile.profile_picture = pfp_url
-            user.profile.id42 = id42
-            user.profile.save()
-            user = authenticate(request, username=user.username, password=user.username)
-            if user is not None:
-                login(request, user)
-                return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
-            else:
-                return JsonResponse({'message': 'Invalid credentials'}, status=400)
-        else:
-            # If user with user_login exists, but id42 is different, create a unique username
-            username = generate_unique_username(user_login)
-            user = User.objects.create_user(username=username, password=username)
-            user.profile.display_name = display
-            user.profile.profile_picture = pfp_url
-            user.profile.id42 = id42
-            user.save()
-            user = authenticate(request, username=username, password=username)
-            if user is not None:
-                login(request, user)
-                return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
-            else:
-                return JsonResponse({'message': 'Invalid credentials'}, status=400)
+	access_token = response.json().get('access_token')
+	if not access_token:
+		return JsonResponse({'message': 'Failed to retrieve access token'}, status=400)
+	url = 'https://api.intra.42.fr/v2/me'
+	headers = {
+		'Authorization': f'Bearer {access_token}'
+	}
+	response = requests.get(url, headers=headers)
+	if response.status_code != 200:
+		return JsonResponse(response.json(), status=response.status_code)
+	
+	user_json = response.json()
+	user_login = user_json.get('login')
+	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
+	display = user_login
+	id42 = user_json.get('id')
+	if not user_login or id42 is None:
+		return JsonResponse({'message': 'Failed to retrieve user data'}, status=400)
+	try:
+		user = User.objects.get(profile__id42=id42)
+		user = authenticate(request, username=user.username, password=user.username)
+		if user is not None:
+			login(request, user)
+			return JsonResponse({'message': 'User logged in', 'content': pfp_url})
+		else:
+			return JsonResponse({'message': 'Invalid credentials'}, status=400)
+	except User.DoesNotExist:
+		user, created = User.objects.get_or_create(username=user_login)
+		if created:
+			user.set_password(user.username)
+			user.save()
+			user.profile.display_name = display
+			user.profile.profile_picture = pfp_url
+			user.profile.id42 = id42
+			user.profile.save()
+			user = authenticate(request, username=user.username, password=user.username)
+			if user is not None:
+				login(request, user)
+				return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
+			else:
+				return JsonResponse({'message': 'Invalid credentials'}, status=400)
+		else:
+			username = generate_unique_username(user_login)
+			user = User.objects.create_user(username=username, password=username)
+			user.profile.display_name = display
+			user.profile.profile_picture = pfp_url
+			user.profile.id42 = id42
+			user.save()
+			user = authenticate(request, username=username, password=username)
+			if user is not None:
+				login(request, user)
+				return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
+			else:
+				return JsonResponse({'message': 'Invalid credentials'}, status=400)
 
 def create_user(request):
 	if request.method != 'POST' :
