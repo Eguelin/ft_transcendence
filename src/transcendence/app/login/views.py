@@ -172,11 +172,38 @@ def current_user(request):
 				raw_img = (base64.b64encode(f.read())).decode('utf-8')
 		except:
 			raw_img = ""
+		friends_list = request.user.profile.friends.all()
+		friend_json = {}
+		i = 0
+		for e in friends_list:
+			friend_json[i] = {
+				'username' : e.username,
+				'display' : e.profile.display_name
+				}
+			i += 1
 		return JsonResponse({'username': request.user.username,
 			'display': request.user.profile.display_name,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack,
-			'friend_code': request.user.profile.friend_code})
+			'friend_code': request.user.profile.friend_code,
+			'friends': friend_json})
+	else:
+		return JsonResponse({'username': None}, status=400)
+
+def send_friend_request(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	if request.user.is_authenticated:
+		data = json.loads(request.body)
+		code = data['code']
+		try:
+			new_friend = customModels.Profile.objects.get(friend_code=code).user
+			user = request.user
+			user.profile.friends.add(new_friend)
+			user.save
+			return JsonResponse({'message': 'Succesfully add friend'})
+		except:
+			return JsonResponse({'message': 'Can\'t find user'}, status=400)
 	else:
 		return JsonResponse({'username': None}, status=400)

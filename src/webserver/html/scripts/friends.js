@@ -2,15 +2,28 @@ friendCodeSpan = document.getElementById("friendCode");
 friendCodePopup = document.getElementById("friendCodePopup");
 popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
+inputCode = document.getElementById("inputCode");
+sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 
 document.addEventListener("click", (e) => {
-	if (e.srcElement.parentElement == null || e.srcElement.parentElement.id != "friendCodePopup"){
+	if (e.target.parentElement == null || e.target.parentElement.id != "friendCodePopup"){
 		friendCodePopup.style.setProperty("display", "none");
 		popupBg.style.setProperty("display", "none");
 	}
-	if (e.srcElement.id == "friendCodeBtn") {
+	if (e.target.id == "friendCodeBtn") {
 		popupBg.style.setProperty("display", "block");
 		friendCodePopup.style.setProperty("display", "block");
+	}
+	if (e.target.id == "sendFriendRequestBtn"){
+		const data = {code: inputCode.value};
+		fetch('/api/user/send_friend_request', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
 	}
 })
 

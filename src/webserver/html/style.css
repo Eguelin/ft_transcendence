@@ -601,7 +601,7 @@ a {
 	color: var(--main-text-rgb);
 }
 
-#friendCodeBtn {
+#friendCodeBtn, #sendFriendRequestBtn {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
@@ -614,7 +614,7 @@ a {
 	border-radius: 1.5vw;
 }
 
-#friendCodeBtn:hover, #friendCodeBtn:focus {
+#friendCodeBtn:hover, #friendCodeBtn:focus, #sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
 	color: var(--page-bg-rgb);
 	border-color: var(--page-bg-rgb);
 	outline: none;
@@ -642,4 +642,12 @@ a {
 	background-color: black;
 	opacity: 0.5;
 	display: none;
+}
+
+#inputCode{
+	border-radius: 1.5vw 0 0 1.5vw;
+}
+
+#sendFriendRequestBtn{
+	border-radius: 0 1.5vw 1.5vw 0;
 }
