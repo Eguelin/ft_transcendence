@@ -595,6 +595,12 @@ a {
 
 #friendInfo {
 	text-align: center;
+	display: flex;
+	flex-flow: column;
+	width: fit-content;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 #friendInfo span{
@@ -607,9 +613,8 @@ a {
 	color: var(--main-text-rgb);
 	font-weight: thin;	
 	font-family: "pong";
-	font-size: min(4vh, 2vw);
-	padding: 1vh 0;
-	width: 20vw;
+	font-size: min(3vh, 2vw);
+	padding: 1.5vh 1.5vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
 }
@@ -645,9 +650,18 @@ a {
 }
 
 #inputCode{
-	border-radius: 1.5vw 0 0 1.5vw;
+	border-radius: 0 0 0 1.5vw;
+	font-size: min(2vh, 1vw);
 }
 
 #sendFriendRequestBtn{
-	border-radius: 0 1.5vw 1.5vw 0;
+	border-radius: 0 0 1.5vw 0;
+}
+
+#friendCodeBtn{
+	border-radius: 1.5vw 1.5vw 0 0;
+}
+
+#addFriendContainer{
+	display: flex;
 }
