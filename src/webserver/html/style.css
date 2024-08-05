@@ -633,3 +633,13 @@ a {
 	border: 2px solid var(--main-text-rgb);
 	display: none;
 }
+
+#popupBg{
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	background-color: black;
+	opacity: 0.5;
+	display: none;
+}

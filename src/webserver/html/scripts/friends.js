@@ -1,9 +1,24 @@
 friendCodeSpan = document.getElementById("friendCode");
 friendCodePopup = document.getElementById("friendCodePopup");
+popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
 
-friendCodeBtn.addEventListener("click", (e) => {
-	friendCodePopup.style.setProperty("display", "block");
+document.addEventListener("click", (e) => {
+	if (e.srcElement.parentElement == null || e.srcElement.parentElement.id != "friendCodePopup"){
+		friendCodePopup.style.setProperty("display", "none");
+		popupBg.style.setProperty("display", "none");
+	}
+	if (e.srcElement.id == "friendCodeBtn") {
+		popupBg.style.setProperty("display", "block");
+		friendCodePopup.style.setProperty("display", "block");
+	}
+})
+
+document.addEventListener("keydown", (e) => {
+	if (e.key == "Escape"){
+		friendCodePopup.style.setProperty("display", "none");
+		popupBg.style.setProperty("display", "none");
+	}
 })
 
 {
@@ -46,6 +61,5 @@ friendCodeBtn.addEventListener("click", (e) => {
 				}))
 			});
 		}
-		return (null);
 	})
 }
