@@ -1,6 +1,7 @@
 {
 	"home" : {
 		"title" : "PONG",
+		"friendsBtn" :  "Friends",
 		"settingsBtn" :  "Settings",
 		"logOutBtn" :  "Log out",
 		"playBtn" : "Play"
@@ -50,5 +51,8 @@
 		"germanBtnP" : "German",
 		"italianBtnP" : "Italian",
 		"pirateBtnP" : "Pirate"
+	},
+	"friends":{
+		"title" : "Friends"
 	}
 }
