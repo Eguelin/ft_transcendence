@@ -53,6 +53,8 @@
 		"pirateBtnP" : "Pirate"
 	},
 	"friends":{
-		"title" : "Friends"
+		"title" : "Friends",
+		"friendCodeBtn" : "My friend code",
+		"friendCode" : "My friend code"
 	}
 }
