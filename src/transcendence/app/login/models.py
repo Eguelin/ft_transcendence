@@ -17,7 +17,7 @@ class Profile(models.Model):
 	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_US.json")
 	display_name = models.CharField(max_length=15)
-	id = models.CharField(max_length=50, primary_key=True)
+	id42 = models.IntegerField(default=0)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwards):
