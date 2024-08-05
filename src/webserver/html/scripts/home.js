@@ -4,6 +4,7 @@ swichTheme = document.getElementById("themeButton");
 userBtn = document.getElementById("usernameBtn");
 dpUserBtn = document.getElementById("dropDownUser");
 accSettingsBtn = document.getElementById("settingsBtn");
+friendsBtn = document.getElementById("friendsBtn");
 
 dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
@@ -152,6 +153,27 @@ accSettingsBtn.addEventListener("click", (e) => {
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/settings.js`);
 			loadCurrentLang("settings");
+			document.body.appendChild(s);
+			document.getElementById("pfp").style.setProperty("display", "none");
+			document.getElementById("dropDownUser").style.setProperty("display", "none");
+			document.getElementById("goHomeButton").style.setProperty("display", "block");
+		}))
+	});
+})
+
+friendsBtn.addEventListener("click", (e) => {
+	fetch ('bodyLess/friends.html').then((response) => {
+		return (response.text().then(response => {
+			if (container.innerHTML != "")
+				history.pushState(response, "");
+			else
+				history.replaceState(response,"");
+			container.innerHTML = response;
+			document.getElementById("script").remove();
+			var s = document.createElement("script");
+			s.setAttribute('id', 'script');
+			s.setAttribute('src', `scripts/friends.js`);
+			loadCurrentLang("friends");
 			document.body.appendChild(s);
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");
