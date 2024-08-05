@@ -201,7 +201,9 @@ def send_friend_request(request):
 			new_friend = customModels.Profile.objects.get(friend_code=code).user
 			user = request.user
 			user.profile.friends.add(new_friend)
-			user.save
+			user.save()
+			new_friend.profile.friends.add(user)
+			new_friend.save()
 			return JsonResponse({'message': 'Succesfully add friend'})
 		except:
 			return JsonResponse({'message': 'Can\'t find user'}, status=400)
