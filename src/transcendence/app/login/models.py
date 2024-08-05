@@ -18,6 +18,7 @@ class Profile(models.Model):
 	language_pack = models.CharField(max_length=40, default="lang/EN_US.json")
 	display_name = models.CharField(max_length=15)
 	friend_code = models.CharField(max_length=20, null=True)
+	friends = models.ManyToManyField(User, related_name="friends_list")
 	
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwards):
