@@ -592,3 +592,44 @@ a {
 	border-radius: 1.5vw;
 	display: block;
 }
+
+#friendInfo {
+	text-align: center;
+}
+
+#friendInfo span{
+	color: var(--main-text-rgb);
+}
+
+#friendCodeBtn {
+	text-align: center;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	font-weight: thin;	
+	font-family: "pong";
+	font-size: min(4vh, 2vw);
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+}
+
+#friendCodeBtn:hover, #friendCodeBtn:focus {
+	color: var(--page-bg-rgb);
+	border-color: var(--page-bg-rgb);
+	outline: none;
+}
+
+#friendCodePopup{
+	background: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	position: fixed;
+	left: 50%;
+	right: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	padding: min(5vh, 4vw);
+	width: fit-content;
+	border: 2px solid var(--main-text-rgb);
+	display: none;
+}
