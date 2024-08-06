@@ -665,3 +665,21 @@ a {
 #addFriendContainer{
 	display: flex;
 }
+
+#friendList{
+	background: var(--input-bg-rgb);
+	margin-top: min(2vh, 1vw);
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+}
+
+.friendContainer{
+	display: flex;
+	align-items: center;
+	flex-wrap: inherit;
+	color: var(--main-text-rgb);
+}
+
+.friendContainer a{
+	margin-left: 1vw;
+}

@@ -4,6 +4,7 @@ popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
 inputCode = document.getElementById("inputCode");
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
+friendListContainer = document.getElementById("friendList");
 
 document.addEventListener("click", (e) => {
 	if (e.target.parentElement == null || e.target.parentElement.id != "friendCodePopup"){
@@ -50,6 +51,26 @@ document.addEventListener("keydown", (e) => {
 				code = document.createElement("a");
 				code.innerHTML = text.friend_code;
 				friendCodePopup.appendChild(code);
+				var friends = text.friends;
+				Object.keys(friends).forEach(function(key) {
+					friendContainer = document.createElement("div");
+					friendContainer.className = "friendContainer"
+					pfp = document.createElement("img");
+					pfp.className = "profilePicture";
+					if (friends[key].pfp != ""){
+						var rawPfp = friends[key].pfp;
+						if (rawPfp.startsWith('https://'))
+							pfp.setAttribute("src", `${rawPfp}`);
+						else
+							pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+					}
+					friendName = document.createElement("a");
+					friendName.innerHTML = friends[key].display;
+					friendContainer.appendChild(pfp);
+					friendContainer.appendChild(friendName);
+					friendListContainer.appendChild(friendContainer);
+				});
+				console.log(friends);
 				history.replaceState(container.innerHTML, "");
 			});
 		}

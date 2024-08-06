@@ -160,6 +160,20 @@ def profile_update(request):
 				return JsonResponse({'message': 'Invalid JSON'}, status=400)
 	return JsonResponse({'message': 'Can\'t update user profile'})
 
+def get_user_json(user):
+	try:
+		if (user.profile.profile_picture.startswith("https://")):
+			raw_img = user.profile.profile_picture
+		else:
+			f = open(user.profile.profile_picture, "rb")
+			raw_img = (base64.b64encode(f.read())).decode('utf-8')
+	except:
+		raw_img = ""
+	return {'username' : user.username,
+		'display' : user.profile.display_name,
+		'pfp' : raw_img
+	}
+
 def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -176,10 +190,7 @@ def current_user(request):
 		friend_json = {}
 		i = 0
 		for e in friends_list:
-			friend_json[i] = {
-				'username' : e.username,
-				'display' : e.profile.display_name
-				}
+			friend_json[i] = get_user_json(e)
 			i += 1
 		return JsonResponse({'username': request.user.username,
 			'display': request.user.profile.display_name,
