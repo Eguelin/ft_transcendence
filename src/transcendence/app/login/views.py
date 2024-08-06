@@ -187,10 +187,17 @@ def current_user(request):
 		except:
 			raw_img = ""
 		friends_list = request.user.profile.friends.all()
+		friends_request_list = request.user.profile.friends_request.all()
 		friend_json = {}
+		friend_request_json = {}
 		i = 0
 		for e in friends_list:
 			friend_json[i] = get_user_json(e)
+			i += 1
+		
+		i = 0
+		for e in friends_request_list:
+			friend_request_json[i] = get_user_json(e)
 			i += 1
 		return JsonResponse({'username': request.user.username,
 			'display': request.user.profile.display_name,
@@ -198,7 +205,8 @@ def current_user(request):
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack,
 			'friend_code': request.user.profile.friend_code,
-			'friends': friend_json})
+			'friends': friend_json,
+			'friend_request': friend_request_json})
 	else:
 		return JsonResponse({'username': None}, status=400)
 
@@ -211,9 +219,7 @@ def send_friend_request(request):
 		try:
 			new_friend = customModels.Profile.objects.get(friend_code=code).user
 			user = request.user
-			user.profile.friends.add(new_friend)
-			user.save()
-			new_friend.profile.friends.add(user)
+			new_friend.profile.friends_request.add(user)
 			new_friend.save()
 			return JsonResponse({'message': 'Succesfully add friend'})
 		except:
