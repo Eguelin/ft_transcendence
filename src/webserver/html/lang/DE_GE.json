@@ -55,6 +55,7 @@
 	"friends":{
 		"title" : "Freunde",
 		"friendCodeBtn" : "Mein freundescode",
-		"friendCode" : "Mein Freundescode : "
+		"friendCode" : "Mein Freundescode",
+		"pendingRequestBtn" : "Ausstehende Freundschaftsanfrage"
 	}
 }

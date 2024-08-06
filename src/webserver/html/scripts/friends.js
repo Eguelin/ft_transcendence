@@ -1,19 +1,26 @@
 friendCodeSpan = document.getElementById("friendCode");
 friendCodePopup = document.getElementById("friendCodePopup");
+friendRequestPopup = document.getElementById("friendRequestPopup");
 popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
+pendingRequestBtn = document.getElementById("pendingRequestBtn");
 inputCode = document.getElementById("inputCode");
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 friendListContainer = document.getElementById("friendList");
 
 document.addEventListener("click", (e) => {
-	if (e.target.parentElement == null || e.target.parentElement.id != "friendCodePopup"){
+	if (e.target.parentElement == null || (e.target.parentElement.id != "friendCodePopup" && e.target.parentElement.id != "friendRequestPopup")){
 		friendCodePopup.style.setProperty("display", "none");
+		friendRequestPopup.style.setProperty("display", "none");
 		popupBg.style.setProperty("display", "none");
 	}
 	if (e.target.id == "friendCodeBtn") {
 		popupBg.style.setProperty("display", "block");
 		friendCodePopup.style.setProperty("display", "block");
+	}
+	if (e.target.id == "pendingRequestBtn") {
+		popupBg.style.setProperty("display", "block");
+		friendRequestPopup.style.setProperty("display", "block");
 	}
 	if (e.target.id == "sendFriendRequestBtn"){
 		const data = {code: inputCode.value};
@@ -48,9 +55,7 @@ document.addEventListener("keydown", (e) => {
 			(response.json()).then((text) => {
 				switchTheme(text.is_dark_theme);
 				loadCurrentLang("friends");
-				code = document.createElement("a");
-				code.innerHTML = text.friend_code;
-				friendCodePopup.appendChild(code);
+				friendCodePopup.lastElementChild.innerHTML = text.friend_code;
 				var friends = text.friends;
 				Object.keys(friends).forEach(function(key) {
 					friendContainer = document.createElement("div");
