@@ -687,3 +687,24 @@ a {
 #pendingRequestBtn {
 	border-radius: 0;
 }
+
+
+.acceptRequestBtn{
+	mask-image:url("svg/check-mark-1.svg");
+	background:green;
+	height:10vh;
+	width:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+.rejectRequestBtn{
+	mask-image:url("svg/cross-17.svg");
+	background:red;
+	height:10vh;
+	width:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}

@@ -25,4 +25,6 @@ urlpatterns = [
 	path('user/fortyTwo/login', views.fortytwo),
     path('user/update', views.profile_update),
     path('user/send_friend_request', views.send_friend_request),
+    path('user/accept_friend_request', views.accept_friend_request),
+    path('user/reject_friend_request', views.reject_friend_request),
 ]
