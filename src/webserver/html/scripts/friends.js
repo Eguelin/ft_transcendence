@@ -1,4 +1,3 @@
-friendCodeSpan = document.getElementById("friendCode");
 friendCodePopup = document.getElementById("friendCodePopup");
 friendRequestPopup = document.getElementById("friendRequestPopup");
 popupBg = document.getElementById("popupBg");
@@ -7,20 +6,33 @@ pendingRequestBtn = document.getElementById("pendingRequestBtn");
 inputCode = document.getElementById("inputCode");
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 friendListContainer = document.getElementById("friendList");
+friendInfo = document.getElementById("friendInfo");
 
 document.addEventListener("click", (e) => {
 	if (e.target.parentElement == null || (e.target.parentElement.id != "friendCodePopup" && e.target.parentElement.id != "friendRequestPopup")){
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
-		popupBg.style.setProperty("display", "none");
+		var bg = document.getElementById("popupBg");
+		if (bg != null)
+			bg.remove();
 	}
 	if (e.target.id == "friendCodeBtn") {
-		popupBg.style.setProperty("display", "block");
 		friendCodePopup.style.setProperty("display", "block");
+		var bg = document.createElement("div");
+		bg.id = "popupBg";
+		pos = friendInfo.getBoundingClientRect();
+		bg.style.left = `${-pos.left}px`;
+		bg.style.top = `${-pos.top}px`;
+		friendCodePopup.before(bg)
 	}
 	if (e.target.id == "pendingRequestBtn") {
-		popupBg.style.setProperty("display", "block");
 		friendRequestPopup.style.setProperty("display", "block");
+		var bg = document.createElement("div");
+		bg.id = "popupBg";
+		pos = friendInfo.getBoundingClientRect();
+		bg.style.left = `${-pos.left}px`;
+		bg.style.top = `${-pos.top}px`;
+		friendRequestPopup.before(bg)
 	}
 	if (e.target.id == "sendFriendRequestBtn"){
 		const data = {code: inputCode.value};
@@ -38,7 +50,10 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
 	if (e.key == "Escape"){
 		friendCodePopup.style.setProperty("display", "none");
-		popupBg.style.setProperty("display", "none");
+		friendRequestPopup.style.setProperty("display", "none");
+		var bg = document.getElementById("popupBg");
+		if (bg != null)
+			bg.remove();
 	}
 })
 
