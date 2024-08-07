@@ -47,6 +47,15 @@ document.addEventListener("click", (e) => {
 	}
 })
 
+window.addEventListener("resize", (e) => {
+	var bg = document.getElementById("popupBg");
+	if (bg != null){
+		pos = friendInfo.getBoundingClientRect();
+		bg.style.left = `${-pos.left}px`;
+		bg.style.top = `${-pos.top}px`;
+	}
+})
+
 document.addEventListener("keydown", (e) => {
 	if (e.key == "Escape"){
 		friendCodePopup.style.setProperty("display", "none");
