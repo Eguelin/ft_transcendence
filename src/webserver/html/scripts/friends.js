@@ -8,8 +8,9 @@ sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 friendListContainer = document.getElementById("friendList");
 friendInfo = document.getElementById("friendInfo");
 
+
 document.addEventListener("click", (e) => {
-	if (e.target.parentElement == null || (e.target.parentElement.id != "friendCodePopup" && e.target.parentElement.id != "friendRequestPopup")){
+	if (e.target.parentElement == null){
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
@@ -103,6 +104,7 @@ document.addEventListener("keydown", (e) => {
 				Object.keys(friends_request).forEach(function(key) {
 					friendContainer = document.createElement("div");
 					friendContainer.className = "friendContainer"
+					friendContainer.id = friends_request[key].friend_code;
 					pfp = document.createElement("img");
 					pfp.className = "profilePicture";
 					if (friends_request[key].pfp != ""){
@@ -116,9 +118,46 @@ document.addEventListener("keydown", (e) => {
 					friendName.innerHTML = friends_request[key].display;
 					friendContainer.appendChild(pfp);
 					friendContainer.appendChild(friendName);
+					acceptBtn = document.createElement("div");
+					acceptBtn.className = "acceptRequestBtn";
+					friendContainer.appendChild(acceptBtn);
+					
+					rejectBtn = document.createElement("div");
+					rejectBtn.className = "rejectRequestBtn";
+					friendContainer.appendChild(rejectBtn);
+					
 					friendRequestPopup.appendChild(friendContainer);
 				});
-
+				acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
+				rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
+				
+				for (var i = 0; i < acceptRequestBtn.length; i++){
+					acceptRequestBtn[i].addEventListener("click", (e) => {
+						const data = {code: e.srcElement.parentElement.id};
+						fetch('/api/user/accept_friend_request', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify(data),
+							credentials: 'include'
+						})
+						e.srcElement.parentElement.remove();
+					})
+					rejectRequestBtn[i].addEventListener("click", (e) => {
+						const data = {code: e.srcElement.parentElement.id};
+						fetch('/api/user/accept_friend_request', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify(data),
+							credentials: 'include'
+						})
+						e.srcElement.parentElement.remove();
+					})
+				}
+				
 				history.replaceState(container.innerHTML, "");
 			});
 		}
