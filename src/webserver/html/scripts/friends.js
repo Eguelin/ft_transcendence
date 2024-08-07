@@ -75,7 +75,26 @@ document.addEventListener("keydown", (e) => {
 					friendContainer.appendChild(friendName);
 					friendListContainer.appendChild(friendContainer);
 				});
-				console.log(friends);
+				var friends_request = text.friend_request;
+				Object.keys(friends_request).forEach(function(key) {
+					friendContainer = document.createElement("div");
+					friendContainer.className = "friendContainer"
+					pfp = document.createElement("img");
+					pfp.className = "profilePicture";
+					if (friends_request[key].pfp != ""){
+						var rawPfp = friends_request[key].pfp;
+						if (rawPfp.startsWith('https://'))
+							pfp.setAttribute("src", `${rawPfp}`);
+						else
+							pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+					}
+					friendName = document.createElement("a");
+					friendName.innerHTML = friends_request[key].display;
+					friendContainer.appendChild(pfp);
+					friendContainer.appendChild(friendName);
+					friendRequestPopup.appendChild(friendContainer);
+				});
+
 				history.replaceState(container.innerHTML, "");
 			});
 		}
