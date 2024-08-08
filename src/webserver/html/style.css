@@ -634,7 +634,7 @@ a {
 	top: 50%;
 	transform: translateX(-50%) translateY(-50%);
 	padding: min(5vh, 4vw);
-	width: fit-content;
+	width: max-content;
 	border: 2px solid var(--main-text-rgb);
 	display: none;
 }
