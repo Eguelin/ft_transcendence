@@ -142,6 +142,21 @@ document.addEventListener("keydown", (e) => {
 							body: JSON.stringify(data),
 							credentials: 'include'
 						})
+						const parent = e.srcElement.parentElement;
+						console.log(parent);
+						console.log(parent.children);
+						console.log(parent.children[0]);
+						friendContainer = document.createElement("div");
+						friendContainer.className = "friendContainer"
+						pfp = document.createElement("img");
+						pfp.className = "profilePicture";
+						pfp.setAttribute("src", parent.children[0].getAttribute("src"));
+						friendName = document.createElement("a");
+						friendName.innerHTML = parent.children[1].innerHTML;
+						friendContainer.appendChild(pfp);
+						friendContainer.appendChild(friendName);
+						friendListContainer.appendChild(friendContainer);
+						
 						e.srcElement.parentElement.remove();
 					})
 					rejectRequestBtn[i].addEventListener("click", (e) => {
