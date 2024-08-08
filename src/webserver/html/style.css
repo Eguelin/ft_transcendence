@@ -682,6 +682,8 @@ a {
 
 .friendContainer a{
 	margin-left: 1vw;
+	width: 15ch;
+	text-align: left;
 }
 
 #pendingRequestBtn {

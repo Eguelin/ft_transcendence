@@ -27,13 +27,15 @@ document.addEventListener("click", (e) => {
 		friendCodePopup.before(bg)
 	}
 	if (e.target.id == "pendingRequestBtn") {
-		friendRequestPopup.style.setProperty("display", "block");
-		var bg = document.createElement("div");
-		bg.id = "popupBg";
-		pos = friendInfo.getBoundingClientRect();
-		bg.style.left = `${-pos.left}px`;
-		bg.style.top = `${-pos.top}px`;
-		friendRequestPopup.before(bg)
+		if (friendRequestPopup.innerHTML != ""){
+			friendRequestPopup.style.setProperty("display", "block");
+			var bg = document.createElement("div");
+			bg.id = "popupBg";
+			pos = friendInfo.getBoundingClientRect();
+			bg.style.left = `${-pos.left}px`;
+			bg.style.top = `${-pos.top}px`;
+			friendRequestPopup.before(bg)
+		}
 	}
 	if (e.target.id == "sendFriendRequestBtn"){
 		const data = {code: inputCode.value};
@@ -102,6 +104,7 @@ document.addEventListener("keydown", (e) => {
 				});
 				var friends_request = text.friend_request;
 				Object.keys(friends_request).forEach(function(key) {
+					console.log(friends_request[key]);
 					friendContainer = document.createElement("div");
 					friendContainer.className = "friendContainer"
 					friendContainer.id = friends_request[key].friend_code;
@@ -158,6 +161,12 @@ document.addEventListener("keydown", (e) => {
 						friendListContainer.appendChild(friendContainer);
 						
 						e.srcElement.parentElement.remove();
+						if (friendRequestPopup.innerHTML == ""){
+							friendRequestPopup.style.setProperty("display", "none");
+							var bg = document.getElementById("popupBg");
+							if (bg != null)
+								bg.remove();
+						}
 					})
 					rejectRequestBtn[i].addEventListener("click", (e) => {
 						const data = {code: e.srcElement.parentElement.id};
@@ -170,6 +179,12 @@ document.addEventListener("keydown", (e) => {
 							credentials: 'include'
 						})
 						e.srcElement.parentElement.remove();
+						if (friendRequestPopup.innerHTML == ""){
+							friendRequestPopup.style.setProperty("display", "none");
+							var bg = document.getElementById("popupBg");
+							if (bg != null)
+								bg.remove();
+						}
 					})
 				}
 				
