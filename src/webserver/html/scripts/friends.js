@@ -10,7 +10,7 @@ friendInfo = document.getElementById("friendInfo");
 
 
 document.addEventListener("click", (e) => {
-	if (e.target.parentElement == null){
+	if (e.target.parentElement == null || e.target.id == "popupBg"){
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
