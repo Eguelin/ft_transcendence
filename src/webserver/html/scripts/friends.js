@@ -84,6 +84,8 @@ document.addEventListener("keydown", (e) => {
 				loadCurrentLang("friends");
 				friendCodePopup.lastElementChild.innerHTML = text.friend_code;
 				var friends = text.friends;
+				friendListContainer.innerHTML = "";
+				friendRequestPopup.innerHTML = "";
 				Object.keys(friends).forEach(function(key) {
 					friendContainer = document.createElement("div");
 					friendContainer.className = "friendContainer"
