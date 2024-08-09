@@ -220,7 +220,14 @@ def send_friend_request(request):
 		try:
 			new_friend = customModels.Profile.objects.get(friend_code=code).user
 			user = request.user
-			if not ((new_friend.profile.friends_request.filter(pk=user.pk)).exists()):
+			if (user.profile.friends_request.filter(pk=new_friend.pk)).exists():
+				new_friend.profile.friends.add(user)
+				new_friend.save()
+				user.profile.friends_request.remove(new_friend)
+				user.profile.friends.add(new_friend)
+				user.save()
+				return JsonResponse({'message': 'Succesfully added friend'})
+			elif not ((new_friend.profile.friends_request.filter(pk=user.pk)).exists()):
 				new_friend.profile.friends_request.add(user)
 				new_friend.save()
 				return JsonResponse({'message': 'Reqyest succesfully sent'})
