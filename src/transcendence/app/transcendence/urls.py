@@ -15,16 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from login import views
+from login import views as login_view
+from friendship import views as friendship_view
 
 urlpatterns = [
-    path('user/create', views.create_user),
-    path('user/login', views.user_login),
-    path('user/logout', views.user_logout),
-    path('user/current', views.current_user),
-	path('user/fortyTwo/login', views.fortytwo),
-    path('user/update', views.profile_update),
-    path('user/send_friend_request', views.send_friend_request),
-    path('user/accept_friend_request', views.accept_friend_request),
-    path('user/reject_friend_request', views.reject_friend_request),
+    path('user/create', login_view.create_user),
+    path('user/login', login_view.user_login),
+    path('user/logout', login_view.user_logout),
+    path('user/current', login_view.current_user),
+	path('user/fortyTwo/login', login_view.fortytwo),
+    path('user/update', login_view.profile_update),
+    path('user/send_friend_request', friendship_view.send_friend_request),
+    path('user/accept_friend_request', friendship_view.accept_friend_request),
+    path('user/reject_friend_request', friendship_view.reject_friend_request),
 ]
