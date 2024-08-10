@@ -160,6 +160,7 @@ def profile_update(request):
 				return JsonResponse({'message': 'Invalid JSON'}, status=400)
 	return JsonResponse({'message': 'Can\'t update user profile'})
 
+
 def get_user_json(user):
 	try:
 		if (user.profile.profile_picture.startswith("https://")):
@@ -174,6 +175,8 @@ def get_user_json(user):
 		'friend_code' : user.profile.friend_code,
 		'pfp' : raw_img
 	}
+
+
 
 def current_user(request):
 	if request.method != 'GET':
@@ -208,69 +211,5 @@ def current_user(request):
 			'friend_code': request.user.profile.friend_code,
 			'friends': friend_json,
 			'friend_request': friend_request_json})
-	else:
-		return JsonResponse({'username': None}, status=400)
-
-def send_friend_request(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		code = data['code']
-		try:
-			new_friend = customModels.Profile.objects.get(friend_code=code).user
-			user = request.user
-			if (user.profile.friends_request.filter(pk=new_friend.pk)).exists():
-				new_friend.profile.friends.add(user)
-				new_friend.save()
-				user.profile.friends_request.remove(new_friend)
-				user.profile.friends.add(new_friend)
-				user.save()
-				return JsonResponse({'message': 'Succesfully added friend'})
-			elif not ((new_friend.profile.friends_request.filter(pk=user.pk)).exists()):
-				new_friend.profile.friends_request.add(user)
-				new_friend.save()
-				return JsonResponse({'message': 'Reqyest succesfully sent'})
-			else :
-				return JsonResponse({'message': 'Request already sent'})
-		except:
-			return JsonResponse({'message': 'Can\'t find user'}, status=400)
-	else:
-		return JsonResponse({'username': None}, status=400)
-		
-def accept_friend_request(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		code = data['code']
-		try:
-			new_friend = customModels.Profile.objects.get(friend_code=code).user
-			user = request.user
-			new_friend.profile.friends.add(user)
-			new_friend.save()
-			user.profile.friends_request.remove(new_friend)
-			user.profile.friends.add(new_friend)
-			user.save()
-			return JsonResponse({'message': 'Succesfully added friend'})
-		except:
-			return JsonResponse({'message': 'Can\'t find user'}, status=400)
-	else:
-		return JsonResponse({'username': None}, status=400)
-		
-def reject_friend_request(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		code = data['code']
-		try:
-			new_friend = customModels.Profile.objects.get(friend_code=code).user
-			user = request.user
-			user.profile.friends_request.remove(new_friend)
-			user.save()
-			return JsonResponse({'message': 'Succesfully added friend'})
-		except:
-			return JsonResponse({'message': 'Can\'t find user'}, status=400)
 	else:
 		return JsonResponse({'username': None}, status=400)
