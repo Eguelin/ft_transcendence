@@ -20,6 +20,7 @@ class Profile(models.Model):
 	friend_code = models.CharField(max_length=20, null=True)
 	friends = models.ManyToManyField(User, related_name="friends_list")
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
+	is_active = models.BooleanField(default=False)
 	
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwards):

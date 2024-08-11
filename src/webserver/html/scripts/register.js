@@ -94,6 +94,14 @@ registerBtn.addEventListener("click", (e) => {
 						}))
 					});
 				});
+				fetch('/api/user/update', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({"is_active": true}),
+					credentials: 'include'
+				})
 			} else {
 				console.log("Failed to create user")
 			}
