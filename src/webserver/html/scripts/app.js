@@ -29,6 +29,14 @@ fetch('/api/user/current', {
 			});	
 
 		});
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({"is_active": true}),
+			credentials: 'include'
+		})
 	}
 	else {
 		console.log("Failed to get user")
@@ -56,6 +64,17 @@ fetch('/api/user/current', {
 	console.error('There was a problem with the fetch operation:', error);
 	return (null);
 });
+
+window.addEventListener("beforeunload", (e) => {
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({"is_active": false}),
+		credentials: 'include'
+	})
+})
 
 homeBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/home.html').then((response) => {
@@ -136,6 +155,16 @@ window.addEventListener("popstate", (event) => {
 					history.replaceState(container.innerHTML, "");
 				}))
 			});
+		}
+		else{
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({"is_active": true}),
+				credentials: 'include'
+			})
 		}
 	})
 });

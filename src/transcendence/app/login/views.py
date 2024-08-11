@@ -154,6 +154,8 @@ def profile_update(request):
 					user.profile.profile_picture = pfpName
 				if ("language_pack" in data):
 					user.profile.language_pack = data['language_pack']
+				if ("is_active" in data):
+					user.profile.is_active = data['is_active']
 				user.save()
 				return JsonResponse({'message': 'User profile updated'})
 			except json.JSONDecodeError:
@@ -173,7 +175,8 @@ def get_user_json(user):
 	return {'username' : user.username,
 		'display' : user.profile.display_name,
 		'friend_code' : user.profile.friend_code,
-		'pfp' : raw_img
+		'pfp' : raw_img,
+		'is_active' : user.profile.is_active
 	}
 
 
@@ -210,6 +213,7 @@ def current_user(request):
 			'lang': request.user.profile.language_pack,
 			'friend_code': request.user.profile.friend_code,
 			'friends': friend_json,
-			'friend_request': friend_request_json})
+			'friend_request': friend_request_json,
+			'is_active': request.user.profile.is_active})
 	else:
 		return JsonResponse({'username': None}, status=400)
