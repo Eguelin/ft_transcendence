@@ -100,8 +100,13 @@ setInterval( function() {
 					}
 					friendName = document.createElement("a");
 					friendName.innerHTML = friends[key].display;
+					is_active = document.createElement("a");
+					is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
+					is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
+					
 					friendContainer.appendChild(pfp);
 					friendContainer.appendChild(friendName);
+					friendContainer.appendChild(is_active);
 					friendListContainer.appendChild(friendContainer);
 				});
 				var friends_request = text.friend_request;
@@ -249,8 +254,13 @@ setInterval( function() {
 					}
 					friendName = document.createElement("a");
 					friendName.innerHTML = friends[key].display;
+					is_active = document.createElement("a");
+					is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
+					is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
+					
 					friendContainer.appendChild(pfp);
 					friendContainer.appendChild(friendName);
+					friendContainer.appendChild(is_active);
 					friendListContainer.appendChild(friendContainer);
 				});
 				var friends_request = text.friend_request;
