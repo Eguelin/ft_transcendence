@@ -15,10 +15,11 @@ fetch('/api/user/current', {
 		(response.json()).then((text) => {	
 			fetch ('bodyLess/home.html').then((response) => {
 				(response.text().then(response => {
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 					if (container.innerHTML != "")
-						history.pushState(response, "");
+						history.pushState(state, "");
 					else
-						history.replaceState(response,"");
+						history.replaceState(state,"");
 					container.innerHTML = response;
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
@@ -26,7 +27,8 @@ fetch('/api/user/current', {
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
 					currentPage = "home";
-					history.replaceState(container.innerHTML, "");
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					history.replaceState(state, "");
 				}))
 			});	
 
@@ -45,10 +47,11 @@ fetch('/api/user/current', {
 		
 		fetch ('bodyLess/login.html').then((response) => {
 			(response.text().then(response => {
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 				if (container.innerHTML != "")
-						history.pushState(response, "");
+					history.pushState(state, "");
 				else
-					history.replaceState(response,"");
+					history.replaceState(state,"");
 				container.innerHTML = response;
 				document.getElementById("script").remove();
 				var s = document.createElement("script");
@@ -57,7 +60,8 @@ fetch('/api/user/current', {
 				document.body.appendChild(s);
 				loadCurrentLang("login");
 				currentPage = "login";
-				history.replaceState(container.innerHTML, "");
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				history.replaceState(state, "");
 			}))
 		});
 	}
@@ -82,10 +86,11 @@ window.addEventListener("beforeunload", (e) => {
 homeBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/home.html').then((response) => {
 		return (response.text().then(response => {
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 			if (container.innerHTML != "")
-				history.pushState(response, "");
+				history.pushState(state, "");
 			else
-				history.replaceState(response,"");
+				history.replaceState(state,"");
 			container.innerHTML = response;
 			document.getElementById("script").remove();
 			var s = document.createElement("script");
@@ -131,8 +136,10 @@ function switchTheme(darkTheme){
 
 window.addEventListener("popstate", (event) => {
 	if (event.state){
-		const contain = document.getElementById("container");
-		contain.innerHTML = event.state;
+		var obj = JSON.parse(event.state);
+		document.body.innerHTML = obj['html'];
+		currentPage = obj['currentPage'];
+		loadCurrentLang(currentPage);
 	}
 	fetch('/api/user/current', {
 		method: 'GET',
@@ -145,10 +152,11 @@ window.addEventListener("popstate", (event) => {
 		if (!response.ok) {
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 					if (container.innerHTML != "")
-						history.pushState(response, "");
+						history.pushState(state, "");
 					else
-						history.replaceState(response,"");
+						history.replaceState(state,"");
 					container.innerHTML = response;
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
@@ -157,7 +165,8 @@ window.addEventListener("popstate", (event) => {
 					document.body.appendChild(s);
 					loadCurrentLang("login");
 					currentPage = "login";
-					history.replaceState(container.innerHTML, "");
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					history.replaceState(state, "");
 				}))
 			});
 		}

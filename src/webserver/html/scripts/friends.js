@@ -154,9 +154,6 @@ function checkUpdate(){
 								credentials: 'include'
 							})
 							const parent = e.srcElement.parentElement;
-							console.log(parent);
-							console.log(parent.children);
-							console.log(parent.children[0]);
 							friendContainer = document.createElement("div");
 							friendContainer.className = "friendContainer"
 							pfp = document.createElement("img");
@@ -196,7 +193,8 @@ function checkUpdate(){
 						})
 					}
 					
-					history.replaceState(container.innerHTML, "");
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					history.replaceState(state, "");
 				});
 			}
 			else {
@@ -204,10 +202,11 @@ function checkUpdate(){
 	
 				fetch ('bodyLess/login.html').then((response) => {
 					(response.text().then(response => {
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 						if (container.innerHTML != "")
-							history.pushState(response, "");
+							history.pushState(state, "");
 						else
-							history.replaceState(response,"");
+							history.replaceState(state,"");
 						container.innerHTML = response;
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
@@ -217,7 +216,8 @@ function checkUpdate(){
 						document.getElementById("pfp").style.setProperty("display", "none");
 						document.getElementById("dropDownUser").style.setProperty("display", "none");
 						currentPage = "login";
-						history.replaceState(container.innerHTML, "");
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+						history.replaceState(state, "");
 					}))
 				});
 			}
