@@ -139,6 +139,12 @@ window.addEventListener("popstate", (event) => {
 		var obj = JSON.parse(event.state);
 		document.body.innerHTML = obj['html'];
 		currentPage = obj['currentPage'];
+
+		document.getElementById("script").remove();
+		var s = document.createElement("script");
+		s.setAttribute('id', 'script');
+		s.setAttribute('src', `scripts/${currentPage}.js`);
+		document.body.appendChild(s);
 		loadCurrentLang(currentPage);
 	}
 	fetch('/api/user/current', {
