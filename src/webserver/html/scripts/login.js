@@ -28,10 +28,11 @@ function handleToken() {
 				window.history.replaceState({}, document.title, "/");
 				fetch ('bodyLess/home.html').then((response) => {
 					return (response.text().then(response => {
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 						if (container.innerHTML != "")
-							history.pushState(response, "");
+							history.pushState(state, "");
 						else
-							history.replaceState(response,"");
+							history.replaceState(state,"");
 						container.innerHTML = response;
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
@@ -52,10 +53,11 @@ window.addEventListener('load', handleToken());
 registerLink.addEventListener("click", (e) => {
 	fetch ('bodyLess/register.html').then((response) => {
 		return (response.text().then(response => {
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 			if (container.innerHTML != "")
-				history.pushState(response, "");
+				history.pushState(state, "");
 			else
-				history.replaceState(response,"");
+				history.replaceState(state,"");
 			container.innerHTML = response;
 			document.getElementById("script").remove();
 			var s = document.createElement("script");
@@ -114,10 +116,11 @@ loginBtn.addEventListener("click", (e) => {
 
 				fetch ('bodyLess/home.html').then((response) => {
 					return (response.text().then(response => {
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 						if (container.innerHTML != "")
-							history.pushState(response, "");
+							history.pushState(state, "");
 						else
-							history.replaceState(response,"");
+							history.replaceState(state,"");
 						container.innerHTML = response;
 						document.getElementById("script").remove();
 						var s = document.createElement("script");

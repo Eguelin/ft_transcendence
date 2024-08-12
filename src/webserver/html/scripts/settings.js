@@ -139,7 +139,8 @@ saveBtn.addEventListener("click", (e) => {
 				switchTheme(text.is_dark_theme);
 				usernameInput.setAttribute('placeholder', text.username);
 				loadCurrentLang("settings");
-				history.replaceState(container.innerHTML, "");
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				history.replaceState(state, "");
 			});
 		}
 		else {
@@ -147,10 +148,11 @@ saveBtn.addEventListener("click", (e) => {
 			
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 					if (container.innerHTML != "")
-						history.pushState(response, "");
+						history.pushState(state, "");
 					else
-						history.replaceState(response,"");
+						history.replaceState(state,"");
 					container.innerHTML = response;
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
@@ -158,7 +160,8 @@ saveBtn.addEventListener("click", (e) => {
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
 					currentPage = "login";
-					history.replaceState(container.innerHTML, "");
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					history.replaceState(state, "");
 				}))
 			});	
 		}
@@ -180,7 +183,8 @@ window.addEventListener("load", () => {
 				switchTheme(text.is_dark_theme);
 				username.setAttribute('placeholder', text.username);
 				loadCurrentLang("settings");
-				history.replaceState(container.innerHTML, "");
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				history.replaceState(state, "");
 			});
 		}
 		else {
@@ -188,10 +192,11 @@ window.addEventListener("load", () => {
 			
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 					if (container.innerHTML != "")
-						history.pushState(response, "");
+						history.pushState(state, "");
 					else
-						history.replaceState(response,"");
+						history.replaceState(state,"");
 					container.innerHTML = response;
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
@@ -199,7 +204,8 @@ window.addEventListener("load", () => {
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
 					currentPage = "login";
-					history.replaceState(container.innerHTML, "");
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					history.replaceState(state, "");
 				}))
 			});	
 		}

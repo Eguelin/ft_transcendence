@@ -33,7 +33,8 @@ window.addEventListener("load", () => {
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
 				document.getElementById("usernameBtn").innerHTML = text.display;
-				history.replaceState(container.innerHTML, "");
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				history.replaceState(state, "");
 			});
 		}
 		else {
@@ -41,10 +42,11 @@ window.addEventListener("load", () => {
 
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 					if (container.innerHTML != "")
-						history.pushState(response, "");
+						history.pushState(state, "");
 					else
-						history.replaceState(response,"");
+						history.replaceState(state,"");
 					container.innerHTML = response;
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
@@ -52,7 +54,8 @@ window.addEventListener("load", () => {
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
 					currentPage = "login";
-					history.replaceState(container.innerHTML, "");
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					history.replaceState(state, "");
 				}))
 			});
 		}
@@ -85,7 +88,8 @@ window.addEventListener("load", () => {
 				}
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
-				history.replaceState(container.innerHTML, "");
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				history.replaceState(state, "");
 			});
 		}
 		else {
@@ -93,10 +97,11 @@ window.addEventListener("load", () => {
 
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 					if (container.innerHTML != "")
-						history.pushState(response, "");
+						history.pushState(state, "");
 					else
-						history.replaceState(response,"");
+						history.replaceState(state,"");
 					container.innerHTML = response;
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
@@ -106,7 +111,8 @@ window.addEventListener("load", () => {
 					document.getElementById("pfp").style.setProperty("display", "none");
 					document.getElementById("dropDownUser").style.setProperty("display", "none");
 					currentPage = "login";
-					history.replaceState(container.innerHTML, "");
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					history.replaceState(state, "");
 				}))
 			});
 		}
@@ -125,10 +131,11 @@ logOutBtn.addEventListener("click", (e) => {
 
 	fetch ('bodyLess/login.html').then((response) => {
 		return (response.text().then(response => {
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 			if (container.innerHTML != "")
-				history.pushState(response, "");
+				history.pushState(state, "");
 			else
-				history.replaceState(response,"");
+				history.replaceState(state,"");
 			container.innerHTML = response;
 			document.getElementById("script").remove();
 			var s = document.createElement("script");
@@ -146,10 +153,11 @@ logOutBtn.addEventListener("click", (e) => {
 accSettingsBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/settings.html').then((response) => {
 		return (response.text().then(response => {
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 			if (container.innerHTML != "")
-				history.pushState(response, "");
+				history.pushState(state, "");
 			else
-				history.replaceState(response,"");
+				history.replaceState(state,"");
 			container.innerHTML = response;
 			document.getElementById("script").remove();
 			var s = document.createElement("script");
@@ -168,10 +176,11 @@ accSettingsBtn.addEventListener("click", (e) => {
 friendsBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/friends.html').then((response) => {
 		return (response.text().then(response => {
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 			if (container.innerHTML != "")
-				history.pushState(response, "");
+				history.pushState(state, "");
 			else
-				history.replaceState(response,"");
+				history.replaceState(state,"");
 			container.innerHTML = response;
 			document.getElementById("script").remove();
 			var s = document.createElement("script");

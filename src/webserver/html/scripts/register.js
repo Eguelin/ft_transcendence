@@ -80,10 +80,11 @@ registerBtn.addEventListener("click", (e) => {
 				}).then(response => {
 					fetch ('bodyLess/home.html').then((response) => {
 						(response.text().then(response => {
+							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
 							if (container.innerHTML != "")
-								history.pushState(response, "");
+								history.pushState(state, "");
 							else
-								history.replaceState(response,"");
+								history.replaceState(state,"");
 							container.innerHTML = response;
 							document.getElementById("script").remove();
 							var s = document.createElement("script");
