@@ -6,13 +6,6 @@ usernameInput = document.getElementById('inputUsername');
 pwInput = document.getElementById('inputPassword');
 cpwInput = document.getElementById('inputCPassword');
 
-window.addEventListener("popstate", (event) => {
-	if (event.state){
-		const contain = document.getElementById("container");
-		contain.innerHTML = event.state;
-	}
-});
-
 registerBtn.addEventListener("click", (e) => {
 	var lock = 0;
 	display = displayInput.value;
