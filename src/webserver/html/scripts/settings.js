@@ -157,6 +157,7 @@ saveBtn.addEventListener("click", (e) => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
+					currentPage = "login";
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
@@ -197,6 +198,7 @@ window.addEventListener("load", () => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
+					currentPage = "login";
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
