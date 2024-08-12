@@ -1,6 +1,7 @@
 container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
+var currentPage = "";
 
 fetch('/api/user/current', {
 	method: 'GET',
@@ -24,6 +25,7 @@ fetch('/api/user/current', {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
+					currentPage = "home";
 					history.replaceState(container.innerHTML, "");
 				}))
 			});	
@@ -54,6 +56,7 @@ fetch('/api/user/current', {
 				s.setAttribute('src', `scripts/login.js`);
 				document.body.appendChild(s);
 				loadCurrentLang("login");
+				currentPage = "login";
 				history.replaceState(container.innerHTML, "");
 			}))
 		});
@@ -90,6 +93,7 @@ homeBtn.addEventListener("click", (e) => {
 			s.setAttribute('src', `scripts/home.js`);
 			loadCurrentLang("home");
 			document.body.appendChild(s);
+			currentPage = "home";
 			homeBtn.style.setProperty("display", "none");
 		}))
 	});	
@@ -152,6 +156,7 @@ window.addEventListener("popstate", (event) => {
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
 					loadCurrentLang("login");
+					currentPage = "login";
 					history.replaceState(container.innerHTML, "");
 				}))
 			});

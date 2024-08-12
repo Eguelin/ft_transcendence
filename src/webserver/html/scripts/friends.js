@@ -69,309 +69,162 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
-setInterval( function() {
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-	.then(response => {
-		if (response.ok) {
-			(response.json()).then((text) => {
-				switchTheme(text.is_dark_theme);
-				loadCurrentLang("friends");
-				friendCodePopup.lastElementChild.innerHTML = text.friend_code;
-				var friends = text.friends;
-				friendListContainer.innerHTML = "";
-				friendRequestPopup.innerHTML = "";
-				Object.keys(friends).forEach(function(key) {
-					friendContainer = document.createElement("div");
-					friendContainer.className = "friendContainer"
-					pfp = document.createElement("img");
-					pfp.className = "profilePicture";
-					if (friends[key].pfp != ""){
-						var rawPfp = friends[key].pfp;
-						if (rawPfp.startsWith('https://'))
-							pfp.setAttribute("src", `${rawPfp}`);
-						else
-							pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-					}
-					friendName = document.createElement("a");
-					friendName.innerHTML = friends[key].display;
-					is_active = document.createElement("a");
-					is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
-					is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
-					
-					friendContainer.appendChild(pfp);
-					friendContainer.appendChild(friendName);
-					friendContainer.appendChild(is_active);
-					friendListContainer.appendChild(friendContainer);
-				});
-				var friends_request = text.friend_request;
-				Object.keys(friends_request).forEach(function(key) {
-					console.log(friends_request[key]);
-					friendContainer = document.createElement("div");
-					friendContainer.className = "friendContainer"
-					friendContainer.id = friends_request[key].friend_code;
-					pfp = document.createElement("img");
-					pfp.className = "profilePicture";
-					if (friends_request[key].pfp != ""){
-						var rawPfp = friends_request[key].pfp;
-						if (rawPfp.startsWith('https://'))
-							pfp.setAttribute("src", `${rawPfp}`);
-						else
-							pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-					}
-					friendName = document.createElement("a");
-					friendName.innerHTML = friends_request[key].display;
-					friendContainer.appendChild(pfp);
-					friendContainer.appendChild(friendName);
-					acceptBtn = document.createElement("div");
-					acceptBtn.className = "acceptRequestBtn";
-					friendContainer.appendChild(acceptBtn);
-					
-					rejectBtn = document.createElement("div");
-					rejectBtn.className = "rejectRequestBtn";
-					friendContainer.appendChild(rejectBtn);
-					
-					friendRequestPopup.appendChild(friendContainer);
-				});
-				acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
-				rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
-				
-				for (var i = 0; i < acceptRequestBtn.length; i++){
-					acceptRequestBtn[i].addEventListener("click", (e) => {
-						const data = {code: e.srcElement.parentElement.id};
-						fetch('/api/user/accept_friend_request', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							body: JSON.stringify(data),
-							credentials: 'include'
-						})
-						const parent = e.srcElement.parentElement;
-						console.log(parent);
-						console.log(parent.children);
-						console.log(parent.children[0]);
+function checkUpdate(){
+	if (currentPage == "friends"){
+		fetch('/api/user/current', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		})
+		.then(response => {
+			if (response.ok) {
+				(response.json()).then((text) => {
+					switchTheme(text.is_dark_theme);
+					loadCurrentLang("friends");
+					friendCodePopup.lastElementChild.innerHTML = text.friend_code;
+					var friends = text.friends;
+					friendListContainer.innerHTML = "";
+					friendRequestPopup.innerHTML = "";
+					Object.keys(friends).forEach(function(key) {
 						friendContainer = document.createElement("div");
 						friendContainer.className = "friendContainer"
 						pfp = document.createElement("img");
 						pfp.className = "profilePicture";
-						pfp.setAttribute("src", parent.children[0].getAttribute("src"));
+						if (friends[key].pfp != ""){
+							var rawPfp = friends[key].pfp;
+							if (rawPfp.startsWith('https://'))
+								pfp.setAttribute("src", `${rawPfp}`);
+							else
+								pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+						}
 						friendName = document.createElement("a");
-						friendName.innerHTML = parent.children[1].innerHTML;
+						friendName.innerHTML = friends[key].display;
+						is_active = document.createElement("a");
+						is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
+						is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
+						
 						friendContainer.appendChild(pfp);
 						friendContainer.appendChild(friendName);
+						friendContainer.appendChild(is_active);
 						friendListContainer.appendChild(friendContainer);
-						
-						e.srcElement.parentElement.remove();
-						if (friendRequestPopup.innerHTML == ""){
-							friendRequestPopup.style.setProperty("display", "none");
-							var bg = document.getElementById("popupBg");
-							if (bg != null)
-								bg.remove();
-						}
-					})
-					rejectRequestBtn[i].addEventListener("click", (e) => {
-						const data = {code: e.srcElement.parentElement.id};
-						fetch('/api/user/reject_friend_request', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							body: JSON.stringify(data),
-							credentials: 'include'
-						})
-						e.srcElement.parentElement.remove();
-						if (friendRequestPopup.innerHTML == ""){
-							friendRequestPopup.style.setProperty("display", "none");
-							var bg = document.getElementById("popupBg");
-							if (bg != null)
-								bg.remove();
-						}
-					})
-				}
-				
-				history.replaceState(container.innerHTML, "");
-			});
-		}
-		else {
-			console.log("Failed to get user")
-
-			fetch ('bodyLess/login.html').then((response) => {
-				(response.text().then(response => {
-					if (container.innerHTML != "")
-						history.pushState(response, "");
-					else
-						history.replaceState(response,"");
-					container.innerHTML = response;
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/login.js`);
-					document.body.appendChild(s);
-					document.getElementById("pfp").style.setProperty("display", "none");
-					document.getElementById("dropDownUser").style.setProperty("display", "none");
-					history.replaceState(container.innerHTML, "");
-				}))
-			});
-		}
-	})
-}, 5000);
-
-
-{
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-	.then(response => {
-		if (response.ok) {
-			(response.json()).then((text) => {
-				switchTheme(text.is_dark_theme);
-				loadCurrentLang("friends");
-				friendCodePopup.lastElementChild.innerHTML = text.friend_code;
-				var friends = text.friends;
-				friendListContainer.innerHTML = "";
-				friendRequestPopup.innerHTML = "";
-				Object.keys(friends).forEach(function(key) {
-					friendContainer = document.createElement("div");
-					friendContainer.className = "friendContainer"
-					pfp = document.createElement("img");
-					pfp.className = "profilePicture";
-					if (friends[key].pfp != ""){
-						var rawPfp = friends[key].pfp;
-						if (rawPfp.startsWith('https://'))
-							pfp.setAttribute("src", `${rawPfp}`);
-						else
-							pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-					}
-					friendName = document.createElement("a");
-					friendName.innerHTML = friends[key].display;
-					is_active = document.createElement("a");
-					is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
-					is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
-					
-					friendContainer.appendChild(pfp);
-					friendContainer.appendChild(friendName);
-					friendContainer.appendChild(is_active);
-					friendListContainer.appendChild(friendContainer);
-				});
-				var friends_request = text.friend_request;
-				Object.keys(friends_request).forEach(function(key) {
-					console.log(friends_request[key]);
-					friendContainer = document.createElement("div");
-					friendContainer.className = "friendContainer"
-					friendContainer.id = friends_request[key].friend_code;
-					pfp = document.createElement("img");
-					pfp.className = "profilePicture";
-					if (friends_request[key].pfp != ""){
-						var rawPfp = friends_request[key].pfp;
-						if (rawPfp.startsWith('https://'))
-							pfp.setAttribute("src", `${rawPfp}`);
-						else
-							pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-					}
-					friendName = document.createElement("a");
-					friendName.innerHTML = friends_request[key].display;
-					friendContainer.appendChild(pfp);
-					friendContainer.appendChild(friendName);
-					acceptBtn = document.createElement("div");
-					acceptBtn.className = "acceptRequestBtn";
-					friendContainer.appendChild(acceptBtn);
-					
-					rejectBtn = document.createElement("div");
-					rejectBtn.className = "rejectRequestBtn";
-					friendContainer.appendChild(rejectBtn);
-					
-					friendRequestPopup.appendChild(friendContainer);
-				});
-				acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
-				rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
-				
-				for (var i = 0; i < acceptRequestBtn.length; i++){
-					acceptRequestBtn[i].addEventListener("click", (e) => {
-						const data = {code: e.srcElement.parentElement.id};
-						fetch('/api/user/accept_friend_request', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							body: JSON.stringify(data),
-							credentials: 'include'
-						})
-						const parent = e.srcElement.parentElement;
-						console.log(parent);
-						console.log(parent.children);
-						console.log(parent.children[0]);
+					});
+					var friends_request = text.friend_request;
+					Object.keys(friends_request).forEach(function(key) {
+						console.log(friends_request[key]);
 						friendContainer = document.createElement("div");
 						friendContainer.className = "friendContainer"
+						friendContainer.id = friends_request[key].friend_code;
 						pfp = document.createElement("img");
 						pfp.className = "profilePicture";
-						pfp.setAttribute("src", parent.children[0].getAttribute("src"));
+						if (friends_request[key].pfp != ""){
+							var rawPfp = friends_request[key].pfp;
+							if (rawPfp.startsWith('https://'))
+								pfp.setAttribute("src", `${rawPfp}`);
+							else
+								pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+						}
 						friendName = document.createElement("a");
-						friendName.innerHTML = parent.children[1].innerHTML;
+						friendName.innerHTML = friends_request[key].display;
 						friendContainer.appendChild(pfp);
 						friendContainer.appendChild(friendName);
-						friendListContainer.appendChild(friendContainer);
+						acceptBtn = document.createElement("div");
+						acceptBtn.className = "acceptRequestBtn";
+						friendContainer.appendChild(acceptBtn);
 						
-						e.srcElement.parentElement.remove();
-						if (friendRequestPopup.innerHTML == ""){
-							friendRequestPopup.style.setProperty("display", "none");
-							var bg = document.getElementById("popupBg");
-							if (bg != null)
-								bg.remove();
-						}
-					})
-					rejectRequestBtn[i].addEventListener("click", (e) => {
-						const data = {code: e.srcElement.parentElement.id};
-						fetch('/api/user/reject_friend_request', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							body: JSON.stringify(data),
-							credentials: 'include'
+						rejectBtn = document.createElement("div");
+						rejectBtn.className = "rejectRequestBtn";
+						friendContainer.appendChild(rejectBtn);
+						
+						friendRequestPopup.appendChild(friendContainer);
+					});
+					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
+					rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
+					
+					for (var i = 0; i < acceptRequestBtn.length; i++){
+						acceptRequestBtn[i].addEventListener("click", (e) => {
+							const data = {code: e.srcElement.parentElement.id};
+							fetch('/api/user/accept_friend_request', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify(data),
+								credentials: 'include'
+							})
+							const parent = e.srcElement.parentElement;
+							console.log(parent);
+							console.log(parent.children);
+							console.log(parent.children[0]);
+							friendContainer = document.createElement("div");
+							friendContainer.className = "friendContainer"
+							pfp = document.createElement("img");
+							pfp.className = "profilePicture";
+							pfp.setAttribute("src", parent.children[0].getAttribute("src"));
+							friendName = document.createElement("a");
+							friendName.innerHTML = parent.children[1].innerHTML;
+							friendContainer.appendChild(pfp);
+							friendContainer.appendChild(friendName);
+							friendListContainer.appendChild(friendContainer);
+							
+							e.srcElement.parentElement.remove();
+							if (friendRequestPopup.innerHTML == ""){
+								friendRequestPopup.style.setProperty("display", "none");
+								var bg = document.getElementById("popupBg");
+								if (bg != null)
+									bg.remove();
+							}
 						})
-						e.srcElement.parentElement.remove();
-						if (friendRequestPopup.innerHTML == ""){
-							friendRequestPopup.style.setProperty("display", "none");
-							var bg = document.getElementById("popupBg");
-							if (bg != null)
-								bg.remove();
-						}
-					})
-				}
-				
-				history.replaceState(container.innerHTML, "");
-			});
-		}
-		else {
-			console.log("Failed to get user")
-
-			fetch ('bodyLess/login.html').then((response) => {
-				(response.text().then(response => {
-					if (container.innerHTML != "")
-						history.pushState(response, "");
-					else
-						history.replaceState(response,"");
-					container.innerHTML = response;
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/login.js`);
-					document.body.appendChild(s);
-					document.getElementById("pfp").style.setProperty("display", "none");
-					document.getElementById("dropDownUser").style.setProperty("display", "none");
+						rejectRequestBtn[i].addEventListener("click", (e) => {
+							const data = {code: e.srcElement.parentElement.id};
+							fetch('/api/user/reject_friend_request', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify(data),
+								credentials: 'include'
+							})
+							e.srcElement.parentElement.remove();
+							if (friendRequestPopup.innerHTML == ""){
+								friendRequestPopup.style.setProperty("display", "none");
+								var bg = document.getElementById("popupBg");
+								if (bg != null)
+									bg.remove();
+							}
+						})
+					}
+					
 					history.replaceState(container.innerHTML, "");
-				}))
-			});
-		}
-	})
+				});
+			}
+			else {
+				console.log("Failed to get user")
+	
+				fetch ('bodyLess/login.html').then((response) => {
+					(response.text().then(response => {
+						if (container.innerHTML != "")
+							history.pushState(response, "");
+						else
+							history.replaceState(response,"");
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/login.js`);
+						document.body.appendChild(s);
+						document.getElementById("pfp").style.setProperty("display", "none");
+						document.getElementById("dropDownUser").style.setProperty("display", "none");
+						currentPage = "login";
+						history.replaceState(container.innerHTML, "");
+					}))
+				});
+			}
+		})
+	}
 }
+
+var checkUpdateInterval = setInterval(checkUpdate, 5000);
+
+checkUpdate();

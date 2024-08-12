@@ -51,6 +51,7 @@ window.addEventListener("load", () => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
+					currentPage = "login";
 					history.replaceState(container.innerHTML, "");
 				}))
 			});
@@ -104,6 +105,7 @@ window.addEventListener("load", () => {
 					document.body.appendChild(s);
 					document.getElementById("pfp").style.setProperty("display", "none");
 					document.getElementById("dropDownUser").style.setProperty("display", "none");
+					currentPage = "login";
 					history.replaceState(container.innerHTML, "");
 				}))
 			});
@@ -136,6 +138,7 @@ logOutBtn.addEventListener("click", (e) => {
 			document.body.appendChild(s);
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");
+			currentPage = "login";
 		}))
 	});
 });
@@ -157,6 +160,7 @@ accSettingsBtn.addEventListener("click", (e) => {
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");
 			document.getElementById("goHomeButton").style.setProperty("display", "block");
+			currentPage = "settings";
 		}))
 	});
 })
@@ -178,6 +182,7 @@ friendsBtn.addEventListener("click", (e) => {
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");
 			document.getElementById("goHomeButton").style.setProperty("display", "block");
+			currentPage = "friends";
 		}))
 	});
 })

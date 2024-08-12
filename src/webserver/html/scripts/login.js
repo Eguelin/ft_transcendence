@@ -38,6 +38,7 @@ function handleToken() {
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/home.js`);
 						loadCurrentLang("home");
+						currentPage = "home";
 						document.body.appendChild(s);
 					}))
 				});
@@ -61,6 +62,7 @@ registerLink.addEventListener("click", (e) => {
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/register.js`);
 			loadCurrentLang("register");
+			currentPage = "register";
 			document.body.appendChild(s);
 		}))
 	});
@@ -122,6 +124,7 @@ loginBtn.addEventListener("click", (e) => {
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/home.js`);
 						loadCurrentLang("home");
+						currentPage = "home";
 						document.body.appendChild(s);
 					}))
 				});
