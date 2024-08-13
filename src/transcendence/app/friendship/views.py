@@ -72,3 +72,20 @@ def reject_friend_request(request):
 			return JsonResponse({'message': 'Can\'t find user'}, status=400)
 	else:
 		return JsonResponse({'username': None}, status=400)
+
+def remove_friend(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	if request.user.is_authenticated:
+		data = json.loads(request.body)
+		code = data['code']
+		try:
+			friend = customModels.Profile.objects.get(friend_code=code).user
+			user = request.user
+			user.profile.friends.remove(friend)
+			user.save()
+			return JsonResponse({'message': 'Succesfully added friend'})
+		except:
+			return JsonResponse({'message': 'Can\'t find user'}, status=400)
+	else:
+		return JsonResponse({'username': None}, status=400)
