@@ -710,3 +710,17 @@ a {
 	mask-position:center;
 	mask-repeat:no-repeat;
 }
+
+.moreVerticalBtn{
+	mask-image:url("svg/more-vertical.svg");
+	background:var(--main-text-rgb);
+	height:10vh;
+	width:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+.moreVerticalBtn:focus, .moreVerticalBtn:hover{
+	background: var(--option-hover-text-rgb);
+}

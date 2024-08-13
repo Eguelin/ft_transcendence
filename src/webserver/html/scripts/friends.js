@@ -90,6 +90,7 @@ function checkUpdate(){
 					Object.keys(friends).forEach(function(key) {
 						friendContainer = document.createElement("div");
 						friendContainer.className = "friendContainer"
+						friendContainer.id = friends[key].friend_code;
 						pfp = document.createElement("img");
 						pfp.className = "profilePicture";
 						if (friends[key].pfp != ""){
@@ -101,6 +102,10 @@ function checkUpdate(){
 						}
 						friendName = document.createElement("a");
 						friendName.innerHTML = friends[key].display;
+						
+						moreBtn = document.createElement("div");
+						moreBtn.className = "moreVerticalBtn";
+						
 						is_active = document.createElement("a");
 						is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
 						is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
@@ -109,6 +114,7 @@ function checkUpdate(){
 						friendContainer.appendChild(pfp);
 						friendContainer.appendChild(friendName);
 						friendContainer.appendChild(is_active);
+						friendContainer.appendChild(moreBtn);
 						friendListContainer.appendChild(friendContainer);
 					});
 					var friends_request = text.friend_request;
@@ -142,6 +148,22 @@ function checkUpdate(){
 					});
 					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
 					rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
+					moreBtn = document.querySelectorAll(".moreVerticalBtn");
+					
+					for (var i = 0; i < moreBtn.length; i++){
+						moreBtn[i].addEventListener("click", (e) => {
+							const data = {code: e.srcElement.parentElement.id};
+							fetch('/api/user/remove_friend', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify(data),
+								credentials: 'include'
+							})
+							e.srcElement.parentElement.remove();
+						})
+					}
 					
 					for (var i = 0; i < acceptRequestBtn.length; i++){
 						acceptRequestBtn[i].addEventListener("click", (e) => {
