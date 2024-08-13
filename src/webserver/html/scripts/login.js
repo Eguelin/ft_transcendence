@@ -131,14 +131,6 @@ loginBtn.addEventListener("click", (e) => {
 						document.body.appendChild(s);
 					}))
 				});
-				fetch('/api/user/update', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({"is_active": true}),
-					credentials: 'include'
-				})
 			} else {
 				console.log("Failed to login user")
 				if (response.status != 500){
@@ -146,7 +138,6 @@ loginBtn.addEventListener("click", (e) => {
 						warning.text = text.message;
 						if (!loginBtn.previousElementSibling)
 							loginBtn.before(warning.cloneNode(true));
-
 						return (text.message);
 					}));
 				}
