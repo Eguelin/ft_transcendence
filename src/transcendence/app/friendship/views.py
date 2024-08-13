@@ -13,6 +13,8 @@ def send_friend_request(request):
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		code = data['code']
+		if (code == request.user.profile.friend_code):
+			return JsonResponse({'message': 'Can\'t send friend request with yourself'})
 		try:
 			new_friend = customModels.Profile.objects.get(friend_code=code).user
 			user = request.user

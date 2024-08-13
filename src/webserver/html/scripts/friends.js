@@ -226,6 +226,6 @@ function checkUpdate(){
 	}
 }
 
-var checkUpdateInterval = setInterval(checkUpdate, 10000);
+//var checkUpdateInterval = setInterval(checkUpdate, 10000);
 
 checkUpdate();
