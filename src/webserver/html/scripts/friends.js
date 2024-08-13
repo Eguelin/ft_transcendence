@@ -104,6 +104,7 @@ function checkUpdate(){
 						is_active = document.createElement("a");
 						is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
 						is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
+						is_active.style.setProperty("text-align", "center");
 						
 						friendContainer.appendChild(pfp);
 						friendContainer.appendChild(friendName);
@@ -225,6 +226,6 @@ function checkUpdate(){
 	}
 }
 
-var checkUpdateInterval = setInterval(checkUpdate, 5000);
+var checkUpdateInterval = setInterval(checkUpdate, 10000);
 
 checkUpdate();
