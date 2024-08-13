@@ -49,6 +49,8 @@ def fortytwo(request):
 		user = User.objects.get(username=username)
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
+			user.profile.is_active = True
+			user.save()
 			login(request, user)
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
@@ -57,6 +59,7 @@ def fortytwo(request):
 		user = User.objects.create_user(username=username, password=password)
 		user.profile.display_name = display
 		user.profile.profile_picture = pfp_url
+		user.profile.is_active = True
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
@@ -87,6 +90,7 @@ def create_user(request):
 		else:
 			user.profile.display_name = display
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+		user.profile.is_active = True
 		for count in range (0, 0x7fffffff):
 			friend_code = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
 			user.profile.friend_code = friend_code
@@ -115,6 +119,8 @@ def user_login(request):
 			return JsonResponse({'message': 'Username and password are required'}, status=400)
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
+			user.profile.is_active = True
+			user.save()
 			login(request, user)
 			return JsonResponse({'message': 'User logged in'})
 		else:
@@ -178,8 +184,6 @@ def get_user_json(user):
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active
 	}
-
-
 
 def current_user(request):
 	if request.method != 'GET':
