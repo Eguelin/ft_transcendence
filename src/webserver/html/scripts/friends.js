@@ -1,5 +1,6 @@
 friendCodePopup = document.getElementById("friendCodePopup");
 friendRequestPopup = document.getElementById("friendRequestPopup");
+deleteRequestPopup = document.getElementById("deleteRequestPopup");
 popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
 pendingRequestBtn = document.getElementById("pendingRequestBtn");
@@ -13,6 +14,7 @@ document.addEventListener("click", (e) => {
 	if (e.target.parentElement == null || e.target.id == "popupBg"){
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
+		deleteFriendPopup.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
 		if (bg != null)
 			bg.remove();
@@ -47,6 +49,23 @@ document.addEventListener("click", (e) => {
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
+	}
+	if (e.target.id == "confirmDelete"){
+		const data = {code: e.target.parentElement.className};
+		fetch('/api/user/remove_friend', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+		var friend = document.getElementById(e.target.parentElement.className);
+		deleteFriendPopup.style.setProperty("display", "none");
+		var bg = document.getElementById("popupBg");
+		if (bg != null)
+			bg.remove();
+		friend.remove();
 	}
 })
 
@@ -152,16 +171,15 @@ function checkUpdate(){
 					
 					for (var i = 0; i < moreBtn.length; i++){
 						moreBtn[i].addEventListener("click", (e) => {
-							const data = {code: e.srcElement.parentElement.id};
-							fetch('/api/user/remove_friend', {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json',
-								},
-								body: JSON.stringify(data),
-								credentials: 'include'
-							})
-							e.srcElement.parentElement.remove();
+							deleteFriendPopup.style.setProperty("display", "block");
+							deleteFriendPopup.className = e.srcElement.parentElement.id;
+
+							var bg = document.createElement("div");
+							bg.id = "popupBg";
+							pos = friendInfo.getBoundingClientRect();
+							bg.style.left = `${-pos.left}px`;
+							bg.style.top = `${-pos.top}px`;
+							deleteFriendPopup.before(bg);
 						})
 					}
 					

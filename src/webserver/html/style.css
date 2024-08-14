@@ -625,7 +625,7 @@ a {
 	outline: none;
 }
 
-#friendCodePopup, #friendRequestPopup{
+#friendCodePopup, #friendRequestPopup, #deleteFriendPopup{
 	background: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	position: fixed;
