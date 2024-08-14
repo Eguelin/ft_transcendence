@@ -82,6 +82,8 @@ def remove_friend(request):
 		try:
 			friend = customModels.Profile.objects.get(friend_code=code).user
 			user = request.user
+			friend.profile.friends.remove(user);
+			friend.save();
 			user.profile.friends.remove(friend)
 			user.save()
 			return JsonResponse({'message': 'Succesfully added friend'})
