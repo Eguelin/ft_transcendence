@@ -63,6 +63,11 @@ pfpInputLabel.addEventListener("keydown", (ek) => {
 	}
 })
 
+pfpInput.addEventListener("change", (e) => {
+	if (pfpInput.files.length >= 1)
+		pfpInputLabel.innerHTML = pfpInput.files[0].name;
+})
+
 saveBtn.addEventListener("click", (e) => {
 	var data = {};
 	var username = usernameInput.value;
