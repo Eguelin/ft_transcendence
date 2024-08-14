@@ -172,7 +172,7 @@ function checkUpdate(){
 					
 					for (var i = 0; i < moreBtn.length; i++){
 						moreBtn[i].addEventListener("click", (e) => {
-							deleteFriendPopup.style.setProperty("display", "block");
+							deleteFriendPopup.style.setProperty("display", "flex");
 							deleteFriendPopup.className = e.srcElement.parentElement.id;
 
 							var bg = document.createElement("div");

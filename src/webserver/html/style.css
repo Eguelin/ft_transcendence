@@ -724,3 +724,30 @@ a {
 .moreVerticalBtn:focus, .moreVerticalBtn:hover{
 	background: var(--option-hover-text-rgb);
 }
+
+#deleteFriendPopup{
+	flex-direction: column;
+	align-items: center;
+}
+
+#deleteFriendPopup a{
+	margin-bottom: 3em;
+}
+
+#confirmDelete {
+	text-align: center;
+	background-color: red;
+	color: var(--main-text-rgb);
+	font-weight: thin;	
+	font-family: "pong";
+	font-size: min(4vh, 2vw);
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+}
+
+#confirmDelete:hover, #confirmDelete:focus {
+	color: var(--hover-text-rgb);
+	border: 0.2px solid var(--hover-text-rgb);
+}
