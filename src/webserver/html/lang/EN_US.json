@@ -56,6 +56,10 @@
 		"title" : "Friends",
 		"friendCodeBtn" : "My friend code",
 		"friendCode" : "My friend code",
-		"pendingRequestBtn" : "Pending friend request"
+		"inputCode" : "Friend code",
+		"sendFriendRequestBtn" : "Send",
+		"pendingRequestBtn" : "Pending friend request",
+		"confirmDeleteQuestion" : "Are you sure you want to delete this friend",
+		"confirmDelete" : "I'm sure"
 	}
 }

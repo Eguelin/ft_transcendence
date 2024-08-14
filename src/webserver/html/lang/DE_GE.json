@@ -56,6 +56,10 @@
 		"title" : "Freunde",
 		"friendCodeBtn" : "Mein freundescode",
 		"friendCode" : "Mein Freundescode",
-		"pendingRequestBtn" : "Ausstehende Freundschaftsanfrage"
+		"inputCode" : "Freundescode",
+		"sendFriendRequestBtn" : "Schicken",
+		"pendingRequestBtn" : "Ausstehende Freundschaftsanfrage",
+		"confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
+		"confirmDelete" : "Ich bin sicher"
 	}
 }
