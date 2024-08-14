@@ -14,7 +14,7 @@ document.addEventListener("click", (e) => {
 	if (e.target.parentElement == null || e.target.id == "popupBg"){
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
-		deleteFriendPopup.setProperty("display", "none");
+		deleteFriendPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
 		if (bg != null)
 			bg.remove();
@@ -82,6 +82,7 @@ document.addEventListener("keydown", (e) => {
 	if (e.key == "Escape"){
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
+		deleteFriendPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
 		if (bg != null)
 			bg.remove();
