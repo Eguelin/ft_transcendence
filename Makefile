@@ -19,6 +19,7 @@
 
 NAME	= ft_transcendence
 DC		= docker compose
+PFP		= $(shell find src/transcendence/app/profilePictures/ -name "*.jpg" | grep -v "defaults/")
 
 # **************************************************************************** #
 #                                    Sources                                   #
@@ -46,6 +47,9 @@ clean:
 fclean: clean
 	docker system prune --force --all;
 	docker volume prune -f;
+    ifneq ($(PFP),)
+		rm -f $(PFP)
+    endif
 
 re: fclean all
 	docker exec -it transcendence python3 manage.py migrate
