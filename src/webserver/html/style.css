@@ -759,15 +759,28 @@ a {
 
 #pendingRequestBtnContainer #notificationDot{
 	mask-image:url("svg/notification-dot.svg");
-	background:red;
-	height:1em;
-	width:1em;
+	background:var(--main-text-rgb);
+	height:min(3vh, 2vw);
+	width:min(3vh, 2vw);
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
 	position: absolute;
-	left: -0.5em;
+	left: -0.5vw;
 	top: 50%;
 	transform: translateY(-50%);
 	z-index: -1;
+	animation: flash 1s infinite;
+}
+
+@keyframes flash {
+	0% {
+		opacity: 100%;
+	}
+	50%{
+		opacity: 0%;
+	}
+	100%{
+		opacity: 100%;
+	}
 }
