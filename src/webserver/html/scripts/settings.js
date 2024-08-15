@@ -22,8 +22,9 @@ settingsSlides[slideIdx].style.display = "block";
 
 window.addEventListener("keydown", (e) => {
 	let i;
-	if (e.keyCode == 37 || e.keyCode == 39){
-		if (e.keyCode == 37)
+	console.log(e);
+	if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
+		if (e.key == "ArrowLeft")
 			slideIdx -= 1;
 		else
 			slideIdx += 1;
@@ -58,7 +59,7 @@ leftSlideBtn.addEventListener("click", () => {
 });
 
 pfpInputLabel.addEventListener("keydown", (ek) => {
-	if (ek.keyCode == 13){
+	if (ek.key == "Enter"){
 		pfpInput.click();
 	}
 })
@@ -227,10 +228,10 @@ dropDownContent.forEach(function(button) {
 		a[0].classList.add("dropDownContentAHover");
 	});
 	button.addEventListener("keydown", (ek) => {
-		if (ek.keyCode == 40 || ek.keyCode == 13){
+		if (ek.key == "ArrowDown" || ek.key == "Enter"){
 			if (j >= a.length)
 				j--;
-			if (ek.keyCode == 13){
+			if (ek.key == "Enter"){
 				a[j].click();
 			}
 			else if (j == a.length - 1){
@@ -243,7 +244,7 @@ dropDownContent.forEach(function(button) {
 			}
 			a[j].classList.add("dropDownContentAHover");	
 		}
-		else if (ek.keyCode == 38){
+		else if (ek.key == "ArrowUp"){
 			if (j == 0){
 				a[j].classList.remove("dropDownContentAHover");
 				j = a.length - 1;

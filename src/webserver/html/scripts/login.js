@@ -71,13 +71,13 @@ registerLink.addEventListener("click", (e) => {
 });
 
 fortyTwoLogin.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13){
+	if (e.key == "Enter"){
 		fortyTwoLogin.click()
 	}
 });
 
 registerLink.addEventListener("keyup", (e) => {
-	if (e.keyCode === 13) {
+	if (e.key == "Enter") {
 		registerLink.click();
 	}
 });
