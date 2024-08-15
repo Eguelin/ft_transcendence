@@ -105,7 +105,7 @@ homeBtn.addEventListener("click", (e) => {
 })
 
 homeBtn.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13)
+	if (e.key == "Enter")
 		homeBtn.click();
 })
 
@@ -244,7 +244,7 @@ swichTheme.addEventListener("click", () => {
 })
 
 swichTheme.addEventListener("keydown", (e) => {
-	if (e.keyCode == 13){
+	if (e.key == "Enter"){
 		swichTheme.click();
 		swichTheme.focus();
 	}
