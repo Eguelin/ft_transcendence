@@ -4,7 +4,7 @@ homeBtn = document.getElementById("goHomeButton");
 usernameInput = document.getElementById("inputUsername");
 displayInput = document.getElementById("inputDisplayName");
 pfpInput = document.getElementById("inputPfp");
-pfpInputLabel = document.getElementById("inputPfpLabel");
+pfpInputLabel = document.getElementById("pfpLabel");
 lightTheme = document.getElementsByClassName("loadLight");
 darkTheme = document.getElementsByClassName("loadDark");
 germanBtn = document.getElementsByClassName("germanBtn");
@@ -22,7 +22,6 @@ settingsSlides[slideIdx].style.display = "block";
 
 window.addEventListener("keydown", (e) => {
 	let i;
-	console.log(e);
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
 		if (e.key == "ArrowLeft")
 			slideIdx -= 1;
@@ -143,9 +142,11 @@ saveBtn.addEventListener("click", (e) => {
 		if (response.ok) {
 			(response.json()).then((text) => {
 				switchTheme(text.is_dark_theme);
+				currentLang = text.lang;
 				usernameInput.setAttribute('placeholder', text.username);
-				loadCurrentLang("settings");
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				loadCurrentLang();
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 				history.replaceState(state, "");
 			});
 		}
@@ -154,7 +155,8 @@ saveBtn.addEventListener("click", (e) => {
 			
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					if (container.innerHTML != "")
 						history.pushState(state, "");
 					else
@@ -166,7 +168,8 @@ saveBtn.addEventListener("click", (e) => {
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
 					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					history.replaceState(state, "");
 				}))
 			});	
@@ -188,8 +191,10 @@ window.addEventListener("load", () => {
 			(response.json()).then((text) => {
 				switchTheme(text.is_dark_theme);
 				username.setAttribute('placeholder', text.username);
-				loadCurrentLang("settings");
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				currentLang = text.lang;
+				loadCurrentLang();
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 				history.replaceState(state, "");
 			});
 		}
@@ -198,7 +203,8 @@ window.addEventListener("load", () => {
 			
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					if (container.innerHTML != "")
 						history.pushState(state, "");
 					else
@@ -210,7 +216,8 @@ window.addEventListener("load", () => {
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
 					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					history.replaceState(state, "");
 				}))
 			});	
@@ -270,6 +277,7 @@ dropDownContent.forEach(function(button) {
 for (var i = 0 ;i < germanBtn.length; i++)
 {
 	germanBtn[i].addEventListener("click", (e) => {
+		currentLang = "lang/DE_GE.json";
 		const data = {language_pack: "lang/DE_GE.json"};
 		fetch("lang/DE_GE.json").then(response => {
 			response.json().then((text) => {
@@ -297,6 +305,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 	})
 	
 	englishBtn[i].addEventListener("click", (e) => {
+		currentLang = "lang/EN_US.json";
 		const data = {language_pack: "lang/EN_US.json"};
 		fetch("lang/EN_US.json").then(response => {
 			response.json().then((text) => {

@@ -102,7 +102,8 @@ function checkUpdate(){
 			if (response.ok) {
 				(response.json()).then((text) => {
 					switchTheme(text.is_dark_theme);
-					loadCurrentLang("friends");
+					currentLang = text.lang;
+					loadCurrentLang();
 					friendCodePopup.lastElementChild.innerHTML = text.friend_code;
 					var friends = text.friends;
 					friendListContainer.innerHTML = "";
@@ -235,7 +236,8 @@ function checkUpdate(){
 						})
 					}
 					
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					history.replaceState(state, "");
 				});
 			}
@@ -244,7 +246,8 @@ function checkUpdate(){
 	
 				fetch ('bodyLess/login.html').then((response) => {
 					(response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 						if (container.innerHTML != "")
 							history.pushState(state, "");
 						else
@@ -258,7 +261,8 @@ function checkUpdate(){
 						document.getElementById("pfp").style.setProperty("display", "none");
 						document.getElementById("dropDownUser").style.setProperty("display", "none");
 						currentPage = "login";
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 						history.replaceState(state, "");
 					}))
 				});

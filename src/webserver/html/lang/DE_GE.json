@@ -33,6 +33,7 @@
 		"inputDisplayName" : "Anzeigename",
 		"inputUsername" : "Nutzername",
 		"inputPfp" : "Profilbild",
+		"pfpLabel" : "Profilbild",
 		"themesDropDownL" : "Themen",
 		"themesDropDownP" : "Themen",
 		"loadLightL" : "Licht",
