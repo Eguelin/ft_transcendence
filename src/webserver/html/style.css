@@ -581,7 +581,7 @@ a {
 	outline: none;
 }
 
-#inputPfpLabel {
+#pfpLabel {
 	width: inherit;
 	text-align: center;
 	background-color: var(--input-bg-rgb);

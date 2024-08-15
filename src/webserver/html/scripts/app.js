@@ -2,6 +2,7 @@ container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
 var currentPage = "";
+var currentLang = "lang/EN_US.json"
 
 fetch('/api/user/current', {
 	method: 'GET',
@@ -15,7 +16,7 @@ fetch('/api/user/current', {
 		(response.json()).then((text) => {	
 			fetch ('bodyLess/home.html').then((response) => {
 				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 					if (container.innerHTML != "")
 						history.pushState(state, "");
 					else
@@ -27,7 +28,10 @@ fetch('/api/user/current', {
 					s.setAttribute('src', `scripts/home.js`);
 					document.body.appendChild(s);
 					currentPage = "home";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					currentLang = response.lang;
+					loadCurrentLang();
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					history.replaceState(state, "");
 				}))
 			});	
@@ -47,7 +51,8 @@ fetch('/api/user/current', {
 		
 		fetch ('bodyLess/login.html').then((response) => {
 			(response.text().then(response => {
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 				if (container.innerHTML != "")
 					history.pushState(state, "");
 				else
@@ -58,9 +63,9 @@ fetch('/api/user/current', {
 				s.setAttribute('id', 'script');
 				s.setAttribute('src', `scripts/login.js`);
 				document.body.appendChild(s);
-				loadCurrentLang("login");
 				currentPage = "login";
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 				history.replaceState(state, "");
 			}))
 		});
@@ -86,7 +91,8 @@ window.addEventListener("beforeunload", (e) => {
 homeBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/home.html').then((response) => {
 		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 			if (container.innerHTML != "")
 				history.pushState(state, "");
 			else
@@ -96,9 +102,9 @@ homeBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/home.js`);
-			loadCurrentLang("home");
-			document.body.appendChild(s);
 			currentPage = "home";
+			loadCurrentLang();
+			document.body.appendChild(s);
 			homeBtn.style.setProperty("display", "none");
 		}))
 	});	
@@ -145,7 +151,8 @@ window.addEventListener("popstate", (event) => {
 		s.setAttribute('id', 'script');
 		s.setAttribute('src', `scripts/${currentPage}.js`);
 		document.body.appendChild(s);
-		loadCurrentLang(currentPage);
+		currentLang = obj['currentLang'];
+		loadCurrentLang();
 	}
 	fetch('/api/user/current', {
 		method: 'GET',
@@ -158,7 +165,8 @@ window.addEventListener("popstate", (event) => {
 		if (!response.ok) {
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					if (container.innerHTML != "")
 						history.pushState(state, "");
 					else
@@ -169,9 +177,11 @@ window.addEventListener("popstate", (event) => {
 					s.setAttribute('id', 'script');
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
-					loadCurrentLang("login");
+					currentLang = "lang/EN_US.json";
 					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					loadCurrentLang();
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					history.replaceState(state, "");
 				}))
 			});
@@ -189,19 +199,24 @@ window.addEventListener("popstate", (event) => {
 	})
 });
 
-function loadCurrentLang(page){ //just for better readability before prod, don't care about efficiency
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	}).then(response => {
-		if (response.ok) {
-			(response.json()).then((text) => {
-				fetch(text.lang).then(response => {
+function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
+	if (currentLang != undefined){
+		fetch(currentLang).then(response => {
+			if (response.ok){
+				response.json().then((text) => {
+					content = text[currentPage];
+					Object.keys(content).forEach(function(key) {
+						if (key.startsWith('input'))
+							document.getElementById(key).placeholder = content[key];
+						else
+							document.getElementById(key).innerHTML = content[key];
+					});
+				})
+			}
+			else{
+				fetch("lang/EN_US.json").then(response => {
 					response.json().then((text) => {
-						content = text[page];
+						content = text[currentPage];
 						Object.keys(content).forEach(function(key) {
 							if (key.startsWith('input'))
 								document.getElementById(key).placeholder = content[key];
@@ -210,22 +225,22 @@ function loadCurrentLang(page){ //just for better readability before prod, don't
 						});
 					})
 				})
+			}
+		})
+	}
+	else{
+		fetch("lang/EN_US.json").then(response => {
+			response.json().then((text) => {
+				content = text[currentPage];
+				Object.keys(content).forEach(function(key) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					else
+						document.getElementById(key).innerHTML = content[key];
+				});
 			})
-		}
-		else{
-			fetch("lang/EN_US.json").then(response => {
-				response.json().then((text) => {
-					content = text[page];
-					Object.keys(content).forEach(function(key) {
-						if (key.startsWith('input'))
-							document.getElementById(key).placeholder = content[key];
-						else
-							document.getElementById(key).innerHTML = content[key];
-					});
-				})
-			})
-		}
-	});
+		})
+	}
 }
 
 swichTheme.addEventListener("click", () => {

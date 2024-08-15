@@ -28,7 +28,8 @@ function handleToken() {
 				window.history.replaceState({}, document.title, "/");
 				fetch ('bodyLess/home.html').then((response) => {
 					return (response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 						if (container.innerHTML != "")
 							history.pushState(state, "");
 						else
@@ -38,8 +39,8 @@ function handleToken() {
 						var s = document.createElement("script");
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/home.js`);
-						loadCurrentLang("home");
 						currentPage = "home";
+						loadCurrentLang();
 						document.body.appendChild(s);
 					}))
 				});
@@ -53,7 +54,8 @@ window.addEventListener('load', handleToken());
 registerLink.addEventListener("click", (e) => {
 	fetch ('bodyLess/register.html').then((response) => {
 		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 			if (container.innerHTML != "")
 				history.pushState(state, "");
 			else
@@ -63,8 +65,8 @@ registerLink.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/register.js`);
-			loadCurrentLang("register");
 			currentPage = "register";
+			loadCurrentLang();
 			document.body.appendChild(s);
 		}))
 	});
@@ -116,7 +118,8 @@ loginBtn.addEventListener("click", (e) => {
 
 				fetch ('bodyLess/home.html').then((response) => {
 					return (response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 						if (container.innerHTML != "")
 							history.pushState(state, "");
 						else
@@ -126,8 +129,8 @@ loginBtn.addEventListener("click", (e) => {
 						var s = document.createElement("script");
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/home.js`);
-						loadCurrentLang("home");
 						currentPage = "home";
+						loadCurrentLang();
 						document.body.appendChild(s);
 					}))
 				});

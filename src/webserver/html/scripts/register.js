@@ -73,7 +73,8 @@ registerBtn.addEventListener("click", (e) => {
 				}).then(response => {
 					fetch ('bodyLess/home.html').then((response) => {
 						(response.text().then(response => {
-							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 							if (container.innerHTML != "")
 								history.pushState(state, "");
 							else
@@ -83,8 +84,8 @@ registerBtn.addEventListener("click", (e) => {
 							var s = document.createElement("script");
 							s.setAttribute('id', 'script');
 							s.setAttribute('src', `scripts/home.js`);
-							loadCurrentLang("home");
 							currentPage = "home";
+							loadCurrentLang();
 							document.body.appendChild(s);
 						}))
 					});

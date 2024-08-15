@@ -22,7 +22,8 @@ window.addEventListener("load", () => {
 		if (response.ok) {
 			(response.json()).then((text) => {
 				switchTheme(text.is_dark_theme);
-				loadCurrentLang("home");
+				currentLang = text.lang;
+				loadCurrentLang();
 				if (text.pfp != ""){
 					var rawPfp = text.pfp;
 					if (rawPfp.startsWith('https://'))
@@ -33,7 +34,8 @@ window.addEventListener("load", () => {
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
 				document.getElementById("usernameBtn").innerHTML = text.display;
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 				history.replaceState(state, "");
 			});
 		}
@@ -42,7 +44,8 @@ window.addEventListener("load", () => {
 
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					if (container.innerHTML != "")
 						history.pushState(state, "");
 					else
@@ -54,7 +57,8 @@ window.addEventListener("load", () => {
 					s.setAttribute('src', `scripts/login.js`);
 					document.body.appendChild(s);
 					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					history.replaceState(state, "");
 				}))
 			});
@@ -75,7 +79,8 @@ window.addEventListener("load", () => {
 		if (response.ok) {
 			(response.json()).then((text) => {
 				switchTheme(text.is_dark_theme);
-				loadCurrentLang("home");
+				currentLang = text.lang;
+				loadCurrentLang();
 				document.getElementById("usernameBtn").innerHTML = text.display;
 				document.getElementById("pfp").style.setProperty("display", "block");
 				document.getElementById("dropDownUser").style.setProperty("display", "block");
@@ -88,7 +93,8 @@ window.addEventListener("load", () => {
 				}
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 				history.replaceState(state, "");
 			});
 		}
@@ -97,7 +103,8 @@ window.addEventListener("load", () => {
 
 			fetch ('bodyLess/login.html').then((response) => {
 				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					if (container.innerHTML != "")
 						history.pushState(state, "");
 					else
@@ -111,7 +118,8 @@ window.addEventListener("load", () => {
 					document.getElementById("pfp").style.setProperty("display", "none");
 					document.getElementById("dropDownUser").style.setProperty("display", "none");
 					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 					history.replaceState(state, "");
 				}))
 			});
@@ -131,7 +139,8 @@ logOutBtn.addEventListener("click", (e) => {
 
 	fetch ('bodyLess/login.html').then((response) => {
 		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 			if (container.innerHTML != "")
 				history.pushState(state, "");
 			else
@@ -141,11 +150,11 @@ logOutBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/login.js`);
-			loadCurrentLang("login");
+			currentPage = "login";
+			loadCurrentLang();
 			document.body.appendChild(s);
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");
-			currentPage = "login";
 		}))
 	});
 });
@@ -153,7 +162,8 @@ logOutBtn.addEventListener("click", (e) => {
 accSettingsBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/settings.html').then((response) => {
 		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 			if (container.innerHTML != "")
 				history.pushState(state, "");
 			else
@@ -163,12 +173,12 @@ accSettingsBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/settings.js`);
-			loadCurrentLang("settings");
+			currentPage = "settings";
+			loadCurrentLang();
 			document.body.appendChild(s);
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");
 			document.getElementById("goHomeButton").style.setProperty("display", "block");
-			currentPage = "settings";
 		}))
 	});
 })
@@ -176,7 +186,8 @@ accSettingsBtn.addEventListener("click", (e) => {
 friendsBtn.addEventListener("click", (e) => {
 	fetch ('bodyLess/friends.html').then((response) => {
 		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage})
+			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
 			if (container.innerHTML != "")
 				history.pushState(state, "");
 			else
@@ -186,12 +197,12 @@ friendsBtn.addEventListener("click", (e) => {
 			var s = document.createElement("script");
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', `scripts/friends.js`);
-			loadCurrentLang("friends");
+			currentPage = "friends";
+			loadCurrentLang();
 			document.body.appendChild(s);
 			document.getElementById("pfp").style.setProperty("display", "none");
 			document.getElementById("dropDownUser").style.setProperty("display", "none");
 			document.getElementById("goHomeButton").style.setProperty("display", "block");
-			currentPage = "friends";
 		}))
 	});
 })
