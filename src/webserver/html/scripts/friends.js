@@ -139,8 +139,10 @@ function checkUpdate(){
 						friendListContainer.appendChild(friendContainer);
 					});
 					var friends_request = text.friend_request;
+					notificationDot = document.getElementById("notificationDot");
+					console.log(typeof(friends_request));
+					notificationDot.style.setProperty("display", Object.keys(friends_request).length > 0 ? "block" : "none");
 					Object.keys(friends_request).forEach(function(key) {
-						console.log(friends_request[key]);
 						friendContainer = document.createElement("div");
 						friendContainer.className = "friendContainer"
 						friendContainer.id = friends_request[key].friend_code;

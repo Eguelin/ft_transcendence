@@ -751,3 +751,23 @@ a {
 	color: var(--hover-text-rgb);
 	border: 0.2px solid var(--hover-text-rgb);
 }
+
+#pendingRequestBtnContainer{
+	position: relative;
+	z-index: -1;
+}
+
+#pendingRequestBtnContainer #notificationDot{
+	mask-image:url("svg/notification-dot.svg");
+	background:red;
+	height:1em;
+	width:1em;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	position: absolute;
+	left: -0.5em;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: -1;
+}
