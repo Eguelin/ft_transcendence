@@ -140,7 +140,6 @@ function checkUpdate(){
 					});
 					var friends_request = text.friend_request;
 					notificationDot = document.getElementById("notificationDot");
-					console.log(typeof(friends_request));
 					notificationDot.style.setProperty("display", Object.keys(friends_request).length > 0 ? "block" : "none");
 					Object.keys(friends_request).forEach(function(key) {
 						friendContainer = document.createElement("div");
@@ -213,6 +212,7 @@ function checkUpdate(){
 							e.srcElement.parentElement.remove();
 							if (friendRequestPopup.innerHTML == ""){
 								friendRequestPopup.style.setProperty("display", "none");
+								notificationDot.style.setProperty("display", "none");
 								var bg = document.getElementById("popupBg");
 								if (bg != null)
 									bg.remove();
@@ -231,6 +231,7 @@ function checkUpdate(){
 							e.srcElement.parentElement.remove();
 							if (friendRequestPopup.innerHTML == ""){
 								friendRequestPopup.style.setProperty("display", "none");
+								notificationDot.style.setProperty("display", "none");
 								var bg = document.getElementById("popupBg");
 								if (bg != null)
 									bg.remove();
