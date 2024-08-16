@@ -47,8 +47,6 @@ fetch('/api/user/current', {
 		})
 	}
 	else {
-		console.log("Failed to get user")
-		
 		fetch ('bodyLess/login.html').then((response) => {
 			(response.text().then(response => {
 				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
@@ -64,6 +62,7 @@ fetch('/api/user/current', {
 				s.setAttribute('src', `scripts/login.js`);
 				document.body.appendChild(s);
 				currentPage = "login";
+				loadCurrentLang();
 				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 				history.replaceState(state, "");
