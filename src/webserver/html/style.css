@@ -533,6 +533,7 @@ a {
 	left: 50%;
 	top: 50%;
 	transform: translateX(-50%) translateY(-50%);
+	height: 5vw;
 }
 
 #usernameBtn {
@@ -557,6 +558,7 @@ a {
 }
 
 #dropDownUser:focus, #dropDownUser:focus-within{
+	display: inline-table;
 	border: 0.2px solid;
 	border-color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
