@@ -83,7 +83,7 @@ window.addEventListener("load", () => {
 				loadCurrentLang();
 				document.getElementById("usernameBtn").innerHTML = text.display;
 				document.getElementById("pfp").style.setProperty("display", "block");
-				document.getElementById("dropDownUser").style.setProperty("display", "block");
+				document.getElementById("dropDownUser").style.setProperty("display", "inline-table");
 				if (text.pfp != ""){
 					var rawPfp = text.pfp;
 					if (rawPfp.startsWith('https://'))
