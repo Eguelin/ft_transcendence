@@ -73,6 +73,7 @@ registerBtn.addEventListener("click", (e) => {
 				}).then(response => {
 					fetch ('bodyLess/home.html').then((response) => {
 						(response.text().then(response => {
+							swichTheme.focus();
 							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 							if (container.innerHTML != "")

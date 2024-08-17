@@ -118,6 +118,7 @@ loginBtn.addEventListener("click", (e) => {
 
 				fetch ('bodyLess/home.html').then((response) => {
 					return (response.text().then(response => {
+						swichTheme.focus();
 						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 						if (container.innerHTML != "")
