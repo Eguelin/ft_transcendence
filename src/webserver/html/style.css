@@ -25,14 +25,14 @@ body{
 	flex-flow: column;
 }
 
-.titleFlexContainer{
+#titleFlexContainer{
 	height:fit-content;
 	text-align: center;
 	display: flex;
 	width: -webkit-fill-available;
 }
 
-.titleFlexContainer div{
+#titleFlexContainer div{
 	position: relative;
 }
 
