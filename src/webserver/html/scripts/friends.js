@@ -1,6 +1,7 @@
 friendCodePopup = document.getElementById("friendCodePopup");
 friendRequestPopup = document.getElementById("friendRequestPopup");
 deleteRequestPopup = document.getElementById("deleteRequestPopup");
+blockFriendPopup = document.getElementById("blockFriendPopup");
 popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
 pendingRequestBtn = document.getElementById("pendingRequestBtn");
@@ -15,6 +16,7 @@ document.addEventListener("click", (e) => {
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
 		deleteFriendPopup.style.setProperty("display", "none");
+		blockFriendPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
 		if (bg != null)
 			bg.remove();
@@ -67,6 +69,23 @@ document.addEventListener("click", (e) => {
 			bg.remove();
 		friend.remove();
 	}
+	if (e.target.id == "confirmBlock"){
+		const data = {code: e.target.parentElement.className};
+		fetch('/api/user/block_friend', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+		var friend = document.getElementById(e.target.parentElement.className);
+		blockFriendPopup.style.setProperty("display", "none");
+		var bg = document.getElementById("popupBg");
+		if (bg != null)
+			bg.remove();
+		friend.remove();
+	}
 })
 
 window.addEventListener("resize", (e) => {
@@ -83,6 +102,7 @@ document.addEventListener("keydown", (e) => {
 		friendCodePopup.style.setProperty("display", "none");
 		friendRequestPopup.style.setProperty("display", "none");
 		deleteFriendPopup.style.setProperty("display", "none");
+		blockFriendPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
 		if (bg != null)
 			bg.remove();
@@ -194,6 +214,7 @@ function checkUpdate(){
 					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
 					rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
 					removeFriendBtn = document.querySelectorAll(".removeFriendBtn");
+					blockFriendBtn = document.querySelectorAll(".blockFriendBtn");
 					
 					for (var i = 0; i < removeFriendBtn.length; i++){
 						removeFriendBtn[i].addEventListener("click", (e) => {
@@ -206,6 +227,17 @@ function checkUpdate(){
 							bg.style.left = `${-pos.left}px`;
 							bg.style.top = `${-pos.top}px`;
 							deleteFriendPopup.before(bg);
+						})
+						blockFriendBtn[i].addEventListener("click", (e) => {
+							blockFriendPopup.style.setProperty("display", "flex");
+							blockFriendPopup.className = e.srcElement.parentElement.id;
+
+							var bg = document.createElement("div");
+							bg.id = "popupBg";
+							pos = friendInfo.getBoundingClientRect();
+							bg.style.left = `${-pos.left}px`;
+							bg.style.top = `${-pos.top}px`;
+							blockFriendPopup.before(bg);
 						})
 					}
 					

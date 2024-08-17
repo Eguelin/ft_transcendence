@@ -639,7 +639,7 @@ a {
 	outline: none;
 }
 
-#friendCodePopup, #friendRequestPopup, #deleteFriendPopup{
+#friendCodePopup, #friendRequestPopup, #deleteFriendPopup, #blockFriendPopup{
 	background: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	position: fixed;
@@ -776,16 +776,16 @@ a {
 	margin-right: 1.5vmin;
 }
 
-#deleteFriendPopup{
+#deleteFriendPopup, #blockFriendPopup{
 	flex-direction: column;
 	align-items: center;
 }
 
-#deleteFriendPopup a{
+#deleteFriendPopup a, #blockFriendPopup a{
 	margin-bottom: 3em;
 }
 
-#confirmDelete {
+#confirmDelete, #confirmBlock {
 	text-align: center;
 	background-color: red;
 	color: var(--main-text-rgb);
@@ -798,7 +798,7 @@ a {
 	border-radius: 1.5vw;
 }
 
-#confirmDelete:hover, #confirmDelete:focus {
+#confirmDelete:hover, #confirmDelete:focus, #confirmBlock:hover, #confirmBlock:focus {
 	color: var(--hover-text-rgb);
 	border: 0.2px solid var(--hover-text-rgb);
 }

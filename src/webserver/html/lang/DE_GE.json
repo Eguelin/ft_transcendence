@@ -61,6 +61,8 @@
 		"sendFriendRequestBtn" : "Schicken",
 		"pendingRequestBtn" : "Ausstehende Freundschaftsanfrage",
 		"confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
-		"confirmDelete" : "Ich bin sicher"
+		"confirmBlockQuestion" : "Möchten Sie diesen Freund wirklich blockieren?",
+		"confirmDelete" : "Ich bin sicher",
+		"confirmBlock" : "Ich bin sicher"
 	}
 }
