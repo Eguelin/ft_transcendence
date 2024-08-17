@@ -630,6 +630,7 @@ a {
 	padding: 1.5vh 1.5vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
+	width: -webkit-fill-available;
 }
 
 #friendCodeBtn:hover, #friendCodeBtn:focus, #sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus, #pendingRequestBtn:hover, #pendingRequestBtn:focus {

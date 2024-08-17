@@ -89,6 +89,37 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
+function createFriendContainer(friend){
+	friendContainer = document.createElement("div");
+	friendContainer.className = "friendContainer"
+	friendContainer.id = friend.friend_code;
+	pfp = document.createElement("img");
+	pfp.className = "profilePicture";
+	if (friend.pfp != ""){
+		var rawPfp = friend.pfp;
+		if (rawPfp.startsWith('https://'))
+			pfp.setAttribute("src", `${rawPfp}`);
+		else
+			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+	}
+	friendName = document.createElement("a");
+	friendName.innerHTML = friend.display;
+	
+	moreBtn = document.createElement("div");
+	moreBtn.className = "moreVerticalBtn";
+	
+	is_active = document.createElement("a");
+	is_active.innerHTML = friend.is_active == true ? "online" : "offline";
+	is_active.style.setProperty("color", friend.is_active == true ? "green" : "red");
+	is_active.style.setProperty("text-align", "center");
+	
+	friendContainer.appendChild(pfp);
+	friendContainer.appendChild(friendName);
+	friendContainer.appendChild(is_active);
+	friendContainer.appendChild(moreBtn);
+	friendListContainer.appendChild(friendContainer);
+}
+
 function checkUpdate(){
 	if (currentPage == "friends"){
 		fetch('/api/user/current', {
@@ -109,34 +140,7 @@ function checkUpdate(){
 					friendListContainer.innerHTML = "";
 					friendRequestPopup.innerHTML = "";
 					Object.keys(friends).forEach(function(key) {
-						friendContainer = document.createElement("div");
-						friendContainer.className = "friendContainer"
-						friendContainer.id = friends[key].friend_code;
-						pfp = document.createElement("img");
-						pfp.className = "profilePicture";
-						if (friends[key].pfp != ""){
-							var rawPfp = friends[key].pfp;
-							if (rawPfp.startsWith('https://'))
-								pfp.setAttribute("src", `${rawPfp}`);
-							else
-								pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-						}
-						friendName = document.createElement("a");
-						friendName.innerHTML = friends[key].display;
-						
-						moreBtn = document.createElement("div");
-						moreBtn.className = "moreVerticalBtn";
-						
-						is_active = document.createElement("a");
-						is_active.innerHTML = friends[key].is_active == true ? "online" : "offline";
-						is_active.style.setProperty("color", friends[key].is_active == true ? "green" : "red");
-						is_active.style.setProperty("text-align", "center");
-						
-						friendContainer.appendChild(pfp);
-						friendContainer.appendChild(friendName);
-						friendContainer.appendChild(is_active);
-						friendContainer.appendChild(moreBtn);
-						friendListContainer.appendChild(friendContainer);
+						createFriendContainer(friends[key]);
 					});
 					var friends_request = text.friend_request;
 					notificationDot = document.getElementById("notificationDot");
