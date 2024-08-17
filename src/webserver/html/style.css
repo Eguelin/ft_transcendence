@@ -725,8 +725,7 @@ a {
 	mask-repeat:no-repeat;
 }
 
-.moreVerticalBtn{
-	mask-image:url("svg/more-vertical.svg");
+.moreBtn, .removeFriendBtn, .blockFriendBtn{
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
@@ -735,8 +734,46 @@ a {
 	mask-repeat:no-repeat;
 }
 
-.moreVerticalBtn:focus, .moreVerticalBtn:hover{
-	background: var(--option-hover-text-rgb);
+.moreBtn{
+	mask-image: url("svg/more-vertical.svg");
+}
+
+.removeFriendBtn{
+	mask-image:url("svg/minus-circle.svg");
+}
+
+.removeFriendBtn:focus, .removeFriendBtn:hover, .blockFriendBtn:focus, .blockFriendBtn:hover{
+	background: red;
+}
+
+.blockFriendBtn{
+	mask-image: url("svg/checkbox-cross.svg");
+}
+
+.friendsOptionContainer{
+	width: 10vmin;
+}
+
+.friendsOptionContainer:hover .moreBtn{
+	display: none;
+}
+
+.friendsOptionContainer:hover .friendsOption{
+	display: flex;
+}
+
+.friendsOption{
+	display: none;
+}
+
+.friendsOption div{
+	margin-right: 1.5vmin;
+}
+
+.friendContainer .friendStatus{
+	text-align: center;
+	width: min-content;
+	margin-right: 1.5vmin;
 }
 
 #deleteFriendPopup{

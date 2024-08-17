@@ -104,19 +104,38 @@ function createFriendContainer(friend){
 	}
 	friendName = document.createElement("a");
 	friendName.innerHTML = friend.display;
+
+	friendsOptionContainer = document.createElement("div");
+	friendsOptionContainer.className = "friendsOptionContainer"
+
+	friendsOption = document.createElement("div");
+	friendsOption.className = "friendsOption"
 	
+
 	moreBtn = document.createElement("div");
-	moreBtn.className = "moreVerticalBtn";
+	moreBtn.className = "moreBtn";
+
+	friendsOptionContainer.appendChild(moreBtn);
+	friendsOptionContainer.appendChild(friendsOption);
+
+	removeFriendBtn = document.createElement("div");
+	removeFriendBtn.className = "removeFriendBtn";
+	
+	blockFriendBtn = document.createElement("div");
+	blockFriendBtn.className = "blockFriendBtn";
+
+	friendsOption.appendChild(removeFriendBtn);
+	friendsOption.appendChild(blockFriendBtn);
 	
 	is_active = document.createElement("a");
 	is_active.innerHTML = friend.is_active == true ? "online" : "offline";
+	is_active.className = "friendStatus";
 	is_active.style.setProperty("color", friend.is_active == true ? "green" : "red");
-	is_active.style.setProperty("text-align", "center");
 	
 	friendContainer.appendChild(pfp);
 	friendContainer.appendChild(friendName);
 	friendContainer.appendChild(is_active);
-	friendContainer.appendChild(moreBtn);
+	friendContainer.appendChild(friendsOptionContainer);
 	friendListContainer.appendChild(friendContainer);
 }
 
@@ -174,10 +193,10 @@ function checkUpdate(){
 					});
 					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
 					rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
-					moreBtn = document.querySelectorAll(".moreVerticalBtn");
+					removeFriendBtn = document.querySelectorAll(".removeFriendBtn");
 					
-					for (var i = 0; i < moreBtn.length; i++){
-						moreBtn[i].addEventListener("click", (e) => {
+					for (var i = 0; i < removeFriendBtn.length; i++){
+						removeFriendBtn[i].addEventListener("click", (e) => {
 							deleteFriendPopup.style.setProperty("display", "flex");
 							deleteFriendPopup.className = e.srcElement.parentElement.id;
 
