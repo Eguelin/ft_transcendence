@@ -24,6 +24,10 @@ class Migration(migrations.Migration):
                 ('language_pack', models.CharField(max_length=40, default="lang/EN_US.json")),
                 ('display_name', models.CharField(max_length=15)),
             	('friend_code', models.CharField(max_length=20, null=True)),
+                ('friends', models.ManyToManyField(related_name='friends_list', to=settings.AUTH_USER_MODEL)),
+                ('friends_request', models.ManyToManyField(related_name='friends_request_list', to=settings.AUTH_USER_MODEL)),
+                ('is_active', models.BooleanField(default=False)),
+                ('blocked_users', models.ManyToManyField(related_name='block_users_list', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

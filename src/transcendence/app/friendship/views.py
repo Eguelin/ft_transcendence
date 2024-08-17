@@ -18,6 +18,8 @@ def send_friend_request(request):
 		try:
 			new_friend = customModels.Profile.objects.get(friend_code=code).user
 			user = request.user
+			if (new_friend.profile.blocked_users.filter(pk=user.pk)).exists():
+				return JsonResponse({'message': 'User blocked you'})
 			if (user.profile.friends_request.filter(pk=new_friend.pk)).exists():
 				new_friend.profile.friends.add(user)
 				new_friend.save()
@@ -28,7 +30,7 @@ def send_friend_request(request):
 			elif not ((new_friend.profile.friends_request.filter(pk=user.pk)).exists()):
 				new_friend.profile.friends_request.add(user)
 				new_friend.save()
-				return JsonResponse({'message': 'Reqyest succesfully sent'})
+				return JsonResponse({'message': 'Request succesfully sent'})
 			else :
 				return JsonResponse({'message': 'Request already sent'})
 		except:
@@ -86,6 +88,26 @@ def remove_friend(request):
 			friend.save();
 			user.profile.friends.remove(friend)
 			user.save()
+			return JsonResponse({'message': 'Succesfully added friend'})
+		except:
+			return JsonResponse({'message': 'Can\'t find user'}, status=400)
+	else:
+		return JsonResponse({'username': None}, status=400)
+
+def block_friend(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	if request.user.is_authenticated:
+		data = json.loads(request.body)
+		code = data['code']
+		try:
+			ennemy = customModels.Profile.objects.get(friend_code=code).user
+			user = request.user
+			ennemy.profile.friends.remove(user);
+			ennemy.save();
+			user.profile.friends.remove(ennemy)
+			user.save()
+			user.profile.blocked_users.add(ennemy);
 			return JsonResponse({'message': 'Succesfully added friend'})
 		except:
 			return JsonResponse({'message': 'Can\'t find user'}, status=400)

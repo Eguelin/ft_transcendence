@@ -144,6 +144,8 @@ function createFriendContainer(friend){
 	blockFriendBtn = document.createElement("div");
 	blockFriendBtn.className = "blockFriendBtn";
 
+	friendsOption.id = friend.friend_code;
+
 	friendsOption.appendChild(removeFriendBtn);
 	friendsOption.appendChild(blockFriendBtn);
 	
