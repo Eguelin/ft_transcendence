@@ -106,9 +106,24 @@ def block_friend(request):
 			ennemy.profile.friends.remove(user);
 			ennemy.save();
 			user.profile.friends.remove(ennemy)
-			user.save()
 			user.profile.blocked_users.add(ennemy);
-			return JsonResponse({'message': 'Succesfully added friend'})
+			user.save()
+			return JsonResponse({'message': 'Succesfully blocked user'})
+		except:
+			return JsonResponse({'message': 'Can\'t find user'}, status=400)
+	else:
+		return JsonResponse({'username': None}, status=400)
+
+def unblock_user(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	if request.user.is_authenticated:
+		data = json.loads(request.body)
+		code = data['code']
+		try:
+			request.user.profile.blocked_users.remove(customModels.Profile.objects.get(friend_code=code).user)
+			request.user.save()
+			return JsonResponse({'message': 'Succesfully unblocked user'})
 		except:
 			return JsonResponse({'message': 'Can\'t find user'}, status=400)
 	else:
