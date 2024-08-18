@@ -1,20 +1,58 @@
 friendCodePopup = document.getElementById("friendCodePopup");
-friendRequestPopup = document.getElementById("friendRequestPopup");
+//friendRequestPopup = document.getElementById("friendRequestPopup");
 deleteRequestPopup = document.getElementById("deleteRequestPopup");
 blockFriendPopup = document.getElementById("blockFriendPopup");
 popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
-pendingRequestBtn = document.getElementById("pendingRequestBtn");
+//pendingRequestBtn = document.getElementById("pendingRequestBtn");
 inputCode = document.getElementById("inputCode");
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
-friendListContainer = document.getElementById("friendList");
+allFriendListContainer = document.getElementById("allFriendList");
+onlineFriendListContainer = document.getElementById("onlineFriendList");
+pendingFriendRequestListContainer = document.getElementById("pendingFriendRequestList");
+blockedListContainer = document.getElementById("blockedList");
 friendInfo = document.getElementById("friendInfo");
+
+
+friendSlides = document.querySelectorAll(".friendSlide");
+slideSelector = document.querySelectorAll(".slideSelector");
+var slideIdx = 0;
+friendSlides[slideIdx].className = `${friendSlides[slideIdx].className} activeSlide`
+slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`
+
+window.addEventListener("keydown", (e) => {
+	let i;
+	if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
+		friendSlides[slideIdx].className = "friendSlide";
+		slideSelector[slideIdx].className = "slideSelector";
+		if (e.key == "ArrowLeft")
+			slideIdx -= 1;
+		else
+			slideIdx += 1;
+		if (slideIdx > friendSlides.length - 1) 
+			slideIdx = 0;
+		if (slideIdx < 0) 
+			slideIdx = friendSlides.length - 1;
+		friendSlides[slideIdx].className = `${friendSlides[slideIdx].className} activeSlide`
+		slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`		
+	}
+})
+
+Object.keys(slideSelector).forEach(function(key) {
+	slideSelector[key].addEventListener("click", (e) => {
+		friendSlides[slideIdx].className = "friendSlide";
+		slideSelector[slideIdx].className = "slideSelector";
+		slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
+		friendSlides[slideIdx].className = `${friendSlides[slideIdx].className} activeSlide`
+		slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`		
+	})
+})
 
 
 document.addEventListener("click", (e) => {
 	if (e.target.parentElement == null || e.target.id == "popupBg"){
 		friendCodePopup.style.setProperty("display", "none");
-		friendRequestPopup.style.setProperty("display", "none");
+		//friendRequestPopup.style.setProperty("display", "none");
 		deleteFriendPopup.style.setProperty("display", "none");
 		blockFriendPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
@@ -30,17 +68,7 @@ document.addEventListener("click", (e) => {
 		bg.style.top = `${-pos.top}px`;
 		friendCodePopup.before(bg)
 	}
-	if (e.target.id == "pendingRequestBtn") {
-		if (friendRequestPopup.innerHTML != ""){
-			friendRequestPopup.style.setProperty("display", "block");
-			var bg = document.createElement("div");
-			bg.id = "popupBg";
-			pos = friendInfo.getBoundingClientRect();
-			bg.style.left = `${-pos.left}px`;
-			bg.style.top = `${-pos.top}px`;
-			friendRequestPopup.before(bg)
-		}
-	}
+
 	if (e.target.id == "sendFriendRequestBtn"){
 		const data = {code: inputCode.value};
 		fetch('/api/user/send_friend_request', {
@@ -100,7 +128,7 @@ window.addEventListener("resize", (e) => {
 document.addEventListener("keydown", (e) => {
 	if (e.key == "Escape"){
 		friendCodePopup.style.setProperty("display", "none");
-		friendRequestPopup.style.setProperty("display", "none");
+		//friendRequestPopup.style.setProperty("display", "none");
 		deleteFriendPopup.style.setProperty("display", "none");
 		blockFriendPopup.style.setProperty("display", "none");
 		var bg = document.getElementById("popupBg");
@@ -158,7 +186,9 @@ function createFriendContainer(friend){
 	friendContainer.appendChild(friendName);
 	friendContainer.appendChild(is_active);
 	friendContainer.appendChild(friendsOptionContainer);
-	friendListContainer.appendChild(friendContainer);
+	if (friend.is_active == true)
+		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
+	allFriendListContainer.appendChild(friendContainer);
 }
 
 function checkUpdate(){
@@ -178,14 +208,14 @@ function checkUpdate(){
 					loadCurrentLang();
 					friendCodePopup.lastElementChild.innerHTML = text.friend_code;
 					var friends = text.friends;
-					friendListContainer.innerHTML = "";
-					friendRequestPopup.innerHTML = "";
+					allFriendListContainer.innerHTML = "";
+//					friendRequestPopup.innerHTML = "";
 					Object.keys(friends).forEach(function(key) {
 						createFriendContainer(friends[key]);
 					});
 					var friends_request = text.friend_request;
-					notificationDot = document.getElementById("notificationDot");
-					notificationDot.style.setProperty("display", Object.keys(friends_request).length > 0 ? "block" : "none");
+					/*notificationDot = document.getElementById("notificationDot");
+					notificationDot.style.setProperty("display", Object.keys(friends_request).length > 0 ? "block" : "none");*/
 					Object.keys(friends_request).forEach(function(key) {
 						friendContainer = document.createElement("div");
 						friendContainer.className = "friendContainer"
@@ -211,7 +241,7 @@ function checkUpdate(){
 						rejectBtn.className = "rejectRequestBtn";
 						friendContainer.appendChild(rejectBtn);
 						
-						friendRequestPopup.appendChild(friendContainer);
+						pendingFriendRequestListContainer.appendChild(friendContainer);
 					});
 					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
 					rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
@@ -254,7 +284,7 @@ function checkUpdate(){
 								body: JSON.stringify(data),
 								credentials: 'include'
 							})
-							const parent = e.srcElement.parentElement;
+							/*const parent = e.srcElement.parentElement;
 							friendContainer = document.createElement("div");
 							friendContainer.className = "friendContainer"
 							pfp = document.createElement("img");
@@ -264,16 +294,16 @@ function checkUpdate(){
 							friendName.innerHTML = parent.children[1].innerHTML;
 							friendContainer.appendChild(pfp);
 							friendContainer.appendChild(friendName);
-							friendListContainer.appendChild(friendContainer);
+							allFriendListContainer.appendChild(friendContainer);
 							
-							e.srcElement.parentElement.remove();
-							if (friendRequestPopup.innerHTML == ""){
+							e.srcElement.parentElement.remove();*/
+							/*if (friendRequestPopup.innerHTML == ""){
 								friendRequestPopup.style.setProperty("display", "none");
 								notificationDot.style.setProperty("display", "none");
 								var bg = document.getElementById("popupBg");
 								if (bg != null)
 									bg.remove();
-							}
+							}*/
 						})
 						rejectRequestBtn[i].addEventListener("click", (e) => {
 							const data = {code: e.srcElement.parentElement.id};
@@ -284,7 +314,7 @@ function checkUpdate(){
 								},
 								body: JSON.stringify(data),
 								credentials: 'include'
-							})
+							})/*
 							e.srcElement.parentElement.remove();
 							if (friendRequestPopup.innerHTML == ""){
 								friendRequestPopup.style.setProperty("display", "none");
@@ -292,7 +322,7 @@ function checkUpdate(){
 								var bg = document.getElementById("popupBg");
 								if (bg != null)
 									bg.remove();
-							}
+							}*/
 						})
 					}
 					

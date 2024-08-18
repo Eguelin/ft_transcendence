@@ -835,3 +835,23 @@ a {
 		opacity: 100%;
 	}
 }
+
+#friendSlideSelector{
+	color: var(--main-text-rgb);
+	display: flex;
+}
+#friendSlideSelector div{
+	flex: 1;
+}
+
+.friendSlide{
+	display: none;
+}
+
+.activeSlide{
+	display: block !important;
+}
+
+.activeSelector{
+	border-bottom: 2px solid var(--main-text-rgb);
+}
