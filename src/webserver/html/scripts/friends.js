@@ -233,14 +233,28 @@ function checkUpdate(){
 						friendName.innerHTML = friends_request[key].display;
 						friendContainer.appendChild(pfp);
 						friendContainer.appendChild(friendName);
+
+						is_active = document.createElement("a");
+						is_active.innerHTML = friends_request[key].is_active == true ? "online" : "offline";
+						is_active.className = "friendStatus";
+						is_active.style.setProperty("color", friends_request[key].is_active == true ? "green" : "red");
+						friendContainer.appendChild(is_active);
+
+						requestOptionContainer = document.createElement("div");
+						requestOptionContainer.className = "requestOptionContainer";
+
 						acceptBtn = document.createElement("div");
 						acceptBtn.className = "acceptRequestBtn";
-						friendContainer.appendChild(acceptBtn);
+						requestOptionContainer.appendChild(acceptBtn);
 						
 						rejectBtn = document.createElement("div");
 						rejectBtn.className = "rejectRequestBtn";
-						friendContainer.appendChild(rejectBtn);
+						requestOptionContainer.appendChild(rejectBtn);
+
+						requestOptionContainer.id = friends_request[key].friend_code;
 						
+						friendContainer.appendChild(requestOptionContainer);
+
 						pendingFriendRequestListContainer.appendChild(friendContainer);
 					});
 					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
