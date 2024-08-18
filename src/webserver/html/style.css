@@ -610,7 +610,7 @@ a {
 	text-align: center;
 	display: flex;
 	flex-flow: column;
-	width: fit-content;
+	width: -webkit-fill-available;
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
@@ -670,6 +670,7 @@ a {
 
 #sendFriendRequestBtn{
 	border-radius: 0 0 1.5vw 0;
+	width: min-content;
 }
 
 #friendCodeBtn{
@@ -696,6 +697,7 @@ a {
 
 .friendContainer a{
 	margin-left: 1vw;
+	flex: auto;
 	width: 15ch;
 	text-align: left;
 }
@@ -708,8 +710,9 @@ a {
 .acceptRequestBtn{
 	mask-image:url("svg/check-mark-1.svg");
 	background:green;
-	height:10vh;
+	height:5vw;
 	width:5vw;
+	margin-right: 1.5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -718,8 +721,9 @@ a {
 .rejectRequestBtn{
 	mask-image:url("svg/cross-17.svg");
 	background:red;
-	height:10vh;
+	height:5vw;
 	width:5vw;
+	margin-right: 1.5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -727,11 +731,16 @@ a {
 
 .moreBtn, .removeFriendBtn, .blockFriendBtn{
 	background:var(--main-text-rgb);
-	height:10vh;
+	height:5vw;
 	width:5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+}
+
+.moreBtn{
+	width: 10vw;
+	mask-position: 0;
 }
 
 .moreBtn{
@@ -750,8 +759,13 @@ a {
 	mask-image: url("svg/checkbox-cross.svg");
 }
 
-.friendsOptionContainer{
+.friendsOptionContainer, .requestOptionContainer{
 	width: 10vmin;
+	flex: auto;
+}
+
+.requestOptionContainer {
+	display: flex;
 }
 
 .friendsOptionContainer:hover .moreBtn{
@@ -771,8 +785,7 @@ a {
 }
 
 .friendContainer .friendStatus{
-	text-align: center;
-	width: min-content;
+	flex: auto;
 	margin-right: 1.5vmin;
 }
 
@@ -847,6 +860,11 @@ a {
 
 .friendSlide{
 	display: none;
+	background: var(--hover-text-rgb);
+	border: 1px solid var(--main-text-rgb);
+	border-radius: 2vw;
+	margin-top: 2vmin;
+	min-height: 1vh;
 }
 
 .activeSlide{
@@ -855,11 +873,4 @@ a {
 
 .activeSelector{
 	border-bottom: 2px solid var(--main-text-rgb);
-}
-
-#onlineFriendList{
-	background: var(--hover-text-rgb);
-	border: 1px solid var(--main-text-rgb);
-	border-radius: 2vw;
-	margin-top: 2vmin;
 }
