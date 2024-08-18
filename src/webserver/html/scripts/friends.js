@@ -257,6 +257,15 @@ function createBlockedUserContainer(user){
 	is_active.style.setProperty("color", user.is_active == true ? "green" : "red");
 	friendContainer.appendChild(is_active);
 
+
+	unblockBtn = document.createElement("div");
+	unblockBtn.className = "unblockBtn";
+
+
+	requestOptionContainer = document.createElement("div");
+	requestOptionContainer.className = "requestOptionContainer";
+	requestOptionContainer.appendChild(unblockBtn);
+	friendContainer.appendChild(requestOptionContainer);
 	blockedListContainer.appendChild(friendContainer);
 }
 
