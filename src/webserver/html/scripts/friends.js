@@ -191,6 +191,75 @@ function createFriendContainer(friend){
 	allFriendListContainer.appendChild(friendContainer);
 }
 
+function createFriendRequestContainer(user){
+	friendContainer = document.createElement("div");
+	friendContainer.className = "friendContainer"
+	friendContainer.id = user.friend_code;
+	pfp = document.createElement("img");
+	pfp.className = "profilePicture";
+	if (user.pfp != ""){
+		var rawPfp = user.pfp;
+		if (rawPfp.startsWith('https://'))
+			pfp.setAttribute("src", `${rawPfp}`);
+		else
+			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+	}
+	friendName = document.createElement("a");
+	friendName.innerHTML = user.display;
+	friendContainer.appendChild(pfp);
+	friendContainer.appendChild(friendName);
+
+	is_active = document.createElement("a");
+	is_active.innerHTML = user.is_active == true ? "online" : "offline";
+	is_active.className = "friendStatus";
+	is_active.style.setProperty("color", user.is_active == true ? "green" : "red");
+	friendContainer.appendChild(is_active);
+
+	requestOptionContainer = document.createElement("div");
+	requestOptionContainer.className = "requestOptionContainer";
+
+	acceptBtn = document.createElement("div");
+	acceptBtn.className = "acceptRequestBtn";
+	requestOptionContainer.appendChild(acceptBtn);
+	
+	rejectBtn = document.createElement("div");
+	rejectBtn.className = "rejectRequestBtn";
+	requestOptionContainer.appendChild(rejectBtn);
+
+	requestOptionContainer.id = user.friend_code;
+	
+	friendContainer.appendChild(requestOptionContainer);
+
+	pendingFriendRequestListContainer.appendChild(friendContainer);
+}
+
+function createBlockedUserContainer(user){
+	friendContainer = document.createElement("div");
+	friendContainer.className = "friendContainer"
+	friendContainer.id = user.friend_code;
+	pfp = document.createElement("img");
+	pfp.className = "profilePicture";
+	if (user.pfp != ""){
+		var rawPfp = user.pfp;
+		if (rawPfp.startsWith('https://'))
+			pfp.setAttribute("src", `${rawPfp}`);
+		else
+			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+	}
+	friendName = document.createElement("a");
+	friendName.innerHTML = user.display;
+	friendContainer.appendChild(pfp);
+	friendContainer.appendChild(friendName);
+
+	is_active = document.createElement("a");
+	is_active.innerHTML = user.is_active == true ? "online" : "offline";
+	is_active.className = "friendStatus";
+	is_active.style.setProperty("color", user.is_active == true ? "green" : "red");
+	friendContainer.appendChild(is_active);
+
+	blockedListContainer.appendChild(friendContainer);
+}
+
 function checkUpdate(){
 	if (currentPage == "friends"){
 		fetch('/api/user/current', {
@@ -214,48 +283,13 @@ function checkUpdate(){
 						createFriendContainer(friends[key]);
 					});
 					var friends_request = text.friend_request;
-					/*notificationDot = document.getElementById("notificationDot");
-					notificationDot.style.setProperty("display", Object.keys(friends_request).length > 0 ? "block" : "none");*/
 					Object.keys(friends_request).forEach(function(key) {
-						friendContainer = document.createElement("div");
-						friendContainer.className = "friendContainer"
-						friendContainer.id = friends_request[key].friend_code;
-						pfp = document.createElement("img");
-						pfp.className = "profilePicture";
-						if (friends_request[key].pfp != ""){
-							var rawPfp = friends_request[key].pfp;
-							if (rawPfp.startsWith('https://'))
-								pfp.setAttribute("src", `${rawPfp}`);
-							else
-								pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-						}
-						friendName = document.createElement("a");
-						friendName.innerHTML = friends_request[key].display;
-						friendContainer.appendChild(pfp);
-						friendContainer.appendChild(friendName);
+						createFriendRequestContainer(friends_request[key]);
+					});
 
-						is_active = document.createElement("a");
-						is_active.innerHTML = friends_request[key].is_active == true ? "online" : "offline";
-						is_active.className = "friendStatus";
-						is_active.style.setProperty("color", friends_request[key].is_active == true ? "green" : "red");
-						friendContainer.appendChild(is_active);
-
-						requestOptionContainer = document.createElement("div");
-						requestOptionContainer.className = "requestOptionContainer";
-
-						acceptBtn = document.createElement("div");
-						acceptBtn.className = "acceptRequestBtn";
-						requestOptionContainer.appendChild(acceptBtn);
-						
-						rejectBtn = document.createElement("div");
-						rejectBtn.className = "rejectRequestBtn";
-						requestOptionContainer.appendChild(rejectBtn);
-
-						requestOptionContainer.id = friends_request[key].friend_code;
-						
-						friendContainer.appendChild(requestOptionContainer);
-
-						pendingFriendRequestListContainer.appendChild(friendContainer);
+					var blocked_users = text.blocked_users
+					Object.keys(blocked_users).forEach(function(key) {
+						createBlockedUserContainer(blocked_users[key]);
 					});
 					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
 					rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
