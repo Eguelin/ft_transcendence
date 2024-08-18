@@ -839,6 +839,7 @@ a {
 #friendSlideSelector{
 	color: var(--main-text-rgb);
 	display: flex;
+	margin-top: 2vmin;
 }
 #friendSlideSelector div{
 	flex: 1;
@@ -854,4 +855,11 @@ a {
 
 .activeSelector{
 	border-bottom: 2px solid var(--main-text-rgb);
+}
+
+#onlineFriendList{
+	background: var(--hover-text-rgb);
+	border: 1px solid var(--main-text-rgb);
+	border-radius: 2vw;
+	margin-top: 2vmin;
 }
