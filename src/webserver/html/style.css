@@ -729,7 +729,7 @@ a {
 	mask-repeat:no-repeat;
 }
 
-.moreBtn, .removeFriendBtn, .blockFriendBtn{
+.moreBtn, .removeFriendBtn, .blockFriendBtn, .unblockBtn{
 	background:var(--main-text-rgb);
 	height:5vw;
 	width:5vw;
@@ -741,9 +741,6 @@ a {
 .moreBtn{
 	width: 10vw;
 	mask-position: 0;
-}
-
-.moreBtn{
 	mask-image: url("svg/more-vertical.svg");
 }
 
@@ -759,9 +756,14 @@ a {
 	mask-image: url("svg/checkbox-cross.svg");
 }
 
+.unblockBtn{
+	mask-image: url("svg/unblock.svg");
+	margin-right: 1.5vw;
+}
+
 .friendsOptionContainer, .requestOptionContainer{
 	width: 10vmin;
-	flex: auto;
+	flex: none;
 }
 
 .requestOptionContainer {
