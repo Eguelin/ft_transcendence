@@ -30,4 +30,5 @@ urlpatterns = [
     path('user/reject_friend_request', friendship_view.reject_friend_request),
     path('user/remove_friend', friendship_view.remove_friend),
     path('user/block_friend', friendship_view.block_friend),
+    path('user/unblock_user', friendship_view.unblock_user),
 ]
