@@ -201,8 +201,10 @@ def current_user(request):
 			raw_img = ""
 		friends_list = request.user.profile.friends.all()
 		friends_request_list = request.user.profile.friends_request.all()
+		blocked_list = request.user.profile.blocked_users.all()
 		friend_json = {}
 		friend_request_json = {}
+		blocked_json = {}
 		i = 0
 		for e in friends_list:
 			friend_json[i] = get_user_json(e)
@@ -212,6 +214,11 @@ def current_user(request):
 		for e in friends_request_list:
 			friend_request_json[i] = get_user_json(e)
 			i += 1
+
+		i = 0
+		for e in blocked_list:
+			blocked_json[i] = get_user_json(e)
+			i += 1
 		return JsonResponse({'username': request.user.username,
 			'display': request.user.profile.display_name,
 			'is_dark_theme': request.user.profile.dark_theme,
@@ -220,6 +227,7 @@ def current_user(request):
 			'friend_code': request.user.profile.friend_code,
 			'friends': friend_json,
 			'friend_request': friend_request_json,
+			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active})
 	else:
 		return JsonResponse({'username': None}, status=400)
