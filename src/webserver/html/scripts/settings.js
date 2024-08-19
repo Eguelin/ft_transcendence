@@ -20,39 +20,20 @@ for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
 settingsSlides[slideIdx].style.display = "block";
 
-window.addEventListener("keydown", (e) => {
-	let i;
-	if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
-		if (e.key == "ArrowLeft")
-			slideIdx -= 1;
-		else
-			slideIdx += 1;
-		if (slideIdx > settingsSlides.length - 1) 
-			slideIdx = 0;
-		if (slideIdx < 0) 
-			slideIdx = settingsSlides.length - 1;
-		for (i = 0; i < settingsSlides.length; i++)
-			settingsSlides[i].style.display = "none";
-		settingsSlides[slideIdx].style.display = "block";
-	}
-})
-
 rightSlideBtn.addEventListener("click", () => {
-	let i;
 	slideIdx += 1;
 	if (slideIdx > settingsSlides.length - 1) 
 		slideIdx = 0;
-	for (i = 0; i < settingsSlides.length; i++)
+	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
 	settingsSlides[slideIdx].style.display = "block";
 });
 
 leftSlideBtn.addEventListener("click", () => {
-	let i;
 	slideIdx -= 1;
 	if (slideIdx < 0 ) 
 		slideIdx = settingsSlides.length - 1;
-	for (i = 0; i < settingsSlides.length; i++)
+	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
 	settingsSlides[slideIdx].style.display = "block";
 });
