@@ -62,6 +62,10 @@
 		"confirmDeleteQuestion" : "Are you sure you want to remove this friend?",
 		"confirmBlockQuestion" : "Are you sure you want to block this friend?",
 		"confirmDelete" : "I'm sure",
-		"confirmBlock" : "I'm sure"
+		"confirmBlock" : "I'm sure",
+		"onlineFriendSelectorText": "Online",
+		"allFriendSelectorText": "All",
+		"pendingFriendRequestSelectorText": "Pending",
+		"blockedSelectorText": "Blocked"
 	}
 }

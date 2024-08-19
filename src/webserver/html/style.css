@@ -869,10 +869,20 @@ a {
 	min-height: 1vh;
 }
 
+.slideSelector{
+	font-size: 1.5vmin;
+}
+
 .activeSlide{
 	display: block !important;
 }
 
 .activeSelector{
+	padding-bottom: 2px;
 	border-bottom: 2px solid var(--main-text-rgb);
+}
+
+.userSlideCount{
+	font-size: 1vmin;
+	opacity: 0.9;
 }

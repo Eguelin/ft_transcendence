@@ -59,10 +59,13 @@
 		"friendCode" : "Mein Freundescode",
 		"inputCode" : "Freundescode",
 		"sendFriendRequestBtn" : "Schicken",
-		"pendingRequestBtn" : "Ausstehende Freundschaftsanfrage",
 		"confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
 		"confirmBlockQuestion" : "Möchten Sie diesen Freund wirklich blockieren?",
 		"confirmDelete" : "Ich bin sicher",
-		"confirmBlock" : "Ich bin sicher"
+		"confirmBlock" : "Ich bin sicher",
+		"onlineFriendSelectorText": "Online",
+		"allFriendSelectorText": "Alle",
+		"pendingFriendRequestSelectorText": "Ausstehend",
+		"blockedSelectorText": "Blockiert"
 	}
 }
