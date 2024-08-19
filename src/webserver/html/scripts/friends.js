@@ -138,6 +138,10 @@ function createFriendContainer(friend){
 	friendContainer = document.createElement("div");
 	friendContainer.className = "friendContainer"
 	friendContainer.id = friend.friend_code;
+	pfpContainer = document.createElement("div");
+	pfpContainer.className = "pfpContainer";
+	pfpStatus = document.createElement("div");
+	pfpStatus.className = friend.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (friend.pfp != ""){
@@ -147,6 +151,9 @@ function createFriendContainer(friend){
 		else
 			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
 	}
+	pfpContainer.appendChild(pfp);
+	pfpContainer.appendChild(pfpStatus)
+
 	friendName = document.createElement("a");
 	friendName.innerHTML = friend.display;
 
@@ -173,15 +180,15 @@ function createFriendContainer(friend){
 
 	friendsOption.appendChild(removeFriendBtn);
 	friendsOption.appendChild(blockFriendBtn);
-	
+	/*
 	is_active = document.createElement("a");
 	is_active.innerHTML = friend.is_active == true ? "online" : "offline";
 	is_active.className = "friendStatus";
 	is_active.style.setProperty("color", friend.is_active == true ? "green" : "red");
-	
-	friendContainer.appendChild(pfp);
+	*/
+	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
-	friendContainer.appendChild(is_active);
+	//friendContainer.appendChild(is_active);
 	friendContainer.appendChild(friendsOptionContainer);
 	if (friend.is_active == true){	
 		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
@@ -193,6 +200,10 @@ function createFriendRequestContainer(user){
 	friendContainer = document.createElement("div");
 	friendContainer.className = "friendContainer"
 	friendContainer.id = user.friend_code;
+	pfpContainer = document.createElement("div");
+	pfpContainer.className = "pfpContainer";
+	pfpStatus = document.createElement("div");
+	pfpStatus.className = user.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
@@ -202,16 +213,12 @@ function createFriendRequestContainer(user){
 		else
 			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
 	}
+	pfpContainer.appendChild(pfp);
+	pfpContainer.appendChild(pfpStatus)
 	friendName = document.createElement("a");
 	friendName.innerHTML = user.display;
-	friendContainer.appendChild(pfp);
+	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
-
-	is_active = document.createElement("a");
-	is_active.innerHTML = user.is_active == true ? "online" : "offline";
-	is_active.className = "friendStatus";
-	is_active.style.setProperty("color", user.is_active == true ? "green" : "red");
-	friendContainer.appendChild(is_active);
 
 	requestOptionContainer = document.createElement("div");
 	requestOptionContainer.className = "requestOptionContainer";
@@ -235,6 +242,11 @@ function createBlockedUserContainer(user){
 	friendContainer = document.createElement("div");
 	friendContainer.className = "friendContainer"
 	friendContainer.id = user.friend_code;
+
+	pfpContainer = document.createElement("div");
+	pfpContainer.className = "pfpContainer";
+	pfpStatus = document.createElement("div");
+	pfpStatus.className = friend.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
@@ -244,17 +256,13 @@ function createBlockedUserContainer(user){
 		else
 			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
 	}
+	pfpContainer.appendChild(pfp);
+	pfpContainer.appendChild(pfpStatus)
+
 	friendName = document.createElement("a");
 	friendName.innerHTML = user.display;
-	friendContainer.appendChild(pfp);
+	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
-
-	is_active = document.createElement("a");
-	is_active.innerHTML = user.is_active == true ? "online" : "offline";
-	is_active.className = "friendStatus";
-	is_active.style.setProperty("color", user.is_active == true ? "green" : "red");
-	friendContainer.appendChild(is_active);
-
 
 	unblockBtn = document.createElement("div");
 	unblockBtn.className = "unblockBtn";
@@ -285,16 +293,19 @@ function checkUpdate(){
 					loadCurrentLang();
 					friendCodePopup.lastElementChild.innerHTML = text.friend_code;
 					var friends = text.friends;
+					var friends_request = text.friend_request;
+					var blocked_users = text.blocked_users
 					allFriendListContainer.innerHTML = "";
+					onlineFriendListContainer.innerHTML = ""
+					pendingFriendRequestListContainer.innerHTML = ""
+					blockedListContainer.innerHTML = ""
 					Object.keys(friends).forEach(function(key) {
 						createFriendContainer(friends[key]);
 					});
-					var friends_request = text.friend_request;
 					Object.keys(friends_request).forEach(function(key) {
 						createFriendRequestContainer(friends_request[key]);
 					});
 
-					var blocked_users = text.blocked_users
 					Object.keys(blocked_users).forEach(function(key) {
 						createBlockedUserContainer(blocked_users[key]);
 					});
