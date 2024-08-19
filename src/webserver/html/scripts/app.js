@@ -264,3 +264,38 @@ swichTheme.addEventListener("keydown", (e) => {
 	}
 })
 
+window.addEventListener("keydown", (e) => {
+	if (currentPage == "friends"){
+		console.log("Friend event");
+		if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
+			friendSlides[friendSlideIdx].className = "friendSlide";
+			slideSelector[friendSlideIdx].className = "slideSelector";
+			if (e.key == "ArrowLeft")
+				friendSlideIdx -= 1;
+			else
+				friendSlideIdx += 1;
+			if (friendSlideIdx > friendSlides.length - 1) 
+				friendSlideIdx = 0;
+			if (friendSlideIdx < 0) 
+				friendSlideIdx = friendSlides.length - 1;
+			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`		
+		}
+	}
+	if (currentPage == "settings"){
+		console.log("Settings event");
+		if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
+			if (e.key == "ArrowLeft")
+				slideIdx -= 1;
+			else
+				slideIdx += 1;
+			if (slideIdx > settingsSlides.length - 1) 
+				slideIdx = 0;
+			if (slideIdx < 0) 
+				slideIdx = settingsSlides.length - 1;
+			for (let i = 0; i < settingsSlides.length; i++)
+				settingsSlides[i].style.display = "none";
+			settingsSlides[slideIdx].style.display = "block";
+		}
+	}
+})

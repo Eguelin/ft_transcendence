@@ -13,136 +13,124 @@ friendInfo = document.getElementById("friendInfo");
 
 friendSlides = document.querySelectorAll(".friendSlide");
 slideSelector = document.querySelectorAll(".slideSelector");
-var slideIdx = 0;
-friendSlides[slideIdx].className = `${friendSlides[slideIdx].className} activeSlide`
-slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`
-
-window.addEventListener("keydown", (e) => {
-	let i;
-	if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
-		friendSlides[slideIdx].className = "friendSlide";
-		slideSelector[slideIdx].className = "slideSelector";
-		if (e.key == "ArrowLeft")
-			slideIdx -= 1;
-		else
-			slideIdx += 1;
-		if (slideIdx > friendSlides.length - 1) 
-			slideIdx = 0;
-		if (slideIdx < 0) 
-			slideIdx = friendSlides.length - 1;
-		friendSlides[slideIdx].className = `${friendSlides[slideIdx].className} activeSlide`
-		slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`		
-	}
-})
+var friendSlideIdx = 0;
+friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 
 Object.keys(slideSelector).forEach(function(key) {
-	slideSelector[key].addEventListener("click", (e) => {
-		friendSlides[slideIdx].className = "friendSlide";
-		slideSelector[slideIdx].className = "slideSelector";
-		slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-		friendSlides[slideIdx].className = `${friendSlides[slideIdx].className} activeSlide`
-		slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`		
-	})
+	if (currentPage == "friends"){
+		slideSelector[key].addEventListener("click", (e) => {
+			friendSlides[friendSlideIdx].className = "friendSlide";
+			slideSelector[friendSlideIdx].className = "slideSelector";
+			friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
+			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`		
+		})
+	}
 })
 
 
 document.addEventListener("click", (e) => {
-	if (e.target.parentElement == null || e.target.id == "popupBg"){
-		friendCodePopup.style.setProperty("display", "none");
-		//friendRequestPopup.style.setProperty("display", "none");
-		deleteFriendPopup.style.setProperty("display", "none");
-		blockFriendPopup.style.setProperty("display", "none");
-		var bg = document.getElementById("popupBg");
-		if (bg != null)
-			bg.remove();
-	}
-	if (e.target.id == "friendCodeBtn") {
-		friendCodePopup.style.setProperty("display", "block");
-		var bg = document.createElement("div");
-		bg.id = "popupBg";
-		pos = friendInfo.getBoundingClientRect();
-		bg.style.left = `${-pos.left}px`;
-		bg.style.top = `${-pos.top}px`;
-		friendCodePopup.before(bg)
-	}
+	if (currentPage == "friends"){
+		if (e.target.parentElement == null || e.target.id == "popupBg"){
+			friendCodePopup.style.setProperty("display", "none");
+			deleteFriendPopup.style.setProperty("display", "none");
+			blockFriendPopup.style.setProperty("display", "none");
+			var bg = document.getElementById("popupBg");
+			if (bg != null)
+				bg.remove();
+		}
+		if (e.target.id == "friendCodeBtn") {
+			friendCodePopup.style.setProperty("display", "block");
+			var bg = document.createElement("div");
+			bg.id = "popupBg";
+			pos = friendInfo.getBoundingClientRect();
+			bg.style.left = `${-pos.left}px`;
+			bg.style.top = `${-pos.top}px`;
+			friendCodePopup.before(bg)
+		}
 
-	if (e.target.id == "sendFriendRequestBtn"){
-		const data = {code: inputCode.value};
-		fetch('/api/user/send_friend_request', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-	}
-	if (e.target.id == "confirmDelete"){
-		const data = {code: e.target.parentElement.className};
-		fetch('/api/user/remove_friend', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		var friend = document.getElementById(e.target.parentElement.className);
-		deleteFriendPopup.style.setProperty("display", "none");
-		var bg = document.getElementById("popupBg");
-		if (bg != null)
-			bg.remove();
-		friend.remove();
-	}
-	if (e.target.id == "confirmBlock"){
-		const data = {code: e.target.parentElement.className};
-		fetch('/api/user/block_friend', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		var friend = document.getElementById(e.target.parentElement.className);
-		blockFriendPopup.style.setProperty("display", "none");
-		var bg = document.getElementById("popupBg");
-		if (bg != null)
-			bg.remove();
-		friend.remove();
-	}
-	if (e.target.className == "unblockBtn"){
-		const data = {code: e.target.parentElement.id};
-		fetch('/api/user/unblock_user', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		e.target.parentElement.remove();
+		if (e.target.id == "sendFriendRequestBtn"){
+			const data = {code: inputCode.value};
+			fetch('/api/user/send_friend_request', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+		}
+		if (e.target.id == "confirmDelete"){
+			const data = {code: e.target.parentElement.className};
+			fetch('/api/user/remove_friend', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			var friend = document.getElementById(e.target.parentElement.className);
+			deleteFriendPopup.style.setProperty("display", "none");
+			var bg = document.getElementById("popupBg");
+			if (bg != null)
+				bg.remove();
+			friend.remove();
+		}
+		if (e.target.id == "confirmBlock"){
+			const data = {code: e.target.parentElement.className};
+			fetch('/api/user/block_friend', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			var friend = document.getElementById(e.target.parentElement.className);
+			blockFriendPopup.style.setProperty("display", "none");
+			var bg = document.getElementById("popupBg");
+			if (bg != null)
+				bg.remove();
+			friend.remove();
+		}
+		if (e.target.className == "unblockBtn"){
+			const data = {code: e.target.parentElement.id};
+			fetch('/api/user/unblock_user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			e.target.parentElement.remove();
+		}
 	}
 })
 
 window.addEventListener("resize", (e) => {
-	var bg = document.getElementById("popupBg");
-	if (bg != null){
-		pos = friendInfo.getBoundingClientRect();
-		bg.style.left = `${-pos.left}px`;
-		bg.style.top = `${-pos.top}px`;
+	if (currentPage == "friends"){
+		var bg = document.getElementById("popupBg");
+		if (bg != null){
+			pos = friendInfo.getBoundingClientRect();
+			bg.style.left = `${-pos.left}px`;
+			bg.style.top = `${-pos.top}px`;
+		}
 	}
 })
 
 document.addEventListener("keydown", (e) => {
-	if (e.key == "Escape"){
-		friendCodePopup.style.setProperty("display", "none");
-		//friendRequestPopup.style.setProperty("display", "none");
-		deleteFriendPopup.style.setProperty("display", "none");
-		blockFriendPopup.style.setProperty("display", "none");
-		var bg = document.getElementById("popupBg");
-		if (bg != null)
-			bg.remove();
+	if (currentPage == "friends"){
+		if (e.key == "Escape"){
+			friendCodePopup.style.setProperty("display", "none");
+			deleteFriendPopup.style.setProperty("display", "none");
+			blockFriendPopup.style.setProperty("display", "none");
+			var bg = document.getElementById("popupBg");
+			if (bg != null)
+				bg.remove();
+		}
 	}
 })
 
@@ -357,26 +345,6 @@ function checkUpdate(){
 								body: JSON.stringify(data),
 								credentials: 'include'
 							})
-							/*const parent = e.srcElement.parentElement;
-							friendContainer = document.createElement("div");
-							friendContainer.className = "friendContainer"
-							pfp = document.createElement("img");
-							pfp.className = "profilePicture";
-							pfp.setAttribute("src", parent.children[0].getAttribute("src"));
-							friendName = document.createElement("a");
-							friendName.innerHTML = parent.children[1].innerHTML;
-							friendContainer.appendChild(pfp);
-							friendContainer.appendChild(friendName);
-							allFriendListContainer.appendChild(friendContainer);
-							
-							e.srcElement.parentElement.remove();*/
-							/*if (friendRequestPopup.innerHTML == ""){
-								friendRequestPopup.style.setProperty("display", "none");
-								notificationDot.style.setProperty("display", "none");
-								var bg = document.getElementById("popupBg");
-								if (bg != null)
-									bg.remove();
-							}*/
 						})
 						rejectRequestBtn[i].addEventListener("click", (e) => {
 							const data = {code: e.srcElement.parentElement.id};
@@ -387,15 +355,7 @@ function checkUpdate(){
 								},
 								body: JSON.stringify(data),
 								credentials: 'include'
-							})/*
-							e.srcElement.parentElement.remove();
-							if (friendRequestPopup.innerHTML == ""){
-								friendRequestPopup.style.setProperty("display", "none");
-								notificationDot.style.setProperty("display", "none");
-								var bg = document.getElementById("popupBg");
-								if (bg != null)
-									bg.remove();
-							}*/
+							})
 						})
 					}
 					
