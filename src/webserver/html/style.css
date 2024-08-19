@@ -886,3 +886,30 @@ a {
 	font-size: 1vmin;
 	opacity: 0.9;
 }
+
+.pfpContainer{
+	display: flex;
+	position: relative;
+}
+
+.pfpStatusOnline, .pfpStatusOffline{
+	height:2.5vw;
+	width:2.5vw;
+	position:absolute;
+	bottom: 0px;
+	right: 0px;
+	transform: translate(50%);
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;	
+}
+
+.pfpStatusOffline{
+	mask-image:url("svg/circle.svg");
+	background: grey;
+}
+
+.pfpStatusOnline{
+	mask-image: url("svg/circle.svg");
+	background: green;
+}
