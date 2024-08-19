@@ -1,10 +1,8 @@
 friendCodePopup = document.getElementById("friendCodePopup");
-//friendRequestPopup = document.getElementById("friendRequestPopup");
 deleteRequestPopup = document.getElementById("deleteRequestPopup");
 blockFriendPopup = document.getElementById("blockFriendPopup");
 popupBg = document.getElementById("popupBg");
 friendCodeBtn = document.getElementById("friendCodeBtn");
-//pendingRequestBtn = document.getElementById("pendingRequestBtn");
 inputCode = document.getElementById("inputCode");
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 allFriendListContainer = document.getElementById("allFriendList");
@@ -12,7 +10,6 @@ onlineFriendListContainer = document.getElementById("onlineFriendList");
 pendingFriendRequestListContainer = document.getElementById("pendingFriendRequestList");
 blockedListContainer = document.getElementById("blockedList");
 friendInfo = document.getElementById("friendInfo");
-
 
 friendSlides = document.querySelectorAll(".friendSlide");
 slideSelector = document.querySelectorAll(".slideSelector");
@@ -198,8 +195,9 @@ function createFriendContainer(friend){
 	friendContainer.appendChild(friendName);
 	friendContainer.appendChild(is_active);
 	friendContainer.appendChild(friendsOptionContainer);
-	if (friend.is_active == true)
+	if (friend.is_active == true){	
 		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
+	}
 	allFriendListContainer.appendChild(friendContainer);
 }
 
@@ -318,6 +316,11 @@ function checkUpdate(){
 					blockFriendBtn = document.querySelectorAll(".blockFriendBtn");
 					unblockBtn = document.querySelectorAll(".unblockBtn");
 					
+					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
+					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
+
 					for (var i = 0; i < removeFriendBtn.length; i++){
 						removeFriendBtn[i].addEventListener("click", (e) => {
 							deleteFriendPopup.style.setProperty("display", "flex");
@@ -342,7 +345,7 @@ function checkUpdate(){
 							blockFriendPopup.before(bg);
 						})
 					}
-					
+
 					for (var i = 0; i < acceptRequestBtn.length; i++){
 						acceptRequestBtn[i].addEventListener("click", (e) => {
 							const data = {code: e.srcElement.parentElement.id};
