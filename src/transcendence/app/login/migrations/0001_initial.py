@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
             name='Profile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id42', models.IntegerField(default=0)),
                 ('dark_theme', models.BooleanField(default=True)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('profile_picture', models.TextField(default='profilePictures/defaults/default0.jpg')),
