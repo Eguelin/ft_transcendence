@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: llevasse <llevasse@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/28 17:47:48 by eguelin           #+#    #+#              #
-#    Updated: 2024/07/07 14:24:04 by llevasse         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 .PHONY: all clean fclean re down restart
 # .SILENT:
 
@@ -34,7 +22,8 @@ DB_DIR	= ~/goinfre/db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-	$(DC) up --build
+	$(DC) up --build -d
+	docker exec -it transcendence python3 manage.py migrate
 
 down:
 	$(DC) down
@@ -52,7 +41,6 @@ fclean: clean
     endif
 
 re: fclean all
-	docker exec -it transcendence python3 manage.py migrate
 
 $(DB_DIR):
 	mkdir -p $@
