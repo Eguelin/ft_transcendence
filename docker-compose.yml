@@ -36,8 +36,8 @@ services:
       - .env
     volumes:
       - ./src/transcendence/app:/app
-    command: wait-for-postgres $POSTGRES_HOST:$POSTGRES_PORT python manage.py runserver 0.0.0.0:8000 # use this command for development
-    # command: wait-for-postgres $POSTGRES_HOST:$POSTGRES_PORT gunicorn --bind 0.0.0.0:8000 transcendence.wsgi:application # use this command for production
+    command: start dev # use this command for development
+    # command: start prod # use this command for production
     networks:
       - transcendence
     depends_on:
