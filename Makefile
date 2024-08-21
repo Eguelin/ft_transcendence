@@ -22,12 +22,7 @@ DB_DIR	= ~/goinfre/db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-    ifeq ($(LOG),1)
-		$(DC) up --build
-    else
-		$(DC) up --build -d
-    endif
-	docker exec -it transcendence python3 manage.py migrate
+	$(DC) up --build
 
 down:
 	$(DC) down

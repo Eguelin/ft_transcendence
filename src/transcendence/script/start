@@ -2,9 +2,7 @@
 
 set -e
 
-host="$1"
-shift
-cmd="$@"
+host="$POSTGRES_HOST:$POSTGRES_PORT"
 
 until nc -z "$host" 2>/dev/null; do
   echo "Waiting for $host to be available..."
@@ -12,4 +10,6 @@ until nc -z "$host" 2>/dev/null; do
 done
 
 echo "$host is available - executing command"
-exec $cmd
+python manage.py migrate
+daphne -b 0.0.0.0 -p 8000 transcendence.asgi:application
+
