@@ -13,7 +13,7 @@ RUN pip install -r requirements.txt
 
 # Copy script
 COPY script/ /bin/
-RUN chmod 777 /bin/wait-for-postgres
+RUN chmod 777 /bin/start
 
 # Add non-root user
 RUN adduser -D -h /app -s /bin/sh django
