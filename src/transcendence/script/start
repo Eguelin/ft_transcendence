@@ -11,11 +11,5 @@ done
 
 echo "$host is available - executing command"
 python manage.py migrate
+daphne -b 0.0.0.0 -p 8000 transcendence.asgi:application
 
-if [ "$1" = "dev" ]; then
-  echo "start in dev mode..."
-  python manage.py runserver 0.0.0.0:8000
-else
-  echo "start in prod mode..."
-  gunicorn transcendence.wsgi:application --bind 0.0.0.0:8000
-fi
