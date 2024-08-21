@@ -13,10 +13,15 @@ class MatchManager(models.Manager):
 		match = self.create(player_one=creator, player_two=User.objects.get_or_create(username="random")[0])
 		match.player_one_pts = random.randint(0, 10)
 		match.player_two_pts = random.randint(0, 10)
+		match.save()
+		return match
+
+	def save(self):
+		super().save()
 
 class Match(models.Model):
-	player_one = models.OneToOneField(User, on_delete=models.SET(User.objects.get_or_create(username="deleted")[0]), related_name="first_player")
-	player_two = models.OneToOneField(User, on_delete=models.SET(User.objects.get_or_create(username="deleted")[0]), related_name="second_player")
+	player_one = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
+	player_two = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	player_one_pts = models.IntegerField(default=0)
 	player_two_pts = models.IntegerField(default=0)
