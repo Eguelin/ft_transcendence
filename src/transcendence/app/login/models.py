@@ -17,13 +17,13 @@ class Profile(models.Model):
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
 	is_active = models.BooleanField(default=False)
 	blocked_users = models.ManyToManyField(User, related_name="block_user_list")
+	id42 = models.IntegerField(default=0)
 
-	
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwards):
 	if created:
 		Profile.objects.create(user=instance)
-		
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
 	instance.profile.save()

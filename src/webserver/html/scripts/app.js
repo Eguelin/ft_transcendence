@@ -266,7 +266,6 @@ swichTheme.addEventListener("keydown", (e) => {
 
 window.addEventListener("keydown", (e) => {
 	if (currentPage == "friends"){
-		console.log("Friend event");
 		if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
 			friendSlides[friendSlideIdx].className = "friendSlide";
 			slideSelector[friendSlideIdx].className = "slideSelector";
@@ -283,7 +282,6 @@ window.addEventListener("keydown", (e) => {
 		}
 	}
 	if (currentPage == "settings"){
-		console.log("Settings event");
 		if (e.key == "ArrowLeft" || e.key == "ArrowRight"){
 			if (e.key == "ArrowLeft")
 				slideIdx -= 1;
