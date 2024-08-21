@@ -121,6 +121,12 @@ def create_user(request):
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.id42 = 0
 		user.profile.is_active = True
+
+		# CREATE RANDOM FIRST MATCH
+		match = customModels.Match.objects.createWithRandomOpps(user)
+		match.save()
+		user.matches.add(match)
+
 		for count in range (0, 0x7fffffff):
 			friend_code = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
 			user.profile.friend_code = friend_code
@@ -209,6 +215,14 @@ def profile_update(request):
 	return JsonResponse({'message': 'Can\'t update user profile'})
 
 
+def get_user_match_json(match):
+	return {
+		'player_one' : match.player_one.username,
+		'player_two' : match.player_two.username,
+		'player_one_pts' : match.player_one_pts,
+		'player_two_pts' : match.player_two_pts,
+	}
+
 def get_user_json(user):
 	try:
 		if (user.profile.profile_picture.startswith("https://")):
@@ -222,7 +236,8 @@ def get_user_json(user):
 		'display' : user.profile.display_name,
 		'friend_code' : user.profile.friend_code,
 		'pfp' : raw_img,
-		'is_active' : user.profile.is_active
+		'is_active' : user.profile.is_active,
+		'first_match' : get_user_match_json(user.profile.matches.objects.get(id=1))
 	}
 
 def current_user(request):
