@@ -18,8 +18,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Match",
             fields=[
-                ('player_one', models.OneToOneField(on_delete=models.SET_NULL, null=True, related_name="first_player", to=settings.AUTH_USER_MODEL)),
-	            ('player_two', models.OneToOneField(on_delete=models.SET_NULL, null=True, related_name="second_player", to=settings.AUTH_USER_MODEL)),
+                ('player_one', models.ForeignKey(on_delete=models.SET_NULL, null=True, related_name="first_player", to=settings.AUTH_USER_MODEL)),
+	            ('player_two', models.ForeignKey(on_delete=models.SET_NULL, null=True, related_name="second_player", to=settings.AUTH_USER_MODEL)),
 	            ('date', models.DateField(auto_now=False, auto_now_add=True)),
 	            ('player_one_pts', models.IntegerField(default=0)),
 	            ('player_two_pts', models.IntegerField(default=0)),
