@@ -5,6 +5,7 @@ userBtn = document.getElementById("usernameBtn");
 dpUserBtn = document.getElementById("dropDownUser");
 accSettingsBtn = document.getElementById("settingsBtn");
 friendsBtn = document.getElementById("friendsBtn");
+recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
 
 dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
@@ -67,6 +68,17 @@ window.addEventListener("load", () => {
 	})
 })
 
+function createMatchResumeContainer(match){
+	matchContainer = document.createElement("div");
+	matchContainer.className = "matchDescContainer";
+	if (match.player_one_pts > match.player_two_pts)
+		matchContainer.style.setProperty("background", "green");
+	else if (match.player_one_pts < match.player_two_pts)
+		matchContainer.style.setProperty("background", "red");
+	recentMatchHistoryContainer.appendChild(matchContainer);
+}
+					
+
 {
 	fetch('/api/user/current', {
 		method: 'GET',
@@ -93,6 +105,10 @@ window.addEventListener("load", () => {
 				}
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
+				matches = text.matches;
+				for (var i=0; i<Object.keys(matches).length && i<5;i++){
+					createMatchResumeContainer(matches[i]);
+				};
 				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 				history.replaceState(state, "");
@@ -124,7 +140,6 @@ window.addEventListener("load", () => {
 				}))
 			});
 		}
-		return (null);
 	})
 }
 

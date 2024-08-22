@@ -18,6 +18,7 @@ body{
 	font-family:'pong';
 	background-color: var(--page-bg-rgb);
 	height: 100%;
+	margin: 0;
 }
 
 #container{
@@ -914,4 +915,24 @@ a {
 .pfpStatusOnline{
 	mask-image: url("svg/circle.svg");
 	background: green;
+}
+
+
+
+
+
+
+#recentMatchHistoryContainer{
+	height: 20vh;
+	width: -webkit-fill-available;
+	position: absolute;
+	bottom: 0;
+	display: flex;
+}
+
+.matchDescContainer{
+	background: grey;
+	height: auto;
+	border: .5px solid var(--page-bg-rgb);
+	flex: auto;
 }
