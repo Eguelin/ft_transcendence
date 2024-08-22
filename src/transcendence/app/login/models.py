@@ -20,8 +20,8 @@ class MatchManager(models.Manager):
 		super().save()
 
 class Match(models.Model):
-	player_one = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
-	player_two = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
+	player_one = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
+	player_two = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	player_one_pts = models.IntegerField(default=0)
 	player_two_pts = models.IntegerField(default=0)

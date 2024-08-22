@@ -123,11 +123,9 @@ def create_user(request):
 		user.profile.is_active = True
 
 		# CREATE RANDOM FIRST MATCH
-		print("CREATE RANDOM USER")
-		User.objects.get_or_create(username="random")
-		print("CREATE RANDOM MATCH")
-		match = customModels.Match.objects.createWithRandomOpps(user)
-		user.profile.matches.add(match)
+		for i in range(0, 5):
+			match = customModels.Match.objects.createWithRandomOpps(user)
+			user.profile.matches.add(match)
 
 		for count in range (0, 0x7fffffff):
 			friend_code = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
@@ -226,6 +224,7 @@ def get_user_match_json(matches):
 			'player_two' : match.player_two.username,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
+			'date' : match.date,
 		}
 		i += 1
 	return matches_json
