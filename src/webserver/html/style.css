@@ -935,4 +935,25 @@ a {
 	height: auto;
 	border: .5px solid var(--page-bg-rgb);
 	flex: auto;
+	display: flex;
+	flex-direction: column;
+	color: var(--main-text-rgb);
+}
+
+.matchDescContainerResult{
+	flex: auto;
+	margin-top: 1vh;
+}
+
+.matchDescContainerScore{
+	display: flex;
+	flex-direction: row;
+}
+
+.resultScore, .matchDescContainerDate{
+	flex: auto;
+}
+
+.resultScore.winner{
+	font-size: 3vh;
 }
