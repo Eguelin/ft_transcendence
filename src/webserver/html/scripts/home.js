@@ -71,10 +71,43 @@ window.addEventListener("load", () => {
 function createMatchResumeContainer(match){
 	matchContainer = document.createElement("div");
 	matchContainer.className = "matchDescContainer";
-	if (match.player_one_pts > match.player_two_pts)
+	
+	result = document.createElement("a");
+	result.className = "matchDescContainerResult"
+	
+	date = document.createElement("a");
+	date.className = "matchDescContainerDate"
+	date.innerHTML = match.date;
+	
+	scoreContainer = document.createElement("div");
+	scoreContainer.className = "matchDescContainerScore";
+	scoreLeft = document.createElement("a");	
+	scoreRight = document.createElement("a");
+	
+	if (match.player_one_pts > match.player_two_pts){
 		matchContainer.style.setProperty("background", "green");
-	else if (match.player_one_pts < match.player_two_pts)
+		result.innerHTML = "VICTORY"
+		scoreLeft.className = "resultScore winner";
+		scoreRight.className = "resultScore";
+		scoreLeft.innerHTML = match.player_one_pts;
+		scoreRight.innerHTML = match.player_two_pts;
+	}
+	else if (match.player_one_pts < match.player_two_pts){
 		matchContainer.style.setProperty("background", "red");
+		result.innerHTML = "LOST"
+		scoreLeft.className = "resultScore";
+		scoreRight.className = "resultScore winner";
+		scoreLeft.innerHTML = match.player_one_pts;
+		scoreRight.innerHTML = match.player_two_pts;
+	}
+	
+	scoreContainer.appendChild(scoreLeft);
+	scoreContainer.appendChild(scoreRight);
+	
+	matchContainer.appendChild(result);
+	matchContainer.appendChild(date);
+	matchContainer.appendChild(scoreContainer);
+	
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }
 					
