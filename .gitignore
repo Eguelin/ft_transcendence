@@ -1,2 +1,4 @@
 .env
 __pycache__
+.ash_history
+*.swp

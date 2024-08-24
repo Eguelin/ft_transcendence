@@ -22,6 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-=1%z50-g7ed0!%af6yod+-a8gjfjzqft3fwlyw9#ofy-!29+fx'
 
+import ossaudiodev
+# 42 API credentials
+
+from dotenv import load_dotenv
+import os
+load_dotenv()
+PUBLIC = os.getenv('PUBLIC')
+SECRET = os.getenv('SECRET')
+REDIRECT_URI = os.getenv('REDIRECT_URI')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -38,13 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'login',
+	'channels',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -68,11 +79,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'transcendence.wsgi.application'
 
+ASGI_APPLICATION = "transcendence.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-import os
 import dj_database_url
 
 DATABASES = {
@@ -122,3 +133,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MEDIA_ROOT = 'profilePicture'
+URL_ROOT = 'profilePicture'
