@@ -81,30 +81,48 @@ function createMatchResumeContainer(match){
 	
 	scoreContainer = document.createElement("div");
 	scoreContainer.className = "matchDescContainerScore";
-	scoreLeft = document.createElement("a");	
-	scoreRight = document.createElement("a");
+	scoreUser = document.createElement("div");
+	scoreOpponent = document.createElement("div");
+	scoreUser.className = "resultScore";
+	scoreOpponent.className = "resultScore";
+
+	scoreUserName = document.createElement("a");
+	scoreUserScore = document.createElement("a");
+
+	scoreUserName.className = "resultScoreName";
+	scoreUserScore.className = "resultScoreScore";
+
+
+	scoreOpponentName = document.createElement("a");
+	scoreOpponentScore = document.createElement("a");
+
+	scoreOpponentName.className = "resultScoreName";
+	scoreOpponentScore.className = "resultScoreScore";
+
+	scoreUserName.innerHTML = `${match.player_one} :`;
+	scoreOpponentName.innerHTML = `${match.player_two} :`;
 	
-	if (match.player_one_pts > match.player_two_pts){
-		result.innerHTML = "VICTORY"
-		scoreLeft.className = "resultScore winner";
-		scoreRight.className = "resultScore";
-		scoreLeft.innerHTML = match.player_one_pts;
-		scoreRight.innerHTML = match.player_two_pts;
-	}
-	else if (match.player_one_pts < match.player_two_pts){
-		result.innerHTML = "LOST"
-		scoreLeft.className = "resultScore";
-		scoreRight.className = "resultScore winner";
-		scoreLeft.innerHTML = match.player_one_pts;
-		scoreRight.innerHTML = match.player_two_pts;
-	}
+	scoreUserScore.innerHTML = `${match.player_one_pts}`;
+	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
+
+	scoreUser.appendChild(scoreUserName);
+	scoreUser.appendChild(scoreUserScore);
+
+	scoreOpponent.appendChild(scoreOpponentName);
+	scoreOpponent.appendChild(scoreOpponentScore);
+	if (match.player_one_pts > match.player_two_pts)
+		result.innerHTML = "VICTORY";
+	else if (match.player_one_pts < match.player_two_pts)
+		result.innerHTML = "LOST";
+	else
+		result.innerHTML = "DRAW";
 	
-	scoreContainer.appendChild(scoreLeft);
-	scoreContainer.appendChild(scoreRight);
+	scoreContainer.appendChild(scoreUser);
+	scoreContainer.appendChild(scoreOpponent);
 	
 	matchContainer.appendChild(result);
-	matchContainer.appendChild(date);
 	matchContainer.appendChild(scoreContainer);
+	matchContainer.appendChild(date);
 	
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }

@@ -947,13 +947,21 @@ a {
 
 .matchDescContainerScore{
 	display: flex;
-	flex-direction: row;
-}
-
-.resultScore, .matchDescContainerDate{
+	flex-direction: column;
 	flex: auto;
+	padding: 0 1vw;
+	gap: 1vh;
 }
 
-.resultScore.winner{
-	font-size: 3vh;
+.resultScore{
+	display: flex;
+}
+
+.resultScoreScore{
+	flex: 0;
+}
+
+.resultScoreName{
+	flex: auto;
+	text-align: left;
 }
