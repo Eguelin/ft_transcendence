@@ -23,7 +23,11 @@ You need to have Docker installed on your machine.
     ```sh
     cp .env-example .env
     ```
-3. Build the docker compose
+3. Build and run the project
     ```sh
-    docker compose up --build
+    make
+    ```
+4. Open your browser and go to
+    ```sh
+    https://localhost:49300
     ```

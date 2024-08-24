@@ -1,0 +1,71 @@
+{
+	"home" : {
+		"title" : "PONG",
+		"friendsBtn" :  "Friends",
+		"settingsBtn" :  "Settings",
+		"logOutBtn" :  "Log out",
+		"playBtn" : "Play"
+	},
+	"login" : {
+		"title" : "LOGIN",
+		"internalLoginOpt" : "Login with credentials",
+		"forgotPassword" : "Forgot password",
+		"registerLink" : "register",
+		"loginBtn" : "LOGIN",
+		"externalLoginOpt" : "Other login options",
+		"inputUsername" : "Username",
+		"inputPassword" : "Password"
+	},
+	"register" : {
+		"title" : "REGISTER",
+		"createAcc" : "Create your account",
+		"registerBtn" : "REGISTER",
+		"inputDisplayName" : "Display name",
+		"inputUsername" : "Username",
+		"inputPassword" : "Password",
+		"inputCPassword" : "Confirm password"
+	},
+	"settings": {
+		"title" : "Settings",
+		"accountTitle" : "Account",
+		"accessibilityTitle" : "Accessibility",
+		"saveBtn" : "SAVE",
+		"inputUsername" : "Username",
+		"inputDisplayName" : "Display name",
+		"inputPfp" : "Profile picture",
+		"pfpLabel" : "Profile picture",
+		"themesDropDownL" : "Themes",
+		"themesDropDownP" : "Themes",
+		"loadLightL" : "Light",
+		"loadDarkL" : "Dark",
+		"loadLightP" : "Light",
+		"loadDarkP" : "Dark",
+		"languagesDropDownL" : "Languages",
+		"languagesDropDownP" : "Languages",
+		"englishBtnL" : "English",
+		"frenchBtnL" : "French",
+		"germanBtnL" : "German",
+		"italianBtnL" : "Italian",
+		"pirateBtnL" : "Pirate",
+		"englishBtnP" : "English",
+		"frenchBtnP" : "French",
+		"germanBtnP" : "German",
+		"italianBtnP" : "Italian",
+		"pirateBtnP" : "Pirate"
+	},
+	"friends":{
+		"title" : "Friends",
+		"friendCodeBtn" : "My friend code",
+		"friendCode" : "My friend code",
+		"inputCode" : "Friend code",
+		"sendFriendRequestBtn" : "Send",
+		"confirmDeleteQuestion" : "Are you sure you want to remove this friend?",
+		"confirmBlockQuestion" : "Are you sure you want to block this friend?",
+		"confirmDelete" : "I'm sure",
+		"confirmBlock" : "I'm sure",
+		"onlineFriendSelectorText": "Online",
+		"allFriendSelectorText": "All",
+		"pendingFriendRequestSelectorText": "Pending",
+		"blockedSelectorText": "Blocked"
+	}
+}

@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: eguelin <eguelin@student.42lyon.fr>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/28 17:47:48 by eguelin           #+#    #+#              #
-#    Updated: 2024/06/26 19:26:08 by eguelin          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 .PHONY: all clean fclean re down restart
 # .SILENT:
 
@@ -19,6 +7,7 @@
 
 NAME	= ft_transcendence
 DC		= docker compose
+PFP		= $(shell find src/transcendence/app/profilePictures/ -name "*.jpg" | grep -v "defaults/")
 
 # **************************************************************************** #
 #                                    Sources                                   #
@@ -33,7 +22,7 @@ DB_DIR	= ~/goinfre/db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-	$(DC) up --build -d
+	$(DC) up --build
 
 down:
 	$(DC) down
@@ -46,6 +35,9 @@ clean:
 fclean: clean
 	docker system prune --force --all;
 	docker volume prune -f;
+    ifneq ($(PFP),)
+		rm -f $(PFP)
+    endif
 
 re: fclean all
 
