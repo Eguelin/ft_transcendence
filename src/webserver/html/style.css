@@ -931,7 +931,7 @@ a {
 }
 
 .matchDescContainer{
-	background: grey;
+	background: var(--input-bg-rgb); 
 	height: auto;
 	border: .5px solid var(--page-bg-rgb);
 	flex: auto;

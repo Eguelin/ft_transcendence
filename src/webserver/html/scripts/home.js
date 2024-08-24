@@ -85,7 +85,6 @@ function createMatchResumeContainer(match){
 	scoreRight = document.createElement("a");
 	
 	if (match.player_one_pts > match.player_two_pts){
-		matchContainer.style.setProperty("background", "green");
 		result.innerHTML = "VICTORY"
 		scoreLeft.className = "resultScore winner";
 		scoreRight.className = "resultScore";
@@ -93,7 +92,6 @@ function createMatchResumeContainer(match){
 		scoreRight.innerHTML = match.player_two_pts;
 	}
 	else if (match.player_one_pts < match.player_two_pts){
-		matchContainer.style.setProperty("background", "red");
 		result.innerHTML = "LOST"
 		scoreLeft.className = "resultScore";
 		scoreRight.className = "resultScore winner";
