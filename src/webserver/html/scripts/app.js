@@ -5,7 +5,26 @@ var currentPage = "";
 var currentLang = "lang/EN_US.json"
 
 window.navigation.addEventListener("navigate", (e) => {
-	console.log(e);
+	const url = new URL(e.destination.url);
+
+	if (url.pathname.startsWith("/user")){
+		e.intercept({
+			async handler() {
+				fetch('bodyLess/profile.html').then((response) => {
+					response.text().then(response => {
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/profile.js`);
+						document.body.appendChild(s);
+						currentPage = "profile";
+						homeBtn.style.setProperty("display", "block");
+					})
+				})
+			}
+		})
+	}
 })
 
 fetch('/api/user/current', {
@@ -97,9 +116,9 @@ homeBtn.addEventListener("click", (e) => {
 			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 			if (container.innerHTML != "")
-				history.pushState(state, "");
+				history.pushState(state, "", "https://localhost:49300");
 			else
-				history.replaceState(state,"");
+				history.replaceState(state,"", "https://localhost:49300");
 			container.innerHTML = response;
 			document.getElementById("script").remove();
 			var s = document.createElement("script");
@@ -208,24 +227,28 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 			if (response.ok){
 				response.json().then((text) => {
 					content = text[currentPage];
-					Object.keys(content).forEach(function(key) {
-						if (key.startsWith('input'))
-							document.getElementById(key).placeholder = content[key];
-						else
-							document.getElementById(key).innerHTML = content[key];
-					});
-				})
-			}
-			else{
-				fetch("lang/EN_US.json").then(response => {
-					response.json().then((text) => {
-						content = text[currentPage];
+					if (content != null || content != undefined){
 						Object.keys(content).forEach(function(key) {
 							if (key.startsWith('input'))
 								document.getElementById(key).placeholder = content[key];
 							else
 								document.getElementById(key).innerHTML = content[key];
 						});
+					}
+				})
+			}
+			else{
+				fetch("lang/EN_US.json").then(response => {
+					response.json().then((text) => {
+						content = text[currentPage];
+						if (content != null || content != undefined){
+							Object.keys(content).forEach(function(key) {
+								if (key.startsWith('input'))
+									document.getElementById(key).placeholder = content[key];
+								else
+									document.getElementById(key).innerHTML = content[key];
+							});
+						}
 					})
 				})
 			}
@@ -235,12 +258,14 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 		fetch("lang/EN_US.json").then(response => {
 			response.json().then((text) => {
 				content = text[currentPage];
-				Object.keys(content).forEach(function(key) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					else
-						document.getElementById(key).innerHTML = content[key];
-				});
+				if (content != null || content != undefined){
+					Object.keys(content).forEach(function(key) {
+						if (key.startsWith('input'))
+							document.getElementById(key).placeholder = content[key];
+						else
+							document.getElementById(key).innerHTML = content[key];
+					});
+				}
 			})
 		})
 	}
