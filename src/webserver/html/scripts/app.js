@@ -4,6 +4,10 @@ swichTheme = document.getElementById("themeButton");
 var currentPage = "";
 var currentLang = "lang/EN_US.json"
 
+window.navigation.addEventListener("navigate", (e) => {
+	console.log(e);
+})
+
 fetch('/api/user/current', {
 	method: 'GET',
 	headers: {
