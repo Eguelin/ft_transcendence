@@ -307,3 +307,13 @@ def generate_unique_username(base_username):
 		suffix_length += 1
 
 	return unique_username
+
+def get(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	if request.user.is_authenticated:
+		data = json.loads(request.body)
+		try:
+			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
+		except:
+			return JsonResponse({'message': "can't find user"}, status=400)
