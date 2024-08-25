@@ -16,19 +16,34 @@ window.navigation.addEventListener("navigate", (e) => {
 					headers: {'Content-Type': 'application/json',},
 					body: JSON.stringify({"name" : splitPath[2]}),
 					credentials: 'include'
-				}).then(response => {
-					fetch('bodyLess/profile.html').then((response) => {
-						response.text().then(response => {
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/profile.js`);
-							document.body.appendChild(s);
-							currentPage = "profile";
-							homeBtn.style.setProperty("display", "block");
+				}).then(user => {
+					user.json().then(((user) => {
+						fetch('bodyLess/profile.html').then((response) => {
+							response.text().then(response => {
+								container.innerHTML = response;
+								document.getElementById("script").remove();
+								var s = document.createElement("script");
+								s.setAttribute('id', 'script');
+								s.setAttribute('src', `scripts/profile.js`);
+								document.body.appendChild(s);
+								currentPage = "profile";
+								loadCurrentLang(currentPage);
+								homeBtn.style.setProperty("display", "block");
+								document.getElementById("profileName").innerHTML = user.display;
+								document.getElementById("profilePfp").style.setProperty("display", "block");
+								document.getElementById("profilePfp").innerHTML = "";
+								if (user.pfp != ""){
+									var rawPfp = user.pfp;
+									if (rawPfp.startsWith('https://'))
+										document.getElementById("profilePfp").setAttribute("src", `${rawPfp}`);
+									else
+										document.getElementById("profilePfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+								}
+								else
+									document.getElementById("profilePfp").style.setProperty("display", "none");
+							})
 						})
-					})
+					}))
 				})
 			}
 		})
