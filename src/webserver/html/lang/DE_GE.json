@@ -67,5 +67,8 @@
 		"allFriendSelectorText": "Alle",
 		"pendingFriendRequestSelectorText": "Ausstehend",
 		"blockedSelectorText": "Blockiert"
+	},
+	"profile":{
+		"title" : ""
 	}
 }
