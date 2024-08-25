@@ -10,16 +10,25 @@ window.navigation.addEventListener("navigate", (e) => {
 	if (url.pathname.startsWith("/user")){
 		e.intercept({
 			async handler() {
-				fetch('bodyLess/profile.html').then((response) => {
-					response.text().then(response => {
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/profile.js`);
-						document.body.appendChild(s);
-						currentPage = "profile";
-						homeBtn.style.setProperty("display", "block");
+				var splitPath = url.pathname.split('/');
+				console.log(splitPath[1]);
+				fetch('/api/user/get', {
+					method: 'GET',
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : splitPath[1]}),
+					credentials: 'include'
+				}).then(response => {
+					fetch('bodyLess/profile.html').then((response) => {
+						response.text().then(response => {
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/profile.js`);
+							document.body.appendChild(s);
+							currentPage = "profile";
+							homeBtn.style.setProperty("display", "block");
+						})
 					})
 				})
 			}
