@@ -11,11 +11,10 @@ window.navigation.addEventListener("navigate", (e) => {
 		e.intercept({
 			async handler() {
 				var splitPath = url.pathname.split('/');
-				console.log(splitPath[1]);
 				fetch('/api/user/get', {
-					method: 'GET',
+					method: 'POST', //GET forbid the use of body :(
 					headers: {'Content-Type': 'application/json',},
-					body: JSON.stringify({"name" : splitPath[1]}),
+					body: JSON.stringify({"name" : splitPath[2]}),
 					credentials: 'include'
 				}).then(response => {
 					fetch('bodyLess/profile.html').then((response) => {
