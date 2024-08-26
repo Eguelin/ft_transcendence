@@ -1025,3 +1025,12 @@ a {
 .userResumeName{
 	color: var(--main-text-rgb);
 }
+
+#userResumeCountContainer{
+	color: var(--main-text-rgb);
+}
+
+#userResumeSearch{
+	background: var(--input-bg-rgb);
+	border: 3px solid var(--input-bg-rgb);
+}
