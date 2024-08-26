@@ -54,6 +54,34 @@ window.navigation.addEventListener("navigate", (e) => {
 			}
 		})
 	}
+	if (url.pathname.startsWith("/search")){
+		fetch('/api/user/search_by_display', {
+			method: 'POST', //GET forbid the use of body :(
+			headers: {'Content-Type': 'application/json',},
+			body: JSON.stringify({"name" : url.searchParams.get("query")}),
+			credentials: 'include'
+		}).then(user => {
+			user.json().then(((user) => {
+				fetch('bodyLess/search.html').then((response) => {
+					response.text().then(response => {
+						inputSearchUser.value = "";
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/profile.js`);
+						document.body.appendChild(s);
+						currentPage = "search";
+						loadCurrentLang(currentPage);
+						homeBtn.style.setProperty("display", "block");
+						Object.keys(user).forEach(function(key){
+							createUserResumeContainer(user[key]);
+						})
+					})
+				})
+			}))
+		})
+	}
 })
 
 fetch('/api/user/current', {
@@ -458,7 +486,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 						if (container.innerHTML != "")
-							history.pushState(state, "");
+							history.pushState(state, "", `https://localhost:49300/search?query=${inputSearchUser.value}`);
 						else
 							history.replaceState(state,"");
 						inputSearchUser.value = "";
