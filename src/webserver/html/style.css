@@ -31,6 +31,7 @@ body{
 	text-align: center;
 	display: flex;
 	width: -webkit-fill-available;
+	align-items: center;
 }
 
 #titleFlexContainer div{
@@ -47,9 +48,9 @@ h1{
 	color: var(--main-text-rgb);
 	height: inherit;
 	font-style: italic;
-	margin-top: 5vh;
-	margin-bottom: 5vh;
-	font-size: 7vw;
+	margin-top: 4vmax;
+	margin-bottom: 4vmax;
+	font-size: 7vmax;
 	text-align: center;
 }
 
@@ -260,10 +261,10 @@ a {
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
-	position:absolute;
+	/*position:absolute;
 	top:50%;
 	left:50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);*/
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -515,9 +516,7 @@ a {
 .profilePicture {
 	height: 4vw;
 	width: 4vw;
-	margin-left: 1vw;
-	margin-top: 1vh;
-	margin-bottom: 1vh;
+	margin: 1vw 5vmax 1vw 1vh;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -530,11 +529,7 @@ a {
 	flex-direction: row-reverse;
 	display: flex;
 	flex: 1;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translateX(-50%) translateY(-50%);
-	height: 5vw;
+	align-items: center;
 }
 
 #usernameBtn {
@@ -550,6 +545,7 @@ a {
 	display: inline-block;
 	padding-right: 0.1vw;
 	margin-left: 1vw;
+	height: 4vw;
 	outline: none;
 }
 
@@ -968,6 +964,7 @@ a {
 
 #profileInfoContainer {
 	display: flex;
+	margin: 3vw 3vw 0 3vw;
 }
 
 #profileNameContainer {
@@ -975,8 +972,8 @@ a {
 }
 
 #profilePfp {
-	height: 20vw;
-	width: 20vw;
+	height: 7vw;
+	width: 7vw;
 	margin-left: 1vw;
 	margin-top: 1vh;
 	margin-bottom: 1vh;
@@ -996,4 +993,12 @@ a {
 	top: -5vmin;
 	display: flex;
 	gap: 1vmin;
+}
+
+#profileName{
+	margin: 0;
+}
+
+#inputSearchUser{
+	flex: 1;
 }
