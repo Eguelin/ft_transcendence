@@ -80,6 +80,7 @@ registerBtn.addEventListener("click", (e) => {
 								history.pushState(state, "");
 							else
 								history.replaceState(state,"");
+							document.getElementById("inputSearchUser").style.setProperty("display", "block");
 							container.innerHTML = response;
 							document.getElementById("script").remove();
 							var s = document.createElement("script");

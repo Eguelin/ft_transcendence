@@ -1000,5 +1000,6 @@ a {
 }
 
 #inputSearchUser{
-	flex: 1;
+	margin-left: 5vmax;
+	width: 20vmax;
 }

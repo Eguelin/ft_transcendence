@@ -105,6 +105,7 @@ fetch('/api/user/current', {
 					history.pushState(state, "");
 				else
 					history.replaceState(state,"");
+				document.getElementById("inputSearchUser").style.setProperty("display", "none");
 				container.innerHTML = response;
 				document.getElementById("script").remove();
 				var s = document.createElement("script");
