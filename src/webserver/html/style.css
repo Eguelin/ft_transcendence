@@ -1003,3 +1003,25 @@ a {
 	margin-left: 5vmax;
 	width: 20vmax;
 }
+
+.userResume {
+	width: min-content;
+	background: var(--input-bg-rgb);
+	border: 1px solid var(--main-text-rgb);
+	margin: 1vmax;
+	padding: 1vmax;
+	display: inline-block;
+}
+
+.userResumePfp {
+	height: 4vw;
+	width: 4vw;
+
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: 50% 50%;
+}
+
+.userResumeName{
+	color: var(--main-text-rgb);
+}

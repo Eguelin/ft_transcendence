@@ -1,6 +1,8 @@
 container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
+inputSearchUser = document.getElementById("inputSearchUser");
+pageContentContainer = document.getElementById("pageContentContainer");
 var currentPage = "";
 var currentLang = "lang/EN_US.json"
 
@@ -105,7 +107,7 @@ fetch('/api/user/current', {
 					history.pushState(state, "");
 				else
 					history.replaceState(state,"");
-				document.getElementById("inputSearchUser").style.setProperty("display", "none");
+				inputSearchUser.style.setProperty("display", "none");
 				container.innerHTML = response;
 				document.getElementById("script").remove();
 				var s = document.createElement("script");
@@ -415,13 +417,66 @@ function createMatchResumeContainer(match){
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }
 
-document.getElementById("inputSearchUser").addEventListener("keydown", (e) => {
+function createUserResumeContainer(user){
+	userResume = document.createElement("div");
+	userResume.className = "userResume";
+	userResume.id = user.username
+
+	img = document.createElement("img");
+	img.className = "userResumePfp";
+	if (user.pfp != ""){
+		var rawPfp = user.pfp;
+		if (rawPfp.startsWith('https://'))
+			img.setAttribute("src", `${rawPfp}`);
+		else
+			img.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+	}
+	else
+		img.style.setProperty("display", "none");
+
+	userResumeName = document.createElement("a");
+	userResumeName.className = "userResumeName"
+	userResumeName.innerHTML = user.display;
+	
+	
+	userResume.appendChild(img);
+	userResume.appendChild(userResumeName);
+	document.getElementById("userResumeContainer").appendChild(userResume);
+}
+
+inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter"){
 		fetch('/api/user/search_by_display', {
 			method: 'POST', //GET forbid the use of body :(
 			headers: {'Content-Type': 'application/json',},
-			body: JSON.stringify({"name" : document.getElementById("inputSearchUser").value}),
+			body: JSON.stringify({"name" : inputSearchUser.value}),
 			credentials: 'include'
+		}).then(user => {
+			user.json().then(((user) => {
+				fetch('bodyLess/search.html').then((response) => {
+					response.text().then(response => {
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
+						if (container.innerHTML != "")
+							history.pushState(state, "");
+						else
+							history.replaceState(state,"");
+						inputSearchUser.value = "";
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/profile.js`);
+						document.body.appendChild(s);
+						currentPage = "search";
+						loadCurrentLang(currentPage);
+						homeBtn.style.setProperty("display", "block");
+						Object.keys(user).forEach(function(key){
+							createUserResumeContainer(user[key]);
+						})
+					})
+				})
+			}))
 		})
 	}
 })
