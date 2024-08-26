@@ -95,6 +95,7 @@ window.addEventListener("load", () => {
 				else
 					document.getElementById("pfp").style.setProperty("display", "none");
 				matches = text.matches;
+				recentMatchHistoryContainer.innerHTML = "";
 				for (var i=0; i<Object.keys(matches).length && i<5;i++){
 					createMatchResumeContainer(matches[i]);
 				};
