@@ -181,14 +181,6 @@ def user_logout(request):
 	return JsonResponse({'message': 'User logged out'})
 
 def file_opener(path, flags):
-	result = subprocess.run(['pwd'], stdout=subprocess.PIPE)
-	print(result.stdout.decode('utf-8'))
-	result.stdout.decode('utf-8')
-
-	result = subprocess.run(['ls', '-l'], stdout=subprocess.PIPE)
-	print(result.stdout.decode('utf-8'))
-	result.stdout.decode('utf-8')
-
 	return os.open(path, flags, 0o777)
 
 def profile_update(request):
