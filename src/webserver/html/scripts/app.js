@@ -79,6 +79,22 @@ window.navigation.addEventListener("navigate", (e) => {
 							createUserResumeContainer(user[key]);
 						})
 						inputSearchUser.value = "";
+						userResume = document.querySelectorAll(".userResume");
+						for (var i = 0; i< userResume.length; i++){
+							userResume[i].addEventListener("click", (e) => {
+								var username;
+								if (e.target.className != "userResume")
+									username = e.target.parentElement.id;
+								else
+									username = e.target.id;
+								state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
+								if (container.innerHTML != "")
+									history.pushState(state, "", `https://localhost:49300/user/${username}`);
+								else
+									history.replaceState(state,"");
+							})
+						}
 					})
 				})
 			}))

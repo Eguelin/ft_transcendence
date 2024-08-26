@@ -1005,12 +1005,12 @@ a {
 }
 
 .userResume {
-	width: min-content;
+	width: 10ch;
 	background: var(--input-bg-rgb);
 	border: 1px solid var(--main-text-rgb);
 	margin: 1vmax;
-	padding: 1vmax;
 	display: inline-block;
+	font-size: 1vmin;
 }
 
 .userResumePfp {
@@ -1024,6 +1024,7 @@ a {
 
 .userResumeName{
 	color: var(--main-text-rgb);
+	overflow-wrap: anywhere;
 }
 
 #userResumeCountContainer{
