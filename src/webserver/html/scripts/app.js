@@ -64,7 +64,6 @@ window.navigation.addEventListener("navigate", (e) => {
 			user.json().then(((user) => {
 				fetch('bodyLess/search.html').then((response) => {
 					response.text().then(response => {
-						inputSearchUser.value = "";
 						container.innerHTML = response;
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
@@ -74,9 +73,12 @@ window.navigation.addEventListener("navigate", (e) => {
 						currentPage = "search";
 						loadCurrentLang(currentPage);
 						homeBtn.style.setProperty("display", "block");
+						document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+						document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
 						Object.keys(user).forEach(function(key){
 							createUserResumeContainer(user[key]);
 						})
+						inputSearchUser.value = "";
 					})
 				})
 			}))
@@ -489,7 +491,6 @@ inputSearchUser.addEventListener("keydown", (e) => {
 							history.pushState(state, "", `https://localhost:49300/search?query=${inputSearchUser.value}`);
 						else
 							history.replaceState(state,"");
-						inputSearchUser.value = "";
 						container.innerHTML = response;
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
@@ -499,9 +500,12 @@ inputSearchUser.addEventListener("keydown", (e) => {
 						currentPage = "search";
 						loadCurrentLang(currentPage);
 						homeBtn.style.setProperty("display", "block");
+						document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+						document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
 						Object.keys(user).forEach(function(key){
 							createUserResumeContainer(user[key]);
 						})
+						inputSearchUser.value = "";
 					})
 				})
 			}))
