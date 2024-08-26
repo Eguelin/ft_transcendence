@@ -66,67 +66,7 @@ window.addEventListener("load", () => {
 		}
 		return (null);
 	})
-})
-
-function createMatchResumeContainer(match){
-	matchContainer = document.createElement("div");
-	matchContainer.className = "matchDescContainer";
-	
-	result = document.createElement("a");
-	result.className = "matchDescContainerResult"
-	
-	date = document.createElement("a");
-	date.className = "matchDescContainerDate"
-	date.innerHTML = match.date;
-	
-	scoreContainer = document.createElement("div");
-	scoreContainer.className = "matchDescContainerScore";
-	scoreUser = document.createElement("div");
-	scoreOpponent = document.createElement("div");
-	scoreUser.className = "resultScore";
-	scoreOpponent.className = "resultScore";
-
-	scoreUserName = document.createElement("a");
-	scoreUserScore = document.createElement("a");
-
-	scoreUserName.className = "resultScoreName";
-	scoreUserScore.className = "resultScoreScore";
-
-
-	scoreOpponentName = document.createElement("a");
-	scoreOpponentScore = document.createElement("a");
-
-	scoreOpponentName.className = "resultScoreName";
-	scoreOpponentScore.className = "resultScoreScore";
-
-	scoreUserName.innerHTML = `${match.player_one} :`;
-	scoreOpponentName.innerHTML = `${match.player_two} :`;
-	
-	scoreUserScore.innerHTML = `${match.player_one_pts}`;
-	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
-
-	scoreUser.appendChild(scoreUserName);
-	scoreUser.appendChild(scoreUserScore);
-
-	scoreOpponent.appendChild(scoreOpponentName);
-	scoreOpponent.appendChild(scoreOpponentScore);
-	if (match.player_one_pts > match.player_two_pts)
-		result.innerHTML = "VICTORY";
-	else if (match.player_one_pts < match.player_two_pts)
-		result.innerHTML = "LOST";
-	else
-		result.innerHTML = "DRAW";
-	
-	scoreContainer.appendChild(scoreUser);
-	scoreContainer.appendChild(scoreOpponent);
-	
-	matchContainer.appendChild(result);
-	matchContainer.appendChild(scoreContainer);
-	matchContainer.appendChild(date);
-	
-	recentMatchHistoryContainer.appendChild(matchContainer);
-}
-					
+})					
 
 {
 	fetch('/api/user/current', {

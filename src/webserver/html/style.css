@@ -987,3 +987,13 @@ a {
 	
 	border-radius: 50%;
 }
+
+#MatchHistoryTextContainer{
+	color: var(--main-text-rgb);
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	top: -5vmin;
+	display: flex;
+	gap: 1vmin;
+}
