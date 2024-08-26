@@ -247,6 +247,21 @@ def get_user_json(user):
 		'matches' : matches
 	}
 
+def get_user_preview_json(user):
+	try:
+		if (user.profile.profile_picture.startswith("https://")):
+			raw_img = user.profile.profile_picture
+		else:
+			f = open(user.profile.profile_picture, "rb")
+			raw_img = (base64.b64encode(f.read())).decode('utf-8')
+	except:
+		raw_img = ""
+	return {'username' : user.username,
+		'display' : user.profile.display_name,
+		'pfp' : raw_img,
+		'is_active' : user.profile.is_active,
+	}
+
 def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -317,3 +332,21 @@ def get(request):
 			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
 		except:
 			return JsonResponse({'message': "can't find user"}, status=400)
+		
+def search_by_display(request):
+	if (request.method != 'POST'):
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	if request.user.is_authenticated:
+		data = json.loads(request.body)
+		users_json = {}
+		try:
+			query_users = customModels.Profile.objects.filter(display_name__icontains=data['name'])
+			i = 0
+			for user in query_users:
+				users_json[i] = get_user_preview_json(user.user)
+				i += 1
+			if i == 0:
+				return JsonResponse({'message': 'User not found'}, status=400)
+			return JsonResponse(users_json, status=200)
+		except Exception as error:
+			return JsonResponse({'message': error}, status=400)

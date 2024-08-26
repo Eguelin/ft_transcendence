@@ -414,3 +414,14 @@ function createMatchResumeContainer(match){
 	
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }
+
+document.getElementById("inputSearchUser").addEventListener("keydown", (e) => {
+	if (e.key == "Enter"){
+		fetch('/api/user/search_by_display', {
+			method: 'POST', //GET forbid the use of body :(
+			headers: {'Content-Type': 'application/json',},
+			body: JSON.stringify({"name" : document.getElementById("inputSearchUser").value}),
+			credentials: 'include'
+		})
+	}
+})
