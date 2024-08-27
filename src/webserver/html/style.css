@@ -1004,6 +1004,10 @@ a {
 	width: 20vmax;
 }
 
+#resumeContainer{
+	margin-top: 2vmax;
+}
+
 .userResume {
 	display: flex;
 	flex-direction: column;

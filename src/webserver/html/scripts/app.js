@@ -90,17 +90,8 @@ window.navigation.addEventListener("navigate", (e) => {
 											userResume = document.querySelectorAll(".userResume");
 											for (var i = 0; i< userResume.length; i++){
 												userResume[i].addEventListener("click", (e) => {
-													var username;
-													if (e.target.className != "userResume")
-														username = e.target.parentElement.id;
-													else
-														username = e.target.id;
-													state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-					
-													if (container.innerHTML != "")
-														history.pushState(state, "", `https://localhost:49300/user/${username}`);
-													else
-														history.replaceState(state,"");
+													var username = e.target.closest(".userResume").id;
+													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://localhost:49300/user/${username}`);
 												})
 											}
 										})
@@ -554,7 +545,7 @@ function createMatchResumeContainer(match){
 function createUserResumeContainer(user){
 	userResumeContainer = document.createElement("div");
 	userResumeContainer.className = "userResumeContainer";
-	userResumeContainer.id = user.username
+	
 	userResume = document.createElement("div");
 	userResume.className = "userResume";
 	userResume.id = user.username
