@@ -346,7 +346,7 @@ def search_by_display(request):
 				users_json[i] = get_user_preview_json(user.user)
 				i += 1
 			if i == 0:
-				return JsonResponse({'message': 'User not found'}, status=400)
+				return JsonResponse({}, status=200)
 			return JsonResponse(users_json, status=200)
 		except Exception as error:
 			return JsonResponse({'message': error}, status=400)
