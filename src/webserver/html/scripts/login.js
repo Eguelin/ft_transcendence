@@ -98,28 +98,7 @@ loginBtn.addEventListener("click", (e) => {
 		})
 		.then(response => {
 			if (response.ok) {
-				console.log('User logged in successfully');
-
-				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
-						swichTheme.focus();
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						if (container.innerHTML != "")
-							history.pushState(state, "");
-						else
-							history.replaceState(state,"");
-						document.getElementById("inputSearchUser").style.setProperty("display", "block");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						currentPage = "home";
-						loadCurrentLang();
-						document.body.appendChild(s);
-					}))
-				});
+				history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/home');
 			} else {
 				console.log("Failed to login user")
 				if (response.status != 500){

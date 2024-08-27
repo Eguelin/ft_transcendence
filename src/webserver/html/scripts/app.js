@@ -119,6 +119,8 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/login.html').then((response) => {
 								(response.text().then(response => {
 									inputSearchUser.style.setProperty("display", "none");
+									document.getElementById("pfp").style.setProperty("display", "none");
+									document.getElementById("dropDownUser").style.setProperty("display", "none");
 									container.innerHTML = response;
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
@@ -141,6 +143,9 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/register.html').then((response) => {
 								return (response.text().then(response => {
 									container.innerHTML = response;
+									inputSearchUser.style.setProperty("display", "none");
+									document.getElementById("pfp").style.setProperty("display", "none");
+									document.getElementById("dropDownUser").style.setProperty("display", "none");
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
 									s.setAttribute('id', 'script');
@@ -198,6 +203,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentLang = currentUser.lang;
 									switchTheme(currentUser.is_dark_theme);
 									document.getElementById("usernameBtn").innerHTML = currentUser.display;
+									document.getElementById("goHomeButton").style.setProperty("display", "none");
 									document.getElementById("pfp").style.setProperty("display", "block");
 									document.getElementById("dropDownUser").style.setProperty("display", "inline-table");
 									if (currentUser.pfp != ""){
@@ -230,6 +236,8 @@ window.navigation.addEventListener("navigate", (e) => {
 					})
 				}
 				else{
+					document.getElementById("pfp").style.setProperty("display", "none");
+					document.getElementById("dropDownUser").style.setProperty("display", "none");
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
 							(response.text().then(response => {
@@ -353,19 +361,6 @@ function switchTheme(darkTheme){
 }
 
 window.addEventListener("popstate", (event) => {
-	if (event.state){
-		var obj = JSON.parse(event.state);
-		document.body.innerHTML = obj['html'];
-		currentPage = obj['currentPage'];
-
-		document.getElementById("script").remove();
-		var s = document.createElement("script");
-		s.setAttribute('id', 'script');
-		s.setAttribute('src', `scripts/${currentPage}.js`);
-		document.body.appendChild(s);
-		currentLang = obj['currentLang'];
-		loadCurrentLang();
-	}
 	fetch('/api/user/current', {
 		method: 'GET',
 		headers: {
@@ -375,28 +370,7 @@ window.addEventListener("popstate", (event) => {
 	})
 	.then(response => {
 		if (!response.ok) {
-			fetch ('bodyLess/login.html').then((response) => {
-				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					if (container.innerHTML != "")
-						history.pushState(state, "");
-					else
-						history.replaceState(state,"");
-					container.innerHTML = response;
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/login.js`);
-					document.body.appendChild(s);
-					currentLang = "lang/EN_US.json";
-					currentPage = "login";
-					loadCurrentLang();
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					history.replaceState(state, "");
-				}))
-			});
+			history.replaceState(state, "", 'https://localhost:49300/login');
 		}
 		else{
 			fetch('/api/user/update', {
