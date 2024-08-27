@@ -9,98 +9,262 @@ var currentLang = "lang/EN_US.json"
 window.navigation.addEventListener("navigate", (e) => {
 	const url = new URL(e.destination.url);
 
-	if (url.pathname.startsWith("/user")){
-		e.intercept({
-			async handler() {
-				var splitPath = url.pathname.split('/');
-				fetch('/api/user/get', {
-					method: 'POST', //GET forbid the use of body :(
-					headers: {'Content-Type': 'application/json',},
-					body: JSON.stringify({"name" : splitPath[2]}),
-					credentials: 'include'
-				}).then(user => {
-					user.json().then(((user) => {
-						fetch('bodyLess/profile.html').then((response) => {
-							response.text().then(response => {
+	e.intercept({
+		async handler() {
+			fetch('/api/user/current', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			})
+			.then(currentUser => {
+				if (currentUser.ok) {
+					currentUser.json().then((currentUser) => {
+						if (url.pathname.startsWith("/user")){
+							var splitPath = url.pathname.split('/');
+							fetch('/api/user/get', {
+								method: 'POST', //GET forbid the use of body :(
+								headers: {'Content-Type': 'application/json',},
+								body: JSON.stringify({"name" : splitPath[2]}),
+								credentials: 'include'
+							}).then(user => {
+								user.json().then(((user) => {
+									fetch('bodyLess/profile.html').then((response) => {
+										response.text().then(response => {
+											container.innerHTML = response;
+											document.getElementById("script").remove();
+											var s = document.createElement("script");
+											s.setAttribute('id', 'script');
+											s.setAttribute('src', `scripts/profile.js`);
+											document.body.appendChild(s);
+											currentPage = "profile";
+											loadCurrentLang(currentPage);
+											homeBtn.style.setProperty("display", "block");
+											document.getElementById("profileName").innerHTML = user.display;
+											document.getElementById("profilePfp").style.setProperty("display", "block");
+											document.getElementById("profilePfp").innerHTML = "";
+											if (user.pfp != ""){
+												var rawPfp = user.pfp;
+												if (rawPfp.startsWith('https://'))
+													document.getElementById("profilePfp").setAttribute("src", `${rawPfp}`);
+												else
+													document.getElementById("profilePfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+											}
+											else
+												document.getElementById("profilePfp").style.setProperty("display", "none");
+											recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
+											for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
+												createMatchResumeContainer(user.matches[i]);
+											};
+										})
+									})
+								}))
+							})
+						}
+						else if (url.pathname.startsWith("/search")){
+							fetch('/api/user/search_by_display', {
+								method: 'POST', //GET forbid the use of body :(
+								headers: {'Content-Type': 'application/json',},
+								body: JSON.stringify({"name" : url.searchParams.get("query")}),
+								credentials: 'include'
+							}).then(user => {
+								user.json().then(((user) => {
+									fetch('bodyLess/search.html').then((response) => {
+										response.text().then(response => {
+											container.innerHTML = response;
+											document.getElementById("script").remove();
+											var s = document.createElement("script");
+											s.setAttribute('id', 'script');
+											s.setAttribute('src', `scripts/profile.js`);
+											document.body.appendChild(s);
+											currentPage = "search";
+											loadCurrentLang(currentPage);
+											homeBtn.style.setProperty("display", "block");
+											document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+											document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
+											Object.keys(user).forEach(function(key){
+												createUserResumeContainer(user[key]);
+											})
+											inputSearchUser.value = "";
+											userResume = document.querySelectorAll(".userResume");
+											for (var i = 0; i< userResume.length; i++){
+												userResume[i].addEventListener("click", (e) => {
+													var username;
+													if (e.target.className != "userResume")
+														username = e.target.parentElement.id;
+													else
+														username = e.target.id;
+													state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+					
+													if (container.innerHTML != "")
+														history.pushState(state, "", `https://localhost:49300/user/${username}`);
+													else
+														history.replaceState(state,"");
+												})
+											}
+										})
+									})
+								}))
+							})
+						}
+						else if (url.pathname.startsWith("/login")){
+							fetch('/api/user/logout', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								credentials: 'include'
+							});
+							fetch ('bodyLess/login.html').then((response) => {
+								(response.text().then(response => {
+									inputSearchUser.style.setProperty("display", "none");
+									container.innerHTML = response;
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/login.js`);
+									document.body.appendChild(s);
+									currentPage = "login";
+									loadCurrentLang();
+								}))
+							});
+						}
+						else if (url.pathname.startsWith("/register")){
+							fetch('/api/user/logout', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								credentials: 'include'
+							});
+							fetch ('bodyLess/register.html').then((response) => {
+								return (response.text().then(response => {
+									container.innerHTML = response;
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/register.js`);
+									currentPage = "register";
+									loadCurrentLang();
+									document.body.appendChild(s);
+								}))
+							});
+						}
+						else if (url.pathname.startsWith("/settings")){
+							fetch ('bodyLess/settings.html').then((response) => {
+								(response.text().then(response => {
+									container.innerHTML = response;
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/settings.js`);
+									currentPage = "settings";
+									loadCurrentLang();
+									document.body.appendChild(s);
+									document.getElementById("pfp").style.setProperty("display", "none");
+									document.getElementById("dropDownUser").style.setProperty("display", "none");
+									document.getElementById("goHomeButton").style.setProperty("display", "block");
+								}))
+							});
+						}
+						else if (url.pathname.startsWith("/friends")){
+							fetch ('bodyLess/friends.html').then((response) => {
+								return (response.text().then(response => {
+									container.innerHTML = response;
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/friends.js`);
+									currentPage = "friends";
+									loadCurrentLang();
+									document.body.appendChild(s);
+									document.getElementById("pfp").style.setProperty("display", "none");
+									document.getElementById("dropDownUser").style.setProperty("display", "none");
+									document.getElementById("goHomeButton").style.setProperty("display", "block");
+								}))
+							});
+						}
+						else{
+							fetch ('bodyLess/home.html').then((response) => {
+								(response.text().then(response => {
+									container.innerHTML = response;
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/home.js`);
+									document.body.appendChild(s);
+									currentPage = "home";
+									currentLang = currentUser.lang;
+									switchTheme(currentUser.is_dark_theme);
+									document.getElementById("usernameBtn").innerHTML = currentUser.display;
+									document.getElementById("pfp").style.setProperty("display", "block");
+									document.getElementById("dropDownUser").style.setProperty("display", "inline-table");
+									if (currentUser.pfp != ""){
+										var rawPfp = currentUser.pfp;
+										if (rawPfp.startsWith('https://'))
+											document.getElementById("pfp").setAttribute("src", `${rawPfp}`);
+										else
+											document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+									}
+									else
+										document.getElementById("pfp").style.setProperty("display", "none");
+									matches = currentUser.matches;
+									recentMatchHistoryContainer.innerHTML = "";
+									for (var i=0; i<Object.keys(matches).length && i<5;i++){
+										createMatchResumeContainer(matches[i]);
+									};
+									loadCurrentLang();
+								}))
+							});	
+						}
+					})
+
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({"is_active": true}),
+						credentials: 'include'
+					})
+				}
+				else{
+					if (url.pathname.startsWith("/login")){
+						fetch ('bodyLess/login.html').then((response) => {
+							(response.text().then(response => {
+								inputSearchUser.style.setProperty("display", "none");
 								container.innerHTML = response;
 								document.getElementById("script").remove();
 								var s = document.createElement("script");
 								s.setAttribute('id', 'script');
-								s.setAttribute('src', `scripts/profile.js`);
+								s.setAttribute('src', `scripts/login.js`);
 								document.body.appendChild(s);
-								currentPage = "profile";
-								loadCurrentLang(currentPage);
-								homeBtn.style.setProperty("display", "block");
-								document.getElementById("profileName").innerHTML = user.display;
-								document.getElementById("profilePfp").style.setProperty("display", "block");
-								document.getElementById("profilePfp").innerHTML = "";
-								if (user.pfp != ""){
-									var rawPfp = user.pfp;
-									if (rawPfp.startsWith('https://'))
-										document.getElementById("profilePfp").setAttribute("src", `${rawPfp}`);
-									else
-										document.getElementById("profilePfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-								}
-								else
-									document.getElementById("profilePfp").style.setProperty("display", "none");
-								recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
-								for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
-									createMatchResumeContainer(user.matches[i]);
-								};
-							})
-						})
-					}))
-				})
-			}
-		})
-	}
-	if (url.pathname.startsWith("/search")){
-		fetch('/api/user/search_by_display', {
-			method: 'POST', //GET forbid the use of body :(
-			headers: {'Content-Type': 'application/json',},
-			body: JSON.stringify({"name" : url.searchParams.get("query")}),
-			credentials: 'include'
-		}).then(user => {
-			user.json().then(((user) => {
-				fetch('bodyLess/search.html').then((response) => {
-					response.text().then(response => {
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/profile.js`);
-						document.body.appendChild(s);
-						currentPage = "search";
-						loadCurrentLang(currentPage);
-						homeBtn.style.setProperty("display", "block");
-						document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-						document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
-						Object.keys(user).forEach(function(key){
-							createUserResumeContainer(user[key]);
-						})
-						inputSearchUser.value = "";
-						userResume = document.querySelectorAll(".userResume");
-						for (var i = 0; i< userResume.length; i++){
-							userResume[i].addEventListener("click", (e) => {
-								var username;
-								if (e.target.className != "userResume")
-									username = e.target.parentElement.id;
-								else
-									username = e.target.id;
-								state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-								if (container.innerHTML != "")
-									history.pushState(state, "", `https://localhost:49300/user/${username}`);
-								else
-									history.replaceState(state,"");
-							})
-						}
-					})
-				})
-			}))
-		})
-	}
+								currentPage = "login";
+								loadCurrentLang();
+							}))
+						});
+					}
+					if (url.pathname.startsWith("/register")){
+						fetch ('bodyLess/register.html').then((response) => {
+							return (response.text().then(response => {
+								container.innerHTML = response;
+								document.getElementById("script").remove();
+								var s = document.createElement("script");
+								s.setAttribute('id', 'script');
+								s.setAttribute('src', `scripts/register.js`);
+								currentPage = "register";
+								loadCurrentLang();
+								document.body.appendChild(s);
+							}))
+						});
+					}
+				}
+			})
+		}
+	})
 })
+
 
 fetch('/api/user/current', {
 	method: 'GET',
@@ -110,70 +274,20 @@ fetch('/api/user/current', {
 	credentials: 'include'
 })
 .then(response => {
+	const url = new URL(window.location.href);
+
 	if (response.ok) {
-		(response.json()).then((text) => {	
-			fetch ('bodyLess/home.html').then((response) => {
-				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-					if (container.innerHTML != "")
-						history.pushState(state, "");
-					else
-						history.replaceState(state,"");
-					container.innerHTML = response;
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/home.js`);
-					document.body.appendChild(s);
-					currentPage = "home";
-					currentLang = response.lang;
-					loadCurrentLang();
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					history.replaceState(state, "");
-				}))
-			});	
-
+		(response.json()).then((text) => {
+			if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/home');
+			else
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "");
 		});
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({"is_active": true}),
-			credentials: 'include'
-		})
 	}
 	else {
-		fetch ('bodyLess/login.html').then((response) => {
-			(response.text().then(response => {
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-				if (container.innerHTML != "")
-					history.pushState(state, "");
-				else
-					history.replaceState(state,"");
-				inputSearchUser.style.setProperty("display", "none");
-				container.innerHTML = response;
-				document.getElementById("script").remove();
-				var s = document.createElement("script");
-				s.setAttribute('id', 'script');
-				s.setAttribute('src', `scripts/login.js`);
-				document.body.appendChild(s);
-				currentPage = "login";
-				loadCurrentLang();
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-				history.replaceState(state, "");
-			}))
-		});
+		history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/login');
 	}
-	return (null);
 })
-.catch(error => {
-	console.error('There was a problem with the fetch operation:', error);
-	return (null);
-});
 
 window.addEventListener("beforeunload", (e) => {
 	fetch('/api/user/update', {
