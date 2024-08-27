@@ -53,24 +53,7 @@ function handleToken() {
 window.addEventListener('load', handleToken());
 
 registerLink.addEventListener("click", (e) => {
-	fetch ('bodyLess/register.html').then((response) => {
-		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-			if (container.innerHTML != "")
-				history.pushState(state, "");
-			else
-				history.replaceState(state,"");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/register.js`);
-			currentPage = "register";
-			loadCurrentLang();
-			document.body.appendChild(s);
-		}))
-	});
+	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/register');
 });
 
 fortyTwoLogin.addEventListener("keydown", (e) => {

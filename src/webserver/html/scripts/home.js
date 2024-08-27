@@ -77,138 +77,20 @@ window.addEventListener("load", () => {
 		credentials: 'include'
 	})
 	.then(response => {
-		if (response.ok) {
-			(response.json()).then((text) => {
-				switchTheme(text.is_dark_theme);
-				currentLang = text.lang;
-				loadCurrentLang();
-				document.getElementById("usernameBtn").innerHTML = text.display;
-				document.getElementById("pfp").style.setProperty("display", "block");
-				document.getElementById("dropDownUser").style.setProperty("display", "inline-table");
-				if (text.pfp != ""){
-					var rawPfp = text.pfp;
-					if (rawPfp.startsWith('https://'))
-						document.getElementById("pfp").setAttribute("src", `${rawPfp}`);
-					else
-						document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-				}
-				else
-					document.getElementById("pfp").style.setProperty("display", "none");
-				matches = text.matches;
-				recentMatchHistoryContainer.innerHTML = "";
-				for (var i=0; i<Object.keys(matches).length && i<5;i++){
-					createMatchResumeContainer(matches[i]);
-				};
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-				history.replaceState(state, "");
-			});
-		}
-		else {
-			console.log("Failed to get user")
-
-			fetch ('bodyLess/login.html').then((response) => {
-				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					if (container.innerHTML != "")
-						history.pushState(state, "");
-					else
-						history.replaceState(state,"");
-					container.innerHTML = response;
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/login.js`);
-					document.body.appendChild(s);
-					document.getElementById("pfp").style.setProperty("display", "none");
-					document.getElementById("dropDownUser").style.setProperty("display", "none");
-					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					history.replaceState(state, "");
-				}))
-			});
+		if (!response.ok) {
+			history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/login');
 		}
 	})
 }
 
 logOutBtn.addEventListener("click", (e) => {
-	fetch('/api/user/logout', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	});
-
-	fetch ('bodyLess/login.html').then((response) => {
-		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-			if (container.innerHTML != "")
-				history.pushState(state, "");
-			else
-				history.replaceState(state,"");
-			document.getElementById("inputSearchUser").style.setProperty("display", "none");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/login.js`);
-			currentPage = "login";
-			loadCurrentLang();
-			document.body.appendChild(s);
-			document.getElementById("pfp").style.setProperty("display", "none");
-			document.getElementById("dropDownUser").style.setProperty("display", "none");
-		}))
-	});
+	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/login');
 });
 
 accSettingsBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/settings.html').then((response) => {
-		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-			if (container.innerHTML != "")
-				history.pushState(state, "");
-			else
-				history.replaceState(state,"");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/settings.js`);
-			currentPage = "settings";
-			loadCurrentLang();
-			document.body.appendChild(s);
-			document.getElementById("pfp").style.setProperty("display", "none");
-			document.getElementById("dropDownUser").style.setProperty("display", "none");
-			document.getElementById("goHomeButton").style.setProperty("display", "block");
-		}))
-	});
+	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/settings');
 })
 
 friendsBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/friends.html').then((response) => {
-		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-			if (container.innerHTML != "")
-				history.pushState(state, "");
-			else
-				history.replaceState(state,"");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/friends.js`);
-			currentPage = "friends";
-			loadCurrentLang();
-			document.body.appendChild(s);
-			document.getElementById("pfp").style.setProperty("display", "none");
-			document.getElementById("dropDownUser").style.setProperty("display", "none");
-			document.getElementById("goHomeButton").style.setProperty("display", "block");
-		}))
-	});
+	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/friends');
 })
