@@ -552,12 +552,17 @@ function createMatchResumeContainer(match){
 }
 
 function createUserResumeContainer(user){
+	userResumeContainer = document.createElement("div");
+	userResumeContainer.className = "userResumeContainer";
+	userResumeContainer.id = user.username
 	userResume = document.createElement("div");
 	userResume.className = "userResume";
 	userResume.id = user.username
 
 	img = document.createElement("img");
+	imgContainer = document.createElement("div");
 	img.className = "userResumePfp";
+	imgContainer.className = "userResumePfpContainer";
 	if (user.pfp != ""){
 		var rawPfp = user.pfp;
 		if (rawPfp.startsWith('https://'))
@@ -573,9 +578,11 @@ function createUserResumeContainer(user){
 	userResumeName.innerHTML = user.display;
 	
 	
-	userResume.appendChild(img);
+	imgContainer.appendChild(img);
+	userResume.appendChild(imgContainer);
 	userResume.appendChild(userResumeName);
-	document.getElementById("userResumeContainer").appendChild(userResume);
+	userResumeContainer.appendChild(userResume)
+	document.getElementById("resumeContainer").appendChild(userResumeContainer);
 }
 
 inputSearchUser.addEventListener("keydown", (e) => {

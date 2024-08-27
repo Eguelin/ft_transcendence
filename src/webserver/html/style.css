@@ -1005,6 +1005,11 @@ a {
 }
 
 .userResume {
+	display: flex;
+	flex-direction: column;
+}
+
+.userResumeContainer {
 	width: 10ch;
 	background: var(--input-bg-rgb);
 	border: 1px solid var(--main-text-rgb);
@@ -1013,16 +1018,25 @@ a {
 	font-size: 1vmin;
 }
 
-.userResumePfp {
-	height: 4vw;
-	width: 4vw;
-
+.userResumePfpContainer{
+	height: 10ch;
+	width: 10ch;
+	background-position: center center;
 	background-repeat: no-repeat;
-	background-size: 100%;
-	background-position: 50% 50%;
+	overflow: hidden;
+	position: relative;
+}
+
+.userResumePfp {
+	width: 120%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .userResumeName{
+	padding: .5vmin .1vmin;
 	color: var(--main-text-rgb);
 	overflow-wrap: anywhere;
 }
