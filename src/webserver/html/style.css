@@ -969,6 +969,7 @@ a {
 
 #profileNameContainer {
 	flex: auto;
+	position: relative;
 }
 
 #profilePfp {
@@ -996,7 +997,11 @@ a {
 }
 
 #profileName{
+	font-size: 6vmax;
 	margin: 0;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 #inputSearchUser{
