@@ -5,6 +5,7 @@ inputSearchUser = document.getElementById("inputSearchUser");
 pageContentContainer = document.getElementById("pageContentContainer");
 var currentPage = "";
 var currentLang = "lang/EN_US.json"
+const hostname = new URL(window.location.href)
 
 window.navigation.addEventListener("navigate", (e) => {
 	const url = new URL(e.destination.url);
@@ -91,7 +92,7 @@ window.navigation.addEventListener("navigate", (e) => {
 											for (var i = 0; i< userResume.length; i++){
 												userResume[i].addEventListener("click", (e) => {
 													var username = e.target.closest(".userResume").id;
-													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://localhost:49300/user/${username}`);
+													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://${hostname.host}/user/${username}`);
 												})
 											}
 										})
@@ -278,13 +279,13 @@ fetch('/api/user/current', {
 	if (response.ok) {
 		(response.json()).then((text) => {
 			if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/home');
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 			else
 				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "");
 		});
 	}
 	else {
-		history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/login');
+		history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 	}
 })
 
@@ -305,9 +306,9 @@ homeBtn.addEventListener("click", (e) => {
 			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 			if (container.innerHTML != "")
-				history.pushState(state, "", "https://localhost:49300");
+				history.pushState(state, "", `https://${hostname.host}`);
 			else
-				history.replaceState(state,"", "https://localhost:49300");
+				history.replaceState(state,"", `https://${hostname.host}`);
 			container.innerHTML = response;
 			document.getElementById("script").remove();
 			var s = document.createElement("script");
@@ -361,7 +362,7 @@ window.addEventListener("popstate", (event) => {
 	})
 	.then(response => {
 		if (!response.ok) {
-			history.replaceState(state, "", 'https://localhost:49300/login');
+			history.replaceState(state, "", `https://${hostname.host}/login`);
 		}
 		else{
 			fetch('/api/user/update', {
@@ -590,7 +591,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
 
 						if (container.innerHTML != "")
-							history.pushState(state, "", `https://localhost:49300/search?query=${inputSearchUser.value}`);
+							history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
 						else
 							history.replaceState(state,"");
 						container.innerHTML = response;

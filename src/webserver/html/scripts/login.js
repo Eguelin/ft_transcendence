@@ -5,7 +5,7 @@ swichTheme = document.getElementById("themeButton");
 fortyTwoLogin = document.getElementById("fortyTwoLogin");
 
 fortyTwoLogin.addEventListener("click", (e) => {
-	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-cb9676bf45bf8955cbb6ab78a74a365e69a9f11a901301c48e5f5f5ee1a7c144&redirect_uri=https%3A%2F%2Flocalhost%3A49300%2F&response_type=code`;
+	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-cb9676bf45bf8955cbb6ab78a74a365e69a9f11a901301c48e5f5f5ee1a7c144&redirect_uri=https%3A%2F%2F${hostname.hostname}%3A49300%2F&response_type=code`;
 	window.location.href = authUrl;
 });
 
@@ -53,7 +53,7 @@ function handleToken() {
 window.addEventListener('load', handleToken());
 
 registerLink.addEventListener("click", (e) => {
-	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/register');
+	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/register`);
 });
 
 fortyTwoLogin.addEventListener("keydown", (e) => {
@@ -98,7 +98,7 @@ loginBtn.addEventListener("click", (e) => {
 		})
 		.then(response => {
 			if (response.ok) {
-				history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/home');
+				history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 			} else {
 				console.log("Failed to login user")
 				if (response.status != 500){
