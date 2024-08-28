@@ -288,6 +288,49 @@ window.navigation.addEventListener("navigate", (e) => {
 })
 
 
+function handleToken() {
+	const code = window.location.href.split("code=")[1];
+
+	if (code)
+	{
+		fetch('/api/user/fortyTwo/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ code: code }),
+			credentials: 'include'
+		})
+		.then(response => response.json())
+		.then(data => {
+				console.log('Data:', data)
+				window.history.replaceState({}, document.title, "/");
+				fetch ('bodyLess/home.html').then((response) => {
+					return (response.text().then(response => {
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
+						if (container.innerHTML != "")
+							history.pushState(state, "");
+						else
+							history.replaceState(state,"");
+						document.getElementById("inputSearchUser").style.setProperty("display", "block");
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/home.js`);
+						currentPage = "home";
+						loadCurrentLang();
+						document.body.appendChild(s);
+					}))
+				});
+		})
+		.catch(error => console.error('Error:', error));
+	}
+}
+
+window.addEventListener('load', handleToken());
+
 fetch('/api/user/current', {
 	method: 'GET',
 	headers: {
@@ -383,10 +426,7 @@ window.addEventListener("popstate", (event) => {
 		credentials: 'include'
 	})
 	.then(response => {
-		if (!response.ok) {
-			history.replaceState(state, "", `https://${hostname.host}/login`);
-		}
-		else{
+		if (response.ok) {
 			fetch('/api/user/update', {
 				method: 'POST',
 				headers: {
