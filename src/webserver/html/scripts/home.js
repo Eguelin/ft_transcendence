@@ -25,6 +25,15 @@ dpUserBtn.addEventListener("click", (e) => {
 		if (!response.ok) {
 			history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 		}
+		else{
+			response.json().then(currentUser => {
+				matches = currentUser.matches;
+				recentMatchHistoryContainer.innerHTML = "";
+				for (var i=0; i<Object.keys(matches).length && i<5;i++){
+					createMatchResumeContainer(matches[i]);
+				};
+			})
+		}
 	})
 }
 

@@ -207,11 +207,6 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/home.html').then((response) => {
 								(response.text().then(response => {
 									container.innerHTML = response;
-									document.getElementById("script").remove();
-									var s = document.createElement("script");
-									s.setAttribute('id', 'script');
-									s.setAttribute('src', `scripts/home.js`);
-									document.body.appendChild(s);
 									currentPage = "home";
 									currentLang = currentUser.lang;
 									switchTheme(currentUser.is_dark_theme);
@@ -229,11 +224,11 @@ window.navigation.addEventListener("navigate", (e) => {
 									}
 									else
 										userPfp.style.setProperty("display", "none");
-									matches = currentUser.matches;
-									recentMatchHistoryContainer.innerHTML = "";
-									for (var i=0; i<Object.keys(matches).length && i<5;i++){
-										createMatchResumeContainer(matches[i]);
-									};
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/home.js`);
+									document.body.appendChild(s);
 									loadCurrentLang();
 								}))
 							});	
