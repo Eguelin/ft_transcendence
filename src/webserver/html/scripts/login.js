@@ -5,52 +5,9 @@ swichTheme = document.getElementById("themeButton");
 fortyTwoLogin = document.getElementById("fortyTwoLogin");
 
 fortyTwoLogin.addEventListener("click", (e) => {
-	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-cb9676bf45bf8955cbb6ab78a74a365e69a9f11a901301c48e5f5f5ee1a7c144&redirect_uri=https%3A%2F%2F${hostname.hostname}%3A49300%2F&response_type=code`;
+	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-cb9676bf45bf8955cbb6ab78a74a365e69a9f11a901301c48e5f5f5ee1a7c144&redirect_uri=https%3A%2F%2F${hostname.hostname}%3A49300%2Flogin&response_type=code`;
 	window.location.href = authUrl;
 });
-
-function handleToken() {
-	const code = window.location.href.split("code=")[1];
-
-	if (code)
-	{
-		fetch('/api/user/fortyTwo/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ code: code }),
-			credentials: 'include'
-		})
-		.then(response => response.json())
-		.then(data => {
-				console.log('Data:', data)
-				window.history.replaceState({}, document.title, "/");
-				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						if (container.innerHTML != "")
-							history.pushState(state, "");
-						else
-							history.replaceState(state,"");
-						document.getElementById("inputSearchUser").style.setProperty("display", "block");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						currentPage = "home";
-						loadCurrentLang();
-						document.body.appendChild(s);
-					}))
-				});
-		})
-		.catch(error => console.error('Error:', error));
-	}
-}
-
-window.addEventListener('load', handleToken());
 
 registerLink.addEventListener("click", (e) => {
 	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/register`);
