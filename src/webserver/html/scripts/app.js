@@ -2,7 +2,11 @@ container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
+usernameBtn = document.getElementById("usernameBtn");
+userPfp = document.getElementById("pfp");
+dropDownUser = document.getElementById("dropDownUser");
 pageContentContainer = document.getElementById("pageContentContainer");
+
 var currentPage = "";
 var currentLang = "lang/EN_US.json"
 const hostname = new URL(window.location.href)
@@ -111,8 +115,8 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/login.html').then((response) => {
 								(response.text().then(response => {
 									inputSearchUser.style.setProperty("display", "none");
-									document.getElementById("pfp").style.setProperty("display", "none");
-									document.getElementById("dropDownUser").style.setProperty("display", "none");
+									userPfp.style.setProperty("display", "none");
+									dropDownUser.style.setProperty("display", "none");
 									container.innerHTML = response;
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
@@ -136,8 +140,8 @@ window.navigation.addEventListener("navigate", (e) => {
 								return (response.text().then(response => {
 									container.innerHTML = response;
 									inputSearchUser.style.setProperty("display", "none");
-									document.getElementById("pfp").style.setProperty("display", "none");
-									document.getElementById("dropDownUser").style.setProperty("display", "none");
+									userPfp.style.setProperty("display", "none");
+									dropDownUser.style.setProperty("display", "none");
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
 									s.setAttribute('id', 'script');
@@ -159,9 +163,9 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "settings";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									document.getElementById("pfp").style.setProperty("display", "none");
-									document.getElementById("dropDownUser").style.setProperty("display", "none");
-									document.getElementById("goHomeButton").style.setProperty("display", "block");
+									userPfp.style.setProperty("display", "none");
+									dropDownUser.style.setProperty("display", "none");
+									homeBtn.style.setProperty("display", "block");
 								}))
 							});
 						}
@@ -176,9 +180,9 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "friends";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									document.getElementById("pfp").style.setProperty("display", "none");
-									document.getElementById("dropDownUser").style.setProperty("display", "none");
-									document.getElementById("goHomeButton").style.setProperty("display", "block");
+									userPfp.style.setProperty("display", "none");
+									dropDownUser.style.setProperty("display", "none");
+									homeBtn.style.setProperty("display", "block");
 								}))
 							});
 						}
@@ -194,19 +198,20 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "home";
 									currentLang = currentUser.lang;
 									switchTheme(currentUser.is_dark_theme);
-									document.getElementById("usernameBtn").innerHTML = currentUser.display;
-									document.getElementById("goHomeButton").style.setProperty("display", "none");
-									document.getElementById("pfp").style.setProperty("display", "block");
-									document.getElementById("dropDownUser").style.setProperty("display", "inline-table");
+									usernameBtn.innerHTML = currentUser.display;
+									homeBtn.style.setProperty("display", "none");
+									userPfp.style.setProperty("display", "block");
+									dropDownUser.style.setProperty("display", "inline-table");
+									inputSearchUser.style.setProperty("display", "block");
 									if (currentUser.pfp != ""){
 										var rawPfp = currentUser.pfp;
 										if (rawPfp.startsWith('https://'))
-											document.getElementById("pfp").setAttribute("src", `${rawPfp}`);
+											userPfp.setAttribute("src", `${rawPfp}`);
 										else
-											document.getElementById("pfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+											userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
 									}
 									else
-										document.getElementById("pfp").style.setProperty("display", "none");
+										userPfp.style.setProperty("display", "none");
 									matches = currentUser.matches;
 									recentMatchHistoryContainer.innerHTML = "";
 									for (var i=0; i<Object.keys(matches).length && i<5;i++){
