@@ -186,6 +186,23 @@ window.navigation.addEventListener("navigate", (e) => {
 								}))
 							});
 						}
+						else if (url.pathname.startsWith("/game")){
+							fetch ('bodyLess/game.html').then((response) => {
+								return (response.text().then(response => {
+									container.innerHTML = response;
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/game.js`);
+									currentPage = "game";
+									loadCurrentLang();
+									document.body.appendChild(s);
+									userPfp.style.setProperty("display", "none");
+									dropDownUser.style.setProperty("display", "none");
+									homeBtn.style.setProperty("display", "block");
+								}))
+							});
+						}
 						else{
 							fetch ('bodyLess/home.html').then((response) => {
 								(response.text().then(response => {
