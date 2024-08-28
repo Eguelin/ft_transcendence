@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'login',
-	'channels',
+    'channels',
 ]
 
 MIDDLEWARE = [
