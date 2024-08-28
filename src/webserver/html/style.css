@@ -38,6 +38,10 @@ body{
 	position: relative;
 }
 
+#browseFlexContainer {
+	display: flex;
+}
+
 #pageContentContainer {
 	height: fit-content;
 	text-align: center;
@@ -1005,7 +1009,6 @@ a {
 }
 
 #inputSearchUser{
-	margin-left: 5vmax;
 	width: 20vmax;
 }
 
