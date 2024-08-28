@@ -71,7 +71,7 @@ registerBtn.addEventListener("click", (e) => {
 					body: JSON.stringify(data),
 					credentials: 'include'
 				}).then(response => {
-					history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/home');
+					history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 				});
 			} else {
 				console.log("Failed to create user")

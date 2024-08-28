@@ -372,7 +372,7 @@ function checkUpdate(){
 				});
 			}
 			else {
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", 'https://localhost:49300/login');
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 			}
 		})
 	}
