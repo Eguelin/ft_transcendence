@@ -6,6 +6,8 @@ dpUserBtn = document.getElementById("dropDownUser");
 accSettingsBtn = document.getElementById("settingsBtn");
 friendsBtn = document.getElementById("friendsBtn");
 recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
+playBtn = document.getElementById("playBtn");
+
 
 dpUserBtn.addEventListener("click", (e) => {
 	document.getElementById("dropDownUser").focus();
@@ -36,4 +38,8 @@ accSettingsBtn.addEventListener("click", (e) => {
 
 friendsBtn.addEventListener("click", (e) => {
 	history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/friends`);
+})
+
+playBtn.addEventListener("click", (e) => {
+	history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/game`);
 })
