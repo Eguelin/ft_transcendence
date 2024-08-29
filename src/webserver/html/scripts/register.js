@@ -71,25 +71,7 @@ registerBtn.addEventListener("click", (e) => {
 					body: JSON.stringify(data),
 					credentials: 'include'
 				}).then(response => {
-					fetch ('bodyLess/home.html').then((response) => {
-						(response.text().then(response => {
-							swichTheme.focus();
-							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-							if (container.innerHTML != "")
-								history.pushState(state, "");
-							else
-								history.replaceState(state,"");
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/home.js`);
-							currentPage = "home";
-							loadCurrentLang();
-							document.body.appendChild(s);
-						}))
-					});
+					history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 				});
 			} else {
 				console.log("Failed to create user")

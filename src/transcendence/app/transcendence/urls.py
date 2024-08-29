@@ -15,20 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from login import views as login_view
-from friendship import views as friendship_view
+import login.views, friendship.views
 
 urlpatterns = [
-    path('user/create', login_view.create_user),
-    path('user/login', login_view.user_login),
-    path('user/logout', login_view.user_logout),
-    path('user/current', login_view.current_user),
-	path('user/fortyTwo/login', login_view.fortytwo),
-    path('user/update', login_view.profile_update),
-    path('user/send_friend_request', friendship_view.send_friend_request),
-    path('user/accept_friend_request', friendship_view.accept_friend_request),
-    path('user/reject_friend_request', friendship_view.reject_friend_request),
-    path('user/remove_friend', friendship_view.remove_friend),
-    path('user/block_friend', friendship_view.block_friend),
-    path('user/unblock_user', friendship_view.unblock_user),
+    path('user/create', login.views.create_user),
+    path('user/login', login.views.user_login),
+    path('user/logout', login.views.user_logout),
+    path('user/current', login.views.current_user),
+	path('user/fortyTwo/login', login.views.fortytwo),
+    path('user/update', login.views.profile_update),
+    path('user/send_friend_request', friendship.views.send_friend_request),
+    path('user/accept_friend_request', friendship.views.accept_friend_request),
+    path('user/reject_friend_request', friendship.views.reject_friend_request),
+    path('user/remove_friend', friendship.views.remove_friend),
+    path('user/block_friend', friendship.views.block_friend),
+    path('user/unblock_user', friendship.views.unblock_user),
+    path('user/get', login.views.get),
+    path('user/search_by_display', login.views.search_by_display)
 ]
