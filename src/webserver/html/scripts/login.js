@@ -5,7 +5,7 @@ swichTheme = document.getElementById("themeButton");
 fortyTwoLogin = document.getElementById("fortyTwoLogin");
 
 fortyTwoLogin.addEventListener("click", (e) => {
-	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-cb9676bf45bf8955cbb6ab78a74a365e69a9f11a901301c48e5f5f5ee1a7c144&redirect_uri=https%3A%2F%2F${hostname.hostname}%3A49300%2F&response_type=code`;
+	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-cb9676bf45bf8955cbb6ab78a74a365e69a9f11a901301c48e5f5f5ee1a7c144&redirect_uri=https%3A%2F%2Flocalhost%3A49300%2F&response_type=code`;
 	window.location.href = authUrl;
 });
 
