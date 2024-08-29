@@ -42,6 +42,10 @@ body{
 	display: flex;
 }
 
+#browseFlexContainer div{
+	margin: 1vmax;
+}
+
 #pageContentContainer {
 	height: fit-content;
 	text-align: center;
@@ -283,6 +287,7 @@ a {
 	background:var(--main-text-rgb);
 	height:5vw;
 	width:5vw;
+	margin: 1vmax;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -520,7 +525,7 @@ a {
 .profilePicture {
 	height: 4vw;
 	width: 4vw;
-	margin: 1vw 5vmax 1vw 1vh;
+	margin: 1vmax;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -548,7 +553,7 @@ a {
 	position: relative;
 	display: inline-block;
 	padding-right: 0.1vw;
-	margin-left: 1vw;
+	margin: 1vmax;
 	height: 4vw;
 	outline: none;
 }
@@ -958,11 +963,11 @@ a {
 }
 
 .resultScoreScore{
-	flex: 0;
+	flex: auto;
+	text-align: right;
 }
 
 .resultScoreName{
-	flex: auto;
 	text-align: left;
 }
 

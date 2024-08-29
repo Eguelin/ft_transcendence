@@ -62,6 +62,12 @@ window.navigation.addEventListener("navigate", (e) => {
 											for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
 												createMatchResumeContainer(user.matches[i]);
 											};
+											matchUsersName = document.querySelectorAll(".resultScoreName")
+											Object.keys(matchUsersName).forEach(function(key){
+												matchUsersName[key].addEventListener("click", (e) => {
+													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+												})
+											})
 										})
 									})
 								}))
@@ -572,16 +578,18 @@ function createMatchResumeContainer(match){
 	scoreOpponentName.className = "resultScoreName";
 	scoreOpponentScore.className = "resultScoreScore";
 
-	scoreUserName.innerHTML = `${match.player_one} :`;
-	scoreOpponentName.innerHTML = `${match.player_two} :`;
+	scoreUserName.innerHTML = `${match.player_one}`;
+	scoreOpponentName.innerHTML = `${match.player_two}`;
 	
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
 	scoreUser.appendChild(scoreUserName);
+	scoreUser.innerHTML += " : ";
 	scoreUser.appendChild(scoreUserScore);
 
 	scoreOpponent.appendChild(scoreOpponentName);
+	scoreOpponent.innerHTML += " : ";
 	scoreOpponent.appendChild(scoreOpponentScore);
 	if (match.player_one_pts > match.player_two_pts)
 		result.innerHTML = "VICTORY";
@@ -589,7 +597,7 @@ function createMatchResumeContainer(match){
 		result.innerHTML = "LOST";
 	else
 		result.innerHTML = "DRAW";
-	
+
 	scoreContainer.appendChild(scoreUser);
 	scoreContainer.appendChild(scoreOpponent);
 	
