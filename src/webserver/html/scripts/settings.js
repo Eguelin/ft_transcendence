@@ -110,7 +110,7 @@ saveBtn.addEventListener("click", (e) => {
 		})
 	}
 })
-
+/*
 {
 	fetch('/api/user/current', {
 		method: 'GET',
@@ -205,7 +205,7 @@ window.addEventListener("load", () => {
 		}
 	})
 })
-
+*/
 
 
 dropDownContent.forEach(function(button) {

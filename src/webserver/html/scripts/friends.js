@@ -369,37 +369,10 @@ function checkUpdate(){
 							})
 						})
 					}
-					
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					history.replaceState(state, "");
 				});
 			}
 			else {
-				console.log("Failed to get user")
-	
-				fetch ('bodyLess/login.html').then((response) => {
-					(response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						if (container.innerHTML != "")
-							history.pushState(state, "");
-						else
-							history.replaceState(state,"");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/login.js`);
-						document.body.appendChild(s);
-						document.getElementById("pfp").style.setProperty("display", "none");
-						document.getElementById("dropDownUser").style.setProperty("display", "none");
-						currentPage = "login";
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						history.replaceState(state, "");
-					}))
-				});
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 			}
 		})
 	}
