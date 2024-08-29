@@ -19,21 +19,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=1%z50-g7ed0!%af6yod+-a8gjfjzqft3fwlyw9#ofy-!29+fx'
+import os
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-import ossaudiodev
 # 42 API credentials
 
-from dotenv import load_dotenv
-import os
-load_dotenv()
 PUBLIC = os.getenv('PUBLIC')
 SECRET = os.getenv('SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = [
 	'localhost',
@@ -41,7 +36,6 @@ ALLOWED_HOSTS = [
     'www.ft-transcendence.online',
     '*',
 ]
-
 
 # Application definition
 
@@ -80,7 +74,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'transcendence.wsgi.application'
 
-ASGI_APPLICATION = "transcendence.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
+
+ASGI_APPLICATION = 'transcendence.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
