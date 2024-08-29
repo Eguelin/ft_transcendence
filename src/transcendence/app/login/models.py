@@ -10,10 +10,17 @@ import random
 
 class MatchManager(models.Manager):
 	def createWithRandomOpps(self, creator):
-		match = self.create(player_one=creator, player_two=User.objects.get_or_create(username="random")[0])
+		try:
+			player_two = User.objects.get(username="random")
+		except:
+			player_two = User.objects.get_or_create(username="random")[0]
+			player_two.profile.display_name = "random"
+			player_two.save()
+		match = self.create(player_one=creator, player_two=player_two)
 		match.player_one_pts = random.randint(0, 10)
 		match.player_two_pts = random.randint(0, 10)
 		match.save()
+		player_two.profile.matches.add(match)
 		return match
 
 	def save(self):
