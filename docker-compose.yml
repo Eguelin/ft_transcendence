@@ -36,7 +36,8 @@ services:
       - .env
     volumes:
       - ./src/transcendence/app:/app
-    command: /bin/start
+    command: /bin/start dev # start the backend in development mode
+    # command: /bin/start prod # start the backend in production mode
     networks:
       - transcendence
     depends_on:
