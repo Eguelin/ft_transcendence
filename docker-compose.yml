@@ -12,6 +12,14 @@ services:
       - transcendence
     restart: always
 
+  #Channel layer service
+  redis:
+    image: redis:7.4.0-alpine
+    container_name: redis
+    networks:
+      - transcendence
+    restart: always
+
   # web server service
   webserver:
     build: src/webserver/
@@ -42,6 +50,7 @@ services:
       - transcendence
     depends_on:
       - db
+      - redis
     restart: always
 
 volumes:
