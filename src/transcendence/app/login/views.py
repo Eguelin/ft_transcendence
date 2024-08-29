@@ -52,7 +52,7 @@ def fortytwo(request):
 	response = requests.get(url, headers=headers)
 	if response.status_code != 200:
 		return JsonResponse(response.json(), status=response.status_code)
-	
+
 	user_json = response.json()
 	user_login = user_json.get('login')
 	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
@@ -182,7 +182,7 @@ def user_login(request):
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'User does not exist'}, status=404)
 	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=404)
+		return JsonResponse({'message': str(e)}, status=500)
 
 def user_logout(request):
 	if request.method != 'POST':
@@ -296,7 +296,7 @@ def current_user(request):
 		for e in friends_list:
 			friend_json[i] = get_user_json(e)
 			i += 1
-		
+
 		i = 0
 		for e in friends_request_list:
 			friend_request_json[i] = get_user_json(e)
@@ -322,19 +322,6 @@ def current_user(request):
 	else:
 		return JsonResponse({'username': None}, status=400)
 
-def generate_unique_username(base_username):
-	def random_suffix(length=5):
-		letters_and_digits = string.ascii_letters + string.digits
-		return ''.join(random.choice(letters_and_digits) for i in range(length))
-
-	unique_username = base_username
-	suffix_length = 5
-	while User.objects.filter(username=unique_username).exists():
-		unique_username = f"{base_username}_{random_suffix(suffix_length)}"
-		suffix_length += 1
-
-	return unique_username
-
 def get(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -344,7 +331,7 @@ def get(request):
 			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
 		except:
 			return JsonResponse({'message': "can't find user"}, status=400)
-		
+
 def search_by_display(request):
 	if (request.method != 'POST'):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -361,4 +348,4 @@ def search_by_display(request):
 				return JsonResponse({}, status=200)
 			return JsonResponse(users_json, status=200)
 		except Exception as error:
-			return JsonResponse({'message': error}, status=400)
+			return JsonResponse({'message': error}, status=500)
