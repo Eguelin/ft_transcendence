@@ -9,67 +9,8 @@ fortyTwoLogin.addEventListener("click", (e) => {
 	window.location.href = authUrl;
 });
 
-function handleToken() {
-	const code = window.location.href.split("code=")[1];
-
-	if (code)
-	{
-		fetch('/api/user/fortyTwo/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ code: code }),
-			credentials: 'include'
-		})
-		.then(response => response.json())
-		.then(data => {
-				console.log('Data:', data)
-				window.history.replaceState({}, document.title, "/");
-				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						if (container.innerHTML != "")
-							history.pushState(state, "");
-						else
-							history.replaceState(state,"");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						currentPage = "home";
-						loadCurrentLang();
-						document.body.appendChild(s);
-					}))
-				});
-		})
-		.catch(error => console.error('Error:', error));
-	}
-}
-
-window.addEventListener('load', handleToken());
-
 registerLink.addEventListener("click", (e) => {
-	fetch ('bodyLess/register.html').then((response) => {
-		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-			if (container.innerHTML != "")
-				history.pushState(state, "");
-			else
-				history.replaceState(state,"");
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/register.js`);
-			currentPage = "register";
-			loadCurrentLang();
-			document.body.appendChild(s);
-		}))
-	});
+	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/register`);
 });
 
 fortyTwoLogin.addEventListener("keydown", (e) => {
@@ -114,27 +55,7 @@ loginBtn.addEventListener("click", (e) => {
 		})
 		.then(response => {
 			if (response.ok) {
-				console.log('User logged in successfully');
-
-				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
-						swichTheme.focus();
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						if (container.innerHTML != "")
-							history.pushState(state, "");
-						else
-							history.replaceState(state,"");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						currentPage = "home";
-						loadCurrentLang();
-						document.body.appendChild(s);
-					}))
-				});
+				history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 			} else {
 				console.log("Failed to login user")
 				if (response.status != 500){

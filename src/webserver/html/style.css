@@ -18,6 +18,7 @@ body{
 	font-family:'pong';
 	background-color: var(--page-bg-rgb);
 	height: 100%;
+	margin: 0;
 }
 
 #container{
@@ -30,10 +31,19 @@ body{
 	text-align: center;
 	display: flex;
 	width: -webkit-fill-available;
+	align-items: center;
 }
 
 #titleFlexContainer div{
 	position: relative;
+}
+
+#browseFlexContainer {
+	display: flex;
+}
+
+#browseFlexContainer div{
+	margin: 1vmax;
 }
 
 #pageContentContainer {
@@ -46,9 +56,9 @@ h1{
 	color: var(--main-text-rgb);
 	height: inherit;
 	font-style: italic;
-	margin-top: 5vh;
-	margin-bottom: 5vh;
-	font-size: 7vw;
+	margin-top: 4vmax;
+	margin-bottom: 4vmax;
+	font-size: 7vmax;
 	text-align: center;
 }
 
@@ -259,10 +269,10 @@ a {
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
-	position:absolute;
+	/*position:absolute;
 	top:50%;
 	left:50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);*/
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -277,6 +287,7 @@ a {
 	background:var(--main-text-rgb);
 	height:5vw;
 	width:5vw;
+	margin: 1vmax;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -514,9 +525,7 @@ a {
 .profilePicture {
 	height: 4vw;
 	width: 4vw;
-	margin-left: 1vw;
-	margin-top: 1vh;
-	margin-bottom: 1vh;
+	margin: 1vmax;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -529,11 +538,7 @@ a {
 	flex-direction: row-reverse;
 	display: flex;
 	flex: 1;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translateX(-50%) translateY(-50%);
-	height: 5vw;
+	align-items: center;
 }
 
 #usernameBtn {
@@ -548,7 +553,8 @@ a {
 	position: relative;
 	display: inline-block;
 	padding-right: 0.1vw;
-	margin-left: 1vw;
+	margin: 1vmax;
+	height: 4vw;
 	outline: none;
 }
 
@@ -914,4 +920,149 @@ a {
 .pfpStatusOnline{
 	mask-image: url("svg/circle.svg");
 	background: green;
+}
+
+
+
+
+
+
+#recentMatchHistoryContainer{
+	height: 20vh;
+	width: -webkit-fill-available;
+	position: absolute;
+	bottom: 0;
+	display: flex;
+}
+
+.matchDescContainer{
+	background: var(--input-bg-rgb); 
+	height: auto;
+	border: .5px solid var(--page-bg-rgb);
+	flex: auto;
+	display: flex;
+	flex-direction: column;
+	color: var(--main-text-rgb);
+}
+
+.matchDescContainerResult{
+	flex: auto;
+	margin-top: 1vh;
+}
+
+.matchDescContainerScore{
+	display: flex;
+	flex-direction: column;
+	flex: auto;
+	padding: 0 1vw;
+	gap: 1vh;
+}
+
+.resultScore{
+	display: flex;
+}
+
+.resultScoreScore{
+	flex: auto;
+	text-align: right;
+}
+
+.resultScoreName{
+	text-align: left;
+}
+
+#profileInfoContainer {
+	display: flex;
+	margin: 3vw 3vw 0 3vw;
+}
+
+#profileNameContainer {
+	flex: auto;
+	position: relative;
+}
+
+#profilePfp {
+	height: 7vw;
+	width: 7vw;
+	margin-left: 1vw;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: 50% 50%;
+	
+	border-radius: 50%;
+}
+
+#MatchHistoryTextContainer{
+	color: var(--main-text-rgb);
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	top: -5vmin;
+	display: flex;
+	gap: 1vmin;
+}
+
+#profileName{
+	font-size: 6vmax;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+#inputSearchUser{
+	width: 20vmax;
+}
+
+#resumeContainer{
+	margin-top: 2vmax;
+}
+
+.userResume {
+	display: flex;
+	flex-direction: column;
+}
+
+.userResumeContainer {
+	width: 10ch;
+	background: var(--input-bg-rgb);
+	border: 1px solid var(--main-text-rgb);
+	margin: 1vmax;
+	display: inline-block;
+	font-size: 1vmin;
+}
+
+.userResumePfpContainer{
+	height: 10ch;
+	width: 10ch;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: relative;
+}
+
+.userResumePfp {
+	width: 120%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.userResumeName{
+	padding: .5vmin .1vmin;
+	color: var(--main-text-rgb);
+	overflow-wrap: anywhere;
+}
+
+#userResumeCountContainer{
+	color: var(--main-text-rgb);
+}
+
+#userResumeSearch{
+	background: var(--input-bg-rgb);
+	border: 3px solid var(--input-bg-rgb);
 }
