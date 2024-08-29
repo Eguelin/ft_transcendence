@@ -2,3 +2,4 @@
 __pycache__
 .ash_history
 *.swp
+src/transcendence/app/profilePictures/*.jpg

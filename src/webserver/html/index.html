@@ -6,23 +6,24 @@
 </head>
 <body>
 	<div id="titleFlexContainer">
-		<div style="flex: 1;">
+		<div style="flex: 1;" id="browseFlexContainer" >
 			<div tabindex="1" id="goHomeButton" style="display: none"></div>
+			<div style="flex: 1; text-align: left; align-self: center;">
+				<input tabindex="1" id="inputSearchUser" placeholder="Search user">
+			</div>
 		</div>
 		<h1 style="flex: 1;" id="title"></h1>
-		<div style="flex: 1;">
-			<div id="quickSettingContainer">
-				<img id="pfp" class="profilePicture" style="display: none;">
-				<div tabindex="2" id="dropDownUser" style="display: none;">
-					<span id="usernameBtn"></span>
-					<div class="dropDownUserContent">
-						<button tabindex="3" id="friendsBtn">Friends</button>
-						<button tabindex="4" id="settingsBtn">Account settings</button>
-						<button tabindex="5" id="logOutBtn">Log out</button>
-					</div>
+		<div id="quickSettingContainer">
+			<img id="pfp" class="profilePicture" style="display: none;">
+			<div tabindex="2" id="dropDownUser" style="display: none;">
+				<span id="usernameBtn"></span>
+				<div class="dropDownUserContent">
+					<button tabindex="3" id="friendsBtn">Friends</button>
+					<button tabindex="4" id="settingsBtn">Account settings</button>
+					<button tabindex="5" id="logOutBtn">Log out</button>
 				</div>
-				<div tabindex="1" id="themeButton"></div>
 			</div>
+			<div tabindex="1" id="themeButton"></div>
 		</div>
 	</div>
 	<div id="container"></div>

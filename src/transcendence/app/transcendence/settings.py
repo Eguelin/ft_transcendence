@@ -38,7 +38,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
 	'localhost',
 	'ft-transcendence.online',
-	'www.ft-transcendence.online',
+    'www.ft-transcendence.online',
+    '*',
 ]
 
 
