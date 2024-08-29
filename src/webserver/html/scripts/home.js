@@ -32,6 +32,12 @@ dpUserBtn.addEventListener("click", (e) => {
 				for (var i=0; i<Object.keys(matches).length && i<5;i++){
 					createMatchResumeContainer(matches[i]);
 				};
+				matchUsersName = document.querySelectorAll(".resultScoreName")
+				Object.keys(matchUsersName).forEach(function(key){
+					matchUsersName[key].addEventListener("click", (e) => {
+						history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+					})
+				})
 			})
 		}
 	})

@@ -78,6 +78,12 @@ def fortytwo(request):
 			user.profile.display_name = display
 			user.profile.profile_picture = pfp_url
 			user.profile.id42 = id42
+
+			# CREATE RANDOM FIRST MATCH
+			for i in range(0, 5):
+				match = customModels.Match.objects.createWithRandomOpps(user)
+				user.profile.matches.add(match)
+
 			user.profile.save()
 			user = authenticate(request, username=user.username, password=user.username)
 			if user is not None:
@@ -91,6 +97,12 @@ def fortytwo(request):
 			user.profile.display_name = display
 			user.profile.profile_picture = pfp_url
 			user.profile.id42 = id42
+
+			# CREATE RANDOM FIRST MATCH
+			for i in range(0, 5):
+				match = customModels.Match.objects.createWithRandomOpps(user)
+				user.profile.matches.add(match)
+
 			user.save()
 			user = authenticate(request, username=username, password=username)
 			if user is not None:
