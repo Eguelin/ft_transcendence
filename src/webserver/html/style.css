@@ -1066,3 +1066,15 @@ a {
 	background: var(--input-bg-rgb);
 	border: 3px solid var(--input-bg-rgb);
 }
+
+#statsContainer{
+	color: var(--main-text-rgb);
+	display: flex;
+	flex-direction: row;
+}
+
+#statsContainer div{
+	display: flex;
+	flex-direction: column;
+	gap: 1vmin;
+}
