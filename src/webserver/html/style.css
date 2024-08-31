@@ -210,7 +210,7 @@ input:focus{
 }
 
 #fortyTwoLogin{
-	mask-image:url("svg/42.svg");
+	mask-image:url("icons/42.svg");
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
@@ -223,7 +223,7 @@ input:focus{
 }
 
 #githubLogin{
-	mask-image:url("svg/github.svg");
+	mask-image:url("icons/github.svg");
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
@@ -236,7 +236,7 @@ input:focus{
 }
 
 #googleLogin{
-	background-image:url("svg/google.svg");
+	background-image:url("icons/google.svg");
 	height:10vh;
 	width:5vw;
 	top:5vh;
@@ -265,7 +265,7 @@ a {
 }
 
 #goHomeButton{
-	mask-image:url("svg/left_arrow.svg");
+	mask-image:url("icons/left_arrow.svg");
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
@@ -283,7 +283,7 @@ a {
 }
 
 #themeButton{
-	mask-image:url("svg/button-night-mode.svg");
+	mask-image:url("icons/button-night-mode.svg");
 	background:var(--main-text-rgb);
 	height:5vw;
 	width:5vw;
@@ -294,7 +294,7 @@ a {
 }
 
 #leftSlideBtn{
-	mask-image:url("svg/left_arrow.svg");
+	mask-image:url("icons/left_arrow.svg");
 	background:var(--main-text-rgb);
 	height:5vw;
 	width:5vw;
@@ -307,7 +307,7 @@ a {
 
 
 #rightSlideBtn{
-	mask-image:url("svg/right_arrow.svg");
+	mask-image:url("icons/right_arrow.svg");
 	background:var(--main-text-rgb);
 	height:5vw;
 	width:5vw;
@@ -365,7 +365,7 @@ a {
 	}
 	
 	.dropDownArrow{
-		mask-image:url("svg/right_arrow.svg");
+		mask-image:url("icons/right_arrow.svg");
 		background:var(--main-text-rgb);
 		height:min(5vh, 5vw);
 		width:5vw;
@@ -453,7 +453,7 @@ a {
 	}
 	
 	.dropDownArrow{
-		mask-image:url("svg/right_arrow.svg");
+		mask-image:url("icons/right_arrow.svg");
 		background:var(--main-text-rgb);
 		height:min(5vh, 5vw);
 		width:5vw;
@@ -723,7 +723,7 @@ a {
 
 
 .acceptRequestBtn{
-	mask-image:url("svg/check-mark-1.svg");
+	mask-image:url("icons/check-mark-1.svg");
 	background:green;
 	height:5vw;
 	width:5vw;
@@ -734,7 +734,7 @@ a {
 }
 
 .rejectRequestBtn{
-	mask-image:url("svg/cross-17.svg");
+	mask-image:url("icons/cross-17.svg");
 	background:red;
 	height:5vw;
 	width:5vw;
@@ -756,11 +756,11 @@ a {
 .moreBtn{
 	width: 10vw;
 	mask-position: 0;
-	mask-image: url("svg/more-vertical.svg");
+	mask-image: url("icons/more-vertical.svg");
 }
 
 .removeFriendBtn{
-	mask-image:url("svg/minus-circle.svg");
+	mask-image:url("icons/minus-circle.svg");
 }
 
 .removeFriendBtn:focus, .removeFriendBtn:hover, .blockFriendBtn:focus, .blockFriendBtn:hover{
@@ -768,11 +768,11 @@ a {
 }
 
 .blockFriendBtn{
-	mask-image: url("svg/checkbox-cross.svg");
+	mask-image: url("icons/checkbox-cross.svg");
 }
 
 .unblockBtn{
-	mask-image: url("svg/unblock.svg");
+	mask-image: url("icons/unblock.svg");
 	margin-right: 1.5vw;
 }
 
@@ -839,7 +839,7 @@ a {
 }
 
 #pendingRequestBtnContainer #notificationDot{
-	mask-image:url("svg/notification-dot.svg");
+	mask-image:url("icons/notification-dot.svg");
 	background:var(--main-text-rgb);
 	height:min(3vh, 2vw);
 	width:min(3vh, 2vw);
@@ -922,12 +922,12 @@ a {
 }
 
 .pfpStatusOffline{
-	mask-image:url("svg/circle.svg");
+	mask-image:url("icons/circle.svg");
 	background: grey;
 }
 
 .pfpStatusOnline{
-	mask-image: url("svg/circle.svg");
+	mask-image: url("icons/circle.svg");
 	background: green;
 }
 

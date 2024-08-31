@@ -286,9 +286,9 @@ for (var i = 0 ;i < germanBtn.length; i++)
 	})
 	
 	englishBtn[i].addEventListener("click", (e) => {
-		currentLang = "lang/EN_US.json";
-		const data = {language_pack: "lang/EN_US.json"};
-		fetch("lang/EN_US.json").then(response => {
+		currentLang = "lang/EN_UK.json";
+		const data = {language_pack: "lang/EN_UK.json"};
+		fetch("lang/EN_UK.json").then(response => {
 			response.json().then((text) => {
 				content = text['settings'];
 				Object.keys(content).forEach(function(key) {

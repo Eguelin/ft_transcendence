@@ -39,7 +39,7 @@ class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	dark_theme = models.BooleanField(default=True)
 	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
-	language_pack = models.CharField(max_length=40, default="lang/EN_US.json")
+	language_pack = models.CharField(max_length=40, default="lang/EN_UK.json")
 	display_name = models.CharField(max_length=15)
 	friend_code = models.CharField(max_length=20, null=True)
 	friends = models.ManyToManyField(User, related_name="friends_list")

@@ -8,7 +8,7 @@ dropDownUser = document.getElementById("dropDownUserContainer");
 pageContentContainer = document.getElementById("pageContentContainer");
 
 var currentPage = "";
-var currentLang = "lang/EN_US.json"
+var currentLang = "lang/EN_UK.json"
 const hostname = new URL(window.location.href)
 
 window.navigation.addEventListener("navigate", (e) => {
@@ -266,8 +266,8 @@ window.navigation.addEventListener("navigate", (e) => {
 					})
 				}
 				else{
-					document.getElementById("pfp").style.setProperty("display", "none");
-					document.getElementById("dropDownUser").style.setProperty("display", "none");
+					userPfp.style.setProperty("display", "none");
+					dropDownUser.style.setProperty("display", "none");
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
 							(response.text().then(response => {
@@ -418,7 +418,7 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
 		document.documentElement.style.setProperty("--is-dark-theme", 1);
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-night-mode.svg\")";
 	}
 	else{
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
@@ -428,7 +428,7 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-light-mode.svg\")";
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 	}
 }
@@ -472,7 +472,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 				})
 			}
 			else{
-				fetch("lang/EN_US.json").then(response => {
+				fetch("lang/EN_UK.json").then(response => {
 					response.json().then((text) => {
 						content = text[currentPage];
 						if (content != null || content != undefined){
@@ -489,7 +489,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 		})
 	}
 	else{
-		fetch("lang/EN_US.json").then(response => {
+		fetch("lang/EN_UK.json").then(response => {
 			response.json().then((text) => {
 				content = text[currentPage];
 				if (content != null || content != undefined){
