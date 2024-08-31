@@ -136,7 +136,6 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/login.html').then((response) => {
 								(response.text().then(response => {
 									inputSearchUser.style.setProperty("display", "none");
-									userPfp.style.setProperty("display", "none");
 									dropDownUser.style.setProperty("display", "none");
 									container.innerHTML = response;
 									document.getElementById("script").remove();
@@ -161,7 +160,6 @@ window.navigation.addEventListener("navigate", (e) => {
 								return (response.text().then(response => {
 									container.innerHTML = response;
 									inputSearchUser.style.setProperty("display", "none");
-									userPfp.style.setProperty("display", "none");
 									dropDownUser.style.setProperty("display", "none");
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
@@ -184,7 +182,6 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "settings";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									userPfp.style.setProperty("display", "none");
 									dropDownUser.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
@@ -201,7 +198,6 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "friends";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									userPfp.style.setProperty("display", "none");
 									dropDownUser.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
@@ -218,7 +214,6 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "game";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									userPfp.style.setProperty("display", "none");
 									dropDownUser.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
@@ -233,7 +228,6 @@ window.navigation.addEventListener("navigate", (e) => {
 									switchTheme(currentUser.is_dark_theme);
 									usernameBtn.innerHTML = currentUser.display;
 									homeBtn.style.setProperty("display", "none");
-									userPfp.style.setProperty("display", "block");
 									dropDownUser.style.setProperty("display", "flex");
 									inputSearchUser.style.setProperty("display", "block");
 									if (currentUser.pfp != ""){
@@ -242,6 +236,7 @@ window.navigation.addEventListener("navigate", (e) => {
 											userPfp.setAttribute("src", `${rawPfp}`);
 										else
 											userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+										userPfp.style.setProperty("display", "block");
 									}
 									else
 										userPfp.style.setProperty("display", "none");
@@ -266,7 +261,6 @@ window.navigation.addEventListener("navigate", (e) => {
 					})
 				}
 				else{
-					userPfp.style.setProperty("display", "none");
 					dropDownUser.style.setProperty("display", "none");
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
