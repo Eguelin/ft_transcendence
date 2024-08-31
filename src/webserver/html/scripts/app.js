@@ -4,7 +4,7 @@ swichTheme = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
 usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
-dropDownUser = document.getElementById("dropDownUser");
+dropDownUser = document.getElementById("dropDownUserContainer");
 pageContentContainer = document.getElementById("pageContentContainer");
 
 var currentPage = "";
@@ -234,7 +234,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									usernameBtn.innerHTML = currentUser.display;
 									homeBtn.style.setProperty("display", "none");
 									userPfp.style.setProperty("display", "block");
-									dropDownUser.style.setProperty("display", "inline-table");
+									dropDownUser.style.setProperty("display", "flex");
 									inputSearchUser.style.setProperty("display", "block");
 									if (currentUser.pfp != ""){
 										var rawPfp = currentUser.pfp;
