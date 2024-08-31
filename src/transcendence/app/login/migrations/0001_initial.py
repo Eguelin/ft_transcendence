@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('dark_theme', models.BooleanField(default=True)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('profile_picture', models.TextField(default='profilePictures/defaults/default0.jpg')),
-                ('language_pack', models.CharField(max_length=40, default="lang/EN_US.json")),
+                ('language_pack', models.CharField(max_length=40, default="lang/EN_UK.json")),
                 ('display_name', models.CharField(max_length=15)),
             	('friend_code', models.CharField(max_length=20, null=True)),
                 ('friends', models.ManyToManyField(related_name='friends_list', to=settings.AUTH_USER_MODEL)),
