@@ -525,7 +525,7 @@ a {
 .profilePicture {
 	height: 4vw;
 	width: 4vw;
-	margin: 1vmax;
+	margin: 0 1vmax;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -544,18 +544,27 @@ a {
 #usernameBtn {
 	color: var(--main-text-rgb);
 	font-size: min(3vh, 1vw);
-	line-height: 5vw;
+	line-height: 4vw;
 	display: block;
 	text-align: right;
 }
 
-#dropDownUser {
+#dropDownUserContainer {
 	position: relative;
-	display: inline-block;
+	display: flex;
 	padding-right: 0.1vw;
-	margin: 1vmax;
 	height: 4vw;
 	outline: none;
+}
+
+#dropDownUser {
+	position: relative;
+	display: flex;
+	padding-right: 0.1vw;
+	margin: 0 1vmax;
+	height: fit-content;
+	outline: none;
+	flex-direction: column;
 }
 
 .dropDownUserContent{
