@@ -1091,3 +1091,16 @@ a {
 	flex-direction: column;
 	gap: 1vmin;
 }
+
+
+.langDropDownOptions{
+	height: 32px;
+	width: 32px;
+	margin: 1vmin;
+
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: 50% 50%;
+	
+	border-radius: 50%;
+}
