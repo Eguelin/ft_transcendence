@@ -1095,15 +1095,13 @@ a {
 
 
 .langDropDownOptions, #langDropDownBtn{
-	height: 32px;
-	width: 32px;
+	height: 64px;
+	width: 64px;
 	margin: 1vmin;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 50% 50%;
-	
-	border-radius: 50%;
 }
 
 #langDropDownContent{
