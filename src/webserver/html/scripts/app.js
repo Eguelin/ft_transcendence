@@ -6,7 +6,8 @@ usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
 dropDownUser = document.getElementById("dropDownUserContainer");
 pageContentContainer = document.getElementById("pageContentContainer");
-langDropDownBtn = document.getElementById("langDropDown");
+langDropDown = document.getElementById("langDropDown");
+langDropDownBtn = document.getElementById("langDropDownBtn");
 langDropDownOption = document.querySelectorAll(".langDropDownOptions");
 
 var currentPage = "";
@@ -355,13 +356,17 @@ fetch('/api/user/current', {
 
 	if (response.ok) {
 		(response.json()).then((text) => {
+			currentLang = text['lang'];
+			langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+
 			if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 			else
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "");
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "");
 		});
 	}
 	else {
+		langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
 		history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 	}
 })
@@ -692,8 +697,8 @@ inputSearchUser.addEventListener("keydown", (e) => {
 	}
 })
 
-langDropDownBtn.addEventListener("click", (e) => {
-	langDropDownBtn.focus();
+langDropDown.addEventListener("click", (e) => {
+	langDropDown.focus();
 })
 
 langDropDownOption.forEach(function(button) {
@@ -718,5 +723,6 @@ langDropDownOption.forEach(function(button) {
 			body: JSON.stringify({language_pack: currentLang}),
 			credentials: 'include'
 		})
+		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.png)`);
 	})
 })
