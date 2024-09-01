@@ -51,7 +51,7 @@ registerBtn.addEventListener("click", (e) => {
 		}
 	}
 	else if (lock == 0){
-		const data = {username: username, password: pw, displayName: display};
+		const data = {username: username, password: pw, displayName: display, 'lang': currentLang};
 		fetch('/api/user/create', {
 			method: 'POST',
 			headers: {
