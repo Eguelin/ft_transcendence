@@ -7,6 +7,7 @@ userPfp = document.getElementById("pfp");
 dropDownUser = document.getElementById("dropDownUserContainer");
 pageContentContainer = document.getElementById("pageContentContainer");
 langDropDownBtn = document.getElementById("langDropDown");
+langDropDownOption = document.querySelectorAll(".langDropDownOptions");
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -693,4 +694,29 @@ inputSearchUser.addEventListener("keydown", (e) => {
 
 langDropDownBtn.addEventListener("click", (e) => {
 	langDropDownBtn.focus();
+})
+
+langDropDownOption.forEach(function(button) {
+	button.addEventListener("click", (e) =>{
+		currentLang = `lang/${button.id}.json`;
+		fetch(currentLang).then(response => {
+			response.json().then((text) => {
+				content = text[currentPage];
+				Object.keys(content).forEach(function(key) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					else
+						document.getElementById(key).innerHTML = content[key];
+				});
+			})
+		})
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({language_pack: currentLang}),
+			credentials: 'include'
+		})
+	})
 })
