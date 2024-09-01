@@ -6,6 +6,7 @@ usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
 dropDownUser = document.getElementById("dropDownUserContainer");
 pageContentContainer = document.getElementById("pageContentContainer");
+langDropDownBtn = document.getElementById("langDropDown");
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -688,4 +689,8 @@ inputSearchUser.addEventListener("keydown", (e) => {
 			}))
 		})
 	}
+})
+
+langDropDownBtn.addEventListener("click", (e) => {
+	langDropDownBtn.focus();
 })
