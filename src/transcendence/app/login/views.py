@@ -136,6 +136,9 @@ def create_user(request):
 		user.id42 = 0
 		user.profile.is_active = True
 
+		if 'lang' in data:
+			user.profile.language_pack = data['lang']
+
 		# CREATE RANDOM FIRST MATCH
 		for i in range(0, 5):
 			match = customModels.Match.objects.createWithRandomOpps(user)
