@@ -28,6 +28,12 @@ window.navigation.addEventListener("navigate", (e) => {
 				credentials: 'include'
 			})
 			.then(currentUser => {
+				if (langDropDown.classList.contains("activeDropDown"))
+					langDropDown.classList.remove("activeDropDown");
+				if (dropDownUser.classList.contains("activeDropDown"))
+					dropDownUser.classList.remove("activeDropDown");
+
+				
 				if (currentUser.ok) {
 					currentUser.json().then((currentUser) => {
 						if (url.pathname.startsWith("/user")){
