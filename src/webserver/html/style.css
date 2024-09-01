@@ -546,7 +546,7 @@ a {
 	font-size: min(3vh, 1vw);
 	line-height: 4vw;
 	display: block;
-	text-align: right;
+	text-align: center;
 }
 
 #dropDownUserContainer, #langDropDownContainer {
@@ -572,20 +572,17 @@ a {
 	background-color: var(--input-bg-rgb);
 }
 
-#dropDownUser:focus, #dropDownUser:focus-within, #langDropDown:focus, .activeDropDown{
+.activeDropDown{
 	display: inline-table;
 	border: 0.2px solid;
 	border-color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	width: max-content;
 	outline: none;
-}
-
-#dropDownUser:focus #usernameBtn, #dropDownUser:focus-within #usernameBtn{
 	text-align: center;
 }
 
-#dropDownUser:focus .dropDownUserContent, #dropDownUser:focus-within .dropDownUserContent{
+.activeDropDown .dropDownUserContent{
 	border-block-start: var(--hover-text-rgb);
 	display: block;
 	z-index: 1;

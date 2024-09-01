@@ -4,7 +4,8 @@ swichTheme = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
 usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
-dropDownUser = document.getElementById("dropDownUserContainer");
+dropDownUserContainer = document.getElementById("dropDownUserContainer");
+dropDownUser = document.getElementById("dropDownUser");
 pageContentContainer = document.getElementById("pageContentContainer");
 langDropDown = document.getElementById("langDropDown");
 langDropDownBtn = document.getElementById("langDropDownBtn");
@@ -139,7 +140,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/login.html').then((response) => {
 								(response.text().then(response => {
 									inputSearchUser.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									container.innerHTML = response;
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
@@ -163,7 +164,7 @@ window.navigation.addEventListener("navigate", (e) => {
 								return (response.text().then(response => {
 									container.innerHTML = response;
 									inputSearchUser.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
 									s.setAttribute('id', 'script');
@@ -185,7 +186,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "settings";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
 							});
@@ -201,7 +202,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "friends";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
 							});
@@ -217,7 +218,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "game";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
 							});
@@ -231,7 +232,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									switchTheme(currentUser.is_dark_theme);
 									usernameBtn.innerHTML = currentUser.display;
 									homeBtn.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "flex");
+									dropDownUserContainer.style.setProperty("display", "flex");
 									inputSearchUser.style.setProperty("display", "block");
 									if (currentUser.pfp != ""){
 										var rawPfp = currentUser.pfp;
@@ -264,7 +265,7 @@ window.navigation.addEventListener("navigate", (e) => {
 					})
 				}
 				else{
-					dropDownUser.style.setProperty("display", "none");
+					dropDownUserContainer.style.setProperty("display", "none");
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
 							(response.text().then(response => {
@@ -704,9 +705,28 @@ langDropDownBtn.addEventListener("click", (e) => {
 		langDropDown.classList.add("activeDropDown")
 })
 
+usernameBtn.addEventListener("click", (e) => {
+	if (dropDownUser.classList.contains("activeDropDown"))
+		dropDownUser.classList.remove("activeDropDown")
+	else
+		dropDownUser.classList.add("activeDropDown")
+})
+
+
 langDropDownBtn.addEventListener("keydown", (e) => {
-	if (e.key == "Enter")
+	if (e.key == "Enter"){
 		langDropDownBtn.click();
+		if (dropDownUser.classList.contains("activeDropDown"))
+			dropDownUser.classList.remove("activeDropDown");
+	}
+})
+
+usernameBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Enter"){
+		usernameBtn.click();
+		if (langDropDown.classList.contains("activeDropDown"))
+			langDropDown.classList.remove("activeDropDown");
+	}
 })
 
 langDropDownOption.forEach(function(button) {
@@ -741,8 +761,9 @@ langDropDownOption.forEach(function(button) {
 
 window.addEventListener("click", (e) => {
 	if (!e.target.closest(".activeDropDown")){
-		if (langDropDown.classList.contains("activeDropDown")){
+		if (langDropDown.classList.contains("activeDropDown"))
 			langDropDown.classList.remove("activeDropDown");
-		}
+		if (dropDownUser.classList.contains("activeDropDown"))
+			dropDownUser.classList.remove("activeDropDown");
 	}
 })
