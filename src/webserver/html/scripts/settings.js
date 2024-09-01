@@ -283,6 +283,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
+		langDropDownBtn.style.setProperty("background-image", `url(icons/DE_GE.png)`);
 	})
 	
 	englishBtn[i].addEventListener("click", (e) => {
@@ -311,6 +312,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
+		langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.png)`);
 	})
 }
 
