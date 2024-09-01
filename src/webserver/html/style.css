@@ -572,7 +572,7 @@ a {
 	background-color: var(--input-bg-rgb);
 }
 
-#dropDownUser:focus, #dropDownUser:focus-within, #langDropDown:focus, #langDropDown:focus-within{
+#dropDownUser:focus, #dropDownUser:focus-within, #langDropDown:focus, .activeDropDown{
 	display: inline-table;
 	border: 0.2px solid;
 	border-color: var(--main-text-rgb);
@@ -1108,6 +1108,10 @@ a {
 	display: none;
 }
 
-#langDropDown:focus #langDropDownContent, #langDropDown:focus-within #langDropDownContent{
+#langDropDown:focus #langDropDownContent, .activeDropDown #langDropDownContent{
+	display: block;
+}
+
+.active{
 	display: block;
 }

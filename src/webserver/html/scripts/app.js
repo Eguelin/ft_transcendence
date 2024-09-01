@@ -697,8 +697,16 @@ inputSearchUser.addEventListener("keydown", (e) => {
 	}
 })
 
-langDropDown.addEventListener("click", (e) => {
-	langDropDown.focus();
+langDropDownBtn.addEventListener("click", (e) => {
+	if (langDropDown.classList.contains("activeDropDown"))
+		langDropDown.classList.remove("activeDropDown")
+	else
+		langDropDown.classList.add("activeDropDown")
+})
+
+langDropDownBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Enter")
+		langDropDownBtn.click();
 })
 
 langDropDownOption.forEach(function(button) {
@@ -725,4 +733,16 @@ langDropDownOption.forEach(function(button) {
 		})
 		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.png)`);
 	})
+	button.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			button.click();
+	})
+})
+
+window.addEventListener("click", (e) => {
+	if (!e.target.closest(".activeDropDown")){
+		if (langDropDown.classList.contains("activeDropDown")){
+			langDropDown.classList.remove("activeDropDown");
+		}
+	}
 })
