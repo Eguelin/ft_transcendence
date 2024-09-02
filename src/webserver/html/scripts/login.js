@@ -10,7 +10,7 @@ fortyTwoLogin.addEventListener("click", (e) => {
 });
 
 registerLink.addEventListener("click", (e) => {
-	history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/register`);
+	history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/register`);
 });
 
 fortyTwoLogin.addEventListener("keydown", (e) => {

@@ -169,6 +169,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/register.html').then((response) => {
 								return (response.text().then(response => {
 									container.innerHTML = response;
+									homeBtn.style.setProperty("display", "block");
 									inputSearchUser.style.setProperty("display", "none");
 									dropDownUserContainer.style.setProperty("display", "none");
 									document.getElementById("script").remove();
@@ -290,6 +291,9 @@ window.navigation.addEventListener("navigate", (e) => {
 					if (url.pathname.startsWith("/register")){
 						fetch ('bodyLess/register.html').then((response) => {
 							return (response.text().then(response => {
+
+								homeBtn.style.setProperty("display", "block");
+								inputSearchUser.style.setProperty("display", "none");
 								container.innerHTML = response;
 								document.getElementById("script").remove();
 								var s = document.createElement("script");
@@ -390,25 +394,10 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/home.html').then((response) => {
-		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-			if (container.innerHTML != "")
-				history.pushState(state, "", `https://${hostname.host}`);
-			else
-				history.replaceState(state,"", `https://${hostname.host}`);
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/home.js`);
-			currentPage = "home";
-			loadCurrentLang();
-			document.body.appendChild(s);
-			homeBtn.style.setProperty("display", "none");
-		}))
-	});	
+	if (currentPage != "register")
+		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+	else
+		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
