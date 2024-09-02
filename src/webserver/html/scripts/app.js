@@ -656,40 +656,42 @@ function createUserResumeContainer(user){
 
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter"){
-		fetch('/api/user/search_by_display', {
-			method: 'POST', //GET forbid the use of body :(
-			headers: {'Content-Type': 'application/json',},
-			body: JSON.stringify({"name" : inputSearchUser.value}),
-			credentials: 'include'
-		}).then(user => {
-			user.json().then(((user) => {
-				fetch('bodyLess/search.html').then((response) => {
-					response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						if (container.innerHTML != "")
-							history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
-						else
-							history.replaceState(state,"");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/profile.js`);
-						document.body.appendChild(s);
-						currentPage = "search";
-						loadCurrentLang(currentPage);
-						homeBtn.style.setProperty("display", "block");
-						document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-						document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
-						Object.keys(user).forEach(function(key){
-							createUserResumeContainer(user[key]);
+		if (inputSearchUser.value.length > 0){
+			fetch('/api/user/search_by_display', {
+				method: 'POST', //GET forbid the use of body :(
+				headers: {'Content-Type': 'application/json',},
+				body: JSON.stringify({"name" : inputSearchUser.value}),
+				credentials: 'include'
+			}).then(user => {
+				user.json().then(((user) => {
+					fetch('bodyLess/search.html').then((response) => {
+						response.text().then(response => {
+							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+	
+							if (container.innerHTML != "")
+								history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
+							else
+								history.replaceState(state,"");
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/profile.js`);
+							document.body.appendChild(s);
+							currentPage = "search";
+							loadCurrentLang(currentPage);
+							homeBtn.style.setProperty("display", "block");
+							document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+							document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
+							Object.keys(user).forEach(function(key){
+								createUserResumeContainer(user[key]);
+							})
+							inputSearchUser.value = "";
 						})
-						inputSearchUser.value = "";
 					})
-				})
-			}))
-		})
+				}))
+			})
+		}
 	}
 })
 
