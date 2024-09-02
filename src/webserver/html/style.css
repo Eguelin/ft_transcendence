@@ -582,6 +582,11 @@ a {
 	text-align: center;
 }
 
+.activeDropDown #usernameBtn:focus{
+	outline: none;
+	color: var(--option-hover-text-rgb);
+}
+
 .activeDropDown .dropDownUserContent{
 	border-block-start: var(--hover-text-rgb);
 	display: block;
