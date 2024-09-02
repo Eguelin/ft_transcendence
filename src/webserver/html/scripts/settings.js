@@ -1,7 +1,6 @@
 saveBtn = document.getElementById('saveBtn');
 swichTheme = document.getElementById("themeButton");
 homeBtn = document.getElementById("goHomeButton");
-usernameInput = document.getElementById("inputUsername");
 displayInput = document.getElementById("inputDisplayName");
 pfpInput = document.getElementById("inputPfp");
 pfpInputLabel = document.getElementById("pfpLabel");
@@ -51,10 +50,7 @@ pfpInput.addEventListener("change", (e) => {
 
 saveBtn.addEventListener("click", (e) => {
 	var data = {};
-	var username = usernameInput.value;
 	var display = displayInput.value;
-	if (username != "")
-		data['username'] = username;
 	if (display != ""){
 		if (display.length > 15){
 			warning = document.createElement("a");
@@ -110,103 +106,6 @@ saveBtn.addEventListener("click", (e) => {
 		})
 	}
 })
-/*
-{
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-	.then(response => {
-		if (response.ok) {
-			(response.json()).then((text) => {
-				switchTheme(text.is_dark_theme);
-				currentLang = text.lang;
-				usernameInput.setAttribute('placeholder', text.username);
-				loadCurrentLang();
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-				history.replaceState(state, "");
-			});
-		}
-		else {
-			console.log("Failed to get user")
-			
-			fetch ('bodyLess/login.html').then((response) => {
-				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					if (container.innerHTML != "")
-						history.pushState(state, "");
-					else
-						history.replaceState(state,"");
-					container.innerHTML = response;
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/login.js`);
-					document.body.appendChild(s);
-					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					history.replaceState(state, "");
-				}))
-			});	
-		}
-	})
-}
-
-
-window.addEventListener("load", () => {
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-	.then(response => {
-		if (response.ok) {
-			(response.json()).then((text) => {
-				switchTheme(text.is_dark_theme);
-				username.setAttribute('placeholder', text.username);
-				currentLang = text.lang;
-				loadCurrentLang();
-				state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-				history.replaceState(state, "");
-			});
-		}
-		else {
-			console.log("Failed to get user")
-			
-			fetch ('bodyLess/login.html').then((response) => {
-				(response.text().then(response => {
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					if (container.innerHTML != "")
-						history.pushState(state, "");
-					else
-						history.replaceState(state,"");
-					container.innerHTML = response;
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/login.js`);
-					document.body.appendChild(s);
-					currentPage = "login";
-					state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-					history.replaceState(state, "");
-				}))
-			});	
-		}
-	})
-})
-*/
-
 
 dropDownContent.forEach(function(button) {
 	var a = button.getElementsByTagName('a');
