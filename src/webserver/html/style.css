@@ -1117,3 +1117,48 @@ a {
 .active{
 	display: block;
 }
+
+
+
+
+
+
+
+
+#loaderBg{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: black;
+	opacity: .7;
+	display: none;
+}
+
+#loaderBg .loader{
+	position: inherit;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.loader {
+	width: 85px;
+	height: 25px;
+	--topLeft:conic-gradient(from  90deg at left   3px top   3px,#0000 90deg,#fff 0);
+	--bottomRight:conic-gradient(from -90deg at bottom 3px right 3px,#0000 90deg,#fff 0);
+	background:var(--topLeft),var(--topLeft),var(--topLeft), var(--bottomRight),var(--bottomRight),var(--bottomRight);
+	background-position: left,center,right;
+	background-repeat: no-repeat;
+	animation: loaderAnimation 1s infinite;
+}
+
+@keyframes loaderAnimation {
+	0% {background-size:25px 100%,25px 100%,25px 100%}
+	20% {background-size:25px 50% ,25px 100%,25px 100%}
+	40% {background-size:25px 50% ,25px 50% ,25px 100%}
+	60% {background-size:25px 100%,25px 50% ,25px 50% }
+	80% {background-size:25px 100%,25px 100%,25px 50% }
+	100% {background-size:25px 100%,25px 100%,25px 100%}
+}
