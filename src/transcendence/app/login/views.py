@@ -126,6 +126,9 @@ def create_user(request):
 		return JsonResponse({'message': str(e)}, status=400)
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
+
+	if User.objects.filter(username=username).exists():
+		return JsonResponse({'message': 'User with same username already exist'}, status=400)
 	try:
 		user = User.objects.create_user(username=username, password=password)
 		if (len(display) > 15):
@@ -153,9 +156,10 @@ def create_user(request):
 			except:
 				continue
 		user = authenticate(request, username=username, password=password)
-		return JsonResponse({'message': 'User created but not logged in'}, status=201)
+		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
 		return JsonResponse({'message': 'Database error'}, status=500)
+		
 
 def user_login(request):
 	if request.method != 'POST':
