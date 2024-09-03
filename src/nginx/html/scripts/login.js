@@ -55,17 +55,15 @@ loginBtn.addEventListener("click", (e) => {
 		})
 		.then(response => {
 			if (response.ok) {
-				history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
-			} else {
-				console.log("Failed to login user")
-				if (response.status != 500){
-					return response.json().then((text => {
+				response.json().then(text => {
+					if (text.logged == 0){
 						warning.text = text.message;
 						if (!loginBtn.previousElementSibling)
 							loginBtn.before(warning.cloneNode(true));
-						return (text.message);
-					}));
-				}
+					}
+					else
+						history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+				})
 			}
 		})
 	}
