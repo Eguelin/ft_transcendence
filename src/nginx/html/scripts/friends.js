@@ -24,7 +24,7 @@ Object.keys(slideSelector).forEach(function(key) {
 			slideSelector[friendSlideIdx].className = "slideSelector";
 			friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
 			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
-			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`		
+			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		})
 	}
 })
@@ -155,14 +155,14 @@ function createFriendContainer(friend){
 	pfpContainer.appendChild(pfpStatus)
 
 	friendName = document.createElement("a");
-	friendName.innerHTML = friend.display;
+	friendName.innerHTML = friend.username;
 
 	friendsOptionContainer = document.createElement("div");
 	friendsOptionContainer.className = "friendsOptionContainer"
 
 	friendsOption = document.createElement("div");
 	friendsOption.className = "friendsOption"
-	
+
 
 	moreBtn = document.createElement("div");
 	moreBtn.className = "moreBtn";
@@ -172,7 +172,7 @@ function createFriendContainer(friend){
 
 	removeFriendBtn = document.createElement("div");
 	removeFriendBtn.className = "removeFriendBtn";
-	
+
 	blockFriendBtn = document.createElement("div");
 	blockFriendBtn.className = "blockFriendBtn";
 
@@ -190,7 +190,7 @@ function createFriendContainer(friend){
 	friendContainer.appendChild(friendName);
 	//friendContainer.appendChild(is_active);
 	friendContainer.appendChild(friendsOptionContainer);
-	if (friend.is_active == true){	
+	if (friend.is_active == true){
 		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
 	}
 	allFriendListContainer.appendChild(friendContainer);
@@ -216,7 +216,7 @@ function createFriendRequestContainer(user){
 	pfpContainer.appendChild(pfp);
 	pfpContainer.appendChild(pfpStatus)
 	friendName = document.createElement("a");
-	friendName.innerHTML = user.display;
+	friendName.innerHTML = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
@@ -226,13 +226,13 @@ function createFriendRequestContainer(user){
 	acceptBtn = document.createElement("div");
 	acceptBtn.className = "acceptRequestBtn";
 	requestOptionContainer.appendChild(acceptBtn);
-	
+
 	rejectBtn = document.createElement("div");
 	rejectBtn.className = "rejectRequestBtn";
 	requestOptionContainer.appendChild(rejectBtn);
 
 	requestOptionContainer.id = user.friend_code;
-	
+
 	friendContainer.appendChild(requestOptionContainer);
 
 	pendingFriendRequestListContainer.appendChild(friendContainer);
@@ -260,7 +260,7 @@ function createBlockedUserContainer(user){
 	pfpContainer.appendChild(pfpStatus)
 
 	friendName = document.createElement("a");
-	friendName.innerHTML = user.display;
+	friendName.innerHTML = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
@@ -314,7 +314,7 @@ function checkUpdate(){
 					removeFriendBtn = document.querySelectorAll(".removeFriendBtn");
 					blockFriendBtn = document.querySelectorAll(".blockFriendBtn");
 					unblockBtn = document.querySelectorAll(".unblockBtn");
-					
+
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
