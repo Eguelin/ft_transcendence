@@ -141,11 +141,11 @@ def create_user(request):
 
 def user_login(request):
 	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request', 'logged' : 0}, status=400)
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
-		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		return JsonResponse({'message': 'Invalid JSON', 'logged' : 0}, status=400)
 
 	try :
 		username = data.get('username')
@@ -154,25 +154,25 @@ def user_login(request):
 		return JsonResponse({'message': str(e)}, status=500)
 
 	if not username or not password:
-		return JsonResponse({'message': 'Username and password are required'}, status=400)
+		return JsonResponse({'message': 'Username and password are required', 'logged' : 0}, status=400)
 	try:
 		user = User.objects.get(username=username)
 
 		if user.profile.id42 != 0:
-			return JsonResponse({'message': 'Forbidden'}, status=403)
+			return JsonResponse({'message': 'Forbidden', 'logged' : 0}, status=403)
 
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			user.profile.is_active = True
 			user.save()
 			login(request, user)
-			return JsonResponse({'message': 'User logged in'})
+			return JsonResponse({'message': 'User logged in', 'logged' : 1})
 		else:
-			return JsonResponse({'message': 'Invalid credentials'}, status=400)
+			return JsonResponse({'message': 'Invalid credentials', 'logged' : 0}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': 'User does not exist'}, status=200)
+		return JsonResponse({'message': 'User does not exist', 'logged' : 0}, status=200)
 	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+		return JsonResponse({'message': str(e), 'logged' : 0}, status=500)
 
 def user_logout(request):
 	if request.method != 'POST':
