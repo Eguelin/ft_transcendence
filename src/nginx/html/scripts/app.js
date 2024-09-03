@@ -4,11 +4,15 @@ swichTheme = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
 usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
+dropDownUserContainer = document.getElementById("dropDownUserContainer");
 dropDownUser = document.getElementById("dropDownUser");
 pageContentContainer = document.getElementById("pageContentContainer");
+langDropDown = document.getElementById("langDropDown");
+langDropDownBtn = document.getElementById("langDropDownBtn");
+langDropDownOption = document.querySelectorAll(".langDropDownOptions");
 
 var currentPage = "";
-var currentLang = "lang/EN_US.json"
+var currentLang = "lang/EN_UK.json"
 const hostname = new URL(window.location.href)
 
 window.navigation.addEventListener("navigate", (e) => {
@@ -24,6 +28,12 @@ window.navigation.addEventListener("navigate", (e) => {
 				credentials: 'include'
 			})
 			.then(currentUser => {
+				if (langDropDown.classList.contains("activeDropDown"))
+					langDropDown.classList.remove("activeDropDown");
+				if (dropDownUser.classList.contains("activeDropDown"))
+					dropDownUser.classList.remove("activeDropDown");
+
+				
 				if (currentUser.ok) {
 					currentUser.json().then((currentUser) => {
 						if (url.pathname.startsWith("/user")){
@@ -59,9 +69,24 @@ window.navigation.addEventListener("navigate", (e) => {
 											else
 												document.getElementById("profilePfp").style.setProperty("display", "none");
 											recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
+											var countWin = 0, countLost = 0;
 											for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
 												createMatchResumeContainer(user.matches[i]);
 											};
+											for (var i=0; i<Object.keys(user.matches).length;i++){
+												if (user.matches[i].player_one == user.display){
+													countWin += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
+													countLost += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
+												}
+												else{
+													countWin += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
+													countLost += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
+												}
+											}
+											document.getElementById("ratioContainer").innerHTML += `${countWin / Object.keys(user.matches).length}%`
+											document.getElementById("nbWinContainer").innerHTML += `${countWin}`
+											document.getElementById("nbLossContainer").innerHTML += `${countLost}`
+											document.getElementById("nbMatchContainer").innerHTML += `${Object.keys(user.matches).length}`
 											matchUsersName = document.querySelectorAll(".resultScoreName")
 											Object.keys(matchUsersName).forEach(function(key){
 												matchUsersName[key].addEventListener("click", (e) => {
@@ -121,8 +146,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/login.html').then((response) => {
 								(response.text().then(response => {
 									inputSearchUser.style.setProperty("display", "none");
-									userPfp.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									container.innerHTML = response;
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
@@ -145,9 +169,9 @@ window.navigation.addEventListener("navigate", (e) => {
 							fetch ('bodyLess/register.html').then((response) => {
 								return (response.text().then(response => {
 									container.innerHTML = response;
+									homeBtn.style.setProperty("display", "block");
 									inputSearchUser.style.setProperty("display", "none");
-									userPfp.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
 									s.setAttribute('id', 'script');
@@ -169,8 +193,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "settings";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									userPfp.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
 							});
@@ -186,8 +209,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "friends";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									userPfp.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
 							});
@@ -203,8 +225,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "game";
 									loadCurrentLang();
 									document.body.appendChild(s);
-									userPfp.style.setProperty("display", "none");
-									dropDownUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
 								}))
 							});
@@ -218,8 +239,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									switchTheme(currentUser.is_dark_theme);
 									usernameBtn.innerHTML = currentUser.display;
 									homeBtn.style.setProperty("display", "none");
-									userPfp.style.setProperty("display", "block");
-									dropDownUser.style.setProperty("display", "inline-table");
+									dropDownUserContainer.style.setProperty("display", "flex");
 									inputSearchUser.style.setProperty("display", "block");
 									if (currentUser.pfp != ""){
 										var rawPfp = currentUser.pfp;
@@ -227,6 +247,7 @@ window.navigation.addEventListener("navigate", (e) => {
 											userPfp.setAttribute("src", `${rawPfp}`);
 										else
 											userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+										userPfp.style.setProperty("display", "block");
 									}
 									else
 										userPfp.style.setProperty("display", "none");
@@ -251,8 +272,7 @@ window.navigation.addEventListener("navigate", (e) => {
 					})
 				}
 				else{
-					document.getElementById("pfp").style.setProperty("display", "none");
-					document.getElementById("dropDownUser").style.setProperty("display", "none");
+					dropDownUserContainer.style.setProperty("display", "none");
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
 							(response.text().then(response => {
@@ -271,6 +291,9 @@ window.navigation.addEventListener("navigate", (e) => {
 					if (url.pathname.startsWith("/register")){
 						fetch ('bodyLess/register.html').then((response) => {
 							return (response.text().then(response => {
+
+								homeBtn.style.setProperty("display", "block");
+								inputSearchUser.style.setProperty("display", "none");
 								container.innerHTML = response;
 								document.getElementById("script").remove();
 								var s = document.createElement("script");
@@ -294,6 +317,8 @@ function handleToken() {
 
 	if (code)
 	{
+		if (document.getElementById("loaderBg"))
+			document.getElementById("loaderBg").style.setProperty("display", "block");
 		fetch('/api/user/fortyTwo/login', {
 			method: 'POST',
 			headers: {
@@ -304,56 +329,47 @@ function handleToken() {
 		})
 		.then(response => response.json())
 		.then(data => {
+				if (document.getElementById("loaderBg"))
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+				console.log(document.body.innerHTML);
 				console.log('Data:', data)
-				window.history.replaceState({}, document.title, "/");
-				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 
-						if (container.innerHTML != "")
-							history.pushState(state, "");
-						else
-							history.replaceState(state,"");
-						document.getElementById("inputSearchUser").style.setProperty("display", "block");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						currentPage = "home";
-						loadCurrentLang();
-						document.body.appendChild(s);
-					}))
-				});
 		})
 		.catch(error => console.error('Error:', error));
+	}
+	else{
+		fetch('/api/user/current', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		})
+		.then(response => {
+			const url = new URL(window.location.href);
+
+			if (response.ok) {
+				(response.json()).then((text) => {
+					currentLang = text['lang'];
+					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+
+					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
+						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+					else
+						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "");
+				});
+			}
+			else {
+				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+			}
+		})
 	}
 }
 
 window.addEventListener('load', handleToken());
 
-fetch('/api/user/current', {
-	method: 'GET',
-	headers: {
-		'Content-Type': 'application/json',
-	},
-	credentials: 'include'
-})
-.then(response => {
-	const url = new URL(window.location.href);
-
-	if (response.ok) {
-		(response.json()).then((text) => {
-			if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
-			else
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "");
-		});
-	}
-	else {
-		history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
-	}
-})
 
 window.addEventListener("beforeunload", (e) => {
 	fetch('/api/user/update', {
@@ -367,25 +383,10 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	fetch ('bodyLess/home.html').then((response) => {
-		return (response.text().then(response => {
-			state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-			if (container.innerHTML != "")
-				history.pushState(state, "", `https://${hostname.host}`);
-			else
-				history.replaceState(state,"", `https://${hostname.host}`);
-			container.innerHTML = response;
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', `scripts/home.js`);
-			currentPage = "home";
-			loadCurrentLang();
-			document.body.appendChild(s);
-			homeBtn.style.setProperty("display", "none");
-		}))
-	});	
+	if (currentPage != "register")
+		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+	else
+		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
@@ -403,7 +404,7 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
 		document.documentElement.style.setProperty("--is-dark-theme", 1);
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-night-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-night-mode.svg\")";
 	}
 	else{
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
@@ -413,7 +414,7 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"svg/button-light-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-light-mode.svg\")";
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 	}
 }
@@ -457,7 +458,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 				})
 			}
 			else{
-				fetch("lang/EN_US.json").then(response => {
+				fetch("lang/EN_UK.json").then(response => {
 					response.json().then((text) => {
 						content = text[currentPage];
 						if (content != null || content != undefined){
@@ -474,7 +475,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 		})
 	}
 	else{
-		fetch("lang/EN_US.json").then(response => {
+		fetch("lang/EN_UK.json").then(response => {
 			response.json().then((text) => {
 				content = text[currentPage];
 				if (content != null || content != undefined){
@@ -644,39 +645,111 @@ function createUserResumeContainer(user){
 
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter"){
-		fetch('/api/user/search_by_display', {
-			method: 'POST', //GET forbid the use of body :(
-			headers: {'Content-Type': 'application/json',},
-			body: JSON.stringify({"name" : inputSearchUser.value}),
-			credentials: 'include'
-		}).then(user => {
-			user.json().then(((user) => {
-				fetch('bodyLess/search.html').then((response) => {
-					response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-
-						if (container.innerHTML != "")
-							history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
-						else
-							history.replaceState(state,"");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/profile.js`);
-						document.body.appendChild(s);
-						currentPage = "search";
-						loadCurrentLang(currentPage);
-						homeBtn.style.setProperty("display", "block");
-						document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-						document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
-						Object.keys(user).forEach(function(key){
-							createUserResumeContainer(user[key]);
+		if (inputSearchUser.value.length > 0){
+			fetch('/api/user/search_by_display', {
+				method: 'POST', //GET forbid the use of body :(
+				headers: {'Content-Type': 'application/json',},
+				body: JSON.stringify({"name" : inputSearchUser.value}),
+				credentials: 'include'
+			}).then(user => {
+				user.json().then(((user) => {
+					fetch('bodyLess/search.html').then((response) => {
+						response.text().then(response => {
+							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+	
+							if (container.innerHTML != "")
+								history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
+							else
+								history.replaceState(state,"");
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/profile.js`);
+							document.body.appendChild(s);
+							currentPage = "search";
+							loadCurrentLang(currentPage);
+							homeBtn.style.setProperty("display", "block");
+							document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+							document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
+							Object.keys(user).forEach(function(key){
+								createUserResumeContainer(user[key]);
+							})
+							inputSearchUser.value = "";
 						})
-						inputSearchUser.value = "";
 					})
-				})
-			}))
+				}))
+			})
+		}
+	}
+})
+
+langDropDownBtn.addEventListener("click", (e) => {
+	if (langDropDown.classList.contains("activeDropDown"))
+		langDropDown.classList.remove("activeDropDown")
+	else
+		langDropDown.classList.add("activeDropDown")
+})
+
+usernameBtn.addEventListener("click", (e) => {
+	if (dropDownUser.classList.contains("activeDropDown"))
+		dropDownUser.classList.remove("activeDropDown")
+	else
+		dropDownUser.classList.add("activeDropDown")
+})
+
+
+langDropDownBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Enter"){
+		langDropDownBtn.click();
+		if (dropDownUser.classList.contains("activeDropDown"))
+			dropDownUser.classList.remove("activeDropDown");
+	}
+})
+
+usernameBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Enter"){
+		usernameBtn.click();
+		if (langDropDown.classList.contains("activeDropDown"))
+			langDropDown.classList.remove("activeDropDown");
+	}
+})
+
+langDropDownOption.forEach(function(button) {
+	button.addEventListener("click", (e) =>{
+		currentLang = `lang/${button.id}.json`;
+		fetch(currentLang).then(response => {
+			response.json().then((text) => {
+				content = text[currentPage];
+				Object.keys(content).forEach(function(key) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					else
+						document.getElementById(key).innerHTML = content[key];
+				});
+			})
 		})
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({language_pack: currentLang}),
+			credentials: 'include'
+		})
+		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.png)`);
+	})
+	button.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			button.click();
+	})
+})
+
+window.addEventListener("click", (e) => {
+	if (!e.target.closest(".activeDropDown")){
+		if (langDropDown.classList.contains("activeDropDown"))
+			langDropDown.classList.remove("activeDropDown");
+		if (dropDownUser.classList.contains("activeDropDown"))
+			dropDownUser.classList.remove("activeDropDown");
 	}
 })
