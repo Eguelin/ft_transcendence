@@ -317,6 +317,8 @@ function handleToken() {
 
 	if (code)
 	{
+		if (document.getElementById("loaderBg"))
+			document.getElementById("loaderBg").style.setProperty("display", "block");
 		fetch('/api/user/fortyTwo/login', {
 			method: 'POST',
 			headers: {
@@ -327,60 +329,47 @@ function handleToken() {
 		})
 		.then(response => response.json())
 		.then(data => {
+				if (document.getElementById("loaderBg"))
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+				console.log(document.body.innerHTML);
 				console.log('Data:', data)
-				window.history.replaceState({}, document.title, "/");
-				fetch ('bodyLess/home.html').then((response) => {
-					return (response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 
-						if (container.innerHTML != "")
-							history.pushState(state, "");
-						else
-							history.replaceState(state,"");
-						document.getElementById("inputSearchUser").style.setProperty("display", "block");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/home.js`);
-						currentPage = "home";
-						loadCurrentLang();
-						document.body.appendChild(s);
-					}))
-				});
 		})
 		.catch(error => console.error('Error:', error));
+	}
+	else{
+		fetch('/api/user/current', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		})
+		.then(response => {
+			const url = new URL(window.location.href);
+
+			if (response.ok) {
+				(response.json()).then((text) => {
+					currentLang = text['lang'];
+					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+
+					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
+						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+					else
+						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "");
+				});
+			}
+			else {
+				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+			}
+		})
 	}
 }
 
 window.addEventListener('load', handleToken());
 
-fetch('/api/user/current', {
-	method: 'GET',
-	headers: {
-		'Content-Type': 'application/json',
-	},
-	credentials: 'include'
-})
-.then(response => {
-	const url = new URL(window.location.href);
-
-	if (response.ok) {
-		(response.json()).then((text) => {
-			currentLang = text['lang'];
-			langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
-
-			if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
-			else
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "");
-		});
-	}
-	else {
-		langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
-		history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
-	}
-})
 
 window.addEventListener("beforeunload", (e) => {
 	fetch('/api/user/update', {
