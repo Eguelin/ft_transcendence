@@ -1097,13 +1097,16 @@ a {
 
 
 .langDropDownOptions, #langDropDownBtn{
-	height: 64px;
-	width: 64px;
+	height: 3vw;
+	width: 5vw;
 	margin: 1vmin;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 50% 50%;
+
+	border: .2vmin solid var(--option-hover-text-rgb);
+	border-radius: 10%;
 }
 
 #langDropDownContent{

@@ -37,7 +37,7 @@ window.navigation.addEventListener("navigate", (e) => {
 				if (currentUser.ok) {
 					currentUser.json().then((currentUser) => {
 						currentLang = currentUser.lang;
-						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.svg)`);
 
 						if (url.pathname.startsWith("/user")){
 							var splitPath = url.pathname.split('/');
@@ -276,7 +276,7 @@ window.navigation.addEventListener("navigate", (e) => {
 				else{
 					dropDownUserContainer.style.setProperty("display", "none");
 					currentLang = "lang/EN_UK.json";
-					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.svg)`);
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
 							(response.text().then(response => {
@@ -733,7 +733,7 @@ langDropDownOption.forEach(function(button) {
 			body: JSON.stringify({language_pack: currentLang}),
 			credentials: 'include'
 		})
-		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.png)`);
+		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
 	})
 	button.addEventListener("keydown", (e) => {
 		if (e.key == "Enter")
