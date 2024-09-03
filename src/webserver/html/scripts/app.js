@@ -216,7 +216,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									currentPage = "home";
 									currentLang = currentUser.lang;
 									switchTheme(currentUser.is_dark_theme);
-									usernameBtn.innerHTML = currentUser.display;
+									usernameBtn.innerHTML = currentUser.username;
 									homeBtn.style.setProperty("display", "none");
 									userPfp.style.setProperty("display", "block");
 									dropDownUser.style.setProperty("display", "inline-table");
@@ -237,7 +237,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									document.body.appendChild(s);
 									loadCurrentLang();
 								}))
-							});	
+							});
 						}
 					})
 
@@ -385,7 +385,7 @@ homeBtn.addEventListener("click", (e) => {
 			document.body.appendChild(s);
 			homeBtn.style.setProperty("display", "none");
 		}))
-	});	
+	});
 })
 
 homeBtn.addEventListener("keydown", (e) => {
@@ -521,12 +521,12 @@ window.addEventListener("keydown", (e) => {
 				friendSlideIdx -= 1;
 			else
 				friendSlideIdx += 1;
-			if (friendSlideIdx > friendSlides.length - 1) 
+			if (friendSlideIdx > friendSlides.length - 1)
 				friendSlideIdx = 0;
-			if (friendSlideIdx < 0) 
+			if (friendSlideIdx < 0)
 				friendSlideIdx = friendSlides.length - 1;
 			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
-			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`		
+			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		}
 	}
 	if (currentPage == "settings"){
@@ -535,9 +535,9 @@ window.addEventListener("keydown", (e) => {
 				slideIdx -= 1;
 			else
 				slideIdx += 1;
-			if (slideIdx > settingsSlides.length - 1) 
+			if (slideIdx > settingsSlides.length - 1)
 				slideIdx = 0;
-			if (slideIdx < 0) 
+			if (slideIdx < 0)
 				slideIdx = settingsSlides.length - 1;
 			for (let i = 0; i < settingsSlides.length; i++)
 				settingsSlides[i].style.display = "none";
@@ -550,14 +550,14 @@ window.addEventListener("keydown", (e) => {
 function createMatchResumeContainer(match){
 	matchContainer = document.createElement("div");
 	matchContainer.className = "matchDescContainer";
-	
+
 	result = document.createElement("a");
 	result.className = "matchDescContainerResult"
-	
+
 	date = document.createElement("a");
 	date.className = "matchDescContainerDate"
 	date.innerHTML = match.date;
-	
+
 	scoreContainer = document.createElement("div");
 	scoreContainer.className = "matchDescContainerScore";
 	scoreUser = document.createElement("div");
@@ -580,7 +580,7 @@ function createMatchResumeContainer(match){
 
 	scoreUserName.innerHTML = `${match.player_one}`;
 	scoreOpponentName.innerHTML = `${match.player_two}`;
-	
+
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
@@ -600,18 +600,18 @@ function createMatchResumeContainer(match){
 
 	scoreContainer.appendChild(scoreUser);
 	scoreContainer.appendChild(scoreOpponent);
-	
+
 	matchContainer.appendChild(result);
 	matchContainer.appendChild(scoreContainer);
 	matchContainer.appendChild(date);
-	
+
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }
 
 function createUserResumeContainer(user){
 	userResumeContainer = document.createElement("div");
 	userResumeContainer.className = "userResumeContainer";
-	
+
 	userResume = document.createElement("div");
 	userResume.className = "userResume";
 	userResume.id = user.username
@@ -633,8 +633,8 @@ function createUserResumeContainer(user){
 	userResumeName = document.createElement("a");
 	userResumeName.className = "userResumeName"
 	userResumeName.innerHTML = user.display;
-	
-	
+
+
 	imgContainer.appendChild(img);
 	userResume.appendChild(imgContainer);
 	userResume.appendChild(userResumeName);
@@ -644,7 +644,7 @@ function createUserResumeContainer(user){
 
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter"){
-		fetch('/api/user/search_by_display', {
+		fetch('/api/user/search_by_username', {
 			method: 'POST', //GET forbid the use of body :(
 			headers: {'Content-Type': 'application/json',},
 			body: JSON.stringify({"name" : inputSearchUser.value}),

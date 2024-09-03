@@ -1,6 +1,4 @@
 from django.db import models
-
-
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -14,7 +12,6 @@ class MatchManager(models.Manager):
 			player_two = User.objects.get(username="random")
 		except:
 			player_two = User.objects.get_or_create(username="random")[0]
-			player_two.profile.display_name = "random"
 			player_two.save()
 		match = self.create(player_one=creator, player_two=player_two)
 		match.player_one_pts = random.randint(0, 10)
@@ -40,7 +37,6 @@ class Profile(models.Model):
 	dark_theme = models.BooleanField(default=True)
 	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_US.json")
-	display_name = models.CharField(max_length=15)
 	friend_code = models.CharField(max_length=20, null=True)
 	friends = models.ManyToManyField(User, related_name="friends_list")
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
@@ -48,6 +44,7 @@ class Profile(models.Model):
 	blocked_users = models.ManyToManyField(User, related_name="block_user_list")
 	id42 = models.IntegerField(default=0)
 	matches = models.ManyToManyField(Match, related_name="matches_history")
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwards):

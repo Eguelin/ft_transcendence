@@ -1,14 +1,12 @@
 container = document.getElementById("container");
 registerBtn = document.getElementById("registerBtn");
 swichTheme = document.getElementById("themeButton");
-displayInput = document.getElementById('inputDisplayName');
 usernameInput = document.getElementById('inputUsername');
 pwInput = document.getElementById('inputPassword');
 cpwInput = document.getElementById('inputCPassword');
 
 registerBtn.addEventListener("click", (e) => {
 	var lock = 0;
-	display = displayInput.value;
 	username = usernameInput.value;
 	pw = pwInput.value;
 	cpw = cpwInput.value;
@@ -25,17 +23,17 @@ registerBtn.addEventListener("click", (e) => {
 			lock = 1;
 		}
 	}
-	
-	if (display.length > 15){
+
+	if (username.length > 15){
 		warning = document.createElement("a");
 		warning.className = "warning";
-		warning.text = "Display name must not exceed 15 characters";
-		if (!displayInput.previousElementSibling)
-			displayInput.before(warning);
+		warning.text = "username name must not exceed 15 characters";
+		if (!usernameInput.previousElementSibling)
+			usernameInput.before(warning);
 		lock = 1;
 	}
-	else if (displayInput.previousElementSibling)
-			displayInput.previousElementSibling.remove();
+	else if (usernameInput.previousElementSibling)
+			usernameInput.previousElementSibling.remove();
 	if (pw != cpw){
 		warning = document.createElement("a");
 		warning.className = "warning";
@@ -51,7 +49,7 @@ registerBtn.addEventListener("click", (e) => {
 		}
 	}
 	else if (lock == 0){
-		const data = {username: username, password: pw, displayName: display};
+		const data = {username: username, password: pw};
 		fetch('/api/user/create', {
 			method: 'POST',
 			headers: {

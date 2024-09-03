@@ -2,10 +2,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError, IntegrityError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random, string
+import json, os, requests, base64, random, string, subprocess
 import login.models as customModels
-
-import subprocess
 
 def generate_unique_username(base_username):
 	username = base_username
@@ -71,45 +69,27 @@ def fortytwo(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except User.DoesNotExist:
-		user, created = User.objects.get_or_create(username=user_login)
-		if created:
-			user.set_password(user.username)
-			user.save()
-			user.profile.display_name = display
-			user.profile.profile_picture = pfp_url
-			user.profile.id42 = id42
+		user, user_existence = User.objects.get_or_create(username=user_login)
+		if user_existence is False:
+			user_login = generate_unique_username(user_login)
 
-			# CREATE RANDOM FIRST MATCH
-			for i in range(0, 5):
-				match = customModels.Match.objects.createWithRandomOpps(user)
-				user.profile.matches.add(match)
+		user.set_password(user.username)
+		user.save()
+		user.profile.profile_picture = pfp_url
+		user.profile.id42 = id42
 
-			user.profile.save()
-			user = authenticate(request, username=user.username, password=user.username)
-			if user is not None:
-				login(request, user)
-				return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
-			else:
-				return JsonResponse({'message': 'Invalid credentials'}, status=400)
+		# CREATE RANDOM FIRST MATCH
+		for i in range(0, 5):
+			match = customModels.Match.objects.createWithRandomOpps(user)
+			user.profile.matches.add(match)
+
+		user.profile.save()
+		user = authenticate(request, username=user.username, password=user.username)
+		if user is not None:
+			login(request, user)
+			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
 		else:
-			username = generate_unique_username(user_login)
-			user = User.objects.create_user(username=username, password=username)
-			user.profile.display_name = display
-			user.profile.profile_picture = pfp_url
-			user.profile.id42 = id42
-
-			# CREATE RANDOM FIRST MATCH
-			for i in range(0, 5):
-				match = customModels.Match.objects.createWithRandomOpps(user)
-				user.profile.matches.add(match)
-
-			user.save()
-			user = authenticate(request, username=username, password=username)
-			if user is not None:
-				login(request, user)
-				return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
-			else:
-				return JsonResponse({'message': 'Invalid credentials'}, status=400)
+			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 
 def create_user(request):
 	if request.method != 'POST' :
@@ -118,20 +98,18 @@ def create_user(request):
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
 	try:
 		username = data['username']
 		password = data['password']
-		display = data['displayName']
 	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=400)
+		return JsonResponse({'message': str(e)}, status=500)
+
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=400)
+
 	try:
 		user = User.objects.create_user(username=username, password=password)
-		if (len(display) > 15):
-			user.profile.display_name = display[:15]
-		else:
-			user.profile.display_name = display
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.id42 = 0
 		user.profile.is_active = True
@@ -153,6 +131,8 @@ def create_user(request):
 		return JsonResponse({'message': 'User created but not logged in'}, status=201)
 	except DatabaseError:
 		return JsonResponse({'message': 'Database error'}, status=500)
+	except Exception as e:
+		return JsonResponse({'message': str(e)}, status=500)
 
 def user_login(request):
 	if request.method != 'POST':
@@ -161,15 +141,20 @@ def user_login(request):
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
-	username = data.get('username')
-	password = data.get('password')
+
+	try :
+		username = data.get('username')
+		password = data.get('password')
+	except Exception as e:
+		return JsonResponse({'message': str(e)}, status=500)
+
 	if not username or not password:
 		return JsonResponse({'message': 'Username and password are required'}, status=400)
 	try:
 		user = User.objects.get(username=username)
 
 		if user.profile.id42 != 0:
-			return JsonResponse({'message': 'User does not exist'}, status=404)
+			return JsonResponse({'message': 'Forbidden'}, status=403)
 
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
@@ -180,7 +165,7 @@ def user_login(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': 'User does not exist'}, status=404)
+		return JsonResponse({'message': 'User does not exist'}, status=200)
 	except Exception as e:
 		return JsonResponse({'message': str(e)}, status=500)
 
@@ -205,11 +190,6 @@ def profile_update(request):
 					user.profile.dark_theme = data['is_dark_theme']
 				if "username" in data:
 					user.username = data['username']
-				if "display" in data:
-					if (len(data['display']) > 15):
-						user.profile.display_name = data['display'][:15]
-					else:
-						user.profile.display_name = data['display']
 				if "pfp" in data:
 					raw = data['pfp']
 					pfpName = "profilePictures/{0}.jpg".format(user.username)
@@ -252,7 +232,6 @@ def get_user_json(user):
 		raw_img = ""
 	matches = get_user_match_json(user.profile.matches.all())
 	return {'username' : user.username,
-		'display' : user.profile.display_name,
 		'friend_code' : user.profile.friend_code,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
@@ -269,7 +248,6 @@ def get_user_preview_json(user):
 	except:
 		raw_img = ""
 	return {'username' : user.username,
-		'display' : user.profile.display_name,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
 	}
@@ -308,7 +286,6 @@ def current_user(request):
 			i += 1
 		matches = get_user_match_json(request.user.profile.matches.all())
 		return JsonResponse({'username': request.user.username,
-			'display': request.user.profile.display_name,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack,
@@ -332,14 +309,14 @@ def get(request):
 		except:
 			return JsonResponse({'message': "can't find user"}, status=400)
 
-def search_by_display(request):
+def search_by_username(request):
 	if (request.method != 'POST'):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		users_json = {}
 		try:
-			query_users = customModels.Profile.objects.filter(display_name__icontains=data['name'])
+			query_users = customModels.Profile.objects.filter(username__icontains=data['name'])
 			i = 0
 			for user in query_users:
 				users_json[i] = get_user_preview_json(user.user)
