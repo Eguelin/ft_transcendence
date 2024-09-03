@@ -220,6 +220,11 @@ input:focus{
 	mask-position:center;
 	mask-repeat:no-repeat;
 	flex: 1;
+	outline: none;
+}
+
+#fortyTwoLogin:hover, #fortyTwoLogin:focus{
+	background: var(--hover-text-rgb);
 }
 
 #githubLogin{
@@ -1165,3 +1170,4 @@ a {
 	80% {background-size:25px 100%,25px 100%,25px 50% }
 	100% {background-size:25px 100%,25px 100%,25px 100%}
 }
+
