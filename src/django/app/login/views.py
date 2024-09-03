@@ -322,10 +322,10 @@ def search_by_username(request):
 		data = json.loads(request.body)
 		users_json = {}
 		try:
-			query_users = customModels.Profile.objects.filter(username__icontains=data['name'])
+			query_users = User.objects.filter(username__icontains=data['name'])
 			i = 0
 			for user in query_users:
-				users_json[i] = get_user_preview_json(user.user)
+				users_json[i] = get_user_preview_json(user)
 				i += 1
 			if i == 0:
 				return JsonResponse({}, status=200)
