@@ -10,3 +10,4 @@ python-dotenv
 requests
 channels
 daphne
+zxcvbn-python

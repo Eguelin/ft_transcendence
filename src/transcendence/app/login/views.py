@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError, IntegrityError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random, string, subprocess
+import json, os, requests, base64, random, string, subprocess, zxcvbn
 import login.models as customModels
 
 def generate_unique_username(base_username):
@@ -15,7 +15,7 @@ def generate_unique_username(base_username):
 
 def fortytwo(request):
 	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 
 	try:
 		data = json.loads(request.body)
@@ -42,7 +42,7 @@ def fortytwo(request):
 
 	access_token = response.json().get('access_token')
 	if not access_token:
-		return JsonResponse({'message': 'Failed to retrieve access token'}, status=400)
+		return JsonResponse({'message': 'Failed to retrieve access token'}, status=500)
 	url = 'https://api.intra.42.fr/v2/me'
 	headers = {
 		'Authorization': f'Bearer {access_token}'
@@ -57,7 +57,7 @@ def fortytwo(request):
 	display = user_login
 	id42 = user_json.get('id')
 	if not user_login or id42 is None:
-		return JsonResponse({'message': 'Failed to retrieve user data'}, status=400)
+		return JsonResponse({'message': 'Failed to retrieve user data'}, status=500)
 	try:
 		user = User.objects.get(profile__id42=id42)
 		user = authenticate(request, username=user.username, password=user.username)
@@ -65,9 +65,9 @@ def fortytwo(request):
 			user.profile.is_active = True
 			user.save()
 			login(request, user)
-			return JsonResponse({'message': 'User logged in', 'content': pfp_url})
+			return JsonResponse({'message': 'User logged in', 'content': pfp_url}, status=200)
 		else:
-			return JsonResponse({'message': 'Invalid credentials'}, status=400)
+			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 	except User.DoesNotExist:
 		user, user_existence = User.objects.get_or_create(username=user_login)
 		if user_existence is False:
@@ -89,11 +89,11 @@ def fortytwo(request):
 			login(request, user)
 			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
 		else:
-			return JsonResponse({'message': 'Invalid credentials'}, status=400)
+			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
 def create_user(request):
 	if request.method != 'POST' :
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
@@ -106,7 +106,13 @@ def create_user(request):
 		return JsonResponse({'message': str(e)}, status=500)
 
 	if username is None or password is None:
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+
+	if len(username) > 15:
+		return JsonResponse({'message': 'Username too long'}, status=400)
+	result = zxcvbn.zxcvbn(password)
+	if result['score'] < 4:
+		return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	try:
 		user = User.objects.create_user(username=username, password=password)
@@ -136,7 +142,7 @@ def create_user(request):
 
 def user_login(request):
 	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
@@ -161,21 +167,21 @@ def user_login(request):
 			user.profile.is_active = True
 			user.save()
 			login(request, user)
-			return JsonResponse({'message': 'User logged in'})
+			return JsonResponse({'message': 'User logged in'}, status=200)
 		else:
-			return JsonResponse({'message': 'Invalid credentials'}, status=400)
+			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 	except User.DoesNotExist:
-		return JsonResponse({'message': 'User does not exist'}, status=200)
+		return JsonResponse({'message': 'User does not exist'}, status=404)
 	except Exception as e:
 		return JsonResponse({'message': str(e)}, status=500)
 
 def user_logout(request):
 	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 	request.user.profile.is_active = False
 	request.user.save()
 	logout(request)
-	return JsonResponse({'message': 'User logged out'})
+	return JsonResponse({'message': 'User logged out'}, status=200)
 
 def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
@@ -201,10 +207,10 @@ def profile_update(request):
 				if ("is_active" in data):
 					user.profile.is_active = data['is_active']
 				user.save()
-				return JsonResponse({'message': 'User profile updated'})
+				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
 				return JsonResponse({'message': 'Invalid JSON'}, status=400)
-	return JsonResponse({'message': 'Can\'t update user profile'})
+	return JsonResponse({'message': 'Can\'t update user profile'}, status=400)
 
 
 def get_user_match_json(matches):
@@ -254,7 +260,7 @@ def get_user_preview_json(user):
 
 def current_user(request):
 	if request.method != 'GET':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
 		try:
 			if (request.user.profile.profile_picture.startswith("https://")):
@@ -297,21 +303,21 @@ def current_user(request):
 			'matches' : matches
 			})
 	else:
-		return JsonResponse({'username': None}, status=400)
+		return JsonResponse({'username': None}, status=404)
 
 def get(request):
 	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		try:
 			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
 		except:
-			return JsonResponse({'message': "can't find user"}, status=400)
+			return JsonResponse({'message': "can't find user"}, status=404)
 
 def search_by_username(request):
 	if (request.method != 'POST'):
-		return JsonResponse({'message': 'Invalid request'}, status=400)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		users_json = {}
@@ -323,6 +329,6 @@ def search_by_username(request):
 				i += 1
 			if i == 0:
 				return JsonResponse({}, status=200)
-			return JsonResponse(users_json, status=200)
+			return JsonResponse(users_json, status=400)
 		except Exception as error:
 			return JsonResponse({'message': error}, status=500)
