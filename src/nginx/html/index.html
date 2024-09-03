@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Transendence</title>
+<link id="style" rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="titleFlexContainer">
+		<div style="flex: 1;" id="browseFlexContainer" >
+			<div tabindex="1" id="goHomeButton" style="display: none"></div>
+			<div style="flex: 1; text-align: left; align-self: center;">
+				<input tabindex="1" id="inputSearchUser" placeholder="Search user">
+			</div>
+		</div>
+		<h1 style="flex: 1;" id="title"></h1>
+		<div id="quickSettingContainer">
+			<div  id="dropDownUserContainer" style="display: none;">
+				<div id="dropDownUser">
+					<span tabindex="7" id="usernameBtn"></span>
+					<div class="dropDownUserContent">
+						<button tabindex="8" id="friendsBtn">Friends</button>
+						<button tabindex="9" id="settingsBtn">Account settings</button>
+						<button tabindex="10" id="logOutBtn">Log out</button>
+					</div>
+				</div>
+				<img id="pfp" class="profilePicture">
+			</div>
+			<div tabindex="6" id="themeButton"></div>
+			<div id="langDropDownContainer">
+				<div id="langDropDown">
+					<div tabindex="1" id="langDropDownBtn"></div>
+					<div id="langDropDownContent">
+						<div class="langDropDownOptions" id="EN_UK" style="background-image: url(icons/EN_UK.png);" tabindex="2"></div>
+						<div class="langDropDownOptions" id="FR_FR" style="background-image: url(icons/FR_FR.png);" tabindex="3"></div>
+						<div class="langDropDownOptions" id="DE_GE" style="background-image: url(icons/DE_GE.png);" tabindex="4"></div>
+						<div class="langDropDownOptions" id="IT_IT" style="background-image: url(icons/IT_IT.png);" tabindex="5"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div id="container"></div>
+	<div id="loaderBg"><div class="loader"></div></div>
+	<script id="script" src="scripts/app.js"></script>
+</body>
+</html>

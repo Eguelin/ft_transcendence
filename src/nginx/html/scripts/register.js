@@ -51,7 +51,11 @@ registerBtn.addEventListener("click", (e) => {
 		}
 	}
 	else if (lock == 0){
-		const data = {username: username, password: pw, displayName: display};
+		document.getElementById("loaderBg").style.setProperty("display", "block");
+		if (registerBtn.previousElementSibling)
+			registerBtn.previousElementSibling.remove();
+
+		const data = {username: username, password: pw, displayName: display, 'lang': currentLang};
 		fetch('/api/user/create', {
 			method: 'POST',
 			headers: {
@@ -71,10 +75,16 @@ registerBtn.addEventListener("click", (e) => {
 					body: JSON.stringify(data),
 					credentials: 'include'
 				}).then(response => {
+					document.getElementById("loaderBg").style.setProperty("display", "none");
 					history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 				});
 			} else {
-				console.log("Failed to create user")
+				document.getElementById("loaderBg").style.setProperty("display", "none");
+				warning = document.createElement("a");
+				warning.className = "warning";
+				warning.text = "User already exist";
+				if (!registerBtn.previousElementSibling)
+					registerBtn.before(warning);
 			}
 		})
 		.catch(error => {

@@ -10,38 +10,35 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - transcendence
-    restart: always
 
   # web server service
-  webserver:
-    build: src/webserver/
-    image: webserver
-    container_name: webserver
+  nginx:
+    build: src/nginx/
+    image: nginx
+    container_name: nginx
     volumes:
-      - ./src/webserver/html:/usr/share/nginx/html
+      - ./src/nginx/html:/usr/share/nginx/html
     ports:
       - "49300:443"
     networks:
       - transcendence
     depends_on:
-      - transcendence
-    restart: always
+      - django
 
   # transcendence backend service
-  transcendence:
-    build: src/transcendence
-    image: transcendence
-    container_name: transcendence
+  django:
+    build: src/django
+    image: django
+    container_name: django
     env_file:
       - .env
     volumes:
-      - ./src/transcendence/app:/app
+      - ./src/django/app:/app
     command: /bin/start
     networks:
       - transcendence
     depends_on:
       - db
-    restart: always
 
 volumes:
 
