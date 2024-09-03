@@ -194,9 +194,10 @@ def user_login(request):
 def user_logout(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
-	request.user.profile.is_active = False
-	request.user.save()
-	logout(request)
+	if (request.user.is_authenticated):
+		request.user.profile.is_active = False
+		request.user.save()
+		logout(request)
 	return JsonResponse({'message': 'User logged out'})
 
 def file_opener(path, flags):

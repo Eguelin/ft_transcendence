@@ -36,6 +36,9 @@ window.navigation.addEventListener("navigate", (e) => {
 				
 				if (currentUser.ok) {
 					currentUser.json().then((currentUser) => {
+						currentLang = currentUser.lang;
+						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
+
 						if (url.pathname.startsWith("/user")){
 							var splitPath = url.pathname.split('/');
 							fetch('/api/user/get', {
@@ -235,7 +238,6 @@ window.navigation.addEventListener("navigate", (e) => {
 								(response.text().then(response => {
 									container.innerHTML = response;
 									currentPage = "home";
-									currentLang = currentUser.lang;
 									switchTheme(currentUser.is_dark_theme);
 									usernameBtn.innerHTML = currentUser.display;
 									homeBtn.style.setProperty("display", "none");
@@ -273,6 +275,8 @@ window.navigation.addEventListener("navigate", (e) => {
 				}
 				else{
 					dropDownUserContainer.style.setProperty("display", "none");
+					currentLang = "lang/EN_UK.json";
+					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
 							(response.text().then(response => {
@@ -331,7 +335,6 @@ function handleToken() {
 		.then(data => {
 				if (document.getElementById("loaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "none");
-				console.log(document.body.innerHTML);
 				console.log('Data:', data)
 				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 
@@ -351,9 +354,6 @@ function handleToken() {
 
 			if (response.ok) {
 				(response.json()).then((text) => {
-					currentLang = text['lang'];
-					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
-
 					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
 						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 					else
@@ -361,7 +361,6 @@ function handleToken() {
 				});
 			}
 			else {
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
 				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 			}
 		})
