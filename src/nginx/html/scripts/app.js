@@ -102,7 +102,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							})
 						}
 						else if (url.pathname.startsWith("/search")){
-							fetch('/api/user/search_by_display', {
+							fetch('/api/user/search_by_username', {
 								method: 'POST', //GET forbid the use of body :(
 								headers: {'Content-Type': 'application/json',},
 								body: JSON.stringify({"name" : url.searchParams.get("query")}),
@@ -632,7 +632,7 @@ function createUserResumeContainer(user){
 
 	userResumeName = document.createElement("a");
 	userResumeName.className = "userResumeName"
-	userResumeName.innerHTML = user.display;
+	userResumeName.innerHTML = user.username;
 
 
 	imgContainer.appendChild(img);
