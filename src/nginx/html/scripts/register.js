@@ -77,12 +77,15 @@ registerBtn.addEventListener("click", (e) => {
 					history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 				});
 			} else {
-				document.getElementById("loaderBg").style.setProperty("display", "none");
-				warning = document.createElement("a");
-				warning.className = "warning";
-				warning.text = "User already exist";
-				if (!registerBtn.previousElementSibling)
-					registerBtn.before(warning);
+				response.json().then(response => {
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+					warning = document.createElement("a");
+					warning.className = "warning";
+					warning.text = response.message;
+					if (!registerBtn.previousElementSibling)
+						registerBtn.before(warning);
+				})
+
 			}
 		})
 		.catch(error => {

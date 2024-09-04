@@ -65,6 +65,14 @@ loginBtn.addEventListener("click", (e) => {
 						history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 				})
 			}
+			else
+			{
+				response.json().then(text => {
+					warning.text = text.message;
+					if (!loginBtn.previousElementSibling)
+						loginBtn.before(warning.cloneNode(true));
+				})
+			}
 		})
 	}
 })
