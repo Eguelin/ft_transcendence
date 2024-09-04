@@ -127,6 +127,24 @@ confirmDeleteBtn.addEventListener("click", (e) => {
 	}
 })
 
+document.addEventListener("keydown", (e) => {
+	if (currentPage == "settings"){
+		if (e.key == "Escape"){
+			document.getElementById("popupBg").style.setProperty("display", "none");
+			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+		}
+	}
+})
+
+document.addEventListener("click", (e) => {
+	if (currentPage == "settings"){
+		if (e.target.parentElement == null || e.target.id == "popupBg"){
+			document.getElementById("popupBg").style.setProperty("display", "none");
+			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+		}
+	}
+})
+
 dropDownContent.forEach(function(button) {
 	var a = button.getElementsByTagName('a');
 	var j = 0;

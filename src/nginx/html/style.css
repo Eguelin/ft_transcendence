@@ -683,6 +683,7 @@ a {
 	display: none;
 	flex-direction: column;
 	align-items: center;
+	gap: 2vmax;
 }
 
 #popupBg{
