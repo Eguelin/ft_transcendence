@@ -1,5 +1,6 @@
 saveBtn = document.getElementById('saveBtn');
 deleteBtn = document.getElementById('deleteBtn');
+confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 usernameInput = document.getElementById("inputUsername");
 pfpInput = document.getElementById("inputPfp");
 pfpInputLabel = document.getElementById("pfpLabel");
@@ -11,7 +12,6 @@ dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandsca
 settingsSlides = document.querySelectorAll(".settingSlide");
 rightSlideBtn = document.getElementById("rightSlideBtn");
 leftSlideBtn = document.getElementById("leftSlideBtn");
-
 
 var slideIdx = 0;
 for (i = 0; i < settingsSlides.length; i++)
@@ -106,18 +106,25 @@ saveBtn.addEventListener("click", (e) => {
 })
 
 deleteBtn.addEventListener("click", (e) => {
-	fetch('/api/user/delete_user', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	}).then(response => {
-		if (response.ok){
-			history.pushState("", "", `https://${hostname.host}/login`);
-		}
-	})
+	document.getElementById("popupBg").style.setProperty("display", "block");
+	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
+})
 
+confirmDeleteBtn.addEventListener("click", (e) => {
+	val = document.getElementById("confirmDeleteInput").value;
+	if (val == document.getElementById("usernameBtn").innerHTML){
+		fetch('/api/user/delete_user', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		}).then(response => {
+			if (response.ok){
+				history.pushState("", "", `https://${hostname.host}/login`);
+			}
+		})
+	}
 })
 
 dropDownContent.forEach(function(button) {

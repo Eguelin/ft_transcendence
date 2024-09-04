@@ -669,7 +669,7 @@ a {
 	outline: none;
 }
 
-#friendCodePopup, #friendRequestPopup, #deleteFriendPopup, #blockFriendPopup{
+#friendCodePopup, #friendRequestPopup, #deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup{
 	background: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	position: fixed;
@@ -681,6 +681,8 @@ a {
 	width: max-content;
 	border: 2px solid var(--main-text-rgb);
 	display: none;
+	flex-direction: column;
+	align-items: center;
 }
 
 #popupBg{
@@ -690,6 +692,7 @@ a {
 	top: 0;
 	background-color: black;
 	opacity: 0.5;
+	display: none;
 }
 
 #inputCode{
