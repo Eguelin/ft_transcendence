@@ -174,9 +174,9 @@ def user_login(request):
 			login(request, user)
 			return JsonResponse({'message': 'User logged in', 'logged' : 1}, status=200)
 		else:
-			return JsonResponse({'message': 'Invalid credentials', 'logged' : 0}, status=401)
+			return JsonResponse({'message': 'Invalid credentials', 'logged' : 0}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': 'User does not exist', 'logged' : 0}, status=404)
+		return JsonResponse({'message': 'Invalid credentials', 'logged' : 0}, status=400)
 	except Exception as e:
 		return JsonResponse({'message': str(e), 'logged' : 0}, status=500)
 
