@@ -20,7 +20,6 @@
 		"title" : "REGISTRIEREN",
 		"createAcc" : "Erstelle deinen Account",
 		"registerBtn" : "REGISTRIEREN",
-		"inputDisplayName" : "Anzeigename",
 		"inputUsername" : "Nutzername",
 		"inputPassword" : "Passwort",
 		"inputCPassword" : "Bestätige das Passwort"
@@ -30,7 +29,6 @@
 		"accountTitle" : "Account",
 		"accessibilityTitle" : "Barrierefreiheit",
 		"saveBtn" : "SPEICHERN",
-		"inputDisplayName" : "Anzeigename",
 		"inputUsername" : "Nutzername",
 		"inputPfp" : "Profilbild",
 		"pfpLabel" : "Profilbild",

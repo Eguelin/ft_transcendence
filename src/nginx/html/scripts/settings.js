@@ -1,6 +1,5 @@
 saveBtn = document.getElementById('saveBtn');
-swichTheme = document.getElementById("themeButton");
-homeBtn = document.getElementById("goHomeButton");
+deleteBtn = document.getElementById('deleteBtn');
 usernameInput = document.getElementById("inputUsername");
 pfpInput = document.getElementById("inputPfp");
 pfpInputLabel = document.getElementById("pfpLabel");
@@ -104,6 +103,21 @@ saveBtn.addEventListener("click", (e) => {
 			credentials: 'include'
 		})
 	}
+})
+
+deleteBtn.addEventListener("click", (e) => {
+	fetch('/api/user/delete_user', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	}).then(response => {
+		if (response.ok){
+			history.pushState("", "", `https://${hostname.host}/login`);
+		}
+	})
+
 })
 
 dropDownContent.forEach(function(button) {

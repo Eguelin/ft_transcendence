@@ -176,9 +176,8 @@ input:focus{
 	outline: none;
 }
 
-.saveBtn {
+.saveBtn, .deleteBtn {
 	text-align: center;
-	background-color: limegreen;
 	color: var(--main-text-rgb);
 	font-weight: thin;	
 	font-family: "pong";
@@ -187,6 +186,14 @@ input:focus{
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
+}
+
+.saveBtn{
+	background-color: limegreen;
+}
+
+.deleteBtn{
+	background-color: red;
 }
 
 .loginOpt{

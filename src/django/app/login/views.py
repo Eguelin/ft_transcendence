@@ -183,6 +183,17 @@ def user_logout(request):
 		logout(request)
 	return JsonResponse({'message': 'User logged out'})
 
+def delete_user(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request'}, status=400)
+	if (request.user.is_authenticated):
+		try:
+			request.user.delete()
+			return JsonResponse({'message': 'User deleted'}, status=200)
+		except Exception as e:
+			return JsonResponse({'message': e}, status=400)
+	return JsonResponse({'message': 'can\'t delete user'}, status=200)
+
 def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
 

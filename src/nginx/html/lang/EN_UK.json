@@ -20,7 +20,6 @@
 		"title" : "REGISTER",
 		"createAcc" : "Create your account",
 		"registerBtn" : "REGISTER",
-		"inputDisplayName" : "Display name",
 		"inputUsername" : "Username",
 		"inputPassword" : "Password",
 		"inputCPassword" : "Confirm password"
@@ -31,7 +30,6 @@
 		"accessibilityTitle" : "Accessibility",
 		"saveBtn" : "SAVE",
 		"inputUsername" : "Username",
-		"inputDisplayName" : "Display name",
 		"inputPfp" : "Profile picture",
 		"pfpLabel" : "Profile picture",
 		"themesDropDownL" : "Themes",
