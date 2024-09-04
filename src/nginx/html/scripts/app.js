@@ -10,6 +10,7 @@ pageContentContainer = document.getElementById("pageContentContainer");
 langDropDown = document.getElementById("langDropDown");
 langDropDownBtn = document.getElementById("langDropDownBtn");
 langDropDownOption = document.querySelectorAll(".langDropDownOptions");
+myProfileBtn = document.getElementById("myProfileBtn");
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -36,6 +37,21 @@ window.navigation.addEventListener("navigate", (e) => {
 				
 				if (currentUser.ok) {
 					currentUser.json().then((currentUser) => {
+						currentLang = currentUser.lang;
+						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.svg)`);
+
+						usernameBtn.innerHTML = currentUser.username;
+						if (currentUser.pfp != ""){
+							var rawPfp = currentUser.pfp;
+							if (rawPfp.startsWith('https://'))
+								userPfp.setAttribute("src", `${rawPfp}`);
+							else
+								userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+							userPfp.style.setProperty("display", "block");
+						}
+						else
+							userPfp.style.setProperty("display", "none");
+
 						if (url.pathname.startsWith("/user")){
 							var splitPath = url.pathname.split('/');
 							fetch('/api/user/get', {
@@ -56,7 +72,8 @@ window.navigation.addEventListener("navigate", (e) => {
 											currentPage = "profile";
 											loadCurrentLang(currentPage);
 											homeBtn.style.setProperty("display", "block");
-											document.getElementById("profileName").innerHTML = user.display;
+											dropDownUserContainer.style.setProperty("display", "flex");
+											document.getElementById("profileName").innerHTML = user.username;
 											document.getElementById("profilePfp").style.setProperty("display", "block");
 											document.getElementById("profilePfp").innerHTML = "";
 											if (user.pfp != ""){
@@ -99,7 +116,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							})
 						}
 						else if (url.pathname.startsWith("/search")){
-							fetch('/api/user/search_by_display', {
+							fetch('/api/user/search_by_username', {
 								method: 'POST', //GET forbid the use of body :(
 								headers: {'Content-Type': 'application/json',},
 								body: JSON.stringify({"name" : url.searchParams.get("query")}),
@@ -235,22 +252,10 @@ window.navigation.addEventListener("navigate", (e) => {
 								(response.text().then(response => {
 									container.innerHTML = response;
 									currentPage = "home";
-									currentLang = currentUser.lang;
 									switchTheme(currentUser.is_dark_theme);
-									usernameBtn.innerHTML = currentUser.display;
 									homeBtn.style.setProperty("display", "none");
 									dropDownUserContainer.style.setProperty("display", "flex");
 									inputSearchUser.style.setProperty("display", "block");
-									if (currentUser.pfp != ""){
-										var rawPfp = currentUser.pfp;
-										if (rawPfp.startsWith('https://'))
-											userPfp.setAttribute("src", `${rawPfp}`);
-										else
-											userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-										userPfp.style.setProperty("display", "block");
-									}
-									else
-										userPfp.style.setProperty("display", "none");
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
 									s.setAttribute('id', 'script');
@@ -258,7 +263,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									document.body.appendChild(s);
 									loadCurrentLang();
 								}))
-							});	
+							});
 						}
 					})
 
@@ -273,6 +278,8 @@ window.navigation.addEventListener("navigate", (e) => {
 				}
 				else{
 					dropDownUserContainer.style.setProperty("display", "none");
+					currentLang = "lang/EN_UK.json";
+					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.svg)`);
 					if (url.pathname.startsWith("/login")){
 						fetch ('bodyLess/login.html').then((response) => {
 							(response.text().then(response => {
@@ -331,7 +338,6 @@ function handleToken() {
 		.then(data => {
 				if (document.getElementById("loaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "none");
-				console.log(document.body.innerHTML);
 				console.log('Data:', data)
 				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 
@@ -351,9 +357,6 @@ function handleToken() {
 
 			if (response.ok) {
 				(response.json()).then((text) => {
-					currentLang = text['lang'];
-					langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
-
 					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
 						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 					else
@@ -361,7 +364,6 @@ function handleToken() {
 				});
 			}
 			else {
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.png)`);
 				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
 			}
 		})
@@ -387,6 +389,10 @@ homeBtn.addEventListener("click", (e) => {
 		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 	else
 		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+})
+
+myProfileBtn.addEventListener("click", (e) => {
+	history.pushState("","",`https://${hostname.host}/user/${usernameBtn.innerHTML}`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
@@ -522,12 +528,12 @@ window.addEventListener("keydown", (e) => {
 				friendSlideIdx -= 1;
 			else
 				friendSlideIdx += 1;
-			if (friendSlideIdx > friendSlides.length - 1) 
+			if (friendSlideIdx > friendSlides.length - 1)
 				friendSlideIdx = 0;
-			if (friendSlideIdx < 0) 
+			if (friendSlideIdx < 0)
 				friendSlideIdx = friendSlides.length - 1;
 			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
-			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`		
+			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		}
 	}
 	if (currentPage == "settings"){
@@ -536,9 +542,9 @@ window.addEventListener("keydown", (e) => {
 				slideIdx -= 1;
 			else
 				slideIdx += 1;
-			if (slideIdx > settingsSlides.length - 1) 
+			if (slideIdx > settingsSlides.length - 1)
 				slideIdx = 0;
-			if (slideIdx < 0) 
+			if (slideIdx < 0)
 				slideIdx = settingsSlides.length - 1;
 			for (let i = 0; i < settingsSlides.length; i++)
 				settingsSlides[i].style.display = "none";
@@ -551,14 +557,14 @@ window.addEventListener("keydown", (e) => {
 function createMatchResumeContainer(match){
 	matchContainer = document.createElement("div");
 	matchContainer.className = "matchDescContainer";
-	
+
 	result = document.createElement("a");
 	result.className = "matchDescContainerResult"
-	
+
 	date = document.createElement("a");
 	date.className = "matchDescContainerDate"
 	date.innerHTML = match.date;
-	
+
 	scoreContainer = document.createElement("div");
 	scoreContainer.className = "matchDescContainerScore";
 	scoreUser = document.createElement("div");
@@ -581,7 +587,7 @@ function createMatchResumeContainer(match){
 
 	scoreUserName.innerHTML = `${match.player_one}`;
 	scoreOpponentName.innerHTML = `${match.player_two}`;
-	
+
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
@@ -601,18 +607,18 @@ function createMatchResumeContainer(match){
 
 	scoreContainer.appendChild(scoreUser);
 	scoreContainer.appendChild(scoreOpponent);
-	
+
 	matchContainer.appendChild(result);
 	matchContainer.appendChild(scoreContainer);
 	matchContainer.appendChild(date);
-	
+
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }
 
 function createUserResumeContainer(user){
 	userResumeContainer = document.createElement("div");
 	userResumeContainer.className = "userResumeContainer";
-	
+
 	userResume = document.createElement("div");
 	userResume.className = "userResume";
 	userResume.id = user.username
@@ -633,9 +639,9 @@ function createUserResumeContainer(user){
 
 	userResumeName = document.createElement("a");
 	userResumeName.className = "userResumeName"
-	userResumeName.innerHTML = user.display;
-	
-	
+	userResumeName.innerHTML = user.username;
+
+
 	imgContainer.appendChild(img);
 	userResume.appendChild(imgContainer);
 	userResume.appendChild(userResumeName);
@@ -644,43 +650,40 @@ function createUserResumeContainer(user){
 }
 
 inputSearchUser.addEventListener("keydown", (e) => {
-	if (e.key == "Enter"){
-		if (inputSearchUser.value.length > 0){
-			fetch('/api/user/search_by_display', {
-				method: 'POST', //GET forbid the use of body :(
-				headers: {'Content-Type': 'application/json',},
-				body: JSON.stringify({"name" : inputSearchUser.value}),
-				credentials: 'include'
-			}).then(user => {
-				user.json().then(((user) => {
-					fetch('bodyLess/search.html').then((response) => {
-						response.text().then(response => {
-							state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
-	
-							if (container.innerHTML != "")
-								history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
-							else
-								history.replaceState(state,"");
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/profile.js`);
-							document.body.appendChild(s);
-							currentPage = "search";
-							loadCurrentLang(currentPage);
-							homeBtn.style.setProperty("display", "block");
-							document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-							document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
-							Object.keys(user).forEach(function(key){
-								createUserResumeContainer(user[key]);
-							})
-							inputSearchUser.value = "";
+	if (e.key == "Enter" && inputSearchUser.value.length > 0){
+		fetch('/api/user/search_by_username', {
+			method: 'POST', //GET forbid the use of body :(
+			headers: {'Content-Type': 'application/json',},
+			body: JSON.stringify({"name" : inputSearchUser.value}),
+			credentials: 'include'
+		}).then(user => {
+			user.json().then((user) => {
+				fetch('bodyLess/search.html').then((response) => {
+					response.text().then(response => {
+						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+
+						if (container.innerHTML != "")
+							history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
+						else
+							history.replaceState(state,"");
+						container.innerHTML = response;
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/profile.js`);
+						document.body.appendChild(s);
+						currentPage = "search";
+						loadCurrentLang(currentPage);
+						homeBtn.style.setProperty("display", "block");
+						document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+						document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
+						Object.keys(user).forEach(function(key){
+							createUserResumeContainer(user[key]);
 						})
 					})
-				}))
+				})
 			})
-		}
+		})
 	}
 })
 
@@ -737,7 +740,7 @@ langDropDownOption.forEach(function(button) {
 			body: JSON.stringify({language_pack: currentLang}),
 			credentials: 'include'
 		})
-		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.png)`);
+		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
 	})
 	button.addEventListener("keydown", (e) => {
 		if (e.key == "Enter")

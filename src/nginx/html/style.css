@@ -176,9 +176,8 @@ input:focus{
 	outline: none;
 }
 
-.saveBtn {
+.saveBtn, .deleteBtn {
 	text-align: center;
-	background-color: limegreen;
 	color: var(--main-text-rgb);
 	font-weight: thin;	
 	font-family: "pong";
@@ -187,6 +186,14 @@ input:focus{
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
+}
+
+.saveBtn{
+	background-color: limegreen;
+}
+
+.deleteBtn{
+	background-color: red;
 }
 
 .loginOpt{
@@ -220,6 +227,11 @@ input:focus{
 	mask-position:center;
 	mask-repeat:no-repeat;
 	flex: 1;
+	outline: none;
+}
+
+#fortyTwoLogin:hover, #fortyTwoLogin:focus{
+	background: var(--hover-text-rgb);
 }
 
 #githubLogin{
@@ -1087,6 +1099,7 @@ a {
 	color: var(--main-text-rgb);
 	display: flex;
 	flex-direction: row;
+	gap: 1vw;
 }
 
 #statsContainer div{
@@ -1097,13 +1110,23 @@ a {
 
 
 .langDropDownOptions, #langDropDownBtn{
-	height: 64px;
-	width: 64px;
-	margin: 1vmin;
+	height: 3vw;
+	width: 5vw;
+	margin: 0 1vmin;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 50% 50%;
+
+	border: .2vmin solid var(--option-hover-text-rgb);
+	border-radius: 10%;
+
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.langDropDownOptionsContainer{
+	height: 4vw;
 }
 
 #langDropDownContent{
@@ -1162,3 +1185,4 @@ a {
 	80% {background-size:25px 100%,25px 100%,25px 50% }
 	100% {background-size:25px 100%,25px 100%,25px 100%}
 }
+
