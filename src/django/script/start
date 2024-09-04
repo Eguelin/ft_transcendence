@@ -10,7 +10,17 @@ until nc -z "$host" 2>/dev/null; do
 done
 
 echo "$host is available - executing command"
+python manage.py makemigrations
 python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
-# daphne -b 0.0.0.0 -p 8000 transcendence.asgi:application
+
+if [ "$1" = 'dev' ]; then
+  export DJANGO_DEBUG=True
+  python manage.py runserver 0.0.0.0:8000
+elif [ "$1" = 'prod' ]; then
+  export DJANGO_DEBUG=False
+  python manage.py runserver 0.0.0.0:8000
+  # daphne -b 0.0.0.0 -p 8000 transcendence.asgi:application
+else
+  exit 1
+fi
 

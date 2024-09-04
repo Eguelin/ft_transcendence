@@ -15,9 +15,5 @@ RUN pip install -r requirements.txt
 COPY script/ /bin/
 RUN chmod 777 /bin/start
 
-# Add non-root user
-RUN adduser -D -h /app -s /bin/sh django
-USER django
-
 # Expose port 8000
 EXPOSE 8000

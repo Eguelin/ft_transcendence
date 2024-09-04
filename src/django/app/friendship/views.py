@@ -5,8 +5,6 @@ from django.http import JsonResponse
 import json, os, requests, base64, random, string
 import login.models as customModels
 
-# Create your views here.
-
 def send_friend_request(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -37,7 +35,7 @@ def send_friend_request(request):
 			return JsonResponse({'message': 'Can\'t find user'}, status=400)
 	else:
 		return JsonResponse({'username': None}, status=400)
-		
+
 def accept_friend_request(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
@@ -57,7 +55,7 @@ def accept_friend_request(request):
 			return JsonResponse({'message': 'Can\'t find user'}, status=400)
 	else:
 		return JsonResponse({'username': None}, status=400)
-		
+
 def reject_friend_request(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
