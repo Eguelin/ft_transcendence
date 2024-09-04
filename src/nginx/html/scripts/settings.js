@@ -12,6 +12,8 @@ dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandsca
 settingsSlides = document.querySelectorAll(".settingSlide");
 rightSlideBtn = document.getElementById("rightSlideBtn");
 leftSlideBtn = document.getElementById("leftSlideBtn");
+confirmDeleteInput = document.getElementById("confirmDeleteInput");
+
 
 var slideIdx = 0;
 for (i = 0; i < settingsSlides.length; i++)
@@ -111,7 +113,7 @@ deleteBtn.addEventListener("click", (e) => {
 })
 
 confirmDeleteBtn.addEventListener("click", (e) => {
-	val = document.getElementById("confirmDeleteInput").value;
+	val = confirmDeleteInput.value;
 	if (val == document.getElementById("usernameBtn").innerHTML){
 		fetch('/api/user/delete_user', {
 			method: 'POST',
@@ -124,6 +126,25 @@ confirmDeleteBtn.addEventListener("click", (e) => {
 				history.pushState("", "", `https://${hostname.host}/login`);
 			}
 		})
+	}
+})
+
+confirmDeleteInput.addEventListener("keydown", (e) => {
+	if (e.key == "Enter"){
+		val = confirmDeleteInput.value;
+		if (val == document.getElementById("usernameBtn").innerHTML){
+			fetch('/api/user/delete_user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			}).then(response => {
+				if (response.ok){
+					history.pushState("", "", `https://${hostname.host}/login`);
+				}
+			})
+		}
 	}
 })
 
