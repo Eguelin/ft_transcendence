@@ -52,7 +52,6 @@ def fortytwo(request):
 	response = requests.get(url, headers=headers)
 	if response.status_code != 200:
 		return JsonResponse(response.json(), status=response.status_code)
-	
 	user_json = response.json()
 	user_login = user_json.get('login')
 	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
@@ -159,7 +158,6 @@ def create_user(request):
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
 		return JsonResponse({'message': 'Database error'}, status=500)
-		
 
 def user_login(request):
 	if request.method != 'POST':
@@ -303,7 +301,6 @@ def current_user(request):
 		for e in friends_list:
 			friend_json[i] = get_user_json(e)
 			i += 1
-		
 		i = 0
 		for e in friends_request_list:
 			friend_request_json[i] = get_user_json(e)
@@ -351,7 +348,7 @@ def get(request):
 			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
 		except:
 			return JsonResponse({'message': "can't find user"}, status=400)
-		
+
 def search_by_display(request):
 	if (request.method != 'POST'):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
