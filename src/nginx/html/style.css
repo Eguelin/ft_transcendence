@@ -1092,6 +1092,7 @@ a {
 	color: var(--main-text-rgb);
 	display: flex;
 	flex-direction: row;
+	gap: 1vw;
 }
 
 #statsContainer div{
@@ -1104,7 +1105,7 @@ a {
 .langDropDownOptions, #langDropDownBtn{
 	height: 3vw;
 	width: 5vw;
-	margin: 1vmin;
+	margin: 0 1vmin;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -1112,6 +1113,13 @@ a {
 
 	border: .2vmin solid var(--option-hover-text-rgb);
 	border-radius: 10%;
+
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.langDropDownOptionsContainer{
+	height: 4vw;
 }
 
 #langDropDownContent{
