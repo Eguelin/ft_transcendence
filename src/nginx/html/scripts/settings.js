@@ -1,7 +1,6 @@
 saveBtn = document.getElementById('saveBtn');
-swichTheme = document.getElementById("themeButton");
-homeBtn = document.getElementById("goHomeButton");
-displayInput = document.getElementById("inputDisplayName");
+deleteBtn = document.getElementById('deleteBtn');
+usernameInput = document.getElementById("inputUsername");
 pfpInput = document.getElementById("inputPfp");
 pfpInputLabel = document.getElementById("pfpLabel");
 lightTheme = document.getElementsByClassName("loadLight");
@@ -21,7 +20,7 @@ settingsSlides[slideIdx].style.display = "block";
 
 rightSlideBtn.addEventListener("click", () => {
 	slideIdx += 1;
-	if (slideIdx > settingsSlides.length - 1) 
+	if (slideIdx > settingsSlides.length - 1)
 		slideIdx = 0;
 	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
@@ -30,7 +29,7 @@ rightSlideBtn.addEventListener("click", () => {
 
 leftSlideBtn.addEventListener("click", () => {
 	slideIdx -= 1;
-	if (slideIdx < 0 ) 
+	if (slideIdx < 0 )
 		slideIdx = settingsSlides.length - 1;
 	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
@@ -50,26 +49,25 @@ pfpInput.addEventListener("change", (e) => {
 
 saveBtn.addEventListener("click", (e) => {
 	var data = {};
-	var display = displayInput.value;
-	if (display != ""){
-		if (display.length > 15){
+	username = usernameInput.value;
+	if (username != ""){
+		if (username.length > 15){
 			warning = document.createElement("a");
 			warning.className = "warning";
-			warning.text = "Display name must not exceed 15 characters";
-			if (!displayInput.previousElementSibling)
-				displayInput.before(warning);
+			warning.text = "username name must not exceed 15 characters";
+			usernameInput.before(warning);
 		}
 		else{
-			if (displayInput.previousElementSibling)
-				displayInput.previousElementSibling.remove();
-			data['display'] = display;
+			if (usernameInput.previousElementSibling)
+				usernameInput.previousElementSibling.remove();
+			data['username'] = username;
 		}
 	}
 	if (pfpInput.value != ""){ // this should always be the last check
 		path = pfpInput.files[0];
 		var blob = new Blob([path]);
 		var reader = new FileReader();
-		
+
 		reader.readAsDataURL(blob);
 		reader.onloadend = function(){
 			var buf = reader.result;
@@ -93,7 +91,7 @@ saveBtn.addEventListener("click", (e) => {
 					pfpInputLabel.previousElementSibling.remove();
 			})
 		}
-		
+
 	}
 	else {
 		fetch('/api/user/update', {
@@ -105,6 +103,21 @@ saveBtn.addEventListener("click", (e) => {
 			credentials: 'include'
 		})
 	}
+})
+
+deleteBtn.addEventListener("click", (e) => {
+	fetch('/api/user/delete_user', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	}).then(response => {
+		if (response.ok){
+			history.pushState("", "", `https://${hostname.host}/login`);
+		}
+	})
+
 })
 
 dropDownContent.forEach(function(button) {
@@ -129,7 +142,7 @@ dropDownContent.forEach(function(button) {
 				a[j].classList.remove("dropDownContentAHover");
 				j += 1;
 			}
-			a[j].classList.add("dropDownContentAHover");	
+			a[j].classList.add("dropDownContentAHover");
 		}
 		else if (ek.key == "ArrowUp"){
 			if (j == 0){
@@ -140,8 +153,8 @@ dropDownContent.forEach(function(button) {
 				a[j].classList.remove("dropDownContentAHover");
 				j--;
 			}
-			a[j].classList.add("dropDownContentAHover");	
-			
+			a[j].classList.add("dropDownContentAHover");
+
 		}
 	});
 	button.addEventListener("focusout", (even) => {
@@ -182,9 +195,9 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
-		langDropDownBtn.style.setProperty("background-image", `url(icons/DE_GE.png)`);
+		langDropDownBtn.style.setProperty("background-image", `url(icons/DE_GE.svg)`);
 	})
-	
+
 	englishBtn[i].addEventListener("click", (e) => {
 		currentLang = "lang/EN_UK.json";
 		const data = {language_pack: "lang/EN_UK.json"};
@@ -211,7 +224,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
-		langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.png)`);
+		langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
 	})
 }
 

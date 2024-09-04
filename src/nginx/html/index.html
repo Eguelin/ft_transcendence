@@ -18,9 +18,10 @@
 				<div id="dropDownUser">
 					<span tabindex="7" id="usernameBtn"></span>
 					<div class="dropDownUserContent">
-						<button tabindex="8" id="friendsBtn">Friends</button>
-						<button tabindex="9" id="settingsBtn">Account settings</button>
-						<button tabindex="10" id="logOutBtn">Log out</button>
+						<button tabindex="8" id="myProfileBtn">Profile</button>
+						<button tabindex="9" id="friendsBtn">Friends</button>
+						<button tabindex="10" id="settingsBtn">Account settings</button>
+						<button tabindex="11" id="logOutBtn">Log out</button>
 					</div>
 				</div>
 				<img id="pfp" class="profilePicture">
@@ -28,12 +29,22 @@
 			<div tabindex="6" id="themeButton"></div>
 			<div id="langDropDownContainer">
 				<div id="langDropDown">
-					<div tabindex="1" id="langDropDownBtn"></div>
+					<div class="langDropDownOptionsContainer">
+						<div tabindex="1" id="langDropDownBtn"></div>
+					</div>
 					<div id="langDropDownContent">
-						<div class="langDropDownOptions" id="EN_UK" style="background-image: url(icons/EN_UK.png);" tabindex="2"></div>
-						<div class="langDropDownOptions" id="FR_FR" style="background-image: url(icons/FR_FR.png);" tabindex="3"></div>
-						<div class="langDropDownOptions" id="DE_GE" style="background-image: url(icons/DE_GE.png);" tabindex="4"></div>
-						<div class="langDropDownOptions" id="IT_IT" style="background-image: url(icons/IT_IT.png);" tabindex="5"></div>
+						<div class="langDropDownOptionsContainer">
+							<div class="langDropDownOptions" id="EN_UK" style="background-image: url(icons/EN_UK.svg);" tabindex="2"></div>
+						</div>
+						<div class="langDropDownOptionsContainer">
+							<div class="langDropDownOptions" id="FR_FR" style="background-image: url(icons/FR_FR.svg);" tabindex="3"></div>
+						</div>
+						<div class="langDropDownOptionsContainer">
+							<div class="langDropDownOptions" id="DE_GE" style="background-image: url(icons/DE_GE.svg);" tabindex="4"></div>
+						</div>
+						<div class="langDropDownOptionsContainer">
+							<div class="langDropDownOptions" id="IT_IT" style="background-image: url(icons/IT_IT.svg);" tabindex="5"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -41,7 +52,9 @@
 		</div>
 	</div>
 	<div id="container"></div>
-	<div id="loaderBg"><div class="loader"></div></div>
+	<div id="loaderBg">
+		<div class="loader"></div>
+	</div>
 	<script id="script" src="scripts/app.js"></script>
 </body>
 </html>

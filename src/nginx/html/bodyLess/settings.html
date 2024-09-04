@@ -3,22 +3,27 @@
 	<div class="settingSlide" style="width: -webkit-fill-available;">
 		<h2 id="accountTitle">Account</h2>
 		<div class="forms">
-			<input tabindex="11" type="text" id="inputDisplayName" name="displayName" class="formInput" placeholder="Display name"/>
+			<input tabindex="12" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username"/>
 		</div>
-		
+
 		<div class="forms">
-			<label tabindex="12" for="inputPfp" id="pfpLabel">Profile picture</label>
+			<label tabindex="13" for="inputPfp" id="pfpLabel">Profile picture</label>
 			<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
 		</div>
 
 		<div class="forms">
-			<button tabindex="13" id="saveBtn" class="saveBtn">SAVE</button>
+			<button tabindex="14" id="saveBtn" class="saveBtn">SAVE</button>
+		</div>
+
+
+		<div class="forms">
+			<button tabindex="15" id="deleteBtn" class="deleteBtn">DELETE ACCOUNT</button>
 		</div>
 	</div>
 	<div class="settingSlide" style="width: -webkit-fill-available;">
 		<h2 id="accessibilityTitle">Accessibility</h2>
 		<div style="height:fit-content;">
-			<div class="dropDownLandscape" tabindex="6">
+			<div class="dropDownLandscape" tabindex="12">
 				<button tabindex="-1" id="themesDropDownL" class="dropDownBtn">Themes</button>
 				<div class="dropDownOptionContainer">
 					<div class="dropDownArrow"></div>
@@ -28,7 +33,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="dropDownPortrait" tabindex="6">
+			<div class="dropDownPortrait" tabindex="12">
 				<div class="dropDownOptionContainer">
 					<button tabindex="-1" id="themesDropDownP" class="dropDownBtn">Themes</button>
 					<div class="dropDownArrow"></div>
@@ -40,7 +45,7 @@
 			</div>
 		</div>
 		<div style="height:fit-content;">
-			<div class="dropDownLandscape" tabindex="7">
+			<div class="dropDownLandscape" tabindex="13">
 				<button tabindex="-1" id="languagesDropDownL" class="dropDownBtn">Language</button>
 				<div class="dropDownOptionContainer">
 					<div class="dropDownArrow"></div>
@@ -53,7 +58,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="dropDownPortrait" tabindex="7">
+			<div class="dropDownPortrait" tabindex="13">
 				<div class="dropDownOptionContainer">
 					<button tabindex="-1" id="languagesDropDownP" class="dropDownBtn">Language</button>
 					<div class="dropDownArrow"></div>
