@@ -10,6 +10,7 @@ pageContentContainer = document.getElementById("pageContentContainer");
 langDropDown = document.getElementById("langDropDown");
 langDropDownBtn = document.getElementById("langDropDownBtn");
 langDropDownOption = document.querySelectorAll(".langDropDownOptions");
+myProfileBtn = document.getElementById("myProfileBtn");
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -39,6 +40,18 @@ window.navigation.addEventListener("navigate", (e) => {
 						currentLang = currentUser.lang;
 						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.svg)`);
 
+						usernameBtn.innerHTML = currentUser.username;
+						if (currentUser.pfp != ""){
+							var rawPfp = currentUser.pfp;
+							if (rawPfp.startsWith('https://'))
+								userPfp.setAttribute("src", `${rawPfp}`);
+							else
+								userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+							userPfp.style.setProperty("display", "block");
+						}
+						else
+							userPfp.style.setProperty("display", "none");
+
 						if (url.pathname.startsWith("/user")){
 							var splitPath = url.pathname.split('/');
 							fetch('/api/user/get', {
@@ -59,7 +72,8 @@ window.navigation.addEventListener("navigate", (e) => {
 											currentPage = "profile";
 											loadCurrentLang(currentPage);
 											homeBtn.style.setProperty("display", "block");
-											document.getElementById("profileName").innerHTML = user.display;
+											dropDownUserContainer.style.setProperty("display", "flex");
+											document.getElementById("profileName").innerHTML = user.username;
 											document.getElementById("profilePfp").style.setProperty("display", "block");
 											document.getElementById("profilePfp").innerHTML = "";
 											if (user.pfp != ""){
@@ -239,20 +253,9 @@ window.navigation.addEventListener("navigate", (e) => {
 									container.innerHTML = response;
 									currentPage = "home";
 									switchTheme(currentUser.is_dark_theme);
-									usernameBtn.innerHTML = currentUser.username;
 									homeBtn.style.setProperty("display", "none");
 									dropDownUserContainer.style.setProperty("display", "flex");
 									inputSearchUser.style.setProperty("display", "block");
-									if (currentUser.pfp != ""){
-										var rawPfp = currentUser.pfp;
-										if (rawPfp.startsWith('https://'))
-											userPfp.setAttribute("src", `${rawPfp}`);
-										else
-											userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-										userPfp.style.setProperty("display", "block");
-									}
-									else
-										userPfp.style.setProperty("display", "none");
 									document.getElementById("script").remove();
 									var s = document.createElement("script");
 									s.setAttribute('id', 'script');
@@ -386,6 +389,10 @@ homeBtn.addEventListener("click", (e) => {
 		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
 	else
 		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+})
+
+myProfileBtn.addEventListener("click", (e) => {
+	history.pushState("","",`https://${hostname.host}/user/${usernameBtn.innerHTML}`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
