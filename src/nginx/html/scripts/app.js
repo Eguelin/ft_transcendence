@@ -212,6 +212,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									document.body.appendChild(s);
 									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
+									document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
 								}))
 							});
 						}
