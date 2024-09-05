@@ -110,6 +110,7 @@ window.navigation.addEventListener("navigate", (e) => {
 													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
 												})
 											})
+											document.getElementById("sendFriendRequestBtn").className = splitPath[2];
 										})
 									})
 								}))
@@ -456,6 +457,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 					content = text[currentPage];
 					if (content != null || content != undefined){
 						Object.keys(content).forEach(function(key) {
+							//console.log(key);
 							if (key.startsWith('input'))
 								document.getElementById(key).placeholder = content[key];
 							else

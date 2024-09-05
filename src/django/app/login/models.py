@@ -37,7 +37,6 @@ class Profile(models.Model):
 	dark_theme = models.BooleanField(default=True)
 	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_UK.json")
-	friend_code = models.CharField(max_length=20, null=True)
 	friends = models.ManyToManyField(User, related_name="friends_list")
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
 	is_active = models.BooleanField(default=False)
