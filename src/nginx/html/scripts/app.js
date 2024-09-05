@@ -110,7 +110,10 @@ window.navigation.addEventListener("navigate", (e) => {
 													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
 												})
 											})
-											document.getElementById("sendFriendRequestBtn").className = splitPath[2];
+											if (splitPath[2] != currentUser.username)
+												document.getElementById("sendFriendRequestBtn").className = splitPath[2];
+											else
+												document.getElementById("sendFriendRequestBtn").remove();
 										})
 									})
 								}))
