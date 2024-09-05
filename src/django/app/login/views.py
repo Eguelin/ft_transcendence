@@ -277,20 +277,14 @@ def current_user(request):
 		friend_json = {}
 		friend_request_json = {}
 		blocked_json = {}
-		i = 0
+
 		for e in friends_list:
-			friend_json[i] = get_user_json(e)
-			i += 1
-
-		i = 0
+			friend_json[e.username] = get_user_json(e)
 		for e in friends_request_list:
-			friend_request_json[i] = get_user_json(e)
-			i += 1
-
-		i = 0
+			friend_request_json[e.username] = get_user_json(e)
 		for e in blocked_list:
-			blocked_json[i] = get_user_json(e)
-			i += 1
+			blocked_json[e.username] = get_user_json(e)
+		
 		matches = get_user_match_json(request.user.profile.matches.all())
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,

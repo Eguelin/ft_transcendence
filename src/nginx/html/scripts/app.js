@@ -110,7 +110,7 @@ window.navigation.addEventListener("navigate", (e) => {
 													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
 												})
 											})
-											if (splitPath[2] != currentUser.username)
+											if (splitPath[2] != currentUser.username && currentUser.friends[splitPath[2]] == null)
 												document.getElementById("sendFriendRequestBtn").className = splitPath[2];
 											else
 												document.getElementById("sendFriendRequestBtn").remove();
