@@ -123,41 +123,47 @@ window.navigation.addEventListener("navigate", (e) => {
 							})
 						}
 						else if (url.pathname.startsWith("/search")){
-							fetch('/api/user/search_by_username', {
-								method: 'POST', //GET forbid the use of body :(
-								headers: {'Content-Type': 'application/json',},
-								body: JSON.stringify({"name" : url.searchParams.get("query")}),
-								credentials: 'include'
-							}).then(user => {
-								user.json().then(((user) => {
-									fetch('bodyLess/search.html').then((response) => {
-										response.text().then(response => {
-											container.innerHTML = response;
-											document.getElementById("script").remove();
-											var s = document.createElement("script");
-											s.setAttribute('id', 'script');
-											s.setAttribute('src', `scripts/profile.js`);
-											document.body.appendChild(s);
-											currentPage = "search";
-											loadCurrentLang(currentPage);
-											homeBtn.style.setProperty("display", "block");
-											document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-											document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
-											Object.keys(user).forEach(function(key){
-												createUserResumeContainer(user[key]);
-											})
-											inputSearchUser.value = "";
-											userResume = document.querySelectorAll(".userResume");
-											for (var i = 0; i< userResume.length; i++){
-												userResume[i].addEventListener("click", (e) => {
-													var username = e.target.closest(".userResume").id;
-													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://${hostname.host}/user/${username}`);
+							if(url.searchParams.get("query")){
+								fetch('/api/user/search_by_username', {
+									method: 'POST', //GET forbid the use of body :(
+									headers: {'Content-Type': 'application/json',},
+									body: JSON.stringify({"name" : url.searchParams.get("query")}),
+									credentials: 'include'
+								}).then(user => {
+									user.json().then(((user) => {
+										fetch('bodyLess/search.html').then((response) => {
+											response.text().then(response => {
+												container.innerHTML = response;
+												document.getElementById("script").remove();
+												var s = document.createElement("script");
+												s.setAttribute('id', 'script');
+												s.setAttribute('src', `scripts/profile.js`);
+												document.body.appendChild(s);
+												currentPage = "search";
+												loadCurrentLang(currentPage);
+												homeBtn.style.setProperty("display", "block");
+												document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+												document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
+												Object.keys(user).forEach(function(key){
+													createUserResumeContainer(user[key]);
 												})
-											}
+												inputSearchUser.value = "";
+												userResume = document.querySelectorAll(".userResume");
+												for (var i = 0; i< userResume.length; i++){
+													userResume[i].addEventListener("click", (e) => {
+														var username = e.target.closest(".userResume").id;
+														history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://${hostname.host}/user/${username}`);
+													})
+												}
+											})
 										})
-									})
-								}))
-							})
+									}))
+								})
+							}
+							else{
+								history.replaceState("","",`https://${hostname.host}/home`);
+							}
+							
 						}
 						else if (url.pathname.startsWith("/login")){
 							fetch('/api/user/logout', {
