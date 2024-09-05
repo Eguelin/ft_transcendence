@@ -123,15 +123,6 @@ def create_user(request):
 		for i in range(0, 5):
 			match = customModels.Match.objects.createWithRandomOpps(user)
 			user.profile.matches.add(match)
-
-		for count in range (0, 0x7fffffff):
-			friend_code = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
-			user.profile.friend_code = friend_code
-			try:
-				user.save()
-				break
-			except:
-				continue
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
@@ -249,7 +240,6 @@ def get_user_json(user):
 		raw_img = ""
 	matches = get_user_match_json(user.profile.matches.all())
 	return {'username' : user.username,
-		'friend_code' : user.profile.friend_code,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
 		'matches' : matches
@@ -306,7 +296,6 @@ def current_user(request):
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack,
-			'friend_code': request.user.profile.friend_code,
 			'friends': friend_json,
 			'friend_request': friend_request_json,
 			'blocked_users': blocked_json,

@@ -650,7 +650,7 @@ a {
 	color: var(--main-text-rgb);
 }
 
-#friendCodeBtn, #sendFriendRequestBtn, #pendingRequestBtn {
+#sendFriendRequestBtn {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
@@ -660,10 +660,10 @@ a {
 	padding: 1.5vh 1.5vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
-	width: -webkit-fill-available;
+	width: min-content;
 }
 
-#friendCodeBtn:hover, #friendCodeBtn:focus, #sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus, #pendingRequestBtn:hover, #pendingRequestBtn:focus {
+#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
 	color: var(--page-bg-rgb);
 	border-color: var(--page-bg-rgb);
 	outline: none;
@@ -700,11 +700,6 @@ a {
 	border-radius: 0 0 0 1.5vw;
 	font-size: min(2vh, 1vw);
 	width: -webkit-fill-available;
-}
-
-#sendFriendRequestBtn{
-	border-radius: 0 0 1.5vw 0;
-	width: min-content;
 }
 
 #friendCodeBtn{
