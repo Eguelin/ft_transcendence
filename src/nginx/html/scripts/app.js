@@ -11,6 +11,9 @@ langDropDown = document.getElementById("langDropDown");
 langDropDownBtn = document.getElementById("langDropDownBtn");
 langDropDownOption = document.querySelectorAll(".langDropDownOptions");
 myProfileBtn = document.getElementById("myProfileBtn");
+friendsBtn = document.getElementById("friendsBtn");
+settingsBtn = document.getElementById("settingsBtn");
+
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -398,6 +401,14 @@ homeBtn.addEventListener("click", (e) => {
 
 myProfileBtn.addEventListener("click", (e) => {
 	history.pushState("","",`https://${hostname.host}/user/${usernameBtn.innerHTML}`);
+})
+
+friendsBtn.addEventListener("click", (e) => {
+	history.pushState("","",`https://${hostname.host}/friends`);
+})
+
+settingsBtn.addEventListener("click", (e) => {
+	history.pushState("","",`https://${hostname.host}/settings`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
