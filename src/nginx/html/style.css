@@ -546,6 +546,26 @@ a {
 	border-radius: 50%;
 }
 
+#pfp{
+	width: 100%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#pfpContainer{
+	height: 4vw;
+	width: 4vw;
+	margin: 0 1vmax;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: relative;
+
+	border-radius: 50%;
+}
+
 #quickSettingContainer{
 	flex-direction: row-reverse;
 	display: flex;
