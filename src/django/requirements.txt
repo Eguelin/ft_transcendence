@@ -1,5 +1,5 @@
 channels
-# channels-redis
+channels-redis
 daphne
 dj-database-url
 Django
