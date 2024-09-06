@@ -81,6 +81,16 @@ WSGI_APPLICATION = 'transcendence.wsgi.application'
 
 ASGI_APPLICATION = 'transcendence.asgi.application'
 
+# Channels
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)],
+        },
+    },
+}
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
