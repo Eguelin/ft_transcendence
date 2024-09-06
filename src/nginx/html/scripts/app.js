@@ -56,70 +56,29 @@ window.navigation.addEventListener("navigate", (e) => {
 							userPfp.style.setProperty("display", "none");
 
 						if (url.pathname.startsWith("/user")){
-							var splitPath = url.pathname.split('/');
-							fetch('/api/user/get', {
-								method: 'POST', //GET forbid the use of body :(
-								headers: {'Content-Type': 'application/json',},
-								body: JSON.stringify({"name" : splitPath[2]}),
-								credentials: 'include'
-							}).then(user => {
-								user.json().then(((user) => {
-									fetch('bodyLess/profile.html').then((response) => {
-										response.text().then(response => {
-											container.innerHTML = response;
-											document.getElementById("script").remove();
-											var s = document.createElement("script");
-											s.setAttribute('id', 'script');
-											s.setAttribute('src', `scripts/profile.js`);
-											document.body.appendChild(s);
-											currentPage = "profile";
-											loadCurrentLang(currentPage);
-											homeBtn.style.setProperty("display", "block");
-											dropDownUserContainer.style.setProperty("display", "flex");
-											document.getElementById("profileName").innerHTML = user.username;
-											document.getElementById("profilePfp").style.setProperty("display", "block");
-											document.getElementById("profilePfp").innerHTML = "";
-											if (user.pfp != ""){
-												var rawPfp = user.pfp;
-												if (rawPfp.startsWith('https://'))
-													document.getElementById("profilePfp").setAttribute("src", `${rawPfp}`);
-												else
-													document.getElementById("profilePfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-											}
-											else
-												document.getElementById("profilePfp").style.setProperty("display", "none");
-											recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
-											var countWin = 0, countLost = 0;
-											for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
-												createMatchResumeContainer(user.matches[i]);
-											};
-											for (var i=0; i<Object.keys(user.matches).length;i++){
-												if (user.matches[i].player_one == user.display){
-													countWin += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
-													countLost += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
-												}
-												else{
-													countWin += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
-													countLost += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
-												}
-											}
-											document.getElementById("ratioContainer").innerHTML += `${countWin / Object.keys(user.matches).length}%`
-											document.getElementById("nbWinContainer").innerHTML += `${countWin}`
-											document.getElementById("nbLossContainer").innerHTML += `${countLost}`
-											document.getElementById("nbMatchContainer").innerHTML += `${Object.keys(user.matches).length}`
-											matchUsersName = document.querySelectorAll(".resultScoreName")
-											Object.keys(matchUsersName).forEach(function(key){
-												matchUsersName[key].addEventListener("click", (e) => {
-													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
-												})
-											})
-											if (splitPath[2] != currentUser.username && currentUser.friends[splitPath[2]] == null)
-												document.getElementById("sendFriendRequestBtn").className = splitPath[2];
-											else
-												document.getElementById("sendFriendRequestBtn").remove();
-										})
-									})
-								}))
+							fetch('bodyLess/profile.html').then((response) => {
+								response.text().then(response => {
+									container.innerHTML = response;
+									var splitPath = window.location.href.split('/');
+
+
+									if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] != null){
+										document.getElementById("sendFriendRequestBtn").remove();
+									}
+									if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] == null)
+										document.getElementById("deleteFriendBtn").remove();
+
+
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/profile.js`);
+									document.body.appendChild(s);
+									currentPage = "profile";
+									loadCurrentLang(currentPage);
+									homeBtn.style.setProperty("display", "block");
+									dropDownUserContainer.style.setProperty("display", "flex");
+								})
 							})
 						}
 						else if (url.pathname.startsWith("/search")){
@@ -477,11 +436,12 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 					content = text[currentPage];
 					if (content != null || content != undefined){
 						Object.keys(content).forEach(function(key) {
-							//console.log(key);
-							if (key.startsWith('input'))
-								document.getElementById(key).placeholder = content[key];
-							else
-								document.getElementById(key).innerHTML = content[key];
+							if (document.getElementById(key)){
+								if (key.startsWith('input'))
+									document.getElementById(key).placeholder = content[key];
+								else
+									document.getElementById(key).innerHTML = content[key];	
+							}
 						});
 					}
 				})
@@ -492,10 +452,12 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 						content = text[currentPage];
 						if (content != null || content != undefined){
 							Object.keys(content).forEach(function(key) {
-								if (key.startsWith('input'))
-									document.getElementById(key).placeholder = content[key];
-								else
-									document.getElementById(key).innerHTML = content[key];
+								if (document.getElementById(key)){
+									if (key.startsWith('input'))
+										document.getElementById(key).placeholder = content[key];
+									else
+										document.getElementById(key).innerHTML = content[key];
+								}
 							});
 						}
 					})
@@ -509,10 +471,12 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 				content = text[currentPage];
 				if (content != null || content != undefined){
 					Object.keys(content).forEach(function(key) {
-						if (key.startsWith('input'))
-							document.getElementById(key).placeholder = content[key];
-						else
-							document.getElementById(key).innerHTML = content[key];
+						if (document.getElementById(key)){
+							if (key.startsWith('input'))
+								document.getElementById(key).placeholder = content[key];
+							else
+								document.getElementById(key).innerHTML = content[key];
+						}
 					});
 				}
 			})
