@@ -41,7 +41,7 @@ if (sendFriendRequestBtn){
                 createMatchResumeContainer(user.matches[i]);
             };
             for (var i=0; i<Object.keys(user.matches).length;i++){
-                if (user.matches[i].player_one == user.display){
+                if (user.matches[i].player_one == user.username){
                     countWin += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
                     countLost += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
                 }
