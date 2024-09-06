@@ -11,3 +11,6 @@ RUN openssl req -x509 -nodes -newkey rsa:2048 \
 
 # Copy configuration files
 COPY conf /etc/nginx/conf.d
+
+# run nginx
+CMD [ "nginx", "-g", "daemon off;" ]
