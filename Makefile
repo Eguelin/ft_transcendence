@@ -7,7 +7,7 @@
 
 NAME	= ft_transcendence
 DC		= docker compose
-PFP		= $(shell find src/transcendence/app/profilePictures/ -name "*.jpg" | grep -v "defaults/")
+PFP		= $(shell find src/django/app/profilePictures/ -name "*.jpg" | grep -v "defaults/")
 
 # **************************************************************************** #
 #                                    Sources                                   #
