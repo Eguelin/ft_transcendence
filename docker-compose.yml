@@ -1,8 +1,8 @@
 services:
 
-  # database service
+  # transcendence database service
   db:
-    image: postgres:16.3
+    image: postgres:16.4-alpine3.20
     container_name: db
     env_file:
       - .env
@@ -10,8 +10,9 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - transcendence
+    restart: on-failure
 
-  # web server service
+  # transcendence frontend service
   nginx:
     build: src/nginx/
     image: nginx
@@ -24,6 +25,7 @@ services:
       - transcendence
     depends_on:
       - django
+    restart: on-failure
 
   # transcendence backend service
   django:
@@ -40,6 +42,7 @@ services:
       - transcendence
     depends_on:
       - db
+    restart: on-failure
 
 volumes:
 
