@@ -3,17 +3,14 @@
 	<div id="rightSlideBtn"></div>
 	<div class="settingSlide" style="width: -webkit-fill-available;">
 		<h2 id="accountTitle">Account</h2>
-		<div class="forms">
+		<div class="forms" id="saveUsernameContainer">
 			<input tabindex="12" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username"/>
+			<div tabindex="14" id="saveUsernameBtn"></div>
 		</div>
 
 		<div class="forms">
 			<label tabindex="13" for="inputPfp" id="pfpLabel">Profile picture</label>
 			<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
-		</div>
-
-		<div class="forms">
-			<button tabindex="14" id="saveBtn" class="saveBtn">SAVE</button>
 		</div>
 
 
@@ -30,6 +27,8 @@
 			<button tabindex="17" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
 		</div>
 	</div>
+
+
 	<div class="settingSlide" style="width: -webkit-fill-available;">
 		<h2 id="accessibilityTitle">Accessibility</h2>
 		<div style="height:fit-content;">

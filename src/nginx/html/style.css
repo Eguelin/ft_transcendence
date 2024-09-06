@@ -131,7 +131,7 @@ input:focus{
 	font-weight:thin;	
 	margin-left:auto;
 	margin-right:auto;
-	padding-top: 5vh;
+	margin-top: 5vh;
 	width:20vw;
 }
 
@@ -1205,3 +1205,29 @@ a {
 	100% {background-size:25px 100%,25px 100%,25px 100%}
 }
 
+#inputUsername{
+	width: 14vw;
+	border: 0;
+}
+
+#saveUsernameBtn{
+	text-align: center;
+	mask-image: url(icons/check.svg);
+	background-color: var(--main-text-rgb);
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+	width: min-content;
+
+	width: 4vw;
+	height: 4vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+#saveUsernameContainer{
+	display: flex;
+	background-color: var(--hover-text-rgb);
+	border-radius: 1.5vw;
+	border: 0.2px solid var(--main-text-rgb);
+}
