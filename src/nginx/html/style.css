@@ -286,10 +286,6 @@ a {
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
-	/*position:absolute;
-	top:50%;
-	left:50%;
-	transform: translate(-50%, -50%);*/
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -1239,4 +1235,28 @@ a {
 	background-color: var(--hover-text-rgb);
 	border-radius: 1.5vw;
 	border: 0.2px solid var(--main-text-rgb);
+}
+
+
+#confirmPfpContainer{
+	height: 20vw;
+	width: 20vw;
+	margin: 0 1vmax;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-color: var(--hover-text-rgb);
+	overflow: hidden;
+	position: absolute;
+
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
+}
+
+#confirmPfpImg{
+	width: 100%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
