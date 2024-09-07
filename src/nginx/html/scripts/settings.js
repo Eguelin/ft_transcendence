@@ -1,7 +1,7 @@
-saveBtn = document.getElementById('saveBtn');
 deleteBtn = document.getElementById('deleteBtn');
 confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-usernameInput = document.getElementById("inputUsername");
+usernameInput = document.getElementById("inputChangeUsername");
+saveUsernameBtn = document.getElementById("saveUsernameBtn");
 pfpInput = document.getElementById("inputPfp");
 pfpInputLabel = document.getElementById("pfpLabel");
 lightTheme = document.getElementsByClassName("loadLight");
@@ -49,8 +49,7 @@ pfpInput.addEventListener("change", (e) => {
 		pfpInputLabel.innerHTML = pfpInput.files[0].name;
 })
 
-saveBtn.addEventListener("click", (e) => {
-	var data = {};
+saveUsernameBtn.addEventListener("click", (e) => {
 	username = usernameInput.value;
 	if (username != ""){
 		if (username.length > 15){
@@ -62,9 +61,28 @@ saveBtn.addEventListener("click", (e) => {
 		else{
 			if (usernameInput.previousElementSibling)
 				usernameInput.previousElementSibling.remove();
-			data['username'] = username;
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({'username': username}),
+				credentials: 'include'
+			})
 		}
 	}
+	else{
+		if (usernameInput.previousElementSibling)
+			usernameInput.previousElementSibling.remove();
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "username can't be empty";
+		usernameInput.before(warning);
+	}
+})
+/*
+saveBtn.addEventListener("click", (e) => {
+	
 	if (pfpInput.value != ""){ // this should always be the last check
 		path = pfpInput.files[0];
 		var blob = new Blob([path]);
@@ -95,18 +113,8 @@ saveBtn.addEventListener("click", (e) => {
 		}
 
 	}
-	else {
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-	}
 })
-
+*/
 deleteBtn.addEventListener("click", (e) => {
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
