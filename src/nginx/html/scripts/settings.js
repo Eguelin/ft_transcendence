@@ -13,7 +13,8 @@ settingsSlides = document.querySelectorAll(".settingSlide");
 rightSlideBtn = document.getElementById("rightSlideBtn");
 leftSlideBtn = document.getElementById("leftSlideBtn");
 confirmDeleteInput = document.getElementById("confirmDeleteInput");
-
+confirmPfpBtn = document.getElementById("confirmPfpBtn");
+var buf = "";
 
 var slideIdx = 0;
 for (i = 0; i < settingsSlides.length; i++)
@@ -53,34 +54,39 @@ pfpInput.addEventListener("change", (e) => {
 
 		reader.readAsDataURL(blob);
 		reader.onloadend = function(){
-			var buf = reader.result;
+			buf = reader.result;
 			buf = buf.substr(buf.indexOf(',') + 1);
 			document.getElementById("popupBg").style.setProperty("display", "block");
-			document.getElementById("confirmPfpContainer").style.setProperty("display", "block")
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
 			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
-			/*data['pfp'] = buf.substr(buf.indexOf(',') + 1);
 			
-			fetch('/api/user/update', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-				credentials: 'include'
-			}).then(response => {
-				if (!response.ok){
-					warning = document.createElement("a");
-					warning.className = "warning";
-					warning.text = "File is too heavy";
-					if (!pfpInputLabel.previousElementSibling)
-						pfpInputLabel.before(warning);
-				}
-				else if (pfpInputLabel.previousElementSibling)
-					pfpInputLabel.previousElementSibling.remove();
-			})
-			*/
 		}
 	}
+})
+
+confirmPfpBtn.addEventListener("click", (e) => {			
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({'pfp': buf}),
+		credentials: 'include'
+	}).then(response => {
+		if (!response.ok){
+			warning = document.createElement("a");
+			warning.className = "warning";
+			warning.text = "File is too heavy";
+			if (!pfpInputLabel.previousElementSibling)
+				pfpInputLabel.before(warning);
+		}
+		else{ 
+			if (pfpInputLabel.previousElementSibling)
+				pfpInputLabel.previousElementSibling.remove();
+			document.getElementById("popupBg").style.setProperty("display", "none");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+		}
+	})
 })
 
 saveUsernameBtn.addEventListener("keydown", (e) => {
@@ -128,41 +134,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 		usernameInput.before(warning);
 	}
 })
-/*
-saveBtn.addEventListener("click", (e) => {
-	
-	if (pfpInput.value != ""){ // this should always be the last check
-		path = pfpInput.files[0];
-		var blob = new Blob([path]);
-		var reader = new FileReader();
 
-		reader.readAsDataURL(blob);
-		reader.onloadend = function(){
-			var buf = reader.result;
-			data['pfp'] = buf.substr(buf.indexOf(',') + 1);
-			fetch('/api/user/update', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-				credentials: 'include'
-			}).then(response => {
-				if (!response.ok){
-					warning = document.createElement("a");
-					warning.className = "warning";
-					warning.text = "File is too heavy";
-					if (!pfpInputLabel.previousElementSibling)
-						pfpInputLabel.before(warning);
-				}
-				else if (pfpInputLabel.previousElementSibling)
-					pfpInputLabel.previousElementSibling.remove();
-			})
-		}
-
-	}
-})
-*/
 deleteBtn.addEventListener("click", (e) => {
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
@@ -209,6 +181,7 @@ document.addEventListener("keydown", (e) => {
 		if (e.key == "Escape"){
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		}
 	}
 })
