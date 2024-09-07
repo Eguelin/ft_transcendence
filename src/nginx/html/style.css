@@ -263,8 +263,7 @@ a {
 	outline: none;
 }
 
-.warning {
-	color: #FF0000;
+.warning, .success {
 	font-size: min(0.9vh, 0.9vw);
 	position: absolute;
 	top: -2vh;
@@ -272,6 +271,14 @@ a {
 	display: block;
 	height: 0;
 	left: 1vw;
+}
+
+.warning{
+	color: #FF0000;
+}
+
+.success{
+	color: #00FF00;
 }
 
 #goHomeButton{
