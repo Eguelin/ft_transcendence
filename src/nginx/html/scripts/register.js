@@ -32,7 +32,7 @@ registerBtn.addEventListener("click", (e) => {
 			usernameInput.before(warning);
 		lock = 1;
 	}
-	else if (usernameInput.previousElementSibling)
+	else if (username != "" && usernameInput.previousElementSibling)
 			usernameInput.previousElementSibling.remove();
 	if (pw != cpw){
 		warning = document.createElement("a");
