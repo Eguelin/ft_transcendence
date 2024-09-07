@@ -49,18 +49,25 @@ pfpInput.addEventListener("change", (e) => {
 		pfpInputLabel.innerHTML = pfpInput.files[0].name;
 })
 
+saveUsernameBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Enter")
+		saveUsernameBtn.click();
+})
+
 saveUsernameBtn.addEventListener("click", (e) => {
 	username = usernameInput.value;
+
+	if (usernameInput.previousElementSibling)
+		usernameInput.previousElementSibling.remove();
+
 	if (username != ""){
 		if (username.length > 15){
 			warning = document.createElement("a");
 			warning.className = "warning";
-			warning.text = "username name must not exceed 15 characters";
+			warning.text = "username must not exceed 15 characters";
 			usernameInput.before(warning);
 		}
 		else{
-			if (usernameInput.previousElementSibling)
-				usernameInput.previousElementSibling.remove();
 			fetch('/api/user/update', {
 				method: 'POST',
 				headers: {
@@ -68,12 +75,19 @@ saveUsernameBtn.addEventListener("click", (e) => {
 				},
 				body: JSON.stringify({'username': username}),
 				credentials: 'include'
+			}).then(response => {
+				if (response.ok){
+					if (usernameInput.previousElementSibling)
+						usernameInput.previousElementSibling.remove();
+					success = document.createElement("a");
+					success.className = "success";
+					success.text = "username successfully updated";
+					usernameInput.before(success);
+				}
 			})
 		}
 	}
 	else{
-		if (usernameInput.previousElementSibling)
-			usernameInput.previousElementSibling.remove();
 		warning = document.createElement("a");
 		warning.className = "warning";
 		warning.text = "username can't be empty";
