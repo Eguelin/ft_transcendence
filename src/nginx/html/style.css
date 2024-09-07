@@ -112,11 +112,8 @@ input{
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1.5vw;
-	font-size: min(1vh, 1vw);
-	padding-top:1.5vh;
-	padding-left: 1vw;
-	padding-bottom: 1.5vh;
-	padding-right: 1vw;
+	font-size: 1vmin;
+	padding: 1.5vh 1vw;
 	width: 18vw;
 }
 
@@ -1217,17 +1214,21 @@ a {
 	background-color: var(--main-text-rgb);
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
-	width: min-content;
 
-	width: 4vw;
-	height: 4vw;
+	width: 3vw;
+	height: 3vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
 }
 
+#saveUsernameBtn:hover, #saveUsernameBtn:focus {
+	background-color: var(--option-hover-text-rgb);
+}
+
 #saveUsernameContainer{
 	display: flex;
+	align-items: center;
 	background-color: var(--hover-text-rgb);
 	border-radius: 1.5vw;
 	border: 0.2px solid var(--main-text-rgb);
