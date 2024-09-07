@@ -45,8 +45,42 @@ pfpInputLabel.addEventListener("keydown", (ek) => {
 })
 
 pfpInput.addEventListener("change", (e) => {
-	if (pfpInput.files.length >= 1)
-		pfpInputLabel.innerHTML = pfpInput.files[0].name;
+	if (pfpInput.files.length >= 1){
+		path = pfpInput.files[0];
+		pfpInputLabel.innerHTML = path.name;
+		var blob = new Blob([path]);
+		var reader = new FileReader();
+
+		reader.readAsDataURL(blob);
+		reader.onloadend = function(){
+			var buf = reader.result;
+			buf = buf.substr(buf.indexOf(',') + 1);
+			document.getElementById("popupBg").style.setProperty("display", "block");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "block")
+			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
+			/*data['pfp'] = buf.substr(buf.indexOf(',') + 1);
+			
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			}).then(response => {
+				if (!response.ok){
+					warning = document.createElement("a");
+					warning.className = "warning";
+					warning.text = "File is too heavy";
+					if (!pfpInputLabel.previousElementSibling)
+						pfpInputLabel.before(warning);
+				}
+				else if (pfpInputLabel.previousElementSibling)
+					pfpInputLabel.previousElementSibling.remove();
+			})
+			*/
+		}
+	}
 })
 
 saveUsernameBtn.addEventListener("keydown", (e) => {
@@ -184,6 +218,7 @@ document.addEventListener("click", (e) => {
 		if (e.target.parentElement == null || e.target.id == "popupBg"){
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		}
 	}
 })
