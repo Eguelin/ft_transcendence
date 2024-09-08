@@ -629,6 +629,15 @@ function createUserResumeContainer(user){
 			img.setAttribute("src", `${rawPfp}`);
 		else
 			img.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+
+		testImg = new Image();
+		testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
+		setTimeout(() => {
+			if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+				img.style.setProperty("height", "100%");
+				img.style.setProperty("width", "unset");
+			}
+		}, 0)
 	}
 	else
 		img.style.setProperty("display", "none");
