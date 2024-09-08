@@ -576,8 +576,6 @@ a {
 	background-repeat: no-repeat;
 	overflow: hidden;
 	position: relative;
-
-	border-radius: 50%;
 }
 
 #quickSettingContainer{
@@ -1282,4 +1280,16 @@ a {
 
 #confirmPfpBtn:hover, #confirmPfpBtn:focus{
 	color: var(--option-hover-text-rgb);
+}
+
+.pfpMask{
+	background: radial-gradient(circle, rgba(255,255,255,0) 70%, var(--page-bg-rgb) 70%);
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+}
+
+#confirmPfpMask{
+	opacity: .5;
 }
