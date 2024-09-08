@@ -23,18 +23,28 @@ if (sendFriendRequestBtn){
         credentials: 'include'
     }).then(user => {
         user.json().then((user) => {
+            profilePfp = document.getElementById("profilePfp");
             document.getElementById("profileName").innerHTML = user.username;
             document.getElementById("profilePfp").style.setProperty("display", "block");
-            document.getElementById("profilePfp").innerHTML = "";
+            profilePfp.innerHTML = "";
             if (user.pfp != ""){
                 var rawPfp = user.pfp;
                 if (rawPfp.startsWith('https://'))
-                    document.getElementById("profilePfp").setAttribute("src", `${rawPfp}`);
+                    profilePfp.setAttribute("src", `${rawPfp}`);
                 else
-                    document.getElementById("profilePfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+                    profilePfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+
+                testImg = new Image();
+                testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
+                setTimeout(() => {
+                    if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+                        profilePfp.style.setProperty("height", "100%");
+                        profilePfp.style.setProperty("width", "unset");
+                    }
+                }, 0)
             }
             else
-                document.getElementById("profilePfp").style.setProperty("display", "none");
+                profilePfp.style.setProperty("display", "none");
             recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
             var countWin = 0, countLost = 0;
             for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
