@@ -134,6 +134,12 @@ window.navigation.addEventListener("navigate", (e) => {
 														var username = e.target.closest(".userResume").id;
 														history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://${hostname.host}/user/${username}`);
 													})
+													userResume[i].addEventListener("keydown", (e) => {
+														if (e.key == "Enter"){
+															var username = e.target.closest(".userResume").id;
+															history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://${hostname.host}/user/${username}`);
+														}
+													})
 												}
 											})
 										})
@@ -653,6 +659,7 @@ function createUserResumeContainer(user){
 	imgContainer.appendChild(img);
 	userResume.appendChild(imgContainer);
 	userResume.appendChild(userResumeName);
+	userResume.setAttribute("tabindex", 10);
 	userResumeContainer.appendChild(userResume)
 	document.getElementById("resumeContainer").appendChild(userResumeContainer);
 }
