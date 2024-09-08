@@ -105,7 +105,7 @@ window.navigation.addEventListener("navigate", (e) => {
 												document.getElementById("script").remove();
 												var s = document.createElement("script");
 												s.setAttribute('id', 'script');
-												s.setAttribute('src', `scripts/profile.js`);
+												s.setAttribute('src', `scripts/search.js`);
 												document.body.appendChild(s);
 												currentPage = "search";
 												loadCurrentLang(currentPage);
@@ -117,6 +117,18 @@ window.navigation.addEventListener("navigate", (e) => {
 												})
 												inputSearchUser.value = "";
 												userResume = document.querySelectorAll(".userResume");
+												userResumePfp = document.querySelectorAll(".userResumePfp");
+												testImg = new Image();
+
+												setTimeout(() => {
+													for (var i = 0; i< userResumePfp.length; i++){
+														testImg.setAttribute("src", userResumePfp[i].getAttribute("src"));
+														if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+															userResumePfp[i].style.setProperty("height", "100%");
+															userResumePfp[i].style.setProperty("width", "unset");
+														}
+													}
+												}, 0)
 												for (var i = 0; i< userResume.length; i++){
 													userResume[i].addEventListener("click", (e) => {
 														var username = e.target.closest(".userResume").id;
@@ -629,15 +641,6 @@ function createUserResumeContainer(user){
 			img.setAttribute("src", `${rawPfp}`);
 		else
 			img.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-
-		testImg = new Image();
-		testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
-		setTimeout(() => {
-			if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-				img.style.setProperty("height", "100%");
-				img.style.setProperty("width", "unset");
-			}
-		}, 0)
 	}
 	else
 		img.style.setProperty("display", "none");
