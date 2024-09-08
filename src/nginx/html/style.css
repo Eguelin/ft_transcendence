@@ -549,15 +549,16 @@ a {
 }	
 
 .profilePicture {
-	height: 4vw;
-	width: 4vw;
-	margin: 0 1vmax;
+	width: 100%;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 50% 50%;
-	
-	border-radius: 50%;
+
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	translate: -50% -50%;
 }
 
 #pfp{
@@ -755,6 +756,7 @@ a {
 	align-items: center;
 	flex-wrap: inherit;
 	color: var(--main-text-rgb);
+	padding: 0 1vmax;
 }
 
 .friendContainer a{
@@ -952,8 +954,11 @@ a {
 }
 
 .pfpContainer{
+	width: 4vw;
+	height: 4vw;
 	display: flex;
 	position: relative;
+	overflow: hidden;
 }
 
 .pfpStatusOnline, .pfpStatusOffline{
@@ -1288,12 +1293,24 @@ a {
 	color: var(--option-hover-text-rgb);
 }
 
-.pfpMask{
+.pfpMask, .friendPfpMask, .friendStatusOnlinePfpMask, .friendStatusOfflinePfpMask{
 	background: radial-gradient(circle, rgba(255,255,255,0) 70%, var(--page-bg-rgb) 70%);
 	position: absolute;
 	height: 100%;
 	width: 100%;
 	top: 0;
+}
+
+.friendPfpMask{
+	background: radial-gradient(circle, rgba(255,255,255,0) 70%, var(--hover-text-rgb) 70%);
+}
+
+.friendStatusOnlinePfpMask{
+	background: radial-gradient(circle, rgba(255,255,255,0) 65%, rgba(0,255,0,1) 65%, rgba(0,255,0,1) 70%, var(--hover-text-rgb) 70%);
+}
+
+.friendStatusOfflinePfpMask{
+	background: radial-gradient(circle, rgba(255,255,255,0) 60%, grey 60%);
 }
 
 #confirmPfpMask{
