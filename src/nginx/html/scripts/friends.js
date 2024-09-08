@@ -115,7 +115,9 @@ function createFriendContainer(friend){
 	pfpContainer = document.createElement("div");
 	pfpContainer.className = "pfpContainer";
 	pfpStatus = document.createElement("div");
-	pfpStatus.className = friend.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
+	pfpStatus.className = friend.is_active == true ? "friendStatusOnlinePfpMask" : "friendStatusOfflinePfpMask";
+	pfpMask = document.createElement("div");
+	pfpMask.className = "friendPfpMask";
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (friend.pfp != ""){
@@ -127,6 +129,7 @@ function createFriendContainer(friend){
 	}
 	pfpContainer.appendChild(pfp);
 	pfpContainer.appendChild(pfpStatus)
+	//pfpContainer.appendChild(pfpMask)
 
 	friendName = document.createElement("a");
 	friendName.innerHTML = friend.username;
@@ -283,6 +286,20 @@ function checkUpdate(){
 					removeFriendBtn = document.querySelectorAll(".removeFriendBtn");
 					blockFriendBtn = document.querySelectorAll(".blockFriendBtn");
 					unblockBtn = document.querySelectorAll(".unblockBtn");
+
+
+					profilePictures = document.querySelectorAll(".profilePicture");
+					testImg = new Image();
+
+					setTimeout(() => {
+						for (var i = 0; i< profilePictures.length; i++){
+							testImg.setAttribute("src", profilePictures[i].getAttribute("src"));
+							if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+								profilePictures[i].style.setProperty("height", "100%");
+								profilePictures[i].style.setProperty("width", "unset");
+							}
+						}
+					}, 0)
 
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
