@@ -55,12 +55,11 @@ window.navigation.addEventListener("navigate", (e) => {
 							testImg = new Image();
 							testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
 							setTimeout(() => {
-								if (testImg.width > testImg.height){
+								if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
 									userPfp.style.setProperty("height", "100%");
 									userPfp.style.setProperty("width", "unset");
 								}
-							}, 500)
-							
+							}, 0)
 						}
 						else
 							userPfp.style.setProperty("display", "none");

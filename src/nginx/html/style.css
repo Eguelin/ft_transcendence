@@ -1041,18 +1041,23 @@ a {
 	position: relative;
 }
 
-#profilePfp {
+#profilePfpContainer {
+	position: relative;
 	height: 7vw;
 	width: 7vw;
-	margin-left: 1vw;
-	margin-top: 1vh;
-	margin-bottom: 1vh;
+	overflow: hidden;
+}
+
+#profilePfp {
+	width: 100%;
 
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 50% 50%;
-	
-	border-radius: 50%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	translate: -50% -50%;
 }
 
 #MatchHistoryTextContainer{
