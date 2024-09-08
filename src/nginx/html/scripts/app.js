@@ -51,6 +51,16 @@ window.navigation.addEventListener("navigate", (e) => {
 							else
 								userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
 							userPfp.style.setProperty("display", "block");
+
+							testImg = new Image();
+							testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
+							setTimeout(() => {
+								if (testImg.width > testImg.height){
+									userPfp.style.setProperty("height", "100%");
+									userPfp.style.setProperty("width", "unset");
+								}
+							}, 500)
+							
 						}
 						else
 							userPfp.style.setProperty("display", "none");
