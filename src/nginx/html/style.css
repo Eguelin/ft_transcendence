@@ -628,7 +628,7 @@ a {
 	text-align: center;
 }
 
-@keyframes scaleZ {
+@keyframes scaleZText {
 	0% {
 		opacity: 0;
 		transform: scale(0);
@@ -646,12 +646,26 @@ a {
 	}
 }
 
+@keyframes scaleZLang {
+	0% {
+		opacity: 0;
+		height: 0;
+		scale: 0;
+	}
+	
+	100% {
+		opacity: 1;
+		scale: 1;
+		height: 4vw;
+	}
+}
+
 .activeDropDown #usernameBtn:focus{
 	outline: none;
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent{
+.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent{
 	border-block-start: var(--hover-text-rgb);
 	z-index: 1;
 	display: block;
@@ -659,7 +673,11 @@ a {
 
 .activeDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
-	animation: scaleZ 300ms ease-in-out;
+	animation: scaleZText 300ms ease-in-out;
+}
+
+.activeDropDown #langDropDownContent .langDropDownOptionsContainer{
+	animation: scaleZLang 300ms ease-in-out;
 }
 
 .dropDownUserContent button{
@@ -1199,7 +1217,7 @@ a {
 	display: none;
 }
 
-#langDropDown:focus #langDropDownContent, .activeDropDown #langDropDownContent{
+#langDropDown:focus #langDropDownContent{
 	display: block;
 }
 
