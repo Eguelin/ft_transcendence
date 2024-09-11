@@ -13,6 +13,7 @@ langDropDownOption = document.querySelectorAll(".langDropDownOptions");
 myProfileBtn = document.getElementById("myProfileBtn");
 friendsBtn = document.getElementById("friendsBtn");
 settingsBtn = document.getElementById("settingsBtn");
+logOutBtn = document.getElementById('logOutBtn');
 
 
 var currentPage = "";
@@ -293,7 +294,6 @@ window.navigation.addEventListener("navigate", (e) => {
 	})
 })
 
-
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
 
@@ -382,6 +382,10 @@ homeBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter")
 		homeBtn.click();
 })
+
+logOutBtn.addEventListener("click", (e) => {
+	history.replaceState("", "", `https://${hostname.host}/login`);
+});
 
 function switchTheme(darkTheme){
 	if (darkTheme == 1 || darkTheme == true){
