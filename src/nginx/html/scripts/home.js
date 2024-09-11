@@ -2,11 +2,6 @@ container = document.getElementById("container");
 recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
 playBtn = document.getElementById("playBtn");
 
-
-dpUserBtn.addEventListener("click", (e) => {
-	document.getElementById("dropDownUser").focus();
-})
-
 {
 	fetch('/api/user/current', {
 		method: 'GET',
