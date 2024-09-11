@@ -234,38 +234,6 @@
 	text-align: center;
 }
 
-@keyframes scaleZText {
-	0% {
-		opacity: 0;
-		transform: scale(0);
-		font-size: min(1vh, .5vw);
-	}
-	
-	80% {
-		transform: scale(1.07);
-	}
-  
-	100% {
-		opacity: 1;
-		transform: scale(1);
-		font-size: min(2vh, 1vw);
-	}
-}
-
-@keyframes scaleZLang {
-	0% {
-		opacity: 0;
-		height: 0;
-		scale: 0;
-	}
-	
-	100% {
-		opacity: 1;
-		scale: 1;
-		height: 4vw;
-	}
-}
-
 .activeDropDown #usernameBtn:focus{
 	outline: none;
 	color: var(--option-hover-text-rgb);
@@ -281,6 +249,13 @@
 	transform-origin: top center;
 	animation: scaleZText 300ms ease-in-out;
 }
+
+
+.inctiveDropDown .dropDownUserContent .dropDownMenuBtn{
+	transform-origin: top center;
+	animation: scaleZText 300ms ease-in-out reverse;
+}
+
 
 .activeDropDown #langDropDownContent .langDropDownOptionsContainer{
 	animation: scaleZLang 300ms ease-in-out;
@@ -335,4 +310,35 @@
 	display: block;
 }
 
+
+@keyframes scaleZText {
+	0% {
+		opacity: 0;
+		transform: scale(0);
+		font-size: min(1vh, .5vw);
+	}
 	
+	80% {
+		transform: scale(1.07);
+	}
+  
+	100% {
+		opacity: 1;
+		transform: scale(1);
+		font-size: min(2vh, 1vw);
+	}
+}
+
+@keyframes scaleZLang {
+	0% {
+		opacity: 0;
+		height: 0;
+		scale: 0;
+	}
+	
+	100% {
+		opacity: 1;
+		scale: 1;
+		height: 4vw;
+	}
+}
