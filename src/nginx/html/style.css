@@ -979,6 +979,11 @@ a {
 	font-size: 1.5vmin;
 }
 
+.slideSelector div{
+	z-index: -1;
+	position: relative;
+}
+
 .activeSlide{
 	display: block !important;
 }
