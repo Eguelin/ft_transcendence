@@ -61,8 +61,9 @@ function drawWinLoseGraph(matches){
                 profilePfp.style.setProperty("display", "none");
             recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
             var countWin = 0, countLost = 0;
-            for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
-                createMatchResumeContainer(user.matches[i]);
+            matchObj = (user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]])
+            for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
+                createMatchResumeContainer(matchObj[i]);
             };
             for (var i=0; i<Object.keys(user.matches).length;i++){
                 if (user.matches[i].player_one == user.username){
