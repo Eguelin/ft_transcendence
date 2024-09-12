@@ -60,28 +60,32 @@ function drawWinLoseGraph(matches){
             else
                 profilePfp.style.setProperty("display", "none");
             recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
-            var countWin = 0, countLost = 0;
-            matchObj = (user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]])
+            var countWin = 0, countLost = 0, countMatch = 0;
+            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date 
             for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
                 createMatchResumeContainer(matchObj[i]);
             };
             for (var i=0; i<Object.keys(user.matches).length;i++){
-                if (user.matches[i].player_one == user.username){
-                    countWin += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
-                    countLost += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
-                }
-                else{
-                    countWin += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
-                    countLost += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
+                matchObj = user.matches[Object.keys(user.matches)[i]];
+                for (j = 0; j < Object.keys(matchObj).length; j++){
+                    if (matchObj[j].player_one == user.username){
+                        countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                        countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                    }
+                    else{
+                        countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                        countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                    }
+                    countMatch += 1;
                 }
             }
             
             drawWinLoseGraph(user.matches);
             
-            document.getElementById("ratioContainer").innerHTML += `${countWin / Object.keys(user.matches).length}%`
+            document.getElementById("ratioContainer").innerHTML += `${countWin / countMatch}%`
             document.getElementById("nbWinContainer").innerHTML += `${countWin}`
             document.getElementById("nbLossContainer").innerHTML += `${countLost}`
-            document.getElementById("nbMatchContainer").innerHTML += `${Object.keys(user.matches).length}`
+            document.getElementById("nbMatchContainer").innerHTML += `${countMatch}`
             matchUsersName = document.querySelectorAll(".resultScoreName")
             Object.keys(matchUsersName).forEach(function(key){
                 matchUsersName[key].addEventListener("click", (e) => {
