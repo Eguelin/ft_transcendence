@@ -14,6 +14,20 @@ if (sendFriendRequestBtn){
     })   
 }
 
+function drawWinLoseGraph(matches){
+    graph = document.getElementById("winLoseGraph");
+    nbMatch = Object.keys(matches).length;
+    var center = graph.height / 2;
+    var step =  graph.width / nbMatch;
+    var begX = 0;
+    const ctx = graph.getContext("2d");
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+    for (var i=0;i < nbMatch; i++, begX += step){
+        ctx.strokeRect(begX, center, 1, 1);
+    }
+}
+
 {
     var splitPath = window.location.href.split('/');
     fetch('/api/user/get', {
@@ -60,6 +74,9 @@ if (sendFriendRequestBtn){
                     countLost += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
                 }
             }
+            
+            drawWinLoseGraph(user.matches);
+            
             document.getElementById("ratioContainer").innerHTML += `${countWin / Object.keys(user.matches).length}%`
             document.getElementById("nbWinContainer").innerHTML += `${countWin}`
             document.getElementById("nbLossContainer").innerHTML += `${countLost}`
@@ -67,7 +84,7 @@ if (sendFriendRequestBtn){
             matchUsersName = document.querySelectorAll(".resultScoreName")
             Object.keys(matchUsersName).forEach(function(key){
                 matchUsersName[key].addEventListener("click", (e) => {
-                    history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+                    history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
                 })
             })
         })
