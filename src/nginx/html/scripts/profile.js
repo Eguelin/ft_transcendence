@@ -17,9 +17,9 @@ if (sendFriendRequestBtn){
 function drawWinLoseGraph(matches, username){
     graph = document.getElementById("winLoseGraph");
     nbMatch = Object.keys(matches).length;
-    var center = graph.height / 2;
+    var height = graph.height - 10;
     var step =  graph.width / nbMatch;
-    var begX = 0;
+    var begX = 5;
     const ctx = graph.getContext("2d");
     ctx.lineWidth = 2;
     ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
@@ -37,7 +37,7 @@ function drawWinLoseGraph(matches, username){
             }
             countMatch += 1;
         }
-        ctx.strokeRect(begX, graph.height - (graph.height * (countWin / countMatch)), 1, 1);
+        ctx.strokeRect(begX, (height - (height * (countWin / countMatch))) + 5, 1, 1);
         begX += step;
     }
 }
