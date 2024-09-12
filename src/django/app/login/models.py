@@ -17,6 +17,8 @@ class MatchManager(models.Manager):
 		match.player_one_pts = random.randint(0, 10)
 		match.player_two_pts = random.randint(0, 10)
 		match.save()
+		match.date = "2024-09-{0}".format(random.randint(1, 11))
+		match.save()
 		player_two.profile.matches.add(match)
 		return match
 

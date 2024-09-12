@@ -120,7 +120,7 @@ def create_user(request):
 			user.profile.language_pack = data['lang']
 
 		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 5):
+		for i in range(0, 30):
 			match = customModels.Match.objects.createWithRandomOpps(user)
 			user.profile.matches.add(match)
 		user = authenticate(request, username=username, password=password)
@@ -217,9 +217,17 @@ def profile_update(request):
 
 def get_user_match_json(matches):
 	matches_json = {}
+	date_json = {}
+	date = ""
 	i = 0
 	for match in matches:
-		matches_json[i] = {
+		if (date != match.date):
+			if (date != ""):
+				matches_json["{0}".format(date)] = date_json
+				date_json = {}
+			date = match.date
+			i = 0
+		date_json[i] = {
 			'player_one' : match.player_one.username,
 			'player_two' : match.player_two.username,
 			'player_one_pts' : match.player_one_pts,
@@ -227,6 +235,8 @@ def get_user_match_json(matches):
 			'date' : match.date,
 		}
 		i += 1
+	if (date != ""):
+		matches_json["{0}".format(date)] = date_json
 	return matches_json
 
 def get_user_json(user):
@@ -238,7 +248,7 @@ def get_user_json(user):
 			raw_img = (base64.b64encode(f.read())).decode('utf-8')
 	except:
 		raw_img = ""
-	matches = get_user_match_json(user.profile.matches.all())
+	matches = get_user_match_json(user.profile.matches.order_by("date"))
 	return {'username' : user.username,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
@@ -285,7 +295,7 @@ def current_user(request):
 		for e in blocked_list:
 			blocked_json[e.username] = get_user_json(e)
 		
-		matches = get_user_match_json(request.user.profile.matches.all())
+		matches = get_user_match_json(request.user.profile.matches.order_by("date"))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
