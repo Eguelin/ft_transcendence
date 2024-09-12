@@ -250,13 +250,6 @@
 	animation: scaleZText 300ms ease-in-out;
 }
 
-
-.inctiveDropDown .dropDownUserContent .dropDownMenuBtn{
-	transform-origin: top center;
-	animation: scaleZText 300ms ease-in-out reverse;
-}
-
-
 .activeDropDown #langDropDownContent .langDropDownOptionsContainer{
 	animation: scaleZLang 300ms ease-in-out;
 }
