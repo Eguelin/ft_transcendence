@@ -21,8 +21,8 @@ function drawWinLoseGraph(matches, username){
     var step =  graph.width / nbMatch;
     var begX = 5;
     const ctx = graph.getContext("2d");
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
+    ctx.beginPath();
     for (var i=0; i<Object.keys(matches).length;i++){
         matchObj = matches[Object.keys(matches)[i]];
         var countWin = 0, countLost = 0, countMatch = 0;
@@ -37,9 +37,16 @@ function drawWinLoseGraph(matches, username){
             }
             countMatch += 1;
         }
-        ctx.strokeRect(begX, (height - (height * (countWin / countMatch))) + 5, 1, 1);
+        if (i == 0)
+            ctx.moveTo(begX, (height - (height * (countWin / countMatch))) + 5);
+        else
+            ctx.lineTo(begX, (height - (height * (countWin / countMatch))) + 5);
+        
+        ctx.strokeRect(begX - 1, (height - (height * (countWin / countMatch))) + 4, 2, 2); //begX - 1 and +4 on y instead of + 5, to center point on line (this offset must be half of the point width and height)
         begX += step;
     }
+    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+    ctx.stroke();
 }
 
 {
