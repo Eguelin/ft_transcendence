@@ -14,7 +14,7 @@ if (sendFriendRequestBtn){
     })   
 }
 
-function drawWinLoseGraph(matches){
+function drawWinLoseGraph(matches, username){
     graph = document.getElementById("winLoseGraph");
     nbMatch = Object.keys(matches).length;
     var center = graph.height / 2;
@@ -23,8 +23,22 @@ function drawWinLoseGraph(matches){
     const ctx = graph.getContext("2d");
     ctx.lineWidth = 2;
     ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-    for (var i=0;i < nbMatch; i++, begX += step){
-        ctx.strokeRect(begX, center, 1, 1);
+    for (var i=0; i<Object.keys(matches).length;i++){
+        matchObj = matches[Object.keys(matches)[i]];
+        var countWin = 0, countLost = 0, countMatch = 0;
+        for (j = 0; j < Object.keys(matchObj).length; j++){
+            if (matchObj[j].player_one == username){
+                countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+            }
+            else{
+                countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+            }
+            countMatch += 1;
+        }
+        ctx.strokeRect(begX, graph.height - (graph.height * (countWin / countMatch)), 1, 1);
+        begX += step;
     }
 }
 
@@ -80,7 +94,7 @@ function drawWinLoseGraph(matches){
                 }
             }
             
-            drawWinLoseGraph(user.matches);
+            drawWinLoseGraph(user.matches, user.username);
             
             document.getElementById("ratioContainer").innerHTML += `${countWin / countMatch}%`
             document.getElementById("nbWinContainer").innerHTML += `${countWin}`
