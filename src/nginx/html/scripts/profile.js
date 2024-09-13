@@ -22,6 +22,7 @@ function drawWinLoseGraph(matches, username){
     var begX = 5;
     const ctx = graph.getContext("2d");
     ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
+    ctx.strokeWidth = 1;
     ctx.beginPath();
     for (var i=0; i<Object.keys(matches).length;i++){
         matchObj = matches[Object.keys(matches)[i]];
@@ -37,16 +38,27 @@ function drawWinLoseGraph(matches, username){
             }
             countMatch += 1;
         }
-        if (i == 0)
-            ctx.moveTo(begX, (height - (height * (countWin / countMatch))) + 5);
-        else
-            ctx.lineTo(begX, (height - (height * (countWin / countMatch))) + 5);
+        average = countWin / countMatch;
+        setTimeout((i, ctx, begX, height, average) => {
+            if (average < 0.5)
+                ctx.strokeStyle = "red";
+            else
+                ctx.strokeStyle = "green";
+            ctx.strokeRect(begX - 1, (height - (height * (average))) + 4, 2, 2); //begX - 1 and +4 on y instead of + 5, to center point on line (this offset must be half of the point width and height)
+                
+            if (i == 0)
+                ctx.moveTo(begX, (height - (height * (average))) + 5);
+            else
+                ctx.lineTo(begX, (height - (height * (average))) + 5);
+            if (i > 0){
+                ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+                ctx.stroke();
+            }
+        }, i * 50, i, ctx, begX, height, average);
         
-        ctx.strokeRect(begX - 1, (height - (height * (countWin / countMatch))) + 4, 2, 2); //begX - 1 and +4 on y instead of + 5, to center point on line (this offset must be half of the point width and height)
         begX += step;
     }
-    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-    ctx.stroke();
+
 }
 
 {
