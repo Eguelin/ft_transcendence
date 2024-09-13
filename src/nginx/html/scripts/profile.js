@@ -1,4 +1,5 @@
 var splitPath = window.location.href.split('/');
+var pointAppearanceDelay = 50; // default is 50 (higher the delay, slower the points will appeare on graph)
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 
 if (sendFriendRequestBtn){
@@ -39,23 +40,22 @@ function drawWinLoseGraph(matches, username){
             countMatch += 1;
         }
         average = countWin / countMatch;
-        setTimeout((i, ctx, begX, height, average) => {
+        setTimeout((i, ctx, begX, posY, average) => {
             if (average < 0.5)
                 ctx.strokeStyle = "red";
             else
                 ctx.strokeStyle = "green";
-            ctx.strokeRect(begX - 1, (height - (height * (average))) + 4, 2, 2); //begX - 1 and +4 on y instead of + 5, to center point on line (this offset must be half of the point width and height)
+            ctx.strokeRect(begX - 1, posY + 4, 2, 2); //begX - 1 and +4 on y instead of + 5, to center point on line (this offset must be half of the point width and height)
                 
             if (i == 0)
-                ctx.moveTo(begX, (height - (height * (average))) + 5);
-            else
-                ctx.lineTo(begX, (height - (height * (average))) + 5);
-            if (i > 0){
-                ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+                ctx.moveTo(begX, posY + 5);
+            else {
+                ctx.lineTo(begX, posY + 5);
                 ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(begX, posY + 5);
             }
-        }, i * 50, i, ctx, begX, height, average);
-        
+        }, i * pointAppearanceDelay, i, ctx, begX, height - (height * (average)), average);
         begX += step;
     }
 
