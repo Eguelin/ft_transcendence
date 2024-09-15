@@ -1032,6 +1032,6 @@ a {
 	opacity: .5;
 }
 
-#winLoseGraph{
+#winLossGraph, #winLossAbsGraph{
 	background: var(--hover-text-rgb);
 }

@@ -15,13 +15,14 @@ if (sendFriendRequestBtn){
     })   
 }
 
-function drawWinLoseGraph(matches, username){
-    graph = document.getElementById("winLoseGraph");
+function drawWinLossGraph(matches, username){
+    graph = document.getElementById("winLossGraph");
+    graphAbs = document.getElementById("winLossAbsGraph");
     nbMatch = Object.keys(matches).length;
     var begX = 30, begY = 10;
     var height = graph.height - 20;
     var step =  (graph.width - begX) / nbMatch;
-    const ctx = graph.getContext("2d");
+    const ctx = graph.getContext("2d"), ctxAbs = graphAbs.getContext("2d");
     ctx.strokeWidth = 1;
     ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
     ctx.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
@@ -42,6 +43,7 @@ function drawWinLoseGraph(matches, username){
         ctx.stroke();
     }
     ctx.beginPath();    
+    var highestAbsWin = 0, lowestAbsLoss = 0;
     for (var i=0; i<nbMatch;i++){
         matchObj = matches[Object.keys(matches)[i]];
         var countWin = 0, countLost = 0, countMatch = 0;
@@ -57,6 +59,9 @@ function drawWinLoseGraph(matches, username){
             countMatch += 1;
         }
         average = countWin / countMatch;
+        var absResult = countWin - (countMatch - countWin)
+        highestAbsWin = absResult > highestAbsWin ? absResult : highestAbsWin;
+        lowestAbsLoss = absResult < lowestAbsLoss ? absResult : lowestAbsLoss;
         setTimeout((i, ctx, begX, posY, average) => {
             if (average < 0.5)
                 ctx.strokeStyle = "red";
@@ -75,6 +80,11 @@ function drawWinLoseGraph(matches, username){
         }, i * pointAppearanceDelay, i, ctx, begX, begY + (height - (height * (average))), average);
         begX += step;
     }
+
+    ctxAbs.strokeWidth = 1;
+    ctxAbs.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
+    ctxAbs.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+    console.log(highestAbsWin, lowestAbsLoss);
 
 }
 
@@ -130,7 +140,7 @@ function drawWinLoseGraph(matches, username){
                 }
             }
             
-            drawWinLoseGraph(user.matches, user.username);
+            drawWinLossGraph(user.matches, user.username);
             
             document.getElementById("ratioContainer").innerHTML += `${countWin / countMatch}%`
             document.getElementById("nbWinContainer").innerHTML += `${countWin}`
