@@ -22,10 +22,23 @@ function drawWinLoseGraph(matches, username){
     var step =  graph.width / nbMatch;
     var begX = 5;
     const ctx = graph.getContext("2d");
-    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
     ctx.strokeWidth = 1;
-    ctx.beginPath();
-    for (var i=0; i<Object.keys(matches).length;i++){
+    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
+    
+    for (var i=0; i < nbMatch; i++){
+        ctx.beginPath();
+        ctx.moveTo(begX + (i * step), 0);
+        ctx.lineTo(begX + (i * step), graph.height);
+        ctx.stroke();
+    }
+    for (var i=0; i <= height; i += height / 6){
+        ctx.beginPath();
+        ctx.moveTo(0, i + 5);
+        ctx.lineTo(graph.width, i + 5);
+        ctx.stroke();
+    }
+    ctx.beginPath();    
+    for (var i=0; i<nbMatch;i++){
         matchObj = matches[Object.keys(matches)[i]];
         var countWin = 0, countLost = 0, countMatch = 0;
         for (j = 0; j < Object.keys(matchObj).length; j++){
