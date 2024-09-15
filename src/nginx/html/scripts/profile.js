@@ -1,5 +1,5 @@
 var splitPath = window.location.href.split('/');
-var pointAppearanceDelay = 50; // default is 50 (higher the delay, slower the points will appeare on graph)
+var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 
 if (sendFriendRequestBtn){
@@ -18,23 +18,27 @@ if (sendFriendRequestBtn){
 function drawWinLoseGraph(matches, username){
     graph = document.getElementById("winLoseGraph");
     nbMatch = Object.keys(matches).length;
-    var height = graph.height - 10;
-    var step =  graph.width / nbMatch;
-    var begX = 5;
+    var begX = 30, begY = 10;
+    var height = graph.height - 20;
+    var step =  (graph.width - begX) / nbMatch;
     const ctx = graph.getContext("2d");
     ctx.strokeWidth = 1;
     ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
+    ctx.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
     
-    for (var i=0; i < nbMatch; i++){
+    for (var i=0; i < nbMatch; i++){ //draw vertical lines
         ctx.beginPath();
-        ctx.moveTo(begX + (i * step), 0);
-        ctx.lineTo(begX + (i * step), graph.height);
+        ctx.moveTo(begX + (i * step), begY);
+        ctx.lineTo(begX + (i * step), graph.height - begY);
         ctx.stroke();
     }
-    for (var i=0; i <= height; i += height / 6){
+    ctx.font = "10px serif";
+    ctx.textAlign = "right";
+    for (var i=0, text=1; i <= height; i += height / 4, text -= 1 / 4){ //draw horizontal lines
+        ctx.fillText(text, 25, i + (begY * 1.25), 20);
         ctx.beginPath();
-        ctx.moveTo(0, i + 5);
-        ctx.lineTo(graph.width, i + 5);
+        ctx.moveTo(begX, begY + i);
+        ctx.lineTo(graph.width, begY + i);
         ctx.stroke();
     }
     ctx.beginPath();    
@@ -58,17 +62,17 @@ function drawWinLoseGraph(matches, username){
                 ctx.strokeStyle = "red";
             else
                 ctx.strokeStyle = "green";
-            ctx.strokeRect(begX - 1, posY + 4, 2, 2); //begX - 1 and +4 on y instead of + 5, to center point on line (this offset must be half of the point width and height)
+            ctx.fillRect(begX - 1, posY - 2, 2, 2); //begX - 1 and -2 on y, to center point on line (this offset must be half of the point width and height)
                 
             if (i == 0)
-                ctx.moveTo(begX, posY + 5);
+                ctx.moveTo(begX, posY);
             else {
-                ctx.lineTo(begX, posY + 5);
+                ctx.lineTo(begX, posY);
                 ctx.stroke();
                 ctx.beginPath();
-                ctx.moveTo(begX, posY + 5);
+                ctx.moveTo(begX, posY);
             }
-        }, i * pointAppearanceDelay, i, ctx, begX, height - (height * (average)), average);
+        }, i * pointAppearanceDelay, i, ctx, begX, begY + (height - (height * (average))), average);
         begX += step;
     }
 
