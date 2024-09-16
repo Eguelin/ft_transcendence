@@ -1,6 +1,8 @@
 var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
+allMatchesButton = document.getElementById("allMatchesHistoryBtn");
+
 
 if (sendFriendRequestBtn){
     sendFriendRequestBtn.addEventListener("click", (e) => {
@@ -204,3 +206,7 @@ function drawWinLossGraph(matches, username){
         })
     })
 }
+
+allMatchesButton.addEventListener("click", (e) => {
+    history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
+})

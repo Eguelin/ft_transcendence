@@ -66,6 +66,9 @@
 		"title" : "",
 		"sendFriendRequestBtn" : "Send friend request"
 	},
+	"dashboard":{
+		"title" : ""
+	},
 	"search": {
 		"title" : "Search"
 	},
