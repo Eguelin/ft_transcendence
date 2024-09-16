@@ -1035,3 +1035,13 @@ a {
 #winLossGraph, #winLossAbsGraph{
 	background: var(--hover-text-rgb);
 }
+
+#profileGraphs {
+	display: flex;
+	gap: 1vw;
+	position: relative;
+	left: 50%;
+	translate: -50%;
+	width: fit-content;
+	top: 2vh;
+}
