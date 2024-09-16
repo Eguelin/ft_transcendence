@@ -91,6 +91,23 @@ window.navigation.addEventListener("navigate", (e) => {
 								})
 							})
 						}
+						else if (url.pathname.startsWith("/dashboard")){
+							fetch('bodyLess/dashboard.html').then((response) => {
+								response.text().then(response => {
+									container.innerHTML = response;
+
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/dashboard.js`);
+									document.body.appendChild(s);
+									currentPage = "dashboard";
+									loadCurrentLang(currentPage);
+									homeBtn.style.setProperty("display", "block");
+									dropDownUserContainer.style.setProperty("display", "flex");
+								})
+							})
+						}
 						else if (url.pathname.startsWith("/search")){
 							if(url.searchParams.get("query")){
 								fetch('/api/user/search_by_username', {

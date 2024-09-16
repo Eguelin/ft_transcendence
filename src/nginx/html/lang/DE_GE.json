@@ -66,6 +66,12 @@
 		"title" : "",
 		"sendFriendRequestBtn" : "Freundschaftsanfrage senden"
 	},
+	"dashboard":{
+		"title" : ""
+	},
+	"search": {
+		"title" : "Suchen"
+	},
 	"game":{
 		"title" : ""
 	}
