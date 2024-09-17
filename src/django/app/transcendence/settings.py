@@ -36,14 +36,14 @@ ALLOWED_HOSTS = [
 	'localhost',
 	'ft-transcendence.online',
     'www.ft-transcendence.online',
-    '*',
+    '*', # for testing purposes
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
+	'daphne',
     'channels',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,7 +79,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'transcendence.wsgi.application'
 
-ASGI_APPLICATION = "transcendence.asgi.application"
+ASGI_APPLICATION = 'transcendence.asgi.application'
+
+# Channels
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
