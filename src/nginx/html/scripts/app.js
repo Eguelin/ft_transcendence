@@ -11,6 +11,10 @@ langDropDown = document.getElementById("langDropDown");
 langDropDownBtn = document.getElementById("langDropDownBtn");
 langDropDownOption = document.querySelectorAll(".langDropDownOptions");
 myProfileBtn = document.getElementById("myProfileBtn");
+friendsBtn = document.getElementById("friendsBtn");
+settingsBtn = document.getElementById("settingsBtn");
+logOutBtn = document.getElementById('logOutBtn');
+
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -48,109 +52,97 @@ window.navigation.addEventListener("navigate", (e) => {
 							else
 								userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
 							userPfp.style.setProperty("display", "block");
+
+							testImg = new Image();
+							testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
+							setTimeout(() => {
+								if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+									userPfp.style.setProperty("height", "100%");
+									userPfp.style.setProperty("width", "unset");
+								}
+							}, 0)
 						}
 						else
 							userPfp.style.setProperty("display", "none");
 
 						if (url.pathname.startsWith("/user")){
-							var splitPath = url.pathname.split('/');
-							fetch('/api/user/get', {
-								method: 'POST', //GET forbid the use of body :(
-								headers: {'Content-Type': 'application/json',},
-								body: JSON.stringify({"name" : splitPath[2]}),
-								credentials: 'include'
-							}).then(user => {
-								user.json().then(((user) => {
-									fetch('bodyLess/profile.html').then((response) => {
-										response.text().then(response => {
-											container.innerHTML = response;
-											document.getElementById("script").remove();
-											var s = document.createElement("script");
-											s.setAttribute('id', 'script');
-											s.setAttribute('src', `scripts/profile.js`);
-											document.body.appendChild(s);
-											currentPage = "profile";
-											loadCurrentLang(currentPage);
-											homeBtn.style.setProperty("display", "block");
-											dropDownUserContainer.style.setProperty("display", "flex");
-											document.getElementById("profileName").innerHTML = user.username;
-											document.getElementById("profilePfp").style.setProperty("display", "block");
-											document.getElementById("profilePfp").innerHTML = "";
-											if (user.pfp != ""){
-												var rawPfp = user.pfp;
-												if (rawPfp.startsWith('https://'))
-													document.getElementById("profilePfp").setAttribute("src", `${rawPfp}`);
-												else
-													document.getElementById("profilePfp").setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-											}
-											else
-												document.getElementById("profilePfp").style.setProperty("display", "none");
-											recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
-											var countWin = 0, countLost = 0;
-											for (var i=0; i<Object.keys(user.matches).length && i<5;i++){
-												createMatchResumeContainer(user.matches[i]);
-											};
-											for (var i=0; i<Object.keys(user.matches).length;i++){
-												if (user.matches[i].player_one == user.display){
-													countWin += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
-													countLost += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
-												}
-												else{
-													countWin += user.matches[i].player_one_pts < user.matches[i].player_two_pts;
-													countLost += user.matches[i].player_one_pts > user.matches[i].player_two_pts;
-												}
-											}
-											document.getElementById("ratioContainer").innerHTML += `${countWin / Object.keys(user.matches).length}%`
-											document.getElementById("nbWinContainer").innerHTML += `${countWin}`
-											document.getElementById("nbLossContainer").innerHTML += `${countLost}`
-											document.getElementById("nbMatchContainer").innerHTML += `${Object.keys(user.matches).length}`
-											matchUsersName = document.querySelectorAll(".resultScoreName")
-											Object.keys(matchUsersName).forEach(function(key){
-												matchUsersName[key].addEventListener("click", (e) => {
-													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
-												})
-											})
-										})
-									})
-								}))
+							fetch('bodyLess/profile.html').then((response) => {
+								response.text().then(response => {
+									container.innerHTML = response;
+									var splitPath = window.location.href.split('/');
+
+
+									if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] != null){
+										document.getElementById("sendFriendRequestBtn").remove();
+									}
+									if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] == null)
+										document.getElementById("deleteFriendBtn").remove();
+
+
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/profile.js`);
+									document.body.appendChild(s);
+									currentPage = "profile";
+									loadCurrentLang(currentPage);
+									homeBtn.style.setProperty("display", "block");
+									dropDownUserContainer.style.setProperty("display", "flex");
+								})
+							})
+						}
+						else if (url.pathname.startsWith("/dashboard")){
+							fetch('bodyLess/dashboard.html').then((response) => {
+								response.text().then(response => {
+									container.innerHTML = response;
+
+									document.getElementById("script").remove();
+									var s = document.createElement("script");
+									s.setAttribute('id', 'script');
+									s.setAttribute('src', `scripts/dashboard.js`);
+									document.body.appendChild(s);
+									currentPage = "dashboard";
+									loadCurrentLang(currentPage);
+									homeBtn.style.setProperty("display", "block");
+									dropDownUserContainer.style.setProperty("display", "flex");
+								})
 							})
 						}
 						else if (url.pathname.startsWith("/search")){
-							fetch('/api/user/search_by_username', {
-								method: 'POST', //GET forbid the use of body :(
-								headers: {'Content-Type': 'application/json',},
-								body: JSON.stringify({"name" : url.searchParams.get("query")}),
-								credentials: 'include'
-							}).then(user => {
-								user.json().then(((user) => {
-									fetch('bodyLess/search.html').then((response) => {
-										response.text().then(response => {
-											container.innerHTML = response;
-											document.getElementById("script").remove();
-											var s = document.createElement("script");
-											s.setAttribute('id', 'script');
-											s.setAttribute('src', `scripts/profile.js`);
-											document.body.appendChild(s);
-											currentPage = "search";
-											loadCurrentLang(currentPage);
-											homeBtn.style.setProperty("display", "block");
-											document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-											document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
-											Object.keys(user).forEach(function(key){
-												createUserResumeContainer(user[key]);
-											})
-											inputSearchUser.value = "";
-											userResume = document.querySelectorAll(".userResume");
-											for (var i = 0; i< userResume.length; i++){
-												userResume[i].addEventListener("click", (e) => {
-													var username = e.target.closest(".userResume").id;
-													history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang}), "", `https://${hostname.host}/user/${username}`);
+							if(url.searchParams.get("query")){
+								fetch('/api/user/search_by_username', {
+									method: 'POST', //GET forbid the use of body :(
+									headers: {'Content-Type': 'application/json',},
+									body: JSON.stringify({"name" : url.searchParams.get("query")}),
+									credentials: 'include'
+								}).then(user => {
+									user.json().then(((user) => {
+										fetch('bodyLess/search.html').then((response) => {
+											response.text().then(response => {
+												container.innerHTML = response;
+												document.getElementById("script").remove();
+												var s = document.createElement("script");
+												s.setAttribute('id', 'script');
+												s.setAttribute('src', `scripts/search.js`);
+												document.body.appendChild(s);
+												currentPage = "search";
+												loadCurrentLang(currentPage);
+												homeBtn.style.setProperty("display", "block");
+												document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+												document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
+												Object.keys(user).forEach(function(key){
+													createUserResumeContainer(user[key]);
 												})
-											}
+												inputSearchUser.value = "";
+											})
 										})
-									})
-								}))
-							})
+									}))
+								})
+							}
+							else{
+								history.replaceState("","",`https://${hostname.host}/home`);
+							}
+							
 						}
 						else if (url.pathname.startsWith("/login")){
 							fetch('/api/user/logout', {
@@ -212,6 +204,7 @@ window.navigation.addEventListener("navigate", (e) => {
 									document.body.appendChild(s);
 									dropDownUserContainer.style.setProperty("display", "none");
 									homeBtn.style.setProperty("display", "block");
+									document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
 								}))
 							});
 						}
@@ -318,7 +311,6 @@ window.navigation.addEventListener("navigate", (e) => {
 	})
 })
 
-
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
 
@@ -339,7 +331,7 @@ function handleToken() {
 				if (document.getElementById("loaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "none");
 				console.log('Data:', data)
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+				history.replaceState("", "", `https://${hostname.host}/home`);
 
 		})
 		.catch(error => console.error('Error:', error));
@@ -357,14 +349,14 @@ function handleToken() {
 
 			if (response.ok) {
 				(response.json()).then((text) => {
-					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends")))
-						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard")))
+						history.replaceState("", "", `https://${hostname.host}/home`);
 					else
-						history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "");
+						history.replaceState("", "");
 				});
 			}
 			else {
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+				history.replaceState("", "", `https://${hostname.host}/login`);
 			}
 		})
 	}
@@ -386,19 +378,31 @@ window.addEventListener("beforeunload", (e) => {
 
 homeBtn.addEventListener("click", (e) => {
 	if (currentPage != "register")
-		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+		history.pushState("", "", `https://${hostname.host}/home`);
 	else
-		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+		history.pushState("", "", `https://${hostname.host}/login`);
 })
 
 myProfileBtn.addEventListener("click", (e) => {
 	history.pushState("","",`https://${hostname.host}/user/${usernameBtn.innerHTML}`);
 })
 
+friendsBtn.addEventListener("click", (e) => {
+	history.pushState("","",`https://${hostname.host}/friends`);
+})
+
+settingsBtn.addEventListener("click", (e) => {
+	history.pushState("","",`https://${hostname.host}/settings`);
+})
+
 homeBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter")
 		homeBtn.click();
 })
+
+logOutBtn.addEventListener("click", (e) => {
+	history.replaceState("", "", `https://${hostname.host}/login`);
+});
 
 function switchTheme(darkTheme){
 	if (darkTheme == 1 || darkTheme == true){
@@ -455,10 +459,12 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 					content = text[currentPage];
 					if (content != null || content != undefined){
 						Object.keys(content).forEach(function(key) {
-							if (key.startsWith('input'))
-								document.getElementById(key).placeholder = content[key];
-							else
-								document.getElementById(key).innerHTML = content[key];
+							if (document.getElementById(key)){
+								if (key.startsWith('input'))
+									document.getElementById(key).placeholder = content[key];
+								else
+									document.getElementById(key).innerHTML = content[key];	
+							}
 						});
 					}
 				})
@@ -469,10 +475,12 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 						content = text[currentPage];
 						if (content != null || content != undefined){
 							Object.keys(content).forEach(function(key) {
-								if (key.startsWith('input'))
-									document.getElementById(key).placeholder = content[key];
-								else
-									document.getElementById(key).innerHTML = content[key];
+								if (document.getElementById(key)){
+									if (key.startsWith('input'))
+										document.getElementById(key).placeholder = content[key];
+									else
+										document.getElementById(key).innerHTML = content[key];
+								}
 							});
 						}
 					})
@@ -486,10 +494,12 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 				content = text[currentPage];
 				if (content != null || content != undefined){
 					Object.keys(content).forEach(function(key) {
-						if (key.startsWith('input'))
-							document.getElementById(key).placeholder = content[key];
-						else
-							document.getElementById(key).innerHTML = content[key];
+						if (document.getElementById(key)){
+							if (key.startsWith('input'))
+								document.getElementById(key).placeholder = content[key];
+							else
+								document.getElementById(key).innerHTML = content[key];
+						}
 					});
 				}
 			})
@@ -645,6 +655,7 @@ function createUserResumeContainer(user){
 	imgContainer.appendChild(img);
 	userResume.appendChild(imgContainer);
 	userResume.appendChild(userResumeName);
+	userResume.setAttribute("tabindex", 10);
 	userResumeContainer.appendChild(userResume)
 	document.getElementById("resumeContainer").appendChild(userResumeContainer);
 }
@@ -660,7 +671,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 			user.json().then((user) => {
 				fetch('bodyLess/search.html').then((response) => {
 					response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+						state = "";
 
 						if (container.innerHTML != "")
 							history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);

@@ -17,6 +17,8 @@ class MatchManager(models.Manager):
 		match.player_one_pts = random.randint(0, 10)
 		match.player_two_pts = random.randint(0, 10)
 		match.save()
+		match.date = "2024-09-{0}".format(random.randint(1, 29))
+		match.save()
 		player_two.profile.matches.add(match)
 		return match
 
@@ -37,7 +39,6 @@ class Profile(models.Model):
 	dark_theme = models.BooleanField(default=True)
 	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_UK.json")
-	friend_code = models.CharField(max_length=20, null=True)
 	friends = models.ManyToManyField(User, related_name="friends_list")
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
 	is_active = models.BooleanField(default=False)

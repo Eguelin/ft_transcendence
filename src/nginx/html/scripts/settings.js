@@ -1,6 +1,7 @@
-saveBtn = document.getElementById('saveBtn');
 deleteBtn = document.getElementById('deleteBtn');
-usernameInput = document.getElementById("inputUsername");
+confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+usernameInput = document.getElementById("inputChangeUsername");
+saveUsernameBtn = document.getElementById("saveUsernameBtn");
 pfpInput = document.getElementById("inputPfp");
 pfpInputLabel = document.getElementById("pfpLabel");
 lightTheme = document.getElementsByClassName("loadLight");
@@ -11,7 +12,9 @@ dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandsca
 settingsSlides = document.querySelectorAll(".settingSlide");
 rightSlideBtn = document.getElementById("rightSlideBtn");
 leftSlideBtn = document.getElementById("leftSlideBtn");
-
+confirmDeleteInput = document.getElementById("confirmDeleteInput");
+confirmPfpBtn = document.getElementById("confirmPfpBtn");
+var buf = "";
 
 var slideIdx = 0;
 for (i = 0; i < settingsSlides.length; i++)
@@ -43,81 +46,154 @@ pfpInputLabel.addEventListener("keydown", (ek) => {
 })
 
 pfpInput.addEventListener("change", (e) => {
-	if (pfpInput.files.length >= 1)
-		pfpInputLabel.innerHTML = pfpInput.files[0].name;
-})
-
-saveBtn.addEventListener("click", (e) => {
-	var data = {};
-	username = usernameInput.value;
-	if (username != ""){
-		if (username.length > 15){
-			warning = document.createElement("a");
-			warning.className = "warning";
-			warning.text = "username name must not exceed 15 characters";
-			usernameInput.before(warning);
-		}
-		else{
-			if (usernameInput.previousElementSibling)
-				usernameInput.previousElementSibling.remove();
-			data['username'] = username;
-		}
-	}
-	if (pfpInput.value != ""){ // this should always be the last check
+	if (pfpInput.files.length >= 1){
 		path = pfpInput.files[0];
+		pfpInputLabel.innerHTML = path.name;
 		var blob = new Blob([path]);
 		var reader = new FileReader();
 
 		reader.readAsDataURL(blob);
 		reader.onloadend = function(){
-			var buf = reader.result;
-			data['pfp'] = buf.substr(buf.indexOf(',') + 1);
+			buf = reader.result;
+			buf = buf.substr(buf.indexOf(',') + 1);
+			document.getElementById("popupBg").style.setProperty("display", "block");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
+			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
+			
+		}
+	}
+})
+
+confirmPfpBtn.addEventListener("click", (e) => {			
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({'pfp': buf}),
+		credentials: 'include'
+	}).then(response => {
+		if (!response.ok){
+			warning = document.createElement("a");
+			warning.className = "warning";
+			warning.text = "File is too heavy";
+			if (!pfpInputLabel.previousElementSibling)
+				pfpInputLabel.before(warning);
+		}
+		else{ 
+			if (pfpInputLabel.previousElementSibling)
+				pfpInputLabel.previousElementSibling.remove();
+			document.getElementById("popupBg").style.setProperty("display", "none");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+		}
+	})
+})
+
+saveUsernameBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Enter")
+		saveUsernameBtn.click();
+})
+
+saveUsernameBtn.addEventListener("click", (e) => {
+	username = usernameInput.value;
+
+	if (usernameInput.previousElementSibling)
+		usernameInput.previousElementSibling.remove();
+
+	if (username != ""){
+		if (username.length > 15){
+			warning = document.createElement("a");
+			warning.className = "warning";
+			warning.text = "username must not exceed 15 characters";
+			usernameInput.before(warning);
+		}
+		else{
 			fetch('/api/user/update', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(data),
+				body: JSON.stringify({'username': username}),
 				credentials: 'include'
 			}).then(response => {
-				if (!response.ok){
-					warning = document.createElement("a");
-					warning.className = "warning";
-					warning.text = "File is too heavy";
-					if (!pfpInputLabel.previousElementSibling)
-						pfpInputLabel.before(warning);
+				if (response.ok){
+					if (usernameInput.previousElementSibling)
+						usernameInput.previousElementSibling.remove();
+					success = document.createElement("a");
+					success.className = "success";
+					success.text = "username successfully updated";
+					usernameInput.before(success);
 				}
-				else if (pfpInputLabel.previousElementSibling)
-					pfpInputLabel.previousElementSibling.remove();
 			})
 		}
-
 	}
-	else {
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
+	else{
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "username can't be empty";
+		usernameInput.before(warning);
 	}
 })
 
 deleteBtn.addEventListener("click", (e) => {
-	fetch('/api/user/delete_user', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	}).then(response => {
-		if (response.ok){
-			history.pushState("", "", `https://${hostname.host}/login`);
-		}
-	})
+	document.getElementById("popupBg").style.setProperty("display", "block");
+	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
+})
 
+confirmDeleteBtn.addEventListener("click", (e) => {
+	val = confirmDeleteInput.value;
+	if (val == document.getElementById("usernameBtn").innerHTML){
+		fetch('/api/user/delete_user', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		}).then(response => {
+			if (response.ok){
+				history.pushState("", "", `https://${hostname.host}/login`);
+			}
+		})
+	}
+})
+
+confirmDeleteInput.addEventListener("keydown", (e) => {
+	if (e.key == "Enter"){
+		val = confirmDeleteInput.value;
+		if (val == document.getElementById("usernameBtn").innerHTML){
+			fetch('/api/user/delete_user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			}).then(response => {
+				if (response.ok){
+					history.pushState("", "", `https://${hostname.host}/login`);
+				}
+			})
+		}
+	}
+})
+
+document.addEventListener("keydown", (e) => {
+	if (currentPage == "settings"){
+		if (e.key == "Escape"){
+			document.getElementById("popupBg").style.setProperty("display", "none");
+			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+		}
+	}
+})
+
+document.addEventListener("click", (e) => {
+	if (currentPage == "settings"){
+		if (e.target.parentElement == null || e.target.id == "popupBg"){
+			document.getElementById("popupBg").style.setProperty("display", "none");
+			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+		}
+	}
 })
 
 dropDownContent.forEach(function(button) {
