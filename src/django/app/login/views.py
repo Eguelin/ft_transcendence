@@ -127,18 +127,9 @@ def create_user(request):
 			user.profile.language_pack = data['lang']
 
 		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 5):
+		for i in range(0, 100):
 			match = customModels.Match.objects.createWithRandomOpps(user)
 			user.profile.matches.add(match)
-
-		for count in range (0, 0x7fffffff):
-			friend_code = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
-			user.profile.friend_code = friend_code
-			try:
-				user.save()
-				break
-			except:
-				continue
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
@@ -233,9 +224,17 @@ def profile_update(request):
 
 def get_user_match_json(matches):
 	matches_json = {}
+	date_json = {}
+	date = ""
 	i = 0
 	for match in matches:
-		matches_json[i] = {
+		if (date != match.date):
+			if (date != ""):
+				matches_json["{0}".format(date)] = date_json
+				date_json = {}
+			date = match.date
+			i = 0
+		date_json[i] = {
 			'player_one' : match.player_one.username,
 			'player_two' : match.player_two.username,
 			'player_one_pts' : match.player_one_pts,
@@ -243,6 +242,8 @@ def get_user_match_json(matches):
 			'date' : match.date,
 		}
 		i += 1
+	if (date != ""):
+		matches_json["{0}".format(date)] = date_json
 	return matches_json
 
 def get_user_json(user):
@@ -254,9 +255,8 @@ def get_user_json(user):
 			raw_img = (base64.b64encode(f.read())).decode('utf-8')
 	except:
 		raw_img = ""
-	matches = get_user_match_json(user.profile.matches.all())
+	matches = get_user_match_json(user.profile.matches.order_by("date"))
 	return {'username' : user.username,
-		'friend_code' : user.profile.friend_code,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
 		'matches' : matches
@@ -294,25 +294,19 @@ def current_user(request):
 		friend_json = {}
 		friend_request_json = {}
 		blocked_json = {}
-		i = 0
-		for e in friends_list:
-			friend_json[i] = get_user_json(e)
-			i += 1
-		i = 0
-		for e in friends_request_list:
-			friend_request_json[i] = get_user_json(e)
-			i += 1
 
-		i = 0
+		for e in friends_list:
+			friend_json[e.username] = get_user_json(e)
+		for e in friends_request_list:
+			friend_request_json[e.username] = get_user_json(e)
 		for e in blocked_list:
-			blocked_json[i] = get_user_json(e)
-			i += 1
-		matches = get_user_match_json(request.user.profile.matches.all())
+			blocked_json[e.username] = get_user_json(e)
+
+		matches = get_user_match_json(request.user.profile.matches.order_by("date"))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack,
-			'friend_code': request.user.profile.friend_code,
 			'friends': friend_json,
 			'friend_request': friend_request_json,
 			'blocked_users': blocked_json,

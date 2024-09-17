@@ -1,3 +1,8 @@
+FROM node:20.5
+
+RUN npm install chart.js
+
+
 FROM nginx:1.27.0-alpine
 
 # Install openssl

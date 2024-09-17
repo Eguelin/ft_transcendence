@@ -32,7 +32,7 @@ registerBtn.addEventListener("click", (e) => {
 			usernameInput.before(warning);
 		lock = 1;
 	}
-	else if (usernameInput.previousElementSibling)
+	else if (username != "" && usernameInput.previousElementSibling)
 			usernameInput.previousElementSibling.remove();
 	if (pw != cpw){
 		warning = document.createElement("a");
@@ -74,7 +74,7 @@ registerBtn.addEventListener("click", (e) => {
 					credentials: 'include'
 				}).then(response => {
 					document.getElementById("loaderBg").style.setProperty("display", "none");
-					history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+					history.replaceState("", "", `https://${hostname.host}/home`);
 				});
 			} else {
 				response.json().then(response => {

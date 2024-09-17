@@ -3,6 +3,7 @@
 <head>
 <title>Transendence</title>
 <link id="style" rel="stylesheet" href="style.css">
+<link id="style" rel="stylesheet" href="styles/dropdowns.css">
 </head>
 <body>
 	<div id="titleFlexContainer">
@@ -17,14 +18,25 @@
 			<div  id="dropDownUserContainer" style="display: none;">
 				<div id="dropDownUser">
 					<span tabindex="7" id="usernameBtn"></span>
-					<div class="dropDownUserContent">
-						<button tabindex="8" id="myProfileBtn">Profile</button>
-						<button tabindex="9" id="friendsBtn">Friends</button>
-						<button tabindex="10" id="settingsBtn">Account settings</button>
-						<button tabindex="11" id="logOutBtn">Log out</button>
-					</div>
+					<ul class="dropDownUserContent">
+						<li>
+							<button class="dropDownMenuBtn" tabindex="8" id="myProfileBtn">Profile</button>
+						</li>
+						<li>
+							<button class="dropDownMenuBtn" tabindex="9" id="friendsBtn">Friends</button>
+						</li>
+						<li>
+							<button class="dropDownMenuBtn" tabindex="10" id="settingsBtn">Account settings</button>
+						</li>
+						<li>
+							<button class="dropDownMenuBtn" tabindex="11" id="logOutBtn">Log out</button>
+						</li>
+					</ul>
 				</div>
-				<img id="pfp" class="profilePicture">
+				<div id="pfpContainer">
+					<img id="pfp">
+					<div class="pfpMask"></div>
+				</div>
 			</div>
 			<div tabindex="6" id="themeButton"></div>
 			<div id="langDropDownContainer">
@@ -56,5 +68,6 @@
 		<div class="loader"></div>
 	</div>
 	<script id="script" src="scripts/app.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </body>
 </html>
