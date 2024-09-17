@@ -331,7 +331,7 @@ function handleToken() {
 				if (document.getElementById("loaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "none");
 				console.log('Data:', data)
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+				history.replaceState("", "", `https://${hostname.host}/home`);
 
 		})
 		.catch(error => console.error('Error:', error));
@@ -349,14 +349,14 @@ function handleToken() {
 
 			if (response.ok) {
 				(response.json()).then((text) => {
-					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends" || url.pathname.startsWith("/dashboard"))))
+					if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard")))
 						history.replaceState("", "", `https://${hostname.host}/home`);
 					else
 						history.replaceState("", "");
 				});
 			}
 			else {
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+				history.replaceState("", "", `https://${hostname.host}/login`);
 			}
 		})
 	}
@@ -378,9 +378,9 @@ window.addEventListener("beforeunload", (e) => {
 
 homeBtn.addEventListener("click", (e) => {
 	if (currentPage != "register")
-		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+		history.pushState("", "", `https://${hostname.host}/home`);
 	else
-		history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'home', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+		history.pushState("", "", `https://${hostname.host}/login`);
 })
 
 myProfileBtn.addEventListener("click", (e) => {
@@ -671,7 +671,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 			user.json().then((user) => {
 				fetch('bodyLess/search.html').then((response) => {
 					response.text().then(response => {
-						state = JSON.stringify({"html": document.body.innerHTML, "currentPage": currentPage, "currentLang": currentLang});
+						state = "";
 
 						if (container.innerHTML != "")
 							history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
