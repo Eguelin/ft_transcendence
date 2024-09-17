@@ -109,6 +109,8 @@ def create_user(request):
 
 	if len(username) > 15:
 		return JsonResponse({'message': 'Username too long'}, status=400)
+	if len(password) > 128:
+		return JsonResponse({'message': 'Password too long'}, status=400)
 	result = zxcvbn.zxcvbn(password)
 	if result['score'] < 4:
 		return JsonResponse({'message': 'Password too weak'}, status=400)

@@ -1,5 +1,6 @@
-# channels
-# daphne
+channels
+channels-redis
+daphne
 dj-database-url
 Django
 psycopg2-binary

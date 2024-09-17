@@ -43,6 +43,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -77,6 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'transcendence.wsgi.application'
 
+ASGI_APPLICATION = "transcendence.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
