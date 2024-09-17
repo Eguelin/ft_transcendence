@@ -33,5 +33,5 @@ playBtn = document.getElementById("playBtn");
 }
 
 playBtn.addEventListener("click", (e) => {
-	history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/game`);
+	history.pushState("", "", `https://${hostname.host}/game`);
 })

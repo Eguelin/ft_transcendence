@@ -10,7 +10,7 @@ fortyTwoLogin.addEventListener("click", (e) => {
 });
 
 registerLink.addEventListener("click", (e) => {
-	history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/register`);
+	history.pushState("", "", `https://${hostname.host}/register`);
 });
 
 fortyTwoLogin.addEventListener("keydown", (e) => {
@@ -62,7 +62,7 @@ loginBtn.addEventListener("click", (e) => {
 							loginBtn.before(warning.cloneNode(true));
 					}
 					else
-						history.pushState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/home`);
+						history.pushState("", "", `https://${hostname.host}/home`);
 				})
 			}
 		})
