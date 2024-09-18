@@ -15,7 +15,6 @@ friendsBtn = document.getElementById("friendsBtn");
 settingsBtn = document.getElementById("settingsBtn");
 logOutBtn = document.getElementById('logOutBtn');
 
-
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
 const hostname = new URL(window.location.href)
@@ -38,13 +37,13 @@ window.navigation.addEventListener("navigate", (e) => {
 				if (dropDownUser.classList.contains("activeDropDown"))
 					dropDownUser.classList.remove("activeDropDown");
 
-				
+
 				if (currentUser.ok) {
 					currentUser.json().then((currentUser) => {
 						currentLang = currentUser.lang;
 						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.svg)`);
 
-						usernameBtn.innerHTML = currentUser.username;
+						usernameBtn.innerHTML = htmlEncode(currentUser.username);
 						if (currentUser.pfp != ""){
 							var rawPfp = currentUser.pfp;
 							if (rawPfp.startsWith('https://'))
@@ -129,7 +128,7 @@ window.navigation.addEventListener("navigate", (e) => {
 												loadCurrentLang(currentPage);
 												homeBtn.style.setProperty("display", "block");
 												document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-												document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
+												document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
 												Object.keys(user).forEach(function(key){
 													createUserResumeContainer(user[key]);
 												})
@@ -142,7 +141,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							else{
 								history.replaceState("","",`https://${hostname.host}/home`);
 							}
-							
+
 						}
 						else if (url.pathname.startsWith("/login")){
 							fetch('/api/user/logout', {
@@ -311,6 +310,12 @@ window.navigation.addEventListener("navigate", (e) => {
 	})
 })
 
+function htmlEncode(str){
+	return String(str).replace(/[^\w. ]/gi, function(c){
+		return '&#'+c.charCodeAt(0)+';';
+	});
+}
+
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
 
@@ -463,7 +468,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 								if (key.startsWith('input'))
 									document.getElementById(key).placeholder = content[key];
 								else
-									document.getElementById(key).innerHTML = content[key];	
+									document.getElementById(key).innerHTML = content[key];
 							}
 						});
 					}
