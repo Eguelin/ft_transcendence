@@ -1,6 +1,22 @@
 var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 
+let width, height, gradient;
+function getGradient(ctx, chartArea) {
+  const chartWidth = chartArea.right - chartArea.left;
+  const chartHeight = chartArea.bottom - chartArea.top;
+  if (!gradient || width !== chartWidth || height !== chartHeight) {
+    width = chartWidth;
+    height = chartHeight;
+    gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    gradient.addColorStop(0, "red");
+    gradient.addColorStop(0.5, "orange");
+    gradient.addColorStop(1, "green");
+  }
+
+  return gradient;
+}
+
 function drawWinLossGraph(matches, username){
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [];
@@ -35,9 +51,52 @@ function drawWinLossGraph(matches, username){
                     data: mapAverage.map(row => row.average),
                     backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
                     fill: false,
-                    tension: 0
+                    tension: 0,
+                    borderColor: function(context){
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+
+                        if (!chartArea)
+                            return ;
+                        return (getGradient(ctx, chartArea));
+                    },
+                    borderWidth: 2,
+                    pointBackgroundColor: function(context){
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+
+                        if (!chartArea)
+                            return ;
+                        return (getGradient(ctx, chartArea));
+                    },
+                    pointBorderWidth: 0,
+                    pointhitRadius: 4,
+                    pointRadius: 2,
+                    pointStyle: 'circle',
+                    borderJoinStyle: 'round'
                 }
             ]
+        },
+        options:{
+            plugins: {
+                legend:{
+                    labels:{
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    }
+                }
+            }
         }
     });
 
@@ -52,9 +111,51 @@ function drawWinLossGraph(matches, username){
                     data: mapAbs.map(row => row.result),
                     backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
                     fill: false,
-                    tension: 0
+                    tension: 0,
+                    borderColor: function(context){
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+
+                        if (!chartArea)
+                            return ;
+                        return (getGradient(ctx, chartArea));
+                    },
+                    borderWidth: 2,
+                    pointBackgroundColor: function(context){
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+
+                        if (!chartArea)
+                            return ;
+                        return (getGradient(ctx, chartArea));
+                    },
+                    pointBorderWidth: 0,
+                    pointhitRadius: 4,
+                    pointRadius: 2,
+                    pointStyle: 'circle'
                 }
             ]
+        },
+        options:{
+            plugins: {
+                legend:{
+                    labels:{
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    }
+                }
+            }
         }
     });
 
