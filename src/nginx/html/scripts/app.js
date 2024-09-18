@@ -49,14 +49,17 @@ window.navigation.addEventListener("navigate", (e) => {
 						usernameBtn.innerHTML = currentUser.username;
 						if (currentUser.pfp != ""){
 							var rawPfp = currentUser.pfp;
-							if (rawPfp.startsWith('https://'))
+							testImg = new Image();
+							if (rawPfp.startsWith('https://')){
+								testImg.setAttribute("src", `${rawPfp}`)
 								userPfp.setAttribute("src", `${rawPfp}`);
-							else
+							}
+							else{
+								testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
 								userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+							}
 							userPfp.style.setProperty("display", "block");
 
-							testImg = new Image();
-							testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
 							setTimeout(() => {
 								if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
 									userPfp.style.setProperty("height", "100%");
