@@ -2,13 +2,51 @@ var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 
 function drawWinLossGraph(matches, username){
-    graph = document.getElementById("winLossGraph");
-    graphAbs = document.getElementById("winLossAbsGraph");
+    //const ctx = document.getElementById("winLossGraph").getContext("2d"), ctxAbs = document.getElementById("winLossAbsGraph").getContext("2d");
     nbMatch = Object.keys(matches).length;
-    var begX = 30, begY = 10;
+    const mapAverage = [];
+    for (var i=0; i<nbMatch;i++){
+        matchObj = matches[Object.keys(matches)[i]];
+        var countWin = 0, countLost = 0, countMatch = 0;
+        for (j = 0; j < Object.keys(matchObj).length; j++){
+            if (matchObj[j].player_one == username){
+                countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+            }
+            else{
+                countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+            }
+            countMatch += 1;
+        }
+        average = countWin / countMatch;
+        mapAverage.push({'date' : Object.keys(matches)[i], 'average' : average});
+    }
+    console.log(mapAverage);
+
+    graph = new Chart(document.getElementById("winLossGraph"), {
+        type: 'line',
+        data: {
+            labels: mapAverage.map(row => row.date),
+            datasets: [
+                {
+                    label: 'Average by date',
+                    data: mapAverage.map(row => row.average),
+                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    fill: false,
+                    tension: 0.1
+                }
+            ]
+        }
+    });
+    console.log(graph);
+    /*
+    graphAbs = new Chart(ctxAbs, );
+  */  
+
+/*    var begX = 30, begY = 10;
     var height = graph.height - 20;
     var step =  (graph.width - begX) / nbMatch;
-    const ctx = graph.getContext("2d"), ctxAbs = graphAbs.getContext("2d");
     ctx.strokeWidth = 1;
     ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
     ctx.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
@@ -120,7 +158,7 @@ function drawWinLossGraph(matches, username){
             }
         }, i * pointAppearanceDelay, i, ctxAbs, begX, begY + (height - (height * percent)), percent);
         begX += step;
-    }
+    }*/
 }
 
 {

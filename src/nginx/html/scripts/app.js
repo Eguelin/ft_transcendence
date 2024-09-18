@@ -1,3 +1,5 @@
+//import Chart from '../chart.js/auto';
+
 container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
