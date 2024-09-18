@@ -2,9 +2,8 @@ var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 
 function drawWinLossGraph(matches, username){
-    //const ctx = document.getElementById("winLossGraph").getContext("2d"), ctxAbs = document.getElementById("winLossAbsGraph").getContext("2d");
     nbMatch = Object.keys(matches).length;
-    const mapAverage = [];
+    const mapAverage = [], mapAbs = [];
     for (var i=0; i<nbMatch;i++){
         matchObj = matches[Object.keys(matches)[i]];
         var countWin = 0, countLost = 0, countMatch = 0;
@@ -20,11 +19,13 @@ function drawWinLossGraph(matches, username){
             countMatch += 1;
         }
         average = countWin / countMatch;
+        absResult = (countWin - (countMatch - countWin));
         mapAverage.push({'date' : Object.keys(matches)[i], 'average' : average});
+        mapAbs.push({'date' : Object.keys(matches)[i], 'result' : absResult});
     }
-    console.log(mapAverage);
+    console.log(mapAverage, mapAbs);
 
-    graph = new Chart(document.getElementById("winLossGraph"), {
+    new Chart(document.getElementById("winLossGraph"), {
         type: 'line',
         data: {
             labels: mapAverage.map(row => row.date),
@@ -34,12 +35,28 @@ function drawWinLossGraph(matches, username){
                     data: mapAverage.map(row => row.average),
                     backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
                     fill: false,
-                    tension: 0.1
+                    tension: 0
                 }
             ]
         }
     });
-    console.log(graph);
+
+
+    new Chart(document.getElementById("winLossAbsGraph"), {
+        type: 'line',
+        data: {
+            labels: mapAbs.map(row => row.date),
+            datasets: [
+                {
+                    label: 'Number of victory over number of defeat by date',
+                    data: mapAbs.map(row => row.result),
+                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    fill: false,
+                    tension: 0
+                }
+            ]
+        }
+    });
     /*
     graphAbs = new Chart(ctxAbs, );
   */  
