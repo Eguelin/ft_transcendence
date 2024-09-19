@@ -110,6 +110,8 @@ function drawWinLossGraph(matches, username){
             ]
         },
         options:{
+            animation,
+            
             plugins: {
                 legend:{
                     labels:{
@@ -121,11 +123,20 @@ function drawWinLossGraph(matches, username){
                 y: {
                     ticks: {
                         color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    },
+                    grid: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                        lineWidth: .5,
+                        drawTicks: false,
                     }
                 },
                 x: {
                     ticks: {
                         color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    },
+                    grid: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                        lineWidth: .5,
                     }
                 }
             }
