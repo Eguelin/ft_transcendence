@@ -1,6 +1,6 @@
 var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
-
+var chartAverage, chartAbs;
 let width, height, gradient;
 function getGradient(ctx, chartArea) {
   const chartWidth = chartArea.right - chartArea.left;
@@ -73,7 +73,7 @@ function drawWinLossGraph(matches, username){
       }
     };
 
-    new Chart(document.getElementById("winLossGraph"), {
+    chartAverage = new Chart(document.getElementById("winLossGraph"), {
         type: 'line',
         data: {
             labels: mapAverage.map(row => row.date),
@@ -81,7 +81,6 @@ function drawWinLossGraph(matches, username){
                 {
                     label: 'Average by date',
                     data: mapAverage.map(row => row.average),
-                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
                     fill: false,
                     tension: 0,
                     borderColor: function(context){
@@ -146,7 +145,7 @@ function drawWinLossGraph(matches, username){
     });
 
 
-    new Chart(document.getElementById("winLossAbsGraph"), {
+    chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
         type: 'line',
         data: {
             labels: mapAbs.map(row => row.date),
@@ -154,7 +153,6 @@ function drawWinLossGraph(matches, username){
                 {
                     label: 'Number of victory over number of defeat by date',
                     data: mapAbs.map(row => row.result),
-                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
                     fill: false,
                     tension: 0,
                     borderColor: function(context){
@@ -217,8 +215,7 @@ function drawWinLossGraph(matches, username){
 
 }
 
-{
-
+function loadUserDashboard(){
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
@@ -252,3 +249,5 @@ function drawWinLossGraph(matches, username){
         })
     })
 }
+
+loadUserDashboard()

@@ -432,6 +432,21 @@ function switchTheme(darkTheme){
 			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-light-mode.svg\")";
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 	}
+	if (currentPage == "dashboard"){
+		chartAverage.options.scales.x._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAverage.options.scales.y._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAverage.options.scales.x._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAverage.options.scales.y._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAverage._plugins._cache[3].options.labels.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		
+		chartAverage.update();
+		chartAbs.options.scales.x._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAbs.options.scales.y._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAbs.options.scales.x._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAbs.options.scales.y._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAbs._plugins._cache[3].options.labels.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAbs.update();
+	}
 }
 /*
 window.addEventListener("popstate", (event) => {
