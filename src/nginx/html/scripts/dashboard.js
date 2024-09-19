@@ -111,7 +111,7 @@ function drawWinLossGraph(matches, username){
         },
         options:{
             animation,
-            
+
             plugins: {
                 legend:{
                     labels:{
@@ -128,7 +128,9 @@ function drawWinLossGraph(matches, username){
                         color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
                         lineWidth: .5,
                         drawTicks: false,
-                    }
+                    },
+                    min: 0,
+                    max: 100,
                 },
                 x: {
                     ticks: {
