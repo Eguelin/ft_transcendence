@@ -53,10 +53,6 @@
 	},
 	"friends":{
 		"title" : "Freunde",
-		"friendCodeBtn" : "Mein freundescode",
-		"friendCode" : "Mein Freundescode",
-		"inputCode" : "Freundescode",
-		"sendFriendRequestBtn" : "Schicken",
 		"confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
 		"confirmBlockQuestion" : "Möchten Sie diesen Freund wirklich blockieren?",
 		"confirmDelete" : "Ich bin sicher",
@@ -67,7 +63,14 @@
 		"blockedSelectorText": "Blockiert"
 	},
 	"profile":{
+		"title" : "",
+		"sendFriendRequestBtn" : "Freundschaftsanfrage senden"
+	},
+	"dashboard":{
 		"title" : ""
+	},
+	"search": {
+		"title" : "Suchen"
 	},
 	"game":{
 		"title" : ""

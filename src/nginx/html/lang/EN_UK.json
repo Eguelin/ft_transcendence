@@ -53,10 +53,6 @@
 	},
 	"friends":{
 		"title" : "Friends",
-		"friendCodeBtn" : "My friend code",
-		"friendCode" : "My friend code",
-		"inputCode" : "Friend code",
-		"sendFriendRequestBtn" : "Send",
 		"confirmDeleteQuestion" : "Are you sure you want to remove this friend?",
 		"confirmBlockQuestion" : "Are you sure you want to block this friend?",
 		"confirmDelete" : "I'm sure",
@@ -67,6 +63,10 @@
 		"blockedSelectorText": "Blocked"
 	},
 	"profile":{
+		"title" : "",
+		"sendFriendRequestBtn" : "Send friend request"
+	},
+	"dashboard":{
 		"title" : ""
 	},
 	"search": {

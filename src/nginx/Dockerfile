@@ -1,3 +1,11 @@
+FROM node:20.5 AS builder
+
+WORKDIR /html
+COPY ./html .
+
+RUN npm install
+
+
 FROM nginx:1.27.0-alpine
 
 # Install openssl
