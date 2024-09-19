@@ -1,0 +1,97 @@
+var splitPath = window.location.href.split('/');
+var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
+
+function drawWinLossGraph(matches, username){
+    nbMatch = Object.keys(matches).length;
+    const mapAverage = [], mapAbs = [];
+    for (var i=0; i<nbMatch;i++){
+        matchObj = matches[Object.keys(matches)[i]];
+        var countWin = 0, countLost = 0, countMatch = 0;
+        for (j = 0; j < Object.keys(matchObj).length; j++){
+            if (matchObj[j].player_one == username){
+                countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+            }
+            else{
+                countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+            }
+            countMatch += 1;
+        }
+        average = (countWin / countMatch) * 100;
+        absResult = (countWin - (countMatch - countWin));
+        mapAverage.push({'date' : Object.keys(matches)[i], 'average' : average});
+        mapAbs.push({'date' : Object.keys(matches)[i], 'result' : absResult});
+    }
+    console.log(mapAverage, mapAbs);
+
+    new Chart(document.getElementById("winLossGraph"), {
+        type: 'line',
+        data: {
+            labels: mapAverage.map(row => row.date),
+            datasets: [
+                {
+                    label: 'Average by date',
+                    data: mapAverage.map(row => row.average),
+                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    fill: false,
+                    tension: 0
+                }
+            ]
+        }
+    });
+
+
+    new Chart(document.getElementById("winLossAbsGraph"), {
+        type: 'line',
+        data: {
+            labels: mapAbs.map(row => row.date),
+            datasets: [
+                {
+                    label: 'Number of victory over number of defeat by date',
+                    data: mapAbs.map(row => row.result),
+                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    fill: false,
+                    tension: 0
+                }
+            ]
+        }
+    });
+
+}
+
+{
+
+    fetch('/api/user/get', {
+        method: 'POST', //GET forbid the use of body :(
+        headers: {'Content-Type': 'application/json',},
+        body: JSON.stringify({"name" : splitPath[4]}),
+        credentials: 'include'
+    }).then(user => {
+        user.json().then((user) => {
+            drawWinLossGraph(user.matches, user.username);
+            var countWin = 0, countLost = 0, countMatch = 0;
+            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date 
+
+            for (var i=0; i<Object.keys(user.matches).length;i++){
+                matchObj = user.matches[Object.keys(user.matches)[i]];
+                for (j = 0; j < Object.keys(matchObj).length; j++){
+                    if (matchObj[j].player_one == user.username){
+                        countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                        countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                    }
+                    else{
+                        countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                        countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                    }
+                    countMatch += 1;
+                }
+            }
+                        
+            document.getElementById("ratioContainer").innerHTML += `${(countWin / countMatch) * 100}%`
+            document.getElementById("nbWinContainer").innerHTML += `${countWin}`
+            document.getElementById("nbLossContainer").innerHTML += `${countLost}`
+            document.getElementById("nbMatchContainer").innerHTML += `${countMatch}`
+        })
+    })
+}
