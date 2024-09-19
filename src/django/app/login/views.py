@@ -1,9 +1,11 @@
 from django.contrib.auth import login, authenticate, logout
-from django.db import DatabaseError, IntegrityError
+from django.db import DatabaseError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random, string, subprocess, zxcvbn
 import login.models as customModels
+from django.core.validators import RegexValidator, MaxLengthValidator
+from django.core.exceptions import ValidationError
+import json, os, requests, base64, random, zxcvbn
 
 def generate_unique_username(base_username):
 	username = base_username
@@ -107,11 +109,13 @@ def create_user(request):
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 
-	if not str(username).isalnum():
-		return JsonResponse({'message': 'Username must be alphanumeric'}, status=400)
-
-	if len(username) > 15:
-		return JsonResponse({'message': 'username too long'}, status=400)
+	username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
+	max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
+	try:
+		username_validator(username)
+		max_length_validator(username)
+	except ValidationError as e:
+		return JsonResponse({'message': e.message}, status=400)
 
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
@@ -209,10 +213,13 @@ def profile_update(request):
 					user.profile.dark_theme = data['is_dark_theme']
 				if "username" in data:
 					user.username = data['username']
-				if not str(user.username).isalnum():
-					return JsonResponse({'message': 'Username must be alphanumeric'}, status=400)
-				if len(user.username) > 15:
-					return JsonResponse({'message': 'Username too long'}, status=400)
+				username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
+				max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
+				try:
+					username_validator(user.username)
+					max_length_validator(user.username)
+				except ValidationError as e:
+					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
 					raw = data['pfp']
 					pfpName = "profilePictures/{0}.jpg".format(user.username)
