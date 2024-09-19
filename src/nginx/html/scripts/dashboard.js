@@ -79,7 +79,6 @@ function drawWinLossGraph(matches, username){
             labels: mapAverage.map(row => row.date),
             datasets: [
                 {
-                    label: 'Average by date',
                     data: mapAverage.map(row => row.average),
                     fill: false,
                     tension: 0,
@@ -112,10 +111,14 @@ function drawWinLossGraph(matches, username){
             animation,
 
             plugins: {
+                title: {
+                    color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    text: 'Average by date',
+                    display: true,
+
+                },
                 legend:{
-                    labels:{
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    }
+                    display: false,
                 }
             },
             scales: {
@@ -183,10 +186,14 @@ function drawWinLossGraph(matches, username){
             animation,
 
             plugins: {
+                title: {
+                    color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    text: 'Number of victory over number of defeat by date',
+                    display: true,
+
+                },
                 legend:{
-                    labels:{
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    }
+                    display: false,
                 }
             },
             scales: {
