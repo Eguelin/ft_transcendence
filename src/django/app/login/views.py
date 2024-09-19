@@ -107,8 +107,12 @@ def create_user(request):
 	if username is None or password is None:
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 
+	if not str(username).isalnum():
+		return JsonResponse({'message': 'Username must be alphanumeric'}, status=400)
+
 	if len(username) > 15:
-		return JsonResponse({'message': 'Username too long'}, status=400)
+		return JsonResponse({'message': 'username too long'}, status=400)
+
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
 	result = zxcvbn.zxcvbn(password)
@@ -205,6 +209,10 @@ def profile_update(request):
 					user.profile.dark_theme = data['is_dark_theme']
 				if "username" in data:
 					user.username = data['username']
+				if not str(user.username).isalnum():
+					return JsonResponse({'message': 'Username must be alphanumeric'}, status=400)
+				if len(user.username) > 15:
+					return JsonResponse({'message': 'Username too long'}, status=400)
 				if "pfp" in data:
 					raw = data['pfp']
 					pfpName = "profilePictures/{0}.jpg".format(user.username)
@@ -323,7 +331,7 @@ def get(request):
 		data = json.loads(request.body)
 		try:
 			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
-		except:
+		except User.DoesNotExist:
 			return JsonResponse({'message': "can't find user"}, status=404)
 
 def search_by_username(request):

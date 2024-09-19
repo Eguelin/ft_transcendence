@@ -17,6 +17,7 @@ logOutBtn = document.getElementById('logOutBtn');
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
+var username = "";
 const hostname = new URL(window.location.href)
 
 window.navigation.addEventListener("navigate", (e) => {
@@ -43,7 +44,8 @@ window.navigation.addEventListener("navigate", (e) => {
 						currentLang = currentUser.lang;
 						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4,10)}.svg)`);
 
-						usernameBtn.innerHTML = htmlEncode(currentUser.username);
+						username = currentUser.username;
+						usernameBtn.innerHTML = currentUser.username;
 						if (currentUser.pfp != ""){
 							var rawPfp = currentUser.pfp;
 							if (rawPfp.startsWith('https://'))
@@ -128,7 +130,7 @@ window.navigation.addEventListener("navigate", (e) => {
 												loadCurrentLang(currentPage);
 												homeBtn.style.setProperty("display", "block");
 												document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-												document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
+												document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
 												Object.keys(user).forEach(function(key){
 													createUserResumeContainer(user[key]);
 												})
@@ -310,12 +312,6 @@ window.navigation.addEventListener("navigate", (e) => {
 	})
 })
 
-function htmlEncode(str){
-	return String(str).replace(/[^\w. ]/gi, function(c){
-		return '&#'+c.charCodeAt(0)+';';
-	});
-}
-
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
 
@@ -389,7 +385,7 @@ homeBtn.addEventListener("click", (e) => {
 })
 
 myProfileBtn.addEventListener("click", (e) => {
-	history.pushState("","",`https://${hostname.host}/user/${usernameBtn.innerHTML}`);
+	history.pushState("","",`https://${hostname.host}/user/${username}`);
 })
 
 friendsBtn.addEventListener("click", (e) => {
