@@ -17,6 +17,7 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
+
 function drawWinLossGraph(matches, username){
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [];
@@ -39,7 +40,38 @@ function drawWinLossGraph(matches, username){
         mapAverage.push({'date' : Object.keys(matches)[i], 'average' : average});
         mapAbs.push({'date' : Object.keys(matches)[i], 'result' : absResult});
     }
-    console.log(mapAverage, mapAbs);
+
+    const totalDuration = 500;
+    const delayBetweenPoints = totalDuration / nbMatch;
+    const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
+    const animation = {
+      x: {
+        type: 'number',
+        easing: 'linear',
+        duration: delayBetweenPoints,
+        from: NaN, // the point is initially skipped
+        delay(ctx) {
+          if (ctx.type !== 'data' || ctx.xStarted) {
+            return 0;
+          }
+          ctx.xStarted = true;
+          return ctx.index * delayBetweenPoints;
+        }
+      },
+      y: {
+        type: 'number',
+        easing: 'linear',
+        duration: delayBetweenPoints,
+        from: previousY,
+        delay(ctx) {
+          if (ctx.type !== 'data' || ctx.yStarted) {
+            return 0;
+          }
+          ctx.yStarted = true;
+          return ctx.index * delayBetweenPoints;
+        }
+      }
+    };
 
     new Chart(document.getElementById("winLossGraph"), {
         type: 'line',
@@ -137,6 +169,8 @@ function drawWinLossGraph(matches, username){
             ]
         },
         options:{
+            animation,
+
             plugins: {
                 legend:{
                     labels:{
@@ -148,11 +182,20 @@ function drawWinLossGraph(matches, username){
                 y: {
                     ticks: {
                         color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    },
+                    grid: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                        lineWidth: .5,
+                        drawTicks: false,
                     }
                 },
                 x: {
                     ticks: {
                         color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+                    },
+                    grid: {
+                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                        lineWidth: .5,
                     }
                 }
             }
