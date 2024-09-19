@@ -2,34 +2,8 @@ var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 
 function drawWinLossGraph(matches, username){
-    graph = document.getElementById("winLossGraph");
-    graphAbs = document.getElementById("winLossAbsGraph");
     nbMatch = Object.keys(matches).length;
-    var begX = 30, begY = 10;
-    var height = graph.height - 20;
-    var step =  (graph.width - begX) / nbMatch;
-    const ctx = graph.getContext("2d"), ctxAbs = graphAbs.getContext("2d");
-    ctx.strokeWidth = 1;
-    ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
-    ctx.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-    
-    for (var i=0; i < nbMatch; i++){ //draw vertical lines
-        ctx.beginPath();
-        ctx.moveTo(begX + (i * step), begY);
-        ctx.lineTo(begX + (i * step), graph.height - begY);
-        ctx.stroke();
-    }
-    ctx.font = "10px serif";
-    ctx.textAlign = "right";
-    for (var i=0, text=1; i <= height; i += height / 4, text -= 1 / 4){ //draw horizontal lines
-        ctx.fillText(text, 25, i + (begY * 1.25), 20);
-        ctx.beginPath();
-        ctx.moveTo(begX, begY + i);
-        ctx.lineTo(graph.width, begY + i);
-        ctx.stroke();
-    }
-    ctx.beginPath();    
-    var highestAbs = 0;
+    const mapAverage = [], mapAbs = [];
     for (var i=0; i<nbMatch;i++){
         matchObj = matches[Object.keys(matches)[i]];
         var countWin = 0, countLost = 0, countMatch = 0;
@@ -44,83 +18,46 @@ function drawWinLossGraph(matches, username){
             }
             countMatch += 1;
         }
-        average = countWin / countMatch;
-        var absResult = (countWin - (countMatch - countWin));
-        absResult = absResult >= 0 ? absResult : absResult * -1;
-        highestAbs = highestAbs > absResult ? highestAbs : absResult;
-        setTimeout((i, ctx, begX, posY, average) => {
-            if (average < 0.5)
-                ctx.strokeStyle = "red";
-            else
-                ctx.strokeStyle = "green";
-            ctx.fillRect(begX - 1, posY - 2, 2, 2); //begX - 1 and -2 on y, to center point on line (this offset must be half of the point width and height)
-                
-            if (i == 0)
-                ctx.moveTo(begX, posY);
-            else {
-                ctx.lineTo(begX, posY);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(begX, posY);
-            }
-        }, i * pointAppearanceDelay, i, ctx, begX, begY + (height - (height * (average))), average);
-        begX += step;
+        average = (countWin / countMatch) * 100;
+        absResult = (countWin - (countMatch - countWin));
+        mapAverage.push({'date' : Object.keys(matches)[i], 'average' : average});
+        mapAbs.push({'date' : Object.keys(matches)[i], 'result' : absResult});
     }
+    console.log(mapAverage, mapAbs);
 
-    ctxAbs.strokeWidth = 1;
-    ctxAbs.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--page-bg-rgb");
-    ctxAbs.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-
-
-    var begX = 30, begY = 10;
-    for (var i=0; i < nbMatch; i++){ //draw vertical lines
-        ctxAbs.beginPath();
-        ctxAbs.moveTo(begX + (i * step), begY);
-        ctxAbs.lineTo(begX + (i * step), graph.height - begY);
-        ctxAbs.stroke();
-    }
-    ctxAbs.font = "10px serif";
-    ctxAbs.textAlign = "right";
-    var yStep = height / ((highestAbs * 2));
-    for (var i=0, text=highestAbs; i <= height; i += yStep, text -= 1){ //draw horizontal lines
-        ctxAbs.fillText(text, 25, i + (begY * 1.25), 20);
-        ctxAbs.beginPath();
-        ctxAbs.moveTo(begX, begY + i);
-        ctxAbs.lineTo(graph.width, begY + i);
-        ctxAbs.stroke();
-    }
-    ctxAbs.beginPath();    
-
-    for (var i=0; i<nbMatch;i++){
-        matchObj = matches[Object.keys(matches)[i]];
-        var countWin = 0, countMatch = 0;
-        for (j = 0; j < Object.keys(matchObj).length; j++){
-            if (matchObj[j].player_one == username)
-                countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-            else
-                countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-            countMatch += 1;
+    new Chart(document.getElementById("winLossGraph"), {
+        type: 'line',
+        data: {
+            labels: mapAverage.map(row => row.date),
+            datasets: [
+                {
+                    label: 'Average by date',
+                    data: mapAverage.map(row => row.average),
+                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    fill: false,
+                    tension: 0
+                }
+            ]
         }
-        var absResult = (countWin - (countMatch - countWin)) + highestAbs;
-        percent = absResult / (highestAbs * 2);
-        setTimeout((i, ctx, begX, posY, average) => {
-            if (average < 0.5)
-                ctx.strokeStyle = "red";
-            else
-                ctx.strokeStyle = "green";
-            ctx.fillRect(begX - 1, posY - 2, 2, 2); //begX - 1 and -2 on y, to center point on line (this offset must be half of the point width and height)
-            
-            if (i == 0)
-                ctx.moveTo(begX, posY);
-            else {
-                ctx.lineTo(begX, posY);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(begX, posY);
-            }
-        }, i * pointAppearanceDelay, i, ctxAbs, begX, begY + (height - (height * percent)), percent);
-        begX += step;
-    }
+    });
+
+
+    new Chart(document.getElementById("winLossAbsGraph"), {
+        type: 'line',
+        data: {
+            labels: mapAbs.map(row => row.date),
+            datasets: [
+                {
+                    label: 'Number of victory over number of defeat by date',
+                    data: mapAbs.map(row => row.result),
+                    backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+                    fill: false,
+                    tension: 0
+                }
+            ]
+        }
+    });
+
 }
 
 {
@@ -151,7 +88,7 @@ function drawWinLossGraph(matches, username){
                 }
             }
                         
-            document.getElementById("ratioContainer").innerHTML += `${countWin / countMatch}%`
+            document.getElementById("ratioContainer").innerHTML += `${(countWin / countMatch) * 100}%`
             document.getElementById("nbWinContainer").innerHTML += `${countWin}`
             document.getElementById("nbLossContainer").innerHTML += `${countLost}`
             document.getElementById("nbMatchContainer").innerHTML += `${countMatch}`
