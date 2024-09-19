@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'login',
+	'game',
 ]
 
 MIDDLEWARE = [

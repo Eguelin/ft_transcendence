@@ -306,7 +306,8 @@ def current_user(request):
 			blocked_json[i] = get_user_json(e)
 			i += 1
 		matches = get_user_match_json(request.user.profile.matches.all())
-		return JsonResponse({'username': request.user.username,
+		return JsonResponse({'userid': request.user.id,
+			'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,
 			'lang': request.user.profile.language_pack,

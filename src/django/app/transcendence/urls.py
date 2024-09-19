@@ -32,5 +32,5 @@ urlpatterns = [
     path('user/unblock_user', friendship.views.unblock_user),
     path('user/get', login.views.get),
     path('user/search_by_username', login.views.search_by_username),
-    path('user/delete_user', login.views.delete_user)
+    path('user/delete_user', login.views.delete_user),
 ]
