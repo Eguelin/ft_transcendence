@@ -59,12 +59,12 @@ pfpInput.addEventListener("change", (e) => {
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
 			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
-			
+
 		}
 	}
 })
 
-confirmPfpBtn.addEventListener("click", (e) => {			
+confirmPfpBtn.addEventListener("click", (e) => {
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
@@ -80,7 +80,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 			if (!pfpInputLabel.previousElementSibling)
 				pfpInputLabel.before(warning);
 		}
-		else{ 
+		else{
 			if (pfpInputLabel.previousElementSibling)
 				pfpInputLabel.previousElementSibling.remove();
 			document.getElementById("popupBg").style.setProperty("display", "none");
@@ -101,13 +101,6 @@ saveUsernameBtn.addEventListener("click", (e) => {
 		usernameInput.previousElementSibling.remove();
 
 	if (username != ""){
-		if (username.length > 15){
-			warning = document.createElement("a");
-			warning.className = "warning";
-			warning.text = "username must not exceed 15 characters";
-			usernameInput.before(warning);
-		}
-		else{
 			fetch('/api/user/update', {
 				method: 'POST',
 				headers: {
@@ -124,8 +117,15 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					success.text = "username successfully updated";
 					usernameInput.before(success);
 				}
+				else {
+					response.json().then(response => {
+					warning = document.createElement("a");
+					warning.className = "warning";
+					warning.text = response.message;
+					usernameInput.before(warning);
+					})
+				}
 			})
-		}
 	}
 	else{
 		warning = document.createElement("a");

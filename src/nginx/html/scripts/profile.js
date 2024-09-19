@@ -14,11 +14,12 @@ if (sendFriendRequestBtn){
             body: JSON.stringify({'username': splitPath[4]}),
             credentials: 'include'
         })
-    })   
+    })
 }
 
 {
     var splitPath = window.location.href.split('/');
+    //var username = %3E %3C;
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
@@ -49,7 +50,7 @@ if (sendFriendRequestBtn){
             else
                 profilePfp.style.setProperty("display", "none");
             recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
-            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date 
+            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
             for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
                 createMatchResumeContainer(matchObj[i]);
             };
