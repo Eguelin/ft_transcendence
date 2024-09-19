@@ -433,7 +433,7 @@ function switchTheme(darkTheme){
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 	}
 }
-
+/*
 window.addEventListener("popstate", (event) => {
 	fetch('/api/user/current', {
 		method: 'GET',
@@ -455,7 +455,7 @@ window.addEventListener("popstate", (event) => {
 		}
 	})
 });
-
+*/
 function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
 	if (currentLang != undefined){
 		fetch(currentLang).then(response => {
