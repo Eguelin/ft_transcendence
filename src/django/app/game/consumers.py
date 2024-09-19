@@ -37,12 +37,3 @@ class GameConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_user(self):
         return self.scope["user"]
-
-
-
-
-
-
-
-
-
