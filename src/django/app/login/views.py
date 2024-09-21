@@ -61,7 +61,7 @@ def fortytwo(request):
 		return JsonResponse({'message': 'Failed to retrieve user data'}, status=500)
 	try:
 		user = User.objects.get(profile__id42=id42)
-		user = authenticate(request, username=user.username, password=user.username)
+		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			user.profile.is_active = True
 			user.save()
@@ -74,7 +74,7 @@ def fortytwo(request):
 		if user_existence is False:
 			user_login = generate_unique_username(user_login)
 
-		user.set_password(user.username)
+		user.set_password(str(id42))
 		user.save()
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
@@ -85,7 +85,7 @@ def fortytwo(request):
 			user.profile.matches.add(match)
 
 		user.profile.save()
-		user = authenticate(request, username=user.username, password=user.username)
+		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			login(request, user)
 			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
