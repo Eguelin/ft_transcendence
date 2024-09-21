@@ -341,7 +341,6 @@ function handleToken() {
 			.then(data => {
 				if (document.getElementById("loaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "none");
-				console.log('Data:', data)
 				history.replaceState("", "", `https://${hostname.host}/home`);
 
 			})

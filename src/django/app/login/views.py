@@ -5,7 +5,7 @@ from django.http import JsonResponse
 import login.models as customModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
-import json, os, requests, base64, random, zxcvbn
+import json, os, requests, base64, random, zxcvbn, re
 
 def generate_unique_username(base_username):
 	username = base_username
@@ -55,7 +55,10 @@ def fortytwo(request):
 	user_json = response.json()
 	user_login = user_json.get('login')
 	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
-	display = user_login
+
+	username = re.sub(r'\W+', '', user_login)
+	user_login = username[:15]
+
 	id42 = user_json.get('id')
 	if not user_login or id42 is None:
 		return JsonResponse({'message': 'Failed to retrieve user data'}, status=500)
@@ -120,7 +123,7 @@ def create_user(request):
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
 	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4:
+	if result['score'] < 4 and os.getenv('DEBUG') == 'False':
 		return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	if User.objects.filter(username=username).exists():
@@ -235,7 +238,6 @@ def profile_update(request):
 			except json.JSONDecodeError:
 				return JsonResponse({'message': 'Invalid JSON'}, status=400)
 	return JsonResponse({'message': 'Can\'t update user profile'}, status=400)
-
 
 def get_user_match_json(matches):
 	matches_json = {}
