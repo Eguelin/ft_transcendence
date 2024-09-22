@@ -9,6 +9,8 @@ chartAbs = null;
 lastWeekSelection = document.getElementById("lastWeekSelection");
 lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
+timelineDropdownBtn = document.getElementById("timelineDropdownBtn");
+timelineDropdown = document.getElementById("timelineDropdownContainer")
 
 lastWeekSelection.addEventListener("click", (e) => {
     loadUserDashboard(7);
@@ -20,6 +22,13 @@ lastMonthSelection.addEventListener("click", (e) => {
 
 lastYearSelection.addEventListener("click", (e) => {
     loadUserDashboard(365);
+})
+
+timelineDropdownBtn.addEventListener("click", (e) => {
+    if (timelineDropdown.classList.contains("activeDropDown"))
+		timelineDropdown.classList.remove("activeDropDown")
+	else
+		timelineDropdown.classList.add("activeDropDown")
 })
 
 function getGradient(ctx, chartArea) {
