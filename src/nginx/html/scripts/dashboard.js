@@ -13,16 +13,19 @@ timelineDropdownBtn = document.getElementById("timelineDropdownBtn");
 timelineDropdown = document.getElementById("timelineDropdownContainer")
 
 lastWeekSelection.addEventListener("click", (e) => {
+	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(7);
     timelineDropdownBtn.innerHTML = "7 days";
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
+	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(31);
     timelineDropdownBtn.innerHTML = "Month";
 })
 
 lastYearSelection.addEventListener("click", (e) => {
+	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(365);
     timelineDropdownBtn.innerHTML = "Year";
 })
@@ -319,6 +322,7 @@ function loadUserDashboard(LastXDaysDisplayed){
                 credentials: 'include'
             }).then(client => {
                 client.json().then((client) => {
+                    document.getElementById("loaderBg").style.setProperty("display", "none");
                     drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
                 })
             })
