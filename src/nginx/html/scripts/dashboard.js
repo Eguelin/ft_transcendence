@@ -18,36 +18,42 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
+function decreamentDateByXDays(date, x){
+
+}
 
 function drawWinLossGraph(matches, username, LastXDaysDisplayed){
     var endDate = new Date();
     var startDate = new Date();
-    startDate.setDate(startDate.getDate() - 7);
+    startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [];
-    while (startDate.getFullYear() != endDate.getFullYear() && startDate.getMonth() != endDate.getMonth() && startDate.getDate() != endDate.getDate()){
-        matchObj = matches[startDate.getFullYear()][startDate.getMonth()][startDate.getDate()];
+    while (startDate.valueOf() <= endDate.valueOf()){
         var countWin = 0, countLost = 0, countMatch = 0;
-        for (j = 0; j < Object.keys(matchObj).length; j++){
-            if (matchObj[j].player_one == username){
-                countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+        try{
+            matchObj = matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+            for (j = 0; j < Object.keys(matchObj).length; j++){
+                if (matchObj[j].player_one == username){
+                    countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                    countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                }
+                else{
+                    countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                    countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                }
+                countMatch += 1;
             }
-            else{
-                countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-            }
-            countMatch += 1;
+        }
+        catch{
         }
         average = (countWin / countMatch) * 100;
         absResult = (countWin - (countMatch - countWin));
-        mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()}`, 'average' : average});
-        mapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()}`, 'result' : absResult});
-        console.log(mapAverage);
-        startDate.setDate(startDate.getDate + 1);
+        mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'average' : average});
+        mapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : absResult});
+        startDate.setDate(startDate.getDate() + 1);
     }
 
-    const totalDuration = 500;
+    const totalDuration = (500 / LastXDaysDisplayed);
     const delayBetweenPoints = totalDuration / nbMatch;
     const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
     const animation = {
@@ -262,7 +268,7 @@ function loadUserDashboard(){
                 }
             }
                         
-            document.getElementById("ratioContainer").innerHTML += `${(countWin / countMatch) * 100}%`
+            document.getElementById("ratioContainer").innerHTML += `${Math.floor((countWin / countMatch) * 1000) / 10}%`
             document.getElementById("nbWinContainer").innerHTML += `${countWin}`
             document.getElementById("nbLossContainer").innerHTML += `${countLost}`
             document.getElementById("nbMatchContainer").innerHTML += `${countMatch}`
