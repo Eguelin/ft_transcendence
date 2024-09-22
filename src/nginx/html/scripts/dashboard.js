@@ -15,19 +15,19 @@ timelineDropdown = document.getElementById("timelineDropdownContainer")
 lastWeekSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(7);
-    timelineDropdownBtn.innerHTML = "7 days";
+    timelineDropdownBtn.innerHTML = lastWeekSelection.innerHTML;
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(31);
-    timelineDropdownBtn.innerHTML = "Month";
+    timelineDropdownBtn.innerHTML = lastMonthSelection.innerHTML;
 })
 
 lastYearSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(365);
-    timelineDropdownBtn.innerHTML = "Year";
+    timelineDropdownBtn.innerHTML = lastYearSelection.innerHTML;
 })
 
 timelineDropdownBtn.addEventListener("click", (e) => {
@@ -351,10 +351,10 @@ function loadUserDashboard(LastXDaysDisplayed){
                 }
             }
                         
-            document.getElementById("ratioContainer").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`
-            document.getElementById("nbWinContainer").innerHTML = `${countWin}`
-            document.getElementById("nbLossContainer").innerHTML = `${countLost}`
-            document.getElementById("nbMatchContainer").innerHTML = `${countMatch}`
+            document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`
+            document.getElementById("nbWinValue").innerHTML = `${countWin}`
+            document.getElementById("nbLossValue").innerHTML = `${countLost}`
+            document.getElementById("nbMatchValue").innerHTML = `${countMatch}`
         })
     })
 }

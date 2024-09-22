@@ -363,6 +363,11 @@
 	font-size: unset;
 }
 
+.timelineDropdownContent li span{
+	width: initial;
+	display: block;
+}
+
 .timelineDropdownContent li:hover{
 	color: var(--option-hover-text-rgb);
 }
