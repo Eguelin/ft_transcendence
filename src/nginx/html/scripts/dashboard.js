@@ -68,6 +68,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
+    var startedPlaying = false;
     while (startDate.valueOf() <= endDate.valueOf()){
         var countWin = 0, countMatch = 0;
         var clientCountWin = 0, clientCountMatch = 0;
@@ -80,6 +81,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
                     countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
                 countMatch += 1;
             }
+            startedPlaying = true;
         }
         catch{
         }
@@ -92,17 +94,20 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
                     clientCountWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
                 clientCountMatch += 1;
             }
+            startedPlaying = true;
         }
         catch{
         }
-        average = (countWin / countMatch) * 100;
-        absResult = (countWin - (countMatch - countWin));
-        mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'average' : average});
-        mapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : absResult});
-        clientAverage = (clientCountWin / clientCountMatch) * 100;
-        clientAbsResult = (clientCountWin - (clientCountMatch - clientCountWin));
-        clientMapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'average' : clientAverage});
-        clientMapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : clientAbsResult});
+        if (startedPlaying){
+            average = (countWin / countMatch) * 100;
+            absResult = (countWin - (countMatch - countWin));
+            mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : average});
+            mapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : absResult});
+            clientAverage = (clientCountWin / clientCountMatch) * 100;
+            clientAbsResult = (clientCountWin - (clientCountMatch - clientCountWin));
+            clientMapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : clientAverage});
+            clientMapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : clientAbsResult});
+        }
         startDate.setDate(startDate.getDate() + 1);
     }
 
@@ -140,7 +145,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     datasets = [
         {
             label: username,
-            data: mapAverage.map(row => row.average),
+            data: mapAverage,
             fill: false,
             tension: 0,
             borderColor: function(context){
@@ -172,7 +177,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     if (username != clientUsername){
         datasets.push({
             label: "you",
-            data: clientMapAverage.map(row => row.average),
+            data: clientMapAverage,
             fill: false,
             tension: 0,
             borderColor: "grey",
@@ -190,13 +195,14 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     chartAverage = new Chart(document.getElementById("winLossGraph"), {
         type: 'line',
         data: {
-            labels: mapAverage.map(row => row.date),
-            datasets: datasets
-                
+            datasets: datasets 
         },
         options:{
             animation,
-
+            parsing: {
+                xAxisKey: 'date',
+                yAxisKey: 'result'
+            },
             plugins: {
                 title: {
                     color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
@@ -235,7 +241,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     datasets = [
         {
             label: username,
-            data: mapAbs.map(row => row.result),
+            data: mapAbs,
             fill: false,
             tension: 0,
             borderColor: function(context){
@@ -267,7 +273,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     if (username != clientUsername){
         datasets.push({
             label: "you",
-            data: clientMapAbs.map(row => row.result),
+            data: clientMapAbs,
             fill: false,
             tension: 0,
             borderColor: "grey",
@@ -285,12 +291,14 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
         type: 'line',
         data: {
-            labels: mapAbs.map(row => row.date),
             datasets: datasets
         },
         options:{
             animation,
-
+            parsing: {
+                xAxisKey: 'date',
+                yAxisKey: 'result'
+            },
             plugins: {
                 title: {
                     color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
@@ -355,14 +363,10 @@ function loadUserDashboard(LastXDaysDisplayed){
                         dayObj = monthObj[Object.keys(monthObj)[k]];
                         for (l = 0; l < Object.keys(dayObj).length; l++){
                             matchObj = dayObj[Object.keys(dayObj)[l]];
-                            if (matchObj.player_one == user.username){
+                            if (matchObj.player_one == user.username)
                                 countWin += matchObj.player_one_pts > matchObj.player_two_pts;
-                                countLost += matchObj.player_one_pts < matchObj.player_two_pts;
-                            }
-                            else{
+                            else
                                 countWin += matchObj.player_one_pts < matchObj.player_two_pts;
-                                countLost += matchObj.player_one_pts > matchObj.player_two_pts;
-                            }
                             countMatch += 1;
                         }
                     }
@@ -371,7 +375,7 @@ function loadUserDashboard(LastXDaysDisplayed){
                         
             document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`
             document.getElementById("nbWinValue").innerHTML = `${countWin}`
-            document.getElementById("nbLossValue").innerHTML = `${countLost}`
+            document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`
             document.getElementById("nbMatchValue").innerHTML = `${countMatch}`
         })
     })
