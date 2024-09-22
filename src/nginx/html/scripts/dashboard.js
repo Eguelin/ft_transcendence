@@ -14,21 +14,24 @@ timelineDropdown = document.getElementById("timelineDropdownContainer")
 
 lastWeekSelection.addEventListener("click", (e) => {
     loadUserDashboard(7);
+    timelineDropdownBtn.innerHTML = "7 days";
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
     loadUserDashboard(31);
+    timelineDropdownBtn.innerHTML = "Month";
 })
 
 lastYearSelection.addEventListener("click", (e) => {
     loadUserDashboard(365);
+    timelineDropdownBtn.innerHTML = "Year";
 })
 
 timelineDropdownBtn.addEventListener("click", (e) => {
     if (timelineDropdown.classList.contains("activeDropDown"))
-		timelineDropdown.classList.remove("activeDropDown")
+		timelineDropdown.classList.remove("activeDropDown");
 	else
-		timelineDropdown.classList.add("activeDropDown")
+		timelineDropdown.classList.add("activeDropDown");
 })
 
 function getGradient(ctx, chartArea) {
