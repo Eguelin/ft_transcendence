@@ -99,6 +99,7 @@ window.navigation.addEventListener("navigate", (e) => {
 						else if (url.pathname.startsWith("/dashboard")){
 							fetch('bodyLess/dashboard.html').then((response) => {
 								response.text().then(response => {
+									document.getElementById("loaderBg").style.setProperty("display", "block");
 									container.innerHTML = response;
 
 									document.getElementById("script").remove();
