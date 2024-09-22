@@ -15,27 +15,18 @@ timelineDropdown = document.getElementById("timelineDropdownContainer")
 lastWeekSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(7);
-    timelineDropdownBtn.innerHTML = lastWeekSelection.innerHTML;
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(31);
-    timelineDropdownBtn.innerHTML = lastMonthSelection.innerHTML;
 })
 
 lastYearSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(365);
-    timelineDropdownBtn.innerHTML = lastYearSelection.innerHTML;
 })
 
-timelineDropdownBtn.addEventListener("click", (e) => {
-    if (timelineDropdown.classList.contains("activeDropDown"))
-		timelineDropdown.classList.remove("activeDropDown");
-	else
-		timelineDropdown.classList.add("activeDropDown");
-})
 
 function getGradient(ctx, chartArea) {
   const chartWidth = chartArea.right - chartArea.left;

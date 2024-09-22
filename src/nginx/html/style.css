@@ -1050,6 +1050,23 @@ a {
 	display: flex;
 	gap: 1ch;
 	width: fit-content;
-	height: fit-content;
+}
+
+#timelineSelectionText{
+	align-self: center;
+}
+
+#timelineSelectorContainer{
+	display: flex;
+	width: max-content;
 	border: none;
+	height: fit-content;
+	gap: 1ch;
+}
+
+#timelineSelectorContainer button{
+	border: none;
+	width: fit-content;
+	padding: .5em;
+	font-size: unset;
 }
