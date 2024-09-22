@@ -1043,5 +1043,15 @@ a {
 	left: 50%;
 	translate: -50%;
 	width: fit-content;
-	top: 2vh;
+}
+
+#timelineSelectionContainer{
+	color: var(--main-text-rgb);
+	display: flex;
+	gap: 1ch;
+	width: fit-content;
+}
+
+#timelineDropdownContainer{
+	background-color: var(--input-bg-rgb);
 }
