@@ -785,5 +785,7 @@ window.addEventListener("click", (e) => {
 			langDropDown.classList.remove("activeDropDown");
 		if (dropDownUser.classList.contains("activeDropDown"))
 			dropDownUser.classList.remove("activeDropDown");
+		if (currentPage == "dashboard")
+			timelineDropdown.classList.remove("activeDropDown")
 	}
 })

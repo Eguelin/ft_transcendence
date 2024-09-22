@@ -1050,8 +1050,6 @@ a {
 	display: flex;
 	gap: 1ch;
 	width: fit-content;
-}
-
-#timelineDropdownContainer{
-	background-color: var(--input-bg-rgb);
+	height: fit-content;
+	border: none;
 }

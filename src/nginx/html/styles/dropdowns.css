@@ -346,11 +346,21 @@
 	background-color: var(--input-bg-rgb);
 	display: flex;
 	flex-direction: column;
+	width: max-content;
+	border: none;
+	height: fit-content;
 }
-
+#timelineDropdownBtn{
+	margin: 0 .5em;
+}
 .timelineDropdownContent{
 	width: inherit;
 	border: none;
+}
+
+.timelineDropdownContent li{
+	width: fit-content;
+	font-size: unset;
 }
 
 .timelineDropdownContent li:hover{
