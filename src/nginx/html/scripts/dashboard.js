@@ -3,6 +3,25 @@ var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the po
 var chartAverage, chartAbs;
 const defaultLastXDaysDisplayed = 7;
 let width, height, gradient;
+chartAverage = null;
+chartAbs = null;
+
+lastWeekSelection = document.getElementById("lastWeekSelection");
+lastMonthSelection = document.getElementById("lastMonthSelection");
+lastYearSelection = document.getElementById("lastYearSelection");
+
+lastWeekSelection.addEventListener("click", (e) => {
+    loadUserDashboard(7);
+})
+
+lastMonthSelection.addEventListener("click", (e) => {
+    loadUserDashboard(31);
+})
+
+lastYearSelection.addEventListener("click", (e) => {
+    loadUserDashboard(365);
+})
+
 function getGradient(ctx, chartArea) {
   const chartWidth = chartArea.right - chartArea.left;
   const chartHeight = chartArea.bottom - chartArea.top;
@@ -23,6 +42,10 @@ function decreamentDateByXDays(date, x){
 }
 
 function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, clientUsername){
+    if (chartAverage)
+        chartAverage.destroy();
+    if (chartAbs)
+        chartAbs.destroy();
     var endDate = new Date();
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
@@ -269,7 +292,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 
 }
 
-function loadUserDashboard(){
+function loadUserDashboard(LastXDaysDisplayed){
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
@@ -284,7 +307,7 @@ function loadUserDashboard(){
                 credentials: 'include'
             }).then(client => {
                 client.json().then((client) => {
-                    drawWinLossGraph(user.matches, user.username, defaultLastXDaysDisplayed, client.matches, client.username);
+                    drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
                 })
             })
             var countWin = 0, countLost = 0, countMatch = 0;
@@ -312,12 +335,12 @@ function loadUserDashboard(){
                 }
             }
                         
-            document.getElementById("ratioContainer").innerHTML += `${Math.floor((countWin / countMatch) * 1000) / 10}%`
-            document.getElementById("nbWinContainer").innerHTML += `${countWin}`
-            document.getElementById("nbLossContainer").innerHTML += `${countLost}`
-            document.getElementById("nbMatchContainer").innerHTML += `${countMatch}`
+            document.getElementById("ratioContainer").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`
+            document.getElementById("nbWinContainer").innerHTML = `${countWin}`
+            document.getElementById("nbLossContainer").innerHTML = `${countLost}`
+            document.getElementById("nbMatchContainer").innerHTML = `${countMatch}`
         })
     })
 }
 
-loadUserDashboard()
+loadUserDashboard(defaultLastXDaysDisplayed)
