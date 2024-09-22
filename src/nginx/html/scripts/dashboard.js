@@ -164,7 +164,8 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             pointhitRadius: 4,
             pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
             pointStyle: 'circle',
-            borderJoinStyle: 'round'
+            borderJoinStyle: 'round',
+            spanGaps: true
         }
     ]
 
@@ -181,7 +182,8 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             pointhitRadius: 4,
             pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
             pointStyle: 'circle',
-            borderJoinStyle: 'round'
+            borderJoinStyle: 'round',
+            spanGaps: true
         })
     }
 
@@ -257,7 +259,8 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             pointhitRadius: 4,
             pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
             pointStyle: 'circle',
-            borderJoinStyle: 'round'
+            borderJoinStyle: 'round',
+            spanGaps: true
         }
     ]
 
@@ -274,7 +277,8 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             pointhitRadius: 4,
             pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
             pointStyle: 'circle',
-            borderJoinStyle: 'round'
+            borderJoinStyle: 'round',
+            spanGaps: true
         })
     }
 
