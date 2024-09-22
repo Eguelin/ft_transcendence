@@ -1,6 +1,7 @@
 var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 var chartAverage, chartAbs;
+const defaultLastXDaysDisplayed = 7;
 let width, height, gradient;
 function getGradient(ctx, chartArea) {
   const chartWidth = chartArea.right - chartArea.left;
@@ -18,11 +19,14 @@ function getGradient(ctx, chartArea) {
 }
 
 
-function drawWinLossGraph(matches, username){
+function drawWinLossGraph(matches, username, LastXDaysDisplayed){
+    var endDate = new Date();
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [];
-    for (var i=0; i<nbMatch;i++){
-        matchObj = matches[Object.keys(matches)[i]];
+    while (startDate.getFullYear() != endDate.getFullYear() && startDate.getMonth() != endDate.getMonth() && startDate.getDate() != endDate.getDate()){
+        matchObj = matches[startDate.getFullYear()][startDate.getMonth()][startDate.getDate()];
         var countWin = 0, countLost = 0, countMatch = 0;
         for (j = 0; j < Object.keys(matchObj).length; j++){
             if (matchObj[j].player_one == username){
@@ -37,8 +41,10 @@ function drawWinLossGraph(matches, username){
         }
         average = (countWin / countMatch) * 100;
         absResult = (countWin - (countMatch - countWin));
-        mapAverage.push({'date' : Object.keys(matches)[i], 'average' : average});
-        mapAbs.push({'date' : Object.keys(matches)[i], 'result' : absResult});
+        mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()}`, 'average' : average});
+        mapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()}`, 'result' : absResult});
+        console.log(mapAverage);
+        startDate.setDate(startDate.getDate + 1);
     }
 
     const totalDuration = 500;
@@ -230,22 +236,29 @@ function loadUserDashboard(){
         credentials: 'include'
     }).then(user => {
         user.json().then((user) => {
-            drawWinLossGraph(user.matches, user.username);
+            drawWinLossGraph(user.matches, user.username, defaultLastXDaysDisplayed);
             var countWin = 0, countLost = 0, countMatch = 0;
             matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date 
 
             for (var i=0; i<Object.keys(user.matches).length;i++){
-                matchObj = user.matches[Object.keys(user.matches)[i]];
-                for (j = 0; j < Object.keys(matchObj).length; j++){
-                    if (matchObj[j].player_one == user.username){
-                        countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                        countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                yearObj = user.matches[Object.keys(user.matches)[i]];
+                for (j = 0; j < Object.keys(yearObj).length; j++){
+                    monthObj = yearObj[Object.keys(yearObj)[j]];
+                    for (k = 0; k < Object.keys(monthObj).length; k++){
+                        dayObj = monthObj[Object.keys(monthObj)[k]];
+                        for (l = 0; l < Object.keys(dayObj).length; l++){
+                            matchObj = dayObj[Object.keys(dayObj)[l]];
+                            if (matchObj.player_one == user.username){
+                                countWin += matchObj.player_one_pts > matchObj.player_two_pts;
+                                countLost += matchObj.player_one_pts < matchObj.player_two_pts;
+                            }
+                            else{
+                                countWin += matchObj.player_one_pts < matchObj.player_two_pts;
+                                countLost += matchObj.player_one_pts > matchObj.player_two_pts;
+                            }
+                            countMatch += 1;
+                        }
                     }
-                    else{
-                        countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                        countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                    }
-                    countMatch += 1;
                 }
             }
                         
