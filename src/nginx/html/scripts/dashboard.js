@@ -58,10 +58,6 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
-function decreamentDateByXDays(date, x){
-
-}
-
 function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, clientUsername){
     if (chartAverage)
         chartAverage.destroy();
@@ -141,55 +137,60 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
         }
       }
     };
+    datasets = [
+        {
+            label: username,
+            data: mapAverage.map(row => row.average),
+            fill: false,
+            tension: 0,
+            borderColor: function(context){
+                const chart = context.chart;
+                const {ctx, chartArea} = chart;
+
+                if (!chartArea)
+                    return ;
+                return (getGradient(ctx, chartArea));
+            },
+            borderWidth: 2,
+            pointBackgroundColor: function(context){
+                const chart = context.chart;
+                const {ctx, chartArea} = chart;
+
+                if (!chartArea)
+                    return ;
+                return (getGradient(ctx, chartArea));
+            },
+            pointBorderWidth: 0,
+            pointhitRadius: 4,
+            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+            pointStyle: 'circle',
+            borderJoinStyle: 'round'
+        }
+    ]
+
+    if (username != clientUsername){
+        datasets.push({
+            label: "you",
+            data: clientMapAverage.map(row => row.average),
+            fill: false,
+            tension: 0,
+            borderColor: "grey",
+            borderWidth: 2,
+            pointBackgroundColor: "grey",
+            pointBorderWidth: 0,
+            pointhitRadius: 4,
+            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+            pointStyle: 'circle',
+            borderJoinStyle: 'round'
+        })
+    }
 
     chartAverage = new Chart(document.getElementById("winLossGraph"), {
         type: 'line',
         data: {
             labels: mapAverage.map(row => row.date),
-            datasets: [
-                {
-                    label: username,
-                    data: mapAverage.map(row => row.average),
-                    fill: false,
-                    tension: 0,
-                    borderColor: function(context){
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-
-                        if (!chartArea)
-                            return ;
-                        return (getGradient(ctx, chartArea));
-                    },
-                    borderWidth: 2,
-                    pointBackgroundColor: function(context){
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-
-                        if (!chartArea)
-                            return ;
-                        return (getGradient(ctx, chartArea));
-                    },
-                    pointBorderWidth: 0,
-                    pointhitRadius: 4,
-                    pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-                    pointStyle: 'circle',
-                    borderJoinStyle: 'round'
-                },
-                {
-                    label: "you",
-                    data: clientMapAverage.map(row => row.average),
-                    fill: false,
-                    tension: 0,
-                    borderColor: "grey",
-                    borderWidth: 2,
-                    pointBackgroundColor: "grey",
-                    pointBorderWidth: 0,
-                    pointhitRadius: 4,
-                    pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-                    pointStyle: 'circle',
-                    borderJoinStyle: 'round'
-                }
-            ]
+            datasets: datasets
+                
         },
         options:{
             animation,
@@ -229,52 +230,59 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     });
 
 
+    datasets = [
+        {
+            label: username,
+            data: mapAbs.map(row => row.result),
+            fill: false,
+            tension: 0,
+            borderColor: function(context){
+                const chart = context.chart;
+                const {ctx, chartArea} = chart;
+
+                if (!chartArea)
+                    return ;
+                return (getGradient(ctx, chartArea));
+            },
+            borderWidth: 2,
+            pointBackgroundColor: function(context){
+                const chart = context.chart;
+                const {ctx, chartArea} = chart;
+
+                if (!chartArea)
+                    return ;
+                return (getGradient(ctx, chartArea));
+            },
+            pointBorderWidth: 0,
+            pointhitRadius: 4,
+            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+            pointStyle: 'circle',
+            borderJoinStyle: 'round'
+        }
+    ]
+
+    if (username != clientUsername){
+        datasets.push({
+            label: "you",
+            data: clientMapAbs.map(row => row.result),
+            fill: false,
+            tension: 0,
+            borderColor: "grey",
+            borderWidth: 2,
+            pointBackgroundColor: "grey",
+            pointBorderWidth: 0,
+            pointhitRadius: 4,
+            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+            pointStyle: 'circle',
+            borderJoinStyle: 'round'
+        })
+    }
+
     chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
         type: 'line',
         data: {
             labels: mapAbs.map(row => row.date),
-            datasets: [
-                {
-                    label: username,
-                    data: mapAbs.map(row => row.result),
-                    fill: false,
-                    tension: 0,
-                    borderColor: function(context){
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-
-                        if (!chartArea)
-                            return ;
-                        return (getGradient(ctx, chartArea));
-                    },
-                    borderWidth: 2,
-                    pointBackgroundColor: function(context){
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-
-                        if (!chartArea)
-                            return ;
-                        return (getGradient(ctx, chartArea));
-                    },
-                    pointBorderWidth: 0,
-                    pointhitRadius: 4,
-                    pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-                    pointStyle: 'circle'
-                },
-                {
-                    label: 'You',
-                    data: clientMapAbs.map(row => row.result),
-                    fill: false,
-                    tension: 0,
-                    borderColor: "grey",
-                    borderWidth: 2,
-                    pointBackgroundColor: "grey",
-                    pointBorderWidth: 0,
-                    pointhitRadius: 4,
-                    pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-                    pointStyle: 'circle'
-                }
-            ]
+            datasets: datasets
         },
         options:{
             animation,
