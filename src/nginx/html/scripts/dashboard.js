@@ -22,26 +22,35 @@ function decreamentDateByXDays(date, x){
 
 }
 
-function drawWinLossGraph(matches, username, LastXDaysDisplayed){
+function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, clientUsername){
     var endDate = new Date();
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
     nbMatch = Object.keys(matches).length;
-    const mapAverage = [], mapAbs = [];
+    const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     while (startDate.valueOf() <= endDate.valueOf()){
-        var countWin = 0, countLost = 0, countMatch = 0;
+        var countWin = 0, countMatch = 0;
+        var clientCountWin = 0, clientCountMatch = 0;
         try{
             matchObj = matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
             for (j = 0; j < Object.keys(matchObj).length; j++){
-                if (matchObj[j].player_one == username){
+                if (matchObj[j].player_one == username)
                     countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                    countLost += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                }
-                else{
+                else
                     countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                    countLost += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                }
                 countMatch += 1;
+            }
+        }
+        catch{
+        }
+        try{
+            matchObj = clientMatches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+            for (j = 0; j < Object.keys(matchObj).length; j++){
+                if (matchObj[j].player_one == clientUsername)
+                    clientCountWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+                else
+                    clientCountWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+                clientCountMatch += 1;
             }
         }
         catch{
@@ -50,6 +59,10 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed){
         absResult = (countWin - (countMatch - countWin));
         mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'average' : average});
         mapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : absResult});
+        clientAverage = (clientCountWin / clientCountMatch) * 100;
+        clientAbsResult = (clientCountWin - (clientCountMatch - clientCountWin));
+        clientMapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'average' : clientAverage});
+        clientMapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : clientAbsResult});
         startDate.setDate(startDate.getDate() + 1);
     }
 
@@ -91,6 +104,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed){
             labels: mapAverage.map(row => row.date),
             datasets: [
                 {
+                    label: username,
                     data: mapAverage.map(row => row.average),
                     fill: false,
                     tension: 0,
@@ -116,6 +130,20 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed){
                     pointRadius: 2,
                     pointStyle: 'circle',
                     borderJoinStyle: 'round'
+                },
+                {
+                    label: "you",
+                    data: clientMapAverage.map(row => row.average),
+                    fill: false,
+                    tension: 0,
+                    borderColor: "grey",
+                    borderWidth: 2,
+                    pointBackgroundColor: "grey",
+                    pointBorderWidth: 0,
+                    pointhitRadius: 4,
+                    pointRadius: 2,
+                    pointStyle: 'circle',
+                    borderJoinStyle: 'round'
                 }
             ]
         },
@@ -128,9 +156,6 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed){
                     text: 'Average by date',
                     display: true,
 
-                },
-                legend:{
-                    display: false,
                 }
             },
             scales: {
@@ -166,7 +191,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed){
             labels: mapAbs.map(row => row.date),
             datasets: [
                 {
-                    label: 'Number of victory over number of defeat by date',
+                    label: username,
                     data: mapAbs.map(row => row.result),
                     fill: false,
                     tension: 0,
@@ -191,6 +216,19 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed){
                     pointhitRadius: 4,
                     pointRadius: 2,
                     pointStyle: 'circle'
+                },
+                {
+                    label: 'You',
+                    data: clientMapAbs.map(row => row.result),
+                    fill: false,
+                    tension: 0,
+                    borderColor: "grey",
+                    borderWidth: 2,
+                    pointBackgroundColor: "grey",
+                    pointBorderWidth: 0,
+                    pointhitRadius: 4,
+                    pointRadius: 2,
+                    pointStyle: 'circle'
                 }
             ]
         },
@@ -203,9 +241,6 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed){
                     text: 'Number of victory over number of defeat by date',
                     display: true,
 
-                },
-                legend:{
-                    display: false,
                 }
             },
             scales: {
@@ -242,7 +277,16 @@ function loadUserDashboard(){
         credentials: 'include'
     }).then(user => {
         user.json().then((user) => {
-            drawWinLossGraph(user.matches, user.username, defaultLastXDaysDisplayed);
+            fetch('/api/user/get', {
+                method: 'POST', //GET forbid the use of body :(
+                headers: {'Content-Type': 'application/json',},
+                body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerHTML}),
+                credentials: 'include'
+            }).then(client => {
+                client.json().then((client) => {
+                    drawWinLossGraph(user.matches, user.username, defaultLastXDaysDisplayed, client.matches, client.username);
+                })
+            })
             var countWin = 0, countLost = 0, countMatch = 0;
             matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date 
 
