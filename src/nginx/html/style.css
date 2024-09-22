@@ -1045,6 +1045,10 @@ a {
 	width: fit-content;
 }
 
+.activeTimeline{
+	border: .2px solid var(--main-text-rgb) !important;
+}
+
 #timelineSelectionContainer{
 	color: var(--main-text-rgb);
 	display: flex;
