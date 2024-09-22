@@ -15,16 +15,31 @@ timelineDropdown = document.getElementById("timelineDropdownContainer")
 lastWeekSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(7);
+    if (lastMonthSelection.classList.contains("activeTimeline"))
+        lastMonthSelection.classList.remove("activeTimeline");
+    if (lastYearSelection.classList.contains("activeTimeline"))
+        lastYearSelection.classList.remove("activeTimeline");
+    lastWeekSelection.classList.add("activeTimeline");
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(31);
+    if (lastWeekSelection.classList.contains("activeTimeline"))
+        lastWeekSelection.classList.remove("activeTimeline");
+    if (lastYearSelection.classList.contains("activeTimeline"))
+        lastYearSelection.classList.remove("activeTimeline");
+    lastMonthSelection.classList.add("activeTimeline");
 })
 
 lastYearSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
     loadUserDashboard(365);
+    if (lastWeekSelection.classList.contains("activeTimeline"))
+        lastWeekSelection.classList.remove("activeTimeline");
+    if (lastMonthSelection.classList.contains("activeTimeline"))
+        lastMonthSelection.classList.remove("activeTimeline");
+    lastYearSelection.classList.add("activeTimeline");
 })
 
 
