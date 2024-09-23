@@ -1043,5 +1043,34 @@ a {
 	left: 50%;
 	translate: -50%;
 	width: fit-content;
-	top: 2vh;
+}
+
+.activeTimeline{
+	border: .2px solid var(--main-text-rgb) !important;
+}
+
+#timelineSelectionContainer{
+	color: var(--main-text-rgb);
+	display: flex;
+	gap: 1ch;
+	width: fit-content;
+}
+
+#timelineSelectionText{
+	align-self: center;
+}
+
+#timelineSelectorContainer{
+	display: flex;
+	width: max-content;
+	border: none;
+	height: fit-content;
+	gap: 1ch;
+}
+
+#timelineSelectorContainer button{
+	border: none;
+	width: fit-content;
+	padding: .5em;
+	font-size: unset;
 }

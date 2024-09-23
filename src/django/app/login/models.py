@@ -3,11 +3,15 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import random
+import datetime
 
 # IF and WHEN fields are added 'python manage.py makemigrations' AND 'python manage.py migrate' must be executed in the transcendence container
 
 class MatchManager(models.Manager):
 	def createWithRandomOpps(self, creator):
+		startDate = datetime.datetime(2024,1,1)
+		endDate = datetime.datetime(2024,12,31)
+
 		try:
 			player_two = User.objects.get(username="random")
 		except:
@@ -17,7 +21,7 @@ class MatchManager(models.Manager):
 		match.player_one_pts = random.randint(0, 10)
 		match.player_two_pts = random.randint(0, 10)
 		match.save()
-		match.date = "2024-09-{0}".format(random.randint(1, 29))
+		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds()))) 
 		match.save()
 		player_two.profile.matches.add(match)
 		return match

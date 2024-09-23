@@ -1,4 +1,3 @@
-
 .dropDownLandscape{
 	display: none;
 }
@@ -198,7 +197,7 @@
 
 
 
-#dropDownUserContainer, #langDropDownContainer {
+#dropDownUserContainer, #langDropDownContainer, #timelineDropdownContainer {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
@@ -216,7 +215,7 @@
 	flex-direction: column;
 }
 
-.dropDownUserContent{
+.dropDownUserContent, .timelineDropdownContent{
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -239,13 +238,13 @@
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent{
+.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent, .activeDropDown .timelineDropdownContent{
 	border-block-start: var(--hover-text-rgb);
 	z-index: 1;
 	display: block;
 }
 
-.activeDropDown .dropDownUserContent .dropDownMenuBtn{
+.activeDropDown .dropDownUserContent .dropDownMenuBtn, .activeDropDown #timelineDropdownContainer .timelineDropdownContent li {
 	transform-origin: top center;
 	animation: scaleZText 300ms ease-in-out;
 }
@@ -254,7 +253,7 @@
 	animation: scaleZLang 300ms ease-in-out;
 }
 
-.dropDownUserContent button{
+.dropDownUserContent button, .timelineDropdownContent li{
 	text-align: center;
 	color: var(--option-text-rgb);
 	text-decoration: inherit;
