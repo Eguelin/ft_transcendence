@@ -17,14 +17,14 @@ playBtn = document.getElementById("playBtn");
 		else{
 			response.json().then(currentUser => {
 				matches = currentUser.matches;
-				recentMatchHistoryContainer.innerHTML = "";
+				recentMatchHistoryContainer.innerText = "";
 				for (var i=0; i<Object.keys(matches).length && i<5;i++){
 					createMatchResumeContainer(matches[i]);
 				};
 				matchUsersName = document.querySelectorAll(".resultScoreName")
 				Object.keys(matchUsersName).forEach(function(key){
 					matchUsersName[key].addEventListener("click", (e) => {
-						history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+						history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerText}`);
 					})
 				})
 			})

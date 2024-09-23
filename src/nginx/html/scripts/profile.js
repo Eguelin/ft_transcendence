@@ -28,9 +28,9 @@ if (sendFriendRequestBtn){
     }).then(user => {
         user.json().then((user) => {
             profilePfp = document.getElementById("profilePfp");
-            document.getElementById("profileName").innerHTML = user.username;
+            document.getElementById("profileName").innerText = user.username;
             document.getElementById("profilePfp").style.setProperty("display", "block");
-            profilePfp.innerHTML = "";
+            profilePfp.innerText = "";
             if (user.pfp != ""){
                 var rawPfp = user.pfp;
                 if (rawPfp.startsWith('https://'))
@@ -57,7 +57,7 @@ if (sendFriendRequestBtn){
             matchUsersName = document.querySelectorAll(".resultScoreName")
             Object.keys(matchUsersName).forEach(function(key){
                 matchUsersName[key].addEventListener("click", (e) => {
-                    history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+                    history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerText}`);
                 })
             })
         })

@@ -47,7 +47,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
 
 							username = currentUser.username;
-							usernameBtn.innerHTML = currentUser.username;
+							usernameBtn.innerText = currentUser.username;
 							if (currentUser.pfp != "") {
 								var rawPfp = currentUser.pfp;
 								testImg = new Image();
@@ -134,8 +134,8 @@ window.navigation.addEventListener("navigate", (e) => {
 													currentPage = "search";
 													loadCurrentLang(currentPage);
 													homeBtn.style.setProperty("display", "block");
-													document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-													document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
+													document.getElementById("userResumeCount").innerText = Object.keys(user).length;
+													document.getElementById("userResumeSearch").innerText = url.searchParams.get("query");
 													Object.keys(user).forEach(function (key) {
 														createUserResumeContainer(user[key]);
 													})
@@ -316,12 +316,6 @@ window.navigation.addEventListener("navigate", (e) => {
 		}
 	})
 })
-
-function htmlEncode(str) {
-	return String(str).replace(/[^\w. ]/gi, function (c) {
-		return '&#' + c.charCodeAt(0) + ';';
-	});
-}
 
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
@@ -659,7 +653,7 @@ function createUserResumeContainer(user) {
 
 	userResumeName = document.createElement("a");
 	userResumeName.className = "userResumeName"
-	userResumeName.innerHTML = user.username;
+	userResumeName.innerText = user.username;
 
 
 	imgContainer.appendChild(img);
