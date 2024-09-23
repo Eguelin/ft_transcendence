@@ -272,7 +272,7 @@ def get_user_match(matches):
 	return matches_json
 
 
-def get_user_json(user):
+def get_user_json(user, startDate, endDate):
 	try:
 		if (user.profile.profile_picture.startswith("https://")):
 			raw_img = user.profile.profile_picture
@@ -281,7 +281,7 @@ def get_user_json(user):
 			raw_img = (base64.b64encode(f.read())).decode('utf-8')
 	except:
 		raw_img = ""
-	matches = get_all_user_match_json(user.profile.matches.order_by("date"))
+	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
 	return {'username' : user.username,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
@@ -348,10 +348,9 @@ def get(request):
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		try:
-			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
+			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
 		except Exception as error:
-			return JsonResponse({'message': error}, status=500)
-			#return JsonResponse({'message': "can't find user"}, status=400)
+			return JsonResponse({'message': "can't find user"}, status=400)
 
 def search_by_username(request):
 	if (request.method != 'POST'):

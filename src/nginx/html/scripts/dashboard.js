@@ -334,17 +334,22 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 }
 
 function loadUserDashboard(LastXDaysDisplayed){
+    var endDate = new Date();
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
+    startDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+    endDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify({"name" : splitPath[4]}),
+        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDate, "endDate" : endDate}),
         credentials: 'include'
     }).then(user => {
         user.json().then((user) => {
             fetch('/api/user/get', {
                 method: 'POST', //GET forbid the use of body :(
                 headers: {'Content-Type': 'application/json',},
-                body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerHTML}),
+                body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDate, "endDate" : endDate}),
                 credentials: 'include'
             }).then(client => {
                 client.json().then((client) => {
