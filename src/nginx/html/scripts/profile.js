@@ -37,8 +37,16 @@ if (sendFriendRequestBtn){
             profilePfp.innerText = "";
             if (user.pfp != ""){
                 testImg = new Image();
-                testImg.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
-                profilePfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
+                if (user.pfp.startsWith("http"))
+                {
+                    testImg.setAttribute("src", user.pfp);
+                    profilePfp.setAttribute("src", user.pfp);
+                }
+                else
+                {
+                    testImg.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
+                    profilePfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
+                }
                 setTimeout(() => {
                     if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
                         profilePfp.style.setProperty("height", "100%");
