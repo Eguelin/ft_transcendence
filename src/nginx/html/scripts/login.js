@@ -74,5 +74,8 @@ loginBtn.addEventListener("click", (e) => {
 				})
 			}
 		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
 	}
 })
