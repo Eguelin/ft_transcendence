@@ -132,7 +132,7 @@ function createFriendContainer(friend){
 	//pfpContainer.appendChild(pfpMask)
 
 	friendName = document.createElement("a");
-	friendName.innerHTML = friend.username;
+	friendName.innerText = friend.username;
 
 	friendsOptionContainer = document.createElement("div");
 	friendsOptionContainer.className = "friendsOptionContainer"
@@ -189,7 +189,7 @@ function createFriendRequestContainer(user){
 	pfpContainer.appendChild(pfp);
 	pfpContainer.appendChild(pfpStatus)
 	friendName = document.createElement("a");
-	friendName.innerHTML = user.username;
+	friendName.innerText = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
@@ -233,7 +233,7 @@ function createBlockedUserContainer(user){
 	pfpContainer.appendChild(pfpStatus)
 
 	friendName = document.createElement("a");
-	friendName.innerHTML = user.username;
+	friendName.innerText = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
@@ -267,10 +267,10 @@ function checkUpdate(){
 					var friends = text.friends;
 					var friends_request = text.friend_request;
 					var blocked_users = text.blocked_users
-					allFriendListContainer.innerHTML = "";
-					onlineFriendListContainer.innerHTML = ""
-					pendingFriendRequestListContainer.innerHTML = ""
-					blockedListContainer.innerHTML = ""
+					allFriendListContainer.innerText = "";
+					onlineFriendListContainer.innerText = ""
+					pendingFriendRequestListContainer.innerText = ""
+					blockedListContainer.innerText = ""
 					Object.keys(friends).forEach(function(key) {
 						createFriendContainer(friends[key]);
 					});
@@ -301,10 +301,10 @@ function checkUpdate(){
 						}
 					}, 0)
 
-					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
-					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
-					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
-					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
+					document.getElementById("onlineFriendSelectorCount").innerText = `(${onlineFriendListContainer.childElementCount})`;
+					document.getElementById("allFriendSelectorCount").innerText = `(${allFriendListContainer.childElementCount})`;
+					document.getElementById("pendingFriendRequestSelectorCount").innerText = `(${pendingFriendRequestListContainer.childElementCount})`;
+					document.getElementById("blockedSelectorCount").innerText = `(${blockedListContainer.childElementCount})`;
 
 					for (var i = 0; i < removeFriendBtn.length; i++){
 						removeFriendBtn[i].addEventListener("click", (e) => {

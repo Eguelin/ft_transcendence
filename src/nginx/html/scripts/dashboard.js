@@ -71,7 +71,7 @@ function drawWinLossGraph(matches, username){
         user.json().then((user) => {
             drawWinLossGraph(user.matches, user.username);
             var countWin = 0, countLost = 0, countMatch = 0;
-            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date 
+            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
 
             for (var i=0; i<Object.keys(user.matches).length;i++){
                 matchObj = user.matches[Object.keys(user.matches)[i]];
@@ -87,7 +87,7 @@ function drawWinLossGraph(matches, username){
                     countMatch += 1;
                 }
             }
-                        
+
             document.getElementById("ratioContainer").innerHTML += `${(countWin / countMatch) * 100}%`
             document.getElementById("nbWinContainer").innerHTML += `${countWin}`
             document.getElementById("nbLossContainer").innerHTML += `${countLost}`

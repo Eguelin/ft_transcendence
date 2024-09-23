@@ -76,6 +76,7 @@ def fortytwo(request):
 		user, user_existence = User.objects.get_or_create(username=user_login)
 		if user_existence is False:
 			user_login = generate_unique_username(user_login)
+		user_login 
 
 		user.set_password(user.username)
 		user.save()
@@ -88,7 +89,7 @@ def fortytwo(request):
 			user.profile.matches.add(match)
 
 		user.profile.save()
-		user = authenticate(request, username=user.username, password=user.username)
+		user = authenticate(request, username=user_login, password=user.username)
 		if user is not None:
 			login(request, user)
 			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
