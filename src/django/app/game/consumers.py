@@ -5,35 +5,42 @@ from channels.db import database_sync_to_async
 
 class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope["user"]
+        self.user = await self.get_user()
         if self.user.is_authenticated:
             await self.accept()
             await self.channel_layer.group_add("waiting_room", self.channel_name)
-            print(f"WebSocket opened by user: {self.user.username}")
         else:
             await self.close()
 
     async def disconnect(self, close_code):
         if self.user.is_authenticated:
             await self.channel_layer.group_discard("waiting_room", self.channel_name)
-            print(f"WebSocket closed by user: {self.user.username}")
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
 
-        await self.channel_layer.group_send(
-            "waiting_room",
+    async def send_message(self, message):
+        await self.send(text_data=json.dumps(
             {
-                "type": "game_message",
-                "message": self.user.username + " : " + message
+                "message": message,
+            }
+        ))
+
+    async def send_message_to_group(self, message, group):
+        await self.channel_layer.group_send(
+            group,
+            {
+                "message": message
             },
         )
 
-    async def game_message(self, event):
-        message = event["message"]
-        await self.send(text_data=json.dumps({"message": message,}))
 
     @database_sync_to_async
     def get_user(self):
         return self.scope["user"]
+
+
+    async def get_number_of_users_in_group(self, group_name):
+        group_channels = await self.channel_layer.group_channels(group_name)
+        return len(group_channels)
