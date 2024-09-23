@@ -49,16 +49,10 @@ window.navigation.addEventListener("navigate", (e) => {
 							username = currentUser.username;
 							usernameBtn.innerText = currentUser.username;
 							if (currentUser.pfp != "") {
-								var rawPfp = currentUser.pfp;
 								testImg = new Image();
-								if (rawPfp.startsWith('https://')) {
-									testImg.setAttribute("src", `${rawPfp}`)
-									userPfp.setAttribute("src", `${rawPfp}`);
-								}
-								else {
-									testImg.setAttribute("src", `data:image/jpg;base64,${rawPfp}`)
-									userPfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-								}
+								
+								testImg.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
+								userPfp.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
 								userPfp.style.setProperty("display", "block");
 
 								setTimeout(() => {
@@ -334,7 +328,7 @@ function handleToken() {
 		})
 			.then(response => response.json())
 			.then(data => {
-				if (document.getElementById("loaderBg"))
+				if (document.getElementById("l*oaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "none");
 				history.replaceState("", "", `https://${hostname.host}/home`);
 
@@ -658,11 +652,7 @@ function createUserResumeContainer(user) {
 	img.className = "userResumePfp";
 	imgContainer.className = "userResumePfpContainer";
 	if (user.pfp != "") {
-		var rawPfp = user.pfp;
-		if (rawPfp.startsWith('https://'))
-			img.setAttribute("src", `${rawPfp}`);
-		else
-			img.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+		img.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
 	}
 	else
 		img.style.setProperty("display", "none");
