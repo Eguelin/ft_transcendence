@@ -2,6 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+import json, os, requests, base64, random, string, subprocess, datetime
 import login.models as customModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
@@ -64,7 +65,7 @@ def fortytwo(request):
 		return JsonResponse({'message': 'Failed to retrieve user data'}, status=500)
 	try:
 		user = User.objects.get(profile__id42=id42)
-		user = authenticate(request, username=user.username, password=user.username)
+		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			user.profile.is_active = True
 			user.save()
@@ -76,9 +77,9 @@ def fortytwo(request):
 		user, user_existence = User.objects.get_or_create(username=user_login)
 		if user_existence is False:
 			user_login = generate_unique_username(user_login)
-		user_login 
+		user_login
 
-		user.set_password(user.username)
+		user.set_password(str(id42))
 		user.save()
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
@@ -89,7 +90,7 @@ def fortytwo(request):
 			user.profile.matches.add(match)
 
 		user.profile.save()
-		user = authenticate(request, username=user_login, password=user.username)
+		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			login(request, user)
 			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
@@ -139,7 +140,7 @@ def create_user(request):
 			user.profile.language_pack = data['lang']
 
 		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 100):
+		for i in range(0, 500):
 			match = customModels.Match.objects.createWithRandomOpps(user)
 			user.profile.matches.add(match)
 		user = authenticate(request, username=username, password=password)
@@ -240,7 +241,7 @@ def profile_update(request):
 				return JsonResponse({'message': 'Invalid JSON'}, status=400)
 	return JsonResponse({'message': 'Can\'t update user profile'}, status=400)
 
-def get_user_match_json(matches):
+def get_all_user_match_json(matches):
 	matches_json = {}
 	date_json = {}
 	date = ""
@@ -264,6 +265,22 @@ def get_user_match_json(matches):
 		matches_json["{0}".format(date)] = date_json
 	return matches_json
 
+def get_user_match(matches):
+	matches_json = {}
+	date = ""
+	i = 0
+	for match in matches:
+		matches_json[i] = {
+			'player_one' : match.player_one.username,
+			'player_two' : match.player_two.username,
+			'player_one_pts' : match.player_one_pts,
+			'player_two_pts' : match.player_two_pts,
+			'date' : match.date,
+		}
+		i += 1
+	return matches_json
+
+
 def get_user_json(user):
 	try:
 		if (user.profile.profile_picture.startswith("https://")):
@@ -273,7 +290,7 @@ def get_user_json(user):
 			raw_img = (base64.b64encode(f.read())).decode('utf-8')
 	except:
 		raw_img = ""
-	matches = get_user_match_json(user.profile.matches.order_by("date"))
+	matches = get_all_user_match_json(user.profile.matches.order_by("date"))
 	return {'username' : user.username,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
@@ -314,13 +331,13 @@ def current_user(request):
 		blocked_json = {}
 
 		for e in friends_list:
-			friend_json[e.username] = get_user_json(e)
+			friend_json[e.username] = get_user_preview_json(e)
 		for e in friends_request_list:
-			friend_request_json[e.username] = get_user_json(e)
+			friend_request_json[e.username] = get_user_preview_json(e)
 		for e in blocked_list:
-			blocked_json[e.username] = get_user_json(e)
+			blocked_json[e.username] = get_user_preview_json(e)
 
-		matches = get_user_match_json(request.user.profile.matches.order_by("date"))
+		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'pfp': raw_img,

@@ -1031,10 +1031,10 @@ a {
 #confirmPfpMask{
 	opacity: .5;
 }
-
+/*
 #winLossGraph, #winLossAbsGraph{
 	background: var(--hover-text-rgb);
-}
+}*/
 
 #profileGraphs {
 	display: flex;
