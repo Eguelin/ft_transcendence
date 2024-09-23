@@ -20,10 +20,14 @@ if (sendFriendRequestBtn){
 {
     var splitPath = window.location.href.split('/');
     //var username = %3E %3C;
+    var endDate = new Date();
+    var startDate = new Date();
+    startDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+    endDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify({"name" : splitPath[4]}),
+        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDate, "endDate" : endDate}),
         credentials: 'include'
     }).then(user => {
         user.json().then((user) => {
@@ -50,7 +54,8 @@ if (sendFriendRequestBtn){
             else
                 profilePfp.style.setProperty("display", "none");
             recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
-            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
+            endDate = new Date();
+            matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
             for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
                 createMatchResumeContainer(matchObj[i]);
             };
