@@ -360,7 +360,7 @@ function handleToken() {
 
 				if (response.ok) {
 					(response.json()).then((text) => {
-						if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard")))
+						if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/game")))
 							history.replaceState("", "", `https://${hostname.host}/home`);
 						else
 							history.replaceState("", "");
