@@ -298,32 +298,16 @@ def get_user_match(matches):
 
 
 def get_user_json(user, startDate, endDate):
-	try:
-		if (user.profile.profile_picture.startswith("https://")):
-			raw_img = user.profile.profile_picture
-		else:
-			f = open(user.profile.profile_picture, "rb")
-			raw_img = (base64.b64encode(f.read())).decode('utf-8')
-	except:
-		raw_img = ""
 	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
 	return {'username' : user.username,
-		'pfp' : raw_img,
+		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
 		'matches' : matches
 	}
 
 def get_user_preview_json(user):
-	try:
-		if (user.profile.profile_picture.startswith("https://")):
-			raw_img = user.profile.profile_picture
-		else:
-			f = open(user.profile.profile_picture, "rb")
-			raw_img = (base64.b64encode(f.read())).decode('utf-8')
-	except:
-		raw_img = ""
 	return {'username' : user.username,
-		'pfp' : raw_img,
+		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
 	}
 
@@ -331,14 +315,6 @@ def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
-		try:
-			if (request.user.profile.profile_picture.startswith("https://")):
-				raw_img = request.user.profile.profile_picture
-			else:
-				f = open(request.user.profile.profile_picture, "rb")
-				raw_img = (base64.b64encode(f.read())).decode('utf-8')
-		except:
-			raw_img = ""
 		friends_list = request.user.profile.friends.all()
 		friends_request_list = request.user.profile.friends_request.all()
 		blocked_list = request.user.profile.blocked_users.all()
@@ -356,7 +332,7 @@ def current_user(request):
 		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
-			'pfp': raw_img,
+			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
 			'friends': friend_json,
 			'friend_request': friend_request_json,

@@ -121,11 +121,7 @@ function createFriendContainer(friend){
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (friend.pfp != ""){
-		var rawPfp = friend.pfp;
-		if (rawPfp.startsWith('https://'))
-			pfp.setAttribute("src", `${rawPfp}`);
-		else
-			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+			pfp.setAttribute("src", `https://${hostname.host}/${friend.pfp}`);
 	}
 	pfpContainer.appendChild(pfp);
 	pfpContainer.appendChild(pfpStatus)
@@ -180,13 +176,15 @@ function createFriendRequestContainer(user){
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
-		var rawPfp = user.pfp;
-		if (rawPfp.startsWith('https://'))
-			pfp.setAttribute("src", `${rawPfp}`);
-		else
-			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+		pfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
 	}
+	
+	pfpMask = document.createElement("div");
+	pfpMask.className = "pfpMask";
+	pfpMask.style.setProperty("background","radial-gradient(circle, rgba(255,255,255,0) 70%, var(--input-bg-rgb) 70%)");
+	
 	pfpContainer.appendChild(pfp);
+	pfpContainer.appendChild(pfpMask);
 	pfpContainer.appendChild(pfpStatus)
 	friendName = document.createElement("a");
 	friendName.innerHTML = user.username;
@@ -223,13 +221,16 @@ function createBlockedUserContainer(user){
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
-		var rawPfp = user.pfp;
-		if (rawPfp.startsWith('https://'))
-			pfp.setAttribute("src", `${rawPfp}`);
-		else
-			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
+		pfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
 	}
+	
+	pfpMask = document.createElement("div");
+	pfpMask.className = "pfpMask";
+	pfpMask.style.setProperty("background","radial-gradient(circle, rgba(255,255,255,0) 70%, var(--input-bg-rgb) 70%)");
+	
+	
 	pfpContainer.appendChild(pfp);
+	pfpContainer.appendChild(pfpMask);
 	pfpContainer.appendChild(pfpStatus)
 
 	friendName = document.createElement("a");
