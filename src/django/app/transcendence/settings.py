@@ -39,7 +39,6 @@ ALLOWED_HOSTS = [
     '*', # for testing purposes
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'login',
+	'game',
 ]
 
 MIDDLEWARE = [

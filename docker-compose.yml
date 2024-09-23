@@ -19,6 +19,7 @@ services:
     container_name: nginx
     volumes:
       - ./src/nginx/html:/usr/share/nginx/html
+      - ./src/django/app/profilePictures:/usr/share/nginx/html/images
     ports:
       - "49300:443"
     networks:
