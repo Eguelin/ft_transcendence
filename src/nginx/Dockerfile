@@ -18,7 +18,7 @@ RUN openssl req -x509 -nodes -newkey rsa:2048 \
 	-subj "/C=FR/ST=Auvergne-Rhone-Alpes/L=Lyon/O=42/CN=localhost/emailAddress=eguelin@student.42lyon.fr"
 
 # Copy configuration files
-COPY conf /etc/nginx/conf.d
+COPY conf /etc/nginx/
 
 # run nginx
 CMD [ "nginx", "-g", "daemon off;" ]
