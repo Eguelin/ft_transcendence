@@ -139,7 +139,7 @@ def create_user(request):
 			user.profile.language_pack = data['lang']
 
 		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 500):
+		for i in range(0, 1000):
 			match = customModels.Match.objects.createWithRandomOpps(user)
 			user.profile.matches.add(match)
 		user = authenticate(request, username=username, password=password)
@@ -242,15 +242,30 @@ def profile_update(request):
 
 def get_all_user_match_json(matches):
 	matches_json = {}
+	year_json = {}
+	month_json = {}
 	date_json = {}
-	date = ""
+	dateObj = ""
+	year = ""
+	month = ""
+	day = ""
 	i = 0
 	for match in matches:
-		if (date != match.date):
-			if (date != ""):
-				matches_json["{0}".format(date)] = date_json
-				date_json = {}
-			date = match.date
+		if (dateObj != match.date):
+			if (year != ""):
+				if (year != match.date.year):
+					matches_json["{0}".format(year)] = year_json
+					year_json = {}
+				if (month != match.date.month):
+					year_json["{0}".format(month)] = month_json
+					month_json = {}
+				if (day != match.date.day):
+					month_json["{0}".format(day)] = date_json
+			dateObj = match.date
+			year = dateObj.year
+			month = dateObj.month
+			day = dateObj.day
+			date_json = {}
 			i = 0
 		date_json[i] = {
 			'player_one' : match.player_one.username,
@@ -260,8 +275,10 @@ def get_all_user_match_json(matches):
 			'date' : match.date,
 		}
 		i += 1
-	if (date != ""):
-		matches_json["{0}".format(date)] = date_json
+	if (dateObj != ""):
+		month_json["{0}".format(day)] = date_json
+		year_json["{0}".format(month)] = month_json
+		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
 def get_user_match(matches):
@@ -280,7 +297,7 @@ def get_user_match(matches):
 	return matches_json
 
 
-def get_user_json(user):
+def get_user_json(user, startDate, endDate):
 	try:
 		if (user.profile.profile_picture.startswith("https://")):
 			raw_img = user.profile.profile_picture
@@ -289,7 +306,7 @@ def get_user_json(user):
 			raw_img = (base64.b64encode(f.read())).decode('utf-8')
 	except:
 		raw_img = ""
-	matches = get_all_user_match_json(user.profile.matches.order_by("date"))
+	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
 	return {'username' : user.username,
 		'pfp' : raw_img,
 		'is_active' : user.profile.is_active,
@@ -356,9 +373,9 @@ def get(request):
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		try:
-			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
-		except User.DoesNotExist:
-			return JsonResponse({'message': "can't find user"}, status=404)
+			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
+		except Exception as error:
+			return JsonResponse({'message': "can't find user"}, status=400)
 
 def search_by_username(request):
 	if (request.method != 'POST'):
