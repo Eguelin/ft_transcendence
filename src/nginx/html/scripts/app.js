@@ -50,9 +50,17 @@ window.navigation.addEventListener("navigate", (e) => {
 							usernameBtn.innerText = currentUser.username;
 							if (currentUser.pfp != "") {
 								testImg = new Image();
-								
-								testImg.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
-								userPfp.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
+
+								if (currentUser.pfp.startsWith("http"))
+								{
+									testImg.setAttribute("src", currentUser.pfp);
+									userPfp.setAttribute("src", currentUser.pfp);
+								}
+								else
+								{
+									testImg.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
+									userPfp.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
+								}
 								userPfp.style.setProperty("display", "block");
 
 								setTimeout(() => {
