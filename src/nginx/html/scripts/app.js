@@ -26,7 +26,7 @@ window.navigation.addEventListener("navigate", (e) => {
 	const url = new URL(e.destination.url);
 
 	e.intercept({
-		async handler() {
+		handler() {
 			fetch('/api/user/current', {
 				method: 'GET',
 				headers: {
