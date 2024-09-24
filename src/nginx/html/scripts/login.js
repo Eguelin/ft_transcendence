@@ -61,8 +61,24 @@ loginBtn.addEventListener("click", (e) => {
 						if (!loginBtn.previousElementSibling)
 							loginBtn.before(warning.cloneNode(true));
 					}
-					else
-						history.pushState("", "", `https://${hostname.host}/home`);
+					else{
+						fetch('/api/user/current', {
+							method: 'GET',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							credentials: 'include'
+						}).then(response => {
+							if (response.ok) {
+								(response.json()).then((data) => {
+									if (document.getElementById("loaderBg"))
+										document.getElementById("loaderBg").style.setProperty("display", "none");
+									client = new Client(data.username, data.lang, data.pfp, data.is_dark_theme)
+									history.pushState("", "", `https://${hostname.host}/home`);
+								});
+							}
+						})
+					}
 				})
 			}
 			else

@@ -20,7 +20,45 @@ logOutBtn = document.getElementById('logOutBtn');
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
 var username = "";
-const hostname = new URL(window.location.href)
+const hostname = new URL(window.location.href);
+
+var client = null;
+
+class Client{
+	username;
+	currentPage;
+	currentLang;
+	pfpUrl;
+	use_dark_theme;
+
+	constructor (username, lang, pfp, use_dark_theme){
+		this.username = username;
+		this.currentLang = lang;
+		this.pfpUrl = pfp;
+		this.use_dark_theme = use_dark_theme;
+		switchTheme(use_dark_theme);
+	}
+
+	loadPage(page){
+		fetch(`bodyLess/${page}.html`).then((response) => {
+			response.text().then(response => {
+				document.getElementById("loaderBg").style.setProperty("display", "block");
+				container.innerHTML = response;
+
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `scripts/${page}.js`);
+				document.body.appendChild(s);
+				document.getElementById("loaderBg").style.setProperty("display", "none");
+				currentPage = page;
+				loadCurrentLang(currentPage);
+				homeBtn.style.setProperty("display", "block");
+				dropDownUserContainer.style.setProperty("display", "flex");
+			})
+		})
+	}
+}
 
 window.navigation.addEventListener("navigate", (e) => {
 	const url = new URL(e.destination.url);
@@ -92,22 +130,7 @@ window.navigation.addEventListener("navigate", (e) => {
 								})
 							}
 							else if (url.pathname.startsWith("/dashboard")) {
-								fetch('bodyLess/dashboard.html').then((response) => {
-									response.text().then(response => {
-										document.getElementById("loaderBg").style.setProperty("display", "block");
-										container.innerHTML = response;
-
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/dashboard.js`);
-										document.body.appendChild(s);
-										currentPage = "dashboard";
-										loadCurrentLang(currentPage);
-										homeBtn.style.setProperty("display", "block");
-										dropDownUserContainer.style.setProperty("display", "flex");
-									})
-								})
+								client.loadPage("dashboard");
 							}
 							else if (url.pathname.startsWith("/search")) {
 								if (url.searchParams.get("query")) {
@@ -146,6 +169,8 @@ window.navigation.addEventListener("navigate", (e) => {
 
 							}
 							else if (url.pathname.startsWith("/login")) {
+								client.loadPage("login");
+								client = null;
 								fetch('/api/user/logout', {
 									method: 'POST',
 									headers: {
@@ -153,22 +178,12 @@ window.navigation.addEventListener("navigate", (e) => {
 									},
 									credentials: 'include'
 								});
-								fetch('bodyLess/login.html').then((response) => {
-									(response.text().then(response => {
-										inputSearchUser.style.setProperty("display", "none");
-										dropDownUserContainer.style.setProperty("display", "none");
-										container.innerHTML = response;
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/login.js`);
-										document.body.appendChild(s);
-										currentPage = "login";
-										loadCurrentLang();
-									}))
-								});
+								inputSearchUser.style.setProperty("display", "none");
+								dropDownUserContainer.style.setProperty("display", "none");
 							}
 							else if (url.pathname.startsWith("/register")) {
+								client.loadPage("register");
+								client = null;
 								fetch('/api/user/logout', {
 									method: 'POST',
 									headers: {
@@ -176,88 +191,21 @@ window.navigation.addEventListener("navigate", (e) => {
 									},
 									credentials: 'include'
 								});
-								fetch('bodyLess/register.html').then((response) => {
-									return (response.text().then(response => {
-										container.innerHTML = response;
-										homeBtn.style.setProperty("display", "block");
-										inputSearchUser.style.setProperty("display", "none");
-										dropDownUserContainer.style.setProperty("display", "none");
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/register.js`);
-										currentPage = "register";
-										loadCurrentLang();
-										document.body.appendChild(s);
-									}))
-								});
+								inputSearchUser.style.setProperty("display", "none");
+								dropDownUserContainer.style.setProperty("display", "none");
 							}
 							else if (url.pathname.startsWith("/settings")) {
-								fetch('bodyLess/settings.html').then((response) => {
-									(response.text().then(response => {
-										container.innerHTML = response;
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/settings.js`);
-										currentPage = "settings";
-										loadCurrentLang();
-										document.body.appendChild(s);
-										dropDownUserContainer.style.setProperty("display", "none");
-										homeBtn.style.setProperty("display", "block");
-										document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
-									}))
-								});
+								client.loadPage("settings");
+								document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
 							}
 							else if (url.pathname.startsWith("/friends")) {
-								fetch('bodyLess/friends.html').then((response) => {
-									return (response.text().then(response => {
-										container.innerHTML = response;
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/friends.js`);
-										currentPage = "friends";
-										loadCurrentLang();
-										document.body.appendChild(s);
-										dropDownUserContainer.style.setProperty("display", "none");
-										homeBtn.style.setProperty("display", "block");
-									}))
-								});
+								client.loadPage("friends");
 							}
 							else if (url.pathname.startsWith("/game")) {
-								fetch('bodyLess/game.html').then((response) => {
-									return (response.text().then(response => {
-										container.innerHTML = response;
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/game.js`);
-										currentPage = "game";
-										loadCurrentLang();
-										document.body.appendChild(s);
-										dropDownUserContainer.style.setProperty("display", "none");
-										homeBtn.style.setProperty("display", "block");
-									}))
-								});
+								client.loadPage("game");
 							}
 							else {
-								fetch('bodyLess/home.html').then((response) => {
-									(response.text().then(response => {
-										container.innerHTML = response;
-										currentPage = "home";
-										switchTheme(currentUser.is_dark_theme);
-										homeBtn.style.setProperty("display", "none");
-										dropDownUserContainer.style.setProperty("display", "flex");
-										inputSearchUser.style.setProperty("display", "block");
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/home.js`);
-										document.body.appendChild(s);
-										loadCurrentLang();
-									}))
-								});
+								client.loadPage("home");
 							}
 						})
 
@@ -332,14 +280,26 @@ function handleToken() {
 			body: JSON.stringify({ code: code }),
 			credentials: 'include'
 		})
-			.then(response => response.json())
-			.then(data => {
-				if (document.getElementById("l*oaderBg"))
-					document.getElementById("loaderBg").style.setProperty("display", "none");
-				history.replaceState("", "", `https://${hostname.host}/home`);
-
-			})
-			.catch(error => console.error('Error:', error));
+			.then(response => {
+				if (response.ok){
+					fetch('/api/user/current', {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						credentials: 'include'
+					}).then(response => {
+						if (response.ok) {
+							(response.json()).then((data) => {
+								client = new Client(data.username, data.lang, data.pfp, data.is_dark_theme)
+								if (document.getElementById("loaderBg"))
+									document.getElementById("loaderBg").style.setProperty("display", "none");
+								history.replaceState("", "", `https://${hostname.host}/home`);
+							})
+						}
+					})
+				}
+			}).catch(error => console.error('Error:', error));
 	}
 	else {
 		fetch('/api/user/current', {
@@ -353,7 +313,10 @@ function handleToken() {
 				const url = new URL(window.location.href);
 
 				if (response.ok) {
-					(response.json()).then((text) => {
+					(response.json()).then((data) => {
+						if (document.getElementById("loaderBg"))
+							document.getElementById("loaderBg").style.setProperty("display", "none");
+						client = new Client(data.username, data.lang, data.pfp, data.is_dark_theme)
 						if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/game")))
 							history.replaceState("", "", `https://${hostname.host}/home`);
 						else
@@ -367,7 +330,9 @@ function handleToken() {
 	}
 }
 
-window.addEventListener('load', handleToken());
+window.addEventListener('load', (e) => {
+	handleToken();
+});
 
 
 window.addEventListener("beforeunload", (e) => {
@@ -448,29 +413,7 @@ function switchTheme(darkTheme) {
 		chartAbs.update();
 	}
 }
-/*
-window.addEventListener("popstate", (event) => {
-	fetch('/api/user/current', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		credentials: 'include'
-	})
-		.then(response => {
-			if (response.ok) {
-				fetch('/api/user/update', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ "is_active": true }),
-					credentials: 'include'
-				})
-			}
-		})
-});
-*/
+
 function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
 	if (currentLang != undefined){
 		fetch(currentLang).then(response => {

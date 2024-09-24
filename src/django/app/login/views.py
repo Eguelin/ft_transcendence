@@ -92,7 +92,7 @@ def fortytwo(request):
 		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			login(request, user)
-			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
+			return JsonResponse({'message': 'User created and logged in', 'pfp': pfp_url})
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
@@ -339,7 +339,7 @@ def current_user(request):
 			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active,
 			'matches' : matches
-			})
+		})
 	else:
 		return JsonResponse({'username': None}, status=404)
 
