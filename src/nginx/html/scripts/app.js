@@ -60,7 +60,7 @@ window.navigation.addEventListener("navigate", (e) => {
 										userPfp.style.setProperty("height", "100%");
 										userPfp.style.setProperty("width", "unset");
 									}
-								}, 0)
+								}, 10)
 							}
 							else
 								userPfp.style.setProperty("display", "none");

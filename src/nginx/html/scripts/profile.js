@@ -44,7 +44,7 @@ if (sendFriendRequestBtn){
                         profilePfp.style.setProperty("height", "100%");
                         profilePfp.style.setProperty("width", "unset");
                     }
-                }, 0)
+                }, 10)
             }
             else
                 profilePfp.style.setProperty("display", "none");

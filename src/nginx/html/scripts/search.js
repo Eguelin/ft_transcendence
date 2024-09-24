@@ -11,7 +11,7 @@
                 userResumePfp[i].style.setProperty("width", "unset");
             }
         }
-    }, 0)
+    }, 10)
     for (var i = 0; i< userResume.length; i++){
         userResume[i].addEventListener("click", (e) => {
             var username = e.target.closest(".userResume").id;
