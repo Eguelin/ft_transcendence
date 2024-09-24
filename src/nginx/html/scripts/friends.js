@@ -300,7 +300,7 @@ function checkUpdate(){
 								profilePictures[i].style.setProperty("width", "unset");
 							}
 						}
-					}, 0)
+					}, 10)
 
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
@@ -364,7 +364,5 @@ function checkUpdate(){
 		})
 	}
 }
-
-//var checkUpdateInterval = setInterval(checkUpdate, 10000);
 
 checkUpdate();
