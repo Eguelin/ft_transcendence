@@ -55,7 +55,7 @@ def fortytwo(request):
 		return JsonResponse(response.json(), status=response.status_code)
 	user_json = response.json()
 	user_login = user_json.get('login')
-	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
+	pfp_url = user_json.get('image', {}).get('link', '')
 
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:15]
