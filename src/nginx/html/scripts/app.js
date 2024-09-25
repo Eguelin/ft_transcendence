@@ -290,7 +290,7 @@ function handleToken() {
 						history.replaceState("", "", `https://${hostname.host}/login`);
 					else
 						history.replaceState("", "", `https://${hostname.host}/home`);
-				})
+				})()
 			}
 		}).catch(error => console.error('Error:', error));
 	}
