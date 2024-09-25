@@ -23,6 +23,20 @@ var username = "";
 const hostname = new URL(window.location.href);
 
 var client = null;
+var pageName;
+
+const routes = {
+	"/home": "bodyLess/home.html",
+	"/": "bodyLess/home.html",
+	"/game" : "bodyLess/game.html",
+	"/settings" : "bodyLess/settings.html",
+	"/user" : "bodyLess/profile.html",
+	"/dashboard" : "bodyLess/dashboard.html",
+	"/search" : "bodyLess/search.html",
+	"/friends" : "bodyLess/friends.html",
+	"/login" : "bodyLess/login.html",
+	"/register" : "bodyLess/register.html"
+}
 
 class Client{
 	username;
@@ -67,23 +81,32 @@ class Client{
 	loadPage(page){
 		if (this.username == null)
 			return ;
-		fetch(`bodyLess/${page}.html`).then((response) => {
-			response.text().then(response => {
-				document.getElementById("loaderBg").style.setProperty("display", "block");
-				container.innerHTML = response;
-
-				document.getElementById("script").remove();
-				var s = document.createElement("script");
-				s.setAttribute('id', 'script');
-				s.setAttribute('src', `scripts/${page}.js`);
-				document.body.appendChild(s);
-				document.getElementById("loaderBg").style.setProperty("display", "none");
-				currentPage = page;
-				loadCurrentLang(currentPage);
-				homeBtn.style.setProperty("display", "block");
-				dropDownUserContainer.style.setProperty("display", "flex");
+		document.getElementById("loaderBg").style.setProperty("display", "block");
+		
+		var sep = page.indexOf("/", 1)
+		if (sep > 0)
+			pageName = page.substring(0, sep)
+		else
+			pageName = page;
+		
+		if (routes[pageName]){ //need error 404 page 
+			fetch(routes[pageName]).then((response) => {
+				response.text().then(response => {
+					currentPage = pageName.substring(1);
+					container.innerHTML = response;
+	
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/${currentPage}.js`);
+					document.body.appendChild(s);
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+					loadCurrentLang(currentPage);
+					homeBtn.style.setProperty("display", "block");
+					dropDownUserContainer.style.setProperty("display", "flex");
+				})
 			})
-		})
+		}
 	}
 }
 
@@ -121,95 +144,7 @@ window.navigation.addEventListener("navigate", (e) => {
 				}
 				else
 					userPfp.style.setProperty("display", "none");
-
-				if (url.pathname.startsWith("/user")) {
-					client.loadPage("profile");
-					var splitPath = window.location.href.split('/');
-
-
-					if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] != null) {
-						document.getElementById("sendFriendRequestBtn").remove();
-					}
-					if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] == null)
-						document.getElementById("deleteFriendBtn").remove();
-
-				}
-				else if (url.pathname.startsWith("/dashboard"))
-					client.loadPage("dashboard");
-				else if (url.pathname.startsWith("/search")) {
-					if (url.searchParams.get("query")) {
-						fetch('/api/user/search_by_username', {
-							method: 'POST', //GET forbid the use of body :(
-							headers: { 'Content-Type': 'application/json', },
-							body: JSON.stringify({ "name": url.searchParams.get("query") }),
-							credentials: 'include'
-						}).then(user => {
-							user.json().then(((user) => {
-								fetch('bodyLess/search.html').then((response) => {
-									response.text().then(response => {
-										container.innerHTML = response;
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/search.js`);
-										document.body.appendChild(s);
-										currentPage = "search";
-										loadCurrentLang(currentPage);
-										homeBtn.style.setProperty("display", "block");
-										document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-										document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
-										Object.keys(user).forEach(function (key) {
-											createUserResumeContainer(user[key]);
-										})
-										inputSearchUser.value = "";
-									})
-								})
-							}))
-						})
-					}
-					else {
-						history.replaceState("", "", `https://${hostname.host}/home`);
-					}
-
-				}
-				else if (url.pathname.startsWith("/login")) {
-					client.loadPage("login");
-					client = null;
-					fetch('/api/user/logout', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						credentials: 'include'
-					}).then(response => {
-						inputSearchUser.style.setProperty("display", "none");
-						dropDownUserContainer.style.setProperty("display", "none");
-					});
-				}
-				else if (url.pathname.startsWith("/register")) {
-					client.loadPage("register");
-					client = null;
-					fetch('/api/user/logout', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						credentials: 'include'
-					}).then(response => {
-						inputSearchUser.style.setProperty("display", "none");
-						dropDownUserContainer.style.setProperty("display", "none");
-					});
-				}
-				else if (url.pathname.startsWith("/settings")) {
-					client.loadPage("settings");
-					document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
-				}
-				else if (url.pathname.startsWith("/friends")) 
-					client.loadPage("friends");
-				else if (url.pathname.startsWith("/game"))
-					client.loadPage("game");
-				else
-					client.loadPage("home");
+				client.loadPage(url.pathname)
 			}
 			else {
 				dropDownUserContainer.style.setProperty("display", "none");
@@ -272,12 +207,8 @@ function handleToken() {
 		})
 		.then(response => {
 			if (response.ok){
-				if (document.getElementById("loaderBg"))
-					document.getElementById("loaderBg").style.setProperty("display", "block");
 				(async () => {
 					client = await new Client()	
-					if (document.getElementById("loaderBg"))
-						document.getElementById("loaderBg").style.setProperty("display", "none");
 					if (client == null)
 						history.replaceState("", "", `https://${hostname.host}/login`);
 					else
@@ -292,10 +223,10 @@ function handleToken() {
 			document.getElementById("loaderBg").style.setProperty("display", "none");
 		(async () => {
 			client = await new Client();
-			if (client && !(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/game")))
-				history.replaceState("", "", `https://${hostname.host}/home`);
-			else
+			if (!client)
 				history.replaceState("", "", `https://${hostname.host}/login`);
+			else
+				client.loadPage(url.pathname);
 		})()
 	}
 }
@@ -696,3 +627,4 @@ window.addEventListener("click", (e) => {
 			dropDownUser.classList.remove("activeDropDown");
 	}
 })
+

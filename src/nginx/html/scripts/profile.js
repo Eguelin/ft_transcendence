@@ -19,6 +19,12 @@ if (sendFriendRequestBtn){
 
 {
     var splitPath = window.location.href.split('/');
+    
+    if (splitPath[4] == client.username/* || client.friends[splitPath[4]] != null*/) {
+        document.getElementById("sendFriendRequestBtn").remove();
+    }
+    if (splitPath[4] == client.username/* || client.friends[splitPath[4]] == null*/)
+        document.getElementById("deleteFriendBtn").remove();
     //var username = %3E %3C;
     var endDate = new Date();
     var startDate = new Date();
