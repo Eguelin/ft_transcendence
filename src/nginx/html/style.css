@@ -912,7 +912,7 @@ a {
 	height: 100vh;
 	background: black;
 	opacity: .7;
-	display: none;
+	display: block;
 }
 
 #loaderBg .loader{
