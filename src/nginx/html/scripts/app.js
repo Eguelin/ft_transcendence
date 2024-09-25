@@ -33,30 +33,37 @@ class Client{
 	pfpUrl;
 	use_dark_theme;
 
-	async fetchCurrentUser(){
-		const fetchResult = await fetch('/api/user/current', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			credentials: 'include'
-		})
-		const result = await fetchResult.json();
-		if (fetchResult.ok){
-			this.username = result.username;
-			this.currentLang = result.lang;
-			this.pfpUrl = result.pfp;
-			this.use_dark_theme = result.is_dark_theme;
-			switchTheme(this.use_dark_theme);
-			return true;
-		}
-		else
-			return false
-	}
-
 	constructor (){
-		if (this.fetchCurrentUser() == false)
-			return null;
+		return (async () =>{
+			const fetchResult = await fetch('/api/user/current', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			})
+			const result = await fetchResult.json();
+			if (fetchResult.ok){
+				this.username = result.username;
+				this.currentLang = result.lang;
+				this.pfpUrl = result.pfp;
+				this.use_dark_theme = result.is_dark_theme;
+				switchTheme(this.use_dark_theme);
+				
+
+				fetch('/api/user/update', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ "is_active": true }),
+					credentials: 'include'
+				})
+				return this;
+			}
+			else
+				return null
+		})();
 	}
 
 	loadPage(page){
@@ -87,185 +94,168 @@ window.navigation.addEventListener("navigate", (e) => {
 
 	e.intercept({
 		async handler() {
-			fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			})
-				.then(currentUser => {
-					if (langDropDown.classList.contains("activeDropDown"))
-						langDropDown.classList.remove("activeDropDown");
-					if (dropDownUser.classList.contains("activeDropDown"))
-						dropDownUser.classList.remove("activeDropDown");
+			//reset dropdown menus
+			if (langDropDown.classList.contains("activeDropDown"))
+				langDropDown.classList.remove("activeDropDown");
+			if (dropDownUser.classList.contains("activeDropDown"))
+				dropDownUser.classList.remove("activeDropDown");
+				
+			
+			if (client){
+				currentLang = client.currentLang;
+				console.log(client);
+				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
+				console.log("cc1");
+
+				username = client.username;
+				usernameBtn.innerHTML = client.username;
+				if (client.pfpUrl != "") {
+					testImg = new Image();
+					
+					testImg.setAttribute("src", `https://${hostname.host}/${client.pfpUrl}`);
+					userPfp.setAttribute("src", `https://${hostname.host}/${client.pfpUrl}`);
+					userPfp.style.setProperty("display", "block");
+
+					setTimeout(() => {
+						if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+							userPfp.style.setProperty("height", "100%");
+							userPfp.style.setProperty("width", "unset");
+						}
+					}, 10)
+				}
+				else
+					userPfp.style.setProperty("display", "none");
+
+				if (url.pathname.startsWith("/user")) {
+					client.loadPage("profile");
+					var splitPath = window.location.href.split('/');
 
 
-					if (currentUser.ok) {
-						currentUser.json().then((currentUser) => {
-							currentLang = currentUser.lang;
-							langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
+					if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] != null) {
+						document.getElementById("sendFriendRequestBtn").remove();
+					}
+					if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] == null)
+						document.getElementById("deleteFriendBtn").remove();
 
-							username = currentUser.username;
-							usernameBtn.innerHTML = currentUser.username;
-							if (currentUser.pfp != "") {
-								testImg = new Image();
-								
-								testImg.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
-								userPfp.setAttribute("src", `https://${hostname.host}/${currentUser.pfp}`);
-								userPfp.style.setProperty("display", "block");
-
-								setTimeout(() => {
-									if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-										userPfp.style.setProperty("height", "100%");
-										userPfp.style.setProperty("width", "unset");
-									}
-								}, 10)
-							}
-							else
-								userPfp.style.setProperty("display", "none");
-
-							if (url.pathname.startsWith("/user")) {
-								client.loadPage("profile");
-								var splitPath = window.location.href.split('/');
-
-
-								if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] != null) {
-									document.getElementById("sendFriendRequestBtn").remove();
-								}
-								if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] == null)
-									document.getElementById("deleteFriendBtn").remove();
-
-							}
-							else if (url.pathname.startsWith("/dashboard")) {
-								client.loadPage("dashboard");
-							}
-							else if (url.pathname.startsWith("/search")) {
-								if (url.searchParams.get("query")) {
-									fetch('/api/user/search_by_username', {
-										method: 'POST', //GET forbid the use of body :(
-										headers: { 'Content-Type': 'application/json', },
-										body: JSON.stringify({ "name": url.searchParams.get("query") }),
-										credentials: 'include'
-									}).then(user => {
-										user.json().then(((user) => {
-											fetch('bodyLess/search.html').then((response) => {
-												response.text().then(response => {
-													container.innerHTML = response;
-													document.getElementById("script").remove();
-													var s = document.createElement("script");
-													s.setAttribute('id', 'script');
-													s.setAttribute('src', `scripts/search.js`);
-													document.body.appendChild(s);
-													currentPage = "search";
-													loadCurrentLang(currentPage);
-													homeBtn.style.setProperty("display", "block");
-													document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-													document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
-													Object.keys(user).forEach(function (key) {
-														createUserResumeContainer(user[key]);
-													})
-													inputSearchUser.value = "";
-												})
-											})
-										}))
-									})
-								}
-								else {
-									history.replaceState("", "", `https://${hostname.host}/home`);
-								}
-
-							}
-							else if (url.pathname.startsWith("/login")) {
-								client.loadPage("login");
-								client = null;
-								fetch('/api/user/logout', {
-									method: 'POST',
-									headers: {
-										'Content-Type': 'application/json',
-									},
-									credentials: 'include'
-								}).then(response => {
-									inputSearchUser.style.setProperty("display", "none");
-									dropDownUserContainer.style.setProperty("display", "none");
-								});
-							}
-							else if (url.pathname.startsWith("/register")) {
-								client.loadPage("register");
-								client = null;
-								fetch('/api/user/logout', {
-									method: 'POST',
-									headers: {
-										'Content-Type': 'application/json',
-									},
-									credentials: 'include'
-								}).then(response => {
-									inputSearchUser.style.setProperty("display", "none");
-									dropDownUserContainer.style.setProperty("display", "none");
-								});
-							}
-							else if (url.pathname.startsWith("/settings")) {
-								client.loadPage("settings");
-								document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
-							}
-							else if (url.pathname.startsWith("/friends")) {
-								client.loadPage("friends");
-							}
-							else if (url.pathname.startsWith("/game")) {
-								client.loadPage("game");
-							}
-							else {
-								client.loadPage("home");
-							}
-						})
-
-						fetch('/api/user/update', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							body: JSON.stringify({ "is_active": true }),
+				}
+				else if (url.pathname.startsWith("/dashboard")) {
+					client.loadPage("dashboard");
+				}
+				else if (url.pathname.startsWith("/search")) {
+					if (url.searchParams.get("query")) {
+						fetch('/api/user/search_by_username', {
+							method: 'POST', //GET forbid the use of body :(
+							headers: { 'Content-Type': 'application/json', },
+							body: JSON.stringify({ "name": url.searchParams.get("query") }),
 							credentials: 'include'
+						}).then(user => {
+							user.json().then(((user) => {
+								fetch('bodyLess/search.html').then((response) => {
+									response.text().then(response => {
+										container.innerHTML = response;
+										document.getElementById("script").remove();
+										var s = document.createElement("script");
+										s.setAttribute('id', 'script');
+										s.setAttribute('src', `scripts/search.js`);
+										document.body.appendChild(s);
+										currentPage = "search";
+										loadCurrentLang(currentPage);
+										homeBtn.style.setProperty("display", "block");
+										document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+										document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
+										Object.keys(user).forEach(function (key) {
+											createUserResumeContainer(user[key]);
+										})
+										inputSearchUser.value = "";
+									})
+								})
+							}))
 						})
 					}
 					else {
-						dropDownUserContainer.style.setProperty("display", "none");
-						currentLang = "lang/EN_UK.json";
-						langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
-						if (url.pathname.startsWith("/login")) {
-							fetch('bodyLess/login.html').then((response) => {
-								(response.text().then(response => {
-									inputSearchUser.style.setProperty("display", "none");
-									container.innerHTML = response;
-									document.getElementById("script").remove();
-									var s = document.createElement("script");
-									s.setAttribute('id', 'script');
-									s.setAttribute('src', `scripts/login.js`);
-									document.body.appendChild(s);
-									currentPage = "login";
-									loadCurrentLang();
-								}))
-							});
-						}
-						if (url.pathname.startsWith("/register")) {
-							fetch('bodyLess/register.html').then((response) => {
-								return (response.text().then(response => {
-
-									homeBtn.style.setProperty("display", "block");
-									inputSearchUser.style.setProperty("display", "none");
-									container.innerHTML = response;
-									document.getElementById("script").remove();
-									var s = document.createElement("script");
-									s.setAttribute('id', 'script');
-									s.setAttribute('src', `scripts/register.js`);
-									currentPage = "register";
-									loadCurrentLang();
-									document.body.appendChild(s);
-								}))
-							});
-						}
+						history.replaceState("", "", `https://${hostname.host}/home`);
 					}
-				})
+
+				}
+				else if (url.pathname.startsWith("/login")) {
+					client.loadPage("login");
+					client = null;
+					fetch('/api/user/logout', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						credentials: 'include'
+					}).then(response => {
+						inputSearchUser.style.setProperty("display", "none");
+						dropDownUserContainer.style.setProperty("display", "none");
+					});
+				}
+				else if (url.pathname.startsWith("/register")) {
+					client.loadPage("register");
+					client = null;
+					fetch('/api/user/logout', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						credentials: 'include'
+					}).then(response => {
+						inputSearchUser.style.setProperty("display", "none");
+						dropDownUserContainer.style.setProperty("display", "none");
+					});
+				}
+				else if (url.pathname.startsWith("/settings")) {
+					client.loadPage("settings");
+					document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
+				}
+				else if (url.pathname.startsWith("/friends")) {
+					client.loadPage("friends");
+				}
+				else if (url.pathname.startsWith("/game")) {
+					client.loadPage("game");
+				}
+				
+				console.log("cc");
+				client.loadPage("home");
+			}
+			else {
+				dropDownUserContainer.style.setProperty("display", "none");
+				currentLang = "lang/EN_UK.json";
+				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
+				if (url.pathname.startsWith("/login")) {
+					fetch('bodyLess/login.html').then((response) => {
+						(response.text().then(response => {
+							inputSearchUser.style.setProperty("display", "none");
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/login.js`);
+							document.body.appendChild(s);
+							currentPage = "login";
+							loadCurrentLang();
+						}))
+					});
+				}
+				if (url.pathname.startsWith("/register")) {
+					fetch('bodyLess/register.html').then((response) => {
+						return (response.text().then(response => {
+
+							homeBtn.style.setProperty("display", "block");
+							inputSearchUser.style.setProperty("display", "none");
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/register.js`);
+							currentPage = "register";
+							loadCurrentLang();
+							document.body.appendChild(s);
+						}))
+					});
+				}
+			}
 		}
 	})
 })
@@ -292,15 +282,15 @@ function handleToken() {
 			if (response.ok){
 				if (document.getElementById("loaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "block");
-				client = new Client()
-				if (document.getElementById("loaderBg"))
-					document.getElementById("loaderBg").style.setProperty("display", "none");
-				if (client.username == null){
-					client = null;
-					history.replaceState("", "", `https://${hostname.host}/login`);
-				}
-				else
-					history.replaceState("", "", `https://${hostname.host}/home`);
+				(async () => {
+					client = await new Client()	
+					if (document.getElementById("loaderBg"))
+						document.getElementById("loaderBg").style.setProperty("display", "none");
+					if (client == null)
+						history.replaceState("", "", `https://${hostname.host}/login`);
+					else
+						history.replaceState("", "", `https://${hostname.host}/home`);
+				})
 			}
 		}).catch(error => console.error('Error:', error));
 	}
@@ -308,12 +298,13 @@ function handleToken() {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
 			document.getElementById("loaderBg").style.setProperty("display", "none");
-		client = new Client();
-		console.log(client);
-		if (client && !(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/game")))
-			history.replaceState("", "", `https://${hostname.host}/home`);
-		else
-			history.replaceState("", "", `https://${hostname.host}/login`);
+		(async () => {
+			client = await new Client();
+			if (client && !(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/game")))
+				history.replaceState("", "", `https://${hostname.host}/home`);
+			else
+				history.replaceState("", "", `https://${hostname.host}/login`);
+		})()
 	}
 }
 
