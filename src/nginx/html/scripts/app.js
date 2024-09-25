@@ -24,8 +24,6 @@ const hostname = new URL(window.location.href);
 
 var client = null;
 
-
-// always check if username field is null after class init, if username == null then the class instance should be destroyed 
 class Client{
 	username;
 	currentPage;
@@ -103,9 +101,7 @@ window.navigation.addEventListener("navigate", (e) => {
 			
 			if (client){
 				currentLang = client.currentLang;
-				console.log(client);
 				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
-				console.log("cc1");
 
 				username = client.username;
 				usernameBtn.innerHTML = client.username;
@@ -138,9 +134,8 @@ window.navigation.addEventListener("navigate", (e) => {
 						document.getElementById("deleteFriendBtn").remove();
 
 				}
-				else if (url.pathname.startsWith("/dashboard")) {
+				else if (url.pathname.startsWith("/dashboard"))
 					client.loadPage("dashboard");
-				}
 				else if (url.pathname.startsWith("/search")) {
 					if (url.searchParams.get("query")) {
 						fetch('/api/user/search_by_username', {
@@ -209,15 +204,12 @@ window.navigation.addEventListener("navigate", (e) => {
 					client.loadPage("settings");
 					document.getElementById("confirmDeleteDialogVar").innerHTML = currentUser.username;
 				}
-				else if (url.pathname.startsWith("/friends")) {
+				else if (url.pathname.startsWith("/friends")) 
 					client.loadPage("friends");
-				}
-				else if (url.pathname.startsWith("/game")) {
+				else if (url.pathname.startsWith("/game"))
 					client.loadPage("game");
-				}
-				
-				console.log("cc");
-				client.loadPage("home");
+				else
+					client.loadPage("home");
 			}
 			else {
 				dropDownUserContainer.style.setProperty("display", "none");
