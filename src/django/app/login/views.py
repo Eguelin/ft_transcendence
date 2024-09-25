@@ -226,6 +226,8 @@ def profile_update(request):
 				except ValidationError as e:
 					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
+					if user.profile.profile_picture and os.path.exists(user.profile.profile_picture):
+						os.remove(user.profile.profile_picture)
 					raw = data['pfp']
 					pfpName = "profilePictures/{0}.jpg".format(user.username)
 					with open(pfpName, "wb", opener=file_opener) as f:
