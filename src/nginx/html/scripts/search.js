@@ -1,4 +1,24 @@
 {
+    url = new URL(window.location.href);
+    if (url.searchParams.get("query")) {
+        fetch('/api/user/search_by_username', {
+            method: 'POST', //GET forbid the use of body :(
+            headers: { 'Content-Type': 'application/json', },
+            body: JSON.stringify({ "name": url.searchParams.get("query") }),
+            credentials: 'include'
+        }).then(user => {
+            user.json().then(((user) => {
+                document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+                document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
+                Object.keys(user).forEach(function (key) {
+                    createUserResumeContainer(user[key]);
+                })
+            }))
+        })
+    }
+    else
+        history.replaceState("", "", `https://${hostname.host}/home`);
+
     userResume = document.querySelectorAll(".userResume");
     userResumePfp = document.querySelectorAll(".userResumePfp");
     testImg = new Image();
