@@ -24,6 +24,8 @@ const hostname = new URL(window.location.href);
 
 var client = null;
 
+
+// always check if username field is null after class init, if username == null then the class instance should be destroyed 
 class Client{
 	username;
 	currentPage;
@@ -31,15 +33,35 @@ class Client{
 	pfpUrl;
 	use_dark_theme;
 
-	constructor (username, lang, pfp, use_dark_theme){
-		this.username = username;
-		this.currentLang = lang;
-		this.pfpUrl = pfp;
-		this.use_dark_theme = use_dark_theme;
-		switchTheme(use_dark_theme);
+	async fetchCurrentUser(){
+		const fetchResult = await fetch('/api/user/current', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		})
+		const result = await fetchResult.json();
+		if (fetchResult.ok){
+			this.username = result.username;
+			this.currentLang = result.lang;
+			this.pfpUrl = result.pfp;
+			this.use_dark_theme = result.is_dark_theme;
+			switchTheme(this.use_dark_theme);
+			return true;
+		}
+		else
+			return false
+	}
+
+	constructor (){
+		if (this.fetchCurrentUser() == false)
+			return null;
 	}
 
 	loadPage(page){
+		if (this.username == null)
+			return ;
 		fetch(`bodyLess/${page}.html`).then((response) => {
 			response.text().then(response => {
 				document.getElementById("loaderBg").style.setProperty("display", "block");
@@ -104,30 +126,16 @@ window.navigation.addEventListener("navigate", (e) => {
 								userPfp.style.setProperty("display", "none");
 
 							if (url.pathname.startsWith("/user")) {
-								fetch('bodyLess/profile.html').then((response) => {
-									response.text().then(response => {
-										container.innerHTML = response;
-										var splitPath = window.location.href.split('/');
+								client.loadPage("profile");
+								var splitPath = window.location.href.split('/');
 
 
-										if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] != null) {
-											document.getElementById("sendFriendRequestBtn").remove();
-										}
-										if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] == null)
-											document.getElementById("deleteFriendBtn").remove();
+								if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] != null) {
+									document.getElementById("sendFriendRequestBtn").remove();
+								}
+								if (splitPath[4] == currentUser.username || currentUser.friends[splitPath[4]] == null)
+									document.getElementById("deleteFriendBtn").remove();
 
-
-										document.getElementById("script").remove();
-										var s = document.createElement("script");
-										s.setAttribute('id', 'script');
-										s.setAttribute('src', `scripts/profile.js`);
-										document.body.appendChild(s);
-										currentPage = "profile";
-										loadCurrentLang(currentPage);
-										homeBtn.style.setProperty("display", "block");
-										dropDownUserContainer.style.setProperty("display", "flex");
-									})
-								})
 							}
 							else if (url.pathname.startsWith("/dashboard")) {
 								client.loadPage("dashboard");
@@ -177,9 +185,10 @@ window.navigation.addEventListener("navigate", (e) => {
 										'Content-Type': 'application/json',
 									},
 									credentials: 'include'
+								}).then(response => {
+									inputSearchUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 								});
-								inputSearchUser.style.setProperty("display", "none");
-								dropDownUserContainer.style.setProperty("display", "none");
 							}
 							else if (url.pathname.startsWith("/register")) {
 								client.loadPage("register");
@@ -190,9 +199,10 @@ window.navigation.addEventListener("navigate", (e) => {
 										'Content-Type': 'application/json',
 									},
 									credentials: 'include'
+								}).then(response => {
+									inputSearchUser.style.setProperty("display", "none");
+									dropDownUserContainer.style.setProperty("display", "none");
 								});
-								inputSearchUser.style.setProperty("display", "none");
-								dropDownUserContainer.style.setProperty("display", "none");
 							}
 							else if (url.pathname.startsWith("/settings")) {
 								client.loadPage("settings");
@@ -270,8 +280,6 @@ function handleToken() {
 	const code = window.location.href.split("code=")[1];
 
 	if (code) {
-		if (document.getElementById("loaderBg"))
-			document.getElementById("loaderBg").style.setProperty("display", "block");
 		fetch('/api/user/fortyTwo/login', {
 			method: 'POST',
 			headers: {
@@ -280,53 +288,32 @@ function handleToken() {
 			body: JSON.stringify({ code: code }),
 			credentials: 'include'
 		})
-			.then(response => {
-				if (response.ok){
-					fetch('/api/user/current', {
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						credentials: 'include'
-					}).then(response => {
-						if (response.ok) {
-							(response.json()).then((data) => {
-								client = new Client(data.username, data.lang, data.pfp, data.is_dark_theme)
-								if (document.getElementById("loaderBg"))
-									document.getElementById("loaderBg").style.setProperty("display", "none");
-								history.replaceState("", "", `https://${hostname.host}/home`);
-							})
-						}
-					})
-				}
-			}).catch(error => console.error('Error:', error));
-	}
-	else {
-		fetch('/api/user/current', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			credentials: 'include'
-		})
-			.then(response => {
-				const url = new URL(window.location.href);
-
-				if (response.ok) {
-					(response.json()).then((data) => {
-						if (document.getElementById("loaderBg"))
-							document.getElementById("loaderBg").style.setProperty("display", "none");
-						client = new Client(data.username, data.lang, data.pfp, data.is_dark_theme)
-						if (!(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/game")))
-							history.replaceState("", "", `https://${hostname.host}/home`);
-						else
-							history.replaceState("", "");
-					});
-				}
-				else {
+		.then(response => {
+			if (response.ok){
+				if (document.getElementById("loaderBg"))
+					document.getElementById("loaderBg").style.setProperty("display", "block");
+				client = new Client()
+				if (document.getElementById("loaderBg"))
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+				if (client.username == null){
+					client = null;
 					history.replaceState("", "", `https://${hostname.host}/login`);
 				}
-			})
+				else
+					history.replaceState("", "", `https://${hostname.host}/home`);
+			}
+		}).catch(error => console.error('Error:', error));
+	}
+	else {
+		const url = new URL(window.location.href);
+		if (document.getElementById("loaderBg"))
+			document.getElementById("loaderBg").style.setProperty("display", "none");
+		client = new Client();
+		console.log(client);
+		if (client && !(url.pathname.startsWith("/user") || url.pathname.startsWith("/search") || url.pathname.startsWith("/login") || url.pathname.startsWith("/register") || url.pathname.startsWith("/settings") || url.pathname.startsWith("/friends") || url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/game")))
+			history.replaceState("", "", `https://${hostname.host}/home`);
+		else
+			history.replaceState("", "", `https://${hostname.host}/login`);
 	}
 }
 
