@@ -62,22 +62,13 @@ loginBtn.addEventListener("click", (e) => {
 							loginBtn.before(warning.cloneNode(true));
 					}
 					else{
-						fetch('/api/user/current', {
-							method: 'GET',
-							headers: {
-								'Content-Type': 'application/json',
-							},
-							credentials: 'include'
-						}).then(response => {
-							if (response.ok) {
-								(response.json()).then((data) => {
-									if (document.getElementById("loaderBg"))
-										document.getElementById("loaderBg").style.setProperty("display", "none");
-									client = new Client(data.username, data.lang, data.pfp, data.is_dark_theme)
-									history.pushState("", "", `https://${hostname.host}/home`);
-								});
-							}
-						})
+						(async () => {
+							client = await new Client()	
+							if (client == null)
+								history.replaceState("", "", `https://${hostname.host}/login`);
+							else
+								history.replaceState("", "", `https://${hostname.host}/home`);
+						})();
 					}
 				})
 			}
