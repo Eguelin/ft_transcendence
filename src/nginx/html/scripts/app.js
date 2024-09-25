@@ -336,7 +336,7 @@ function handleToken() {
 		})
 			.then(response => response.json())
 			.then(data => {
-				if (document.getElementById("l*oaderBg"))
+				if (document.getElementById("loaderBg"))
 					document.getElementById("loaderBg").style.setProperty("display", "none");
 				history.replaceState("", "", `https://${hostname.host}/home`);
 
