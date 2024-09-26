@@ -1,5 +1,4 @@
 var splitPath = window.location.href.split('/');
-console.log(splitPath);
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 allMatchesButton = document.getElementById("allMatchesHistoryBtn");

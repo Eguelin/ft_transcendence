@@ -334,3 +334,9 @@ for (var i=0; i< lightTheme.length; i++)
 		e.srcElement.classList.remove("dropDownContentAHover");
 	})
 }
+
+{
+	inputSearchUser.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
+}
