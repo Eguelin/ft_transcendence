@@ -335,7 +335,7 @@ def current_user(request):
 			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
 			'friends': friend_json,
-			'friend_request': friend_request_json,
+			'friend_requests': friend_request_json,
 			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active,
 			'matches' : matches

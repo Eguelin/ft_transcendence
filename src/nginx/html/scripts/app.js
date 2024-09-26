@@ -30,7 +30,7 @@ const routes = {
 	"/": "bodyLess/home.html",
 	"/game" : "bodyLess/game.html",
 	"/settings" : "bodyLess/settings.html",
-	"/user" : "bodyLess/profile.html",
+	"/user" : "bodyLess/user.html",
 	"/dashboard" : "bodyLess/dashboard.html",
 	"/search" : "bodyLess/search.html",
 	"/friends" : "bodyLess/friends.html",
@@ -44,6 +44,9 @@ class Client{
 	currentLang;
 	pfpUrl;
 	use_dark_theme;
+	friends;
+	friend_requests;
+	blocked_user;
 
 	constructor (){
 		return (async () =>{
@@ -60,6 +63,9 @@ class Client{
 				this.currentLang = result.lang;
 				this.pfpUrl = result.pfp;
 				this.use_dark_theme = result.is_dark_theme;
+				this.friends = result.friends;
+				this.friend_requests = result.friend_requests;
+				this.blocked_user = result.blocked_user;
 				switchTheme(this.use_dark_theme);
 				
 				langDropDownBtn.style.setProperty("background-image", `url(icons/${result.lang.substring(4, 10)}.svg)`);
@@ -223,7 +229,6 @@ function handleToken() {
 			if (!client)
 				history.replaceState("", "", `https://${hostname.host}/login`);
 			else{
-				console.log(url.pathname)
 				if (url.pathname == "" || url.pathname == "/"){
 					history.replaceState("", "", `https://${hostname.host}/home`)
 					client.loadPage("/home");
@@ -259,7 +264,7 @@ homeBtn.addEventListener("click", (e) => {
 })
 
 myProfileBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/user/${username}`);
+	history.pushState("", "", `https://${hostname.host}/user/${client.username}`);
 })
 
 friendsBtn.addEventListener("click", (e) => {
