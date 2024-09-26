@@ -42,6 +42,7 @@ class Client{
 	username;
 	currentPage;
 	currentLang;
+	langJson;
 	pfpUrl;
 	use_dark_theme;
 	friends;
@@ -98,10 +99,15 @@ class Client{
 					body: JSON.stringify({ "is_active": true }),
 					credentials: 'include'
 				})
-				return this;
 			}
 			else
 				return null
+			const fetchLangResult = await fetch(this.currentLang);
+			if (fetchLangResult.ok)
+				this.langJson = await fetchLangResult.json()
+			else
+				this.langJson = null;
+			return (this);
 		})();
 	}
 
@@ -325,7 +331,20 @@ function switchTheme(darkTheme) {
 }
 
 function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
-	if (currentLang != undefined){
+	if (client && client.langJson){
+		content = client.langJson[currentPage];
+		if (content != null || content != undefined) {
+			Object.keys(content).forEach(function (key) {
+				if (document.getElementById(key)) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					else
+						document.getElementById(key).innerHTML = content[key];
+				}
+			});
+		}
+	}
+	else if (currentLang != undefined){
 		fetch(currentLang).then(response => {
 			if (response.ok) {
 				response.json().then((text) => {
@@ -345,6 +364,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 			else {
 				fetch("lang/EN_UK.json").then(response => {
 					response.json().then((text) => {
+						currentLang = "lang/EN_UK.json";
 						content = text[currentPage];
 						if (content != null || content != undefined) {
 							Object.keys(content).forEach(function (key) {
@@ -365,6 +385,7 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 		fetch("lang/EN_UK.json").then(response => {
 			response.json().then((text) => {
 				content = text[currentPage];
+				currentLang = "lang/EN_UK.json";
 				if (content != null || content != undefined) {
 					Object.keys(content).forEach(function (key) {
 						if (document.getElementById(key)) {
@@ -601,16 +622,14 @@ usernameBtn.addEventListener("keydown", (e) => {
 langDropDownOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		currentLang = `lang/${button.id}.json`;
+		client.currentLang = `lang/${button.id}.json`;
 		fetch(currentLang).then(response => {
-			response.json().then((text) => {
-				content = text[currentPage];
-				Object.keys(content).forEach(function (key) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					else
-						document.getElementById(key).innerHTML = content[key];
-				});
-			})
+			if (response.ok){
+				response.json().then((text) => {
+					client.langJson = text;
+					loadCurrentLang();
+				})
+			}
 		})
 		fetch('/api/user/update', {
 			method: 'POST',
