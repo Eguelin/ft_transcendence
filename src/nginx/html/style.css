@@ -827,6 +827,7 @@ a {
 }
 
 #inputSearchUser{
+	display: none;
 	width: 20vmax;
 }
 
