@@ -62,6 +62,27 @@ class Client{
 				this.use_dark_theme = result.is_dark_theme;
 				switchTheme(this.use_dark_theme);
 				
+				langDropDownBtn.style.setProperty("background-image", `url(icons/${result.lang.substring(4, 10)}.svg)`);
+
+				usernameBtn.innerHTML = result.username;
+	
+				if (result.pfp != "") {
+					var testImg = new Image();
+					
+					testImg.setAttribute("src", `https://${hostname.host}/${result.pfp}`);
+					userPfp.setAttribute("src", `https://${hostname.host}/${result.pfp}`);
+					userPfp.style.setProperty("display", "block");
+			
+					setTimeout(() => {
+						if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+							userPfp.style.setProperty("height", "100%");
+							userPfp.style.setProperty("width", "unset");
+						}
+					}, 10)
+				}
+				else
+					userPfp.style.setProperty("display", "none");
+
 
 				fetch('/api/user/update', {
 					method: 'POST',
@@ -102,8 +123,6 @@ class Client{
 					document.body.appendChild(s);
 					document.getElementById("loaderBg").style.setProperty("display", "none");
 					loadCurrentLang(currentPage);
-					homeBtn.style.setProperty("display", "block");
-					dropDownUserContainer.style.setProperty("display", "flex");
 				})
 			})
 		}
@@ -122,30 +141,8 @@ window.navigation.addEventListener("navigate", (e) => {
 				dropDownUser.classList.remove("activeDropDown");
 				
 			
-			if (client){
-				currentLang = client.currentLang;
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
-
-				username = client.username;
-				usernameBtn.innerHTML = client.username;
-				if (client.pfpUrl != "") {
-					testImg = new Image();
-					
-					testImg.setAttribute("src", `https://${hostname.host}/${client.pfpUrl}`);
-					userPfp.setAttribute("src", `https://${hostname.host}/${client.pfpUrl}`);
-					userPfp.style.setProperty("display", "block");
-
-					setTimeout(() => {
-						if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-							userPfp.style.setProperty("height", "100%");
-							userPfp.style.setProperty("width", "unset");
-						}
-					}, 10)
-				}
-				else
-					userPfp.style.setProperty("display", "none");
+			if (client)
 				client.loadPage(url.pathname)
-			}
 			else {
 				dropDownUserContainer.style.setProperty("display", "none");
 				currentLang = "lang/EN_UK.json";
@@ -209,7 +206,7 @@ function handleToken() {
 			if (response.ok){
 				(async () => {
 					client = await new Client()	
-					if (client == null)
+					if (!client)
 						history.replaceState("", "", `https://${hostname.host}/login`);
 					else
 						history.replaceState("", "", `https://${hostname.host}/home`);
@@ -225,8 +222,15 @@ function handleToken() {
 			client = await new Client();
 			if (!client)
 				history.replaceState("", "", `https://${hostname.host}/login`);
-			else
-				client.loadPage(url.pathname);
+			else{
+				console.log(url.pathname)
+				if (url.pathname == "" || url.pathname == "/"){
+					history.replaceState("", "", `https://${hostname.host}/home`)
+					client.loadPage("/home");
+				}
+				else
+					client.loadPage(url.pathname);
+			}
 		})()
 	}
 }

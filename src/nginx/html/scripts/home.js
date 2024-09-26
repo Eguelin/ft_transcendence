@@ -3,6 +3,10 @@ recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContain
 playBtn = document.getElementById("playBtn");
 
 {
+	inputSearchUser.style.setProperty("display", "block");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "none");
+		
 	fetch('/api/user/current', {
 		method: 'GET',
 		headers: {
