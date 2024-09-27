@@ -76,16 +76,15 @@ class Client{
 				if (result.pfp != "") {
 					var testImg = new Image();
 					
-					testImg.setAttribute("src", `https://${hostname.host}/${result.pfp}`);
-					userPfp.setAttribute("src", `https://${hostname.host}/${result.pfp}`);
-					userPfp.style.setProperty("display", "block");
-			
-					setTimeout(() => {
+					testImg.onload = function(){
 						if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
 							userPfp.style.setProperty("height", "100%");
 							userPfp.style.setProperty("width", "unset");
 						}
-					}, 10)
+					}
+					testImg.src = `https://${hostname.host}/${result.pfp}`;
+					userPfp.setAttribute("src", `https://${hostname.host}/${result.pfp}`);
+					userPfp.style.setProperty("display", "block");
 				}
 				else
 					userPfp.style.setProperty("display", "none");

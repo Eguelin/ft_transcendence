@@ -48,14 +48,16 @@ if (sendFriendRequestBtn){
                 profilePfp.innerHTML = "";
                 if (user.pfp != ""){
                     testImg = new Image();
-                    testImg.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
-                    profilePfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
-                    setTimeout(() => {
-                        if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-                            profilePfp.style.setProperty("height", "100%");
-                            profilePfp.style.setProperty("width", "unset");
-                        }
-                    }, 10)
+                    
+                    
+					testImg.onload = function(){
+						if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+							profilePfp.style.setProperty("height", "100%");
+							profilePfp.style.setProperty("width", "unset");
+						}
+					}
+                    testImg.src = `https://${hostname.host}/${user.pfp}`;
+                    profilePfp.src = `https://${hostname.host}/${user.pfp}`;
                 }
                 else
                     profilePfp.style.setProperty("display", "none");

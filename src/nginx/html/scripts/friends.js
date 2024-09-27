@@ -121,7 +121,18 @@ function createFriendContainer(friend){
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (friend.pfp != ""){
-			pfp.setAttribute("src", `https://${hostname.host}/${friend.pfp}`);
+	
+		testImg = new Image();
+                    
+                    
+		testImg.onload = function(){
+			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+				pfp.style.setProperty("height", "100%");
+				pfp.style.setProperty("width", "unset");
+			}
+		}
+		testImg.src = `https://${hostname.host}/${friend.pfp}`;
+		pfp.src = `https://${hostname.host}/${friend.pfp}`;
 	}
 	pfpContainer.appendChild(pfp);
 	pfpContainer.appendChild(pfpStatus)
@@ -176,7 +187,18 @@ function createFriendRequestContainer(user){
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
-		pfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
+	
+		testImg = new Image();
+                    
+                    
+		testImg.onload = function(){
+			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+				pfp.style.setProperty("height", "100%");
+				pfp.style.setProperty("width", "unset");
+			}
+		}
+		testImg.src = `https://${hostname.host}/${user.pfp}`;
+		pfp.src = `https://${hostname.host}/${user.pfp}`;
 	}
 	
 	pfpMask = document.createElement("div");
@@ -221,7 +243,18 @@ function createBlockedUserContainer(user){
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
-		pfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
+	
+		testImg = new Image();
+                    
+                    
+		testImg.onload = function(){
+			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+				pfp.style.setProperty("height", "100%");
+				pfp.style.setProperty("width", "unset");
+			}
+		}
+		testImg.src = `https://${hostname.host}/${user.pfp}`;
+		pfp.src = `https://${hostname.host}/${user.pfp}`;
 	}
 	
 	pfpMask = document.createElement("div");
@@ -266,7 +299,7 @@ function checkUpdate(){
 					currentLang = text.lang;
 					loadCurrentLang();
 					var friends = text.friends;
-					var friends_request = text.friend_request;
+					var friends_request = text.friend_requests;
 					var blocked_users = text.blocked_users
 					allFriendListContainer.innerHTML = "";
 					onlineFriendListContainer.innerHTML = ""
@@ -287,20 +320,6 @@ function checkUpdate(){
 					removeFriendBtn = document.querySelectorAll(".removeFriendBtn");
 					blockFriendBtn = document.querySelectorAll(".blockFriendBtn");
 					unblockBtn = document.querySelectorAll(".unblockBtn");
-
-
-					profilePictures = document.querySelectorAll(".profilePicture");
-					testImg = new Image();
-
-					setTimeout(() => {
-						for (var i = 0; i< profilePictures.length; i++){
-							testImg.setAttribute("src", profilePictures[i].getAttribute("src"));
-							if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-								profilePictures[i].style.setProperty("height", "100%");
-								profilePictures[i].style.setProperty("width", "unset");
-							}
-						}
-					}, 10)
 
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
