@@ -114,18 +114,14 @@ function createFriendContainer(friend){
 	friendContainer.id = friend.username;
 	pfpContainer = document.createElement("div");
 	pfpContainer.className = "pfpContainer";
-	pfpStatus = document.createElement("div");
-	pfpStatus.className = friend.is_active == true ? "friendStatusOnlinePfpMask" : "friendStatusOfflinePfpMask";
-	pfpMask = document.createElement("div");
-	pfpMask.className = "friendPfpMask";
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (friend.pfp != ""){
 	
 		testImg = new Image();
                     
-                    
 		testImg.onload = function(){
+		console.log(testImg.width, testImg.height, testImg.width > testImg.height)
 			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
 				pfp.style.setProperty("height", "100%");
 				pfp.style.setProperty("width", "unset");
@@ -135,8 +131,6 @@ function createFriendContainer(friend){
 		pfp.src = `https://${hostname.host}/${friend.pfp}`;
 	}
 	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpStatus)
-	//pfpContainer.appendChild(pfpMask)
 
 	friendName = document.createElement("a");
 	friendName.innerHTML = friend.username;
@@ -182,8 +176,6 @@ function createFriendRequestContainer(user){
 	friendContainer.id = user.username;
 	pfpContainer = document.createElement("div");
 	pfpContainer.className = "pfpContainer";
-	pfpStatus = document.createElement("div");
-	pfpStatus.className = user.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
@@ -201,13 +193,7 @@ function createFriendRequestContainer(user){
 		pfp.src = `https://${hostname.host}/${user.pfp}`;
 	}
 	
-	pfpMask = document.createElement("div");
-	pfpMask.className = "pfpMask";
-	pfpMask.style.setProperty("background","radial-gradient(circle, rgba(255,255,255,0) 70%, var(--input-bg-rgb) 70%)");
-	
 	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpMask);
-	pfpContainer.appendChild(pfpStatus)
 	friendName = document.createElement("a");
 	friendName.innerHTML = user.username;
 	friendContainer.appendChild(pfpContainer);
@@ -238,8 +224,6 @@ function createBlockedUserContainer(user){
 
 	pfpContainer = document.createElement("div");
 	pfpContainer.className = "pfpContainer";
-	pfpStatus = document.createElement("div");
-	pfpStatus.className = friend.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
 	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
@@ -257,14 +241,7 @@ function createBlockedUserContainer(user){
 		pfp.src = `https://${hostname.host}/${user.pfp}`;
 	}
 	
-	pfpMask = document.createElement("div");
-	pfpMask.className = "pfpMask";
-	pfpMask.style.setProperty("background","radial-gradient(circle, rgba(255,255,255,0) 70%, var(--input-bg-rgb) 70%)");
-	
-	
 	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpMask);
-	pfpContainer.appendChild(pfpStatus)
 
 	friendName = document.createElement("a");
 	friendName.innerHTML = user.username;
