@@ -495,7 +495,6 @@ a {
 	align-items: center;
 	flex-wrap: inherit;
 	color: var(--main-text-rgb);
-	padding: 0 1vmax;
 }
 
 .friendContainer a{
@@ -509,40 +508,33 @@ a {
 	border-radius: 0;
 }
 
-
-.acceptRequestBtn{
-	mask-image:url("icons/check-mark-1.svg");
-	background:green;
-	height:5vw;
-	width:5vw;
-	margin-right: 1.5vw;
+.acceptRequestBtn, .rejectRequestBtn{
+	height:3.5vw;
+	width:3.5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+}
+.acceptRequestBtn{
+	mask-image:url("icons/check-mark-1.svg");
+	background:green;
 }
 
 .rejectRequestBtn{
 	mask-image:url("icons/cross-17.svg");
 	background:red;
-	height:5vw;
-	width:5vw;
-	margin-right: 1.5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
 }
 
 .moreBtn, .removeFriendBtn, .blockFriendBtn, .unblockBtn{
 	background:var(--main-text-rgb);
-	height:5vw;
-	width:5vw;
+	height:3.5vw;
+	width:3.5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
 }
 
 .moreBtn{
-	width: 10vw;
 	mask-position: 0;
 	mask-image: url("icons/more-vertical.svg");
 }
@@ -565,7 +557,6 @@ a {
 }
 
 .friendsOptionContainer, .requestOptionContainer{
-	width: 10vmin;
 	flex: none;
 }
 
@@ -672,6 +663,18 @@ a {
 	min-height: 1vh;
 }
 
+.friendSlide .friendContainer:first-child .pfpContainer{
+	border-radius: 2vw 0 0 0;
+}
+
+.friendSlide .friendContainer:last-child .pfpContainer{
+	border-radius: 0 0 0 2vw;
+}
+
+.friendSlide .friendContainer:only-child .pfpContainer{
+	border-radius: 2vw 0 0 2vw;
+}
+
 .slideSelector{
 	font-size: 1.5vmin;
 }
@@ -703,6 +706,7 @@ a {
 	display: flex;
 	position: relative;
 	overflow: hidden;
+	border-radius: 2vw 0 0 2vw;
 }
 
 .pfpStatusOnline, .pfpStatusOffline{
