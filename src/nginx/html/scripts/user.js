@@ -50,16 +50,21 @@ if (sendFriendRequestBtn){
 
                 recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
                 endDate = new Date();
-                matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
-                for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
-                    createMatchResumeContainer(matchObj[i]);
-                };
-                matchUsersName = document.querySelectorAll(".resultScoreName")
-                Object.keys(matchUsersName).forEach(function(key){
-                    matchUsersName[key].addEventListener("click", (e) => {
-                        history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+                try{
+                    matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
+                    for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
+                        createMatchResumeContainer(matchObj[i]);
+                    };
+                    matchUsersName = document.querySelectorAll(".resultScoreName")
+                    Object.keys(matchUsersName).forEach(function(key){
+                        matchUsersName[key].addEventListener("click", (e) => {
+                            history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+                        })
                     })
-                })
+                }
+                catch{
+                    //display message if user did not yet play today
+                }
             })
         }
         else{

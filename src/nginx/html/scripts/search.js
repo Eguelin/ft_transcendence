@@ -22,7 +22,6 @@
                     })
                     userResume[i].addEventListener("keydown", (e) => {
                         if (e.key == "Enter"){
-                            console.log(e);
                             var username = e.target.closest(".userResume").id;
                             history.pushState("", "", `https://${hostname.host}/user/${username}`);
                         }

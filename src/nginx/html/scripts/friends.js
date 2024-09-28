@@ -14,6 +14,10 @@ var friendSlideIdx = 0;
 friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
 slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 
+homeBtn.style.setProperty("display", "block");
+inputSearchUser.style.setProperty("display", "block");
+dropDownUserContainer.style.setProperty("display", "flex");
+
 Object.keys(slideSelector).forEach(function(key) {
 	if (currentPage == "friends"){
 		slideSelector[key].addEventListener("click", (e) => {
