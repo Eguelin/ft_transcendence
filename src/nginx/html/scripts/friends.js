@@ -108,53 +108,53 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
-function createFriendContainer(friend){
-	friendContainer = document.createElement("div");
+function createFriendContainer(user){
+	var friendContainer = document.createElement("div");
+	var pfpContainer = document.createElement("div");
+	var pfp = document.createElement("img");
+	var friendName = document.createElement("a");
+	var friendsOptionContainer = document.createElement("div");
+	var friendsOption = document.createElement("div");
+	var moreBtn = document.createElement("div");
+	var removeFriendBtn = document.createElement("div");
+	var blockFriendBtn = document.createElement("div");
+
 	friendContainer.className = "friendContainer"
-	friendContainer.id = friend.username;
-	pfpContainer = document.createElement("div");
+	friendContainer.id = user.username;
 	pfpContainer.className = "pfpContainer";
-	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
-	if (friend.pfp != ""){
+	if (user.pfp != ""){
 	
 		testImg = new Image();
                     
 		testImg.onload = function(){
-		console.log(testImg.width, testImg.height, testImg.width > testImg.height)
 			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
 				pfp.style.setProperty("height", "100%");
 				pfp.style.setProperty("width", "unset");
 			}
 		}
-		testImg.src = `https://${hostname.host}/${friend.pfp}`;
-		pfp.src = `https://${hostname.host}/${friend.pfp}`;
+		testImg.src = `https://${hostname.host}/${user.pfp}`;
+		pfp.src = `https://${hostname.host}/${user.pfp}`;
 	}
 	pfpContainer.appendChild(pfp);
 
-	friendName = document.createElement("a");
-	friendName.innerHTML = friend.username;
+	friendName.innerHTML = user.username;
 
-	friendsOptionContainer = document.createElement("div");
 	friendsOptionContainer.className = "friendsOptionContainer"
 
-	friendsOption = document.createElement("div");
 	friendsOption.className = "friendsOption"
 
 
-	moreBtn = document.createElement("div");
 	moreBtn.className = "moreBtn";
 
 	friendsOptionContainer.appendChild(moreBtn);
 	friendsOptionContainer.appendChild(friendsOption);
 
-	removeFriendBtn = document.createElement("div");
 	removeFriendBtn.className = "removeFriendBtn";
 
-	blockFriendBtn = document.createElement("div");
 	blockFriendBtn.className = "blockFriendBtn";
 
-	friendsOption.id = friend.username;
+	friendsOption.id = user.username;
 
 	friendsOption.appendChild(removeFriendBtn);
 	friendsOption.appendChild(blockFriendBtn);
@@ -163,7 +163,7 @@ function createFriendContainer(friend){
 	friendContainer.appendChild(friendName);
 	friendContainer.appendChild(friendsOptionContainer);
 
-	if (friend.is_active == true){
+	if (user.is_active == true){
 		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
 	}
 
@@ -171,16 +171,21 @@ function createFriendContainer(friend){
 }
 
 function createFriendRequestContainer(user){
-	friendContainer = document.createElement("div");
+	var friendContainer = document.createElement("div");
+	var pfpContainer = document.createElement("div");
+	var pfp = document.createElement("img");
+	var friendName = document.createElement("a");
+	var requestOptionContainer = document.createElement("div");
+	var acceptBtn = document.createElement("div");
+	var rejectBtn = document.createElement("div");
+	
 	friendContainer.className = "friendContainer"
 	friendContainer.id = user.username;
-	pfpContainer = document.createElement("div");
 	pfpContainer.className = "pfpContainer";
-	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
 	
-		testImg = new Image();
+		var testImg = new Image();
                     
                     
 		testImg.onload = function(){
@@ -194,19 +199,15 @@ function createFriendRequestContainer(user){
 	}
 	
 	pfpContainer.appendChild(pfp);
-	friendName = document.createElement("a");
 	friendName.innerHTML = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
-	requestOptionContainer = document.createElement("div");
 	requestOptionContainer.className = "requestOptionContainer";
 
-	acceptBtn = document.createElement("div");
 	acceptBtn.className = "acceptRequestBtn";
 	requestOptionContainer.appendChild(acceptBtn);
 
-	rejectBtn = document.createElement("div");
 	rejectBtn.className = "rejectRequestBtn";
 	requestOptionContainer.appendChild(rejectBtn);
 
@@ -218,13 +219,17 @@ function createFriendRequestContainer(user){
 }
 
 function createBlockedUserContainer(user){
-	friendContainer = document.createElement("div");
+	var friendContainer = document.createElement("div");
+	var pfpContainer = document.createElement("div");
+	var pfp = document.createElement("img");
+	var friendName = document.createElement("a");
+	var unblockBtn = document.createElement("div");
+	var requestOptionContainer = document.createElement("div");
+
 	friendContainer.className = "friendContainer"
 	friendContainer.id = user.username;
 
-	pfpContainer = document.createElement("div");
 	pfpContainer.className = "pfpContainer";
-	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
 	if (user.pfp != ""){
 	
@@ -243,15 +248,12 @@ function createBlockedUserContainer(user){
 	
 	pfpContainer.appendChild(pfp);
 
-	friendName = document.createElement("a");
 	friendName.innerHTML = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
-	unblockBtn = document.createElement("div");
 	unblockBtn.className = "unblockBtn";
 
-	requestOptionContainer = document.createElement("div");
 	requestOptionContainer.className = "requestOptionContainer";
 	requestOptionContainer.id = user.username;
 	requestOptionContainer.appendChild(unblockBtn);

@@ -706,7 +706,6 @@ a {
 	display: flex;
 	position: relative;
 	overflow: hidden;
-	border-radius: 2vw 0 0 2vw;
 }
 
 .pfpStatusOnline, .pfpStatusOffline{
