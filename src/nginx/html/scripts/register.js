@@ -73,8 +73,13 @@ registerBtn.addEventListener("click", (e) => {
 					body: JSON.stringify(data),
 					credentials: 'include'
 				}).then(response => {
-					document.getElementById("loaderBg").style.setProperty("display", "none");
-					history.replaceState("", "", `https://${hostname.host}/home`);
+					(async () => {
+						client = await new Client()	
+						if (client == null)
+							history.replaceState("", "", `https://${hostname.host}/login`);
+						else
+							history.replaceState("", "", `https://${hostname.host}/home`);
+					})();
 				});
 			} else {
 				response.json().then(response => {
