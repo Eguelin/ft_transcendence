@@ -215,6 +215,10 @@
 	flex-direction: column;
 }
 
+#langDropDown {
+	z-index: 1;
+}
+
 .dropDownUserContent, .timelineDropdownContent{
 	list-style: none;
 	padding: 0;
