@@ -13,35 +13,52 @@
                 Object.keys(user).forEach(function (key) {
                     createUserResumeContainer(user[key]);
                 })
+
+                userResume = document.querySelectorAll(".userResume");
+                for (i = 0; i<  userResume.length; i++){
+                    userResume[i].addEventListener("click", (e) => {
+                        var username = e.target.closest(".userResume").id;
+                        history.pushState("", "", `https://${hostname.host}/user/${username}`);
+                    })
+                    userResume[i].addEventListener("keydown", (e) => {
+                        if (e.key == "Enter"){
+                            console.log(e);
+                            var username = e.target.closest(".userResume").id;
+                            history.pushState("", "", `https://${hostname.host}/user/${username}`);
+                        }
+                    })
+                }
             }))
         })
     }
     else
         history.replaceState("", "", `https://${hostname.host}/home`);
 
-    userResume = document.querySelectorAll(".userResume");
-    userResumePfp = document.querySelectorAll(".userResumePfp");
-    testImg = new Image();
+}
 
-    setTimeout(() => {
-        for (var i = 0; i< userResumePfp.length; i++){
-            testImg.setAttribute("src", userResumePfp[i].getAttribute("src"));
-            if (testImg.width > testImg.height){		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-                userResumePfp[i].style.setProperty("height", "100%");
-                userResumePfp[i].style.setProperty("width", "unset");
-            }
-        }
-    }, 10)
-    for (var i = 0; i< userResume.length; i++){
-        userResume[i].addEventListener("click", (e) => {
-            var username = e.target.closest(".userResume").id;
-            history.pushState("", "", `https://${hostname.host}/user/${username}`);
-        })
-        userResume[i].addEventListener("keydown", (e) => {
-            if (e.key == "Enter"){
-                var username = e.target.closest(".userResume").id;
-                history.pushState("", "", `https://${hostname.host}/user/${username}`);
-            }
-        })
-    }
+
+function createUserResumeContainer(user) {
+	userResumeContainer = document.createElement("div");
+	userResumeContainer.className = "userResumeContainer";
+
+	userResume = document.createElement("div");
+	userResume.className = "userResume";
+	userResume.id = user.username
+
+	img = document.createElement("img");
+	imgContainer = document.createElement("div");
+	img.className = "userResumePfp";
+	imgContainer.className = "userResumePfpContainer";
+    addPfpUrlToImgSrc(img, user.pfp);
+	userResumeName = document.createElement("a");
+	userResumeName.className = "userResumeName"
+	userResumeName.innerHTML = user.username;
+
+
+	imgContainer.appendChild(img);
+	userResume.appendChild(imgContainer);
+	userResume.appendChild(userResumeName);
+	userResume.setAttribute("tabindex", 10);
+	userResumeContainer.appendChild(userResume)
+	document.getElementById("resumeContainer").appendChild(userResumeContainer);
 }

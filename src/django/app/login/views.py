@@ -367,6 +367,6 @@ def search_by_username(request):
 				i += 1
 			if i == 0:
 				return JsonResponse({}, status=200)
-			return JsonResponse(users_json, status=400)
+			return JsonResponse(users_json, status=200)
 		except Exception as error:
 			return JsonResponse({'message': error}, status=500)

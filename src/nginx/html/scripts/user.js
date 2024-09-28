@@ -46,21 +46,8 @@ if (sendFriendRequestBtn){
                 document.getElementById("profileName").innerHTML = user.username;
                 document.getElementById("profilePfp").style.setProperty("display", "block");
                 profilePfp.innerHTML = "";
-                if (user.pfp != ""){
-                    testImg = new Image();
-                    
-                    
-					testImg.onload = function(){
-						if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-							profilePfp.style.setProperty("height", "100%");
-							profilePfp.style.setProperty("width", "unset");
-						}
-					}
-                    testImg.src = `https://${hostname.host}/${user.pfp}`;
-                    profilePfp.src = `https://${hostname.host}/${user.pfp}`;
-                }
-                else
-                    profilePfp.style.setProperty("display", "none");
+            	addPfpUrlToImgSrc(profilePfp, user.pfp);
+
                 recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
                 endDate = new Date();
                 matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
