@@ -123,19 +123,7 @@ function createFriendContainer(user){
 	friendContainer.id = user.username;
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
-	if (user.pfp != ""){
-	
-		testImg = new Image();
-                    
-		testImg.onload = function(){
-			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-				pfp.style.setProperty("height", "100%");
-				pfp.style.setProperty("width", "unset");
-			}
-		}
-		testImg.src = `https://${hostname.host}/${user.pfp}`;
-		pfp.src = `https://${hostname.host}/${user.pfp}`;
-	}
+	addPfpUrlToImgSrc(pfp, user.pfp);
 	pfpContainer.appendChild(pfp);
 
 	friendName.innerHTML = user.username;
@@ -183,20 +171,7 @@ function createFriendRequestContainer(user){
 	friendContainer.id = user.username;
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
-	if (user.pfp != ""){
-	
-		var testImg = new Image();
-                    
-                    
-		testImg.onload = function(){
-			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-				pfp.style.setProperty("height", "100%");
-				pfp.style.setProperty("width", "unset");
-			}
-		}
-		testImg.src = `https://${hostname.host}/${user.pfp}`;
-		pfp.src = `https://${hostname.host}/${user.pfp}`;
-	}
+	addPfpUrlToImgSrc(pfp, user.pfp);
 	
 	pfpContainer.appendChild(pfp);
 	friendName.innerHTML = user.username;
@@ -231,21 +206,8 @@ function createBlockedUserContainer(user){
 
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
-	if (user.pfp != ""){
-	
-		testImg = new Image();
-                    
-                    
-		testImg.onload = function(){
-			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-				pfp.style.setProperty("height", "100%");
-				pfp.style.setProperty("width", "unset");
-			}
-		}
-		testImg.src = `https://${hostname.host}/${user.pfp}`;
-		pfp.src = `https://${hostname.host}/${user.pfp}`;
-	}
-	
+	addPfpUrlToImgSrc(pfp, user.pfp);
+
 	pfpContainer.appendChild(pfp);
 
 	friendName.innerHTML = user.username;

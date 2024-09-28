@@ -38,6 +38,24 @@ const routes = {
 	"/register" : "bodyLess/register.html"
 }
 
+function addPfpUrlToImgSrc(img, path){
+	if (path != "") {
+		var testImg = new Image();
+		
+		testImg.onload = function(){
+			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+				img.style.setProperty("height", "100%");
+				img.style.setProperty("width", "unset");
+			}
+		}
+		testImg.src = `https://${hostname.host}/${path}`;
+		img.src = `https://${hostname.host}/${path}`;
+		img.style.setProperty("display", "block");
+	}
+	else
+		img.style.setProperty("display", "none");
+}
+
 class Client{
 	username;
 	currentPage;
@@ -73,22 +91,7 @@ class Client{
 
 				usernameBtn.innerHTML = result.username;
 	
-				if (result.pfp != "") {
-					var testImg = new Image();
-					
-					testImg.onload = function(){
-						if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
-							userPfp.style.setProperty("height", "100%");
-							userPfp.style.setProperty("width", "unset");
-						}
-					}
-					testImg.src = `https://${hostname.host}/${result.pfp}`;
-					userPfp.setAttribute("src", `https://${hostname.host}/${result.pfp}`);
-					userPfp.style.setProperty("display", "block");
-				}
-				else
-					userPfp.style.setProperty("display", "none");
-
+				addPfpUrlToImgSrc(userPfp, result.pfp)
 
 				fetch('/api/user/update', {
 					method: 'POST',
@@ -518,39 +521,10 @@ function createMatchResumeContainer(match) {
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }
 
-function createUserResumeContainer(user) {
-	userResumeContainer = document.createElement("div");
-	userResumeContainer.className = "userResumeContainer";
-
-	userResume = document.createElement("div");
-	userResume.className = "userResume";
-	userResume.id = user.username
-
-	img = document.createElement("img");
-	imgContainer = document.createElement("div");
-	img.className = "userResumePfp";
-	imgContainer.className = "userResumePfpContainer";
-	if (user.pfp != "") {
-		img.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
-	}
-	else
-		img.style.setProperty("display", "none");
-
-	userResumeName = document.createElement("a");
-	userResumeName.className = "userResumeName"
-	userResumeName.innerHTML = user.username;
-
-
-	imgContainer.appendChild(img);
-	userResume.appendChild(imgContainer);
-	userResume.appendChild(userResumeName);
-	userResume.setAttribute("tabindex", 10);
-	userResumeContainer.appendChild(userResume)
-	document.getElementById("resumeContainer").appendChild(userResumeContainer);
-}
-
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter" && inputSearchUser.value.length > 0) {
+		history.pushState("", "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
+/*
 		fetch('/api/user/search_by_username', {
 			method: 'POST', //GET forbid the use of body :(
 			headers: { 'Content-Type': 'application/json', },
@@ -570,7 +544,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
 						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/profile.js`);
+						s.setAttribute('src', `scripts/user.js`);
 						document.body.appendChild(s);
 						currentPage = "search";
 						loadCurrentLang(currentPage);
@@ -583,7 +557,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 					})
 				})
 			})
-		})
+		})*/
 	}
 })
 
