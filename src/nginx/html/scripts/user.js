@@ -49,7 +49,6 @@ if (sendFriendRequestBtn){
             	addPfpUrlToImgSrc(profilePfp, user.pfp);
 
                 recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
-                recentMatchHistoryContainer.innerHTML = "";
                 endDate = new Date();
                 try{
                     matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today

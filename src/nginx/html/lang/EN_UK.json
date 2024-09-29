@@ -62,7 +62,7 @@
 		"pendingFriendRequestSelectorText": "Pending",
 		"blockedSelectorText": "Blocked"
 	},
-	"profile":{
+	"user":{
 		"title" : "",
 		"sendFriendRequestBtn" : "Send friend request"
 	},

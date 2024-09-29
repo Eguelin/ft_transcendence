@@ -62,7 +62,7 @@
 		"pendingFriendRequestSelectorText": "Ausstehend",
 		"blockedSelectorText": "Blockiert"
 	},
-	"profile":{
+"user":{
 		"title" : "",
 		"sendFriendRequestBtn" : "Freundschaftsanfrage senden"
 	},
