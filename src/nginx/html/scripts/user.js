@@ -49,6 +49,7 @@ if (sendFriendRequestBtn){
             	addPfpUrlToImgSrc(profilePfp, user.pfp);
 
                 recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
+                recentMatchHistoryContainer.innerHTML = "";
                 endDate = new Date();
                 try{
                     matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
@@ -63,7 +64,13 @@ if (sendFriendRequestBtn){
                     })
                 }
                 catch{
-                    //display message if user did not yet play today
+                    var message = document.createElement("a");
+                    recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
+                    recentMatchHistoryContainer.style.setProperty("align-items", "center");
+                    message.style.setProperty("color", "var(--main-text-rgb)");	
+                    message.style.setProperty("width", "100vw");
+                    message.innerText = `${splitPath[4]} has not played any match today`;
+                    recentMatchHistoryContainer.appendChild(message);
                 }
             })
         }

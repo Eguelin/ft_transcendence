@@ -8,6 +8,7 @@ playBtn = document.getElementById("playBtn");
 	homeBtn.style.setProperty("display", "none");
 
 	if (client){
+		recentMatchHistoryContainer.innerHTML = "";
 		if (Object.keys(client.recentMatches).length == 0){
 			var message = document.createElement("a");
 			recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
@@ -18,7 +19,6 @@ playBtn = document.getElementById("playBtn");
 			recentMatchHistoryContainer.appendChild(message);
 		}
 		else{
-			recentMatchHistoryContainer.innerHTML = "";
 			for (var i=0; i<Object.keys(recentMatches).length && i<5;i++)
 				createMatchResumeContainer(recentMatches[i]);
 		}
