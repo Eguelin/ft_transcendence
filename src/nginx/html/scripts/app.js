@@ -66,6 +66,7 @@ class Client{
 	friends;
 	friend_requests;
 	blocked_user;
+	recentMatches;
 
 	constructor (){
 		return (async () =>{
@@ -85,6 +86,7 @@ class Client{
 				this.friends = result.friends;
 				this.friend_requests = result.friend_requests;
 				this.blocked_user = result.blocked_user;
+				this.recentMatches = result.matches;
 				switchTheme(this.use_dark_theme);
 				
 				langDropDownBtn.style.setProperty("background-image", `url(icons/${result.lang.substring(4, 10)}.svg)`);
@@ -154,28 +156,18 @@ window.navigation.addEventListener("navigate", (e) => {
 			if (dropDownUser.classList.contains("activeDropDown"))
 				dropDownUser.classList.remove("activeDropDown");
 				
-			
+			if (!(client instanceof Client)){
+				if (!url.pathname.startsWith("/register"))
+					history.replaceState("","", `https://${hostname.host}/login`)
+				client = null;				
+			}
 			if (client)
 				client.loadPage(url.pathname)
 			else {
 				dropDownUserContainer.style.setProperty("display", "none");
 				currentLang = "lang/EN_UK.json";
 				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
-				if (url.pathname.startsWith("/login")) {
-					fetch('bodyLess/login.html').then((response) => {
-						(response.text().then(response => {
-							inputSearchUser.style.setProperty("display", "none");
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/login.js`);
-							document.body.appendChild(s);
-							currentPage = "login";
-							loadCurrentLang();
-						}))
-					});
-				}
+
 				if (url.pathname.startsWith("/register")) {
 					fetch('bodyLess/register.html').then((response) => {
 						return (response.text().then(response => {
@@ -190,6 +182,21 @@ window.navigation.addEventListener("navigate", (e) => {
 							currentPage = "register";
 							loadCurrentLang();
 							document.body.appendChild(s);
+						}))
+					});
+				}
+				else{
+					fetch('bodyLess/login.html').then((response) => {
+						(response.text().then(response => {
+							inputSearchUser.style.setProperty("display", "none");
+							container.innerHTML = response;
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `scripts/login.js`);
+							document.body.appendChild(s);
+							currentPage = "login";
+							loadCurrentLang();
 						}))
 					});
 				}
@@ -524,40 +531,6 @@ function createMatchResumeContainer(match) {
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter" && inputSearchUser.value.length > 0) {
 		history.pushState("", "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
-/*
-		fetch('/api/user/search_by_username', {
-			method: 'POST', //GET forbid the use of body :(
-			headers: { 'Content-Type': 'application/json', },
-			body: JSON.stringify({ "name": inputSearchUser.value }),
-			credentials: 'include'
-		}).then(user => {
-			user.json().then((user) => {
-				fetch('bodyLess/search.html').then((response) => {
-					response.text().then(response => {
-						state = "";
-
-						if (container.innerHTML != "")
-							history.pushState(state, "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
-						else
-							history.replaceState(state, "");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/user.js`);
-						document.body.appendChild(s);
-						currentPage = "search";
-						loadCurrentLang(currentPage);
-						homeBtn.style.setProperty("display", "block");
-						document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-						document.getElementById("userResumeSearch").innerHTML = inputSearchUser.value;
-						Object.keys(user).forEach(function (key) {
-							createUserResumeContainer(user[key]);
-						})
-					})
-				})
-			})
-		})*/
 	}
 })
 
