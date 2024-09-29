@@ -79,5 +79,13 @@
 		"title" : "ERROR 404",
 		"404_title" : "Ho no, this page does not exist :(",
 		"homeBtn" : "HOME"
+	},
+	"403":{
+		"title" : "ERROR 403",
+		"404_title" : "You're not supposed to be here >:(",
+		"homeBtn" : "HOME"
+	},
+	"admin":{
+		"title" : "Admin"
 	}
 }
