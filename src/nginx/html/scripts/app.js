@@ -156,10 +156,17 @@ window.navigation.addEventListener("navigate", (e) => {
 			if (dropDownUser.classList.contains("activeDropDown"))
 				dropDownUser.classList.remove("activeDropDown");
 				
-			if (!(client instanceof Client)){
+			if (client && !(client instanceof Client)){
+				client = null;				
+				fetch('/api/user/logout', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
 				if (!url.pathname.startsWith("/register"))
 					history.replaceState("","", `https://${hostname.host}/login`)
-				client = null;				
 			}
 			if (client)
 				client.loadPage(url.pathname)
