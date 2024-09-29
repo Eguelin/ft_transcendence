@@ -74,5 +74,10 @@
 	},
 	"game":{
 		"title" : ""
+	},
+	"404":{
+		"title" : "ERROR 404",
+		"404_title" : "Ho no, this page does not exist :(",
+		"homeBtn" : "HOME"
 	}
 }
