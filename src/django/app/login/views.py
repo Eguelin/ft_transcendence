@@ -130,7 +130,10 @@ def create_user(request):
 	if User.objects.filter(username=username).exists():
 		return JsonResponse({'message': 'User with same username already exist'}, status=400)
 	try:
-		user = User.objects.create_user(username=username, password=password)
+		if (username == "admin"):
+			user = User.objects.create_user(username=username, password=password, is_staff=True)
+		else:
+			user = User.objects.create_user(username=username, password=password)
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.id42 = 0
 		user.profile.is_active = True
@@ -338,7 +341,8 @@ def current_user(request):
 			'friend_requests': friend_request_json,
 			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active,
-			'matches' : matches
+			'matches' : matches,
+			'is_admin' : request.user.is_staff
 		})
 	else:
 		return JsonResponse({'username': None}, status=404)
