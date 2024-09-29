@@ -67,6 +67,27 @@ def create_user(request):
 		return JsonResponse({'message': 'User is not authenticated'}, status=400)
 
 
+def create_match(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.user.is_authenticated:	
+		if not request.user.is_staff:
+			return JsonResponse({'message': 'user is not admin'}, status=400)
+		try:
+			data = json.loads(request.body)
+		except json.JSONDecodeError:
+			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		matches = {}
+		for i in range(0, data['range']):
+			match = customModels.Match.objects.createWithTwoOpps(data['userOne'], data['userTwo'])
+			matches[i] = {'playerOne': match.player_one.username,
+				 'playerTwo': match.player_two.username,
+				 'playerOnePts': match.player_one_pts,
+				 'playerTwoPts': match.player_two_pts,
+				 'date': match.date,}
+		return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
+
+
 def delete_user(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
