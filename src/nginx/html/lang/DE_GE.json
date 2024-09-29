@@ -79,5 +79,13 @@
 		"title" : "Fehler 404",
 		"404_title" : "Ho nein, diese Seite existiert nicht :(",
 		"404_homeBtn" : "HOMEPAGE"
+	},
+	"403":{
+		"title" : "Fehler 403",
+		"404_title" : "Du solltest nicht hier sein >:(",
+		"homeBtn" : "HOMEPAGE"
+	},
+	"admin":{
+		"title" : "Administratorin"
 	}
 }
