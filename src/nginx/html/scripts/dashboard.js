@@ -378,7 +378,7 @@ function loadUserDashboard(LastXDaysDisplayed){
                 }
             }
                         
-            document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`
+            document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%` //TODO handle if ratio is equall to NaN
             document.getElementById("nbWinValue").innerHTML = `${countWin}`
             document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`
             document.getElementById("nbMatchValue").innerHTML = `${countMatch}`

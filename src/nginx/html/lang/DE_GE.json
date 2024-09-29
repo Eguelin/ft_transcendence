@@ -62,7 +62,7 @@
 		"pendingFriendRequestSelectorText": "Ausstehend",
 		"blockedSelectorText": "Blockiert"
 	},
-"user":{
+	"user":{
 		"title" : "",
 		"sendFriendRequestBtn" : "Freundschaftsanfrage senden"
 	},
@@ -74,5 +74,10 @@
 	},
 	"game":{
 		"title" : ""
+	},
+	"404":{
+		"title" : "Fehler 404",
+		"404_title" : "Ho nein, diese Seite existiert nicht :(",
+		"404_homeBtn" : "HOMEPAGE"
 	}
 }

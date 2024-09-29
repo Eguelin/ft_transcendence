@@ -35,7 +35,8 @@ const routes = {
 	"/search" : "bodyLess/search.html",
 	"/friends" : "bodyLess/friends.html",
 	"/login" : "bodyLess/login.html",
-	"/register" : "bodyLess/register.html"
+	"/register" : "bodyLess/register.html",
+	404 : "bodyLess/404.html"
 }
 
 function addPfpUrlToImgSrc(img, path){
@@ -130,6 +131,22 @@ class Client{
 			fetch(routes[pageName]).then((response) => {
 				response.text().then(response => {
 					currentPage = pageName.substring(1);
+					container.innerHTML = response;
+	
+					document.getElementById("script").remove();
+					var s = document.createElement("script");
+					s.setAttribute('id', 'script');
+					s.setAttribute('src', `scripts/${currentPage}.js`);
+					document.body.appendChild(s);
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+					loadCurrentLang(currentPage);
+				})
+			})
+		}
+		else{
+			fetch(routes[404]).then((response) => {
+				response.text().then(response => {
+					currentPage = '404';
 					container.innerHTML = response;
 	
 					document.getElementById("script").remove();
