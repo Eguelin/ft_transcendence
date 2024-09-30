@@ -44,7 +44,7 @@ function addPfpUrlToImgSrc(img, path){
 		var testImg = new Image();
 		
 		testImg.onload = function(){
-			if (testImg.width > testImg.height) {		//this condition does not work if not in a setTimeout. You'll ask why. The answer is : ¯\_(ツ)_/¯
+			if (testImg.width > testImg.height) {
 				img.style.setProperty("height", "100%");
 				img.style.setProperty("width", "unset");
 			}
@@ -139,7 +139,7 @@ class Client{
 					s.setAttribute('src', `scripts/${currentPage}.js`);
 					document.body.appendChild(s);
 					document.getElementById("loaderBg").style.setProperty("display", "none");
-					loadCurrentLang(currentPage);
+					(async () => (loadCurrentLang()))();
 				})
 			})
 		}
@@ -155,7 +155,7 @@ class Client{
 					s.setAttribute('src', `scripts/${currentPage}.js`);
 					document.body.appendChild(s);
 					document.getElementById("loaderBg").style.setProperty("display", "none");
-					loadCurrentLang(currentPage);
+					(async () => (loadCurrentLang()))();
 				})
 			})
 		}
@@ -203,7 +203,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							s.setAttribute('id', 'script');
 							s.setAttribute('src', `scripts/register.js`);
 							currentPage = "register";
-							loadCurrentLang();
+							(async () => (loadCurrentLang()))();
 							document.body.appendChild(s);
 						}))
 					});
@@ -219,7 +219,7 @@ window.navigation.addEventListener("navigate", (e) => {
 							s.setAttribute('src', `scripts/login.js`);
 							document.body.appendChild(s);
 							currentPage = "login";
-							loadCurrentLang();
+							(async () => (loadCurrentLang()))();
 						}))
 					});
 				}
@@ -362,126 +362,60 @@ function switchTheme(darkTheme) {
 	}
 }
 
-function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
+
+//TODO apply lang to index at every call
+async function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
+	contentJson = null;
 	if (client && client.langJson){
-		content = client.langJson[currentPage];
-		if (content != null || content != undefined) {
-			Object.keys(content).forEach(function (key) {
-				if (key.startsWith('.')){
-					instances = document.querySelectorAll(key);
-					for (var i=0; i< Object.keys(instances).length; i++){
-						instances[i].innerHTML = content[key];
-					}
-				}
-				else if (document.getElementById(key)) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					
-					else
-						document.getElementById(key).innerHTML = content[key];
-				}
-			});
-		}
-		content = client.langJson['index'];
-		if (content != null || content != undefined) {
-			Object.keys(content).forEach(function (key) {
-				if (key.startsWith('.')){
-					instances = document.querySelectorAll(key);
-					for (var i=0; i< Object.keys(instances).length; i++){
-						instances[i].innerHTML = content[key];
-					}
-				}
-				else if (document.getElementById(key)) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					
-					else
-						document.getElementById(key).innerHTML = content[key];
-				}
-			});
-		}
+		contentJson = client.langJson;
 	}
 	else if (currentLang != undefined){
-		fetch(currentLang).then(response => {
-			if (response.ok) {
-				response.json().then((text) => {
-					content = text[currentPage];
-					if (content != null || content != undefined) {
-						Object.keys(content).forEach(function (key) {
-							if (document.getElementById(key)) {
-								if (key.startsWith('.')){
-									instances = document.querySelectorAll(key);
-									for (var i=0; i< Object.keys(instances).length; i++){
-										instances[i].innerHTML = content[key];
-									}
-								}
-								else if (document.getElementById(key)) {
-									if (key.startsWith('input'))
-										document.getElementById(key).placeholder = content[key];
-									
-									else
-										document.getElementById(key).innerHTML = content[key];
-								}
-							}
-						});
-					}
-				})
-			}
-			else {
-				fetch("lang/EN_UK.json").then(response => {
-					response.json().then((text) => {
-						currentLang = "lang/EN_UK.json";
-						content = text[currentPage];
-						if (content != null || content != undefined) {
-							Object.keys(content).forEach(function (key) {
-								if (document.getElementById(key)) {
-									if (key.startsWith('.')){
-										instances = document.querySelectorAll(key);
-										for (var i=0; i< Object.keys(instances).length; i++){
-											instances[i].innerHTML = content[key];
-										}
-									}
-									else if (document.getElementById(key)) {
-										if (key.startsWith('input'))
-											document.getElementById(key).placeholder = content[key];
-										
-										else
-											document.getElementById(key).innerHTML = content[key];
-									}
-								}
-							});
-						}
-					})
-				})
-			}
-		})
+		const fetchResult = await fetch(currentLang);
+		if (fetchResult.ok)
+			contentJson = await fetchResult.json()
+		else 
+			contentJson = (await fetch("lang/EN_UK.json")).json();
 	}
 	else {
-		fetch("lang/EN_UK.json").then(response => {
-			response.json().then((text) => {
-				content = text[currentPage];
-				currentLang = "lang/EN_UK.json";
-				if (content != null || content != undefined) {
-					Object.keys(content).forEach(function (key) {
-						if (document.getElementById(key)) {
-							if (key.startsWith('.')){
-								instances = document.querySelectorAll(key);
-								for (var i=0; i< Object.keys(instances).length; i++){
-									instances[i].innerHTML = content[key];
-								}
-							}
-							else if (document.getElementById(key)) {
-								if (key.startsWith('input'))
-									document.getElementById(key).placeholder = content[key];
-								
-								else
-									document.getElementById(key).innerHTML = content[key];
-							}
-						}
-					});
+		contentJson = (await fetch("lang/EN_UK.json")).json();
+	}
+	if (contentJson != null && contentJson != undefined){
+		content = contentJson[currentPage];
+		if (content != null && content != undefined) {
+			Object.keys(content).forEach(function (key) {
+				if (key.startsWith('.')){
+					instances = document.querySelectorAll(key);
+					for (var i=0; i< Object.keys(instances).length; i++){
+						instances[i].innerHTML = content[key];
+					}
 				}
-			})
-		})
+				else if (document.getElementById(key)) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					
+					else
+						document.getElementById(key).innerHTML = content[key];
+				}
+			});
+		}
+		content = contentJson['index'];
+		if (content != null || content != undefined) {
+			Object.keys(content).forEach(function (key) {
+				if (key.startsWith('.')){
+					instances = document.querySelectorAll(key);
+					for (var i=0; i< Object.keys(instances).length; i++){
+						instances[i].innerHTML = content[key];
+					}
+				}
+				else if (document.getElementById(key)) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					
+					else
+						document.getElementById(key).innerHTML = content[key];
+				}
+			});
+		}
 	}
 }
 
