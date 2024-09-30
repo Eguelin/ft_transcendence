@@ -362,8 +362,6 @@ function switchTheme(darkTheme) {
 	}
 }
 
-
-//TODO apply lang to index at every call
 async function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
 	contentJson = null;
 	if (client && client.langJson){
@@ -383,36 +381,28 @@ async function loadCurrentLang(){ //just for better readability before prod, don
 		content = contentJson[currentPage];
 		if (content != null && content != undefined) {
 			Object.keys(content).forEach(function (key) {
-				if (key.startsWith('.')){
-					instances = document.querySelectorAll(key);
-					for (var i=0; i< Object.keys(instances).length; i++){
-						instances[i].innerHTML = content[key];
-					}
+				instances = document.querySelectorAll(key);
+				if (key.startsWith('#input')){
+					for (var i=0; i< Object.keys(instances).length; i++)
+						instances[i].placeholder = content[key];
 				}
-				else if (document.getElementById(key)) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					
-					else
-						document.getElementById(key).innerHTML = content[key];
+				else{
+					for (var i=0; i< Object.keys(instances).length; i++)
+						instances[i].innerHTML = content[key];
 				}
 			});
 		}
 		content = contentJson['index'];
 		if (content != null || content != undefined) {
 			Object.keys(content).forEach(function (key) {
-				if (key.startsWith('.')){
-					instances = document.querySelectorAll(key);
-					for (var i=0; i< Object.keys(instances).length; i++){
-						instances[i].innerHTML = content[key];
-					}
+				instances = document.querySelectorAll(key);
+				if (key.startsWith('#input')){
+					for (var i=0; i< Object.keys(instances).length; i++)
+						instances[i].placeholder = content[key];
 				}
-				else if (document.getElementById(key)) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					
-					else
-						document.getElementById(key).innerHTML = content[key];
+				else{
+					for (var i=0; i< Object.keys(instances).length; i++)
+						instances[i].innerHTML = content[key];
 				}
 			});
 		}
