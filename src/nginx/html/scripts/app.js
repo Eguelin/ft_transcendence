@@ -367,9 +367,16 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 		content = client.langJson[currentPage];
 		if (content != null || content != undefined) {
 			Object.keys(content).forEach(function (key) {
-				if (document.getElementById(key)) {
+				if (key.startsWith('.')){
+					instances = document.querySelectorAll(key);
+					for (var i=0; i< Object.keys(instances).length; i++){
+						instances[i].innerHTML = content[key];
+					}
+				}
+				else if (document.getElementById(key)) {
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
+					
 					else
 						document.getElementById(key).innerHTML = content[key];
 				}
@@ -378,9 +385,16 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 		content = client.langJson['index'];
 		if (content != null || content != undefined) {
 			Object.keys(content).forEach(function (key) {
-				if (document.getElementById(key)) {
+				if (key.startsWith('.')){
+					instances = document.querySelectorAll(key);
+					for (var i=0; i< Object.keys(instances).length; i++){
+						instances[i].innerHTML = content[key];
+					}
+				}
+				else if (document.getElementById(key)) {
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
+					
 					else
 						document.getElementById(key).innerHTML = content[key];
 				}
@@ -395,10 +409,19 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 					if (content != null || content != undefined) {
 						Object.keys(content).forEach(function (key) {
 							if (document.getElementById(key)) {
-								if (key.startsWith('input'))
-									document.getElementById(key).placeholder = content[key];
-								else
-									document.getElementById(key).innerHTML = content[key];
+								if (key.startsWith('.')){
+									instances = document.querySelectorAll(key);
+									for (var i=0; i< Object.keys(instances).length; i++){
+										instances[i].innerHTML = content[key];
+									}
+								}
+								else if (document.getElementById(key)) {
+									if (key.startsWith('input'))
+										document.getElementById(key).placeholder = content[key];
+									
+									else
+										document.getElementById(key).innerHTML = content[key];
+								}
 							}
 						});
 					}
@@ -412,10 +435,19 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 						if (content != null || content != undefined) {
 							Object.keys(content).forEach(function (key) {
 								if (document.getElementById(key)) {
-									if (key.startsWith('input'))
-										document.getElementById(key).placeholder = content[key];
-									else
-										document.getElementById(key).innerHTML = content[key];
+									if (key.startsWith('.')){
+										instances = document.querySelectorAll(key);
+										for (var i=0; i< Object.keys(instances).length; i++){
+											instances[i].innerHTML = content[key];
+										}
+									}
+									else if (document.getElementById(key)) {
+										if (key.startsWith('input'))
+											document.getElementById(key).placeholder = content[key];
+										
+										else
+											document.getElementById(key).innerHTML = content[key];
+									}
 								}
 							});
 						}
@@ -432,10 +464,19 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 				if (content != null || content != undefined) {
 					Object.keys(content).forEach(function (key) {
 						if (document.getElementById(key)) {
-							if (key.startsWith('input'))
-								document.getElementById(key).placeholder = content[key];
-							else
-								document.getElementById(key).innerHTML = content[key];
+							if (key.startsWith('.')){
+								instances = document.querySelectorAll(key);
+								for (var i=0; i< Object.keys(instances).length; i++){
+									instances[i].innerHTML = content[key];
+								}
+							}
+							else if (document.getElementById(key)) {
+								if (key.startsWith('input'))
+									document.getElementById(key).placeholder = content[key];
+								
+								else
+									document.getElementById(key).innerHTML = content[key];
+							}
 						}
 					});
 				}
@@ -545,13 +586,18 @@ function createMatchResumeContainer(match) {
 	scoreOpponent.appendChild(scoreOpponentName);
 	scoreOpponent.innerHTML += " : ";
 	scoreOpponent.appendChild(scoreOpponentScore);
-	if (match.player_one_pts > match.player_two_pts)
-		result.innerHTML = "VICTORY";
-	else if (match.player_one_pts < match.player_two_pts)
-		result.innerHTML = "LOST";
-	else
-		result.innerHTML = "DRAW";
-
+	if (match.player_one_pts > match.player_two_pts){
+		result.classList.add("victory");
+		result.innerHTML = client.langJson['user']['.victory'];
+	}
+	else if (match.player_one_pts < match.player_two_pts){
+		result.classList.add("loss");
+		result.innerHTML = client.langJson['user']['.loss'];
+	}
+	else{
+		result.classList.add("draw");
+		result.innerHTML = client.langJson['user']['.draw'];
+	}
 	scoreContainer.appendChild(scoreUser);
 	scoreContainer.appendChild(scoreOpponent);
 

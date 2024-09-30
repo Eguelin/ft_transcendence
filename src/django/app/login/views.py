@@ -139,7 +139,7 @@ def create_user(request):
 			user.profile.language_pack = data['lang']
 
 		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 10):
+		for i in range(0, 1000):
 			match = customModels.Match.objects.createWithRandomOpps(user)
 			user.profile.matches.add(match)
 		user.save()
