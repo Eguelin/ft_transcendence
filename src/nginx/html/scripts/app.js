@@ -375,6 +375,17 @@ function loadCurrentLang(){ //just for better readability before prod, don't car
 				}
 			});
 		}
+		content = client.langJson['index'];
+		if (content != null || content != undefined) {
+			Object.keys(content).forEach(function (key) {
+				if (document.getElementById(key)) {
+					if (key.startsWith('input'))
+						document.getElementById(key).placeholder = content[key];
+					else
+						document.getElementById(key).innerHTML = content[key];
+				}
+			});
+		}
 	}
 	else if (currentLang != undefined){
 		fetch(currentLang).then(response => {

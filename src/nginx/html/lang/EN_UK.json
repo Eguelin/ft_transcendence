@@ -1,10 +1,15 @@
 {
-	"home" : {
-		"title" : "PONG",
+	"index": {
+		"myProfileBtn" : "Profile",
 		"friendsBtn" :  "Friends",
 		"settingsBtn" :  "Settings",
 		"logOutBtn" :  "Log out",
-		"playBtn" : "Play"
+		"inputSearchUser" : "Search user"
+	},
+	"home" : {
+		"title" : "PONG",
+		"playBtn" : "Play",
+		"notPlayedToday" : "You have not played any match today"
 	},
 	"login" : {
 		"title" : "LOGIN",
