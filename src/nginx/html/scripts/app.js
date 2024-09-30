@@ -189,7 +189,6 @@ window.navigation.addEventListener("navigate", (e) => {
 				client.loadPage(url.pathname)
 			else {
 				dropDownUserContainer.style.setProperty("display", "none");
-				currentLang = "lang/EN_UK.json";
 				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
 
 				if (url.pathname.startsWith("/register")) {
@@ -592,11 +591,13 @@ usernameBtn.addEventListener("keydown", (e) => {
 langDropDownOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		currentLang = `lang/${button.id}.json`;
-		client.currentLang = `lang/${button.id}.json`;
+		if (client)
+			client.currentLang = `lang/${button.id}.json`;
 		fetch(currentLang).then(response => {
 			if (response.ok){
 				response.json().then((text) => {
-					client.langJson = text;
+					if (client)
+						client.langJson = text;
 					loadCurrentLang();
 				})
 			}

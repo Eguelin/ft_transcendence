@@ -142,6 +142,7 @@ def create_user(request):
 		for i in range(0, 10):
 			match = customModels.Match.objects.createWithRandomOpps(user)
 			user.profile.matches.add(match)
+		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
