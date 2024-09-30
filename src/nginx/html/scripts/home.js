@@ -20,8 +20,8 @@ playBtn = document.getElementById("playBtn");
 			recentMatchHistoryContainer.appendChild(message);
 		}
 		else{
-			for (var i=0; i<Object.keys(recentMatches).length && i<5;i++)
-				createMatchResumeContainer(recentMatches[i]);
+			for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++)
+				createMatchResumeContainer(client.recentMatches[i]);
 		}
 		matchUsersName = document.querySelectorAll(".resultScoreName")
 		Object.keys(matchUsersName).forEach(function(key){

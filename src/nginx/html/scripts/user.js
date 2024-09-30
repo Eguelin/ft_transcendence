@@ -63,13 +63,23 @@ if (sendFriendRequestBtn){
                     })
                 }
                 catch{
+                    var messageContainer = document.createElement("div");
+                    var messageUsername = document.createElement("a");
                     var message = document.createElement("a");
                     recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
                     recentMatchHistoryContainer.style.setProperty("align-items", "center");
-                    message.style.setProperty("color", "var(--main-text-rgb)");	
-                    message.style.setProperty("width", "100vw");
-                    message.innerText = `${splitPath[4]} has not played any match today`;
-                    recentMatchHistoryContainer.appendChild(message);
+                    messageContainer.style.setProperty("color", "var(--main-text-rgb)");	
+                    messageContainer.style.setProperty("position", "relative");
+                    messageContainer.style.setProperty("display", "flex");
+                    messageContainer.style.setProperty("gap", "1ch");
+                    messageContainer.style.setProperty("left", "50%");
+                    messageContainer.style.setProperty("translate", "-50%");
+                    messageUsername.innerText = splitPath[4]
+                    message.id="notPlayedToday";
+			        message.innerText = client.langJson['user']['notPlayedToday'];
+                    messageContainer.appendChild(messageUsername);
+                    messageContainer.appendChild(message);
+                    recentMatchHistoryContainer.appendChild(messageContainer);
                 }
             })
         }

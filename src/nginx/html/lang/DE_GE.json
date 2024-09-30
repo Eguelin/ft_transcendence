@@ -9,7 +9,10 @@
 	"home" : {
 		"title" : "PONG",
 		"playBtn" : "Spielen",
-		"notPlayedToday" : "Sie haben heute kein Spiel gespielt"
+		"notPlayedToday" : "Sie haben heute kein Spiel gespielt",
+		".victory" : "SIEG",
+		".loss" : "VERLOREN",
+		".draw" : "UNENTSCHIDEN"
 	},
 	"login" : {
 		"title" : "ANMELDUNG",
@@ -69,7 +72,13 @@
 	},
 	"user":{
 		"title" : "",
-		"sendFriendRequestBtn" : "Freundschaftsanfrage senden"
+		"sendFriendRequestBtn" : "Freundschaftsanfrage senden",
+		"notPlayedToday" : "hat heute kein Spiel bestritten",
+		"recentMatchHistoryText" : "Aktuelle Spiele",
+		"allMatchesHistoryBtn" : "Alle Spiele",
+		".victory" : "SIEG",
+		".loss" : "VERLOREN",
+		".draw" : "UNENTSCHIDEN"
 	},
 	"dashboard":{
 		"title" : ""
