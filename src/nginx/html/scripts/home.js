@@ -15,7 +15,8 @@ playBtn = document.getElementById("playBtn");
 			recentMatchHistoryContainer.style.setProperty("align-items", "center");
 			message.style.setProperty("color", "var(--main-text-rgb)");	
 			message.style.setProperty("width", "100vw");
-			message.innerText = "You have not played any match today";
+			message.id="notPlayedToday";
+			message.innerText = client.langJson['home']['notPlayedToday'];
 			recentMatchHistoryContainer.appendChild(message);
 		}
 		else{
