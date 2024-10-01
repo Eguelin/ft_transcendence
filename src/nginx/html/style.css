@@ -909,12 +909,6 @@ a {
 }
 
 
-
-
-
-
-
-
 #loaderBg{
 	position: absolute;
 	top: 0;
@@ -924,6 +918,7 @@ a {
 	background: black;
 	opacity: .7;
 	display: block;
+	z-index: 10;
 }
 
 #loaderBg .loader{
@@ -1087,4 +1082,16 @@ a {
 
 #allMatchesHistoryBtn:hover, #allMatchesHistoryBtn:focus{
 	color: var(--hover-text-rgb);
+}
+
+#popupErrorContainer{
+    background: red;
+    color: var(--main-text-rgb);
+    width: fit-content;
+    padding: 1vw;
+    border-radius: 25vw;
+    position: fixed;
+    top: 5vh;
+    left: 50%;
+    translate: -50%;
 }
