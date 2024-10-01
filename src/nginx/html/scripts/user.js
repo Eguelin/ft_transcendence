@@ -76,7 +76,7 @@ if (sendFriendRequestBtn){
                     messageContainer.style.setProperty("translate", "-50%");
                     messageUsername.innerText = splitPath[4]
                     message.id="notPlayedToday";
-			        message.innerText = client.langJson['user']['notPlayedToday'];
+			        message.innerText = client.langJson['user']['#notPlayedToday'];
                     messageContainer.appendChild(messageUsername);
                     messageContainer.appendChild(message);
                     recentMatchHistoryContainer.appendChild(messageContainer);
@@ -91,4 +91,9 @@ if (sendFriendRequestBtn){
 
 allMatchesButton.addEventListener("click", (e) => {
     history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
+})
+
+allMatchesButton.addEventListener("keydown", (e) => {
+    if (e.key == "Enter")
+        history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
 })

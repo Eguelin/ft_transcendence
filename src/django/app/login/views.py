@@ -83,11 +83,6 @@ def fortytwo(request):
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
 
-		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 5):
-			match = customModels.Match.objects.createWithRandomOpps(user)
-			user.profile.matches.add(match)
-
 		user.profile.save()
 		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
@@ -141,10 +136,6 @@ def create_user(request):
 		if 'lang' in data:
 			user.profile.language_pack = data['lang']
 
-		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 1000):
-			match = customModels.Match.objects.createWithRandomOpps(user)
-			user.profile.matches.add(match)
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)

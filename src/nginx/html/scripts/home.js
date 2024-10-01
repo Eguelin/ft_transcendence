@@ -16,7 +16,7 @@ playBtn = document.getElementById("playBtn");
 			message.style.setProperty("color", "var(--main-text-rgb)");	
 			message.style.setProperty("width", "100vw");
 			message.id="notPlayedToday";
-			message.innerText = client.langJson['home']['notPlayedToday'];
+			message.innerText = client.langJson['home']['#notPlayedToday'];
 			recentMatchHistoryContainer.appendChild(message);
 		}
 		else{
