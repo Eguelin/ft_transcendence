@@ -26,6 +26,32 @@ class MatchManager(models.Manager):
 		player_two.profile.matches.add(match)
 		return match
 
+	def createWithTwoOpps(self, userOne, userTwo):
+		startDate = datetime.datetime(2024,1,1)
+		endDate = datetime.datetime(2024,12,31)
+
+		try:
+			player_one = User.objects.get(username=userOne)
+		except:
+			player_one = User.objects.get_or_create(username=userOne)[0]
+			player_one.save()
+
+		try:
+			player_two = User.objects.get(username=userTwo)
+		except:
+			player_two = User.objects.get_or_create(username=userTwo)[0]
+			player_two.save()
+		
+		match = self.create(player_one=player_one, player_two=player_two)
+		match.player_one_pts = random.randint(0, 10)
+		match.player_two_pts = random.randint(0, 10)
+		match.save()
+		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds()))) 
+		match.save()
+		player_one.profile.matches.add(match)
+		player_two.profile.matches.add(match)
+		return match
+
 	def save(self):
 		super().save()
 

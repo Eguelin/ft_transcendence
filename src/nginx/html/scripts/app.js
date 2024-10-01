@@ -36,7 +36,9 @@ const routes = {
 	"/friends" : "bodyLess/friends.html",
 	"/login" : "bodyLess/login.html",
 	"/register" : "bodyLess/register.html",
-	404 : "bodyLess/404.html"
+	404 : "bodyLess/404.html",
+	403 : "bodyLess/403.html",
+	"/admin": "bodyLess/admin.html"
 }
 
 function addPfpUrlToImgSrc(img, path){
@@ -68,6 +70,7 @@ class Client{
 	friend_requests;
 	blocked_user;
 	recentMatches;
+	#is_admin;
 
 	constructor (){
 		return (async () =>{
@@ -88,6 +91,7 @@ class Client{
 				this.friend_requests = result.friend_requests;
 				this.blocked_user = result.blocked_user;
 				this.recentMatches = result.matches;
+				this.#is_admin = result.is_admin;
 				switchTheme(this.use_dark_theme);
 				
 				langDropDownBtn.style.setProperty("background-image", `url(icons/${result.lang.substring(4, 10)}.svg)`);
@@ -127,21 +131,40 @@ class Client{
 		else
 			pageName = page;
 		
-		if (routes[pageName]){ //need error 404 page 
-			fetch(routes[pageName]).then((response) => {
-				response.text().then(response => {
-					currentPage = pageName.substring(1);
-					container.innerHTML = response;
-	
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/${currentPage}.js`);
-					document.body.appendChild(s);
-					document.getElementById("loaderBg").style.setProperty("display", "none");
-					(async () => (loadCurrentLang()))();
+		
+		if (routes[pageName]){
+			if (!this.#is_admin && pageName == "/admin"){
+				fetch(routes[403]).then((response) => {
+					response.text().then(response => {
+						currentPage = '403';
+						container.innerHTML = response;
+		
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/${currentPage}.js`);
+						document.body.appendChild(s);
+						document.getElementById("loaderBg").style.setProperty("display", "none");
+						(async () => (loadCurrentLang()))();
+					})
 				})
-			})
+			}
+			else{
+				fetch(routes[pageName]).then((response) => {
+					response.text().then(response => {
+						currentPage = pageName.substring(1);
+						container.innerHTML = response;
+		
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', `scripts/${currentPage}.js`);
+						document.body.appendChild(s);
+						document.getElementById("loaderBg").style.setProperty("display", "none");
+						(async () => (loadCurrentLang()))();
+					})
+				})
+			}
 		}
 		else{
 			fetch(routes[404]).then((response) => {
