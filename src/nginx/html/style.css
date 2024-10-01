@@ -62,6 +62,9 @@ h1{
 	font-size: 7vmax;
 	text-align: center;
 }
+h2{
+	color: var(--main-text-rgb);
+}
 
 #title{
 	width: 80%;
