@@ -142,10 +142,12 @@ class Client{
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
 						s.setAttribute('id', 'script');
+						s.onload = function(){
+							(async () => (loadCurrentLang()))();
+						}
 						s.setAttribute('src', `scripts/${currentPage}.js`);
 						document.body.appendChild(s);
 						document.getElementById("loaderBg").style.setProperty("display", "none");
-						(async () => (loadCurrentLang()))();
 					})
 				})
 			}
@@ -157,11 +159,13 @@ class Client{
 		
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
+						s.onload = function(){
+							(async () => (loadCurrentLang()))();
+						}
 						s.setAttribute('id', 'script');
 						s.setAttribute('src', `scripts/${currentPage}.js`);
 						document.body.appendChild(s);
 						document.getElementById("loaderBg").style.setProperty("display", "none");
-						(async () => (loadCurrentLang()))();
 					})
 				})
 			}
@@ -408,6 +412,18 @@ async function loadCurrentLang(){ //just for better readability before prod, don
 				if (key.startsWith('#input')){
 					for (var i=0; i< Object.keys(instances).length; i++)
 						instances[i].placeholder = content[key];
+				}
+				else if (key.startsWith("CV") && chartAverage && chartAbs){
+					if (key == "CVwinLossGraph")
+						chartAverage.titleBlock.options.text = content[key];
+					else if (key == "CVwinLossGraphClient" && chartAverage.config._config.data.datasets.length > 1)
+						chartAverage.config._config.data.datasets[1].label = content[key];
+					else if (key == "CVwinLossAbsGraph")
+						chartAbs.titleBlock.options.text = content[key];
+					else if (key == "CVwinLossAbsGraphClient" && chartAverage.config._config.data.datasets.length > 1)
+						chartAbs.config._config.data.datasets[1].label = content[key];
+					chartAverage.update();
+					chartAbs.update();
 				}
 				else{
 					for (var i=0; i< Object.keys(instances).length; i++)
