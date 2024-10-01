@@ -572,8 +572,12 @@ function createMatchResumeContainer(match) {
 }
 
 inputSearchUser.addEventListener("keydown", (e) => {
-	if (e.key == "Enter" && inputSearchUser.value.length > 0) {
-		history.pushState("", "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
+	if (e.key == "Enter") {
+		query = inputSearchUser.value.trim();
+		if (query.length == 0)
+			popUpError("Can't search empty query");
+		else
+			history.pushState("", "", `https://${hostname.host}/search?query=${query}`);
 	}
 })
 
@@ -647,3 +651,16 @@ window.addEventListener("click", (e) => {
 	}
 })
 
+function popUpError(error){
+	if (document.getElementById("popupErrorContainer"))
+		document.getElementById("popupErrorContainer").remove();
+	var popupContainer = document.createElement("div");
+	popupContainer.id = "popupErrorContainer";
+	var popupText = document.createElement("a")
+	popupText.innerText = error;
+	popupContainer.appendChild(popupText);
+	popupContainer.addEventListener("mouseleave", (e) => {
+		document.getElementById("popupErrorContainer").remove();
+	})
+	document.body.appendChild(popupContainer);
+}
