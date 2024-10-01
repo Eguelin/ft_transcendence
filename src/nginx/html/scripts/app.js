@@ -660,7 +660,10 @@ function popUpError(error){
 	popupText.innerText = error;
 	popupContainer.appendChild(popupText);
 	popupContainer.addEventListener("mouseleave", (e) => {
-		document.getElementById("popupErrorContainer").remove();
+		popupContainer.id = "popupErrorContainerClose"
+		setTimeout(()=>{
+			popupContainer.remove();
+		}, 500)
 	})
 	document.body.appendChild(popupContainer);
 }
