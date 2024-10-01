@@ -81,7 +81,19 @@
 		".draw" : "UNENTSCHIDEN"
 	},
 	"dashboard":{
-		"#title" : ""
+		"#title" : "",
+		"#ratioText" : "Gewinn-/Niederlagenverhältnis",
+		"#nbMatchText" : "Anzahl gespielter Spiele",
+		"#nbWinText" : "Anzahl der gewonnenen Spiele",
+		"#nbLossText" : "Anzahl verlorener Spiele",
+		"#timelineSelectionText" : "Statistiken anzeigen vom letzten",
+		"#lastWeekSelection" : "Sieben Tage",
+		"#lastMonthSelection" : "Monats",
+		"#lastYearSelection" : "Jahr",
+		"CVwinLossGraph" : "Durchschnitt nach Datum",
+		"CVwinLossAbsGraph" : "Anzahl der Siege gegenüber der Anzahl der Niederlagen nach Datum",
+		"CVwinLossGraphClient" : "du",
+		"CVwinLossAbsGraphClient" : "du"
 	},
 	"search": {
 		"#title" : "Suchen"

@@ -81,7 +81,19 @@
 		".draw" : "DRAW"
 	},
 	"dashboard":{
-		"#title" : ""
+		"#title" : "",
+		"#ratioText" : "wins/loses ratio",
+		"#nbMatchText" : "Number of games played",
+		"#nbWinText" : "Number of games winned",
+		"#nbLossText" : "Number of games lost",
+		"#timelineSelectionText" : "Display stats from the last",
+		"#lastWeekSelection" : "7 days",
+		"#lastMonthSelection" : "Month",
+		"#lastYearSelection" : "Year",
+		"CVwinLossGraph" : "Average by date",
+		"CVwinLossAbsGraph" : "Number of victory over number of defeat by date",
+		"CVwinLossGraphClient" : "you",
+		"CVwinLossAbsGraphClient" : "you" 
 	},
 	"search": {
 		"#title" : "Search"
