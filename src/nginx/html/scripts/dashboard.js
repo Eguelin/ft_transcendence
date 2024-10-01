@@ -176,7 +176,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 
     if (username != clientUsername){
         datasets.push({
-            label: "you",
+            label: client.langJson["dashboard"]["CVwinLossGraphClient"],
             data: clientMapAverage,
             fill: false,
             tension: 0,
@@ -206,7 +206,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             plugins: {
                 title: {
                     color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: 'Average by date',
+                    text: client.langJson["dashboard"]["CVwinLossGraph"],
                     display: true,
 
                 }
@@ -272,7 +272,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 
     if (username != clientUsername){
         datasets.push({
-            label: "you",
+            label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
             data: clientMapAbs,
             fill: false,
             tension: 0,
@@ -302,7 +302,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             plugins: {
                 title: {
                     color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: 'Number of victory over number of defeat by date',
+                    text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
                     display: true,
 
                 }
@@ -378,7 +378,7 @@ function loadUserDashboard(LastXDaysDisplayed){
                 }
             }
 
-            document.getElementById("ratioValue").innerHTML = `${((countWin / countMatch) * 100).toFixed(1)}%`
+            document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%` //TODO handle if ratio is equall to NaN
             document.getElementById("nbWinValue").innerHTML = `${countWin}`
             document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`
             document.getElementById("nbMatchValue").innerHTML = `${countMatch}`
@@ -386,4 +386,9 @@ function loadUserDashboard(LastXDaysDisplayed){
     })
 }
 
-loadUserDashboard(defaultLastXDaysDisplayed)
+{
+	inputSearchUser.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
+    loadUserDashboard(defaultLastXDaysDisplayed)
+}
