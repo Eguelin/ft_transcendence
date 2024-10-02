@@ -26,19 +26,19 @@ var client = null;
 var pageName;
 
 const routes = {
-	"/home": "bodyLess/home.html",
-	"/": "bodyLess/home.html",
-	"/game" : "bodyLess/game.html",
-	"/settings" : "bodyLess/settings.html",
-	"/user" : "bodyLess/user.html",
-	"/dashboard" : "bodyLess/dashboard.html",
-	"/search" : "bodyLess/search.html",
-	"/friends" : "bodyLess/friends.html",
-	"/login" : "bodyLess/login.html",
-	"/register" : "bodyLess/register.html",
-	404 : "bodyLess/404.html",
-	403 : "bodyLess/403.html",
-	"/admin": "bodyLess/admin.html"
+	"/home": `https://${hostname.host}/bodyLess/home.html`,
+	"/": `https://${hostname.host}/bodyLess/home.html`,
+	"/game" : `https://${hostname.host}/bodyLess/game.html`,
+	"/settings" : `https://${hostname.host}/bodyLess/settings.html`,
+	"/user" : `https://${hostname.host}/bodyLess/user.html`,
+	"/dashboard" : `https://${hostname.host}/bodyLess/dashboard.html`,
+	"/search" : `https://${hostname.host}/bodyLess/search.html`,
+	"/friends" : `https://${hostname.host}/bodyLess/friends.html`,
+	"/login" : `https://${hostname.host}/bodyLess/login.html`,
+	"/register" : `https://${hostname.host}/bodyLess/register.html`,
+	404 : `https://${hostname.host}/bodyLess/404.html`,
+	403 : `https://${hostname.host}/bodyLess/403.html`,
+	"/admin": `https://${hostname.host}/bodyLess/admin.html`
 }
 
 function addPfpUrlToImgSrc(img, path){
@@ -74,6 +74,7 @@ class Client{
 
 	constructor (){
 		return (async () =>{
+			console.log(hostname);
 			const fetchResult = await fetch('/api/user/current', {
 				method: 'GET',
 				headers: {
@@ -94,7 +95,7 @@ class Client{
 				this.#is_admin = result.is_admin;
 				switchTheme(this.use_dark_theme);
 				
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${result.lang.substring(4, 10)}.svg)`);
+				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 				usernameBtn.innerHTML = result.username;
 	
@@ -111,7 +112,7 @@ class Client{
 			}
 			else
 				return null
-			const fetchLangResult = await fetch(this.currentLang);
+			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
 			if (fetchLangResult.ok)
 				this.langJson = await fetchLangResult.json()
 			else
@@ -121,8 +122,6 @@ class Client{
 	}
 
 	loadPage(page){
-		if (this.username == null)
-			return ;
 		document.getElementById("loaderBg").style.setProperty("display", "block");
 		
 		var sep = page.indexOf("/", 1)
@@ -130,7 +129,6 @@ class Client{
 			pageName = page.substring(0, sep)
 		else
 			pageName = page;
-		
 		
 		if (routes[pageName]){
 			if (!this.#is_admin && pageName == "/admin"){
@@ -145,7 +143,7 @@ class Client{
 						s.onload = function(){
 							(async () => (loadCurrentLang()))();
 						}
-						s.setAttribute('src', `scripts/${currentPage}.js`);
+						s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 						document.body.appendChild(s);
 						document.getElementById("loaderBg").style.setProperty("display", "none");
 					})
@@ -163,7 +161,7 @@ class Client{
 							(async () => (loadCurrentLang()))();
 						}
 						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/${currentPage}.js`);
+						s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 						document.body.appendChild(s);
 						document.getElementById("loaderBg").style.setProperty("display", "none");
 					})
@@ -179,7 +177,7 @@ class Client{
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
 					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/${currentPage}.js`);
+					s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 					document.body.appendChild(s);
 					document.getElementById("loaderBg").style.setProperty("display", "none");
 					(async () => (loadCurrentLang()))();
@@ -216,10 +214,10 @@ window.navigation.addEventListener("navigate", (e) => {
 				client.loadPage(url.pathname)
 			else {
 				dropDownUserContainer.style.setProperty("display", "none");
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
+				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
 				if (url.pathname.startsWith("/register")) {
-					fetch('bodyLess/register.html').then((response) => {
+					fetch(`https://${hostname.host}/bodyLess/register.html`).then((response) => {
 						return (response.text().then(response => {
 
 							homeBtn.style.setProperty("display", "block");
@@ -236,7 +234,7 @@ window.navigation.addEventListener("navigate", (e) => {
 					});
 				}
 				else{
-					fetch('bodyLess/login.html').then((response) => {
+					fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 						(response.text().then(response => {
 							inputSearchUser.style.setProperty("display", "none");
 							container.innerHTML = response;
@@ -289,19 +287,19 @@ function handleToken() {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
 			document.getElementById("loaderBg").style.setProperty("display", "none");
-		(async () => {
-			client = await new Client();
-			if (!client)
-				history.replaceState("", "", `https://${hostname.host}/login`);
-			else{
-				if (url.pathname == "" || url.pathname == "/"){
-					history.replaceState("", "", `https://${hostname.host}/home`)
-					client.loadPage("/home");
+			(async () => {
+				client = await new Client();
+				if (!client)
+					history.replaceState("", "", `https://${hostname.host}/login`);
+				else{
+					if (url.pathname == "" || url.pathname == "/"){
+						history.replaceState("", "", `https://${hostname.host}/home`)
+						client.loadPage("/home");
+					}
+					else
+						client.loadPage(url.pathname);
 				}
-				else
-					client.loadPage(url.pathname);
-			}
-		})()
+			})()
 	}
 }
 
@@ -359,7 +357,7 @@ function switchTheme(darkTheme) {
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
 		document.documentElement.style.setProperty("--is-dark-theme", 1);
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-night-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-night-mode.svg)`;
 	}
 	else {
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
@@ -369,7 +367,7 @@ function switchTheme(darkTheme) {
 		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-light-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-light-mode.svg)`;
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 	}
 	if (currentPage == "dashboard"){
@@ -396,7 +394,7 @@ async function loadCurrentLang(){
 	}
 	else if (currentLang != undefined){
 		const fetchResult = await fetch(currentLang);
-		const svgPath = `icons/${currentLang.substring(5, 10)}.svg`;
+		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
 		if (fetchResult.ok){
 			try{
 				contentJson = await fetchResult.json()
@@ -409,7 +407,7 @@ async function loadCurrentLang(){
 		else {
 			popUpError(`Could not load ${currentLang} language pack`);
 			currentLang = "lang/EN_UK.json";
-			const fetchResult = await fetch("lang/EN_UK.json");
+			const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
 			if (fetchResult.ok){
 				try {
 					contentJson = await fetchResult.json();
@@ -424,11 +422,11 @@ async function loadCurrentLang(){
 	}
 	if (contentJson == null) {
 		currentLang = "lang/EN_UK.json";
-		const fetchResult = await fetch("lang/EN_UK.json");
+		const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
 		if (fetchResult.ok){
 			try {
 				contentJson = await fetchResult.json();
-				langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
+				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
 			}
 			catch {
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -651,7 +649,7 @@ usernameBtn.addEventListener("keydown", (e) => {
 langDropDownOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		(async() => {
-			currentLang = `lang/${button.id}.json`;
+			currentLang = `https://${hostname.host}/lang/${button.id}.json`;
 			try{
 				if (client){
 					client.currentLang = `lang/${button.id}.json`;
@@ -669,7 +667,7 @@ langDropDownOption.forEach(function (button) {
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
+					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
 				}
 			}
 			catch{
