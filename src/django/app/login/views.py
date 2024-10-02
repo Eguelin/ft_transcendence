@@ -84,16 +84,11 @@ def fortytwo(request):
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
 
-		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 5):
-			match = customModels.Match.objects.createWithRandomOpps(user)
-			user.profile.matches.add(match)
-
 		user.profile.save()
 		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			login(request, user)
-			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
+			return JsonResponse({'message': 'User created and logged in', 'pfp': pfp_url})
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
@@ -131,7 +126,10 @@ def create_user(request):
 	if User.objects.filter(username=username).exists():
 		return JsonResponse({'message': 'User with same username already exist'}, status=400)
 	try:
-		user = User.objects.create_user(username=username, password=password)
+		if (username == "admin"):
+			user = User.objects.create_user(username=username, password=password, is_staff=True)
+		else:
+			user = User.objects.create_user(username=username, password=password)
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.id42 = 0
 		user.profile.is_active = True
@@ -139,10 +137,7 @@ def create_user(request):
 		if 'lang' in data:
 			user.profile.language_pack = data['lang']
 
-		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 500):
-			match = customModels.Match.objects.createWithRandomOpps(user)
-			user.profile.matches.add(match)
+		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
@@ -243,15 +238,30 @@ def profile_update(request):
 
 def get_all_user_match_json(matches):
 	matches_json = {}
+	year_json = {}
+	month_json = {}
 	date_json = {}
-	date = ""
+	dateObj = ""
+	year = ""
+	month = ""
+	day = ""
 	i = 0
 	for match in matches:
-		if (date != match.date):
-			if (date != ""):
-				matches_json["{0}".format(date)] = date_json
-				date_json = {}
-			date = match.date
+		if (dateObj != match.date):
+			if (year != ""):
+				if (year != match.date.year):
+					matches_json["{0}".format(year)] = year_json
+					year_json = {}
+				if (month != match.date.month):
+					year_json["{0}".format(month)] = month_json
+					month_json = {}
+				if (day != match.date.day):
+					month_json["{0}".format(day)] = date_json
+			dateObj = match.date
+			year = dateObj.year
+			month = dateObj.month
+			day = dateObj.day
+			date_json = {}
 			i = 0
 		date_json[i] = {
 			'player_one' : match.player_one.username,
@@ -261,8 +271,10 @@ def get_all_user_match_json(matches):
 			'date' : match.date,
 		}
 		i += 1
-	if (date != ""):
-		matches_json["{0}".format(date)] = date_json
+	if (dateObj != ""):
+		month_json["{0}".format(day)] = date_json
+		year_json["{0}".format(month)] = month_json
+		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
 def get_user_match(matches):
@@ -281,33 +293,17 @@ def get_user_match(matches):
 	return matches_json
 
 
-def get_user_json(user):
-	try:
-		if (user.profile.profile_picture.startswith("https://")):
-			raw_img = user.profile.profile_picture
-		else:
-			f = open(user.profile.profile_picture, "rb")
-			raw_img = (base64.b64encode(f.read())).decode('utf-8')
-	except:
-		raw_img = ""
-	matches = get_all_user_match_json(user.profile.matches.order_by("date"))
+def get_user_json(user, startDate, endDate):
+	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
 	return {'username' : user.username,
-		'pfp' : raw_img,
+		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
 		'matches' : matches
 	}
 
 def get_user_preview_json(user):
-	try:
-		if (user.profile.profile_picture.startswith("https://")):
-			raw_img = user.profile.profile_picture
-		else:
-			f = open(user.profile.profile_picture, "rb")
-			raw_img = (base64.b64encode(f.read())).decode('utf-8')
-	except:
-		raw_img = ""
 	return {'username' : user.username,
-		'pfp' : raw_img,
+		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
 	}
 
@@ -315,14 +311,6 @@ def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
-		try:
-			if (request.user.profile.profile_picture.startswith("https://")):
-				raw_img = request.user.profile.profile_picture
-			else:
-				f = open(request.user.profile.profile_picture, "rb")
-				raw_img = (base64.b64encode(f.read())).decode('utf-8')
-		except:
-			raw_img = ""
 		friends_list = request.user.profile.friends.all()
 		friends_request_list = request.user.profile.friends_request.all()
 		blocked_list = request.user.profile.blocked_users.all()
@@ -340,14 +328,15 @@ def current_user(request):
 		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
-			'pfp': raw_img,
+			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
 			'friends': friend_json,
-			'friend_request': friend_request_json,
+			'friend_requests': friend_request_json,
 			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active,
-			'matches' : matches
-			})
+			'matches' : matches,
+			'is_admin' : request.user.is_staff
+		})
 	else:
 		return JsonResponse({'username': None}, status=404)
 
@@ -357,9 +346,9 @@ def get(request):
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		try:
-			return JsonResponse(get_user_json(User.objects.get(username=data['name'])), status=200)
-		except User.DoesNotExist:
-			return JsonResponse({'message': "can't find user"}, status=404)
+			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
+		except Exception as error:
+			return JsonResponse({'message': "can't find user"}, status=400)
 
 def search_by_username(request):
 	if (request.method != 'POST'):
@@ -375,6 +364,11 @@ def search_by_username(request):
 				i += 1
 			if i == 0:
 				return JsonResponse({}, status=200)
-			return JsonResponse(users_json, status=400)
+			return JsonResponse(users_json, status=200)
 		except Exception as error:
 			return JsonResponse({'message': error}, status=500)
+
+def get_uri(request):
+	if request.method != 'GET':
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	return JsonResponse({'uri': os.getenv('URI')}, status=200)
