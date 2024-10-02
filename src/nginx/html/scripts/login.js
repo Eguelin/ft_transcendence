@@ -61,8 +61,15 @@ loginBtn.addEventListener("click", (e) => {
 						if (!loginBtn.previousElementSibling)
 							loginBtn.before(warning.cloneNode(true));
 					}
-					else
-						history.pushState("", "", `https://${hostname.host}/home`);
+					else{
+						(async () => {
+							client = await new Client()	
+							if (client == null)
+								history.replaceState("", "", `https://${hostname.host}/login`);
+							else
+								history.replaceState("", "", `https://${hostname.host}/home`);
+						})();
+					}
 				})
 			}
 			else
@@ -79,3 +86,22 @@ loginBtn.addEventListener("click", (e) => {
 		});
 	}
 })
+
+{
+	if (client){
+		fetch('/api/user/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		}).then(response => {
+			inputSearchUser.style.setProperty("display", "none");
+			dropDownUserContainer.style.setProperty("display", "none");
+		});
+		client = null;
+	}
+	
+	inputSearchUser.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "none");
+}

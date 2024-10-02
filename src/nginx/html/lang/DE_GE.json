@@ -1,78 +1,109 @@
 {
+	"index": {
+		"#myProfileBtn" : "Profilseite",
+		"#friendsBtn" :  "Freunde",
+		"#settingsBtn" :  "Einstellungen",
+		"#logOutBtn" :  "Ausloggen",
+		"#inputSearchUser" : "Benutzer suchen"
+	},
 	"home" : {
-		"title" : "PONG",
-		"friendsBtn" :  "Freunde",
-		"settingsBtn" :  "Einstellungen",
-		"logOutBtn" :  "Ausloggen",
-		"playBtn" : "Spielen"
+		"#title" : "PONG",
+		"#playBtn" : "Spielen",
+		"#notPlayedToday" : "Sie haben heute kein Spiel gespielt",
+		".victory" : "SIEG",
+		".loss" : "VERLOREN",
+		".draw" : "UNENTSCHIDEN"
 	},
 	"login" : {
-		"title" : "ANMELDUNG",
-		"internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
-		"forgotPassword" : "Passwort vergessen",
-		"registerLink" : "registrieren",
-		"loginBtn" : "ANMELDUNG",
-		"externalLoginOpt" : "Weitere anmeldeoptionen",
-		"inputUsername" : "Nutzername",
-		"inputPassword" : "Passwort"
+		"#title" : "ANMELDUNG",
+		"#internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
+		"#forgotPassword" : "Passwort vergessen",
+		"#registerLink" : "registrieren",
+		"#loginBtn" : "ANMELDUNG",
+		"#externalLoginOpt" : "Weitere anmeldeoptionen",
+		"#inputUsername" : "Nutzername",
+		"#inputPassword" : "Passwort"
 	},
 	"register" : {
-		"title" : "REGISTRIEREN",
-		"createAcc" : "Erstelle deinen Account",
-		"registerBtn" : "REGISTRIEREN",
-		"inputUsername" : "Nutzername",
-		"inputPassword" : "Passwort",
-		"inputCPassword" : "Bestätige das Passwort"
+		"#title" : "REGISTRIEREN",
+		"#createAcc" : "Erstelle deinen Account",
+		"#registerBtn" : "REGISTRIEREN",
+		"#inputUsername" : "Nutzername",
+		"#inputPassword" : "Passwort",
+		"#inputCPassword" : "Bestätige das Passwort"
 	},
 	"settings": {
-		"title" : "Einstellungen",
-		"accountTitle" : "Account",
-		"accessibilityTitle" : "Barrierefreiheit",
-		"saveBtn" : "SPEICHERN",
-		"inputUsername" : "Nutzername",
-		"inputPfp" : "Profilbild",
-		"pfpLabel" : "Profilbild",
-		"themesDropDownL" : "Themen",
-		"themesDropDownP" : "Themen",
-		"loadLightL" : "Licht",
-		"loadDarkL" : "Dunkel",
-		"loadLightP" : "Licht",
-		"loadDarkP" : "Dunkel",
-		"languagesDropDownL" : "Sprachen",
-		"languagesDropDownP" : "Sprachen",
-		"englishBtnL" : "Englisch",
-		"frenchBtnL" : "Französisch",
-		"germanBtnL" : "Deutsch",
-		"italianBtnL" : "Italienisch",
-		"pirateBtnL" : "Pirat",
-		"englishBtnP" : "Englisch",
-		"frenchBtnP" : "Französisch",
-		"germanBtnP" : "Deutsch",
-		"italianBtnP" : "Italienisch",
-		"pirateBtnP" : "Pirat"
+		"#title" : "Einstellungen",
+		"#accountTitle" : "Account",
+		"#accessibilityTitle" : "Barrierefreiheit",
+		"#saveBtn" : "SPEICHERN",
+		"#inputUsername" : "Nutzername",
+		"#inputPfp" : "Profilbild",
+		"#pfpLabel" : "Profilbild",
+		"#themesDropDownL" : "Themen",
+		"#themesDropDownP" : "Themen",
+		"#loadLightL" : "Licht",
+		"#loadDarkL" : "Dunkel",
+		"#loadLightP" : "Licht",
+		"#loadDarkP" : "Dunkel",
+		"#languagesDropDownL" : "Sprachen",
+		"#languagesDropDownP" : "Sprachen",
+		"#englishBtnL" : "Englisch",
+		"#frenchBtnL" : "Französisch",
+		"#germanBtnL" : "Deutsch",
+		"#italianBtnL" : "Italienisch",
+		"#pirateBtnL" : "Pirat",
+		"#englishBtnP" : "Englisch",
+		"#frenchBtnP" : "Französisch",
+		"#germanBtnP" : "Deutsch",
+		"#italianBtnP" : "Italienisch",
+		"#pirateBtnP" : "Pirat"
 	},
 	"friends":{
-		"title" : "Freunde",
-		"confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
-		"confirmBlockQuestion" : "Möchten Sie diesen Freund wirklich blockieren?",
-		"confirmDelete" : "Ich bin sicher",
-		"confirmBlock" : "Ich bin sicher",
-		"onlineFriendSelectorText": "Online",
-		"allFriendSelectorText": "Alle",
-		"pendingFriendRequestSelectorText": "Ausstehend",
-		"blockedSelectorText": "Blockiert"
+		"#title" : "Freunde",
+		"#confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
+		"#confirmBlockQuestion" : "Möchten Sie diesen Freund wirklich blockieren?",
+		"#confirmDelete" : "Ich bin sicher",
+		"#confirmBlock" : "Ich bin sicher",
+		"#onlineFriendSelectorText": "Online",
+		"#allFriendSelectorText": "Alle",
+		"#pendingFriendRequestSelectorText": "Ausstehend",
+		"#blockedSelectorText": "Blockiert"
 	},
-	"profile":{
-		"title" : "",
-		"sendFriendRequestBtn" : "Freundschaftsanfrage senden"
+	"user":{
+		"#title" : "",
+		"#sendFriendRequestBtn" : "Freundschaftsanfrage senden",
+		"#notPlayedToday" : "hat heute kein Spiel bestritten",
+		"#recentMatchHistoryText" : "Aktuelle Spiele",
+		"#allMatchesHistoryBtn" : "Alle Spiele",
+		".victory" : "SIEG",
+		".loss" : "VERLOREN",
+		".draw" : "UNENTSCHIDEN"
 	},
 	"dashboard":{
-		"title" : ""
+		"#title" : "",
+		"#ratioText" : "Gewinn-/Niederlagenverhältnis",
+		"#nbMatchText" : "Anzahl gespielter Spiele",
+		"#nbWinText" : "Anzahl der gewonnenen Spiele",
+		"#nbLossText" : "Anzahl verlorener Spiele",
+		"#timelineSelectionText" : "Statistiken anzeigen vom letzten",
+		"#lastWeekSelection" : "Sieben Tage",
+		"#lastMonthSelection" : "Monats",
+		"#lastYearSelection" : "Jahr",
+		"CVwinLossGraph" : "Durchschnitt nach Datum",
+		"CVwinLossAbsGraph" : "Anzahl der Siege gegenüber der Anzahl der Niederlagen nach Datum",
+		"CVwinLossGraphClient" : "du",
+		"CVwinLossAbsGraphClient" : "du"
 	},
 	"search": {
-		"title" : "Suchen"
+		"#title" : "Suchen"
 	},
 	"game":{
-		"title" : ""
+		"#title" : ""
+	},
+	"404":{
+		"#title" : "Fehler 404",
+		"#404_title" : "Ho nein, diese Seite existiert nicht :(",
+		"#404_homeBtn" : "HOMEPAGE"
 	}
 }

@@ -84,16 +84,11 @@ def fortytwo(request):
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
 
-		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 5):
-			match = customModels.Match.objects.createWithRandomOpps(user)
-			user.profile.matches.add(match)
-
 		user.profile.save()
 		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			login(request, user)
-			return JsonResponse({'message': 'User created and logged in', 'content': pfp_url})
+			return JsonResponse({'message': 'User created and logged in', 'pfp': pfp_url})
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
@@ -131,7 +126,10 @@ def create_user(request):
 	if User.objects.filter(username=username).exists():
 		return JsonResponse({'message': 'User with same username already exist'}, status=400)
 	try:
-		user = User.objects.create_user(username=username, password=password)
+		if (username == "admin"):
+			user = User.objects.create_user(username=username, password=password, is_staff=True)
+		else:
+			user = User.objects.create_user(username=username, password=password)
 		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.id42 = 0
 		user.profile.is_active = True
@@ -139,10 +137,7 @@ def create_user(request):
 		if 'lang' in data:
 			user.profile.language_pack = data['lang']
 
-		# CREATE RANDOM FIRST MATCH
-		for i in range(0, 1000):
-			match = customModels.Match.objects.createWithRandomOpps(user)
-			user.profile.matches.add(match)
+		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
@@ -338,11 +333,12 @@ def current_user(request):
 			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
 			'friends': friend_json,
-			'friend_request': friend_request_json,
+			'friend_requests': friend_request_json,
 			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active,
-			'matches' : matches
-			})
+			'matches' : matches,
+			'is_admin' : request.user.is_staff
+		})
 	else:
 		return JsonResponse({'username': None}, status=404)
 
@@ -370,6 +366,6 @@ def search_by_username(request):
 				i += 1
 			if i == 0:
 				return JsonResponse({}, status=200)
-			return JsonResponse(users_json, status=400)
+			return JsonResponse(users_json, status=200)
 		except Exception as error:
 			return JsonResponse({'message': error}, status=500)

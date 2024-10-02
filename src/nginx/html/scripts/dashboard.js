@@ -176,7 +176,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 
     if (username != clientUsername){
         datasets.push({
-            label: "you",
+            label: client.langJson["dashboard"]["CVwinLossGraphClient"],
             data: clientMapAverage,
             fill: false,
             tension: 0,
@@ -206,7 +206,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             plugins: {
                 title: {
                     color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: 'Average by date',
+                    text: client.langJson["dashboard"]["CVwinLossGraph"],
                     display: true,
 
                 }
@@ -272,7 +272,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 
     if (username != clientUsername){
         datasets.push({
-            label: "you",
+            label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
             data: clientMapAbs,
             fill: false,
             tension: 0,
@@ -302,7 +302,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
             plugins: {
                 title: {
                     color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: 'Number of victory over number of defeat by date',
+                    text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
                     display: true,
 
                 }
@@ -345,45 +345,61 @@ function loadUserDashboard(LastXDaysDisplayed){
         body: JSON.stringify({"name" : splitPath[4], "startDate" : startDate, "endDate" : endDate}),
         credentials: 'include'
     }).then(user => {
-        user.json().then((user) => {
-            fetch('/api/user/get', {
-                method: 'POST', //GET forbid the use of body :(
-                headers: {'Content-Type': 'application/json',},
-                body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDate, "endDate" : endDate}),
-                credentials: 'include'
-            }).then(client => {
-                client.json().then((client) => {
-                    document.getElementById("loaderBg").style.setProperty("display", "none");
-                    drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
+        if (user.ok){
+            user.json().then((user) => {
+                fetch('/api/user/get', {
+                    method: 'POST', //GET forbid the use of body :(
+                    headers: {'Content-Type': 'application/json',},
+                    body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDate, "endDate" : endDate}),
+                    credentials: 'include'
+                }).then(client => {
+                    if (client.ok){
+                        client.json().then((client) => {
+                            document.getElementById("loaderBg").style.setProperty("display", "none");
+                            drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
+                        })
+                    }
+                    else
+                        document.getElementById("loaderBg").style.setProperty("display", "none");
                 })
-            })
-            var countWin = 0, countLost = 0, countMatch = 0;
-            matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
+                var countWin = 0, countLost = 0, countMatch = 0;
+                matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
 
-            for (var i=0; i<Object.keys(user.matches).length;i++){
-                yearObj = user.matches[Object.keys(user.matches)[i]];
-                for (j = 0; j < Object.keys(yearObj).length; j++){
-                    monthObj = yearObj[Object.keys(yearObj)[j]];
-                    for (k = 0; k < Object.keys(monthObj).length; k++){
-                        dayObj = monthObj[Object.keys(monthObj)[k]];
-                        for (l = 0; l < Object.keys(dayObj).length; l++){
-                            matchObj = dayObj[Object.keys(dayObj)[l]];
-                            if (matchObj.player_one == user.username)
-                                countWin += matchObj.player_one_pts > matchObj.player_two_pts;
-                            else
-                                countWin += matchObj.player_one_pts < matchObj.player_two_pts;
-                            countMatch += 1;
+                for (var i=0; i<Object.keys(user.matches).length;i++){
+                    yearObj = user.matches[Object.keys(user.matches)[i]];
+                    for (j = 0; j < Object.keys(yearObj).length; j++){
+                        monthObj = yearObj[Object.keys(yearObj)[j]];
+                        for (k = 0; k < Object.keys(monthObj).length; k++){
+                            dayObj = monthObj[Object.keys(monthObj)[k]];
+                            for (l = 0; l < Object.keys(dayObj).length; l++){
+                                matchObj = dayObj[Object.keys(dayObj)[l]];
+                                if (matchObj.player_one == user.username)
+                                    countWin += matchObj.player_one_pts > matchObj.player_two_pts;
+                                else
+                                    countWin += matchObj.player_one_pts < matchObj.player_two_pts;
+                                countMatch += 1;
+                            }
                         }
                     }
                 }
-            }
 
-            document.getElementById("ratioValue").innerHTML = `${((countWin / countMatch) * 100).toFixed(1)}%`
-            document.getElementById("nbWinValue").innerHTML = `${countWin}`
-            document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`
-            document.getElementById("nbMatchValue").innerHTML = `${countMatch}`
-        })
+                if (countMatch == 0)
+                    document.getElementById("ratioValue").innerHTML = `100%`;
+                else
+                    document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`;
+                document.getElementById("nbWinValue").innerHTML = `${countWin}`;
+                document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`;
+                document.getElementById("nbMatchValue").innerHTML = `${countMatch}`;
+            })
+        }
+        else
+		    history.pushState("", "", `https://${hostname.host}/home`);
     })
 }
 
-loadUserDashboard(defaultLastXDaysDisplayed)
+{
+	inputSearchUser.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
+    loadUserDashboard(defaultLastXDaysDisplayed)
+}
