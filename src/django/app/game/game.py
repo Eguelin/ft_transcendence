@@ -31,6 +31,32 @@ class Matchmaking():
 			await game.run()
 
 class Game():
+	canvas = {
+		'width': 4000,
+		'height': 3000
+	}
+
+	paddle = {
+		'height': 500,
+		'width': 40,
+	}
+
+	player1 = {
+		'x': 20,
+		'y':  (canvas['height'] - paddle['height']) / 2,
+	}
+
+	player2 = {
+		'x': canvas['width'] - paddle['width'] - 20,
+		'y': (canvas['height'] - paddle['height']) / 2,
+	}
+
+	ball = {
+		'size': 50,
+		'x': (canvas['width'] - 50) / 2,
+		'y': (canvas['height'] - 50) / 2,
+	}
+
 	def __init__(self, player1, player2):
 		self.player1 = player1
 		self.player2 = player2
@@ -46,6 +72,18 @@ class Game():
 			'game_id': game_id
 		})
 
+	async def initGame(player):
+		await player.send('game_init',
+			{
+				'canvas': Game.canvas,
+				'paddle': Game.paddle,
+				'player1': Game.player1,
+				'player2': Game.player2,
+				'ball': Game.ball
+			}
+		)
+
+
 class Player(AsyncWebsocketConsumer):
 	# matchmaking = Matchmaking()
 
@@ -56,19 +94,19 @@ class Player(AsyncWebsocketConsumer):
 		self.last_game_request = time.time()
 
 	async def disconnect(self, close_code):
-		# self.matchmaking.remove_player(self)
+		# await self.matchmaking.remove_player(self)
 		pass
 
 	async def receive(self, text_data):
-		text_data_json = json.loads(text_data)
-		if text_data_json['type'] == 'game_request':
-			if time.time() - self.last_game_request >= 0.02:
-				self.last_game_request = time.time()
-				await self.send({
-					'type': 'game_response',
-					'key': text_data_json['key']
-				})
-		pass
+		data = json.loads(text_data)
+		if data['type'] == 'game_keydown' and time.time() - self.last_game_request >= 0.02:
+			self.last_game_request = time.time()
+			await self.send('game_keydown', data['message'])
+		elif data['type'] == 'game_init':
+			await Game.initGame(self)
 
-	async def send(self, message):
-		await super().send(text_data=json.dumps(message))
+	async def send(self, type, message):
+		await super().send(text_data=json.dumps({
+			'type': type,
+			'message': message
+		}))

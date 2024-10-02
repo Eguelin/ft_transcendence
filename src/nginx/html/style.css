@@ -84,7 +84,7 @@ h2{
 	color: var(--main-text-rgb);
 	font-size: min(7vh, 4vw);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	margin-top:5vh;
 	margin-left:auto;
 	margin-right:auto;
@@ -101,7 +101,7 @@ h2{
 	color: var(--main-text-rgb);
 	font-size: min(7vh, 4vw);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	font-family: "pong";
 	margin-left:auto;
 	margin-right:auto;
@@ -129,7 +129,7 @@ input:focus{
 	text-align: center;
 	color: var(--main-text-rgb);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	margin-left:auto;
 	margin-right:auto;
 	margin-top: 5vh;
@@ -139,10 +139,10 @@ input:focus{
 
 #forgotPasswordContainer{
 	width:18vw;
-   	text-align: left; 
-	margin-top:0; 
-	color:var(--hover-text-rgb); 
-	font-size:min(1vh, 1vw); 
+   	text-align: left;
+	margin-top:0;
+	color:var(--hover-text-rgb);
+	font-size:min(1vh, 1vw);
 	padding-top:1vh;
 	display: block flex;
 }
@@ -163,7 +163,7 @@ input:focus{
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -181,7 +181,7 @@ input:focus{
 button{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -194,7 +194,7 @@ button{
 .saveBtn, .deleteBtn {
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -430,7 +430,7 @@ a {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(3vh, 2vw);
 	padding: 1.5vh 1.5vw;
@@ -605,7 +605,7 @@ a {
 	text-align: center;
 	background-color: red;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -723,7 +723,7 @@ a {
 	right: 0px;
 	mask-size:contain;
 	mask-position:center;
-	mask-repeat:no-repeat;	
+	mask-repeat:no-repeat;
 }
 
 .pfpStatusOffline{
@@ -750,7 +750,7 @@ a {
 }
 
 .matchDescContainer{
-	background: var(--input-bg-rgb); 
+	background: var(--input-bg-rgb);
 	height: auto;
 	border: .5px solid var(--page-bg-rgb);
 	flex: auto;
@@ -1087,4 +1087,10 @@ a {
 
 #allMatchesHistoryBtn:hover, #allMatchesHistoryBtn:focus{
 	color: var(--hover-text-rgb);
+}
+
+.game{
+	width: 50vw;
+	height: 37.5vw;
+	border: white 5px solid;
 }
