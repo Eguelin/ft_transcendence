@@ -389,16 +389,18 @@ function switchTheme(darkTheme) {
 	}
 }
 
-async function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
+async function loadCurrentLang(){
 	contentJson = null;
 	if (client && client.langJson){
 		contentJson = client.langJson;
 	}
 	else if (currentLang != undefined){
 		const fetchResult = await fetch(currentLang);
+		const svgPath = `icons/${currentLang.substring(5, 10)}.svg`;
 		if (fetchResult.ok){
 			try{
 				contentJson = await fetchResult.json()
+				langDropDownBtn.style.setProperty("background-image", `url(${svgPath})`);
 			}
 			catch{
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -420,12 +422,13 @@ async function loadCurrentLang(){ //just for better readability before prod, don
 				client.langJson = contentJson;
 		}
 	}
-	else {
+	if (contentJson == null) {
 		currentLang = "lang/EN_UK.json";
 		const fetchResult = await fetch("lang/EN_UK.json");
 		if (fetchResult.ok){
 			try {
 				contentJson = await fetchResult.json();
+				langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
 			}
 			catch {
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -666,8 +669,8 @@ langDropDownOption.forEach(function (button) {
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
+					langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
 				}
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
 			}
 			catch{
 				popUpError(`Could not load ${button.id} language pack`);
