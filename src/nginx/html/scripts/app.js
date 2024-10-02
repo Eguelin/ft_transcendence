@@ -383,20 +383,56 @@ function switchTheme(darkTheme) {
 	}
 }
 
-async function loadCurrentLang(){ //just for better readability before prod, don't care about efficiency
+async function loadCurrentLang(){
 	contentJson = null;
 	if (client && client.langJson){
 		contentJson = client.langJson;
 	}
 	else if (currentLang != undefined){
 		const fetchResult = await fetch(currentLang);
-		if (fetchResult.ok)
-			contentJson = await fetchResult.json()
-		else
-			contentJson = (await fetch("lang/EN_UK.json")).json();
+		const svgPath = `icons/${currentLang.substring(5, 10)}.svg`;
+		if (fetchResult.ok){
+			try{
+				contentJson = await fetchResult.json()
+				langDropDownBtn.style.setProperty("background-image", `url(${svgPath})`);
+			}
+			catch{
+				popUpError(`Could not load ${currentLang} language pack`);
+			}
+		}
+		else {
+			popUpError(`Could not load ${currentLang} language pack`);
+			currentLang = "lang/EN_UK.json";
+			const fetchResult = await fetch("lang/EN_UK.json");
+			if (fetchResult.ok){
+				try {
+					contentJson = await fetchResult.json();
+				}
+				catch {
+					popUpError(`Could not load ${currentLang} language pack`);
+				}
+			}
+			if (client)
+				client.langJson = contentJson;
+		}
 	}
-	else {
-		contentJson = (await fetch("lang/EN_UK.json")).json();
+	if (contentJson == null) {
+		currentLang = "lang/EN_UK.json";
+		const fetchResult = await fetch("lang/EN_UK.json");
+		if (fetchResult.ok){
+			try {
+				contentJson = await fetchResult.json();
+				langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
+			}
+			catch {
+				popUpError(`Could not load ${currentLang} language pack`);
+			}
+			if (client)
+				client.langJson = contentJson;
+		}
+		else{
+			popUpError("Could not load language pack");
+		}
 	}
 	if (contentJson != null && contentJson != undefined){
 		content = contentJson[currentPage];
@@ -566,8 +602,12 @@ function createMatchResumeContainer(match) {
 }
 
 inputSearchUser.addEventListener("keydown", (e) => {
-	if (e.key == "Enter" && inputSearchUser.value.length > 0) {
-		history.pushState("", "", `https://${hostname.host}/search?query=${inputSearchUser.value}`);
+	if (e.key == "Enter") {
+		query = inputSearchUser.value.trim();
+		if (query.length == 0)
+			popUpError("Can't search empty query");
+		else
+			history.pushState("", "", `https://${hostname.host}/search?query=${query}`);
 	}
 })
 
@@ -604,27 +644,32 @@ usernameBtn.addEventListener("keydown", (e) => {
 
 langDropDownOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
-		currentLang = `lang/${button.id}.json`;
-		if (client)
-			client.currentLang = `lang/${button.id}.json`;
-		fetch(currentLang).then(response => {
-			if (response.ok){
-				response.json().then((text) => {
-					if (client)
-						client.langJson = text;
-					loadCurrentLang();
-				})
+		(async() => {
+			currentLang = `lang/${button.id}.json`;
+			try{
+				if (client){
+					client.currentLang = `lang/${button.id}.json`;
+					fetchResult = await fetch(currentLang);
+					content = await fetchResult.json();
+					client.langJson = content;
+				}
+				loadCurrentLang();
+				if (client){
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ language_pack: currentLang }),
+						credentials: 'include'
+					})
+					langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
+				}
 			}
-		})
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ language_pack: currentLang }),
-			credentials: 'include'
-		})
-		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
+			catch{
+				popUpError(`Could not load ${button.id} language pack`);
+			}
+		})();
 	})
 	button.addEventListener("keydown", (e) => {
 		if (e.key == "Enter")
@@ -641,3 +686,19 @@ window.addEventListener("click", (e) => {
 	}
 })
 
+function popUpError(error){
+	if (document.getElementById("popupErrorContainer"))
+		document.getElementById("popupErrorContainer").remove();
+	var popupContainer = document.createElement("div");
+	popupContainer.id = "popupErrorContainer";
+	var popupText = document.createElement("a")
+	popupText.innerText = error;
+	popupContainer.appendChild(popupText);
+	popupContainer.addEventListener("mouseleave", (e) => {
+		popupContainer.id = "popupErrorContainerClose"
+		setTimeout(()=>{
+			popupContainer.remove();
+		}, 500)
+	})
+	document.body.appendChild(popupContainer);
+}
