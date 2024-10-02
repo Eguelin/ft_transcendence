@@ -640,18 +640,6 @@ a {
 	animation: flash 1s infinite;
 }
 
-@keyframes flash {
-	0% {
-		opacity: 100%;
-	}
-	50%{
-		opacity: 0%;
-	}
-	100%{
-		opacity: 100%;
-	}
-}
-
 #friendSlideSelector{
 	color: var(--main-text-rgb);
 	display: flex;
@@ -909,12 +897,6 @@ a {
 }
 
 
-
-
-
-
-
-
 #loaderBg{
 	position: absolute;
 	top: 0;
@@ -924,6 +906,7 @@ a {
 	background: black;
 	opacity: .7;
 	display: block;
+	z-index: 10;
 }
 
 #loaderBg .loader{
@@ -1093,4 +1076,57 @@ a {
 	width: 50vw;
 	height: 37.5vw;
 	border: white 5px solid;
+}
+
+#popupErrorContainer, #popupErrorContainerClose{
+    background: red;
+    color: var(--main-text-rgb);
+    width: fit-content;
+    padding: 1vw;
+    border-radius: 25vw;
+    position: fixed;
+    top: 5vh;
+    left: 50%;
+    translate: -50%;
+}
+
+#popupErrorContainer{
+	animation:forwards 250ms popupAppear;
+}
+
+#popupErrorContainer:hover{
+	animation:forwards 250ms popupScaleUp;
+	scale: 1.1;
+}
+
+#popupErrorContainerClose{
+	animation:forwards 500ms popupClose;
+	scale: 0;
+}
+
+@keyframes popupAppear {
+	0% {
+		opacity: 0%;
+	}
+	100%{
+		opacity: 100%;
+	}
+}
+
+@keyframes popupScaleUp {
+	0% {
+		scale: 1;
+	}
+	100%{
+		scale: 1.1;
+	}
+}
+
+@keyframes popupClose {
+	0% {
+		scale: 1.1;
+	}
+	100%{
+		scale: 0;
+	}
 }

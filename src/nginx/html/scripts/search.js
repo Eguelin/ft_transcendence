@@ -30,8 +30,10 @@
             }))
         })
     }
-    else
+    else{
         history.replaceState("", "", `https://${hostname.host}/home`);
+		popUpError("Can't seach empty query");
+    }
 
 }
 
