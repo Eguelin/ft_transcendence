@@ -398,11 +398,27 @@ async function loadCurrentLang(){ //just for better readability before prod, don
 		const fetchResult = await fetch(currentLang);
 		if (fetchResult.ok)
 			contentJson = await fetchResult.json()
-		else 
-			contentJson = (await fetch("lang/EN_UK.json")).json();
+		else {
+			popUpError(`Could not load ${currentLang} language pack`);
+			currentLang = "lang/EN_UK.json";
+			const fetchResult = await fetch("lang/EN_UK.json");
+			if (fetchResult.ok)
+				contentJson = await fetchResult.json();
+			if (client)
+				client.langJson = contentJson;
+		}
 	}
 	else {
-		contentJson = (await fetch("lang/EN_UK.json")).json();
+		currentLang = "lang/EN_UK.json";
+		const fetchResult = await fetch("lang/EN_UK.json");
+		if (fetchResult.ok){
+			contentJson = await fetchResult.json();
+			if (client)
+				client.langJson = contentJson;
+		}
+		else{
+			popUpError("Could not load language pack");
+		}
 	}
 	if (contentJson != null && contentJson != undefined){
 		content = contentJson[currentPage];
@@ -614,27 +630,32 @@ usernameBtn.addEventListener("keydown", (e) => {
 
 langDropDownOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
-		currentLang = `lang/${button.id}.json`;
-		if (client)
-			client.currentLang = `lang/${button.id}.json`;
-		fetch(currentLang).then(response => {
-			if (response.ok){
-				response.json().then((text) => {
-					if (client)
-						client.langJson = text;
-					loadCurrentLang();
-				})
+		(async() => {
+			currentLang = `lang/${button.id}.json`;
+			try{
+				if (client){
+					client.currentLang = `lang/${button.id}.json`;
+					fetchResult = await fetch(currentLang);
+					content = await fetchResult.json();
+					client.langJson = content;
+				}
+				loadCurrentLang();
+				if (client){
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ language_pack: currentLang }),
+						credentials: 'include'
+					})
+				}
+				langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
 			}
-		})
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ language_pack: currentLang }),
-			credentials: 'include'
-		})
-		langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
+			catch{
+				popUpError(`Could not load ${button.id} language pack`);
+			}
+		})();
 	})
 	button.addEventListener("keydown", (e) => {
 		if (e.key == "Enter")
