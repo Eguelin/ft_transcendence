@@ -396,14 +396,26 @@ async function loadCurrentLang(){ //just for better readability before prod, don
 	}
 	else if (currentLang != undefined){
 		const fetchResult = await fetch(currentLang);
-		if (fetchResult.ok)
-			contentJson = await fetchResult.json()
+		if (fetchResult.ok){
+			try{
+				contentJson = await fetchResult.json()
+			}
+			catch{
+				popUpError(`Could not load ${currentLang} language pack`);
+			}
+		}
 		else {
 			popUpError(`Could not load ${currentLang} language pack`);
 			currentLang = "lang/EN_UK.json";
 			const fetchResult = await fetch("lang/EN_UK.json");
-			if (fetchResult.ok)
-				contentJson = await fetchResult.json();
+			if (fetchResult.ok){
+				try {
+					contentJson = await fetchResult.json();
+				}
+				catch {
+					popUpError(`Could not load ${currentLang} language pack`);
+				}
+			}
 			if (client)
 				client.langJson = contentJson;
 		}
@@ -412,7 +424,12 @@ async function loadCurrentLang(){ //just for better readability before prod, don
 		currentLang = "lang/EN_UK.json";
 		const fetchResult = await fetch("lang/EN_UK.json");
 		if (fetchResult.ok){
-			contentJson = await fetchResult.json();
+			try {
+				contentJson = await fetchResult.json();
+			}
+			catch {
+				popUpError(`Could not load ${currentLang} language pack`);
+			}
 			if (client)
 				client.langJson = contentJson;
 		}
