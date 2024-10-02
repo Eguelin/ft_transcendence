@@ -103,7 +103,7 @@
 	},
 	"404":{
 		"#title" : "Fehler 404",
-		"#404_title" : "Ho nein, diese Seite existiert nicht :(",
-		"#404_homeBtn" : "HOMEPAGE"
+		"#NotFoundtitle" : "Ho nein, diese Seite existiert nicht :(",
+		"#NotFoundhomeBtn" : "HOMEPAGE"
 	}
 }

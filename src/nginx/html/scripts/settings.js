@@ -248,7 +248,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 	germanBtn[i].addEventListener("click", (e) => {
 		currentLang = "lang/DE_GE.json";
 		const data = {language_pack: "lang/DE_GE.json"};
-		fetch("lang/DE_GE.json").then(response => {
+		fetch(`https://${hostname.host}/lang/DE_GE.json`).then(response => {
 			response.json().then((text) => {
 				content = text['settings'];
 				Object.keys(content).forEach(function(key) {
@@ -277,7 +277,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 	englishBtn[i].addEventListener("click", (e) => {
 		currentLang = "lang/EN_UK.json";
 		const data = {language_pack: "lang/EN_UK.json"};
-		fetch("lang/EN_UK.json").then(response => {
+		fetch(`https://${hostname.host}/lang/EN_UK.json`).then(response => {
 			response.json().then((text) => {
 				content = text['settings'];
 				Object.keys(content).forEach(function(key) {
