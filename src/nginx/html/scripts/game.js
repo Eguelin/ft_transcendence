@@ -81,8 +81,8 @@ function game() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		// Middle line
-		ctx.fillStyle = 'black';
-		ctx.strokeStyle = 'black';
+		ctx.fillStyle = 'white';
+		ctx.strokeStyle = 'white';
 		ctx.lineWidth = paddle.width / 4;
 		ctx.setLineDash([ball.size, ball.size]);
 		ctx.moveTo(canvas.width / 2, ball.size / 2);
@@ -142,7 +142,7 @@ function game() {
 			gamesend("game_keydown", keysDown);
 	}
 
-	setInterval(() => KeyPress(), 10);
+	setInterval(() => KeyPress(), 20);
 
 	window.addEventListener('beforeunload', handleBeforeUnload);
 	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
