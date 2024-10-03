@@ -74,7 +74,6 @@ class Client{
 
 	constructor (){
 		return (async () =>{
-			console.log(hostname);
 			const fetchResult = await fetch('/api/user/current', {
 				method: 'GET',
 				headers: {
@@ -649,11 +648,11 @@ usernameBtn.addEventListener("keydown", (e) => {
 langDropDownOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		(async() => {
-			currentLang = `https://${hostname.host}/lang/${button.id}.json`;
+			currentLang = `lang/${button.id}.json`;
 			try{
 				if (client){
 					client.currentLang = `lang/${button.id}.json`;
-					fetchResult = await fetch(currentLang);
+					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 					content = await fetchResult.json();
 					client.langJson = content;
 				}

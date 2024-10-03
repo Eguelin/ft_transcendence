@@ -60,7 +60,7 @@
 		"#pirateBtnP" : "Pirate"
 	},
 	"friends":{
-		"title" : "Friends",
+		"#title" : "Friends",
 		"#confirmDeleteQuestion" : "Are you sure you want to remove this friend?",
 		"#confirmBlockQuestion" : "Are you sure you want to block this friend?",
 		"#confirmDelete" : "I'm sure",
