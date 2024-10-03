@@ -81,8 +81,8 @@ function game() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		// Middle line
-		ctx.fillStyle = 'white';
-		ctx.strokeStyle = 'white';
+		ctx.fillStyle = client.mainTextRgb;
+		ctx.strokeStyle = client.mainTextRgb;
 		ctx.lineWidth = paddle.width / 4;
 		ctx.setLineDash([ball.size, ball.size]);
 		ctx.moveTo(canvas.width / 2, ball.size / 2);

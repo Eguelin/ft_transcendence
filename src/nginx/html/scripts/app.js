@@ -71,6 +71,7 @@ class Client{
 	blocked_user;
 	recentMatches;
 	#is_admin;
+	mainTextRgb;
 
 	constructor (){
 		return (async () =>{
@@ -93,6 +94,7 @@ class Client{
 				this.recentMatches = result.matches;
 				this.#is_admin = result.is_admin;
 				switchTheme(this.use_dark_theme);
+				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 				
 				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
@@ -342,6 +344,8 @@ logOutBtn.addEventListener("click", (e) => {
 
 function switchTheme(darkTheme) {
 	if (darkTheme == 1 || darkTheme == true) {
+		if (client)
+			client.mainTextRgb = "#FDFDFB";
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
@@ -353,6 +357,8 @@ function switchTheme(darkTheme) {
 			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-night-mode.svg)`;
 	}
 	else {
+		if (client)
+			client.mainTextRgb = "#110026";
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
