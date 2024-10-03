@@ -41,7 +41,7 @@ class Game():
 	class Paddle():
 		width = 40
 		height = 500
-		speed = 30
+		speed = 50
 		margin = 20
 
 		def getSize():
@@ -64,7 +64,7 @@ class Game():
 		def initPosition(self):
 			self.x = (Game.width - Game.Ball.size) / 2
 			self.y = (Game.height - Game.Ball.size) / 2
-			self.speed = 10
+			self.speed = 20
 
 			self.angle = math.pi + random.uniform(-1, 1) * math.pi / 3
 			self.dx = math.cos(self.angle) * self.speed
@@ -76,7 +76,7 @@ class Game():
 
 		def paddleCollision(self, pad):
 			if self.speed < 70:
-				self.speed += 2.5
+				self.speed += 5
 
 			demiePaddle = (Game.Paddle.height + Game.Ball.size) / 2
 			middlePad = pad.y + demiePaddle
@@ -120,7 +120,7 @@ class Game():
 			self.checkCollision()
 			await self.playerLeft.send('game_update', self.getGame())
 			await self.playerRight.send('game_update', self.getGame())
-			await asyncio.sleep(0.01)
+			await asyncio.sleep(0.02)
 
 	def checkCollision(self):
 		if self.ball.y <= 0 or self.ball.y >= Game.height - Game.Ball.size:
@@ -211,7 +211,7 @@ class Consumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
-		if data['type'] == 'game_keydown' and time.time() - self.lastRequest >= 0.01:
+		if data['type'] == 'game_keydown' and time.time() - self.lastRequest >= 0.02:
 			self.lastRequest = time.time()
 			if self.player:
 				await self.player.move(data['message'])
