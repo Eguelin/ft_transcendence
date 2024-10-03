@@ -1085,7 +1085,7 @@ a {
 }
 
 #popupErrorContainer{
-	animation:forwards 250ms popupAppear;
+	animation:forwards 500ms popupAppear;
 }
 
 #popupErrorContainer:hover{
@@ -1094,15 +1094,17 @@ a {
 }
 
 #popupErrorContainerClose{
-	animation:forwards 500ms popupClose;
-	scale: 0;
+	animation: reverse 500ms popupAppear;
+	opacity: 0;
 }
 
 @keyframes popupAppear {
 	0% {
+		top: 0;
 		opacity: 0%;
 	}
 	100%{
+		top: 5vh;
 		opacity: 100%;
 	}
 }
@@ -1113,14 +1115,5 @@ a {
 	}
 	100%{
 		scale: 1.1;
-	}
-}
-
-@keyframes popupClose {
-	0% {
-		scale: 1.1;
-	}
-	100%{
-		scale: 0;
 	}
 }
