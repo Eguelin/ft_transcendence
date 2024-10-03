@@ -1075,7 +1075,7 @@ a {
 .game{
 	width: 50vw;
 	height: 37.5vw;
-	border: white 5px solid;
+	border: var(--main-text-rgb) 5px solid;
 }
 
 #popupErrorContainer, #popupErrorContainerClose{
