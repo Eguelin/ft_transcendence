@@ -44,7 +44,7 @@ const routes = {
 function addPfpUrlToImgSrc(img, path){
 	if (path != "") {
 		var testImg = new Image();
-		
+
 		testImg.onload = function(){
 			if (testImg.width > testImg.height) {
 				img.style.setProperty("height", "100%");
@@ -97,7 +97,7 @@ class Client{
 				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 				usernameBtn.innerHTML = result.username;
-	
+
 				addPfpUrlToImgSrc(userPfp, result.pfp)
 
 				fetch('/api/user/update', {
@@ -122,7 +122,7 @@ class Client{
 
 	loadPage(page){
 		document.getElementById("loaderBg").style.setProperty("display", "block");
-		
+
 		var sep = page.indexOf("/", 1)
 		if (sep > 0)
 			pageName = page.substring(0, sep)
@@ -135,7 +135,7 @@ class Client{
 					response.text().then(response => {
 						currentPage = '403';
 						container.innerHTML = response;
-		
+
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
 						s.setAttribute('id', 'script');
@@ -153,7 +153,7 @@ class Client{
 					response.text().then(response => {
 						currentPage = pageName.substring(1);
 						container.innerHTML = response;
-		
+
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
 						s.onload = function(){
@@ -172,7 +172,7 @@ class Client{
 				response.text().then(response => {
 					currentPage = '404';
 					container.innerHTML = response;
-	
+
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
 					s.setAttribute('id', 'script');
@@ -196,9 +196,9 @@ window.navigation.addEventListener("navigate", (e) => {
 				langDropDown.classList.remove("activeDropDown");
 			if (dropDownUser.classList.contains("activeDropDown"))
 				dropDownUser.classList.remove("activeDropDown");
-				
+
 			if (client && !(client instanceof Client)){
-				client = null;				
+				client = null;
 				fetch('/api/user/logout', {
 					method: 'POST',
 					headers: {
@@ -252,12 +252,6 @@ window.navigation.addEventListener("navigate", (e) => {
 	})
 })
 
-function htmlEncode(str) {
-	return String(str).replace(/[^\w. ]/gi, function (c) {
-		return '&#' + c.charCodeAt(0) + ';';
-	});
-}
-
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
 
@@ -273,7 +267,7 @@ function handleToken() {
 		.then(response => {
 			if (response.ok){
 				(async () => {
-					client = await new Client()	
+					client = await new Client()
 					if (!client)
 						history.replaceState("", "", `https://${hostname.host}/login`);
 					else

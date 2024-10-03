@@ -48,7 +48,7 @@ pfpInputLabel.addEventListener("keydown", (ek) => {
 pfpInput.addEventListener("change", (e) => {
 	if (pfpInput.files.length >= 1){
 		path = pfpInput.files[0];
-		pfpInputLabel.innerHTML = path.name;
+		pfpInputLabel.innerText = path.name;
 		var blob = new Blob([path]);
 		var reader = new FileReader();
 
@@ -142,7 +142,7 @@ deleteBtn.addEventListener("click", (e) => {
 
 confirmDeleteBtn.addEventListener("click", (e) => {
 	val = confirmDeleteInput.value;
-	if (val == document.getElementById("usernameBtn").innerHTML){
+	if (val == document.getElementById("usernameBtn").innerText){
 		fetch('/api/user/delete_user', {
 			method: 'POST',
 			headers: {
@@ -160,7 +160,7 @@ confirmDeleteBtn.addEventListener("click", (e) => {
 confirmDeleteInput.addEventListener("keydown", (e) => {
 	if (e.key == "Enter"){
 		val = confirmDeleteInput.value;
-		if (val == document.getElementById("usernameBtn").innerHTML){
+		if (val == document.getElementById("usernameBtn").innerText){
 			fetch('/api/user/delete_user', {
 				method: 'POST',
 				headers: {
@@ -255,7 +255,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
 					else
-						document.getElementById(key).innerHTML = content[key];
+						document.getElementById(key).innerText = content[key];
 				});
 			})
 		})
@@ -284,7 +284,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 					if (key.startsWith('input'))
 						document.getElementById(key).placeholder = content[key];
 					else
-						document.getElementById(key).innerHTML = content[key];
+						document.getElementById(key).innerText = content[key];
 				});
 			})
 		})

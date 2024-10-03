@@ -195,7 +195,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
     chartAverage = new Chart(document.getElementById("winLossGraph"), {
         type: 'line',
         data: {
-            datasets: datasets 
+            datasets: datasets
         },
         options:{
             animation,
@@ -363,7 +363,7 @@ function loadUserDashboard(LastXDaysDisplayed){
                         document.getElementById("loaderBg").style.setProperty("display", "none");
                 })
                 var countWin = 0, countLost = 0, countMatch = 0;
-                matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date 
+                matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
 
                 for (var i=0; i<Object.keys(user.matches).length;i++){
                     yearObj = user.matches[Object.keys(user.matches)[i]];
@@ -382,10 +382,10 @@ function loadUserDashboard(LastXDaysDisplayed){
                         }
                     }
                 }
-                
+
                 if (countMatch == 0)
                     document.getElementById("ratioValue").innerHTML = `100%`;
-                else 
+                else
                     document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`;
                 document.getElementById("nbWinValue").innerHTML = `${countWin}`;
                 document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`;

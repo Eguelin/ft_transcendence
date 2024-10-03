@@ -55,7 +55,7 @@ def fortytwo(request):
 		return JsonResponse(response.json(), status=response.status_code)
 	user_json = response.json()
 	user_login = user_json.get('login')
-	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
+	pfp_url = user_json.get('image', {}).get('link', '')
 
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:15]
@@ -77,6 +77,7 @@ def fortytwo(request):
 		user, user_existence = User.objects.get_or_create(username=user_login)
 		if user_existence is False:
 			user_login = generate_unique_username(user_login)
+		user_login
 
 		user.set_password(str(id42))
 		user.save()
@@ -220,6 +221,8 @@ def profile_update(request):
 				except ValidationError as e:
 					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
+					if user.profile.profile_picture and os.path.exists(user.profile.profile_picture):
+						os.remove(user.profile.profile_picture)
 					raw = data['pfp']
 					pfpName = "profilePictures/{0}.jpg".format(user.username)
 					with open(pfpName, "wb", opener=file_opener) as f:

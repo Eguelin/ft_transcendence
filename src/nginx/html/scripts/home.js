@@ -13,7 +13,7 @@ playBtn = document.getElementById("playBtn");
 			var message = document.createElement("a");
 			recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
 			recentMatchHistoryContainer.style.setProperty("align-items", "center");
-			message.style.setProperty("color", "var(--main-text-rgb)");	
+			message.style.setProperty("color", "var(--main-text-rgb)");
 			message.style.setProperty("width", "100vw");
 			message.id="notPlayedToday";
 			message.innerText = client.langJson['home']['#notPlayedToday'];
