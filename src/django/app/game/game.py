@@ -35,14 +35,14 @@ class Matchmaking():
 			await game.initGame()
 
 class Game():
-	width = 4000
-	height = 3000
+	width = 500
+	height = 375
 
 	class Paddle():
-		width = 40
-		height = 500
-		speed = 50
-		margin = 20
+		width = 5
+		height = 62
+		speed = 6
+		margin = 2
 
 		def getSize():
 			return {
@@ -51,7 +51,7 @@ class Game():
 			}
 
 	class Ball():
-		size = 50
+		size = 6
 
 		def __init__(self):
 			self.x = 0
@@ -64,7 +64,7 @@ class Game():
 		def initPosition(self):
 			self.x = (Game.width - Game.Ball.size) / 2
 			self.y = (Game.height - Game.Ball.size) / 2
-			self.speed = 20
+			self.speed = 4
 
 			self.angle = math.pi + random.uniform(-1, 1) * math.pi / 3
 			self.dx = math.cos(self.angle) * self.speed
@@ -75,8 +75,8 @@ class Game():
 			self.y += self.dy
 
 		def paddleCollision(self, pad):
-			if self.speed < 70:
-				self.speed += 5
+			if self.speed < 10:
+				self.speed += 0.5
 
 			demiePaddle = (Game.Paddle.height + Game.Ball.size) / 2
 			middlePad = pad.y + demiePaddle
