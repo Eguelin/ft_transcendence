@@ -27,12 +27,14 @@ body{
 @media screen and (orientation:landscape){
 	body{
 		font-size: 16px;
+		transition: 500ms;
 	}
 }
 
 @media screen and (orientation:portrait), (max-height:590px){
 	body{
 		font-size: 12px;
+		transition: 500ms;
 	}
 }
 
@@ -654,100 +656,6 @@ a {
 
 
 
-#recentMatchHistoryContainer{
-	height: 20vh;
-	width: -webkit-fill-available;
-	position: absolute;
-	bottom: 0;
-	display: flex;
-}
-
-.matchDescContainer{
-	background: var(--input-bg-rgb);
-	height: auto;
-	border: .5px solid var(--page-bg-rgb);
-	flex: auto;
-	display: flex;
-	flex-direction: column;
-	color: var(--main-text-rgb);
-}
-
-.matchDescContainerResult{
-	flex: auto;
-	margin-top: 1vh;
-}
-
-.matchDescContainerScore{
-	display: flex;
-	flex-direction: column;
-	flex: auto;
-	padding: 0 1vw;
-	gap: 1vh;
-}
-
-.resultScore{
-	display: flex;
-}
-
-.resultScoreScore{
-	flex: auto;
-	text-align: right;
-}
-
-.resultScoreName{
-	text-align: left;
-}
-
-.resultScoreName:hover{
-	text-decoration: underline from-font solid var(--main-text-rgb);
-}
-
-#profileInfoContainer {
-	display: flex;
-	margin: 3vw 3vw 0 3vw;
-}
-
-#profileNameContainer {
-	flex: auto;
-	position: relative;
-}
-
-#profilePfpContainer {
-	position: relative;
-	height: 7vw;
-	width: 7vw;
-	overflow: hidden;
-}
-
-#profilePfp {
-	width: 100%;
-
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-position: 50% 50%;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	translate: -50% -50%;
-}
-
-#MatchHistoryTextContainer{
-	color: var(--main-text-rgb);
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	top: -5vmin;
-	display: flex;
-	gap: 1vmin;
-}
-
-#profileName{
-	font-size: 6vmax;
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-}
 
 #resumeContainer{
 	margin-top: 2vmax;

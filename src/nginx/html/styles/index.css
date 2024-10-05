@@ -81,7 +81,6 @@
 
 #usernameBtn {
 	color: var(--main-text-rgb);
-	font-size: min(3vh, 1vw);
 	line-height: 4vw;
 	display: block;
 	text-align: center;
