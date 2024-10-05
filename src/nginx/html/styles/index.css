@@ -1,0 +1,104 @@
+#titleFlexContainer{
+	height:fit-content;
+	text-align: center;
+	display: flex;
+	width: -webkit-fill-available;
+	align-items: center;
+}
+
+#titleFlexContainer div{
+	position: relative;
+}
+
+#browseFlexContainer {
+	width: 30vw;
+	display: flex;
+}
+
+#browseFlexContainer div{
+	margin: 1vmax;
+}
+
+#title{
+	width: 40vw;
+}
+
+#goHomeButton{
+	mask-image:url("../icons/left_arrow.svg");
+	background:var(--main-text-rgb);
+	height:10vh;
+	width:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+#goHomeButton:focus, #goHomeButton:hover{
+	background: var(--hover-text-rgb);
+}
+
+#themeButton{
+	mask-image:url("../icons/button-night-mode.svg");
+	background:var(--main-text-rgb);
+	height:5vw;
+	width:5vw;
+	margin: 1vmax;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover{
+	outline: none;
+	background: var(--hover-text-rgb);
+}
+
+
+#pfp{
+	width: 100%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#pfpContainer{
+	height: 4vw;
+	width: 4vw;
+	margin: 0 1vmax;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: relative;
+}
+
+#quickSettingContainer{
+	flex-direction: row-reverse;
+	display: flex;
+	width: 30vw;
+	align-items: center;
+}
+
+#usernameBtn {
+	color: var(--main-text-rgb);
+	font-size: min(3vh, 1vw);
+	line-height: 4vw;
+	display: block;
+	text-align: center;
+}
+
+#inputSearchUser{
+	display: none;
+}
+
+@media screen and (orientation:landscape){
+	#pfpContainer{
+		display: block;
+	}
+}
+
+@media screen and (orientation:portrait), (max-height:590px){
+	#pfpContainer{
+		display: none;
+	}
+}
