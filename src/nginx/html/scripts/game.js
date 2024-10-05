@@ -42,7 +42,7 @@ function game() {
 	}
 
 	function gameInit(message) {
-		canvas.width = message.canvas.width;
+			canvas.width = message.canvas.width;
 		canvas.height = message.canvas.height;
 
 		paddle.height = message.paddle.height;

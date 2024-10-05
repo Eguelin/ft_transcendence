@@ -16,6 +16,7 @@
 
 body{
 	font-family:'pong';
+	font-size: 16px;
 	background-color: var(--page-bg-rgb);
 	height: 100%;
 	margin: 0;
@@ -40,6 +41,7 @@ body{
 }
 
 #browseFlexContainer {
+	width: 30vw;
 	display: flex;
 }
 
@@ -67,7 +69,7 @@ h2{
 }
 
 #title{
-	width: 80%;
+	width: 40vw;
 }
 
 .settingSlide h2{
@@ -388,7 +390,7 @@ a {
 #quickSettingContainer{
 	flex-direction: row-reverse;
 	display: flex;
-	flex: 1;
+	width: 30vw;
 	align-items: center;
 }
 
