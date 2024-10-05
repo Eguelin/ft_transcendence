@@ -35,14 +35,14 @@ class Matchmaking():
 			await game.initGame()
 
 class Game():
-	width = 500
-	height = 375
+	width = 800
+	height = 600
 
 	class Paddle():
-		width = 5
-		height = 62
-		speed = 6
-		margin = 2
+		width = 8
+		height = 120
+		speed = 8
+		margin = 4
 
 		def getSize():
 			return {
@@ -51,7 +51,7 @@ class Game():
 			}
 
 	class Ball():
-		size = 6
+		size = 10
 
 		def __init__(self):
 			self.x = 0
@@ -64,9 +64,10 @@ class Game():
 		def initPosition(self):
 			self.x = (Game.width - Game.Ball.size) / 2
 			self.y = (Game.height - Game.Ball.size) / 2
-			self.speed = 4
+			self.speed = 3
 
 			self.angle = math.pi + random.uniform(-1, 1) * math.pi / 3
+			# self.angle = 0
 			self.dx = math.cos(self.angle) * self.speed
 			self.dy = math.sin(self.angle) * self.speed
 
@@ -83,6 +84,7 @@ class Game():
 			ballImpact = self.y + Game.Ball.size - middlePad
 
 			self.angle = (ballImpact / demiePaddle) * (math.pi / 2.5)
+			# self.angle = 0
 
 			if self.dx > 0:
 				self.dx = math.cos(self.angle) * self.speed * -1
@@ -120,7 +122,7 @@ class Game():
 			self.checkCollision()
 			await self.playerLeft.send('game_update', self.getGame())
 			await self.playerRight.send('game_update', self.getGame())
-			await asyncio.sleep(0.02)
+			await asyncio.sleep(0.016)
 
 	def checkCollision(self):
 		if self.ball.y <= 0 or self.ball.y >= Game.height - Game.Ball.size:
@@ -211,7 +213,7 @@ class Consumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
-		if data['type'] == 'game_keydown' and time.time() - self.lastRequest >= 0.02:
+		if data['type'] == 'game_keydown' and time.time() - self.lastRequest >= 0.016:
 			self.lastRequest = time.time()
 			if self.player:
 				await self.player.move(data['message'])
