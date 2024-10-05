@@ -7,6 +7,7 @@ function game() {
 	const player1 = {};
 	const player2 = {};
 	const ball = {};
+	const ballTrail = [];
 
 	const socket = new WebSocket("/ws/game/");
 
@@ -16,7 +17,6 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
-		// console.log(data);
 		if (data.type === "game_init") {
 			gameInit(data.message);
 		}
@@ -57,7 +57,13 @@ function game() {
 		ball.size = message.ball.size;
 		ball.x = message.ball.x;
 		ball.y = message.ball.y;
-		gameRender();
+
+		ctx.fillStyle = 'white';
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = paddle.width / 4;
+
+		setInterval(() => gameRender(), 16);
+		setInterval(() => KeyPress(), 16);
 	}
 
 	function updateGame(message) {
@@ -70,41 +76,62 @@ function game() {
 		ball.x = message.ball.x;
 		ball.y = message.ball.y;
 
-		gameRender();
+		ballTrail.push({ x: ball.x, y: ball.y });
+
+		if (ballTrail.length > 5) {
+			ballTrail.shift();
+		}
 	}
 
-
 	function gameRender() {
-		ctx.beginPath();
-
-		// Clear the canvas
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		// Middle line
-		ctx.fillStyle = 'white';
-		ctx.strokeStyle = 'white';
-		ctx.lineWidth = paddle.width / 4;
+		drawMiddleLine();
+		drawBallTrail();
+		drawBall();
+		drawPaddles();
+	}
+
+	function drawMiddleLine() {
+		ctx.beginPath();
 		ctx.setLineDash([ball.size, ball.size]);
 		ctx.moveTo(canvas.width / 2, ball.size / 2);
 		ctx.lineTo(canvas.width / 2, canvas.height);
 		ctx.stroke();
-
-		// Score
-		// scoreRender();
-
-		// Ball
-		ctx.rect(ball.x, ball.y, ball.size, ball.size);
-
-		// Right paddle
-		ctx.rect(player1.x, player1.y, paddle.width, paddle.height);
-
-		// Left paddle
-		ctx.rect(player2.x, player2.y, paddle.width, paddle.height);
-
 		ctx.closePath();
-		ctx.fill();
 	}
 
+	function drawBall() {
+		ctx.beginPath();
+		ctx.rect(ball.x, ball.y, ball.size, ball.size);
+		ctx.fill();
+		ctx.closePath();
+	}
+
+	function drawBallTrail() {
+		for (let i = 0; i < ballTrail.length; i++) {
+			const trail = ballTrail[i];
+			const opacity = (i + 1) / ballTrail.length;
+			ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+			ctx.beginPath();
+			ctx.rect(trail.x, trail.y, ball.size, ball.size);
+			ctx.fill();
+			ctx.closePath();
+		}
+		ctx.fillStyle = 'white';
+	}
+
+	function drawPaddles() {
+		ctx.beginPath();
+		ctx.rect(player1.x, player1.y, paddle.width, paddle.height);
+		ctx.fill();
+		ctx.closePath();
+
+		ctx.beginPath();
+		ctx.rect(player2.x, player2.y, paddle.width, paddle.height);
+		ctx.fill();
+		ctx.closePath();
+	}
 
 	function cleanup() {
 		window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -141,8 +168,6 @@ function game() {
 		if (Object.keys(keysDown).length > 0)
 			gamesend("game_keydown", keysDown);
 	}
-
-	setInterval(() => KeyPress(), 20);
 
 	window.addEventListener('beforeunload', handleBeforeUnload);
 	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
