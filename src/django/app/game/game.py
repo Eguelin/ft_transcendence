@@ -102,9 +102,6 @@ class Game():
 			await asyncio.sleep(0.016)
 
 	def checkCollision(self):
-		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= Game.height:
-			self.ball.dy = -self.ball.dy
-
 		if self.ball.x <= 0:
 			self.playerRight.score += 1
 			self.ball.initPosition()
@@ -119,6 +116,9 @@ class Game():
 
 		elif self.ball.x >= self.playerRight.x:
 			self.ball.paddleCollision(self.playerRight)
+
+		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= Game.height:
+			self.ball.dy = -self.ball.dy
 
 	def getSize():
 		return {
