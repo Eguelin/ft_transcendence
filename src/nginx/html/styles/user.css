@@ -10,22 +10,20 @@
 
 #recentMatchHistory{
 	width: -webkit-fill-available;
+	display: flex;
 	height: 20vh;
+	gap: 1px;
 }
 
 .matchDescContainer{
 	background: var(--input-bg-rgb);
-	height: auto;
+	min-height: min-content;
 	border: .5px solid var(--page-bg-rgb);
 	flex: auto;
 	display: flex;
 	flex-direction: column;
+	padding: 1vh 0;
 	color: var(--main-text-rgb);
-}
-
-.matchDescContainerResult{
-	flex: auto;
-	margin-top: 1vh;
 }
 
 .matchDescContainerScore{
@@ -34,6 +32,9 @@
 	flex: auto;
 	padding: 0 1vw;
 	gap: 1vh;
+	top: 50%;
+	position: relative;
+	translate: 0 -50%;
 }
 
 .resultScore{
@@ -109,9 +110,25 @@
 }
 
 @media screen and (min-height:590px){
+
+	@keyframes appear {
+		0%{
+			scale: 0;
+			opacity: 0;
+		}
+		100%{
+			scale: 1;
+			opacity: 1;
+		}
+		
+	}
+	.matchDescContainerResult, .matchDescContainerDate{
+		animation: appear 500ms forwards;
+	}
+
 	@keyframes recentMatchHistoryContainerScale {
 		from{
-			height: 5vh;
+			height: fit-content;
 		}
 		to{
 			height: 20vh;
@@ -124,25 +141,34 @@
 }
 
 @media screen and (max-height:590px){
+	@keyframes disappear {
+		0%{
+			scale: 1;
+			height: auto;
+			opacity: 1;
+		}
+		100%{
+			scale: 0;
+			height: 0;
+			opacity: 0;
+			display: none;
+		}
+		
+	}
 	.matchDescContainerResult, .matchDescContainerDate{
-		display: none;
+		animation: disappear 500ms forwards;
 	}
 	@keyframes recentMatchHistoryContainerScaleDown {
 		from{
 			height: 20vh;
 		}
 		to{
-			height: 5vh;
+			height: fit-content;
 		}
 	}
 	#recentMatchHistory{
-		height: min-content;
-		min-height: 5vh;
 		animation: recentMatchHistoryContainerScaleDown 500ms forwards;
 		min-height: 12px;
-	}
-	.matchDescContainer{
-		padding: 1vh 0;
 	}
 }
 
