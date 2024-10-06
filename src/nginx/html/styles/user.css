@@ -94,13 +94,41 @@
 	transform: translateY(-50%);
 }
 
+#notPlayedToday{
+	padding: 1vh;;
+}
+
+@media screen and (min-height:590px){
+	@keyframes recentMatchHistoryContainerScale {
+		from{
+			height: 5vh;
+		}
+		to{
+			height: 20vh;
+		}
+	}
+	#recentMatchHistoryContainer{
+		height: 20vh;
+		animation: recentMatchHistoryContainerScale 500ms forwards;
+	}
+}
 
 @media screen and (max-height:590px){
 	.matchDescContainerResult, .matchDescContainerDate{
 		display: none;
 	}
+	@keyframes recentMatchHistoryContainerScaleDown {
+		from{
+			height: 20vh;
+		}
+		to{
+			height: 5vh;
+		}
+	}
 	#recentMatchHistoryContainer{
 		height: min-content;
+		min-height: 5vh;
+		animation: recentMatchHistoryContainerScaleDown 500ms forwards;
 	}
 	.matchDescContainer{
 		padding: 1vh 0;
