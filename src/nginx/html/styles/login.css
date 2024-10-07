@@ -64,6 +64,12 @@
 	flex: 1;
 }
 
+
+#loginSlideSelector div:hover{
+	font-size: calc(1ch + 2px);
+}
+
+
 .loginSlide{
 	width: fit-content;
 	min-width: 40vw;
