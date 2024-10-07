@@ -80,6 +80,8 @@ class Game():
 	def __init__(self, player1, player2):
 		self.playerLeft = player1
 		self.playerRight = player2
+		self.playerRight.game = self
+		self.playerLeft.game = self
 		self.playerLeft.side = 'left'
 		self.playerRight.side = 'right'
 		self.ball = Ball()
@@ -98,10 +100,36 @@ class Game():
 
 		await self.send('game_start', None)
 		while True:
+			if await self.endGame():
+				break
 			self.ball.move()
 			self.checkCollision()
 			await self.send('game_update', self.getInfo())
 			await asyncio.sleep(0.016)
+
+	async def endGame(self):
+		if self.playerLeft == None and self.playerRight == None:
+			return True
+
+		if self.playerLeft == None:
+			await self.playerRight.send('game_end', 'You win')
+			return True
+
+		if self.playerRight == None:
+			await self.playerLeft.send('game_end', 'You win')
+			return True
+
+		if self.playerLeft.score == 5:
+			await self.playerLeft.send('game_end', 'You win')
+			await self.playerRight.send('game_end', 'You lose')
+			return True
+
+		if self.playerRight.score == 5:
+			await self.playerLeft.send('game_end', 'You lose')
+			await self.playerRight.send('game_end', 'You win')
+			return True
+
+		return False
 
 	async def countdown(self):
 		for i in range(3, 0, -1):
@@ -133,6 +161,12 @@ class Game():
 		await self.playerLeft.send(type, message)
 		await self.playerRight.send(type, message)
 
+	async def remove_player(self, player):
+		if player == self.playerLeft:
+			self.playerLeft = None
+		elif player == self.playerRight:
+			self.playerRight = None
+
 	def getSize():
 		return {
 			'width': Game.width,
@@ -150,7 +184,6 @@ class Game():
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
 			print(info)
-
 
 		return info
 
@@ -189,6 +222,7 @@ class Player(AsyncWebsocketConsumer):
 		self.x = 0
 		self.y = 0
 		self.score = 0
+		self.game = None
 		self.side = None
 		self.lastRequest = 0
 		super().__init__()
@@ -200,6 +234,8 @@ class Player(AsyncWebsocketConsumer):
 
 	async def disconnect(self, close_code):
 		self.matchmaking.remove_player(self)
+		if self.game:
+			await self.game.remove_player(self)
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
