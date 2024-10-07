@@ -631,6 +631,11 @@ inputSearchUser.addEventListener("keydown", (e) => {
 })
 
 langDropDownBtn.addEventListener("click", (e) => {
+	if (dropDownUser.classList.contains("activeDropDown")){
+		dropDownUser.classList.remove("activeDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("inactiveDropDown");
+	}
 	if (langDropDown.classList.contains("activeDropDown")){
 		langDropDown.classList.remove("activeDropDown");
 		void langDropDown.offsetWidth;
@@ -646,6 +651,11 @@ langDropDownBtn.addEventListener("click", (e) => {
 })
 
 usernameBtn.addEventListener("click", (e) => {
+	if (langDropDown.classList.contains("activeDropDown")){
+		langDropDown.classList.remove("activeDropDown");
+		void langDropDown.offsetWidth;
+		langDropDown.classList.add("inactiveDropDown");
+	}
 	if (dropDownUser.classList.contains("activeDropDown")){
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;

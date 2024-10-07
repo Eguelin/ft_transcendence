@@ -197,7 +197,7 @@
 
 
 
-#dropDownUserContainer, #langDropDownContainer, #timelineDropdownContainer {
+#dropDownUserContainer, #langDropDownContainer {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
@@ -219,7 +219,7 @@
 	z-index: 1;
 }
 
-.dropDownUserContent, .timelineDropdownContent{
+.dropDownUserContent{
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -241,18 +241,18 @@
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent, .activeDropDown .timelineDropdownContent{
+.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent{
 	z-index: 1;
 	display: block;
 }
 
 
-.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent, .inactiveDropDown .timelineDropdownContent{
+.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
 	z-index: 1;
 	display: block;
 }
 
-.activeDropDown .dropDownUserContent .dropDownMenuBtn, .activeDropDown #timelineDropdownContainer .timelineDropdownContent li {
+.activeDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
 	animation: scaleZText 300ms forwards;
 
@@ -261,7 +261,7 @@
 	font-size: min(2vh, 1vw);
 }
 
-.inactiveDropDown .dropDownUserContent .dropDownMenuBtn, .inactiveDropDown #timelineDropdownContainer .timelineDropdownContent li {
+.inactiveDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
 	animation: scaleZText 300ms reverse;
 
@@ -310,7 +310,7 @@
 	scale: 0;
 }
 
-.dropDownUserContent button, .timelineDropdownContent li{
+.dropDownUserContent button{
 	text-align: center;
 	color: var(--option-text-rgb);
 	text-decoration: inherit;
