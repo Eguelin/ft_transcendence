@@ -194,9 +194,9 @@ window.navigation.addEventListener("navigate", (e) => {
 		async handler() {
 			//reset dropdown menus
 			if (langDropDown.classList.contains("activeDropDown"))
-				langDropDown.classList.remove("activeDropDown");
+				langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
 			if (dropDownUser.classList.contains("activeDropDown"))
-				dropDownUser.classList.remove("activeDropDown");
+				dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
 
 			if (client && !(client instanceof Client)){
 				client = null;
@@ -631,33 +631,45 @@ inputSearchUser.addEventListener("keydown", (e) => {
 })
 
 langDropDownBtn.addEventListener("click", (e) => {
-	if (langDropDown.classList.contains("activeDropDown"))
-		langDropDown.classList.remove("activeDropDown")
+	if (langDropDown.classList.contains("activeDropDown")){
+		langDropDown.classList.remove("activeDropDown");
+		void langDropDown.offsetWidth;
+		langDropDown.classList.add("inactiveDropDown");
+	}
+	else if (langDropDown.classList.contains("inactiveDropDown")){
+		langDropDown.classList.remove("inactiveDropDown");
+		void langDropDown.offsetWidth;
+		langDropDown.classList.add("activeDropDown");
+	}
 	else
-		langDropDown.classList.add("activeDropDown")
+		langDropDown.classList.add("activeDropDown");
 })
 
 usernameBtn.addEventListener("click", (e) => {
-	if (dropDownUser.classList.contains("activeDropDown"))
-		dropDownUser.classList.remove("activeDropDown")
+	if (dropDownUser.classList.contains("activeDropDown")){
+		dropDownUser.classList.remove("activeDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("inactiveDropDown");
+	}
+	else if (dropDownUser.classList.contains("inactiveDropDown")){
+		dropDownUser.classList.remove("inactiveDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("activeDropDown");
+	}
 	else
-		dropDownUser.classList.add("activeDropDown")
+		dropDownUser.classList.add("activeDropDown");
 })
 
 
 langDropDownBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
 		langDropDownBtn.click();
-		if (dropDownUser.classList.contains("activeDropDown"))
-			dropDownUser.classList.remove("activeDropDown");
 	}
 })
 
 usernameBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
 		usernameBtn.click();
-		if (langDropDown.classList.contains("activeDropDown"))
-			langDropDown.classList.remove("activeDropDown");
 	}
 })
 
@@ -699,9 +711,9 @@ langDropDownOption.forEach(function (button) {
 window.addEventListener("click", (e) => {
 	if (!e.target.closest(".activeDropDown")) {
 		if (langDropDown.classList.contains("activeDropDown"))
-			langDropDown.classList.remove("activeDropDown");
+			langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
 		if (dropDownUser.classList.contains("activeDropDown"))
-			dropDownUser.classList.remove("activeDropDown");
+			dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
 	}
 })
 
