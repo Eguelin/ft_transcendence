@@ -17,20 +17,15 @@
 	"login" : {
 		"#title" : "ANMELDUNG",
 		"#internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
-		"#forgotPassword" : "Passwort vergessen",
-		"#registerLink" : "registrieren",
 		"#loginBtn" : "ANMELDUNG",
 		"#externalLoginOpt" : "Weitere anmeldeoptionen",
 		"#inputUsername" : "Nutzername",
-		"#inputPassword" : "Passwort"
-	},
-	"register" : {
-		"#title" : "REGISTRIEREN",
+		"#inputPassword" : "Passwort",
 		"#createAcc" : "Erstelle deinen Account",
 		"#registerBtn" : "REGISTRIEREN",
-		"#inputUsername" : "Nutzername",
-		"#inputPassword" : "Passwort",
-		"#inputCPassword" : "Bestätige das Passwort"
+		"#inputRegisterUsername" : "Nutzername",
+		"#inputRegisterPassword" : "Passwort",
+		"#inputRegisterCPassword" : "Bestätige das Passwort"
 	},
 	"settings": {
 		"#title" : "Einstellungen",
