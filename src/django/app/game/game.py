@@ -50,7 +50,7 @@ class Ball():
 		self.dy = math.sin(self.angle) * self.speed
 
 
-	def getBall(self):
+	def getInfo(self):
 		return {
 			'size': Ball.size,
 			'x': self.x - Ball.demieSize,
@@ -90,7 +90,7 @@ class Game():
 		self.ball.initPosition()
 
 	async def initGame(self):
-		await self.send('game_init', self.getInitGame())
+		await self.send('game_init', self.getInfo(True))
 		asyncio.create_task(self.updateGame())
 
 	async def updateGame(self):
@@ -100,7 +100,7 @@ class Game():
 		while True:
 			self.ball.move()
 			self.checkCollision()
-			await self.send('game_update', self.getGame())
+			await self.send('game_update', self.getInfo())
 			await asyncio.sleep(0.016)
 
 	async def countdown(self):
@@ -139,21 +139,20 @@ class Game():
 			'height': Game.height
 		}
 
-	def getGame(self):
-		return {
-			'player1': self.playerLeft.getPos(),
-			'player2': self.playerRight.getPos(),
-			'ball': self.ball.getBall()
+	def getInfo(self, init=False):
+		info = {
+			'player1': self.playerLeft.getInfo(init),
+			'player2': self.playerRight.getInfo(init),
+			'ball': self.ball.getInfo()
 		}
 
-	def getInitGame(self):
-		return {
-			'canvas': Game.getSize(),
-			'paddle': Paddle.getSize(),
-			'player1': self.playerLeft.getPos(),
-			'player2': self.playerRight.getPos(),
-			'ball': self.ball.getBall()
-		}
+		if init:
+			info['canvas'] = Game.getSize()
+			info['paddle'] = Paddle.getSize()
+			print(info)
+
+
+		return info
 
 
 class Matchmaking():
@@ -191,10 +190,10 @@ class Player(AsyncWebsocketConsumer):
 		self.y = 0
 		self.score = 0
 		self.side = None
+		self.lastRequest = 0
 		super().__init__()
 
 	async def connect(self):
-		self.lastRequest = 0
 		await self.accept()
 		self.matchmaking.add_player(self)
 		await self.matchmaking.run()
@@ -225,19 +224,20 @@ class Player(AsyncWebsocketConsumer):
 	async def move(self, input):
 		if (input.get('ArrowUp') or input.get('KeyW')) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		elif (input.get('ArrowDown') or input.get('KeyS')) and self.y < Game.height - Paddle.demieHeight:
+		if (input.get('ArrowDown') or input.get('KeyS')) and self.y < Game.height - Paddle.demieHeight:
 			self.y += Paddle.speed
 
-	def getPos(self):
+	def getInfo(self, init=False):
+		info = {
+			'x': self.x,
+			'y': self.y - Paddle.demieHeight,
+			'score': self.score,
+		}
+
 		if self.side == 'left':
-			return {
-				'x': self.x - Paddle.width,
-				'y': self.y - Paddle.demieHeight,
-				'score': self.score
-			}
-		elif self.side == 'right':
-			return {
-				'x': self.x,
-				'y': self.y - Paddle.demieHeight,
-				'score': self.score
-			}
+			info['x'] = self.x - Paddle.width
+
+		if init:
+			info['user_id'] = self.scope['user'].id
+
+		return info
