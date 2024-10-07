@@ -54,3 +54,17 @@
 #fortyTwoLogin:hover, #fortyTwoLogin:focus{
 	background: var(--hover-text-rgb);
 }
+
+#loginSlideSelector{
+	color: var(--main-text-rgb);
+	display: flex;
+	margin-top: 2vmin;
+}
+#loginSlideSelector div{
+	flex: 1;
+}
+
+.loginSlide{
+	width: fit-content;
+	min-width: 40vw;
+}

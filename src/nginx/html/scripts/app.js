@@ -536,6 +536,7 @@ window.addEventListener("keydown", (e) => {
 	}
 	if (currentPage == "login"){
 		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+			loginSlideSelector[slideIdx].classList.remove('activeSelector');
 			if (e.key == "ArrowLeft")
 				slideIdx -= 1;
 			else
@@ -546,6 +547,7 @@ window.addEventListener("keydown", (e) => {
 				slideIdx = slides.length - 1;
 			for (let i = 0; i < slides.length; i++)
 				slides[i].style.display = "none";
+			loginSlideSelector[slideIdx].classList.add('activeSelector');
 			slides[slideIdx].style.display = "block";
 		}
 	}

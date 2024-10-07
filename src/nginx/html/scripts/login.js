@@ -2,6 +2,7 @@ container = document.getElementById("container");
 loginBtn = document.getElementById('loginBtn');
 swichTheme = document.getElementById("themeButton");
 fortyTwoLogin = document.getElementById("fortyTwoLogin");
+loginSlideSelector = document.querySelectorAll(".slideSelector");
 
 slides = document.querySelectorAll(".loginSlide");
 var slideIdx = 0;
