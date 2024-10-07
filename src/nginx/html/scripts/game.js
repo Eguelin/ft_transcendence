@@ -2,12 +2,18 @@ function game() {
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
 
+	canvas.width = 800;
+	canvas.height = 600;
+
 	const keysDown = {};
 	const paddle = {};
 	const player1 = {};
 	const player2 = {};
 	const ball = {};
 	const ballTrail = [];
+	let waiting = true;
+	let dotCount = 0;
+	let waitingInterval;
 
 	const socket = new WebSocket("/ws/game/");
 
@@ -17,13 +23,15 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
-		if (data.type === "game_init")
+		if (data.type === "game_init") {
+			waiting = false;
+			clearInterval(waitingInterval); // Stop the waiting message interval
 			gameInit(data.message);
-		else if (data.type === "game_update")
+		} else if (data.type === "game_update") {
 			updateGame(data.message);
-		else if (data.type === "game_countdown")
+		} else if (data.type === "game_countdown") {
 			gameCountdown(data.message);
-		else if (data.type === "game_start") {
+		} else if (data.type === "game_start") {
 			setInterval(() => gameRender(), 16);
 			setInterval(() => KeyPress(), 16);
 		}
@@ -95,10 +103,14 @@ function game() {
 	function gameRender() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		drawMiddleLine();
-		drawBallTrail();
-		drawBall();
-		drawPaddles();
+		if (waiting) {
+			drawWaitingMessage();
+		} else {
+			drawMiddleLine();
+			drawBallTrail();
+			drawBall();
+			drawPaddles();
+		}
 	}
 
 	function drawMiddleLine() {
@@ -142,6 +154,16 @@ function game() {
 		ctx.closePath();
 	}
 
+	function drawWaitingMessage() {
+		ctx.fillStyle = 'white';
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.font = "80px pong";
+		ctx.textAlign = "center";
+		let dots = '.'.repeat(dotCount % 4);
+		ctx.fillText(`waiting${dots}`, canvas.width / 2, canvas.height / 2);
+		dotCount++;
+	}
+
 	function cleanup() {
 		window.removeEventListener('beforeunload', handleBeforeUnload);
 		document.getElementById('goHomeButton').removeEventListener('click', handleGoHomeButton);
@@ -183,6 +205,8 @@ function game() {
 	window.addEventListener('popstate', handlePopState);
 	document.addEventListener("keydown", handleKeyDown);
 	document.addEventListener("keyup", handleKeyUp);
+
+	waitingInterval = setInterval(() => gameRender(), 500); // Adjust the interval for smoother animation
 }
 
 game();
