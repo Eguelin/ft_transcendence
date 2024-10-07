@@ -14,6 +14,8 @@ function game() {
 	let waiting = true;
 	let dotCount = 0;
 	let waitingInterval;
+	let gameInterval;
+	let KeyPressInterval;
 
 	const socket = new WebSocket("/ws/game/");
 
@@ -23,6 +25,7 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
+		console.log(data);
 		if (data.type === "game_init") {
 			waiting = false;
 			clearInterval(waitingInterval); // Stop the waiting message interval
@@ -30,10 +33,14 @@ function game() {
 		} else if (data.type === "game_update") {
 			updateGame(data.message);
 		} else if (data.type === "game_countdown") {
-			gameCountdown(data.message);
+			drawMessage(data.message);
 		} else if (data.type === "game_start") {
-			setInterval(() => gameRender(), 16);
-			setInterval(() => KeyPress(), 16);
+			gameInterval = setInterval(() => gameRender(), 16);
+			KeyPressInterval = setInterval(() => KeyPress(), 16);
+		} else if (data.type === "game_end") {
+			clearInterval(gameInterval);
+			clearInterval(KeyPressInterval);
+			drawMessage(data.message);
 		}
 	}
 
@@ -62,9 +69,11 @@ function game() {
 
 		player1.x = message.player1.x;
 		player1.y = message.player1.y;
+		player1.score = message.player1.score;
 
 		player2.x = message.player2.x;
 		player2.y = message.player2.y;
+		player2.score = message.player2.score;
 
 		ball.size = message.ball.size;
 		ball.x = message.ball.x;
@@ -78,9 +87,11 @@ function game() {
 	function updateGame(message) {
 		player1.x = message.player1.x;
 		player1.y = message.player1.y;
+		player1.score = message.player1.score;
 
 		player2.x = message.player2.x;
 		player2.y = message.player2.y;
+		player2.score = message.player2.score;
 
 		ball.x = message.ball.x;
 		ball.y = message.ball.y;
@@ -92,10 +103,10 @@ function game() {
 		}
 	}
 
-	function gameCountdown(message) {
+	function drawMessage(message) {
 		ctx.fillStyle = 'white';
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.font = "100px pong";
+		ctx.font = "80px pong";
 		ctx.textAlign = "center";
 		ctx.fillText(message, canvas.width / 2, canvas.height / 2);
 	}
@@ -106,11 +117,19 @@ function game() {
 		if (waiting) {
 			drawWaitingMessage();
 		} else {
+			drawScore();
 			drawMiddleLine();
 			drawBallTrail();
 			drawBall();
 			drawPaddles();
 		}
+	}
+
+	function drawScore() {
+		ctx.font = "30px pong";
+		ctx.textAlign = "center";
+		ctx.fillText("Player 1: " + player1.score, canvas.width / 4, 50);
+		ctx.fillText("Player 2: " + player2.score, canvas.width * 3 / 4, 50);
 	}
 
 	function drawMiddleLine() {
@@ -155,13 +174,13 @@ function game() {
 	}
 
 	function drawWaitingMessage() {
-		ctx.fillStyle = 'white';
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.font = "80px pong";
-		ctx.textAlign = "center";
 		let dots = '.'.repeat(dotCount % 4);
-		ctx.fillText(`waiting${dots}`, canvas.width / 2, canvas.height / 2);
-		dotCount++;
+		let spacing = ' '.repeat(4 - dots.length);
+		drawMessage(`  waiting${dots}${spacing}`);
+		if (dotCount === 4)
+			dotCount = 0;
+		else
+			dotCount++;
 	}
 
 	function cleanup() {
