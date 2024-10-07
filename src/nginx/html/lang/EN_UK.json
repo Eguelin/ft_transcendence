@@ -17,20 +17,15 @@
 	"login" : {
 		"#title" : "LOGIN",
 		"#internalLoginOpt" : "Login with credentials",
-		"#forgotPassword" : "Forgot password",
-		"#registerLink" : "register",
 		"#loginBtn" : "LOGIN",
 		"#externalLoginOpt" : "Other login options",
 		"#inputUsername" : "Username",
-		"#inputPassword" : "Password"
-	},
-	"register" : {
-		"#title" : "REGISTER",
+		"#inputPassword" : "Password",
 		"#createAcc" : "Create your account",
 		"#registerBtn" : "REGISTER",
-		"#inputUsername" : "Username",
-		"#inputPassword" : "Password",
-		"#inputCPassword" : "Confirm password"
+		"#inputRegisterUsername" : "Username",
+		"#inputRegisterPassword" : "Password",
+		"#inputRegisterCPassword" : "Confirm password"
 	},
 	"settings": {
 		"#title" : "Settings",

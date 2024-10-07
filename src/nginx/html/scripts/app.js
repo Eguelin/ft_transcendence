@@ -35,7 +35,6 @@ const routes = {
 	"/search" : `https://${hostname.host}/bodyLess/search.html`,
 	"/friends" : `https://${hostname.host}/bodyLess/friends.html`,
 	"/login" : `https://${hostname.host}/bodyLess/login.html`,
-	"/register" : `https://${hostname.host}/bodyLess/register.html`,
 	404 : `https://${hostname.host}/bodyLess/404.html`,
 	403 : `https://${hostname.host}/bodyLess/403.html`,
 	"/admin": `https://${hostname.host}/bodyLess/admin.html`
@@ -533,6 +532,21 @@ window.addEventListener("keydown", (e) => {
 			for (let i = 0; i < settingsSlides.length; i++)
 				settingsSlides[i].style.display = "none";
 			settingsSlides[slideIdx].style.display = "block";
+		}
+	}
+	if (currentPage == "login"){
+		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+			if (e.key == "ArrowLeft")
+				slideIdx -= 1;
+			else
+				slideIdx += 1;
+			if (slideIdx > slides.length - 1)
+				slideIdx = 0;
+			if (slideIdx < 0)
+				slideIdx = slides.length - 1;
+			for (let i = 0; i < slides.length; i++)
+				slides[i].style.display = "none";
+			slides[slideIdx].style.display = "block";
 		}
 	}
 })

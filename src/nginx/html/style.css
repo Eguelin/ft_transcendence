@@ -127,47 +127,6 @@ input:focus{
 	position: relative;
 }
 
-#forgotPasswordContainer{
-	width:18vw;
-   	text-align: left;
-	margin-top:0;
-	color:var(--hover-text-rgb);
-	font-size:min(1vh, 1vw);
-	padding-top:1vh;
-	display: block flex;
-}
-
-#forgotPasswordContainer a{
-	width: inherit;
-	flex: auto;
-}
-
-#forgotPasswordContainer a:hover, #forgotPasswordContainer a:focus{
-	width: inherit;
-	flex: auto;
-	outline : none;
-	color: var(--main-text-rgb);
-}
-
-.loginBtn {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	font-size: min(4vh, 2vw);
-	padding: 1vh 0;
-	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-}
-
-.loginBtn:hover, .loginBtn:focus {
-	color: var(--page-bg-rgb);
-	border-color: var(--page-bg-rgb);
-	outline: none;
-}
-
 button{
 	text-align: center;
 	color: var(--main-text-rgb);
@@ -199,69 +158,6 @@ button{
 
 .deleteBtn{
 	background-color: red;
-}
-
-.loginOpt{
-	text-align: center;
-	color: var(--main-text-rgb);
-	font-size: min(3vh, 2vw);
-	font-weight:thin;
-	padding-top:2vh;
-	margin-left:auto;
-	margin-right:auto;
-	width:fit-content;
-}
-
-#externalLogin {
-	margin-left:auto;
-	margin-right:auto;
-	margin-top: 1vh;
-	width:20vw;
-	height: 5vh;
-	display: flex;
-}
-
-#fortyTwoLogin{
-	mask-image:url("icons/42.svg");
-	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
-	top:5vh;
-	left:5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-	flex: 1;
-	outline: none;
-}
-
-#fortyTwoLogin:hover, #fortyTwoLogin:focus{
-	background: var(--hover-text-rgb);
-}
-
-#githubLogin{
-	mask-image:url("icons/github.svg");
-	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
-	top:5vh;
-	left:5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-	flex: 1;
-}
-
-#googleLogin{
-	background-image:url("icons/google.svg");
-	height:10vh;
-	width:5vw;
-	top:5vh;
-	left:5vw;
-	background-size:contain;
-	background-position:center;
-	background-repeat:no-repeat;
-	flex: 1;
 }
 
 a {
