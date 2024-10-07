@@ -498,6 +498,7 @@ a {
 }
 
 .slideSelector div{
+	padding: 2px;
 	z-index: -1;
 	position: relative;
 }
@@ -506,8 +507,11 @@ a {
 	display: block !important;
 }
 
+.activeSelector div{
+	background: var(--hover-text-rgb);
+}
+
 .activeSelector{
-	padding-bottom: 2px;
 	border-bottom: 2px solid var(--main-text-rgb);
 }
 
