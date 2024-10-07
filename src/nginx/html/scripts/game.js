@@ -17,11 +17,15 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
-		if (data.type === "game_init") {
+		if (data.type === "game_init")
 			gameInit(data.message);
-		}
-		if (data.type === "game_update") {
+		else if (data.type === "game_update")
 			updateGame(data.message);
+		else if (data.type === "game_countdown")
+			gameCountdown(data.message);
+		else if (data.type === "game_start") {
+			setInterval(() => gameRender(), 16);
+			setInterval(() => KeyPress(), 16);
 		}
 	}
 
@@ -61,9 +65,6 @@ function game() {
 		ctx.fillStyle = 'white';
 		ctx.strokeStyle = 'white';
 		ctx.lineWidth = paddle.width / 4;
-
-		setInterval(() => gameRender(), 16);
-		setInterval(() => KeyPress(), 16);
 	}
 
 	function updateGame(message) {
@@ -81,6 +82,14 @@ function game() {
 		if (ballTrail.length > 5) {
 			ballTrail.shift();
 		}
+	}
+
+	function gameCountdown(message) {
+		ctx.fillStyle = 'white';
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.font = "100px pong";
+		ctx.textAlign = "center";
+		ctx.fillText(message, canvas.width / 2, canvas.height / 2);
 	}
 
 	function gameRender() {
