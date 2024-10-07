@@ -73,4 +73,6 @@
 .loginSlide{
 	width: fit-content;
 	min-width: 40vw;
+	position: absolute;
+	top: 4vh;
 }
