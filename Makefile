@@ -7,7 +7,6 @@
 
 NAME	= ft_transcendence
 DC		= docker compose
-PFP		= $(shell find src/django/app/profilePictures/ -name "*.jpg" | grep -v "defaults/")
 
 # **************************************************************************** #
 #                                    Sources                                   #
@@ -22,7 +21,7 @@ DB_DIR	= ~/goinfre/db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-	$(DC) up --build
+	$(DC) up --build -d
 
 down:
 	$(DC) down

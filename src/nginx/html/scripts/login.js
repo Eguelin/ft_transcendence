@@ -16,7 +16,7 @@ Object.keys(loginSlideSelector).forEach(function(key) {
 		loginSlideSelector[key].addEventListener("click", (e) => {
 			loginSlideSelector[slideIdx].classList.remove("activeSelector");
 			slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-			for (i = 0; i < slides.length; i++) 
+			for (i = 0; i < slides.length; i++)
 				slides[i].style.display = "none";
 			slides[slideIdx].style.display = "block";
 			loginSlideSelector[slideIdx].classList.add('activeSelector');
@@ -25,8 +25,17 @@ Object.keys(loginSlideSelector).forEach(function(key) {
 })
 
 fortyTwoLogin.addEventListener("click", (e) => {
-	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-cb9676bf45bf8955cbb6ab78a74a365e69a9f11a901301c48e5f5f5ee1a7c144&redirect_uri=https%3A%2F%2Flocalhost%3A49300%2F&response_type=code`;
-	window.location.href = authUrl;
+	fetch('/api/user/getClientId')
+		.then(response => response.json())
+		.then(data => {
+			const url = `https://${hostname.host}/`;
+			const encodedUrl = encodeURIComponent(url);
+			const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${data.clientId}&redirect_uri=${encodedUrl}&response_type=code`;
+			window.location.href = authUrl;
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
 });
 
 fortyTwoLogin.addEventListener("keydown", (e) => {
@@ -73,7 +82,7 @@ loginBtn.addEventListener("click", (e) => {
 					}
 					else{
 						(async () => {
-							client = await new Client()	
+							client = await new Client()
 							if (client == null)
 								history.replaceState("", "", `https://${hostname.host}/login`);
 							else
@@ -111,11 +120,10 @@ loginBtn.addEventListener("click", (e) => {
 		});
 		client = null;
 	}
-	
+
 	inputSearchUser.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "none");
 }
-
 
 registerBtn = document.getElementById("registerBtn");
 usernameRegisterInput = document.getElementById('inputRegisterUsername');
@@ -187,7 +195,7 @@ registerBtn.addEventListener("click", (e) => {
 					credentials: 'include'
 				}).then(response => {
 					(async () => {
-						client = await new Client()	
+						client = await new Client()
 						if (client == null)
 							history.replaceState("", "", `https://${hostname.host}/login`);
 						else
