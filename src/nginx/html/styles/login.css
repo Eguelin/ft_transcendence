@@ -1,0 +1,78 @@
+.loginBtn {
+	text-align: center;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	font-weight: thin;
+	font-family: "pong";
+	font-size: min(4vh, 2vw);
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+}
+
+.loginBtn:hover, .loginBtn:focus {
+	color: var(--page-bg-rgb);
+	border-color: var(--page-bg-rgb);
+	outline: none;
+}
+
+.loginOpt{
+	text-align: center;
+	color: var(--main-text-rgb);
+	font-size: min(3vh, 2vw);
+	font-weight:thin;
+	padding-top:2vh;
+	margin-left:auto;
+	margin-right:auto;
+	width:fit-content;
+}
+
+#externalLogin {
+	margin-left:auto;
+	margin-right:auto;
+	margin-top: 3vh;
+	width:20vw;
+	height: 5vh;
+	display: flex;
+}
+
+#fortyTwoLogin{
+	mask-image:url("../icons/42.svg");
+	background:var(--main-text-rgb);
+	height:10vh;
+	width:5vw;
+	top:5vh;
+	left:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	flex: 1;
+	outline: none;
+}
+
+#fortyTwoLogin:hover, #fortyTwoLogin:focus{
+	background: var(--hover-text-rgb);
+}
+
+#loginSlideSelector{
+	color: var(--main-text-rgb);
+	display: flex;
+	margin-top: 2vmin;
+}
+#loginSlideSelector div{
+	flex: 1;
+}
+
+
+#loginSlideSelector div:hover{
+	font-size: calc(1ch + 2px);
+}
+
+
+.loginSlide{
+	width: fit-content;
+	min-width: 40vw;
+	position: absolute;
+	top: 4vh;
+}

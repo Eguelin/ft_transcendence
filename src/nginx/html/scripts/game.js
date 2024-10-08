@@ -61,7 +61,7 @@ function game() {
 	}
 
 	function gameInit(message) {
-		canvas.width = message.canvas.width;
+			canvas.width = message.canvas.width;
 		canvas.height = message.canvas.height;
 
 		paddle.height = message.paddle.height;
@@ -79,8 +79,8 @@ function game() {
 		ball.x = message.ball.x;
 		ball.y = message.ball.y;
 
-		ctx.fillStyle = 'white';
-		ctx.strokeStyle = 'white';
+		ctx.fillStyle = client.mainTextRgb;
+		ctx.strokeStyle = client.mainTextRgb;
 		ctx.lineWidth = paddle.width / 4;
 	}
 

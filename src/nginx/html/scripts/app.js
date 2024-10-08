@@ -26,19 +26,18 @@ var client = null;
 var pageName;
 
 const routes = {
-	"/home": "bodyLess/home.html",
-	"/": "bodyLess/home.html",
-	"/game" : "bodyLess/game.html",
-	"/settings" : "bodyLess/settings.html",
-	"/user" : "bodyLess/user.html",
-	"/dashboard" : "bodyLess/dashboard.html",
-	"/search" : "bodyLess/search.html",
-	"/friends" : "bodyLess/friends.html",
-	"/login" : "bodyLess/login.html",
-	"/register" : "bodyLess/register.html",
-	404 : "bodyLess/404.html",
-	403 : "bodyLess/403.html",
-	"/admin": "bodyLess/admin.html"
+	"/home": `https://${hostname.host}/bodyLess/home.html`,
+	"/": `https://${hostname.host}/bodyLess/home.html`,
+	"/game" : `https://${hostname.host}/bodyLess/game.html`,
+	"/settings" : `https://${hostname.host}/bodyLess/settings.html`,
+	"/user" : `https://${hostname.host}/bodyLess/user.html`,
+	"/dashboard" : `https://${hostname.host}/bodyLess/dashboard.html`,
+	"/search" : `https://${hostname.host}/bodyLess/search.html`,
+	"/friends" : `https://${hostname.host}/bodyLess/friends.html`,
+	"/login" : `https://${hostname.host}/bodyLess/login.html`,
+	404 : `https://${hostname.host}/bodyLess/404.html`,
+	403 : `https://${hostname.host}/bodyLess/403.html`,
+	"/admin": `https://${hostname.host}/bodyLess/admin.html`
 }
 
 function addPfpUrlToImgSrc(img, path){
@@ -71,6 +70,7 @@ class Client{
 	blocked_user;
 	recentMatches;
 	#is_admin;
+	mainTextRgb;
 
 	constructor (){
 		return (async () =>{
@@ -93,8 +93,9 @@ class Client{
 				this.recentMatches = result.matches;
 				this.#is_admin = result.is_admin;
 				switchTheme(this.use_dark_theme);
-
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${result.lang.substring(4, 10)}.svg)`);
+				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+				
+				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 				usernameBtn.innerHTML = result.username;
 
@@ -111,7 +112,7 @@ class Client{
 			}
 			else
 				return null
-			const fetchLangResult = await fetch(this.currentLang);
+			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
 			if (fetchLangResult.ok)
 				this.langJson = await fetchLangResult.json()
 			else
@@ -121,8 +122,6 @@ class Client{
 	}
 
 	loadPage(page){
-		if (this.username == null)
-			return ;
 		document.getElementById("loaderBg").style.setProperty("display", "block");
 
 		var sep = page.indexOf("/", 1)
@@ -130,8 +129,7 @@ class Client{
 			pageName = page.substring(0, sep)
 		else
 			pageName = page;
-
-
+		
 		if (routes[pageName]){
 			if (!this.#is_admin && pageName == "/admin"){
 				fetch(routes[403]).then((response) => {
@@ -145,7 +143,7 @@ class Client{
 						s.onload = function(){
 							(async () => (loadCurrentLang()))();
 						}
-						s.setAttribute('src', `scripts/${currentPage}.js`);
+						s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 						document.body.appendChild(s);
 						document.getElementById("loaderBg").style.setProperty("display", "none");
 					})
@@ -163,7 +161,7 @@ class Client{
 							(async () => (loadCurrentLang()))();
 						}
 						s.setAttribute('id', 'script');
-						s.setAttribute('src', `scripts/${currentPage}.js`);
+						s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 						document.body.appendChild(s);
 						document.getElementById("loaderBg").style.setProperty("display", "none");
 					})
@@ -179,7 +177,7 @@ class Client{
 					document.getElementById("script").remove();
 					var s = document.createElement("script");
 					s.setAttribute('id', 'script');
-					s.setAttribute('src', `scripts/${currentPage}.js`);
+					s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 					document.body.appendChild(s);
 					document.getElementById("loaderBg").style.setProperty("display", "none");
 					(async () => (loadCurrentLang()))();
@@ -196,9 +194,9 @@ window.navigation.addEventListener("navigate", (e) => {
 		async handler() {
 			//reset dropdown menus
 			if (langDropDown.classList.contains("activeDropDown"))
-				langDropDown.classList.remove("activeDropDown");
+				langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
 			if (dropDownUser.classList.contains("activeDropDown"))
-				dropDownUser.classList.remove("activeDropDown");
+				dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
 
 			if (client && !(client instanceof Client)){
 				client = null;
@@ -216,10 +214,10 @@ window.navigation.addEventListener("navigate", (e) => {
 				client.loadPage(url.pathname)
 			else {
 				dropDownUserContainer.style.setProperty("display", "none");
-				langDropDownBtn.style.setProperty("background-image", `url(icons/${currentLang.substring(4, 10)}.svg)`);
+				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
 				if (url.pathname.startsWith("/register")) {
-					fetch('bodyLess/register.html').then((response) => {
+					fetch(`https://${hostname.host}/bodyLess/register.html`).then((response) => {
 						return (response.text().then(response => {
 
 							homeBtn.style.setProperty("display", "block");
@@ -236,7 +234,7 @@ window.navigation.addEventListener("navigate", (e) => {
 					});
 				}
 				else{
-					fetch('bodyLess/login.html').then((response) => {
+					fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 						(response.text().then(response => {
 							inputSearchUser.style.setProperty("display", "none");
 							container.innerHTML = response;
@@ -283,19 +281,19 @@ function handleToken() {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
 			document.getElementById("loaderBg").style.setProperty("display", "none");
-		(async () => {
-			client = await new Client();
-			if (!client)
-				history.replaceState("", "", `https://${hostname.host}/login`);
-			else{
-				if (url.pathname == "" || url.pathname == "/"){
-					history.replaceState("", "", `https://${hostname.host}/home`)
-					client.loadPage("/home");
+			(async () => {
+				client = await new Client();
+				if (!client)
+					history.replaceState("", "", `https://${hostname.host}/login`);
+				else{
+					if (url.pathname == "" || url.pathname == "/"){
+						history.replaceState("", "", `https://${hostname.host}/home`)
+						client.loadPage("/home");
+					}
+					else
+						client.loadPage(url.pathname);
 				}
-				else
-					client.loadPage(url.pathname);
-			}
-		})()
+			})()
 	}
 }
 
@@ -345,6 +343,8 @@ logOutBtn.addEventListener("click", (e) => {
 
 function switchTheme(darkTheme) {
 	if (darkTheme == 1 || darkTheme == true) {
+		if (client)
+			client.mainTextRgb = "#FDFDFB";
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
@@ -353,9 +353,11 @@ function switchTheme(darkTheme) {
 		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
 		document.documentElement.style.setProperty("--is-dark-theme", 1);
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-night-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-night-mode.svg)`;
 	}
 	else {
+		if (client)
+			client.mainTextRgb = "#110026";
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
@@ -363,7 +365,7 @@ function switchTheme(darkTheme) {
 		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
 		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = "url(\"icons/button-light-mode.svg\")";
+			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-light-mode.svg)`;
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
 	}
 	if (currentPage == "dashboard"){
@@ -390,7 +392,7 @@ async function loadCurrentLang(){
 	}
 	else if (currentLang != undefined){
 		const fetchResult = await fetch(currentLang);
-		const svgPath = `icons/${currentLang.substring(5, 10)}.svg`;
+		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
 		if (fetchResult.ok){
 			try{
 				contentJson = await fetchResult.json()
@@ -403,7 +405,7 @@ async function loadCurrentLang(){
 		else {
 			popUpError(`Could not load ${currentLang} language pack`);
 			currentLang = "lang/EN_UK.json";
-			const fetchResult = await fetch("lang/EN_UK.json");
+			const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
 			if (fetchResult.ok){
 				try {
 					contentJson = await fetchResult.json();
@@ -418,11 +420,11 @@ async function loadCurrentLang(){
 	}
 	if (contentJson == null) {
 		currentLang = "lang/EN_UK.json";
-		const fetchResult = await fetch("lang/EN_UK.json");
+		const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
 		if (fetchResult.ok){
 			try {
 				contentJson = await fetchResult.json();
-				langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
+				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
 			}
 			catch {
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -532,6 +534,23 @@ window.addEventListener("keydown", (e) => {
 			settingsSlides[slideIdx].style.display = "block";
 		}
 	}
+	if (currentPage == "login"){
+		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+			loginSlideSelector[slideIdx].classList.remove('activeSelector');
+			if (e.key == "ArrowLeft")
+				slideIdx -= 1;
+			else
+				slideIdx += 1;
+			if (slideIdx > slides.length - 1)
+				slideIdx = 0;
+			if (slideIdx < 0)
+				slideIdx = slides.length - 1;
+			for (let i = 0; i < slides.length; i++)
+				slides[i].style.display = "none";
+			loginSlideSelector[slideIdx].classList.add('activeSelector');
+			slides[slideIdx].style.display = "block";
+		}
+	}
 })
 
 
@@ -612,33 +631,55 @@ inputSearchUser.addEventListener("keydown", (e) => {
 })
 
 langDropDownBtn.addEventListener("click", (e) => {
-	if (langDropDown.classList.contains("activeDropDown"))
-		langDropDown.classList.remove("activeDropDown")
+	if (dropDownUser.classList.contains("activeDropDown")){
+		dropDownUser.classList.remove("activeDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("inactiveDropDown");
+	}
+	if (langDropDown.classList.contains("activeDropDown")){
+		langDropDown.classList.remove("activeDropDown");
+		void langDropDown.offsetWidth;
+		langDropDown.classList.add("inactiveDropDown");
+	}
+	else if (langDropDown.classList.contains("inactiveDropDown")){
+		langDropDown.classList.remove("inactiveDropDown");
+		void langDropDown.offsetWidth;
+		langDropDown.classList.add("activeDropDown");
+	}
 	else
-		langDropDown.classList.add("activeDropDown")
+		langDropDown.classList.add("activeDropDown");
 })
 
 usernameBtn.addEventListener("click", (e) => {
-	if (dropDownUser.classList.contains("activeDropDown"))
-		dropDownUser.classList.remove("activeDropDown")
+	if (langDropDown.classList.contains("activeDropDown")){
+		langDropDown.classList.remove("activeDropDown");
+		void langDropDown.offsetWidth;
+		langDropDown.classList.add("inactiveDropDown");
+	}
+	if (dropDownUser.classList.contains("activeDropDown")){
+		dropDownUser.classList.remove("activeDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("inactiveDropDown");
+	}
+	else if (dropDownUser.classList.contains("inactiveDropDown")){
+		dropDownUser.classList.remove("inactiveDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("activeDropDown");
+	}
 	else
-		dropDownUser.classList.add("activeDropDown")
+		dropDownUser.classList.add("activeDropDown");
 })
 
 
 langDropDownBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
 		langDropDownBtn.click();
-		if (dropDownUser.classList.contains("activeDropDown"))
-			dropDownUser.classList.remove("activeDropDown");
 	}
 })
 
 usernameBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
 		usernameBtn.click();
-		if (langDropDown.classList.contains("activeDropDown"))
-			langDropDown.classList.remove("activeDropDown");
 	}
 })
 
@@ -649,7 +690,7 @@ langDropDownOption.forEach(function (button) {
 			try{
 				if (client){
 					client.currentLang = `lang/${button.id}.json`;
-					fetchResult = await fetch(currentLang);
+					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 					content = await fetchResult.json();
 					client.langJson = content;
 				}
@@ -663,7 +704,7 @@ langDropDownOption.forEach(function (button) {
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(icons/${button.id}.svg)`);
+					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
 				}
 			}
 			catch{
@@ -680,9 +721,9 @@ langDropDownOption.forEach(function (button) {
 window.addEventListener("click", (e) => {
 	if (!e.target.closest(".activeDropDown")) {
 		if (langDropDown.classList.contains("activeDropDown"))
-			langDropDown.classList.remove("activeDropDown");
+			langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
 		if (dropDownUser.classList.contains("activeDropDown"))
-			dropDownUser.classList.remove("activeDropDown");
+			dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
 	}
 })
 
@@ -702,3 +743,15 @@ function popUpError(error){
 	})
 	document.body.appendChild(popupContainer);
 }
+/*
+document.body.setScaledFont = function(f) {
+	var s= this.offsetWidth, fs = s * f;
+	this.style.fontSize = fs + '%';
+	return this;
+}
+
+document.body.setScaledFont(0.35);
+window.onresize = function() {
+	document.body.setScaledFont(0.35);
+}
+*/
