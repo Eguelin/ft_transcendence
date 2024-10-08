@@ -13,9 +13,11 @@ echo "$host is available - executing command"
 python manage.py makemigrations
 python manage.py migrate
 
-if [ "$1" = 'dev' ]; then
+if [ "$1" == "dev" ]; then
+  echo "Starting development server"
   export DJANGO_DEBUG=True
-elif [ "$1" = 'prod' ]; then
+elif [ "$1" == "prod" ]; then
+  echo "Starting production server"
   export DJANGO_DEBUG=False
 else
   exit 1
