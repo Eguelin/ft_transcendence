@@ -60,7 +60,7 @@ function game() {
 	}
 
 	function gameInit(message) {
-			canvas.width = message.canvas.width;
+		canvas.width = message.canvas.width;
 		canvas.height = message.canvas.height;
 
 		paddle.height = message.paddle.height;
@@ -103,7 +103,6 @@ function game() {
 	}
 
 	function drawMessage(message) {
-		ctx.fillStyle = 'white';
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.font = "80px pong";
 		ctx.textAlign = "center";
@@ -147,17 +146,29 @@ function game() {
 		ctx.closePath();
 	}
 
+	function hexToRgb(hex) {
+		hex = hex.replace(/^#/, '');
+
+		let bigint = parseInt(hex, 16);
+		let r = (bigint >> 16) & 255;
+		let g = (bigint >> 8) & 255;
+		let b = bigint & 255;
+
+		return [r, g, b];
+	}
+
 	function drawBallTrail() {
+		const rgb = hexToRgb(client.mainTextRgb);
 		for (let i = 0; i < ballTrail.length; i++) {
 			const trail = ballTrail[i];
 			const opacity = (i + 1) / ballTrail.length;
-			ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+			ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${opacity})`;
 			ctx.beginPath();
 			ctx.rect(trail.x, trail.y, ball.size, ball.size);
 			ctx.fill();
 			ctx.closePath();
 		}
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = client.mainTextRgb;
 	}
 
 	function drawPaddles() {
