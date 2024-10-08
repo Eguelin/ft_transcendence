@@ -1,9 +1,6 @@
-friendCodePopup = document.getElementById("friendCodePopup");
 deleteRequestPopup = document.getElementById("deleteRequestPopup");
 blockFriendPopup = document.getElementById("blockFriendPopup");
 popupBg = document.getElementById("popupBg");
-friendCodeBtn = document.getElementById("friendCodeBtn");
-inputCode = document.getElementById("inputCode");
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 allFriendListContainer = document.getElementById("allFriendList");
 onlineFriendListContainer = document.getElementById("onlineFriendList");
@@ -16,6 +13,10 @@ slideSelector = document.querySelectorAll(".slideSelector");
 var friendSlideIdx = 0;
 friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
 slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+
+homeBtn.style.setProperty("display", "block");
+inputSearchUser.style.setProperty("display", "block");
+dropDownUserContainer.style.setProperty("display", "flex");
 
 Object.keys(slideSelector).forEach(function(key) {
 	if (currentPage == "friends"){
@@ -33,36 +34,14 @@ Object.keys(slideSelector).forEach(function(key) {
 document.addEventListener("click", (e) => {
 	if (currentPage == "friends"){
 		if (e.target.parentElement == null || e.target.id == "popupBg"){
-			friendCodePopup.style.setProperty("display", "none");
 			deleteFriendPopup.style.setProperty("display", "none");
 			blockFriendPopup.style.setProperty("display", "none");
 			var bg = document.getElementById("popupBg");
 			if (bg != null)
 				bg.remove();
 		}
-		if (e.target.id == "friendCodeBtn") {
-			friendCodePopup.style.setProperty("display", "block");
-			var bg = document.createElement("div");
-			bg.id = "popupBg";
-			pos = friendInfo.getBoundingClientRect();
-			bg.style.left = `${-pos.left}px`;
-			bg.style.top = `${-pos.top}px`;
-			friendCodePopup.before(bg)
-		}
-
-		if (e.target.id == "sendFriendRequestBtn"){
-			const data = {code: inputCode.value};
-			fetch('/api/user/send_friend_request', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-				credentials: 'include'
-			})
-		}
 		if (e.target.id == "confirmDelete"){
-			const data = {code: e.target.parentElement.className};
+			const data = {username: e.target.parentElement.className};
 			fetch('/api/user/remove_friend', {
 				method: 'POST',
 				headers: {
@@ -79,7 +58,7 @@ document.addEventListener("click", (e) => {
 			friend.remove();
 		}
 		if (e.target.id == "confirmBlock"){
-			const data = {code: e.target.parentElement.className};
+			const data = {username: e.target.parentElement.className};
 			fetch('/api/user/block_friend', {
 				method: 'POST',
 				headers: {
@@ -96,7 +75,7 @@ document.addEventListener("click", (e) => {
 			friend.remove();
 		}
 		if (e.target.className == "unblockBtn"){
-			const data = {code: e.target.parentElement.id};
+			const data = {username: e.target.parentElement.id};
 			fetch('/api/user/unblock_user', {
 				method: 'POST',
 				headers: {
@@ -124,7 +103,6 @@ window.addEventListener("resize", (e) => {
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "friends"){
 		if (e.key == "Escape"){
-			friendCodePopup.style.setProperty("display", "none");
 			deleteFriendPopup.style.setProperty("display", "none");
 			blockFriendPopup.style.setProperty("display", "none");
 			var bg = document.getElementById("popupBg");
@@ -134,104 +112,85 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
-function createFriendContainer(friend){
-	friendContainer = document.createElement("div");
+function createFriendContainer(user){
+	var friendContainer = document.createElement("div");
+	var pfpContainer = document.createElement("div");
+	var pfp = document.createElement("img");
+	var friendName = document.createElement("a");
+	var friendsOptionContainer = document.createElement("div");
+	var friendsOption = document.createElement("div");
+	var moreBtn = document.createElement("div");
+	var removeFriendBtn = document.createElement("div");
+	var blockFriendBtn = document.createElement("div");
+
 	friendContainer.className = "friendContainer"
-	friendContainer.id = friend.friend_code;
-	pfpContainer = document.createElement("div");
+	friendContainer.id = user.username;
 	pfpContainer.className = "pfpContainer";
-	pfpStatus = document.createElement("div");
-	pfpStatus.className = friend.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
-	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
-	if (friend.pfp != ""){
-		var rawPfp = friend.pfp;
-		if (rawPfp.startsWith('https://'))
-			pfp.setAttribute("src", `${rawPfp}`);
-		else
-			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-	}
+	addPfpUrlToImgSrc(pfp, user.pfp);
 	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpStatus)
 
-	friendName = document.createElement("a");
-	friendName.innerHTML = friend.username;
+	friendName.innerHTML = user.username;
 
-	friendsOptionContainer = document.createElement("div");
 	friendsOptionContainer.className = "friendsOptionContainer"
 
-	friendsOption = document.createElement("div");
 	friendsOption.className = "friendsOption"
 
 
-	moreBtn = document.createElement("div");
 	moreBtn.className = "moreBtn";
 
 	friendsOptionContainer.appendChild(moreBtn);
 	friendsOptionContainer.appendChild(friendsOption);
 
-	removeFriendBtn = document.createElement("div");
 	removeFriendBtn.className = "removeFriendBtn";
 
-	blockFriendBtn = document.createElement("div");
 	blockFriendBtn.className = "blockFriendBtn";
 
-	friendsOption.id = friend.friend_code;
+	friendsOption.id = user.username;
 
 	friendsOption.appendChild(removeFriendBtn);
 	friendsOption.appendChild(blockFriendBtn);
-	/*
-	is_active = document.createElement("a");
-	is_active.innerHTML = friend.is_active == true ? "online" : "offline";
-	is_active.className = "friendStatus";
-	is_active.style.setProperty("color", friend.is_active == true ? "green" : "red");
-	*/
+
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
-	//friendContainer.appendChild(is_active);
 	friendContainer.appendChild(friendsOptionContainer);
-	if (friend.is_active == true){
+
+	if (user.is_active == true){
 		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
 	}
+
 	allFriendListContainer.appendChild(friendContainer);
 }
 
 function createFriendRequestContainer(user){
-	friendContainer = document.createElement("div");
+	var friendContainer = document.createElement("div");
+	var pfpContainer = document.createElement("div");
+	var pfp = document.createElement("img");
+	var friendName = document.createElement("a");
+	var requestOptionContainer = document.createElement("div");
+	var acceptBtn = document.createElement("div");
+	var rejectBtn = document.createElement("div");
+
 	friendContainer.className = "friendContainer"
-	friendContainer.id = user.friend_code;
-	pfpContainer = document.createElement("div");
+	friendContainer.id = user.username;
 	pfpContainer.className = "pfpContainer";
-	pfpStatus = document.createElement("div");
-	pfpStatus.className = user.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
-	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
-	if (user.pfp != ""){
-		var rawPfp = user.pfp;
-		if (rawPfp.startsWith('https://'))
-			pfp.setAttribute("src", `${rawPfp}`);
-		else
-			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-	}
+	addPfpUrlToImgSrc(pfp, user.pfp);
+
 	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpStatus)
-	friendName = document.createElement("a");
 	friendName.innerHTML = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
-	requestOptionContainer = document.createElement("div");
 	requestOptionContainer.className = "requestOptionContainer";
 
-	acceptBtn = document.createElement("div");
 	acceptBtn.className = "acceptRequestBtn";
 	requestOptionContainer.appendChild(acceptBtn);
 
-	rejectBtn = document.createElement("div");
 	rejectBtn.className = "rejectRequestBtn";
 	requestOptionContainer.appendChild(rejectBtn);
 
-	requestOptionContainer.id = user.friend_code;
+	requestOptionContainer.id = user.username;
 
 	friendContainer.appendChild(requestOptionContainer);
 
@@ -239,37 +198,30 @@ function createFriendRequestContainer(user){
 }
 
 function createBlockedUserContainer(user){
-	friendContainer = document.createElement("div");
+	var friendContainer = document.createElement("div");
+	var pfpContainer = document.createElement("div");
+	var pfp = document.createElement("img");
+	var friendName = document.createElement("a");
+	var unblockBtn = document.createElement("div");
+	var requestOptionContainer = document.createElement("div");
+
 	friendContainer.className = "friendContainer"
-	friendContainer.id = user.friend_code;
+	friendContainer.id = user.username;
 
-	pfpContainer = document.createElement("div");
 	pfpContainer.className = "pfpContainer";
-	pfpStatus = document.createElement("div");
-	pfpStatus.className = friend.is_active == true ? "pfpStatusOnline" : "pfpStatusOffline";
-	pfp = document.createElement("img");
 	pfp.className = "profilePicture";
-	if (user.pfp != ""){
-		var rawPfp = user.pfp;
-		if (rawPfp.startsWith('https://'))
-			pfp.setAttribute("src", `${rawPfp}`);
-		else
-			pfp.setAttribute("src", `data:image/jpg;base64,${rawPfp}`);
-	}
-	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpStatus)
+	addPfpUrlToImgSrc(pfp, user.pfp);
 
-	friendName = document.createElement("a");
+	pfpContainer.appendChild(pfp);
+
 	friendName.innerHTML = user.username;
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
-	unblockBtn = document.createElement("div");
 	unblockBtn.className = "unblockBtn";
 
-	requestOptionContainer = document.createElement("div");
 	requestOptionContainer.className = "requestOptionContainer";
-	requestOptionContainer.id = user.friend_code;
+	requestOptionContainer.id = user.username;
 	requestOptionContainer.appendChild(unblockBtn);
 
 	friendContainer.appendChild(requestOptionContainer);
@@ -291,14 +243,13 @@ function checkUpdate(){
 					switchTheme(text.is_dark_theme);
 					currentLang = text.lang;
 					loadCurrentLang();
-					friendCodePopup.lastElementChild.innerHTML = text.friend_code;
 					var friends = text.friends;
-					var friends_request = text.friend_request;
+					var friends_request = text.friend_requests;
 					var blocked_users = text.blocked_users
-					allFriendListContainer.innerHTML = "";
-					onlineFriendListContainer.innerHTML = ""
-					pendingFriendRequestListContainer.innerHTML = ""
-					blockedListContainer.innerHTML = ""
+					allFriendListContainer.innerText = "";
+					onlineFriendListContainer.innerText = ""
+					pendingFriendRequestListContainer.innerText = ""
+					blockedListContainer.innerText = ""
 					Object.keys(friends).forEach(function(key) {
 						createFriendContainer(friends[key]);
 					});
@@ -347,7 +298,7 @@ function checkUpdate(){
 
 					for (var i = 0; i < acceptRequestBtn.length; i++){
 						acceptRequestBtn[i].addEventListener("click", (e) => {
-							const data = {code: e.srcElement.parentElement.id};
+							const data = {username: e.srcElement.parentElement.id};
 							fetch('/api/user/accept_friend_request', {
 								method: 'POST',
 								headers: {
@@ -358,7 +309,7 @@ function checkUpdate(){
 							})
 						})
 						rejectRequestBtn[i].addEventListener("click", (e) => {
-							const data = {code: e.srcElement.parentElement.id};
+							const data = {username: e.srcElement.parentElement.id};
 							fetch('/api/user/reject_friend_request', {
 								method: 'POST',
 								headers: {
@@ -372,12 +323,11 @@ function checkUpdate(){
 				});
 			}
 			else {
-				history.replaceState(JSON.stringify({"html": document.body.innerHTML, "currentPage": 'login', "currentLang": currentLang}), "", `https://${hostname.host}/login`);
+				client = null;
+				history.replaceState("", "", `https://${hostname.host}/login`);
 			}
 		})
 	}
 }
-
-//var checkUpdateInterval = setInterval(checkUpdate, 10000);
 
 checkUpdate();

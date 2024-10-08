@@ -3,11 +3,15 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import random
+import datetime
 
 # IF and WHEN fields are added 'python manage.py makemigrations' AND 'python manage.py migrate' must be executed in the transcendence container
 
 class MatchManager(models.Manager):
 	def createWithRandomOpps(self, creator):
+		startDate = datetime.datetime(2024,1,1)
+		endDate = datetime.datetime(2024,12,31)
+
 		try:
 			player_two = User.objects.get(username="random")
 		except:
@@ -17,6 +21,34 @@ class MatchManager(models.Manager):
 		match.player_one_pts = random.randint(0, 10)
 		match.player_two_pts = random.randint(0, 10)
 		match.save()
+		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds()))) 
+		match.save()
+		player_two.profile.matches.add(match)
+		return match
+
+	def createWithTwoOpps(self, userOne, userTwo):
+		startDate = datetime.datetime(2024,1,1)
+		endDate = datetime.datetime(2024,12,31)
+
+		try:
+			player_one = User.objects.get(username=userOne)
+		except:
+			player_one = User.objects.get_or_create(username=userOne)[0]
+			player_one.save()
+
+		try:
+			player_two = User.objects.get(username=userTwo)
+		except:
+			player_two = User.objects.get_or_create(username=userTwo)[0]
+			player_two.save()
+		
+		match = self.create(player_one=player_one, player_two=player_two)
+		match.player_one_pts = random.randint(0, 10)
+		match.player_two_pts = random.randint(0, 10)
+		match.save()
+		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds()))) 
+		match.save()
+		player_one.profile.matches.add(match)
 		player_two.profile.matches.add(match)
 		return match
 
@@ -37,7 +69,6 @@ class Profile(models.Model):
 	dark_theme = models.BooleanField(default=True)
 	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_UK.json")
-	friend_code = models.CharField(max_length=20, null=True)
 	friends = models.ManyToManyField(User, related_name="friends_list")
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
 	is_active = models.BooleanField(default=False)

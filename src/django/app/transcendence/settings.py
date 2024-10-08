@@ -30,25 +30,23 @@ DEBUG = os.getenv('DJANGO_DEBUG')
 # 42 API credentials
 PUBLIC = os.getenv('PUBLIC')
 SECRET = os.getenv('SECRET')
-REDIRECT_URI = os.getenv('REDIRECT_URI')
+DJANGO_HOST = os.getenv('DJANGO_HOST')
 
 ALLOWED_HOSTS = [
 	'localhost',
-	'ft-transcendence.online',
-    'www.ft-transcendence.online',
-    '*', # for testing purposes
+	DJANGO_HOST
 ]
-
 
 # Application definition
 
 INSTALLED_APPS = [
-	'daphne',
+    'daphne',
     'channels',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'login',
+    'game',
 ]
 
 MIDDLEWARE = [
@@ -143,3 +141,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 # 10MB

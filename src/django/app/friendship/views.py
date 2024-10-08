@@ -10,11 +10,11 @@ def send_friend_request(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
-		code = data['code']
-		if (code == request.user.profile.friend_code):
+		username = data['username']
+		if (username == request.user.username):
 			return JsonResponse({'message': 'Can\'t send friend request with yourself'})
 		try:
-			new_friend = customModels.Profile.objects.get(friend_code=code).user
+			new_friend = User.objects.get(username=username)
 			user = request.user
 			if (new_friend.profile.blocked_users.filter(pk=user.pk)).exists():
 				return JsonResponse({'message': 'User blocked you'})
@@ -41,9 +41,9 @@ def accept_friend_request(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
-		code = data['code']
+		username = data['username']
 		try:
-			new_friend = customModels.Profile.objects.get(friend_code=code).user
+			new_friend = User.objects.get(username=username)
 			user = request.user
 			new_friend.profile.friends.add(user)
 			new_friend.save()
@@ -61,9 +61,9 @@ def reject_friend_request(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
-		code = data['code']
+		username = data['username']
 		try:
-			new_friend = customModels.Profile.objects.get(friend_code=code).user
+			new_friend = User.objects.get(username=username)
 			user = request.user
 			user.profile.friends_request.remove(new_friend)
 			user.save()
@@ -78,9 +78,9 @@ def remove_friend(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
-		code = data['code']
+		username = data['username']
 		try:
-			friend = customModels.Profile.objects.get(friend_code=code).user
+			friend = User.objects.get(username=username)
 			user = request.user
 			friend.profile.friends.remove(user);
 			friend.save();
@@ -97,9 +97,9 @@ def block_friend(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
-		code = data['code']
+		username = data['username']
 		try:
-			ennemy = customModels.Profile.objects.get(friend_code=code).user
+			ennemy = User.objects.get(username=username)
 			user = request.user
 			ennemy.profile.friends.remove(user);
 			ennemy.save();
@@ -117,9 +117,9 @@ def unblock_user(request):
 		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
-		code = data['code']
+		username = data['username']
 		try:
-			request.user.profile.blocked_users.remove(customModels.Profile.objects.get(friend_code=code).user)
+			request.user.profile.blocked_users.remove(User.objects.get(username=username))
 			request.user.save()
 			return JsonResponse({'message': 'Succesfully unblocked user'})
 		except:
