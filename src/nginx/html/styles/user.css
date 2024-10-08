@@ -69,6 +69,7 @@
 	height: 7vw;
 	width: 7vw;
 	overflow: hidden;
+	border-radius: 50%;
 }
 
 #profilePfp {
