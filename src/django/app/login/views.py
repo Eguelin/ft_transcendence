@@ -17,7 +17,7 @@ def generate_unique_username(base_username):
 	return username
 
 def getClientId(request):
-	clientId = os.getenv('PUBLIC')
+	clientId = os.getenv('API_42_PUBLIC')
 	if not clientId:
 		return JsonResponse({'message': 'Client ID not set'}, status=500)
 	return JsonResponse({'clientId': clientId})
@@ -37,8 +37,8 @@ def fortytwo(request):
 	hostname = data.get('hostname')
 	if not hostname:
 		return JsonResponse({'message': 'Invalid request Hostname'}, status=400)
-	client_id = os.getenv('PUBLIC')
-	client_secret = os.getenv('SECRET')
+	client_id = os.getenv('API_42_PUBLIC')
+	client_secret = os.getenv('API_42_SECRET')
 	redirect_uri = 'https://' + hostname + '/'
 	url = 'https://api.intra.42.fr/oauth/token'
 	payload = {
