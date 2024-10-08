@@ -2,10 +2,13 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+import uvloop
+import asyncio
 
 def main():
     """Run administrative tasks."""
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transcendence.settings')
     try:
         from django.core.management import execute_from_command_line
@@ -20,3 +23,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
