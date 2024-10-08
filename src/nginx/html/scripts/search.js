@@ -1,4 +1,8 @@
 {
+    inputSearchUser.style.setProperty("display", "block");
+	dropDownUserContainer.style.setProperty("display", "none");
+	homeBtn.style.setProperty("display", "block");
+
     url = new URL(window.location.href);
     if (url.searchParams.get("query")) {
         fetch('/api/user/search_by_username', {
