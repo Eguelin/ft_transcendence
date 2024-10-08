@@ -62,6 +62,9 @@ h1{
 	font-size: 7vmax;
 	text-align: center;
 }
+h2{
+	color: var(--main-text-rgb);
+}
 
 #title{
 	width: 80%;
@@ -81,7 +84,7 @@ h1{
 	color: var(--main-text-rgb);
 	font-size: min(7vh, 4vw);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	margin-top:5vh;
 	margin-left:auto;
 	margin-right:auto;
@@ -98,7 +101,7 @@ h1{
 	color: var(--main-text-rgb);
 	font-size: min(7vh, 4vw);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	font-family: "pong";
 	margin-left:auto;
 	margin-right:auto;
@@ -126,7 +129,7 @@ input:focus{
 	text-align: center;
 	color: var(--main-text-rgb);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	margin-left:auto;
 	margin-right:auto;
 	margin-top: 5vh;
@@ -136,10 +139,10 @@ input:focus{
 
 #forgotPasswordContainer{
 	width:18vw;
-   	text-align: left; 
-	margin-top:0; 
-	color:var(--hover-text-rgb); 
-	font-size:min(1vh, 1vw); 
+   	text-align: left;
+	margin-top:0;
+	color:var(--hover-text-rgb);
+	font-size:min(1vh, 1vw);
 	padding-top:1vh;
 	display: block flex;
 }
@@ -160,7 +163,7 @@ input:focus{
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -178,7 +181,7 @@ input:focus{
 button{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -191,7 +194,7 @@ button{
 .saveBtn, .deleteBtn {
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -427,7 +430,7 @@ a {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(3vh, 2vw);
 	padding: 1.5vh 1.5vw;
@@ -495,7 +498,10 @@ a {
 	align-items: center;
 	flex-wrap: inherit;
 	color: var(--main-text-rgb);
-	padding: 0 1vmax;
+}
+
+.friendContainer:not(:first-child){
+	border-top: 1px solid var(--main-text-rgb);
 }
 
 .friendContainer a{
@@ -509,40 +515,33 @@ a {
 	border-radius: 0;
 }
 
-
-.acceptRequestBtn{
-	mask-image:url("icons/check-mark-1.svg");
-	background:green;
-	height:5vw;
-	width:5vw;
-	margin-right: 1.5vw;
+.acceptRequestBtn, .rejectRequestBtn{
+	height:3.5vw;
+	width:3.5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+}
+.acceptRequestBtn{
+	mask-image:url("icons/check-mark-1.svg");
+	background:green;
 }
 
 .rejectRequestBtn{
 	mask-image:url("icons/cross-17.svg");
 	background:red;
-	height:5vw;
-	width:5vw;
-	margin-right: 1.5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
 }
 
 .moreBtn, .removeFriendBtn, .blockFriendBtn, .unblockBtn{
 	background:var(--main-text-rgb);
-	height:5vw;
-	width:5vw;
+	height:3.5vw;
+	width:3.5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
 }
 
 .moreBtn{
-	width: 10vw;
 	mask-position: 0;
 	mask-image: url("icons/more-vertical.svg");
 }
@@ -565,7 +564,6 @@ a {
 }
 
 .friendsOptionContainer, .requestOptionContainer{
-	width: 10vmin;
 	flex: none;
 }
 
@@ -607,7 +605,7 @@ a {
 	text-align: center;
 	background-color: red;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -642,18 +640,6 @@ a {
 	animation: flash 1s infinite;
 }
 
-@keyframes flash {
-	0% {
-		opacity: 100%;
-	}
-	50%{
-		opacity: 0%;
-	}
-	100%{
-		opacity: 100%;
-	}
-}
-
 #friendSlideSelector{
 	color: var(--main-text-rgb);
 	display: flex;
@@ -670,6 +656,18 @@ a {
 	border-radius: 2vw;
 	margin-top: 2vmin;
 	min-height: 1vh;
+}
+
+.friendSlide .friendContainer:first-child .pfpContainer{
+	border-radius: 2vw 0 0 0;
+}
+
+.friendSlide .friendContainer:last-child .pfpContainer{
+	border-radius: 0 0 0 2vw;
+}
+
+.friendSlide .friendContainer:only-child .pfpContainer{
+	border-radius: 2vw 0 0 2vw;
 }
 
 .slideSelector{
@@ -706,15 +704,14 @@ a {
 }
 
 .pfpStatusOnline, .pfpStatusOffline{
-	height:2.5vw;
-	width:2.5vw;
+	height:1.5vw;
+	width:1.5vw;
 	position:absolute;
 	bottom: 0px;
 	right: 0px;
-	transform: translate(50%);
 	mask-size:contain;
 	mask-position:center;
-	mask-repeat:no-repeat;	
+	mask-repeat:no-repeat;
 }
 
 .pfpStatusOffline{
@@ -741,7 +738,7 @@ a {
 }
 
 .matchDescContainer{
-	background: var(--input-bg-rgb); 
+	background: var(--input-bg-rgb);
 	height: auto;
 	border: .5px solid var(--page-bg-rgb);
 	flex: auto;
@@ -828,6 +825,7 @@ a {
 }
 
 #inputSearchUser{
+	display: none;
 	width: 20vmax;
 }
 
@@ -899,12 +897,6 @@ a {
 }
 
 
-
-
-
-
-
-
 #loaderBg{
 	position: absolute;
 	top: 0;
@@ -913,7 +905,8 @@ a {
 	height: 100vh;
 	background: black;
 	opacity: .7;
-	display: none;
+	display: block;
+	z-index: 10;
 }
 
 #loaderBg .loader{
@@ -1031,10 +1024,10 @@ a {
 #confirmPfpMask{
 	opacity: .5;
 }
-
+/*
 #winLossGraph, #winLossAbsGraph{
 	background: var(--hover-text-rgb);
-}
+}*/
 
 #profileGraphs {
 	display: flex;
@@ -1043,5 +1036,97 @@ a {
 	left: 50%;
 	translate: -50%;
 	width: fit-content;
-	top: 2vh;
+}
+
+.activeTimeline{
+	border: .2px solid var(--main-text-rgb) !important;
+}
+
+#timelineSelectionContainer{
+	color: var(--main-text-rgb);
+	display: flex;
+	gap: 1ch;
+	width: fit-content;
+}
+
+#timelineSelectionText{
+	align-self: center;
+}
+
+#timelineSelectorContainer{
+	display: flex;
+	width: max-content;
+	border: none;
+	height: fit-content;
+	gap: 1ch;
+}
+
+#timelineSelectorContainer button{
+	border: none;
+	width: fit-content;
+	padding: .5em;
+	font-size: unset;
+}
+
+#allMatchesHistoryBtn:hover, #allMatchesHistoryBtn:focus{
+	color: var(--hover-text-rgb);
+}
+
+.game{
+	width: 50vw;
+	height: 37.5vw;
+	border: white 5px solid;
+}
+
+#popupErrorContainer, #popupErrorContainerClose{
+    background: red;
+    color: var(--main-text-rgb);
+    width: fit-content;
+    padding: 1vw;
+    border-radius: 25vw;
+    position: fixed;
+    top: 5vh;
+    left: 50%;
+    translate: -50%;
+}
+
+#popupErrorContainer{
+	animation:forwards 250ms popupAppear;
+}
+
+#popupErrorContainer:hover{
+	animation:forwards 250ms popupScaleUp;
+	scale: 1.1;
+}
+
+#popupErrorContainerClose{
+	animation:forwards 500ms popupClose;
+	scale: 0;
+}
+
+@keyframes popupAppear {
+	0% {
+		opacity: 0%;
+	}
+	100%{
+		opacity: 100%;
+	}
+}
+
+@keyframes popupScaleUp {
+	0% {
+		scale: 1;
+	}
+	100%{
+		scale: 1.1;
+	}
+}
+
+@keyframes popupClose {
+	0% {
+		scale: 1.1;
+	}
+	100%{
+		scale: 0;
+	}
 }
