@@ -197,7 +197,7 @@
 
 
 
-#dropDownUserContainer, #langDropDownContainer, #timelineDropdownContainer {
+#dropDownUserContainer, #langDropDownContainer {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
@@ -219,19 +219,18 @@
 	z-index: 1;
 }
 
-.dropDownUserContent, .timelineDropdownContent{
+.dropDownUserContent{
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	display: none;
-	background-color: var(--input-bg-rgb);
 }
 
 .activeDropDown{
 	display: inline-table;
 	border: 0.2px solid;
 	border-color: var(--main-text-rgb);
-	background-color: var(--input-bg-rgb);
+	background: var(--input-bg-rgb);
 	width: max-content;
 	outline: none;
 	text-align: center;
@@ -242,22 +241,76 @@
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent, .activeDropDown .timelineDropdownContent{
-	border-block-start: var(--hover-text-rgb);
+.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent{
 	z-index: 1;
 	display: block;
 }
 
-.activeDropDown .dropDownUserContent .dropDownMenuBtn, .activeDropDown #timelineDropdownContainer .timelineDropdownContent li {
+
+.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
+	z-index: 1;
+	display: block;
+}
+
+.activeDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
-	animation: scaleZText 300ms ease-in-out;
+	animation: scaleZText 300ms forwards;
+
+	opacity: 1;
+	transform: scale(1);
+	font-size: min(2vh, 1vw);
+}
+
+.inactiveDropDown .dropDownUserContent .dropDownMenuBtn{
+	transform-origin: top center;
+	animation: scaleZText 300ms reverse;
+
+	opacity: 0;
+	transform: scale(0);
+	font-size: min(1vh, .5vw);
+}
+
+@keyframes displayNone {
+	0%, 99%{
+		display: block;
+	}
+	100%{
+		display: none;
+	}
+}
+
+.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
+	animation: displayNone 300ms forwards;
+}
+
+#langDropDownContent .langDropDownOptionsContainer{
+	opacity: 0;
+	height: 0;
+	scale: 0;
+}
+
+.dropDownUserContent .dropDownMenuBtn{
+	opacity: 0;
+	transform: scale(0);
+	font-size: min(1vh, .5vw);
+	background: transparent;
 }
 
 .activeDropDown #langDropDownContent .langDropDownOptionsContainer{
-	animation: scaleZLang 300ms ease-in-out;
+	animation: scaleZLang 300ms forwards;
+	opacity: 1;
+	scale: 1;
+	height: 4vw;
 }
 
-.dropDownUserContent button, .timelineDropdownContent li{
+.inactiveDropDown #langDropDownContent .langDropDownOptionsContainer{
+	animation: scaleZLang 300ms reverse;
+	opacity: 0;
+	height: 0;
+	scale: 0;
+}
+
+.dropDownUserContent button{
 	text-align: center;
 	color: var(--option-text-rgb);
 	text-decoration: inherit;
@@ -312,6 +365,7 @@
 		opacity: 0;
 		transform: scale(0);
 		font-size: min(1vh, .5vw);
+		display: block;
 	}
 	
 	80% {
@@ -322,6 +376,7 @@
 		opacity: 1;
 		transform: scale(1);
 		font-size: min(2vh, 1vw);
+		display: block;
 	}
 }
 
