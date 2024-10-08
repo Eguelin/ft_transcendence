@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('dark_theme', models.BooleanField(default=True)),
-                ('profile_picture', models.TextField(default='profilePictures/defaults/default0.jpg')),
+                ('profile_picture', models.TextField(default='/images/defaults/default0.jpg')),
                 ('language_pack', models.CharField(default='lang/EN_UK.json', max_length=40)),
                 ('friend_code', models.CharField(max_length=20, null=True)),
                 ('is_active', models.BooleanField(default=False)),

@@ -139,7 +139,7 @@ def create_user(request):
 			user = User.objects.create_user(username=username, password=password, is_staff=True)
 		else:
 			user = User.objects.create_user(username=username, password=password)
-		user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+		user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.id42 = 0
 		user.profile.is_active = True
 
@@ -230,10 +230,10 @@ def profile_update(request):
 				except ValidationError as e:
 					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
-					if user.profile.profile_picture and os.path.exists(user.profile.profile_picture):
+					if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
 						os.remove(user.profile.profile_picture)
 					raw = data['pfp']
-					pfpName = "profilePictures/{0}.jpg".format(user.username)
+					pfpName = "/images/{0}.jpg".format(user.username)
 					with open(pfpName, "wb", opener=file_opener) as f:
 						f.write(base64.b64decode(raw))
 					user.profile.profile_picture = pfpName

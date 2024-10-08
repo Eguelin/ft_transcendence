@@ -19,7 +19,7 @@ def generate_unique_username(base_username):
 def create_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:	
+	if request.user.is_authenticated:
 		if not request.user.is_staff:
 			return JsonResponse({'message': 'user is not admin'}, status=400)
 		try:
@@ -54,7 +54,7 @@ def create_user(request):
 			return JsonResponse({'message': 'User with same username already exist'}, status=400)
 		try:
 			user = User.objects.create_user(username=username, password=password)
-			user.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 			user.id42 = 0
 
 			# CREATE RANDOM FIRST MATCH
@@ -70,7 +70,7 @@ def create_user(request):
 def create_match(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:	
+	if request.user.is_authenticated:
 		if not request.user.is_staff:
 			return JsonResponse({'message': 'user is not admin'}, status=400)
 		try:
@@ -121,7 +121,7 @@ def profile_update(request):
 					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
 					raw = data['pfp']
-					pfpName = "profilePictures/{0}.jpg".format(user.username)
+					pfpName = "/images/{0}.jpg".format(user.username)
 					with open(pfpName, "wb", opener=file_opener) as f:
 						f.write(base64.b64decode(raw))
 					user.profile.profile_picture = pfpName

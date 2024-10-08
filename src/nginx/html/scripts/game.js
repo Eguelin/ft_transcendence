@@ -25,7 +25,6 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
-		console.log(data);
 		if (data.type === "game_init") {
 			waiting = false;
 			clearInterval(waitingInterval); // Stop the waiting message interval
