@@ -219,7 +219,7 @@
 	z-index: 1;
 }
 
-.dropDownUserContent{
+.dropDownUserContent, #langDropDownContent{
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -258,6 +258,7 @@
 	border-color: var(--main-text-rgb);
 	background: var(--input-bg-rgb);
 	animation: backgroundNone 300ms forwards;
+	animation-delay: 100ms;
 }
 
 .activeDropDown .dropDownUserContent .dropDownMenuBtn{
@@ -288,9 +289,7 @@
 }
 
 #langDropDownContent .langDropDownOptionsContainer{
-	opacity: 0;
 	height: 0;
-	scale: 0;
 }
 
 .dropDownUserContent .dropDownMenuBtn{
@@ -350,10 +349,6 @@
 
 .langDropDownOptionsContainer{
 	height: 4vw;
-}
-
-#langDropDownContent{
-	display: none;
 }
 
 #langDropDown:focus #langDropDownContent{
