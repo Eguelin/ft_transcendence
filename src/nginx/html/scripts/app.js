@@ -50,8 +50,13 @@ function addPfpUrlToImgSrc(img, path){
 				img.style.setProperty("width", "unset");
 			}
 		}
-		testImg.src = `https://${hostname.host}/${path}`;
-		img.src = `https://${hostname.host}/${path}`;
+		if (path.startsWith("http")){
+			testImg.src = path;
+			img.src = path;
+		} else {
+			testImg.src = `https://${hostname.host}${path}`;
+			img.src = `https://${hostname.host}${path}`;
+		}
 		img.style.setProperty("display", "block");
 	}
 	else
@@ -94,7 +99,7 @@ class Client{
 				this.#is_admin = result.is_admin;
 				switchTheme(this.use_dark_theme);
 				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-				
+
 				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 				usernameBtn.innerHTML = result.username;
@@ -129,7 +134,7 @@ class Client{
 			pageName = page.substring(0, sep)
 		else
 			pageName = page;
-		
+
 		if (routes[pageName]){
 			if (!this.#is_admin && pageName == "/admin"){
 				fetch(routes[403]).then((response) => {

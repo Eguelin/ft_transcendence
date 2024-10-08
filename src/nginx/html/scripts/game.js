@@ -25,10 +25,9 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
-		console.log(data);
 		if (data.type === "game_init") {
 			waiting = false;
-			clearInterval(waitingInterval); // Stop the waiting message interval
+			clearInterval(waitingInterval);
 			gameInit(data.message);
 		} else if (data.type === "game_update") {
 			updateGame(data.message);
@@ -225,7 +224,7 @@ function game() {
 	document.addEventListener("keydown", handleKeyDown);
 	document.addEventListener("keyup", handleKeyUp);
 
-	waitingInterval = setInterval(() => gameRender(), 500); // Adjust the interval for smoother animation
+	waitingInterval = setInterval(() => gameRender(), 500);
 }
 
 game();
