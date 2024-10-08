@@ -262,7 +262,7 @@ function handleToken() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ code: code }),
+			body: JSON.stringify({ code: code, hostname: hostname.host }),
 			credentials: 'include'
 		})
 		.then(response => {

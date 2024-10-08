@@ -14,7 +14,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from django.urls import path
-from game.game import Consumer
+from game.game import Player
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "transcendence.settings")
 
@@ -25,7 +25,7 @@ application = ProtocolTypeRouter({
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter([
-                path("game/", Consumer.as_asgi()),
+                path("game/", Player.as_asgi()),
             ])
         )
     ),
