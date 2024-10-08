@@ -60,8 +60,7 @@
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	-webkit-clip-path: url(#pfpMask);
-	clip-path: url(#pfpMask);
+	z-index: -1;
 }
 
 #pfpContainer{
@@ -72,6 +71,7 @@
 	background-repeat: no-repeat;
 	overflow: hidden;
 	position: relative;
+	border-radius: 50%;
 }
 
 #quickSettingContainer{
