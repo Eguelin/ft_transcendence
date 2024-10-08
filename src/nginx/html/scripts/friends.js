@@ -127,24 +127,10 @@ function createFriendContainer(user){
 	friendContainer.id = user.username;
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
-<<<<<<< HEAD
-	if (friend.pfp != ""){
-		if (friend.pfp.startsWith("http"))
-			pfp.setAttribute("src", friend.pfp);
-		else
-			pfp.setAttribute("src", `https://${hostname.host}/${friend.pfp}`);
-	}
-=======
 	addPfpUrlToImgSrc(pfp, user.pfp);
->>>>>>> origin/front
 	pfpContainer.appendChild(pfp);
 
-<<<<<<< HEAD
-	friendName = document.createElement("a");
-	friendName.innerText = friend.username;
-=======
 	friendName.innerHTML = user.username;
->>>>>>> origin/front
 
 	friendsOptionContainer.className = "friendsOptionContainer"
 
@@ -189,26 +175,10 @@ function createFriendRequestContainer(user){
 	friendContainer.id = user.username;
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
-<<<<<<< HEAD
-	if (user.pfp != ""){
-		pfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
-	}
-
-	pfpMask = document.createElement("div");
-	pfpMask.className = "pfpMask";
-	pfpMask.style.setProperty("background","radial-gradient(circle, rgba(255,255,255,0) 70%, var(--input-bg-rgb) 70%)");
-
-	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpMask);
-	pfpContainer.appendChild(pfpStatus)
-	friendName = document.createElement("a");
-	friendName.innerText = user.username;
-=======
 	addPfpUrlToImgSrc(pfp, user.pfp);
 
 	pfpContainer.appendChild(pfp);
 	friendName.innerHTML = user.username;
->>>>>>> origin/front
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
@@ -240,29 +210,11 @@ function createBlockedUserContainer(user){
 
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
-<<<<<<< HEAD
-	if (user.pfp != ""){
-		pfp.setAttribute("src", `https://${hostname.host}/${user.pfp}`);
-	}
-
-	pfpMask = document.createElement("div");
-	pfpMask.className = "pfpMask";
-	pfpMask.style.setProperty("background","radial-gradient(circle, rgba(255,255,255,0) 70%, var(--input-bg-rgb) 70%)");
-
-
-	pfpContainer.appendChild(pfp);
-	pfpContainer.appendChild(pfpMask);
-	pfpContainer.appendChild(pfpStatus)
-
-	friendName = document.createElement("a");
-	friendName.innerText = user.username;
-=======
 	addPfpUrlToImgSrc(pfp, user.pfp);
 
 	pfpContainer.appendChild(pfp);
 
 	friendName.innerHTML = user.username;
->>>>>>> origin/front
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
