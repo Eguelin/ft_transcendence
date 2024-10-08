@@ -26,6 +26,9 @@ $(NAME): $(DB_DIR)
 down:
 	$(DC) down
 
+stop:
+	$(DC) stop
+
 restart: down all
 
 clean:
