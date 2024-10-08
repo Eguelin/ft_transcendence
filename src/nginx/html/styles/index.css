@@ -60,6 +60,8 @@
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+	-webkit-clip-path: url(#pfpMask);
+	clip-path: url(#pfpMask);
 }
 
 #pfpContainer{
