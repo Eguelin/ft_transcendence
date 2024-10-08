@@ -48,7 +48,7 @@ if (sendFriendRequestBtn){
                 profilePfp.innerHTML = "";
             	addPfpUrlToImgSrc(profilePfp, user.pfp);
 
-                recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
+                recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
                 endDate = new Date();
                 try{
                     matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
@@ -68,12 +68,7 @@ if (sendFriendRequestBtn){
                     var message = document.createElement("a");
                     recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
                     recentMatchHistoryContainer.style.setProperty("align-items", "center");
-                    messageContainer.style.setProperty("color", "var(--main-text-rgb)");	
-                    messageContainer.style.setProperty("position", "relative");
-                    messageContainer.style.setProperty("display", "flex");
-                    messageContainer.style.setProperty("gap", "1ch");
-                    messageContainer.style.setProperty("left", "50%");
-                    messageContainer.style.setProperty("translate", "-50%");
+                    messageContainer.id = "notPlayedTodayContainer";
                     messageUsername.innerText = splitPath[4]
                     message.id="notPlayedToday";
 			        message.innerText = client.langJson['user']['#notPlayedToday'];
