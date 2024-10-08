@@ -9,7 +9,7 @@
         }).then(user => {
             user.json().then(((user) => {
                 document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-                document.getElementById("userResumeSearch").innerHTML = htmlEncode(url.searchParams.get("query"));
+                document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
                 Object.keys(user).forEach(function (key) {
                     createUserResumeContainer(user[key]);
                 })
