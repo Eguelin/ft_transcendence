@@ -1,0 +1,104 @@
+{
+	"index": {
+		"#myProfileBtn" : "Profilo",
+		"#friendsBtn" :  "Amici",
+		"#settingsBtn" :  "Impostazioni",
+		"#logOutBtn" :  "Disconnetti",
+		"#inputSearchUser" : "Cerca utente"
+	},
+	"home" : {
+		"#title" : "PONG",
+		"#playBtn" : "Gioca",
+		"#notPlayedToday" : "Non hai giocato nessuna partita oggi",
+		".victory" : "VITTORIA",
+		".loss" : "SCONFITTA",
+		".draw" : "PAREGGIO"
+	},
+	"login" : {
+		"#title" : "ACCESSO",
+		"#internalLoginOpt" : "Accedi con le credenziali",
+		"#loginBtn" : "ACCESSO",
+		"#externalLoginOpt" : "Altre opzioni di accesso",
+		"#inputUsername" : "Nome utente",
+		"#inputPassword" : "Password",
+		"#createAcc" : "Crea il tuo account",
+		"#registerBtn" : "REGISTRAZIONE",
+		"#inputRegisterUsername" : "Nome utente",
+		"#inputRegisterPassword" : "Password",
+		"#inputRegisterCPassword" : "Conferma password"
+	},
+	"settings": {
+		"#title" : "Impostazioni",
+		"#accountTitle" : "Account",
+		"#accessibilityTitle" : "Accessibilità",
+		"#saveBtn" : "SALVA",
+		"#inputUsername" : "Nome utente",
+		"#inputPfp" : "Immagine del profilo",
+		"#pfpLabel" : "Immagine del profilo",
+		"#themesDropDownL" : "Temi",
+		"#themesDropDownP" : "Temi",
+		"#loadLightL" : "Chiaro",
+		"#loadDarkL" : "Scuro",
+		"#loadLightP" : "Chiaro",
+		"#loadDarkP" : "Scuro",
+		"#languagesDropDownL" : "Lingue",
+		"#languagesDropDownP" : "Lingue",
+		"#englishBtnL" : "Inglese",
+		"#frenchBtnL" : "Francese",
+		"#germanBtnL" : "Tedesco",
+		"#italianBtnL" : "Italiano",
+		"#pirateBtnL" : "Pirata",
+		"#englishBtnP" : "Inglese",
+		"#frenchBtnP" : "Francese",
+		"#germanBtnP" : "Tedesco",
+		"#italianBtnP" : "Italiano",
+		"#pirateBtnP" : "Pirata"
+	},
+	"friends":{
+		"#title" : "Amici",
+		"#confirmDeleteQuestion" : "Sei sicuro di voler rimuovere questo amico?",
+		"#confirmBlockQuestion" : "Sei sicuro di voler bloccare questo amico?",
+		"#confirmDelete" : "Sono sicuro",
+		"#confirmBlock" : "Sono sicuro",
+		"#onlineFriendSelectorText": "Online",
+		"#allFriendSelectorText": "Tutti",
+		"#pendingFriendRequestSelectorText": "In sospeso",
+		"#blockedSelectorText": "Bloccati"
+	},
+	"user":{
+		"#title" : "",
+		"#sendFriendRequestBtn" : "Invia richiesta di amicizia",
+		"#notPlayedToday" : "non ha giocato nessuna partita oggi",
+		"#recentMatchHistoryText" : "Partite recenti",
+		"#allMatchesHistoryBtn" : "Tutte le partite",
+		".victory" : "VITTORIA",
+		".loss" : "SCONFITTA",
+		".draw" : "PAREGGIO"
+	},
+	"dashboard":{
+		"#title" : "",
+		"#ratioText" : "rapporto vittorie/sconfitte",
+		"#nbMatchText" : "Numero di partite giocate",
+		"#nbWinText" : "Numero di partite vinte",
+		"#nbLossText" : "Numero di partite perse",
+		"#timelineSelectionText" : "Visualizza statistiche degli ultimi",
+		"#lastWeekSelection" : "7 giorni",
+		"#lastMonthSelection" : "Mese",
+		"#lastYearSelection" : "Anno",
+		"CVwinLossGraph" : "Media per data",
+		"CVwinLossAbsGraph" : "Numero di vittorie rispetto al numero di sconfitte per data",
+		"CVwinLossGraphClient" : "tu",
+		"CVwinLossAbsGraphClient" : "tu"
+	},
+	"search": {
+		"#title" : "Cerca"
+	},
+	"game":{
+		"#title" : ""
+	},
+	"404":{
+		"#title" : "ERRORE 404",
+		"#NotFoundtitle" : "Oh no, questa pagina non esiste :(",
+		"#NotFoundhomeBtn" : "HOME"
+	}
+}
