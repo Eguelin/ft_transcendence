@@ -11,9 +11,8 @@ function game() {
 	const player2 = {};
 	const ball = {};
 	const ballTrail = [];
-	let waiting = true;
 	let dotCount = 0;
-	let waitingInterval;
+	let messageInterval;
 	let gameInterval;
 	let KeyPressInterval;
 
@@ -26,8 +25,7 @@ function game() {
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
-			waiting = false;
-			clearInterval(waitingInterval);
+			clearInterval(messageInterval);
 			gameInit(data.message);
 		} else if (data.type === "game_update") {
 			updateGame(data.message);
@@ -37,9 +35,9 @@ function game() {
 			gameInterval = setInterval(() => gameRender(), 16);
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
 		} else if (data.type === "game_end") {
-			clearInterval(gameInterval);
 			clearInterval(KeyPressInterval);
-			drawMessage(data.message);
+			clearInterval(gameInterval);
+			messageInterval = setInterval(() => drawMessage(data.message), 300);
 		}
 	}
 
@@ -78,8 +76,6 @@ function game() {
 		ball.x = message.ball.x;
 		ball.y = message.ball.y;
 
-		ctx.fillStyle = client.mainTextRgb;
-		ctx.strokeStyle = client.mainTextRgb;
 		ctx.lineWidth = paddle.width / 4;
 	}
 
@@ -102,25 +98,24 @@ function game() {
 		}
 	}
 
-	function drawMessage(message) {
+	function drawMessage(message, x = canvas.width / 2, y = canvas.height / 2) {
+		ctx.fillStyle = client.mainTextRgb;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.font = "80px pong";
+		ctx.font = `80px pong`;
 		ctx.textAlign = "center";
-		ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+		ctx.fillText(message, x, y);
 	}
 
 	function gameRender() {
+		ctx.fillStyle = client.mainTextRgb;
+		ctx.strokeStyle = client.mainTextRgb;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		if (waiting) {
-			drawWaitingMessage();
-		} else {
-			drawScore();
-			drawMiddleLine();
-			drawBallTrail();
-			drawBall();
-			drawPaddles();
-		}
+		drawScore();
+		drawMiddleLine();
+		drawBallTrail();
+		drawBall();
+		drawPaddles();
 	}
 
 	function drawScore() {
@@ -183,10 +178,11 @@ function game() {
 		ctx.closePath();
 	}
 
-	function drawWaitingMessage() {
-		let dots = '.'.repeat(dotCount % 4);
+	function waitingMessage() {
+		let dots = '.'.repeat((dotCount) % 4);
 		let spacing = ' '.repeat(4 - dots.length);
-		drawMessage(`  waiting${dots}${spacing}`);
+
+		drawMessage(dots + spacing, canvas.width / 2 + 40);
 		if (dotCount === 4)
 			dotCount = 0;
 		else
@@ -235,7 +231,7 @@ function game() {
 	document.addEventListener("keydown", handleKeyDown);
 	document.addEventListener("keyup", handleKeyUp);
 
-	waitingInterval = setInterval(() => gameRender(), 500);
+	messageInterval = setInterval(() => waitingMessage(), 300);
 }
 
 game();
