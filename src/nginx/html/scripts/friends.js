@@ -336,11 +336,16 @@ function friendUpdate()
 
 	socket.onopen = function()
 	{
-		console.log("Connection establisheda");
+		console.log("Connection established");
+		while (true)
+			{
+				socket.send(JSON.stringify(
+					{
+						type: "friend_update"
+					}
+				));
+			}
 	}
-
-	socket.join_group("friend");
-	socket.send_message_to_group("friend", "Hello");
 
 	socket.onmessage = function(event)
 	{
@@ -367,7 +372,18 @@ function friendUpdate()
 	{
 		socket.close();
 	});
+
+	if (socket.readyState === WebSocket.OPEN)
+	{
+		console.log("Sending friend update request");
+		socket.send(JSON.stringify(
+			{
+				type: "friend_update",
+				content: "username",
+			}
+		));
+	}
 }
 
-checkUpdate();
+friendUpdate();
 checkUpdate();

@@ -16,35 +16,31 @@
 
 body{
 	font-family:'pong';
+	font-size: 16px;
 	background-color: var(--page-bg-rgb);
 	height: 100%;
 	margin: 0;
 	user-select: none;
 }
 
+
+@media screen and (orientation:landscape){
+	body{
+		font-size: 16px;
+		transition: 500ms;
+	}
+}
+
+@media screen and (orientation:portrait), (max-height:590px){
+	body{
+		font-size: 12px;
+		transition: 500ms;
+	}
+}
+
 #container{
 	display: flex;
 	flex-flow: column;
-}
-
-#titleFlexContainer{
-	height:fit-content;
-	text-align: center;
-	display: flex;
-	width: -webkit-fill-available;
-	align-items: center;
-}
-
-#titleFlexContainer div{
-	position: relative;
-}
-
-#browseFlexContainer {
-	display: flex;
-}
-
-#browseFlexContainer div{
-	margin: 1vmax;
 }
 
 #pageContentContainer {
@@ -59,15 +55,10 @@ h1{
 	font-style: italic;
 	margin-top: 4vmax;
 	margin-bottom: 4vmax;
-	font-size: 7vmax;
 	text-align: center;
 }
 h2{
 	color: var(--main-text-rgb);
-}
-
-#title{
-	width: 80%;
 }
 
 .settingSlide h2{
@@ -75,7 +66,6 @@ h2{
 	font-style: italic;
 	margin-top: 4vh;
 	margin-bottom: 4vh;
-	font-size: 5vw;
 	text-align: center;
 }
 
@@ -84,7 +74,7 @@ h2{
 	color: var(--main-text-rgb);
 	font-size: min(7vh, 4vw);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	margin-top:5vh;
 	margin-left:auto;
 	margin-right:auto;
@@ -101,7 +91,7 @@ h2{
 	color: var(--main-text-rgb);
 	font-size: min(7vh, 4vw);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	font-family: "pong";
 	margin-left:auto;
 	margin-right:auto;
@@ -129,7 +119,7 @@ input:focus{
 	text-align: center;
 	color: var(--main-text-rgb);
 	font-style:italic;
-	font-weight:thin;	
+	font-weight:thin;
 	margin-left:auto;
 	margin-right:auto;
 	margin-top: 5vh;
@@ -137,51 +127,10 @@ input:focus{
 	position: relative;
 }
 
-#forgotPasswordContainer{
-	width:18vw;
-   	text-align: left; 
-	margin-top:0; 
-	color:var(--hover-text-rgb); 
-	font-size:min(1vh, 1vw); 
-	padding-top:1vh;
-	display: block flex;
-}
-
-#forgotPasswordContainer a{
-	width: inherit;
-	flex: auto;
-}
-
-#forgotPasswordContainer a:hover, #forgotPasswordContainer a:focus{
-	width: inherit;
-	flex: auto;
-	outline : none;
-	color: var(--main-text-rgb);
-}
-
-.loginBtn {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-weight: thin;	
-	font-family: "pong";
-	font-size: min(4vh, 2vw);
-	padding: 1vh 0;
-	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-}
-
-.loginBtn:hover, .loginBtn:focus {
-	color: var(--page-bg-rgb);
-	border-color: var(--page-bg-rgb);
-	outline: none;
-}
-
 button{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -194,7 +143,7 @@ button{
 .saveBtn, .deleteBtn {
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -209,69 +158,6 @@ button{
 
 .deleteBtn{
 	background-color: red;
-}
-
-.loginOpt{
-	text-align: center;
-	color: var(--main-text-rgb);
-	font-size: min(3vh, 2vw);
-	font-weight:thin;
-	padding-top:2vh;
-	margin-left:auto;
-	margin-right:auto;
-	width:fit-content;
-}
-
-#externalLogin {
-	margin-left:auto;
-	margin-right:auto;
-	margin-top: 1vh;
-	width:20vw;
-	height: 5vh;
-	display: flex;
-}
-
-#fortyTwoLogin{
-	mask-image:url("icons/42.svg");
-	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
-	top:5vh;
-	left:5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-	flex: 1;
-	outline: none;
-}
-
-#fortyTwoLogin:hover, #fortyTwoLogin:focus{
-	background: var(--hover-text-rgb);
-}
-
-#githubLogin{
-	mask-image:url("icons/github.svg");
-	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
-	top:5vh;
-	left:5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-	flex: 1;
-}
-
-#googleLogin{
-	background-image:url("icons/google.svg");
-	height:10vh;
-	width:5vw;
-	top:5vh;
-	left:5vw;
-	background-size:contain;
-	background-position:center;
-	background-repeat:no-repeat;
-	flex: 1;
 }
 
 a {
@@ -296,31 +182,6 @@ a {
 
 .success{
 	color: #00FF00;
-}
-
-#goHomeButton{
-	mask-image:url("icons/left_arrow.svg");
-	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-}
-
-#goHomeButton:focus, #goHomeButton:hover{
-	background: var(--hover-text-rgb);
-}
-
-#themeButton{
-	mask-image:url("icons/button-night-mode.svg");
-	background:var(--main-text-rgb);
-	height:5vw;
-	width:5vw;
-	margin: 1vmax;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
 }
 
 #leftSlideBtn{
@@ -349,11 +210,6 @@ a {
 	right: 0;
 }
 
-#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover{
-	outline: none;
-	background: var(--hover-text-rgb);
-}
-
 .profilePicture {
 	width: 100%;
 
@@ -365,39 +221,6 @@ a {
 	left: 50%;
 	top: 50%;
 	translate: -50% -50%;
-}
-
-#pfp{
-	width: 100%;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
-
-#pfpContainer{
-	height: 4vw;
-	width: 4vw;
-	margin: 0 1vmax;
-	background-position: center center;
-	background-repeat: no-repeat;
-	overflow: hidden;
-	position: relative;
-}
-
-#quickSettingContainer{
-	flex-direction: row-reverse;
-	display: flex;
-	flex: 1;
-	align-items: center;
-}
-
-#usernameBtn {
-	color: var(--main-text-rgb);
-	font-size: min(3vh, 1vw);
-	line-height: 4vw;
-	display: block;
-	text-align: center;
 }
 
 #pfpLabel {
@@ -430,7 +253,7 @@ a {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(3vh, 2vw);
 	padding: 1.5vh 1.5vw;
@@ -605,7 +428,7 @@ a {
 	text-align: center;
 	background-color: red;
 	color: var(--main-text-rgb);
-	font-weight: thin;	
+	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -675,6 +498,7 @@ a {
 }
 
 .slideSelector div{
+	padding: 2px;
 	z-index: -1;
 	position: relative;
 }
@@ -683,8 +507,11 @@ a {
 	display: block !important;
 }
 
+.activeSelector div{
+	background: var(--hover-text-rgb);
+}
+
 .activeSelector{
-	padding-bottom: 2px;
 	border-bottom: 2px solid var(--main-text-rgb);
 }
 
@@ -711,7 +538,7 @@ a {
 	right: 0px;
 	mask-size:contain;
 	mask-position:center;
-	mask-repeat:no-repeat;	
+	mask-repeat:no-repeat;
 }
 
 .pfpStatusOffline{
@@ -729,105 +556,6 @@ a {
 
 
 
-#recentMatchHistoryContainer{
-	height: 20vh;
-	width: -webkit-fill-available;
-	position: absolute;
-	bottom: 0;
-	display: flex;
-}
-
-.matchDescContainer{
-	background: var(--input-bg-rgb); 
-	height: auto;
-	border: .5px solid var(--page-bg-rgb);
-	flex: auto;
-	display: flex;
-	flex-direction: column;
-	color: var(--main-text-rgb);
-}
-
-.matchDescContainerResult{
-	flex: auto;
-	margin-top: 1vh;
-}
-
-.matchDescContainerScore{
-	display: flex;
-	flex-direction: column;
-	flex: auto;
-	padding: 0 1vw;
-	gap: 1vh;
-}
-
-.resultScore{
-	display: flex;
-}
-
-.resultScoreScore{
-	flex: auto;
-	text-align: right;
-}
-
-.resultScoreName{
-	text-align: left;
-}
-
-.resultScoreName:hover{
-	text-decoration: underline from-font solid var(--main-text-rgb);
-}
-
-#profileInfoContainer {
-	display: flex;
-	margin: 3vw 3vw 0 3vw;
-}
-
-#profileNameContainer {
-	flex: auto;
-	position: relative;
-}
-
-#profilePfpContainer {
-	position: relative;
-	height: 7vw;
-	width: 7vw;
-	overflow: hidden;
-}
-
-#profilePfp {
-	width: 100%;
-
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-position: 50% 50%;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	translate: -50% -50%;
-}
-
-#MatchHistoryTextContainer{
-	color: var(--main-text-rgb);
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	top: -5vmin;
-	display: flex;
-	gap: 1vmin;
-}
-
-#profileName{
-	font-size: 6vmax;
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-#inputSearchUser{
-	display: none;
-	width: 20vmax;
-}
 
 #resumeContainer{
 	margin-top: 2vmax;
@@ -1024,10 +752,6 @@ a {
 #confirmPfpMask{
 	opacity: .5;
 }
-/*
-#winLossGraph, #winLossAbsGraph{
-	background: var(--hover-text-rgb);
-}*/
 
 #profileGraphs {
 	display: flex;
@@ -1072,6 +796,12 @@ a {
 	color: var(--hover-text-rgb);
 }
 
+.game{
+	width: 50vw;
+	height: 37.5vw;
+	border: var(--main-text-rgb) 5px solid;
+}
+
 #popupErrorContainer, #popupErrorContainerClose{
     background: red;
     color: var(--main-text-rgb);
@@ -1085,7 +815,7 @@ a {
 }
 
 #popupErrorContainer{
-	animation:forwards 250ms popupAppear;
+	animation:forwards 500ms popupAppear;
 }
 
 #popupErrorContainer:hover{
@@ -1094,15 +824,17 @@ a {
 }
 
 #popupErrorContainerClose{
-	animation:forwards 500ms popupClose;
-	scale: 0;
+	animation: reverse 500ms popupAppear;
+	opacity: 0;
 }
 
 @keyframes popupAppear {
 	0% {
+		top: 0;
 		opacity: 0%;
 	}
 	100%{
+		top: 5vh;
 		opacity: 100%;
 	}
 }
@@ -1113,14 +845,5 @@ a {
 	}
 	100%{
 		scale: 1.1;
-	}
-}
-
-@keyframes popupClose {
-	0% {
-		scale: 1.1;
-	}
-	100%{
-		scale: 0;
 	}
 }

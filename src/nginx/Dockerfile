@@ -17,8 +17,11 @@ RUN openssl req -x509 -nodes -newkey rsa:2048 \
 	-out /etc/ssl/certs/transcendence.crt \
 	-subj "/C=FR/ST=Auvergne-Rhone-Alpes/L=Lyon/O=42/CN=localhost/emailAddress=eguelin@student.42lyon.fr"
 
+# Set client_max_body_size to 10M
+RUN sed -i 's/http {/http {\n    client_max_body_size 10M;/g' /etc/nginx/nginx.conf
+
 # Copy configuration files
-COPY conf /etc/nginx/
+COPY conf /etc/nginx/conf.d
 
 # run nginx
 CMD [ "nginx", "-g", "daemon off;" ]

@@ -75,3 +75,8 @@ if (sendFriendRequestBtn){
 allMatchesButton.addEventListener("click", (e) => {
     history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
 })
+
+
+
+
+

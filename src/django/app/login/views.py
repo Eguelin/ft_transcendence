@@ -16,6 +16,12 @@ def generate_unique_username(base_username):
 		counter += 1
 	return username
 
+def getClientId(request):
+	clientId = os.getenv('PUBLIC')
+	if not clientId:
+		return JsonResponse({'message': 'Client ID not set'}, status=500)
+	return JsonResponse({'clientId': clientId})
+
 def fortytwo(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
@@ -28,9 +34,12 @@ def fortytwo(request):
 	code = data.get('code')
 	if not code:
 		return JsonResponse({'message': 'Invalid request Code'}, status=400)
+	hostname = data.get('hostname')
+	if not hostname:
+		return JsonResponse({'message': 'Invalid request Hostname'}, status=400)
 	client_id = os.getenv('PUBLIC')
 	client_secret = os.getenv('SECRET')
-	redirect_uri = os.getenv('REDIRECT_URI')
+	redirect_uri = 'https://' + hostname + '/'
 	url = 'https://api.intra.42.fr/oauth/token'
 	payload = {
 		'grant_type': 'authorization_code',
@@ -55,7 +64,7 @@ def fortytwo(request):
 		return JsonResponse(response.json(), status=response.status_code)
 	user_json = response.json()
 	user_login = user_json.get('login')
-	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '')
+	pfp_url = user_json.get('image', {}).get('link', '')
 
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:15]
