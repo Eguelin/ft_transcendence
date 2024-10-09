@@ -4,6 +4,7 @@ container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
+inputSearchUserContainer = document.getElementById("inputSearchUserContainer");
 usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
 dropDownUserContainer = document.getElementById("dropDownUserContainer");
@@ -221,7 +222,7 @@ window.navigation.addEventListener("navigate", (e) => {
 						return (response.text().then(response => {
 
 							homeBtn.style.setProperty("display", "block");
-							inputSearchUser.style.setProperty("display", "none");
+							inputSearchUserContainer.style.setProperty("display", "none");
 							container.innerHTML = response;
 							document.getElementById("script").remove();
 							var s = document.createElement("script");
@@ -236,7 +237,7 @@ window.navigation.addEventListener("navigate", (e) => {
 				else{
 					fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 						(response.text().then(response => {
-							inputSearchUser.style.setProperty("display", "none");
+							inputSearchUserContainer.style.setProperty("display", "none");
 							container.innerHTML = response;
 							document.getElementById("script").remove();
 							var s = document.createElement("script");
@@ -743,15 +744,3 @@ function popUpError(error){
 	})
 	document.body.appendChild(popupContainer);
 }
-/*
-document.body.setScaledFont = function(f) {
-	var s= this.offsetWidth, fs = s * f;
-	this.style.fontSize = fs + '%';
-	return this;
-}
-
-document.body.setScaledFont(0.35);
-window.onresize = function() {
-	document.body.setScaledFont(0.35);
-}
-*/

@@ -8,6 +8,7 @@
 	},
 	"home" : {
 		"#title" : "PONG",
+		"#subtitle" : "",
 		"#playBtn" : "Spielen",
 		"#notPlayedToday" : "Sie haben heute kein Spiel gespielt",
 		".victory" : "SIEG",
@@ -16,6 +17,7 @@
 	},
 	"login" : {
 		"#title" : "ANMELDUNG",
+		"#subtitle" : "",
 		"#internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
 		"#loginBtn" : "ANMELDUNG",
 		"#externalLoginOpt" : "Weitere anmeldeoptionen",
@@ -28,7 +30,8 @@
 		"#inputRegisterCPassword" : "Bestätige das Passwort"
 	},
 	"settings": {
-		"#title" : "Einstellungen",
+		"#title" : "",
+		"#subtitle" : "Einstellungen",
 		"#accountTitle" : "Account",
 		"#accessibilityTitle" : "Barrierefreiheit",
 		"#saveBtn" : "SPEICHERN",
@@ -55,7 +58,8 @@
 		"#pirateBtnP" : "Pirat"
 	},
 	"friends":{
-		"#title" : "Freunde",
+		"#title" : "",
+		"#subtitle" : "Freunde",
 		"#confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
 		"#confirmBlockQuestion" : "Möchten Sie diesen Freund wirklich blockieren?",
 		"#confirmDelete" : "Ich bin sicher",
@@ -67,6 +71,7 @@
 	},
 	"user":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Freundschaftsanfrage senden",
 		"#notPlayedToday" : "hat heute kein Spiel bestritten",
 		"#recentMatchHistoryText" : "Aktuelle Spiele",
@@ -77,6 +82,7 @@
 	},
 	"dashboard":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#ratioText" : "Gewinn-/Niederlagenverhältnis",
 		"#nbMatchText" : "Anzahl gespielter Spiele",
 		"#nbWinText" : "Anzahl der gewonnenen Spiele",
@@ -91,13 +97,16 @@
 		"CVwinLossAbsGraphClient" : "du"
 	},
 	"search": {
-		"#title" : "Suchen"
+		"#title" : "Suchen",
+		"#subtitle" : ""
 	},
 	"game":{
-		"#title" : ""
+		"#title" : "",
+		"#subtitle" : ""
 	},
 	"404":{
 		"#title" : "Fehler 404",
+		"#subtitle" : "",
 		"#NotFoundtitle" : "Ho nein, diese Seite existiert nicht :(",
 		"#NotFoundhomeBtn" : "HOMEPAGE"
 	}
