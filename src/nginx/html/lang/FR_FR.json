@@ -8,6 +8,7 @@
 	},
 	"home" : {
 		"#title" : "PONG",
+		"#subtitle" : "",
 		"#playBtn" : "Jouer",
 		"#notPlayedToday" : "Vous n'avez joué aucun match aujourd'hui",
 		".victory" : "VICTOIRE",
@@ -16,6 +17,7 @@
 	},
 	"login" : {
 		"#title" : "CONNEXION",
+		"#subtitle" : "",
 		"#internalLoginOpt" : "Se connecter avec des identifiants",
 		"#loginBtn" : "CONNEXION",
 		"#externalLoginOpt" : "Autres options de connexion",
@@ -28,7 +30,8 @@
 		"#inputRegisterCPassword" : "Confirmer le mot de passe"
 	},
 	"settings": {
-		"#title" : "Paramètres",
+		"#title" : "",
+		"#subtitle" : "Options",
 		"#accountTitle" : "Compte",
 		"#accessibilityTitle" : "Accessibilité",
 		"#saveBtn" : "SAUVEGARDER",
