@@ -30,25 +30,23 @@ DEBUG = os.getenv('DJANGO_DEBUG')
 # 42 API credentials
 PUBLIC = os.getenv('PUBLIC')
 SECRET = os.getenv('SECRET')
-REDIRECT_URI = os.getenv('REDIRECT_URI')
+DJANGO_HOST = os.getenv('DJANGO_HOST')
 
 ALLOWED_HOSTS = [
 	'localhost',
-	'ft-transcendence.online',
-    'www.ft-transcendence.online',
-    '*', # for testing purposes
+	DJANGO_HOST
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
-	'daphne',
+    'daphne',
     'channels',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'login',
-	'game',
+    'game',
 ]
 
 MIDDLEWARE = [

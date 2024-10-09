@@ -246,27 +246,32 @@ dropDownContent.forEach(function(button) {
 for (var i = 0 ;i < germanBtn.length; i++)
 {
 	germanBtn[i].addEventListener("click", (e) => {
-		currentLang = "lang/DE_GE.json";
-		const data = {language_pack: "lang/DE_GE.json"};
-		fetch("lang/DE_GE.json").then(response => {
-			response.json().then((text) => {
-				content = text['settings'];
-				Object.keys(content).forEach(function(key) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					else
-						document.getElementById(key).innerText = content[key];
-				});
-			})
-		})
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
+		(async() => {
+			currentLang = `lang/DE_GE.json`;
+			try{
+				if (client){
+					client.currentLang = currentLang;
+					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
+					content = await fetchResult.json();
+					client.langJson = content;
+				}
+				loadCurrentLang();
+				if (client){
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ language_pack: currentLang }),
+						credentials: 'include'
+					})
+					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/DE_GE.svg)`);
+				}
+			}
+			catch{
+				popUpError(`Could not load DE_GE language pack`);
+			}
+		})();
 		for (var j=0; j< germanBtn.length; j++){
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
@@ -275,27 +280,32 @@ for (var i = 0 ;i < germanBtn.length; i++)
 	})
 
 	englishBtn[i].addEventListener("click", (e) => {
-		currentLang = "lang/EN_UK.json";
-		const data = {language_pack: "lang/EN_UK.json"};
-		fetch("lang/EN_UK.json").then(response => {
-			response.json().then((text) => {
-				content = text['settings'];
-				Object.keys(content).forEach(function(key) {
-					if (key.startsWith('input'))
-						document.getElementById(key).placeholder = content[key];
-					else
-						document.getElementById(key).innerText = content[key];
-				});
-			})
-		})
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
+		(async() => {
+			currentLang = `lang/EN_UK.json`;
+			try{
+				if (client){
+					client.currentLang = currentLang;
+					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
+					content = await fetchResult.json();
+					client.langJson = content;
+				}
+				loadCurrentLang();
+				if (client){
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ language_pack: currentLang }),
+						credentials: 'include'
+					})
+					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
+				}
+			}
+			catch{
+				popUpError(`Could not load EN_UK language pack`);
+			}
+		})();
 		for (var j=0; j< germanBtn.length; j++){
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
