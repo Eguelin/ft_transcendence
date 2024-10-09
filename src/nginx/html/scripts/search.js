@@ -1,5 +1,5 @@
 {
-    inputSearchUser.style.setProperty("display", "block");
+    inputSearchUserContainer.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
 

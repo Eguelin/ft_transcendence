@@ -243,13 +243,13 @@ function register(){
 			},
 			credentials: 'include'
 		}).then(response => {
-			inputSearchUser.style.setProperty("display", "none");
+			inputSearchUserContainer.style.setProperty("display", "none");
 			dropDownUserContainer.style.setProperty("display", "none");
 		});
 		client = null;
 	}
 
-	inputSearchUser.style.setProperty("display", "none");
+	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "none");
 }
 
