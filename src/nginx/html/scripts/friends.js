@@ -15,7 +15,7 @@ friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].classNa
 slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 
 homeBtn.style.setProperty("display", "block");
-inputSearchUser.style.setProperty("display", "block");
+inputSearchUserContainer.style.setProperty("display", "block");
 dropDownUserContainer.style.setProperty("display", "flex");
 
 Object.keys(slideSelector).forEach(function(key) {

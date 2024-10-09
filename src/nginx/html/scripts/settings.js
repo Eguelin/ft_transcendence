@@ -346,7 +346,7 @@ for (var i=0; i< lightTheme.length; i++)
 }
 
 {
-	inputSearchUser.style.setProperty("display", "none");
+	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 }
