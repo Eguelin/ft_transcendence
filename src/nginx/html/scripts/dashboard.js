@@ -9,8 +9,6 @@ chartAbs = null;
 lastWeekSelection = document.getElementById("lastWeekSelection");
 lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
-timelineDropdownBtn = document.getElementById("timelineDropdownBtn");
-timelineDropdown = document.getElementById("timelineDropdownContainer")
 
 lastWeekSelection.addEventListener("click", (e) => {
 	document.getElementById("loaderBg").style.setProperty("display", "block");

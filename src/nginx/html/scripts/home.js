@@ -1,5 +1,4 @@
 container = document.getElementById("container");
-recentMatchHistoryContainer = document.getElementById("recentMatchHistoryContainer");
 playBtn = document.getElementById("playBtn");
 
 {
@@ -8,6 +7,7 @@ playBtn = document.getElementById("playBtn");
 	homeBtn.style.setProperty("display", "none");
 
 	if (client){
+		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 		recentMatchHistoryContainer.innerHTML = "";
 		if (Object.keys(client.recentMatches).length == 0){
 			var message = document.createElement("a");
