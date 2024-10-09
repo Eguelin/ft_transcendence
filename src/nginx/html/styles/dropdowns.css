@@ -284,8 +284,18 @@
 	}
 }
 
+@keyframes displayToNone {
+	0%,99%{
+		display: block;
+	}
+	100%{
+		display: none;
+	}
+}
+
 .inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
 	animation: backgroundNone 300ms forwards;
+	animation: displayToNone 1ms  300ms forwards;
 }
 
 #langDropDownContent .langDropDownOptionsContainer{
