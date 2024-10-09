@@ -65,7 +65,7 @@
 }
 
 
-#loginSlideSelector div:hover{
+#loginSlideSelector div:hover, #loginSlideSelector .activeSelector {
 	font-size: calc(1ch + 2px);
 }
 
@@ -73,6 +73,4 @@
 .loginSlide{
 	width: fit-content;
 	min-width: 40vw;
-	position: absolute;
-	top: 4vh;
 }
