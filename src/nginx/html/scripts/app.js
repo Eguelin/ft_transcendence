@@ -1,5 +1,3 @@
-//import Chart from '../chart.js/auto';
-
 container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
@@ -22,6 +20,7 @@ var currentPage = "";
 var currentLang = "lang/EN_UK.json"
 var username = "";
 const hostname = new URL(window.location.href);
+const defaultLastXDaysDisplayed = 7;
 
 var client = null;
 var pageName;

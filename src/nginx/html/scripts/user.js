@@ -1,10 +1,10 @@
-var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 allMatchesButton = document.getElementById("allMatchesHistoryBtn");
 
 
 if (sendFriendRequestBtn){
+    var splitPath = window.location.href.split('/');
     sendFriendRequestBtn.addEventListener("click", (e) => {
         fetch('/api/user/send_friend_request', {
             method: 'POST',
