@@ -116,6 +116,12 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					success.className = "success";
 					success.text = "username successfully updated";
 					usernameInput.before(success);
+
+					(async () => {
+						client = await new Client();
+						if (!client)
+							history.replaceState("", "", `https://${hostname.host}/login`);
+					})()
 				}
 				else {
 					response.json().then(response => {
