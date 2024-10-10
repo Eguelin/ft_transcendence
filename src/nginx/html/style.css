@@ -25,6 +25,7 @@ body{
 
 html{
 	font-size: 16px;
+	transition: 500ms;
 }
 
 @media screen and (orientation:landscape){
@@ -47,6 +48,40 @@ html{
 	}
 }
 
+h1{
+	color: var(--main-text-rgb);
+	font-style: italic;
+	text-align: center;
+	font-size: 4rem;
+	transition: 500ms;
+}
+h2{
+	color: var(--main-text-rgb);
+}
+
+button{
+	text-align: center;
+	color: var(--main-text-rgb);
+	font-weight: thin;
+	font-family: "pong";
+	font-size: 1rem;
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+	background-color: var(--hover-text-rgb);
+}
+
+
+@media screen and (max-width:960px) {
+	h1{
+		font-size: 2rem;
+	}
+	button{
+		font-size: .5rem;
+	}
+}
+
 #container{
 	display: flex;
 	flex-flow: column;
@@ -58,15 +93,6 @@ html{
 	width: -webkit-fill-available;
 }
 
-h1{
-	color: var(--main-text-rgb);
-	font-style: italic;
-	text-align: center;
-	font-size: 4rem;
-}
-h2{
-	color: var(--main-text-rgb);
-}
 
 .settingSlide h2{
 	color: var(--main-text-rgb);
@@ -132,19 +158,6 @@ input:focus{
 	margin-top: 5vh;
 	width:20vw;
 	position: relative;
-}
-
-button{
-	text-align: center;
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	font-size: 1rem;
-	padding: 1vh 0;
-	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-	background-color: var(--hover-text-rgb);
 }
 
 .saveBtn, .deleteBtn {
@@ -478,6 +491,9 @@ a {
 #friendSlideSelector div{
 	flex: 1;
 }
+#friendSlideSelector div div{
+	padding: 2px;
+}
 
 .friendSlide{
 	display: none;
@@ -520,10 +536,6 @@ a {
 
 .activeSelector{
 	border-bottom: 2px solid var(--main-text-rgb);
-}
-
-.userSlideCount{
-	font-size: 1vmin;
 }
 
 .pfpContainer{

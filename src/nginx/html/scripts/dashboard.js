@@ -345,8 +345,6 @@ function loadUserDashboard(LastXDaysDisplayed){
     x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
     y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
 
-    console.log(x, y);
-
     wLGraph.width = x * 42;
     wLAbsGraph.width = x * 42;
     wLGraph.height = y * 21;

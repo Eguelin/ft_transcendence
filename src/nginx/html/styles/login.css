@@ -1,15 +1,3 @@
-.loginBtn {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	padding: 1vh 0;
-	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-}
-
 .loginBtn:hover, .loginBtn:focus {
 	color: var(--page-bg-rgb);
 	border-color: var(--page-bg-rgb);
