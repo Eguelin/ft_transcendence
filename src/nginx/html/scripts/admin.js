@@ -33,3 +33,24 @@ createMatchesBtn.addEventListener("click", (e) => {
         document.getElementById("loaderBg").style.setProperty("display", "none");
     })
 })
+
+
+createFriendshipBtn = document.getElementById("createFriendshipBtn");
+createFriendshipBtn.addEventListener("click", (e) => {
+    document.getElementById("loaderBg").style.setProperty("display", "block");
+
+
+    playerOne = document.getElementById("userOneF").value;
+    playerTwo = document.getElementById("userTwoF").value;
+
+    fetch('/api/admin/create_friendship', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({'userOne': playerOne, 'userTwo': playerTwo})
+}).then(() => {
+        document.getElementById("loaderBg").style.setProperty("display", "none");
+    })
+})
