@@ -1,9 +1,35 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-import time
 import asyncio
 import random
 import math
+import time
+
+class Matchmaking():
+	waiting_players = []
+
+	def __init__(self):
+		pass
+
+	def add_player(self, player):
+		self.waiting_players.append(player)
+
+	def remove_player(self, player):
+		if player in self.waiting_players:
+			self.waiting_players.remove(player)
+
+	def match_players(self):
+		if len(self.waiting_players) >= 2:
+			player1 = self.waiting_players.pop(0)
+			player2 = self.waiting_players.pop(0)
+			return player1, player2
+		return None, None
+
+	async def run(self):
+		player1, player2 = self.match_players()
+		if player1 and player2:
+			game = Game(player1, player2)
+			await game.initGame()
 
 class Ball():
 	size = 10
@@ -80,15 +106,11 @@ class Game():
 	def __init__(self, player1, player2):
 		self.playerLeft = player1
 		self.playerRight = player2
-		self.playerRight.game = self
-		self.playerLeft.game = self
-		self.playerLeft.side = 'left'
-		self.playerRight.side = 'right'
 		self.ball = Ball()
+		self.timeLastPoint = 0
 
-	def initialize(self):
-		self.playerLeft.initPosition()
-		self.playerRight.initPosition()
+		self.playerLeft.initPosition(self, 'left')
+		self.playerRight.initPosition(self, 'right')
 		self.ball.initPosition()
 
 	async def initGame(self):
@@ -100,25 +122,17 @@ class Game():
 
 		await self.send('game_start', None)
 		while True:
+			if time.time() - self.timeLastPoint > 2:
+				self.ball.move()
+			self.playerLeft.move()
+			self.playerRight.move()
+			self.checkCollision()
 			if await self.endGame():
 				break
-			self.ball.move()
-			self.checkCollision()
 			await self.send('game_update', self.getInfo())
 			await asyncio.sleep(0.016)
 
 	async def endGame(self):
-		if self.playerLeft == None and self.playerRight == None:
-			return True
-
-		if self.playerLeft == None:
-			await self.playerRight.send('game_end', 'You win')
-			return True
-
-		if self.playerRight == None:
-			await self.playerLeft.send('game_end', 'You win')
-			return True
-
 		if self.playerLeft.score == 5:
 			await self.playerLeft.send('game_end', 'You win')
 			await self.playerRight.send('game_end', 'You lose')
@@ -133,25 +147,27 @@ class Game():
 
 	async def countdown(self):
 		for i in range(3, 0, -1):
-			await self.send('game_countdown', i)
+			await self.send('game_update', i)
 			await asyncio.sleep(1)
-		await self.send('game_countdown', 'GO')
+		await self.send('game_update', 'GO')
 		await asyncio.sleep(1)
 
 	def checkCollision(self):
-		if self.ball.x <= 0:
+		if self.ball.x <= -Ball.size * 2:
+			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
 			self.ball.initPosition()
 
-		elif self.ball.x >= Game.width:
+		elif self.ball.x >= Game.width + Ball.size * 2:
+			self.timeLastPoint = time.time()
 			self.playerLeft.score += 1
 			self.ball.initPosition()
 			self.ball.dx = -self.ball.dx
 
-		elif self.ball.x <= self.playerLeft.x:
+		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - Paddle.width:
 			self.ball.paddleCollision(self.playerLeft)
 
-		elif self.ball.x >= self.playerRight.x:
+		elif self.ball.x >= self.playerRight.x and self.ball.x <= self.playerRight.x + Paddle.width:
 			self.ball.paddleCollision(self.playerRight)
 
 		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= Game.height:
@@ -160,12 +176,6 @@ class Game():
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
 		await self.playerRight.send(type, message)
-
-	async def remove_player(self, player):
-		if player == self.playerLeft:
-			self.playerLeft = None
-		elif player == self.playerRight:
-			self.playerRight = None
 
 	def getSize():
 		return {
@@ -183,85 +193,44 @@ class Game():
 		if init:
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
-			print(info)
 
 		return info
 
+class Player():
 
-class Matchmaking():
-	waiting_players = []
-
-	def __init__(self):
-		pass
-
-	def add_player(self, player):
-		self.waiting_players.append(player)
-
-	def remove_player(self, player):
-		if player in self.waiting_players:
-			self.waiting_players.remove(player)
-
-	def match_players(self):
-		if len(self.waiting_players) >= 2:
-			player1 = self.waiting_players.pop(0)
-			player2 = self.waiting_players.pop(0)
-			return player1, player2
-		return None, None
-
-	async def run(self):
-		player1, player2 = self.match_players()
-		if player1 and player2:
-			game = Game(player1, player2)
-			game.initialize()
-			await game.initGame()
-
-class Player(AsyncWebsocketConsumer):
-	matchmaking = Matchmaking()
-
-	def __init__(self):
+	def __init__(self, socket):
 		self.x = 0
 		self.y = 0
 		self.score = 0
 		self.game = None
 		self.side = None
-		self.lastRequest = 0
-		super().__init__()
+		self.socket = socket
+		self.input = {
+			'ArrowUp': False,
+			'ArrowDown': False,
+			'KeyW': False,
+			'KeyS': False
+		}
+		self.scope = socket.scope
 
-	async def connect(self):
-		await self.accept()
-		self.matchmaking.add_player(self)
-		await self.matchmaking.run()
-
-	async def disconnect(self, close_code):
-		self.matchmaking.remove_player(self)
-		if self.game:
-			await self.game.remove_player(self)
-
-	async def receive(self, text_data):
-		data = json.loads(text_data)
-		if data['type'] == 'game_keydown' and time.time() - self.lastRequest >= 0.016:
-			self.lastRequest = time.time()
-			if self.side != None:
-				await self.move(data['message'])
-
-	async def send(self, type, message):
-		await super().send(text_data=json.dumps({
-			'type': type,
-			'message': message
-		}))
-
-	def initPosition(self):
+	def initPosition(self, game, side):
+		self.game = game
+		self.score = 0
+		self.side = side
 		if self.side == 'left':
 			self.x = Paddle.margin + Paddle.width
 		elif self.side == 'right':
 			self.x = Game.width - Paddle.width - Paddle.margin
 		self.y = Game.height / 2
 
-	async def move(self, input):
-		if (input.get('ArrowUp') or input.get('KeyW')) and self.y > Paddle.demieHeight:
+	def move(self):
+		if (self.input['ArrowUp'] or self.input['KeyW']) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		if (input.get('ArrowDown') or input.get('KeyS')) and self.y < Game.height - Paddle.demieHeight:
+		if (self.input['ArrowDown'] or self.input['KeyS']) and self.y < Game.height - Paddle.demieHeight:
 			self.y += Paddle.speed
+
+	async def send(self, type, message):
+		await self.socket.send(type, message)
 
 	def getInfo(self, init=False):
 		info = {
@@ -277,3 +246,30 @@ class Player(AsyncWebsocketConsumer):
 			info['user_id'] = self.scope['user'].id
 
 		return info
+
+class GameConsumer(AsyncWebsocketConsumer):
+	matchmaking = Matchmaking()
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.player = None
+
+	async def connect(self):
+		await self.accept()
+		self.player = Player(self)
+		self.matchmaking.add_player(self.player)
+		await self.matchmaking.run()
+
+	async def disconnect(self, close_code):
+		self.matchmaking.remove_player(self.player)
+
+	async def receive(self, text_data):
+		data = json.loads(text_data)
+		if data['type'] == 'game_keydown':
+			self.player.input = data['message']
+
+	async def send(self, type, message):
+		await super().send(text_data=json.dumps({
+			'type': type,
+			'message': message
+		}))
