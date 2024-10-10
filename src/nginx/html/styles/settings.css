@@ -1,0 +1,89 @@
+
+#pfpLabel {
+	width: -webkit-fill-available;
+	height: 3vw;
+	text-align: center;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	font-size: 1rem;
+	align-content: center;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+	display: block;
+	transition: 500ms;
+}
+#confirmPfpMask{
+	opacity: .5;
+}
+#inputChangeUsername{
+	width: 14vw;
+	border: 0;
+}
+
+#saveUsernameBtn{
+	text-align: center;
+	mask-image: url(../icons/check.svg);
+	background-color: var(--main-text-rgb);
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+
+	width: 3vw;
+	height: 3vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+#saveUsernameBtn:hover, #saveUsernameBtn:focus {
+	background-color: var(--option-hover-text-rgb);
+}
+
+#saveUsernameContainer{
+	display: flex;
+	align-items: center;
+	background-color: var(--hover-text-rgb);
+	border-radius: 1.5vw;
+	border: 0.2px solid var(--main-text-rgb);
+}
+
+
+#confirmPfpContainer{
+	display: none;
+	width: 20vw;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-color: var(--hover-text-rgb);
+	overflow: hidden;
+	position: absolute;
+
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
+	flex-direction: column;
+
+	border: 1px solid var(--main-text-rgb);
+}
+
+#confirmPfpImg{
+	width: 100%;
+	position: relative;
+}
+
+#confirmPfpBtn{
+	border-radius: 0;
+	border: 0;
+	border-top: 1px solid var(--main-text-rgb);
+	outline: none;
+}
+
+#confirmPfpBtn:hover, #confirmPfpBtn:focus{
+	color: var(--option-hover-text-rgb);
+}
+
+
+
+@media screen and (max-width:590px) {
+	label{
+		font-size: .5rem !important;
+	}
+}
