@@ -5,16 +5,23 @@ function game() {
 	canvas.width = 800;
 	canvas.height = 600;
 
-	const keysDown = {};
+	const keysDown = {
+		"KeyW": false,
+		"KeyS": false,
+		"ArrowUp": false,
+		"ArrowDown": false
+	};
+
+	const oldKeysDown = {};
 	const paddle = {};
 	const player1 = {};
 	const player2 = {};
 	const ball = {};
 	const ballTrail = [];
 	let dotCount = 0;
-	let messageInterval;
-	let gameInterval;
 	let KeyPressInterval;
+	let endMessage;
+	let countdown;
 
 	const socket = new WebSocket("/ws/game/");
 
@@ -25,19 +32,15 @@ function game() {
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
-			clearInterval(messageInterval);
 			gameInit(data.message);
 		} else if (data.type === "game_update") {
 			updateGame(data.message);
-		} else if (data.type === "game_countdown") {
-			drawMessage(data.message);
 		} else if (data.type === "game_start") {
-			gameInterval = setInterval(() => gameRender(), 16);
+			countdown = null;
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
 		} else if (data.type === "game_end") {
-			clearInterval(KeyPressInterval);
-			clearInterval(gameInterval);
-			messageInterval = setInterval(() => drawMessage(data.message), 300);
+			clearInterval(KeyPressInterval);;
+			endMessage = data.message;
 		}
 	}
 
@@ -100,7 +103,6 @@ function game() {
 
 	function drawMessage(message, x = canvas.width / 2, y = canvas.height / 2) {
 		ctx.fillStyle = client.mainTextRgb;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.font = `80px pong`;
 		ctx.textAlign = "center";
 		ctx.fillText(message, x, y);
@@ -111,11 +113,17 @@ function game() {
 		ctx.strokeStyle = client.mainTextRgb;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		drawScore();
-		drawMiddleLine();
-		drawBallTrail();
-		drawBall();
-		drawPaddles();
+		if (endMessage)
+			drawMessage(endMessage);
+		else {
+			if (countdown)
+				drawMessage(countdown);
+			drawScore();
+			drawMiddleLine();
+			drawBallTrail();
+			drawBall();
+			drawPaddles();
+		}
 	}
 
 	function drawScore() {
@@ -217,12 +225,15 @@ function game() {
 	}
 
 	function handleKeyUp(event) {
-		delete keysDown[event.code];
+		if (event.code === "KeyS" || event.code === "KeyW" || event.code === "ArrowUp" || event.code === "ArrowDown")
+			keysDown[event.code] = false;
 	}
 
 	function KeyPress() {
-		if (Object.keys(keysDown).length > 0)
+		if (JSON.stringify(keysDown) !== JSON.stringify(oldKeysDown)) {
 			gamesend("game_keydown", keysDown);
+			oldKeysDown = Object.assign({}, keysDown);
+		}
 	}
 
 	window.addEventListener('beforeunload', handleBeforeUnload);
@@ -231,7 +242,7 @@ function game() {
 	document.addEventListener("keydown", handleKeyDown);
 	document.addEventListener("keyup", handleKeyUp);
 
-	messageInterval = setInterval(() => waitingMessage(), 300);
+	setInterval(() => gameRender(), 16);
 }
 
 game();
