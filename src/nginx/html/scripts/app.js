@@ -743,3 +743,9 @@ function popUpError(error){
 	})
 	document.body.appendChild(popupContainer);
 }
+
+window.addEventListener("resize", (e) => {
+	if(currentPage == "dashboard"){
+		loadUserDashboard(defaultLastXDaysDisplayed)
+	}
+})
