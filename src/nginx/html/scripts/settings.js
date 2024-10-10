@@ -1,4 +1,4 @@
-deleteBtn = document.getElementById('deleteBtn');
+deleteAccountBtn = document.getElementById('deleteAccountBtn');
 confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 usernameInput = document.getElementById("inputChangeUsername");
 saveUsernameBtn = document.getElementById("saveUsernameBtn");
@@ -141,7 +141,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 	}
 })
 
-deleteBtn.addEventListener("click", (e) => {
+deleteAccountBtn.addEventListener("click", (e) => {
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 })
