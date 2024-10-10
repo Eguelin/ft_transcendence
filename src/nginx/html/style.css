@@ -23,11 +23,17 @@ body{
 	user-select: none;
 }
 
+html{
+	font-size: 16px;
+}
 
 @media screen and (orientation:landscape){
 	body{
 		font-size: 16px;
 		transition: 500ms;
+	}
+	html{
+		font-size: 16px;
 	}
 }
 
@@ -35,6 +41,9 @@ body{
 	body{
 		font-size: 12px;
 		transition: 500ms;
+	}
+	html{
+		font-size: 12px;
 	}
 }
 
@@ -104,7 +113,7 @@ input{
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1.5vw;
-	font-size: 1vmin;
+	font-size: .5rem;
 	padding: 1.5vh 1vw;
 	width: 18vw;
 }
@@ -130,7 +139,7 @@ button{
 	color: var(--main-text-rgb);
 	font-weight: thin;
 	font-family: "pong";
-	font-size: min(4vh, 2vw);
+	font-size: 1rem;
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
@@ -492,11 +501,11 @@ a {
 }
 
 .slideSelector{
-	font-size: 1.5vmin;
+	font-size: 1em;
 }
 
 .slideSelector div{
-	padding: 2px;
+	padding: .5rem;
 	z-index: -1;
 	position: relative;
 }
@@ -515,9 +524,6 @@ a {
 
 .userSlideCount{
 	font-size: 1vmin;
-	opacity: 0.9;
-	position: relative;
-	z-index: -1;
 }
 
 .pfpContainer{
