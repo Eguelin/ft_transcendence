@@ -278,6 +278,7 @@ function checkUpdate(){
 
 							var bg = document.createElement("div");
 							bg.id = "popupBg";
+							bg.style.display = "block";
 							pos = friendInfo.getBoundingClientRect();
 							bg.style.left = `${-pos.left}px`;
 							bg.style.top = `${-pos.top}px`;
@@ -289,6 +290,7 @@ function checkUpdate(){
 
 							var bg = document.createElement("div");
 							bg.id = "popupBg";
+							bg.style.display = "block";
 							pos = friendInfo.getBoundingClientRect();
 							bg.style.left = `${-pos.left}px`;
 							bg.style.top = `${-pos.top}px`;
