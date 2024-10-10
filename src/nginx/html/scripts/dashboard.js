@@ -329,6 +329,33 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 }
 
 function loadUserDashboard(LastXDaysDisplayed){
+
+    wLGraph = document.getElementById("winLossGraph").remove();
+    wLAbsGraph = document.getElementById("winLossAbsGraph").remove();
+
+    wLGraph = document.createElement("canvas");
+    wLGraph.id = "winLossGraph";
+    wLAbsGraph = document.createElement("canvas");
+    wLAbsGraph.id = "winLossAbsGraph";
+
+    var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
+    y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
+
+    console.log(x, y);
+
+    wLGraph.width = x * 42;
+    wLAbsGraph.width = x * 42;
+    wLGraph.height = y * 21;
+    wLAbsGraph.height = y * 21;
+
+    document.getElementById("winLossGraphContainer").appendChild(wLGraph);
+    document.getElementById("winLossAbsGraphContainer").appendChild(wLAbsGraph);
+
+
     var splitPath = window.location.href.split('/');
     var endDate = new Date();
     var startDate = new Date();
