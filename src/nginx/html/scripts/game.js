@@ -1,17 +1,8 @@
 function game() {
+	const socket = new WebSocket("/ws/game/");
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
-
-	canvas.width = 800;
-	canvas.height = 600;
-
-	const keysDown = {
-		"KeyW": false,
-		"KeyS": false,
-		"ArrowUp": false,
-		"ArrowDown": false
-	};
-
+	const keysDown = {};
 	const oldKeysDown = {};
 	const paddle = {};
 	const player1 = {};
@@ -21,9 +12,17 @@ function game() {
 	let dotCount = 0;
 	let KeyPressInterval;
 	let endMessage;
-	let countdown;
 
-	const socket = new WebSocket("/ws/game/");
+	canvas.width = 800;
+	canvas.height = 600;
+
+	window.addEventListener('beforeunload', handleBeforeUnload);
+	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
+	window.addEventListener('popstate', handlePopState);
+	document.addEventListener("keydown", handleKeyDown);
+	document.addEventListener("keyup", handleKeyUp);
+
+	setInterval(() => gameRender(), 16);
 
 	socket.onopen = function() {
 		console.log("Connection established");
@@ -33,6 +32,8 @@ function game() {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
 			gameInit(data.message);
+		} else if (data.type === "game_countdown") {
+			drawCountdown(countdown);
 		} else if (data.type === "game_update") {
 			updateGame(data.message);
 		} else if (data.type === "game_start") {
@@ -113,18 +114,20 @@ function game() {
 		ctx.strokeStyle = client.mainTextRgb;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		if (endMessage)
-			drawMessage(endMessage);
-		else {
-			if (countdown)
-				drawMessage(countdown);
-			drawScore();
-			drawMiddleLine();
-			drawBallTrail();
-			drawBall();
-			drawPaddles();
-		}
+		drawScore();
+		drawMiddleLine();
+		drawBallTrail();
+		drawBall();
+		drawPaddles();
 	}
+
+	function drawCountdown(countdown) {
+		gameRender()
+		drawMessage(countdown, canvas.width / 4, canvas.height / 2);
+		drawMessage(countdown, canvas.width * 3 / 4, canvas.height / 2);
+	}
+
+
 
 	function drawScore() {
 		ctx.font = "30px pong";
@@ -235,14 +238,6 @@ function game() {
 			oldKeysDown = Object.assign({}, keysDown);
 		}
 	}
-
-	window.addEventListener('beforeunload', handleBeforeUnload);
-	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
-	window.addEventListener('popstate', handlePopState);
-	document.addEventListener("keydown", handleKeyDown);
-	document.addEventListener("keyup", handleKeyUp);
-
-	setInterval(() => gameRender(), 16);
 }
 
 game();
