@@ -3,15 +3,14 @@ function game() {
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
 	const keysDown = {};
-	const oldKeysDown = {};
 	const paddle = {};
 	const player1 = {};
 	const player2 = {};
 	const ball = {};
 	const ballTrail = [];
-	let dotCount = 0;
 	let KeyPressInterval;
-	let endMessage;
+	let oldKeysDown = {};
+	let countdown = "";
 
 	canvas.width = 800;
 	canvas.height = 600;
@@ -33,11 +32,11 @@ function game() {
 		if (data.type === "game_init") {
 			gameInit(data.message);
 		} else if (data.type === "game_countdown") {
-			drawCountdown(countdown);
+			countdown = data.message;
 		} else if (data.type === "game_update") {
+			countdown = "";
 			updateGame(data.message);
 		} else if (data.type === "game_start") {
-			countdown = null;
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
 		} else if (data.type === "game_end") {
 			clearInterval(KeyPressInterval);;
@@ -81,6 +80,8 @@ function game() {
 		ball.y = message.ball.y;
 
 		ctx.lineWidth = paddle.width / 4;
+
+		gamesend("game_ready");
 	}
 
 	function updateGame(message) {
@@ -114,7 +115,8 @@ function game() {
 		ctx.strokeStyle = client.mainTextRgb;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		drawScore();
+		if (countdown !== "")
+			drawCountdown(countdown);
 		drawMiddleLine();
 		drawBallTrail();
 		drawBall();
@@ -122,18 +124,8 @@ function game() {
 	}
 
 	function drawCountdown(countdown) {
-		gameRender()
 		drawMessage(countdown, canvas.width / 4, canvas.height / 2);
 		drawMessage(countdown, canvas.width * 3 / 4, canvas.height / 2);
-	}
-
-
-
-	function drawScore() {
-		ctx.font = "30px pong";
-		ctx.textAlign = "center";
-		ctx.fillText("Player 1: " + player1.score, canvas.width / 4, 50);
-		ctx.fillText("Player 2: " + player2.score, canvas.width * 3 / 4, 50);
 	}
 
 	function drawMiddleLine() {
@@ -189,17 +181,6 @@ function game() {
 		ctx.closePath();
 	}
 
-	function waitingMessage() {
-		let dots = '.'.repeat((dotCount) % 4);
-		let spacing = ' '.repeat(4 - dots.length);
-
-		drawMessage(dots + spacing, canvas.width / 2 + 40);
-		if (dotCount === 4)
-			dotCount = 0;
-		else
-			dotCount++;
-	}
-
 	function cleanup() {
 		window.removeEventListener('beforeunload', handleBeforeUnload);
 		document.getElementById('goHomeButton').removeEventListener('click', handleGoHomeButton);
@@ -235,7 +216,7 @@ function game() {
 	function KeyPress() {
 		if (JSON.stringify(keysDown) !== JSON.stringify(oldKeysDown)) {
 			gamesend("game_keydown", keysDown);
-			oldKeysDown = Object.assign({}, keysDown);
+			oldKeysDown = JSON.parse(JSON.stringify(keysDown));
 		}
 	}
 }
