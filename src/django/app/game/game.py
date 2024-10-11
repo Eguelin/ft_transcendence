@@ -29,7 +29,7 @@ class Matchmaking():
 		player1, player2 = self.match_players()
 		if player1 and player2:
 			game = Game(player1, player2)
-			await game.initGame()
+			await game.startGame()
 
 class Ball():
 	size = 10
@@ -104,46 +104,43 @@ class Game():
 	demieHeight = height / 2
 
 	def __init__(self, player1, player2):
-		self.playerLeft = player1
-		self.playerRight = player2
-		self.ball = Ball()
-		self.timeLastPoint = 0
+		self.playerLeft: Player = player1
+		self.playerRight: Player = player2
+		self.ball: Ball = Ball()
+		self.timeLastPoint: float = 0
 
+	async def initGame(self):
 		self.playerLeft.initPosition(self, 'left')
 		self.playerRight.initPosition(self, 'right')
 		self.ball.initPosition()
-
-	async def initGame(self):
 		await self.send('game_init', self.getInfo(True))
+
+	async def startGame(self):
+		await self.initGame()
 		asyncio.create_task(self.updateGame())
 
 	async def updateGame(self):
+		while not self.playerLeft.isReady or not self.playerRight.isReady:
+			await asyncio.sleep(0.1)
 		await self.countdown()
-
 		await self.send('game_start', None)
-		while True:
+		while self.playerLeft.score == 5 or self.playerRight.score == 5:
 			if time.time() - self.timeLastPoint > 2:
 				self.ball.move()
 			self.playerLeft.move()
 			self.playerRight.move()
 			self.checkCollision()
-			if await self.endGame():
-				break
 			await self.send('game_update', self.getInfo())
 			await asyncio.sleep(0.016)
+		await self.endGame()
 
 	async def endGame(self):
-		if self.playerLeft.score == 5:
-			await self.playerLeft.send('game_end', 'You win')
-			await self.playerRight.send('game_end', 'You lose')
-			return True
-
-		if self.playerRight.score == 5:
-			await self.playerLeft.send('game_end', 'You lose')
-			await self.playerRight.send('game_end', 'You win')
-			return True
-
-		return False
+		await self.playerLeft.send('game_end', {
+			'winner': self.playerLeft.score == 5
+		})
+		await self.playerRight.send('game_end', {
+			'winner': self.playerRight.score == 5
+		})
 
 	async def countdown(self):
 		for i in range(3, 0, -1):
@@ -156,12 +153,14 @@ class Game():
 		if self.ball.x <= -Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
-			self.ball.initPosition()
+			if self.playerRight.score != 5:
+				self.ball.initPosition()
 
 		elif self.ball.x >= Game.width + Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerLeft.score += 1
-			self.ball.initPosition()
+			if self.playerLeft.score != 5:
+				self.ball.initPosition()
 			self.ball.dx = -self.ball.dx
 
 		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - Paddle.width:
@@ -205,13 +204,9 @@ class Player():
 		self.game = None
 		self.side = None
 		self.socket = socket
-		self.input = {
-			'ArrowUp': False,
-			'ArrowDown': False,
-			'KeyW': False,
-			'KeyS': False
-		}
-		self.scope = socket.scope
+		self.input = {}
+		self.user = socket.scope['user']
+		self.isReady = False
 
 	def initPosition(self, game, side):
 		self.game = game
@@ -224,9 +219,9 @@ class Player():
 		self.y = Game.height / 2
 
 	def move(self):
-		if (self.input['ArrowUp'] or self.input['KeyW']) and self.y > Paddle.demieHeight:
+		if ((self.input.get('ArrowUp') and self.input['ArrowUp']) or (self.input.get('KeyW') and self.input['KeyW'])) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		if (self.input['ArrowDown'] or self.input['KeyS']) and self.y < Game.height - Paddle.demieHeight:
+		if ((self.input.get('ArrowDown') and self.input['ArrowDown']) or (self.input.get('KeyS') and self.input['KeyS'])) and self.y < Game.height - Paddle.demieHeight:
 			self.y += Paddle.speed
 
 	async def send(self, type, message):
@@ -243,7 +238,7 @@ class Player():
 			info['x'] = self.x - Paddle.width
 
 		if init:
-			info['user_id'] = self.scope['user'].id
+			info['user_id'] = self.user.id
 
 		return info
 
@@ -267,6 +262,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		data = json.loads(text_data)
 		if data['type'] == 'game_keydown':
 			self.player.input = data['message']
+		elif data['type'] == 'game_ready':
+			self.player.isReady = True
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
