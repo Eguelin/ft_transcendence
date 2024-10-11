@@ -57,7 +57,7 @@ class Ball():
 		self.y += self.dy
 
 	def paddleCollision(self, pad):
-		if self.y < pad.y - Paddle.demieHeight or self.y > pad.y + Paddle.demieHeight:
+		if self.y < pad.y - Paddle.demieHeight - Ball.demieSize or self.y > pad.y + Paddle.demieHeight + Ball.demieSize:
 			return
 
 		if self.speed < 10:
@@ -88,7 +88,7 @@ class Paddle():
 	height = 120
 	demieWidth = width / 2
 	demieHeight = height / 2
-	speed = 8
+	speed = 4
 	margin = 4
 
 	def getSize():
@@ -124,7 +124,7 @@ class Game():
 			await asyncio.sleep(0.1)
 		await self.countdown()
 		await self.send('game_start', None)
-		while self.playerLeft.score == 5 or self.playerRight.score == 5:
+		while self.playerLeft.score != 5 and self.playerRight.score != 5 and self.playerLeft.socket and self.playerRight.socket:
 			if time.time() - self.timeLastPoint > 2:
 				self.ball.move()
 			self.playerLeft.move()
@@ -135,18 +135,20 @@ class Game():
 		await self.endGame()
 
 	async def endGame(self):
+		if not self.playerLeft.socket or not self.playerRight.socket:
+			return
 		await self.playerLeft.send('game_end', {
-			'winner': self.playerLeft.score == 5
+			'winner': self.playerLeft.score == 5 or not self.playerRight.socket
 		})
 		await self.playerRight.send('game_end', {
-			'winner': self.playerRight.score == 5
+			'winner': self.playerRight.score == 5 or not self.playerLeft.socket
 		})
 
 	async def countdown(self):
 		for i in range(3, 0, -1):
-			await self.send('game_update', i)
+			await self.send('game_countdown', i)
 			await asyncio.sleep(1)
-		await self.send('game_update', 'GO')
+		await self.send('game_countdown', 'GO')
 		await asyncio.sleep(1)
 
 	def checkCollision(self):
@@ -225,7 +227,10 @@ class Player():
 			self.y += Paddle.speed
 
 	async def send(self, type, message):
-		await self.socket.send(type, message)
+		try:
+			await self.socket.send(type, message)
+		except:
+			self.socket = None
 
 	def getInfo(self, init=False):
 		info = {
@@ -257,6 +262,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def disconnect(self, close_code):
 		self.matchmaking.remove_player(self.player)
+		self.player.socket = None
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
