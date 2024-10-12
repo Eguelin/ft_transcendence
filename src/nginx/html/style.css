@@ -28,7 +28,20 @@ html{
 	transition: 500ms;
 }
 
+
 @media screen and (orientation:landscape){
+	body{
+		font-size: 24px;
+		transition: 500ms;
+	}
+	html{
+		transition: 500ms;
+		font-size: 24px;
+	}
+}
+
+
+@media screen and (orientation:landscape) and (max-height:1080px){
 	body{
 		font-size: 16px;
 		transition: 500ms;
