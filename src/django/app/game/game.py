@@ -1,9 +1,12 @@
-import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from asgiref.sync import sync_to_async
+import game.models as models
+import json
 import asyncio
 import random
 import math
 import time
+import datetime
 
 class Matchmaking():
 	waiting_players = []
@@ -43,7 +46,7 @@ class Ball():
 		self.speed = 0
 		self.angle = 0
 
-	def initPosition(self):
+	def init(self):
 		self.x = Game.demieWidth
 		self.y = Game.demieHeight
 		self.speed = 3
@@ -109,10 +112,14 @@ class Game():
 		self.ball: Ball = Ball()
 		self.timeLastPoint: float = 0
 
+	@sync_to_async
+	def saveGame(self):
+		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
+
 	async def initGame(self):
-		self.playerLeft.initPosition(self, 'left')
-		self.playerRight.initPosition(self, 'right')
-		self.ball.initPosition()
+		await self.playerLeft.init(self, 'left')
+		await self.playerRight.init(self, 'right')
+		self.ball.init()
 		await self.send('game_init', self.getInfo(True))
 
 	async def startGame(self):
@@ -143,6 +150,7 @@ class Game():
 		await self.playerRight.send('game_end', {
 			'winner': self.playerRight.score == 5 or not self.playerLeft.socket
 		})
+		await self.saveGame()
 
 	async def countdown(self):
 		for i in range(3, 0, -1):
@@ -156,13 +164,13 @@ class Game():
 			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
 			if self.playerRight.score != 5:
-				self.ball.initPosition()
+				self.ball.init()
 
 		elif self.ball.x >= Game.width + Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerLeft.score += 1
 			if self.playerLeft.score != 5:
-				self.ball.initPosition()
+				self.ball.init()
 			self.ball.dx = -self.ball.dx
 
 		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - Paddle.width:
@@ -208,9 +216,11 @@ class Player():
 		self.socket = socket
 		self.input = {}
 		self.user = socket.scope['user']
+		self.profile = None
 		self.isReady = False
 
-	def initPosition(self, game, side):
+	@sync_to_async
+	def init(self, game, side):
 		self.game = game
 		self.score = 0
 		self.side = side
@@ -219,6 +229,9 @@ class Player():
 		elif self.side == 'right':
 			self.x = Game.width - Paddle.width - Paddle.margin
 		self.y = Game.height / 2
+		self.input = {}
+		self.profile = self.user.profile
+		self.isReady = False
 
 	def move(self):
 		if ((self.input.get('ArrowUp') and self.input['ArrowUp']) or (self.input.get('KeyW') and self.input['KeyW'])) and self.y > Paddle.demieHeight:
@@ -243,7 +256,10 @@ class Player():
 			info['x'] = self.x - Paddle.width
 
 		if init:
-			info['user_id'] = self.user.id
+			info['user'] = {
+				'username': self.user.username,
+				'profile_picture': self.profile.profile_picture
+			}
 
 		return info
 
