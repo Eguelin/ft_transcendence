@@ -3,6 +3,7 @@
 	text-align: center;
 	display: flex;
 	width: -webkit-fill-available;
+	width: -moz-available;
 	align-items: center;
 }
 

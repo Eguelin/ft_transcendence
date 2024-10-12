@@ -4,6 +4,7 @@
 	display: flex;
 	flex-flow: column;
 	min-width: -webkit-fill-available;
+	min-width: -moz-available;
 	width: fit-content;
 	position: absolute;
 	left: 50%;
