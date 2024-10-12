@@ -120,7 +120,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					(async () => {
 						client = await new Client();
 						if (!client)
-							history.replaceState("", "", `https://${hostname.host}/login`);
+							myReplaceState(`https://${hostname.host}/login`);
 					})()
 				}
 				else {
@@ -157,7 +157,7 @@ confirmDeleteBtn.addEventListener("click", (e) => {
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok){
-				history.pushState("", "", `https://${hostname.host}/login`);
+				myPushState(`https://${hostname.host}/login`);
 			}
 		})
 	}
@@ -175,7 +175,7 @@ confirmDeleteInput.addEventListener("keydown", (e) => {
 				credentials: 'include'
 			}).then(response => {
 				if (response.ok){
-					history.pushState("", "", `https://${hostname.host}/login`);
+					myPushState(`https://${hostname.host}/login`);
 				}
 			})
 		}

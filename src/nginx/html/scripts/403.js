@@ -1,7 +1,7 @@
 homeBtn403 = document.getElementById("403_homeBtn");
 
 homeBtn403.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/home`);
+	myPushState(`https://${hostname.host}/home`);
 })
 
 {
