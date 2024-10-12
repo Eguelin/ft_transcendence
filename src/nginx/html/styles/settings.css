@@ -1,6 +1,6 @@
-
 #pfpLabel {
 	width: -webkit-fill-available;
+	width: -moz-available;
 	height: 3vw;
 	text-align: center;
 	background-color: var(--input-bg-rgb);
