@@ -414,7 +414,7 @@ function loadUserDashboard(LastXDaysDisplayed){
             })
         }
         else
-		    history.pushState("", "", `https://${hostname.host}/home`);
+		    myPushState(`https://${hostname.host}/home`);
     })
 }
 

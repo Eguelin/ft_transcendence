@@ -22,12 +22,12 @@
                 for (i = 0; i<  userResume.length; i++){
                     userResume[i].addEventListener("click", (e) => {
                         var username = e.target.closest(".userResume").id;
-                        history.pushState("", "", `https://${hostname.host}/user/${username}`);
+                        myPushState(`https://${hostname.host}/user/${username}`);
                     })
                     userResume[i].addEventListener("keydown", (e) => {
                         if (e.key == "Enter"){
                             var username = e.target.closest(".userResume").id;
-                            history.pushState("", "", `https://${hostname.host}/user/${username}`);
+                            myPushState(`https://${hostname.host}/user/${username}`);
                         }
                     })
                 }
@@ -35,7 +35,7 @@
         })
     }
     else{
-        history.replaceState("", "", `https://${hostname.host}/home`);
+        myReplaceState(`https://${hostname.host}/home`);
 		popUpError("Can't seach empty query");
     }
 

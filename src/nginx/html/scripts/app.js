@@ -187,71 +187,54 @@ class Client{
 	}
 }
 
-window.navigation.addEventListener("navigate", (e) => {
-	const url = new URL(e.destination.url);
+XMLHttpRequest.prototype.send = function() {
+	return false;
+}
 
-	e.intercept({
-		async handler() {
-			//reset dropdown menus
-			if (langDropDown.classList.contains("activeDropDown"))
-				langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
-			if (dropDownUser.classList.contains("activeDropDown"))
-				dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
-
-			if (client && !(client instanceof Client)){
-				client = null;
-				fetch('/api/user/logout', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					credentials: 'include'
-				})
-				if (!url.pathname.startsWith("/register"))
-					history.replaceState("","", `https://${hostname.host}/login`)
-			}
-			if (client)
-				client.loadPage(url.pathname)
-			else {
-				dropDownUserContainer.style.setProperty("display", "none");
-				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
-
-				if (url.pathname.startsWith("/register")) {
-					fetch(`https://${hostname.host}/bodyLess/register.html`).then((response) => {
-						return (response.text().then(response => {
-
-							homeBtn.style.setProperty("display", "block");
-							inputSearchUserContainer.style.setProperty("display", "none");
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/register.js`);
-							currentPage = "register";
-							(async () => (loadCurrentLang()))();
-							document.body.appendChild(s);
-						}))
-					});
-				}
-				else{
-					fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
-						(response.text().then(response => {
-							inputSearchUserContainer.style.setProperty("display", "none");
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/login.js`);
-							document.body.appendChild(s);
-							currentPage = "login";
-							(async () => (loadCurrentLang()))();
-						}))
-					});
-				}
-			}
-		}
-	})
+window.addEventListener("popstate", (e) =>{
+	load();
 })
+
+function load(){
+	const url =  new URL( window.location.href);
+	if (langDropDown.classList.contains("activeDropDown"))
+		langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
+	if (dropDownUser.classList.contains("activeDropDown"))
+		dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
+
+	if (client && !(client instanceof Client)){
+		client = null;
+		fetch('/api/user/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		})
+		history.replaceState("","", `https://${hostname.host}/login`)
+	}
+	if (client)
+		client.loadPage(url.pathname)
+	else {
+		dropDownUserContainer.style.setProperty("display", "none");
+		langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+
+		fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
+			(response.text().then(response => {
+				inputSearchUserContainer.style.setProperty("display", "none");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
+				document.body.appendChild(s);
+				currentPage = "login";
+				(async () => (loadCurrentLang()))();
+			}))
+		});
+	}
+}
+
 
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
@@ -270,9 +253,9 @@ function handleToken() {
 				(async () => {
 					client = await new Client()
 					if (!client)
-						history.replaceState("", "", `https://${hostname.host}/login`);
+						myReplaceState(`https://${hostname.host}/login`);
 					else
-						history.replaceState("", "", `https://${hostname.host}/home`);
+						myReplaceState(`https://${hostname.host}/home`);
 				})()
 			}
 		}).catch(error => console.error('Error:', error));
@@ -284,15 +267,11 @@ function handleToken() {
 			(async () => {
 				client = await new Client();
 				if (!client)
-					history.replaceState("", "", `https://${hostname.host}/login`);
-				else{
-					if (url.pathname == "" || url.pathname == "/"){
-						history.replaceState("", "", `https://${hostname.host}/home`)
-						client.loadPage("/home");
-					}
-					else
-						client.loadPage(url.pathname);
-				}
+					myReplaceState(`https://${hostname.host}/login`);
+				else if (url.pathname == "" || url.pathname == "/")
+					myReplaceState(`https://${hostname.host}/home`);
+				else
+					load();
 			})()
 	}
 }
@@ -301,6 +280,16 @@ window.addEventListener('load', (e) => {
 	handleToken();
 });
 
+
+function myReplaceState(url){
+	history.replaceState("", "", url);
+	load();
+}
+
+function myPushState(url){
+	history.pushState("", "", url);
+	load();
+}
 
 window.addEventListener("beforeunload", (e) => {
 	fetch('/api/user/update', {
@@ -315,21 +304,21 @@ window.addEventListener("beforeunload", (e) => {
 
 homeBtn.addEventListener("click", (e) => {
 	if (currentPage != "register")
-		history.pushState("", "", `https://${hostname.host}/home`);
+		myPushState(`https://${hostname.host}/home`);
 	else
-		history.pushState("", "", `https://${hostname.host}/login`);
+		myPushState(`https://${hostname.host}/login`);
 })
 
 myProfileBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/user/${client.username}`);
+	myPushState(`https://${hostname.host}/user/${client.username}`);
 })
 
 friendsBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/friends`);
+	myPushState(`https://${hostname.host}/friends`);
 })
 
 settingsBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/settings`);
+	myPushState(`https://${hostname.host}/settings`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
@@ -338,7 +327,7 @@ homeBtn.addEventListener("keydown", (e) => {
 })
 
 logOutBtn.addEventListener("click", (e) => {
-	history.replaceState("", "", `https://${hostname.host}/login`);
+	myReplaceState(`https://${hostname.host}/login`);
 });
 
 function switchTheme(darkTheme) {
@@ -391,7 +380,7 @@ async function loadCurrentLang(){
 		contentJson = client.langJson;
 	}
 	else if (currentLang != undefined){
-		const fetchResult = await fetch(currentLang);
+		const fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
 		if (fetchResult.ok){
 			try{
@@ -626,7 +615,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 		if (query.length == 0)
 			popUpError("Can't search empty query");
 		else
-			history.pushState("", "", `https://${hostname.host}/search?query=${query}`);
+			myPushState(`https://${hostname.host}/search?query=${query}`);
 	}
 })
 

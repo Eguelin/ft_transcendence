@@ -1,7 +1,7 @@
 homeBtn404 = document.getElementById("NotFoundtitle");
 
 homeBtn404.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/home`);
+	myPushState(`https://${hostname.host}/home`);
 })
 
 {

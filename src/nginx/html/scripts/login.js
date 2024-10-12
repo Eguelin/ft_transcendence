@@ -122,9 +122,9 @@ function login(){
 						(async () => {
 							client = await new Client()
 							if (client == null)
-								history.replaceState("", "", `https://${hostname.host}/login`);
+								myReplaceState(`https://${hostname.host}/login`);
 							else
-								history.replaceState("", "", `https://${hostname.host}/home`);
+								myReplaceState(`https://${hostname.host}/home`);
 						})();
 					}
 				})
@@ -211,9 +211,9 @@ function register(){
 					(async () => {
 						client = await new Client()
 						if (client == null)
-							history.replaceState("", "", `https://${hostname.host}/login`);
+							myReplaceState(`https://${hostname.host}/login`);
 						else
-							history.replaceState("", "", `https://${hostname.host}/home`);
+							myReplaceState(`https://${hostname.host}/home`);
 					})();
 				});
 			} else {
