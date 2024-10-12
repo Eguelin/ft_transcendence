@@ -20,11 +20,13 @@
 		"#subtitle" : "",
 		"#internalLoginOpt" : "Se connecter avec des identifiants",
 		"#loginBtn" : "CONNEXION",
+		"#loginSelectorText" : "Connexion",
 		"#externalLoginOpt" : "Autres options de connexion",
 		"#inputUsername" : "Nom d'utilisateur",
 		"#inputPassword" : "Mot de passe",
 		"#createAcc" : "Créer votre compte",
 		"#registerBtn" : "S'INSCRIRE",
+		"#registerSelectorText" : "S'inscrire",
 		"#inputRegisterUsername" : "Nom d'utilisateur",
 		"#inputRegisterPassword" : "Mot de passe",
 		"#inputRegisterCPassword" : "Confirmer le mot de passe"
