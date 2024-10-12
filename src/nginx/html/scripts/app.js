@@ -624,11 +624,18 @@ langDropDownBtn.addEventListener("click", (e) => {
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("inactiveDropDown");
+		setTimeout((dropDownUser) => {
+			dropDownUser.classList.remove("inactiveDropDown");
+		}, 300, dropDownUser)
 	}
 	if (langDropDown.classList.contains("activeDropDown")){
 		langDropDown.classList.remove("activeDropDown");
 		void langDropDown.offsetWidth;
 		langDropDown.classList.add("inactiveDropDown");
+
+		setTimeout((langDropDown) => {
+			langDropDown.classList.remove("inactiveDropDown");
+		}, 300, langDropDown)
 	}
 	else if (langDropDown.classList.contains("inactiveDropDown")){
 		langDropDown.classList.remove("inactiveDropDown");
@@ -644,11 +651,18 @@ usernameBtn.addEventListener("click", (e) => {
 		langDropDown.classList.remove("activeDropDown");
 		void langDropDown.offsetWidth;
 		langDropDown.classList.add("inactiveDropDown");
+
+		setTimeout((langDropDown) => {
+			langDropDown.classList.remove("inactiveDropDown");
+		}, 300, langDropDown)
 	}
 	if (dropDownUser.classList.contains("activeDropDown")){
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("inactiveDropDown");
+		setTimeout((dropDownUser) => {
+			dropDownUser.classList.remove("inactiveDropDown");
+		}, 300, dropDownUser)
 	}
 	else if (dropDownUser.classList.contains("inactiveDropDown")){
 		dropDownUser.classList.remove("inactiveDropDown");
@@ -709,10 +723,23 @@ langDropDownOption.forEach(function (button) {
 
 window.addEventListener("click", (e) => {
 	if (!e.target.closest(".activeDropDown")) {
-		if (langDropDown.classList.contains("activeDropDown"))
-			langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
-		if (dropDownUser.classList.contains("activeDropDown"))
-			dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
+		if (langDropDown.classList.contains("activeDropDown")){
+			langDropDown.classList.remove("activeDropDown");
+			void langDropDown.offsetWidth;
+			langDropDown.classList.add("inactiveDropDown");
+	
+			setTimeout((langDropDown) => {
+				langDropDown.classList.remove("inactiveDropDown");
+			}, 300, langDropDown)
+		}
+		if (dropDownUser.classList.contains("activeDropDown")){
+			dropDownUser.classList.remove("activeDropDown");
+			void dropDownUser.offsetWidth;
+			dropDownUser.classList.add("inactiveDropDown");
+			setTimeout((dropDownUser) => {
+				dropDownUser.classList.remove("inactiveDropDown");
+			}, 300, dropDownUser)
+		}
 	}
 })
 
