@@ -20,11 +20,13 @@
 		"#subtitle" : "",
 		"#internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
 		"#loginBtn" : "ANMELDUNG",
+		"#loginSelectorText" : "Anmeldung",
 		"#externalLoginOpt" : "Weitere anmeldeoptionen",
 		"#inputUsername" : "Nutzername",
 		"#inputPassword" : "Passwort",
 		"#createAcc" : "Erstelle deinen Account",
 		"#registerBtn" : "REGISTRIEREN",
+		"#registerSelectorText" : "Registrieren",
 		"#inputRegisterUsername" : "Nutzername",
 		"#inputRegisterPassword" : "Passwort",
 		"#inputRegisterCPassword" : "Bestätige das Passwort"
