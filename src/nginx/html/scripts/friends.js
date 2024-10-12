@@ -326,7 +326,7 @@ function checkUpdate(){
 			}
 			else {
 				client = null;
-				history.replaceState("", "", `https://${hostname.host}/login`);
+				myReplaceState(`https://${hostname.host}/login`);
 			}
 		})
 	}
