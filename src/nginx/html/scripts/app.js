@@ -797,16 +797,8 @@ function popUpError(error){
 	document.body.appendChild(popupContainer);
 }
 
-<<<<<<< HEAD
-document.body.setScaledFont(0.35);
-window.onresize = function() {
-	document.body.setScaledFont(0.35);
-}
-*/
-=======
 window.addEventListener("resize", (e) => {
 	if(currentPage == "dashboard"){
 		loadUserDashboard(defaultLastXDaysDisplayed)
 	}
 })
->>>>>>> origin/front
