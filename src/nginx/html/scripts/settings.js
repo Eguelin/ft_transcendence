@@ -174,7 +174,7 @@ function deleteRequest(){
 			}
 		})
 	}
-})
+}
 
 confirmDeleteInput.addEventListener("keydown", (e) => {
 	if (e.key == "Enter"){
