@@ -54,3 +54,17 @@ createFriendshipBtn.addEventListener("click", (e) => {
         document.getElementById("loaderBg").style.setProperty("display", "none");
     })
 })
+
+document.getElementById("deleteUserBtn").addEventListener("click", (e) => {
+    document.getElementById("loaderBg").style.setProperty("display", "block");
+    fetch('/api/admin/remove_user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({username: document.getElementById("deleteUserUsername").value})
+    }).then(() => {
+        document.getElementById("loaderBg").style.setProperty("display", "none");
+    })
+})
