@@ -4,7 +4,8 @@
 		"#friendsBtn" :  "Freunde",
 		"#settingsBtn" :  "Einstellungen",
 		"#logOutBtn" :  "Ausloggen",
-		"#inputSearchUser" : "Benutzer suchen"
+		"#inputSearchUser" : "Benutzer suchen",
+		".deletedUser" : "Gelöscht"
 	},
 	"home" : {
 		"#title" : "PONG",

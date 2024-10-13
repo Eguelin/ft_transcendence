@@ -4,7 +4,8 @@
 		"#friendsBtn" :  "Friends",
 		"#settingsBtn" :  "Settings",
 		"#logOutBtn" :  "Log out",
-		"#inputSearchUser" : "Search user"
+		"#inputSearchUser" : "Search user",
+		".deletedUser" : "Deleted"
 	},
 	"home" : {
 		"#title" : "PONG",

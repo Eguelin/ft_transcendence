@@ -57,9 +57,14 @@ if (sendFriendRequestBtn){
                     };
                     matchUsersName = document.querySelectorAll(".resultScoreName")
                     Object.keys(matchUsersName).forEach(function(key){
-                        matchUsersName[key].addEventListener("click", (e) => {
-                            myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
-                        })
+                        if (!matchUsersName[key].classList.contains("deletedUser")){
+                            matchUsersName[key].addEventListener("click", (e) => {
+                                myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);	
+                            })
+                        }
+                        else{
+                            matchUsersName[key].innerText = client.langJson["index"][".deletedUser"];
+                        }
                     })
                 }
                 catch{

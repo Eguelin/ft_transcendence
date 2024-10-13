@@ -30,6 +30,9 @@ playBtn = document.getElementById("playBtn");
 					myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);	
 				})
 			}
+			else{
+				matchUsersName[key].innerText = client.langJson["index"][".deletedUser"];
+			}
 		})
 	}
 	else
