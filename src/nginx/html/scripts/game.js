@@ -12,11 +12,6 @@ function game() {
 	let oldKeysDown = {};
 	let countdown = "";
 
-	if (socket.readyState !== WebSocket.OPEN) {
-		console.log("Connection failed");
-		return;
-	}
-
 	canvas.width = 800;
 	canvas.height = 600;
 
@@ -26,10 +21,9 @@ function game() {
 	document.addEventListener("keydown", handleKeyDown);
 	document.addEventListener("keyup", handleKeyUp);
 
-	setInterval(() => gameRender(), 16);
-
 	socket.onopen = function() {
 		console.log("Connection established");
+		setInterval(() => gameRender(), 16);
 	}
 
 	socket.onmessage = function(event) {
