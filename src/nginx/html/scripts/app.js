@@ -218,7 +218,6 @@ class Client{
 						(async () => (loadCurrentLang()))();
 					}))
 				});
-				this = null;
 			}
 		})();
 	}
