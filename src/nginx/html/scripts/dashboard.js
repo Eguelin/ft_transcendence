@@ -1,8 +1,5 @@
-var splitPath = window.location.href.split('/');
-var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 var chartAverage, chartAbs;
-const defaultLastXDaysDisplayed = 7;
-let width, height, gradient;
+var width, height, gradient;
 chartAverage = null;
 chartAbs = null;
 
@@ -332,6 +329,32 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 }
 
 function loadUserDashboard(LastXDaysDisplayed){
+
+    wLGraph = document.getElementById("winLossGraph").remove();
+    wLAbsGraph = document.getElementById("winLossAbsGraph").remove();
+
+    wLGraph = document.createElement("canvas");
+    wLGraph.id = "winLossGraph";
+    wLAbsGraph = document.createElement("canvas");
+    wLAbsGraph.id = "winLossAbsGraph";
+
+    var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
+    y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
+
+    wLGraph.width = x * 42;
+    wLAbsGraph.width = x * 42;
+    wLGraph.height = y * 21;
+    wLAbsGraph.height = y * 21;
+
+    document.getElementById("winLossGraphContainer").appendChild(wLGraph);
+    document.getElementById("winLossAbsGraphContainer").appendChild(wLAbsGraph);
+
+
+    var splitPath = window.location.href.split('/');
     var endDate = new Date();
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
@@ -391,12 +414,12 @@ function loadUserDashboard(LastXDaysDisplayed){
             })
         }
         else
-		    history.pushState("", "", `https://${hostname.host}/home`);
+		    myPushState(`https://${hostname.host}/home`);
     })
 }
 
 {
-	inputSearchUser.style.setProperty("display", "none");
+	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
     loadUserDashboard(defaultLastXDaysDisplayed)

@@ -15,7 +15,7 @@ friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].classNa
 slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 
 homeBtn.style.setProperty("display", "block");
-inputSearchUser.style.setProperty("display", "block");
+inputSearchUserContainer.style.setProperty("display", "block");
 dropDownUserContainer.style.setProperty("display", "flex");
 
 Object.keys(slideSelector).forEach(function(key) {
@@ -278,6 +278,7 @@ function checkUpdate(){
 
 							var bg = document.createElement("div");
 							bg.id = "popupBg";
+							bg.style.display = "block";
 							pos = friendInfo.getBoundingClientRect();
 							bg.style.left = `${-pos.left}px`;
 							bg.style.top = `${-pos.top}px`;
@@ -289,6 +290,7 @@ function checkUpdate(){
 
 							var bg = document.createElement("div");
 							bg.id = "popupBg";
+							bg.style.display = "block";
 							pos = friendInfo.getBoundingClientRect();
 							bg.style.left = `${-pos.left}px`;
 							bg.style.top = `${-pos.top}px`;
@@ -324,7 +326,7 @@ function checkUpdate(){
 			}
 			else {
 				client = null;
-				history.replaceState("", "", `https://${hostname.host}/login`);
+				myReplaceState(`https://${hostname.host}/login`);
 			}
 		})
 	}
