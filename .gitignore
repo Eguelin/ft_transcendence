@@ -3,4 +3,3 @@ __pycache__
 .ash_history
 *.swp
 .venv
-src/django/app/profilePictures/*.jpg
