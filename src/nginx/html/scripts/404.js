@@ -1,4 +1,4 @@
-homeBtn404 = document.getElementById("NotFoundtitle");
+homeBtn404 = document.getElementById("NotFoundBtn");
 
 homeBtn404.addEventListener("click", (e) => {
 	myPushState(`https://${hostname.host}/home`);

@@ -1,4 +1,4 @@
-homeBtn403 = document.getElementById("403_homeBtn");
+homeBtn403 = document.getElementById("ForbidenBtn");
 
 homeBtn403.addEventListener("click", (e) => {
 	myPushState(`https://${hostname.host}/home`);
