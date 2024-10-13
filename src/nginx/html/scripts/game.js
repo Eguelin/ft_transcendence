@@ -12,6 +12,11 @@ function game() {
 	let oldKeysDown = {};
 	let countdown = "";
 
+	if (socket.readyState !== WebSocket.OPEN) {
+		console.log("Connection failed");
+		return;
+	}
+
 	canvas.width = 800;
 	canvas.height = 600;
 
