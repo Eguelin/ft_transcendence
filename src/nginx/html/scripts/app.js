@@ -613,6 +613,11 @@ function createMatchResumeContainer(match) {
 	scoreUserName.innerHTML = `${match.player_one}`;
 	scoreOpponentName.innerHTML = `${match.player_two}`;
 
+	if (scoreUserName.innerHTML == "deleted")
+		scoreUserName.classList.add("deletedUser");
+
+	if (scoreOpponentName.innerHTML == "deleted")
+		scoreOpponentName.classList.add("deletedUser");
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
