@@ -79,7 +79,7 @@ if (sendFriendRequestBtn){
             })
         }
         else{
-            history.replaceState("","", `https://${hostname.host}/home`);   // TODO replace with page 404
+            client.loadPage("/404");
         }
     })
 }
