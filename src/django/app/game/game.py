@@ -6,13 +6,11 @@ import asyncio
 import random
 import math
 import time
-import datetime
 
 class Matchmaking():
-	waiting_players = []
 
 	def __init__(self):
-		pass
+		self.waiting_players = []
 
 	def add_player(self, player):
 		self.waiting_players.append(player)
@@ -130,6 +128,8 @@ class Game():
 		while not self.playerLeft.isReady or not self.playerRight.isReady:
 			await asyncio.sleep(0.1)
 		await self.countdown()
+		if not self.playerLeft.socket or not self.playerRight.socket:
+			return
 		await self.send('game_start', None)
 		while self.playerLeft.score != 5 and self.playerRight.score != 5 and self.playerLeft.socket and self.playerRight.socket:
 			if time.time() - self.timeLastPoint > 2:
@@ -142,7 +142,7 @@ class Game():
 		await self.endGame()
 
 	async def endGame(self):
-		if not self.playerLeft.socket or not self.playerRight.socket:
+		if not self.playerLeft.socket and not self.playerRight.socket:
 			return
 		await self.playerLeft.send('game_end', {
 			'winner': self.playerLeft.score == 5 or not self.playerRight.socket
@@ -263,21 +263,24 @@ class Player():
 
 		return info
 
+MATCHMAKING = Matchmaking()
+
 class GameConsumer(AsyncWebsocketConsumer):
-	matchmaking = Matchmaking()
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.player = None
 
 	async def connect(self):
+		if not self.scope['user'].is_authenticated:
+			await self.close()
 		await self.accept()
 		self.player = Player(self)
-		self.matchmaking.add_player(self.player)
-		await self.matchmaking.run()
+		MATCHMAKING.add_player(self.player)
+		await MATCHMAKING.run()
 
 	async def disconnect(self, close_code):
-		self.matchmaking.remove_player(self.player)
+		MATCHMAKING.remove_player(self.player)
 		self.player.socket = None
 
 	async def receive(self, text_data):
