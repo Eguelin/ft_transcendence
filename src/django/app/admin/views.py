@@ -67,6 +67,21 @@ def create_user(request):
 	else:
 		return JsonResponse({'message': 'User is not authenticated'}, status=400)
 
+def remove_user(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.user.is_authenticated:
+		if not request.user.is_staff:
+			return JsonResponse({'message': 'user is not admin'}, status=400)
+		try:
+			data = json.loads(request.body)
+		except json.JSONDecodeError:
+			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		print(data['username'])
+		User.objects.get(username=data['username']).delete()
+		return JsonResponse({'message': 'User deleted'}, status=200)
+	return JsonResponse({'message': 'can\'t delete user'}, status=200)
+
 
 def create_match(request):
 	if request.method != 'POST' :
