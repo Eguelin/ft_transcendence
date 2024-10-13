@@ -4,7 +4,8 @@
 		"#friendsBtn" :  "Freunde",
 		"#settingsBtn" :  "Einstellungen",
 		"#logOutBtn" :  "Ausloggen",
-		"#inputSearchUser" : "Benutzer suchen"
+		"#inputSearchUser" : "Benutzer suchen",
+		".deletedUser" : "Gelöscht"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -111,6 +112,12 @@
 		"#title" : "Fehler 404",
 		"#subtitle" : "",
 		"#NotFoundtitle" : "Ho nein, diese Seite existiert nicht :(",
-		"#NotFoundhomeBtn" : "HOMEPAGE"
+		"#NotFoundBtn" : "HOMEPAGE"
+	},
+	"403":{
+		"#title" : "Fehler 403",
+		"#subtitle" : "",
+		"#ForbidenTitle" : "Du solltest nicht hier sein >:(",
+		"#ForbidenBtn" : "HOMEPAGE"
 	}
 }

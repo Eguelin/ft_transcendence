@@ -56,6 +56,11 @@
 	text-decoration: underline from-font solid var(--main-text-rgb);
 }
 
+.deletedUser{
+	text-decoration: line-through !important;
+	font-style: italic;
+}
+
 #profileInfoContainer {
 	display: flex;
 	margin: 3vw 3vw 0 3vw;
