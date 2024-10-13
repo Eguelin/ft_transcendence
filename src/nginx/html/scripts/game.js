@@ -1,22 +1,27 @@
 function game() {
+	const socket = new WebSocket("/ws/game/");
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
-
-	canvas.width = 800;
-	canvas.height = 600;
-
 	const keysDown = {};
 	const paddle = {};
 	const player1 = {};
 	const player2 = {};
 	const ball = {};
 	const ballTrail = [];
-	let dotCount = 0;
-	let messageInterval;
-	let gameInterval;
 	let KeyPressInterval;
+	let oldKeysDown = {};
+	let countdown = "";
 
-	const socket = new WebSocket("/ws/game/");
+	canvas.width = 800;
+	canvas.height = 600;
+
+	window.addEventListener('beforeunload', handleBeforeUnload);
+	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
+	window.addEventListener('popstate', handlePopState);
+	document.addEventListener("keydown", handleKeyDown);
+	document.addEventListener("keyup", handleKeyUp);
+
+	setInterval(() => gameRender(), 16);
 
 	socket.onopen = function() {
 		console.log("Connection established");
@@ -25,19 +30,17 @@ function game() {
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
-			clearInterval(messageInterval);
 			gameInit(data.message);
-		} else if (data.type === "game_update") {
-			updateGame(data.message);
 		} else if (data.type === "game_countdown") {
-			drawMessage(data.message);
+			countdown = data.message;
+		} else if (data.type === "game_update") {
+			countdown = "";
+			updateGame(data.message);
 		} else if (data.type === "game_start") {
-			gameInterval = setInterval(() => gameRender(), 16);
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
 		} else if (data.type === "game_end") {
-			clearInterval(KeyPressInterval);
-			clearInterval(gameInterval);
-			messageInterval = setInterval(() => drawMessage(data.message), 300);
+			clearInterval(KeyPressInterval);;
+			endMessage = data.message;
 		}
 	}
 
@@ -77,6 +80,8 @@ function game() {
 		ball.y = message.ball.y;
 
 		ctx.lineWidth = paddle.width / 4;
+
+		gamesend("game_ready");
 	}
 
 	function updateGame(message) {
@@ -100,7 +105,6 @@ function game() {
 
 	function drawMessage(message, x = canvas.width / 2, y = canvas.height / 2) {
 		ctx.fillStyle = client.mainTextRgb;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.font = `80px pong`;
 		ctx.textAlign = "center";
 		ctx.fillText(message, x, y);
@@ -111,18 +115,17 @@ function game() {
 		ctx.strokeStyle = client.mainTextRgb;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		drawScore();
+		if (countdown !== "")
+			drawCountdown(countdown);
 		drawMiddleLine();
 		drawBallTrail();
 		drawBall();
 		drawPaddles();
 	}
 
-	function drawScore() {
-		ctx.font = "30px pong";
-		ctx.textAlign = "center";
-		ctx.fillText("Player 1: " + player1.score, canvas.width / 4, 50);
-		ctx.fillText("Player 2: " + player2.score, canvas.width * 3 / 4, 50);
+	function drawCountdown(countdown) {
+		drawMessage(countdown, canvas.width / 4, canvas.height / 2);
+		drawMessage(countdown, canvas.width * 3 / 4, canvas.height / 2);
 	}
 
 	function drawMiddleLine() {
@@ -178,17 +181,6 @@ function game() {
 		ctx.closePath();
 	}
 
-	function waitingMessage() {
-		let dots = '.'.repeat((dotCount) % 4);
-		let spacing = ' '.repeat(4 - dots.length);
-
-		drawMessage(dots + spacing, canvas.width / 2 + 40);
-		if (dotCount === 4)
-			dotCount = 0;
-		else
-			dotCount++;
-	}
-
 	function cleanup() {
 		window.removeEventListener('beforeunload', handleBeforeUnload);
 		document.getElementById('goHomeButton').removeEventListener('click', handleGoHomeButton);
@@ -217,21 +209,16 @@ function game() {
 	}
 
 	function handleKeyUp(event) {
-		delete keysDown[event.code];
+		if (event.code === "KeyS" || event.code === "KeyW" || event.code === "ArrowUp" || event.code === "ArrowDown")
+			keysDown[event.code] = false;
 	}
 
 	function KeyPress() {
-		if (Object.keys(keysDown).length > 0)
+		if (JSON.stringify(keysDown) !== JSON.stringify(oldKeysDown)) {
 			gamesend("game_keydown", keysDown);
+			oldKeysDown = JSON.parse(JSON.stringify(keysDown));
+		}
 	}
-
-	window.addEventListener('beforeunload', handleBeforeUnload);
-	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
-	window.addEventListener('popstate', handlePopState);
-	document.addEventListener("keydown", handleKeyDown);
-	document.addEventListener("keyup", handleKeyUp);
-
-	messageInterval = setInterval(() => waitingMessage(), 300);
 }
 
 game();
