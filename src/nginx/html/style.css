@@ -23,11 +23,31 @@ body{
 	user-select: none;
 }
 
+html{
+	font-size: 16px;
+	transition: 500ms;
+}
+
 
 @media screen and (orientation:landscape){
 	body{
+		font-size: 24px;
+		transition: 500ms;
+	}
+	html{
+		transition: 500ms;
+		font-size: 24px;
+	}
+}
+
+
+@media screen and (orientation:landscape) and (max-height:1080px){
+	body{
 		font-size: 16px;
 		transition: 500ms;
+	}
+	html{
+		font-size: 16px;
 	}
 }
 
@@ -35,6 +55,43 @@ body{
 	body{
 		font-size: 12px;
 		transition: 500ms;
+	}
+	html{
+		font-size: 12px;
+	}
+}
+
+h1{
+	color: var(--main-text-rgb);
+	font-style: italic;
+	text-align: center;
+	font-size: 4rem;
+	transition: 500ms;
+}
+h2{
+	color: var(--main-text-rgb);
+}
+
+button{
+	text-align: center;
+	color: var(--main-text-rgb);
+	font-weight: thin;
+	font-family: "pong";
+	font-size: 1rem;
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+	background-color: var(--hover-text-rgb);
+}
+
+
+@media screen and (max-width:960px) {
+	h1{
+		font-size: 2rem;
+	}
+	button{
+		font-size: .5rem;
 	}
 }
 
@@ -47,19 +104,9 @@ body{
 	height: fit-content;
 	text-align: center;
 	width: -webkit-fill-available;
+	width: -moz-available;
 }
 
-h1{
-	color: var(--main-text-rgb);
-	height: inherit;
-	font-style: italic;
-	margin-top: 4vmax;
-	margin-bottom: 4vmax;
-	text-align: center;
-}
-h2{
-	color: var(--main-text-rgb);
-}
 
 .settingSlide h2{
 	color: var(--main-text-rgb);
@@ -89,7 +136,7 @@ h2{
 .options button{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-size: min(7vh, 4vw);
+	font-size: 3rem;
 	font-style:italic;
 	font-weight:thin;
 	font-family: "pong";
@@ -106,7 +153,7 @@ input{
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1.5vw;
-	font-size: 1vmin;
+	font-size: .5rem;
 	padding: 1.5vh 1vw;
 	width: 18vw;
 }
@@ -125,19 +172,6 @@ input:focus{
 	margin-top: 5vh;
 	width:20vw;
 	position: relative;
-}
-
-button{
-	text-align: center;
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	font-size: min(4vh, 2vw);
-	padding: 1vh 0;
-	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-	background-color: var(--hover-text-rgb);
 }
 
 .saveBtn, .deleteBtn {
@@ -223,340 +257,6 @@ a {
 	translate: -50% -50%;
 }
 
-#pfpLabel {
-	width: inherit;
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-size: min(1vh, 1vw);
-	padding: 1vh 0;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-	display: block;
-}
-
-#friendInfo {
-	text-align: center;
-	display: flex;
-	flex-flow: column;
-	width: -webkit-fill-available;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-#friendInfo span{
-	color: var(--main-text-rgb);
-}
-
-#sendFriendRequestBtn {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	font-size: min(3vh, 2vw);
-	padding: 1.5vh 1.5vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-	width: min-content;
-}
-
-#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
-	color: var(--page-bg-rgb);
-	border-color: var(--page-bg-rgb);
-	outline: none;
-}
-
-#friendCodePopup, #friendRequestPopup, #deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup{
-	background: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	position: fixed;
-	left: 50%;
-	right: 50%;
-	top: 50%;
-	transform: translateX(-50%) translateY(-50%);
-	padding: min(5vh, 4vw);
-	width: max-content;
-	border: 2px solid var(--main-text-rgb);
-	display: none;
-	flex-direction: column;
-	align-items: center;
-	gap: 2vmax;
-}
-
-#popupBg{
-	position: fixed;
-	width: 100vw;
-	height: 100vh;
-	top: 0;
-	background-color: black;
-	opacity: 0.5;
-	display: none;
-}
-
-#inputCode{
-	border-radius: 0 0 0 1.5vw;
-	font-size: min(2vh, 1vw);
-	width: -webkit-fill-available;
-}
-
-#friendCodeBtn{
-	border-radius: 1.5vw 1.5vw 0 0;
-}
-
-#addFriendContainer{
-	display: flex;
-}
-
-#friendList{
-	background: var(--input-bg-rgb);
-	margin-top: min(2vh, 1vw);
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-}
-
-.friendContainer{
-	display: flex;
-	align-items: center;
-	flex-wrap: inherit;
-	color: var(--main-text-rgb);
-}
-
-.friendContainer:not(:first-child){
-	border-top: 1px solid var(--main-text-rgb);
-}
-
-.friendContainer a{
-	margin-left: 1vw;
-	flex: auto;
-	width: 15ch;
-	text-align: left;
-}
-
-#pendingRequestBtn {
-	border-radius: 0;
-}
-
-.acceptRequestBtn, .rejectRequestBtn{
-	height:3.5vw;
-	width:3.5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-}
-.acceptRequestBtn{
-	mask-image:url("icons/check-mark-1.svg");
-	background:green;
-}
-
-.rejectRequestBtn{
-	mask-image:url("icons/cross-17.svg");
-	background:red;
-}
-
-.moreBtn, .removeFriendBtn, .blockFriendBtn, .unblockBtn{
-	background:var(--main-text-rgb);
-	height:3.5vw;
-	width:3.5vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-}
-
-.moreBtn{
-	mask-position: 0;
-	mask-image: url("icons/more-vertical.svg");
-}
-
-.removeFriendBtn{
-	mask-image:url("icons/minus-circle.svg");
-}
-
-.removeFriendBtn:focus, .removeFriendBtn:hover, .blockFriendBtn:focus, .blockFriendBtn:hover{
-	background: red;
-}
-
-.blockFriendBtn{
-	mask-image: url("icons/checkbox-cross.svg");
-}
-
-.unblockBtn{
-	mask-image: url("icons/unblock.svg");
-	margin-right: 1.5vw;
-}
-
-.friendsOptionContainer, .requestOptionContainer{
-	flex: none;
-}
-
-.requestOptionContainer {
-	display: flex;
-}
-
-.friendsOptionContainer:hover .moreBtn{
-	display: none;
-}
-
-.friendsOptionContainer:hover .friendsOption{
-	display: flex;
-}
-
-.friendsOption{
-	display: none;
-}
-
-.friendsOption div{
-	margin-right: 1.5vmin;
-}
-
-.friendContainer .friendStatus{
-	flex: auto;
-	margin-right: 1.5vmin;
-}
-
-#deleteFriendPopup, #blockFriendPopup{
-	flex-direction: column;
-	align-items: center;
-}
-
-#deleteFriendPopup a, #blockFriendPopup a{
-	margin-bottom: 3em;
-}
-
-#confirmDelete, #confirmBlock {
-	text-align: center;
-	background-color: red;
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	font-size: min(4vh, 2vw);
-	padding: 1vh 0;
-	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-}
-
-#confirmDelete:hover, #confirmDelete:focus, #confirmBlock:hover, #confirmBlock:focus {
-	color: var(--hover-text-rgb);
-	border: 0.2px solid var(--hover-text-rgb);
-}
-
-#pendingRequestBtnContainer{
-	position: relative;
-	z-index: -1;
-}
-
-#pendingRequestBtnContainer #notificationDot{
-	mask-image:url("icons/notification-dot.svg");
-	background:var(--main-text-rgb);
-	height:min(3vh, 2vw);
-	width:min(3vh, 2vw);
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-	position: absolute;
-	left: -0.5vw;
-	top: 50%;
-	transform: translateY(-50%);
-	z-index: -1;
-	animation: flash 1s infinite;
-}
-
-#friendSlideSelector{
-	color: var(--main-text-rgb);
-	display: flex;
-	margin-top: 2vmin;
-}
-#friendSlideSelector div{
-	flex: 1;
-}
-
-.friendSlide{
-	display: none;
-	background: var(--hover-text-rgb);
-	border: 1px solid var(--main-text-rgb);
-	border-radius: 2vw;
-	margin-top: 2vmin;
-	min-height: 1vh;
-}
-
-.friendSlide .friendContainer:first-child .pfpContainer{
-	border-radius: 2vw 0 0 0;
-}
-
-.friendSlide .friendContainer:last-child .pfpContainer{
-	border-radius: 0 0 0 2vw;
-}
-
-.friendSlide .friendContainer:only-child .pfpContainer{
-	border-radius: 2vw 0 0 2vw;
-}
-
-.slideSelector{
-	font-size: 1.5vmin;
-}
-
-.slideSelector div{
-	padding: 2px;
-	z-index: -1;
-	position: relative;
-}
-
-.activeSlide{
-	display: block !important;
-}
-
-.activeSelector div{
-	background: var(--hover-text-rgb);
-}
-
-.activeSelector{
-	border-bottom: 2px solid var(--main-text-rgb);
-}
-
-.userSlideCount{
-	font-size: 1vmin;
-	opacity: 0.9;
-	position: relative;
-	z-index: -1;
-}
-
-.pfpContainer{
-	width: 4vw;
-	height: 4vw;
-	display: flex;
-	position: relative;
-	overflow: hidden;
-}
-
-.pfpStatusOnline, .pfpStatusOffline{
-	height:1.5vw;
-	width:1.5vw;
-	position:absolute;
-	bottom: 0px;
-	right: 0px;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-}
-
-.pfpStatusOffline{
-	mask-image:url("icons/circle.svg");
-	background: grey;
-}
-
-.pfpStatusOnline{
-	mask-image: url("icons/circle.svg");
-	background: green;
-}
-
-
-
-
-
-
-
 #resumeContainer{
 	margin-top: 2vmax;
 }
@@ -612,6 +312,7 @@ a {
 	display: flex;
 	flex-direction: row;
 	gap: 1vw;
+	word-break: break-all;
 }
 
 #statsContainer div{
@@ -664,71 +365,6 @@ a {
 	100% {background-size:25px 100%,25px 100%,25px 100%}
 }
 
-#inputChangeUsername{
-	width: 14vw;
-	border: 0;
-}
-
-#saveUsernameBtn{
-	text-align: center;
-	mask-image: url(icons/check.svg);
-	background-color: var(--main-text-rgb);
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-
-	width: 3vw;
-	height: 3vw;
-	mask-size:contain;
-	mask-position:center;
-	mask-repeat:no-repeat;
-}
-
-#saveUsernameBtn:hover, #saveUsernameBtn:focus {
-	background-color: var(--option-hover-text-rgb);
-}
-
-#saveUsernameContainer{
-	display: flex;
-	align-items: center;
-	background-color: var(--hover-text-rgb);
-	border-radius: 1.5vw;
-	border: 0.2px solid var(--main-text-rgb);
-}
-
-
-#confirmPfpContainer{
-	display: none;
-	width: 20vw;
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-color: var(--hover-text-rgb);
-	overflow: hidden;
-	position: absolute;
-
-	top: 50%;
-	left: 50%;
-	translate: -50% -50%;
-	flex-direction: column;
-
-	border: 1px solid var(--main-text-rgb);
-}
-
-#confirmPfpImg{
-	width: 100%;
-	position: relative;
-}
-
-#confirmPfpBtn{
-	border-radius: 0;
-	border: 0;
-	border-top: 1px solid var(--main-text-rgb);
-	outline: none;
-}
-
-#confirmPfpBtn:hover, #confirmPfpBtn:focus{
-	color: var(--option-hover-text-rgb);
-}
-
 .pfpMask, .friendPfpMask, .friendStatusOnlinePfpMask, .friendStatusOfflinePfpMask{
 	background: radial-gradient(circle, rgba(255,255,255,0) 70%, var(--page-bg-rgb) 70%);
 	position: absolute;
@@ -749,9 +385,6 @@ a {
 	background: radial-gradient(circle, rgba(255,255,255,0) 60%, grey 60%);
 }
 
-#confirmPfpMask{
-	opacity: .5;
-}
 
 #profileGraphs {
 	display: flex;

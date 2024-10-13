@@ -87,6 +87,36 @@ def create_match(request):
 				 'playerTwoPts': match.player_two_pts,
 				 'date': match.date,}
 		return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
+		
+
+def create_friendship(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.user.is_authenticated:	
+		if not request.user.is_staff:
+			return JsonResponse({'message': 'user is not admin'}, status=400)
+		try:
+			data = json.loads(request.body)
+		except json.JSONDecodeError:
+			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		
+		if not User.objects.filter(username=data['userOne']).exists():
+			user1 = User.objects.create_user(username=data['userOne'], password="password")
+			user1.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user1.id42 = 0
+		else:
+			user1 = User.objects.get(username=data['userOne'])
+		if not User.objects.filter(username=data['userTwo']).exists():
+			user2 = User.objects.create_user(username=data['userTwo'], password="password")
+			user2.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user2.id42 = 0
+		else:
+			user2 = User.objects.get(username=data['userTwo'])
+		user1.profile.friends.add(user2)
+		user1.save()
+		user2.profile.friends.add(user1)
+		user2.save()
+		return JsonResponse({'message': 'Friendship created'}, status=201)
 
 
 def delete_user(request):

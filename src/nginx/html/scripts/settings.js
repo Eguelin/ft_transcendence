@@ -1,4 +1,4 @@
-deleteBtn = document.getElementById('deleteBtn');
+deleteAccountBtn = document.getElementById('deleteAccountBtn');
 confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 usernameInput = document.getElementById("inputChangeUsername");
 saveUsernameBtn = document.getElementById("saveUsernameBtn");
@@ -116,6 +116,12 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					success.className = "success";
 					success.text = "username successfully updated";
 					usernameInput.before(success);
+
+					(async () => {
+						client = await new Client();
+						if (!client)
+							myReplaceState(`https://${hostname.host}/login`);
+					})()
 				}
 				else {
 					response.json().then(response => {
@@ -135,7 +141,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 	}
 })
 
-deleteBtn.addEventListener("click", (e) => {
+deleteAccountBtn.addEventListener("click", (e) => {
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 	document.getElementById("confirmDeleteDialogVar").innerText = 'delete';
@@ -164,7 +170,7 @@ function deleteRequest(){
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok){
-				history.pushState("", "", `https://${hostname.host}/login`);
+				myPushState(`https://${hostname.host}/login`);
 			}
 		})
 	}
@@ -340,7 +346,7 @@ for (var i=0; i< lightTheme.length; i++)
 }
 
 {
-	inputSearchUser.style.setProperty("display", "none");
+	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 }
