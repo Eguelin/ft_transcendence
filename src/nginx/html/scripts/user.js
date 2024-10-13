@@ -1,10 +1,10 @@
-var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 allMatchesButton = document.getElementById("allMatchesHistoryBtn");
 
 
 if (sendFriendRequestBtn){
+    var splitPath = window.location.href.split('/');
     sendFriendRequestBtn.addEventListener("click", (e) => {
         fetch('/api/user/send_friend_request', {
             method: 'POST',
@@ -18,7 +18,7 @@ if (sendFriendRequestBtn){
 }
 
 {
-	inputSearchUser.style.setProperty("display", "block");
+	inputSearchUserContainer.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	
@@ -58,7 +58,7 @@ if (sendFriendRequestBtn){
                     matchUsersName = document.querySelectorAll(".resultScoreName")
                     Object.keys(matchUsersName).forEach(function(key){
                         matchUsersName[key].addEventListener("click", (e) => {
-                            history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+                            myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
                         })
                     })
                 }
@@ -85,10 +85,10 @@ if (sendFriendRequestBtn){
 }
 
 allMatchesButton.addEventListener("click", (e) => {
-    history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
+    myPushState(`https://${hostname.host}/dashboard/${splitPath[4]}`);
 })
 
 allMatchesButton.addEventListener("keydown", (e) => {
     if (e.key == "Enter")
-        history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
+        myPushState(`https://${hostname.host}/dashboard/${splitPath[4]}`);
 })

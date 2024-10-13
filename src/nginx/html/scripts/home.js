@@ -2,7 +2,7 @@ container = document.getElementById("container");
 playBtn = document.getElementById("playBtn");
 
 {
-	inputSearchUser.style.setProperty("display", "block");
+	inputSearchUserContainer.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
 
@@ -26,14 +26,14 @@ playBtn = document.getElementById("playBtn");
 		matchUsersName = document.querySelectorAll(".resultScoreName")
 		Object.keys(matchUsersName).forEach(function(key){
 			matchUsersName[key].addEventListener("click", (e) => {
-				history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
+				myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
 			})
 		})
 	}
 	else
-		history.replaceState("", "", `https://${hostname.host}/login`);
+		myReplaceState(`https://${hostname.host}/login`);
 }
 
 playBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/game`);
+	myPushState(`https://${hostname.host}/game`);
 })
