@@ -3,10 +3,11 @@ from django.db import DatabaseError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json, os, requests, base64, random, string, subprocess, datetime
-import login.models as customModels
+import game.models as customModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 import json, os, requests, base64, random, zxcvbn, re
+
 
 def generate_unique_username(base_username):
 	username = base_username

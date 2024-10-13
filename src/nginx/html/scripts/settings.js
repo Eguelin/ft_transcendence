@@ -138,11 +138,24 @@ saveUsernameBtn.addEventListener("click", (e) => {
 deleteBtn.addEventListener("click", (e) => {
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
+	document.getElementById("confirmDeleteDialogVar").innerText = 'delete';
 })
+
 
 confirmDeleteBtn.addEventListener("click", (e) => {
 	val = confirmDeleteInput.value;
-	if (val == document.getElementById("usernameBtn").innerText){
+	deleteRequest();
+})
+
+confirmDeleteInput.addEventListener("keydown", (e) => {
+	if (e.key == "Enter"){
+		val = confirmDeleteInput.value;
+		deleteRequest();
+	}
+})
+
+function deleteRequest(){
+	if (val == document.getElementById("confirmDeleteDialogVar").innerText){
 		fetch('/api/user/delete_user', {
 			method: 'POST',
 			headers: {
@@ -155,26 +168,7 @@ confirmDeleteBtn.addEventListener("click", (e) => {
 			}
 		})
 	}
-})
-
-confirmDeleteInput.addEventListener("keydown", (e) => {
-	if (e.key == "Enter"){
-		val = confirmDeleteInput.value;
-		if (val == document.getElementById("usernameBtn").innerText){
-			fetch('/api/user/delete_user', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			}).then(response => {
-				if (response.ok){
-					history.pushState("", "", `https://${hostname.host}/login`);
-				}
-			})
-		}
-	}
-})
+}
 
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "settings"){
