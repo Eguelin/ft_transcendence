@@ -37,4 +37,5 @@ urlpatterns = [
     path('user/get', login.views.get),
     path('user/search_by_username', login.views.search_by_username),
     path('user/delete_user', login.views.delete_user),
+    path('admin/remove_user', admin.views.remove_user), 
 ]

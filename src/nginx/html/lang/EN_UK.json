@@ -4,7 +4,8 @@
 		"#friendsBtn" :  "Friends",
 		"#settingsBtn" :  "Settings",
 		"#logOutBtn" :  "Log out",
-		"#inputSearchUser" : "Search user"
+		"#inputSearchUser" : "Search user",
+		".deletedUser" : "Deleted"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -111,6 +112,12 @@
 		"#title" : "ERROR 404",
 		"#subtitle" : "",
 		"#NotFoundtitle" : "Ho no, this page does not exist :(",
-		"#NotFoundhomeBtn" : "HOME"
+		"#NotFoundBtn" : "HOME"
+	},
+	"403":{
+		"#title" : "ERROR 403",
+		"#subtitle" : "",
+		"#ForbidenTitle" : "You're not supposed to be here >:(",
+		"#ForbidenBtn" : "HOME"
 	}
 }

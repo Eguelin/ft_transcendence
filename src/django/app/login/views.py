@@ -274,9 +274,18 @@ def get_all_user_match_json(matches):
 			day = dateObj.day
 			date_json = {}
 			i = 0
+		try:
+			p1_name = match.player_one.username
+		except:
+			p1_name = "deleted"
+
+		try:
+			p2_name = match.player_two.username
+		except:
+			p2_name = "deleted"
 		date_json[i] = {
-			'player_one' : match.player_one.username,
-			'player_two' : match.player_two.username,
+			'player_one' : p1_name,
+			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
 			'date' : match.date,
@@ -293,9 +302,18 @@ def get_user_match(matches):
 	date = ""
 	i = 0
 	for match in matches:
+		try:
+			p1_name = match.player_one.username
+		except:
+			p1_name = "deleted"
+
+		try:
+			p2_name = match.player_two.username
+		except:
+			p2_name = "deleted"
 		matches_json[i] = {
-			'player_one' : match.player_one.username,
-			'player_two' : match.player_two.username,
+			'player_one' : p1_name,
+			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
 			'date' : match.date,

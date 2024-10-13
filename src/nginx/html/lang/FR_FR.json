@@ -4,7 +4,8 @@
 		"#friendsBtn" :  "Amis",
 		"#settingsBtn" :  "Paramètres",
 		"#logOutBtn" :  "Déconnexion",
-		"#inputSearchUser" : "Rechercher un utilisateur"
+		"#inputSearchUser" : "Rechercher un utilisateur",
+		".deletedUser" : "Supprimé"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -61,7 +62,8 @@
 		"#pirateBtnP" : "Pirate"
 	},
 	"friends":{
-		"#title" : "Amis",
+		"#title" : "",
+		"#subtitle" : "Amis",
 		"#confirmDeleteQuestion" : "Êtes-vous sûr de vouloir retirer cet ami ?",
 		"#confirmBlockQuestion" : "Êtes-vous sûr de vouloir bloquer cet ami ?",
 		"#confirmDelete" : "Je suis sûr",
@@ -73,6 +75,7 @@
 	},
 	"user":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Envoyer une demande d'ami",
 		"#notPlayedToday" : "n'a joué aucun match aujourd'hui",
 		"#recentMatchHistoryText" : "Matchs récents",
@@ -83,6 +86,7 @@
 	},
 	"dashboard":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#ratioText" : "ratio victoires/défaites",
 		"#nbMatchText" : "Nombre de matchs joués",
 		"#nbWinText" : "Nombre de victoires",
@@ -97,14 +101,23 @@
 		"CVwinLossAbsGraphClient" : "vous"
 	},
 	"search": {
-		"#title" : "Recherche"
+		"#title" : "Recherche",
+		"#subtitle" : ""
 	},
 	"game":{
-		"#title" : ""
+		"#title" : "",
+		"#subtitle" : ""
 	},
 	"404":{
 		"#title" : "ERREUR 404",
+		"#subtitle" : "",
 		"#NotFoundtitle" : "Oh non, cette page n'existe pas :(",
-		"#NotFoundhomeBtn" : "ACCUEIL"
+		"#NotFoundBtn" : "ACCUEIL"
+	},
+	"403":{
+		"#title" : "ERREUR 403",
+		"#subtitle" : "",
+		"#ForbidenTitle" : "tu n'es pas censé etre ici >:(",
+		"#ForbidenBtn" : "ACCUEIL"
 	}
 }
