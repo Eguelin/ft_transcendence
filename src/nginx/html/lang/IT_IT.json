@@ -111,6 +111,12 @@
 		"#title" : "ERRORE 404",
 		"#subtitle" : "",
 		"#NotFoundtitle" : "Oh no, questa pagina non esiste :(",
-		"#NotFoundhomeBtn" : "HOME"
+		"#NotFoundBtn" : "PAGINA INIZIALE"
+	},
+	"403":{
+		"#title" : "ERRORE 403",
+		"#subtitle" : "",
+		"#ForbidenTitle" : "Non dovresti essere qui >:(",
+		"#ForbidenBtn" : "PAGINA INIZIALE"
 	}
 }
