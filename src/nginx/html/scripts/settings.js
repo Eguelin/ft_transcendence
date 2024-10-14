@@ -147,7 +147,7 @@ deleteAccountBtn.addEventListener("click", (e) => {
 	window.removeEventListener("keydown", settingsKeyDownEvent)
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
-	document.getElementById("confirmDeleteDialogVar").innerText = 'delete';
+	document.getElementById("confirmDeleteDialogVar").innerText = client.username;
 })
 
 
