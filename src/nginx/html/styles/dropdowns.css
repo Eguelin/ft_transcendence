@@ -375,6 +375,12 @@
 }
 
 
+@media screen and (max-width:700px){
+	#langDropDownContainer{
+		display: none;
+	}
+}
+
 @keyframes scaleZText {
 	0% {
 		font-size: 0;

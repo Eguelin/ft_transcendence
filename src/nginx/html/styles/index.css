@@ -46,6 +46,14 @@
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+	flex: none;
+	display: none;
+}
+
+@media screen and (min-width:500px){
+	#themeButton{
+		display: block;
+	}
 }
 
 #themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover{

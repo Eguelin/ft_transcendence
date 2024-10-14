@@ -61,6 +61,26 @@ html{
 	}
 }
 
+@media screen and (max-height:730px){
+	body{
+		font-size: 10px;
+		transition: 500ms;
+	}
+	html{
+		font-size: 10px;
+	}
+}
+
+@media screen and (max-height:500px){
+	body{
+		font-size: 8px;
+		transition: 500ms;
+	}
+	html{
+		font-size: 8px;
+	}
+}
+
 h1{
 	color: var(--main-text-rgb);
 	font-style: italic;
