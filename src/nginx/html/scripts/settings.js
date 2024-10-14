@@ -354,6 +354,7 @@ for (var i=0; i< lightTheme.length; i++)
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+	document.getElementById("fontSizeRange").value = client.fontAmplifier;
 }
 
 window.addEventListener("keydown", settingsKeyDownEvent)
@@ -373,3 +374,16 @@ function settingsKeyDownEvent(e) {
 		settingsSlides[slideIdx].style.display = "block";
 	}
 }
+
+document.getElementById("fontSizeRange").addEventListener("input", (e) => {
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ "font_amplifier":  e.target.value}),
+		credentials: 'include'
+	})
+	client.fontAmplifier = e.target.value;
+	document.documentElement.style.setProperty("--font-size-amplifier", e.target.value);
+})
