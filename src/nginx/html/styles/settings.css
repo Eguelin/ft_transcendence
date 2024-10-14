@@ -88,3 +88,30 @@
 		font-size: .5rem !important;
 	}
 }
+
+#fontSizeRangeContainer{
+	width: fit-content;
+	margin-top: 2vh;
+	margin-left: 25vw;
+	display: flex;
+}
+
+#fontSizeRangeText{
+	align-content: center;
+	color: var(--main-text-rgb);
+	width: 25vw;
+}
+
+#fontSizeRange{
+	padding: 0;
+	margin: 0;
+	width: 20vw;
+}
+
+#fontSizeList{
+	display: flex;
+	justify-content: space-between;
+	writing-mode: horizontal-tb;
+	width: 20vw;
+	color: var(--main-text-rgb);
+}
