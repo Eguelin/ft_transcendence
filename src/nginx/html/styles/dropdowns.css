@@ -271,7 +271,7 @@
 .activeDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
 	animation: scaleZText 300ms forwards;
-	font-size: min(2vh, 1vw);
+	font-size: 1rem;
 }
 
 .inactiveDropDown .dropDownUserContent .dropDownMenuBtn{
@@ -382,11 +382,11 @@
 	}
 	
 	80% {
-		font-size: min(2.1vh, 1.1vw);
+		font-size: 1.1rem;
 	}
   
 	100% {
-		font-size: min(2vh, 1vw);
+		font-size: 1rem;
 		display: block;
 	}
 }
@@ -401,6 +401,6 @@
 	100% {
 		opacity: 1;
 		scale: 1;
-		height: 4vw;
+		height: 3.5rem;
 	}
 }
