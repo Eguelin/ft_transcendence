@@ -74,10 +74,10 @@
 		</div>
 	</div>
 
-	<div id="popupBg">
+	<div id="popupBg" style="z-index: 1;">
 	</div>
 
-	<div id="confirmPfpContainer">
+	<div id="confirmPfpContainer" style="z-index: 2;">
 		<div style="position: relative;">
 			<img id="confirmPfpImg">
 			<div class="pfpMask" id="confirmPfpMask"></div>
@@ -85,9 +85,9 @@
 		<button tabindex="15" id="confirmPfpBtn">Save</button>
 	</div>
 
-	<div id="confirmDeletePopup">
+	<div id="confirmDeletePopup" style="z-index: 2;">
 		<a id="confirmDeleteDialog">To confirm you want to delete your account, please enter </a>
-		<a id="confirmDeleteDialogVar"></a>
+		<a id="confirmDeleteDialogVar" style="background: var(--option-hover-text-rgb);padding: .3ch;"></a>
 		<input tabindex="17" type="text" id="confirmDeleteInput" placeholder="Confirmation">
 		<button tabindex="18" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
 	</div>

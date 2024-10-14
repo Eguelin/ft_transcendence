@@ -221,6 +221,8 @@ def profile_update(request):
 				if "is_dark_theme" in data:
 					user.profile.dark_theme = data['is_dark_theme']
 				if "username" in data:
+					if User.objects.filter(username=data['username']).exists():
+						return JsonResponse({'message': 'Username is already taken'}, status=400)
 					user.username = data['username']
 				username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
 				max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
