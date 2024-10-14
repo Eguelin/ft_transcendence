@@ -56,6 +56,7 @@ pfpInput.addEventListener("change", (e) => {
 		reader.onloadend = function(){
 			buf = reader.result;
 			buf = buf.substr(buf.indexOf(',') + 1);
+			window.removeEventListener("keydown", settingsKeyDownEvent)
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
 			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
@@ -87,6 +88,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		}
 	})
+	window.addEventListener("keydown", settingsKeyDownEvent)
 })
 
 saveUsernameBtn.addEventListener("keydown", (e) => {
@@ -142,6 +144,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 })
 
 deleteAccountBtn.addEventListener("click", (e) => {
+	window.removeEventListener("keydown", settingsKeyDownEvent)
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 	document.getElementById("confirmDeleteDialogVar").innerText = 'delete';
@@ -178,10 +181,12 @@ function deleteRequest(){
 
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "settings"){
-		if (e.key == "Escape"){
+		if (e.key == "Escape" && 
+			document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+			window.addEventListener("keydown", settingsKeyDownEvent)
 		}
 	}
 })
