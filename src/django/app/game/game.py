@@ -390,7 +390,7 @@ class PlayerAI(PlayerTemplate):
 	async def run(self):
 		while True:
 			ball = self.game.ball.copy()
-			while ball.x < self.x:
+			while ball.x < GameTemplate.width and ball.x > 0:
 				ball.move()
 			self.Y = ball.y
 			await asyncio.sleep(1)
