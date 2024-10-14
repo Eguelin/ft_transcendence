@@ -176,25 +176,6 @@ function deleteRequest(){
 	}
 }
 
-confirmDeleteInput.addEventListener("keydown", (e) => {
-	if (e.key == "Enter"){
-		val = confirmDeleteInput.value;
-		if (val == document.getElementById("usernameBtn").innerText){
-			fetch('/api/user/delete_user', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			}).then(response => {
-				if (response.ok){
-					myPushState(`https://${hostname.host}/login`);
-				}
-			})
-		}
-	}
-})
-
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "settings"){
 		if (e.key == "Escape"){
@@ -368,4 +349,22 @@ for (var i=0; i< lightTheme.length; i++)
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+}
+
+window.addEventListener("keydown", settingsKeyDownEvent)
+
+function settingsKeyDownEvent(e) {
+	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		if (e.key == "ArrowLeft")
+			slideIdx -= 1;
+		else
+			slideIdx += 1;
+		if (slideIdx > settingsSlides.length - 1)
+			slideIdx = 0;
+		if (slideIdx < 0)
+			slideIdx = settingsSlides.length - 1;
+		for (let i = 0; i < settingsSlides.length; i++)
+			settingsSlides[i].style.display = "none";
+		settingsSlides[slideIdx].style.display = "block";
+	}
 }
