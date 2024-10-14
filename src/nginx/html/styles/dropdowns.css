@@ -204,15 +204,19 @@
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
-	height: 4vw;
+	height: 3.5rem;
 	outline: none;
+}
+
+#dropDownUserContainer{
+	gap: .5rem;
+	margin-right: .5rem;
 }
 
 #dropDownUser {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
-	margin: 0 1vmax;
 	height: fit-content;
 	outline: none;
 	flex-direction: column;
@@ -314,7 +318,7 @@
 	animation: scaleZLang 300ms forwards;
 	opacity: 1;
 	scale: 1;
-	height: 4vw;
+	height: 3.5rem;
 }
 
 .inactiveDropDown #langDropDownContent .langDropDownOptionsContainer{
@@ -347,8 +351,8 @@
 
 
 .langDropDownOptions, #langDropDownBtn{
-	height: 3vw;
-	width: 5vw;
+	height: 2.5rem;
+	width: 4rem;
 	margin: 0 1vmin;
 
 	background-repeat: no-repeat;
@@ -363,7 +367,7 @@
 }
 
 .langDropDownOptionsContainer{
-	height: 4vw;
+	height: 3.5rem;
 }
 
 #langDropDown:focus #langDropDownContent{
