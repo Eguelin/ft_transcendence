@@ -76,6 +76,7 @@ class Client{
 	recentMatches;
 	#is_admin;
 	mainTextRgb;
+	fontAmplifier
 
 	constructor (){
 		return (async () =>{
@@ -99,6 +100,8 @@ class Client{
 				this.#is_admin = result.is_admin;
 				switchTheme(this.use_dark_theme);
 				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+				this.fontAmplifier = result.font_amplifier;
+				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
 				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 

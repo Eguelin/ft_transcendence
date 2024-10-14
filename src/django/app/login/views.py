@@ -243,6 +243,8 @@ def profile_update(request):
 					user.profile.language_pack = data['language_pack']
 				if ("is_active" in data):
 					user.profile.is_active = data['is_active']
+				if ("font_amplifier" in data):
+					user.profile.font_amplifier = data['font_amplifier']
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
@@ -366,7 +368,8 @@ def current_user(request):
 			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active,
 			'matches' : matches,
-			'is_admin' : request.user.is_staff
+			'is_admin' : request.user.is_staff,
+			'font_amplifier' : request.user.profile.font_amplifier
 		})
 	else:
 		return JsonResponse({'username': None}, status=404)

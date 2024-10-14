@@ -12,11 +12,13 @@
 	--option-text-rgb :  #FDFDFB;
 	--input-bg-rgb : #3A3053; /*#FFDBDE*/
 	--is-dark-theme : 1;
+
+	--font-size-amplifier: 1;
 }
 
 body{
 	font-family:'pong';
-	font-size: 16px;
+	font-size: calc(16px * var(--font-size-amplifier));
 	background-color: var(--page-bg-rgb);
 	height: 100%;
 	margin: 0;
@@ -24,60 +26,60 @@ body{
 }
 
 html{
-	font-size: 16px;
+	font-size: calc(16px * var(--font-size-amplifier));
 	transition: 500ms;
 }
 
 
 @media screen and (orientation:landscape){
 	body{
-		font-size: 24px;
+		font-size: calc(24px * var(--font-size-amplifier));
 		transition: 500ms;
 	}
 	html{
 		transition: 500ms;
-		font-size: 24px;
+		font-size: calc(24px * var(--font-size-amplifier));
 	}
 }
 
 
 @media screen and (orientation:landscape) and (max-height:1080px){
 	body{
-		font-size: 16px;
+		font-size: calc(16px * var(--font-size-amplifier));
 		transition: 500ms;
 	}
 	html{
-		font-size: 16px;
+		font-size: calc(16px * var(--font-size-amplifier));
 	}
 }
 
 @media screen and (orientation:portrait), (max-height:590px){
 	body{
-		font-size: 12px;
+		font-size: calc(12px * var(--font-size-amplifier));
 		transition: 500ms;
 	}
 	html{
-		font-size: 12px;
+		font-size: calc(12px * var(--font-size-amplifier));
 	}
 }
 
 @media screen and (max-height:730px){
 	body{
-		font-size: 10px;
+		font-size: calc(10px * var(--font-size-amplifier));
 		transition: 500ms;
 	}
 	html{
-		font-size: 10px;
+		font-size: calc(10px * var(--font-size-amplifier));
 	}
 }
 
 @media screen and (max-height:500px){
 	body{
-		font-size: 8px;
+		font-size: calc(8px * var(--font-size-amplifier));
 		transition: 500ms;
 	}
 	html{
-		font-size: 8px;
+		font-size: calc(8px * var(--font-size-amplifier));
 	}
 }
 
