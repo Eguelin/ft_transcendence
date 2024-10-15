@@ -221,6 +221,8 @@ def profile_update(request):
 				if "is_dark_theme" in data:
 					user.profile.dark_theme = data['is_dark_theme']
 				if "username" in data:
+					if User.objects.filter(username=data['username']).exists():
+						return JsonResponse({'message': 'Username is already taken'}, status=400)
 					user.username = data['username']
 				username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
 				max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
@@ -241,6 +243,8 @@ def profile_update(request):
 					user.profile.language_pack = data['language_pack']
 				if ("is_active" in data):
 					user.profile.is_active = data['is_active']
+				if ("font_amplifier" in data):
+					user.profile.font_amplifier = data['font_amplifier']
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
@@ -274,9 +278,18 @@ def get_all_user_match_json(matches):
 			day = dateObj.day
 			date_json = {}
 			i = 0
+		try:
+			p1_name = match.player_one.username
+		except:
+			p1_name = "deleted"
+
+		try:
+			p2_name = match.player_two.username
+		except:
+			p2_name = "deleted"
 		date_json[i] = {
-			'player_one' : match.player_one.username,
-			'player_two' : match.player_two.username,
+			'player_one' : p1_name,
+			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
 			'date' : match.date,
@@ -293,9 +306,18 @@ def get_user_match(matches):
 	date = ""
 	i = 0
 	for match in matches:
+		try:
+			p1_name = match.player_one.username
+		except:
+			p1_name = "deleted"
+
+		try:
+			p2_name = match.player_two.username
+		except:
+			p2_name = "deleted"
 		matches_json[i] = {
-			'player_one' : match.player_one.username,
-			'player_two' : match.player_two.username,
+			'player_one' : p1_name,
+			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
 			'date' : match.date,
@@ -346,7 +368,8 @@ def current_user(request):
 			'blocked_users': blocked_json,
 			'is_active': request.user.profile.is_active,
 			'matches' : matches,
-			'is_admin' : request.user.is_staff
+			'is_admin' : request.user.is_staff,
+			'font_amplifier' : request.user.profile.font_amplifier
 		})
 	else:
 		return JsonResponse({'username': None}, status=404)

@@ -71,6 +71,7 @@
 		right: 12.5vw;
 		outline: none;
 		width: -webkit-fill-available;
+		width: -moz-available;
 		border-block-start: var(--hover-text-rgb);
 	}
 	
@@ -86,6 +87,7 @@
 		border-bottom: 0.2px solid var(--main-text-rgb);
 		border-block-start: var(--hover-text-rgb);
 		width: -webkit-fill-available;
+		width: -moz-available;
 		display: block;
 		z-index: 2;
 		flex: 1;
@@ -164,6 +166,7 @@
 	
 	.dropDownPortrait:hover .dropDownContent, .dropDownPortrait:focus .dropDownContent{
 		width: -webkit-fill-available;
+		width: -moz-available;
 		display: block;
 		z-index: 2;
 		flex: 1;
@@ -197,29 +200,32 @@
 
 
 
-#dropDownUserContainer, #langDropDownContainer {
+#dropDownUserContainer, #dropDownLangContainer {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
-	height: 4vw;
+	height: 3.5rem;
 	outline: none;
 }
 
-#dropDownUser {
+#dropDownUserContainer{
+	gap: .5rem;
+}
+
+#dropDownUser, #dropDownLang {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
-	margin: 0 1vmax;
 	height: fit-content;
 	outline: none;
 	flex-direction: column;
 }
 
-#langDropDown {
+#dropDownLang {
 	z-index: 1;
 }
 
-.dropDownUserContent, #langDropDownContent{
+.dropDownUserContent, #dropDownLangContent{
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -242,13 +248,13 @@
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent{
+.activeDropDown .dropDownUserContent, .activeDropDown #dropDownLangContent{
 	z-index: 1;
 	display: block;
 }
 
 
-.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
+.inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent{
 	z-index: 1;
 	display: block;
 }
@@ -258,18 +264,18 @@
 	border-color: var(--main-text-rgb);
 	background: var(--input-bg-rgb);
 	animation: backgroundNone 300ms forwards;
-	animation-delay: 100ms;
+	animation-delay: 300ms;
 }
 
 .activeDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
 	animation: scaleZText 300ms forwards;
-	font-size: min(2vh, 1vw);
+	font-size: 1rem;
 }
 
 .inactiveDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
-	animation: scaleZText 200ms reverse;
+	animation: scaleZText 300ms reverse;
 	font-size: 0;
 }
 
@@ -284,11 +290,22 @@
 	}
 }
 
-.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
-	animation: backgroundNone 300ms forwards;
+@keyframes displayToNone {
+	0%,99%{
+		display: block;
+	}
+	100%{
+		display: none;
+		-moz-user-select: -moz-none;
+	}
 }
 
-#langDropDownContent .langDropDownOptionsContainer{
+.inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent{
+	animation: backgroundNone 300ms forwards;
+	animation: displayToNone 1ms  300ms forwards;
+}
+
+#dropDownLangContent .dropDownLangOptionsContainer{
 	height: 0;
 }
 
@@ -296,14 +313,14 @@
 	font-size: 0;
 }
 
-.activeDropDown #langDropDownContent .langDropDownOptionsContainer{
+.activeDropDown #dropDownLangContent .dropDownLangOptionsContainer{
 	animation: scaleZLang 300ms forwards;
 	opacity: 1;
 	scale: 1;
-	height: 4vw;
+	height: 3.5rem;
 }
 
-.inactiveDropDown #langDropDownContent .langDropDownOptionsContainer{
+.inactiveDropDown #dropDownLangContent .dropDownLangOptionsContainer{
 	animation: scaleZLang 300ms reverse;
 	opacity: 0;
 	height: 0;
@@ -317,6 +334,7 @@
 	display: block;
 	font-size: min(2vh, 1vw);
 	min-width: -webkit-fill-available;
+	min-width: -moz-available;
 	width: min-content;
 	margin: 0.5em;
 	padding: 0;
@@ -331,9 +349,9 @@
 }
 
 
-.langDropDownOptions, #langDropDownBtn{
-	height: 3vw;
-	width: 5vw;
+.dropDownLangOptions, #dropDownLangBtn{
+	height: 2.5rem;
+	width: 4rem;
 	margin: 0 1vmin;
 
 	background-repeat: no-repeat;
@@ -347,14 +365,20 @@
 	transform: translateY(-50%);
 }
 
-.langDropDownOptionsContainer{
-	height: 4vw;
+.dropDownLangOptionsContainer{
+	height: 3.5rem;
 }
 
-#langDropDown:focus #langDropDownContent{
+#dropDownLang:focus #dropDownLangContent{
 	display: block;
 }
 
+
+@media screen and (max-width:700px){
+	#dropDownLangContainer{
+		display: none;
+	}
+}
 
 @keyframes scaleZText {
 	0% {
@@ -363,11 +387,11 @@
 	}
 	
 	80% {
-		font-size: min(2.1vh, 1.1vw);
+		font-size: 1.1rem;
 	}
   
 	100% {
-		font-size: min(2vh, 1vw);
+		font-size: 1rem;
 		display: block;
 	}
 }
@@ -382,6 +406,6 @@
 	100% {
 		opacity: 1;
 		scale: 1;
-		height: 4vw;
+		height: 3.5rem;
 	}
 }

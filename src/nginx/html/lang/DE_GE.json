@@ -4,10 +4,12 @@
 		"#friendsBtn" :  "Freunde",
 		"#settingsBtn" :  "Einstellungen",
 		"#logOutBtn" :  "Ausloggen",
-		"#inputSearchUser" : "Benutzer suchen"
+		"#inputSearchUser" : "Benutzer suchen",
+		".deletedUser" : "Gelöscht"
 	},
 	"home" : {
 		"#title" : "PONG",
+		"#subtitle" : "",
 		"#playBtn" : "Spielen",
 		"#notPlayedToday" : "Sie haben heute kein Spiel gespielt",
 		".victory" : "SIEG",
@@ -16,25 +18,30 @@
 	},
 	"login" : {
 		"#title" : "ANMELDUNG",
+		"#subtitle" : "",
 		"#internalLoginOpt" : "Melden Sie sich mit Zugangsdaten an",
 		"#loginBtn" : "ANMELDUNG",
+		"#loginSelectorText" : "Anmeldung",
 		"#externalLoginOpt" : "Weitere anmeldeoptionen",
 		"#inputUsername" : "Nutzername",
 		"#inputPassword" : "Passwort",
 		"#createAcc" : "Erstelle deinen Account",
 		"#registerBtn" : "REGISTRIEREN",
+		"#registerSelectorText" : "Registrieren",
 		"#inputRegisterUsername" : "Nutzername",
 		"#inputRegisterPassword" : "Passwort",
 		"#inputRegisterCPassword" : "Bestätige das Passwort"
 	},
 	"settings": {
-		"#title" : "Einstellungen",
+		"#title" : "",
+		"#subtitle" : "Einstellungen",
 		"#accountTitle" : "Account",
 		"#accessibilityTitle" : "Barrierefreiheit",
 		"#saveBtn" : "SPEICHERN",
-		"#inputUsername" : "Nutzername",
+		"#inputChangeUsername" : "Nutzername",
 		"#inputPfp" : "Profilbild",
 		"#pfpLabel" : "Profilbild",
+		"#deleteAccountBtn" : "KONTO LÖSCHEN",
 		"#themesDropDownL" : "Themen",
 		"#themesDropDownP" : "Themen",
 		"#loadLightL" : "Licht",
@@ -55,7 +62,8 @@
 		"#pirateBtnP" : "Pirat"
 	},
 	"friends":{
-		"#title" : "Freunde",
+		"#title" : "",
+		"#subtitle" : "Freunde",
 		"#confirmDeleteQuestion" : "Möchten Sie diesen Freund wirklich löschen?",
 		"#confirmBlockQuestion" : "Möchten Sie diesen Freund wirklich blockieren?",
 		"#confirmDelete" : "Ich bin sicher",
@@ -67,6 +75,7 @@
 	},
 	"user":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Freundschaftsanfrage senden",
 		"#notPlayedToday" : "hat heute kein Spiel bestritten",
 		"#recentMatchHistoryText" : "Aktuelle Spiele",
@@ -77,6 +86,7 @@
 	},
 	"dashboard":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#ratioText" : "Gewinn-/Niederlagenverhältnis",
 		"#nbMatchText" : "Anzahl gespielter Spiele",
 		"#nbWinText" : "Anzahl der gewonnenen Spiele",
@@ -91,14 +101,23 @@
 		"CVwinLossAbsGraphClient" : "du"
 	},
 	"search": {
-		"#title" : "Suchen"
+		"#title" : "Suchen",
+		"#subtitle" : ""
 	},
 	"game":{
-		"#title" : ""
+		"#title" : "",
+		"#subtitle" : ""
 	},
 	"404":{
 		"#title" : "Fehler 404",
+		"#subtitle" : "",
 		"#NotFoundtitle" : "Ho nein, diese Seite existiert nicht :(",
-		"#NotFoundhomeBtn" : "HOMEPAGE"
+		"#NotFoundBtn" : "HOMEPAGE"
+	},
+	"403":{
+		"#title" : "Fehler 403",
+		"#subtitle" : "",
+		"#ForbidenTitle" : "Du solltest nicht hier sein >:(",
+		"#ForbidenBtn" : "HOMEPAGE"
 	}
 }

@@ -4,10 +4,12 @@
 		"#friendsBtn" :  "Friends",
 		"#settingsBtn" :  "Settings",
 		"#logOutBtn" :  "Log out",
-		"#inputSearchUser" : "Search user"
+		"#inputSearchUser" : "Search user",
+		".deletedUser" : "Deleted"
 	},
 	"home" : {
 		"#title" : "PONG",
+		"#subtitle" : "",
 		"#playBtn" : "Play",
 		"#notPlayedToday" : "You have not played any match today",
 		".victory" : "VICTORY",
@@ -16,25 +18,30 @@
 	},
 	"login" : {
 		"#title" : "LOGIN",
+		"#subtitle" : "",
 		"#internalLoginOpt" : "Login with credentials",
 		"#loginBtn" : "LOGIN",
+		"#loginSelectorText" : "Login",
 		"#externalLoginOpt" : "Other login options",
 		"#inputUsername" : "Username",
 		"#inputPassword" : "Password",
 		"#createAcc" : "Create your account",
 		"#registerBtn" : "REGISTER",
+		"#registerSelectorText" : "Register",
 		"#inputRegisterUsername" : "Username",
 		"#inputRegisterPassword" : "Password",
 		"#inputRegisterCPassword" : "Confirm password"
 	},
 	"settings": {
-		"#title" : "Settings",
+		"#title" : "",
+		"#subtitle" : "Settings",
 		"#accountTitle" : "Account",
 		"#accessibilityTitle" : "Accessibility",
 		"#saveBtn" : "SAVE",
-		"#inputUsername" : "Username",
+		"#inputChangeUsername" : "Username",
 		"#inputPfp" : "Profile picture",
 		"#pfpLabel" : "Profile picture",
+		"#deleteAccountBtn" : "DELETE ACCOUNT",
 		"#themesDropDownL" : "Themes",
 		"#themesDropDownP" : "Themes",
 		"#loadLightL" : "Light",
@@ -55,7 +62,8 @@
 		"#pirateBtnP" : "Pirate"
 	},
 	"friends":{
-		"#title" : "Friends",
+		"#title" : "",
+		"#subtitle" : "Friends",
 		"#confirmDeleteQuestion" : "Are you sure you want to remove this friend?",
 		"#confirmBlockQuestion" : "Are you sure you want to block this friend?",
 		"#confirmDelete" : "I'm sure",
@@ -67,6 +75,7 @@
 	},
 	"user":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Send friend request",
 		"#notPlayedToday" : "has not played any match today",
 		"#recentMatchHistoryText" : "Recent matches",
@@ -77,6 +86,7 @@
 	},
 	"dashboard":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#ratioText" : "wins/loses ratio",
 		"#nbMatchText" : "Number of games played",
 		"#nbWinText" : "Number of games winned",
@@ -91,14 +101,23 @@
 		"CVwinLossAbsGraphClient" : "you" 
 	},
 	"search": {
-		"#title" : "Search"
+		"#title" : "Search",
+		"#subtitle" : ""
 	},
 	"game":{
-		"#title" : ""
+		"#title" : "",
+		"#subtitle" : ""
 	},
 	"404":{
 		"#title" : "ERROR 404",
+		"#subtitle" : "",
 		"#NotFoundtitle" : "Ho no, this page does not exist :(",
-		"#NotFoundhomeBtn" : "HOME"
+		"#NotFoundBtn" : "HOME"
+	},
+	"403":{
+		"#title" : "ERROR 403",
+		"#subtitle" : "",
+		"#ForbidenTitle" : "You're not supposed to be here >:(",
+		"#ForbidenBtn" : "HOME"
 	}
 }
