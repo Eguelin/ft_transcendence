@@ -387,3 +387,20 @@ document.getElementById("fontSizeRange").addEventListener("input", (e) => {
 	client.fontAmplifier = e.target.value;
 	document.documentElement.style.setProperty("--font-size-amplifier", e.target.value);
 })
+
+document.getElementById("fontSizeRange").addEventListener("focus", (e) =>{
+	window.removeEventListener("keydown", settingsKeyDownEvent)
+})
+
+document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
+	window.addEventListener("keydown", settingsKeyDownEvent)
+})
+
+usernameInput.addEventListener("focus", (e) => {
+	window.removeEventListener("keydown", settingsKeyDownEvent)
+})
+
+
+usernameInput.addEventListener("focusout", (e) => {
+	window.addEventListener("keydown", settingsKeyDownEvent)
+})

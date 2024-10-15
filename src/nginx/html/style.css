@@ -40,8 +40,16 @@ html{
 		transition: 500ms;
 		font-size: calc(24px * var(--font-size-amplifier));
 	}
+	input{
+		font-size: .5rem !important;
+	}
 }
 
+@media screen and (orientation:portrait){
+	input{
+		font-size: .7rem !important;
+	}
+}
 
 @media screen and (orientation:landscape) and (max-height:1080px){
 	body{
