@@ -39,7 +39,7 @@ function game() {
 		} else if (data.type === "game_start") {
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
 		} else if (data.type === "game_end") {
-			clearInterval(KeyPressInterval);;
+			clearInterval(KeyPressInterval);
 			endMessage = data.message;
 		}
 	}
