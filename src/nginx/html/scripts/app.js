@@ -255,6 +255,9 @@ function load(){
 	if (currentPage == "settings"){
 		window.removeEventListener("keydown", settingsKeyDownEvent)
 	}
+	if (currentPage == "login"){
+		window.removeEventListener("keydown", loginKeyDownEvent)
+	}
 	if (client)
 		client.loadPage(url.pathname)
 	else {
@@ -553,21 +556,6 @@ window.addEventListener("keydown", (e) => {
 		}
 	}
 	if (currentPage == "login"){
-		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
-			loginSlideSelector[slideIdx].classList.remove('activeSelector');
-			if (e.key == "ArrowLeft")
-				slideIdx -= 1;
-			else
-				slideIdx += 1;
-			if (slideIdx > slides.length - 1)
-				slideIdx = 0;
-			if (slideIdx < 0)
-				slideIdx = slides.length - 1;
-			for (let i = 0; i < slides.length; i++)
-				slides[i].style.display = "none";
-			loginSlideSelector[slideIdx].classList.add('activeSelector');
-			slides[slideIdx].style.display = "block";
-		}
 	}
 })
 

@@ -258,3 +258,33 @@ registerBtn = document.getElementById("registerBtn");
 registerBtn.addEventListener("click", (e) => {
 	register()
 })
+
+window.addEventListener("keydown", loginKeyDownEvent)
+
+function loginKeyDownEvent(e) {
+	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		loginSlideSelector[slideIdx].classList.remove('activeSelector');
+		if (e.key == "ArrowLeft")
+			slideIdx -= 1;
+		else
+			slideIdx += 1;
+		if (slideIdx > slides.length - 1)
+			slideIdx = 0;
+		if (slideIdx < 0)
+			slideIdx = slides.length - 1;
+		for (let i = 0; i < slides.length; i++)
+			slides[i].style.display = "none";
+		loginSlideSelector[slideIdx].classList.add('activeSelector');
+		slides[slideIdx].style.display = "block";
+	}
+}
+
+inputs = document.querySelectorAll("input");
+inputs.forEach(function (input) {
+	input.addEventListener("focus", (e) => {
+		window.removeEventListener("keydown", loginKeyDownEvent);
+	})
+	input.addEventListener("focusout", (e) => {
+		window.addEventListener("keydown", loginKeyDownEvent);
+	})
+});
