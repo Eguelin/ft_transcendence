@@ -513,15 +513,16 @@ async function loadCurrentLang(){
 
 swichTheme.addEventListener("click", () => {
 	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
-	const data = { is_dark_theme: theme };
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
-	})
+	if (client){
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ is_dark_theme: theme }),
+			credentials: 'include'
+		})
+	}
 	switchTheme(theme);
 	swichTheme.blur();
 })
