@@ -21,10 +21,9 @@ function game() {
 	document.addEventListener("keydown", handleKeyDown);
 	document.addEventListener("keyup", handleKeyUp);
 
-	setInterval(() => gameRender(), 16);
-
 	socket.onopen = function() {
 		console.log("Connection established");
+		setInterval(() => gameRender(), 16);
 	}
 
 	socket.onmessage = function(event) {
