@@ -6,7 +6,6 @@ import asyncio
 import random
 import math
 import time
-import copy
 
 class Matchmaking():
 
@@ -62,8 +61,8 @@ class Ball():
 		if self.y < pad.y - Paddle.demieHeight - Ball.demieSize or self.y > pad.y + Paddle.demieHeight + Ball.demieSize:
 			return
 
-		if self.speed < 10:
-			self.speed += 0.5
+		if self.speed < 12:
+			self.speed += 1
 
 		ballImpact = self.y - pad.y
 
@@ -92,10 +91,10 @@ class Ball():
 
 class Paddle():
 	width = 8
-	height = 120
+	height = 100
 	demieWidth = width / 2
 	demieHeight = height / 2
-	speed = 4
+	speed = 6
 	margin = 4
 
 	def getSize():
@@ -159,10 +158,10 @@ class GameTemplate():
 				self.ball.init()
 			self.ball.dx = -self.ball.dx
 
-		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - Paddle.width:
+		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - self.ball.speed:
 			self.ball.paddleCollision(self.playerLeft)
 
-		elif self.ball.x >= self.playerRight.x and self.ball.x <= self.playerRight.x + Paddle.width:
+		elif self.ball.x >= self.playerRight.x and self.ball.x <= self.playerRight.x + self.ball.speed:
 			self.ball.paddleCollision(self.playerRight)
 
 		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= GameTemplate.height:
@@ -388,9 +387,9 @@ class PlayerAI(PlayerTemplate):
 		self.Y = 0
 
 	async def run(self):
-		while True:
+		while self.game.playerLeft.score != 5 and self.game.playerRight.score != 5:
 			ball = self.game.ball.copy()
-			while ball.x < GameTemplate.width and ball.x > 0:
+			while time.time() - self.game.timeLastPoint > 2 and ball.x < GameTemplate.width and ball.x > 0:
 				ball.move()
 			self.Y = ball.y
 			await asyncio.sleep(1)
