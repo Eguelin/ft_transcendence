@@ -51,10 +51,10 @@ class MatchManager(models.Manager):
 
 	def addMatch(self, playerOne : Player, playerTwo : Player):
 		match = self.create(player_one=playerOne.user, player_two=playerTwo.user)
-		match.player_one_pts = playerOne.score
-		match.player_two_pts = playerTwo.score
+		match.player_one_pts = playerOne.score if playerOne.socket else 0
+		match.player_two_pts = playerTwo.score if playerTwo.socket else 0
 		match.date = datetime.datetime.now()
-		match.winner = playerOne.user if playerOne.score > playerTwo.score else playerTwo.user
+		match.winner = playerOne.user if playerOne.score > playerTwo.score or not playerTwo.socket else playerTwo.user
 		match.save()
 		playerOne.user.profile.matches.add(match)
 		playerTwo.user.profile.matches.add(match)
