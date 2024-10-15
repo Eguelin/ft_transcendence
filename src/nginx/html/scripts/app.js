@@ -275,6 +275,7 @@ function load(){
 			}))
 		});
 	}
+	homeBtn.focus();
 }
 
 
