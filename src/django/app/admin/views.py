@@ -117,13 +117,13 @@ def create_friendship(request):
 		
 		if not User.objects.filter(username=data['userOne']).exists():
 			user1 = User.objects.create_user(username=data['userOne'], password="password")
-			user1.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 			user1.id42 = 0
 		else:
 			user1 = User.objects.get(username=data['userOne'])
 		if not User.objects.filter(username=data['userTwo']).exists():
 			user2 = User.objects.create_user(username=data['userTwo'], password="password")
-			user2.profile.profile_picture = "profilePictures/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user2.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 			user2.id42 = 0
 		else:
 			user2 = User.objects.get(username=data['userTwo'])
