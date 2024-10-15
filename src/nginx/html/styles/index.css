@@ -1,8 +1,9 @@
 #titleFlexContainer{
-	height:fit-content;
+	height:10rem;
 	text-align: center;
 	display: flex;
 	width: -webkit-fill-available;
+	width: -moz-available;
 	align-items: center;
 }
 
@@ -40,12 +41,19 @@
 #themeButton{
 	mask-image:url("../icons/button-night-mode.svg");
 	background:var(--main-text-rgb);
-	height:5vw;
-	width:5vw;
-	margin: 1vmax;
+	height:5rem;
+	width:5rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+	flex: none;
+	display: none;
+}
+
+@media screen and (min-width:500px){
+	#themeButton{
+		display: block;
+	}
 }
 
 #themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover{
@@ -64,9 +72,9 @@
 }
 
 #pfpContainer{
-	height: 4vw;
-	width: 4vw;
-	margin: 0 1vmax;
+	height: 4rem;
+	width: 4rem;
+	align-self: center;
 	background-position: center center;
 	background-repeat: no-repeat;
 	overflow: hidden;
@@ -76,20 +84,26 @@
 
 #quickSettingContainer{
 	flex-direction: row-reverse;
+	gap: .5rem;
 	display: flex;
 	width: 30vw;
 	align-items: center;
+	margin-right: .5rem;
 }
 
 #usernameBtn {
 	color: var(--main-text-rgb);
-	line-height: 4vw;
 	display: block;
 	text-align: center;
+	height: 3.5rem;
+	align-content: center;
+	min-width: 7ch;
 }
 
-#inputSearchUser{
-	display: none;
+#inputSearchUserContainer{
+	flex: 1; 
+	text-align: left; 
+	align-self: center;
 }
 
 @media screen and (orientation:landscape){
@@ -102,4 +116,8 @@
 	#pfpContainer{
 		display: none;
 	}
+}
+
+#subtitleContainer{
+	align-content: center;
 }

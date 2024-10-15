@@ -15,7 +15,7 @@ friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].classNa
 slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 
 homeBtn.style.setProperty("display", "block");
-inputSearchUser.style.setProperty("display", "block");
+inputSearchUserContainer.style.setProperty("display", "block");
 dropDownUserContainer.style.setProperty("display", "flex");
 
 Object.keys(slideSelector).forEach(function(key) {
@@ -112,6 +112,8 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
+var friendTabIdx, pendingFriendTabIdx, blockedUserTabIdx; 
+
 function createFriendContainer(user){
 	var friendContainer = document.createElement("div");
 	var pfpContainer = document.createElement("div");
@@ -141,6 +143,8 @@ function createFriendContainer(user){
 
 	friendsOptionContainer.appendChild(moreBtn);
 	friendsOptionContainer.appendChild(friendsOption);
+	friendsOptionContainer.tabIndex = friendTabIdx;
+	friendTabIdx += 1;
 
 	removeFriendBtn.className = "removeFriendBtn";
 
@@ -230,6 +234,10 @@ function createBlockedUserContainer(user){
 
 function checkUpdate(){
 	if (currentPage == "friends"){
+		friendTabIdx = 12;
+		pendingFriendTabIdx = 12;
+		blockedUserTabIdx = 12;
+	
 		fetch('/api/user/current', {
 			method: 'GET',
 			headers: {
@@ -278,6 +286,7 @@ function checkUpdate(){
 
 							var bg = document.createElement("div");
 							bg.id = "popupBg";
+							bg.style.display = "block";
 							pos = friendInfo.getBoundingClientRect();
 							bg.style.left = `${-pos.left}px`;
 							bg.style.top = `${-pos.top}px`;
@@ -289,6 +298,7 @@ function checkUpdate(){
 
 							var bg = document.createElement("div");
 							bg.id = "popupBg";
+							bg.style.display = "block";
 							pos = friendInfo.getBoundingClientRect();
 							bg.style.left = `${-pos.left}px`;
 							bg.style.top = `${-pos.top}px`;
@@ -320,14 +330,42 @@ function checkUpdate(){
 							})
 						})
 					}
+					document.querySelectorAll(".friendsOptionContainer").forEach(function (elem) {
+						elem.addEventListener("focus", (e)=>{
+							window.removeEventListener("keydown", friendKeyDownEvent);
+						})
+						
+						elem.addEventListener("focusout", (e)=>{
+							window.addEventListener("keydown", friendKeyDownEvent);
+						})
+					})
 				});
 			}
 			else {
 				client = null;
-				history.replaceState("", "", `https://${hostname.host}/login`);
+				myReplaceState(`https://${hostname.host}/login`);
 			}
 		})
 	}
 }
 
 checkUpdate();
+
+function friendKeyDownEvent(e) {
+	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		friendSlides[friendSlideIdx].className = "friendSlide";
+		slideSelector[friendSlideIdx].className = "slideSelector";
+		if (e.key == "ArrowLeft")
+			friendSlideIdx -= 1;
+		else
+			friendSlideIdx += 1;
+		if (friendSlideIdx > friendSlides.length - 1)
+			friendSlideIdx = 0;
+		if (friendSlideIdx < 0)
+			friendSlideIdx = friendSlides.length - 1;
+		friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+		slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+	}
+}
+
+window.addEventListener("keydown", friendKeyDownEvent);

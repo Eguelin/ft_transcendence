@@ -1,17 +1,16 @@
-//import Chart from '../chart.js/auto';
-
 container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
+inputSearchUserContainer = document.getElementById("inputSearchUserContainer");
 usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
 dropDownUserContainer = document.getElementById("dropDownUserContainer");
 dropDownUser = document.getElementById("dropDownUser");
 pageContentContainer = document.getElementById("pageContentContainer");
-langDropDown = document.getElementById("langDropDown");
-langDropDownBtn = document.getElementById("langDropDownBtn");
-langDropDownOption = document.querySelectorAll(".langDropDownOptions");
+dropDownLang = document.getElementById("dropDownLang");
+dropDownLangBtn = document.getElementById("dropDownLangBtn");
+dropDownLangOption = document.querySelectorAll(".dropDownLangOptions");
 myProfileBtn = document.getElementById("myProfileBtn");
 friendsBtn = document.getElementById("friendsBtn");
 settingsBtn = document.getElementById("settingsBtn");
@@ -21,6 +20,7 @@ var currentPage = "";
 var currentLang = "lang/EN_UK.json"
 var username = "";
 const hostname = new URL(window.location.href);
+const defaultLastXDaysDisplayed = 7;
 
 var client = null;
 var pageName;
@@ -76,6 +76,7 @@ class Client{
 	recentMatches;
 	#is_admin;
 	mainTextRgb;
+	fontAmplifier
 
 	constructor (){
 		return (async () =>{
@@ -99,8 +100,10 @@ class Client{
 				this.#is_admin = result.is_admin;
 				switchTheme(this.use_dark_theme);
 				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+				this.fontAmplifier = result.font_amplifier;
+				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
-				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 				usernameBtn.innerHTML = result.username;
 
@@ -127,136 +130,161 @@ class Client{
 	}
 
 	loadPage(page){
-		document.getElementById("loaderBg").style.setProperty("display", "block");
-
-		var sep = page.indexOf("/", 1)
-		if (sep > 0)
-			pageName = page.substring(0, sep)
-		else
-			pageName = page;
-
-		if (routes[pageName]){
-			if (!this.#is_admin && pageName == "/admin"){
-				fetch(routes[403]).then((response) => {
-					response.text().then(response => {
-						currentPage = '403';
-						container.innerHTML = response;
-
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.onload = function(){
+		(async() => {
+			const fetchResult = await fetch('/api/user/current', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			})
+			const result = await fetchResult.json();
+			if (fetchResult.ok){
+				this.#is_admin = result.is_admin;
+				document.getElementById("loaderBg").style.setProperty("display", "block");
+		
+				var sep = page.indexOf("/", 1)
+				if (sep > 0)
+					pageName = page.substring(0, sep)
+				else
+					pageName = page;
+				
+				if (routes[pageName]){
+					if (!this.#is_admin && pageName == "/admin"){
+						fetch(routes[403]).then((response) => {
+							response.text().then(response => {
+								currentPage = '403';
+								container.innerHTML = response;
+		
+								document.getElementById("script").remove();
+								var s = document.createElement("script");
+								s.setAttribute('id', 'script');
+								s.onload = function(){
+									(async () => (loadCurrentLang()))();
+								}
+								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
+								document.body.appendChild(s);
+								document.getElementById("loaderBg").style.setProperty("display", "none");
+							})
+						})
+					}
+					else{
+						fetch(routes[pageName]).then((response) => {
+							response.text().then(response => {
+								currentPage = pageName.substring(1);
+								container.innerHTML = response;
+		
+								document.getElementById("script").remove();
+								var s = document.createElement("script");
+								s.onload = function(){
+									(async () => (loadCurrentLang()))();
+								}
+								s.setAttribute('id', 'script');
+								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
+								document.body.appendChild(s);
+								document.getElementById("loaderBg").style.setProperty("display", "none");
+							})
+						})
+					}
+				}
+				else{
+					fetch(routes[404]).then((response) => {
+						response.text().then(response => {
+							currentPage = '404';
+							container.innerHTML = response;
+		
+							document.getElementById("script").remove();
+							var s = document.createElement("script");
+							s.setAttribute('id', 'script');
+							s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
+							document.body.appendChild(s);
+							document.getElementById("loaderBg").style.setProperty("display", "none");
 							(async () => (loadCurrentLang()))();
-						}
-						s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
-						document.body.appendChild(s);
-						document.getElementById("loaderBg").style.setProperty("display", "none");
+						})
 					})
-				})
+				}
 			}
 			else{
-				fetch(routes[pageName]).then((response) => {
-					response.text().then(response => {
-						currentPage = pageName.substring(1);
+				dropDownUserContainer.style.setProperty("display", "none");
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+		
+				fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
+					(response.text().then(response => {
+						inputSearchUserContainer.style.setProperty("display", "none");
 						container.innerHTML = response;
-
 						document.getElementById("script").remove();
 						var s = document.createElement("script");
-						s.onload = function(){
-							(async () => (loadCurrentLang()))();
-						}
 						s.setAttribute('id', 'script');
-						s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
+						s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
 						document.body.appendChild(s);
-						document.getElementById("loaderBg").style.setProperty("display", "none");
-					})
-				})
+						currentPage = "login";
+						(async () => (loadCurrentLang()))();
+					}))
+				});
 			}
-		}
-		else{
-			fetch(routes[404]).then((response) => {
-				response.text().then(response => {
-					currentPage = '404';
-					container.innerHTML = response;
-
-					document.getElementById("script").remove();
-					var s = document.createElement("script");
-					s.setAttribute('id', 'script');
-					s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
-					document.body.appendChild(s);
-					document.getElementById("loaderBg").style.setProperty("display", "none");
-					(async () => (loadCurrentLang()))();
-				})
-			})
-		}
+		})();
 	}
 }
 
-window.navigation.addEventListener("navigate", (e) => {
-	const url = new URL(e.destination.url);
+XMLHttpRequest.prototype.send = function() {
+	return false;
+}
 
-	e.intercept({
-		async handler() {
-			//reset dropdown menus
-			if (langDropDown.classList.contains("activeDropDown"))
-				langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
-			if (dropDownUser.classList.contains("activeDropDown"))
-				dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
-
-			if (client && !(client instanceof Client)){
-				client = null;
-				fetch('/api/user/logout', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					credentials: 'include'
-				})
-				if (!url.pathname.startsWith("/register"))
-					history.replaceState("","", `https://${hostname.host}/login`)
-			}
-			if (client)
-				client.loadPage(url.pathname)
-			else {
-				dropDownUserContainer.style.setProperty("display", "none");
-				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
-
-				if (url.pathname.startsWith("/register")) {
-					fetch(`https://${hostname.host}/bodyLess/register.html`).then((response) => {
-						return (response.text().then(response => {
-
-							homeBtn.style.setProperty("display", "block");
-							inputSearchUser.style.setProperty("display", "none");
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/register.js`);
-							currentPage = "register";
-							(async () => (loadCurrentLang()))();
-							document.body.appendChild(s);
-						}))
-					});
-				}
-				else{
-					fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
-						(response.text().then(response => {
-							inputSearchUser.style.setProperty("display", "none");
-							container.innerHTML = response;
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `scripts/login.js`);
-							document.body.appendChild(s);
-							currentPage = "login";
-							(async () => (loadCurrentLang()))();
-						}))
-					});
-				}
-			}
-		}
-	})
+window.addEventListener("popstate", (e) =>{
+	load();
 })
+
+function load(){
+	const url =  new URL( window.location.href);
+	if (dropDownLang.classList.contains("activeDropDown"))
+		dropDownLang.classList.replace("activeDropDown", "inactiveDropDown");
+	if (dropDownUser.classList.contains("activeDropDown"))
+		dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
+
+	if (client && !(client instanceof Client)){
+		client = null;
+		fetch('/api/user/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		})
+		history.replaceState("","", `https://${hostname.host}/login`)
+	}
+	if (currentPage == "settings"){
+		window.removeEventListener("keydown", settingsKeyDownEvent)
+	}
+	if (currentPage == "login"){
+		window.removeEventListener("keydown", loginKeyDownEvent)
+	}
+	if (currentPage == "friends"){
+		window.removeEventListener("keydown", friendKeyDownEvent)
+	}
+	
+	if (client)
+		client.loadPage(url.pathname)
+	else {
+		dropDownUserContainer.style.setProperty("display", "none");
+		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+
+		fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
+			(response.text().then(response => {
+				inputSearchUserContainer.style.setProperty("display", "none");
+				container.innerHTML = response;
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
+				document.body.appendChild(s);
+				currentPage = "login";
+				(async () => (loadCurrentLang()))();
+			}))
+		});
+	}
+	homeBtn.focus();
+}
+
 
 function handleToken() {
 	const code = window.location.href.split("code=")[1];
@@ -275,9 +303,9 @@ function handleToken() {
 				(async () => {
 					client = await new Client()
 					if (!client)
-						history.replaceState("", "", `https://${hostname.host}/login`);
+						myReplaceState(`https://${hostname.host}/login`);
 					else
-						history.replaceState("", "", `https://${hostname.host}/home`);
+						myReplaceState(`https://${hostname.host}/home`);
 				})()
 			}
 		}).catch(error => console.error('Error:', error));
@@ -289,15 +317,11 @@ function handleToken() {
 			(async () => {
 				client = await new Client();
 				if (!client)
-					history.replaceState("", "", `https://${hostname.host}/login`);
-				else{
-					if (url.pathname == "" || url.pathname == "/"){
-						history.replaceState("", "", `https://${hostname.host}/home`)
-						client.loadPage("/home");
-					}
-					else
-						client.loadPage(url.pathname);
-				}
+					myReplaceState(`https://${hostname.host}/login`);
+				else if (url.pathname == "" || url.pathname == "/")
+					myReplaceState(`https://${hostname.host}/home`);
+				else
+					load();
 			})()
 	}
 }
@@ -306,6 +330,16 @@ window.addEventListener('load', (e) => {
 	handleToken();
 });
 
+
+function myReplaceState(url){
+	history.replaceState("", "", url);
+	load();
+}
+
+function myPushState(url){
+	history.pushState("", "", url);
+	load();
+}
 
 window.addEventListener("beforeunload", (e) => {
 	fetch('/api/user/update', {
@@ -320,21 +354,21 @@ window.addEventListener("beforeunload", (e) => {
 
 homeBtn.addEventListener("click", (e) => {
 	if (currentPage != "register")
-		history.pushState("", "", `https://${hostname.host}/home`);
+		myPushState(`https://${hostname.host}/home`);
 	else
-		history.pushState("", "", `https://${hostname.host}/login`);
+		myPushState(`https://${hostname.host}/login`);
 })
 
 myProfileBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/user/${client.username}`);
+	myPushState(`https://${hostname.host}/user/${client.username}`);
 })
 
 friendsBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/friends`);
+	myPushState(`https://${hostname.host}/friends`);
 })
 
 settingsBtn.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/settings`);
+	myPushState(`https://${hostname.host}/settings`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
@@ -343,7 +377,7 @@ homeBtn.addEventListener("keydown", (e) => {
 })
 
 logOutBtn.addEventListener("click", (e) => {
-	history.replaceState("", "", `https://${hostname.host}/login`);
+	myReplaceState(`https://${hostname.host}/login`);
 });
 
 function switchTheme(darkTheme) {
@@ -396,12 +430,12 @@ async function loadCurrentLang(){
 		contentJson = client.langJson;
 	}
 	else if (currentLang != undefined){
-		const fetchResult = await fetch(currentLang);
+		const fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
 		if (fetchResult.ok){
 			try{
 				contentJson = await fetchResult.json()
-				langDropDownBtn.style.setProperty("background-image", `url(${svgPath})`);
+				dropDownLangBtn.style.setProperty("background-image", `url(${svgPath})`);
 			}
 			catch{
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -429,7 +463,7 @@ async function loadCurrentLang(){
 		if (fetchResult.ok){
 			try {
 				contentJson = await fetchResult.json();
-				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
 			}
 			catch {
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -487,15 +521,16 @@ async function loadCurrentLang(){
 
 swichTheme.addEventListener("click", () => {
 	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
-	const data = { is_dark_theme: theme };
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-		credentials: 'include'
-	})
+	if (client){
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ is_dark_theme: theme }),
+			credentials: 'include'
+		})
+	}
 	switchTheme(theme);
 	swichTheme.blur();
 })
@@ -506,58 +541,6 @@ swichTheme.addEventListener("keydown", (e) => {
 		swichTheme.focus();
 	}
 })
-
-window.addEventListener("keydown", (e) => {
-	if (currentPage == "friends") {
-		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
-			friendSlides[friendSlideIdx].className = "friendSlide";
-			slideSelector[friendSlideIdx].className = "slideSelector";
-			if (e.key == "ArrowLeft")
-				friendSlideIdx -= 1;
-			else
-				friendSlideIdx += 1;
-			if (friendSlideIdx > friendSlides.length - 1)
-				friendSlideIdx = 0;
-			if (friendSlideIdx < 0)
-				friendSlideIdx = friendSlides.length - 1;
-			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
-			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
-		}
-	}
-	if (currentPage == "settings") {
-		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
-			if (e.key == "ArrowLeft")
-				slideIdx -= 1;
-			else
-				slideIdx += 1;
-			if (slideIdx > settingsSlides.length - 1)
-				slideIdx = 0;
-			if (slideIdx < 0)
-				slideIdx = settingsSlides.length - 1;
-			for (let i = 0; i < settingsSlides.length; i++)
-				settingsSlides[i].style.display = "none";
-			settingsSlides[slideIdx].style.display = "block";
-		}
-	}
-	if (currentPage == "login"){
-		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
-			loginSlideSelector[slideIdx].classList.remove('activeSelector');
-			if (e.key == "ArrowLeft")
-				slideIdx -= 1;
-			else
-				slideIdx += 1;
-			if (slideIdx > slides.length - 1)
-				slideIdx = 0;
-			if (slideIdx < 0)
-				slideIdx = slides.length - 1;
-			for (let i = 0; i < slides.length; i++)
-				slides[i].style.display = "none";
-			loginSlideSelector[slideIdx].classList.add('activeSelector');
-			slides[slideIdx].style.display = "block";
-		}
-	}
-})
-
 
 function createMatchResumeContainer(match) {
 	matchContainer = document.createElement("div");
@@ -593,6 +576,11 @@ function createMatchResumeContainer(match) {
 	scoreUserName.innerHTML = `${match.player_one}`;
 	scoreOpponentName.innerHTML = `${match.player_two}`;
 
+	if (scoreUserName.innerHTML == "deleted")
+		scoreUserName.classList.add("deletedUser");
+
+	if (scoreOpponentName.innerHTML == "deleted")
+		scoreOpponentName.classList.add("deletedUser");
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
@@ -631,40 +619,54 @@ inputSearchUser.addEventListener("keydown", (e) => {
 		if (query.length == 0)
 			popUpError("Can't search empty query");
 		else
-			history.pushState("", "", `https://${hostname.host}/search?query=${query}`);
+			myPushState(`https://${hostname.host}/search?query=${query}`);
 	}
 })
 
-langDropDownBtn.addEventListener("click", (e) => {
+dropDownLangBtn.addEventListener("click", (e) => {
 	if (dropDownUser.classList.contains("activeDropDown")){
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("inactiveDropDown");
+		setTimeout((dropDownUser) => {
+			dropDownUser.classList.remove("inactiveDropDown");
+		}, 300, dropDownUser)
 	}
-	if (langDropDown.classList.contains("activeDropDown")){
-		langDropDown.classList.remove("activeDropDown");
-		void langDropDown.offsetWidth;
-		langDropDown.classList.add("inactiveDropDown");
+	if (dropDownLang.classList.contains("activeDropDown")){
+		dropDownLang.classList.remove("activeDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("inactiveDropDown");
+
+		setTimeout((dropDownLang) => {
+			dropDownLang.classList.remove("inactiveDropDown");
+		}, 300, dropDownLang)
 	}
-	else if (langDropDown.classList.contains("inactiveDropDown")){
-		langDropDown.classList.remove("inactiveDropDown");
-		void langDropDown.offsetWidth;
-		langDropDown.classList.add("activeDropDown");
+	else if (dropDownLang.classList.contains("inactiveDropDown")){
+		dropDownLang.classList.remove("inactiveDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("activeDropDown");
 	}
 	else
-		langDropDown.classList.add("activeDropDown");
+		dropDownLang.classList.add("activeDropDown");
 })
 
 usernameBtn.addEventListener("click", (e) => {
-	if (langDropDown.classList.contains("activeDropDown")){
-		langDropDown.classList.remove("activeDropDown");
-		void langDropDown.offsetWidth;
-		langDropDown.classList.add("inactiveDropDown");
+	if (dropDownLang.classList.contains("activeDropDown")){
+		dropDownLang.classList.remove("activeDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("inactiveDropDown");
+
+		setTimeout((dropDownLang) => {
+			dropDownLang.classList.remove("inactiveDropDown");
+		}, 300, dropDownLang)
 	}
 	if (dropDownUser.classList.contains("activeDropDown")){
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("inactiveDropDown");
+		setTimeout((dropDownUser) => {
+			dropDownUser.classList.remove("inactiveDropDown");
+		}, 300, dropDownUser)
 	}
 	else if (dropDownUser.classList.contains("inactiveDropDown")){
 		dropDownUser.classList.remove("inactiveDropDown");
@@ -676,9 +678,9 @@ usernameBtn.addEventListener("click", (e) => {
 })
 
 
-langDropDownBtn.addEventListener("keydown", (e) => {
+dropDownLangBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
-		langDropDownBtn.click();
+		dropDownLangBtn.click();
 	}
 })
 
@@ -688,7 +690,7 @@ usernameBtn.addEventListener("keydown", (e) => {
 	}
 })
 
-langDropDownOption.forEach(function (button) {
+dropDownLangOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		(async() => {
 			currentLang = `lang/${button.id}.json`;
@@ -709,7 +711,7 @@ langDropDownOption.forEach(function (button) {
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
 				}
 			}
 			catch{
@@ -725,10 +727,23 @@ langDropDownOption.forEach(function (button) {
 
 window.addEventListener("click", (e) => {
 	if (!e.target.closest(".activeDropDown")) {
-		if (langDropDown.classList.contains("activeDropDown"))
-			langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
-		if (dropDownUser.classList.contains("activeDropDown"))
-			dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
+		if (dropDownLang.classList.contains("activeDropDown")){
+			dropDownLang.classList.remove("activeDropDown");
+			void dropDownLang.offsetWidth;
+			dropDownLang.classList.add("inactiveDropDown");
+	
+			setTimeout((dropDownLang) => {
+				dropDownLang.classList.remove("inactiveDropDown");
+			}, 300, dropDownLang)
+		}
+		if (dropDownUser.classList.contains("activeDropDown")){
+			dropDownUser.classList.remove("activeDropDown");
+			void dropDownUser.offsetWidth;
+			dropDownUser.classList.add("inactiveDropDown");
+			setTimeout((dropDownUser) => {
+				dropDownUser.classList.remove("inactiveDropDown");
+			}, 300, dropDownUser)
+		}
 	}
 })
 
@@ -748,15 +763,9 @@ function popUpError(error){
 	})
 	document.body.appendChild(popupContainer);
 }
-/*
-document.body.setScaledFont = function(f) {
-	var s= this.offsetWidth, fs = s * f;
-	this.style.fontSize = fs + '%';
-	return this;
-}
 
-document.body.setScaledFont(0.35);
-window.onresize = function() {
-	document.body.setScaledFont(0.35);
-}
-*/
+window.addEventListener("resize", (e) => {
+	if(currentPage == "dashboard"){
+		loadUserDashboard(defaultLastXDaysDisplayed)
+	}
+})

@@ -21,6 +21,7 @@ urlpatterns = [
     path('user/create', login.views.create_user),
     path('admin/create', admin.views.create_user),
     path('admin/create_match', admin.views.create_match),
+    path('admin/create_friendship', admin.views.create_friendship),
     path('user/getClientId', login.views.getClientId),
     path('user/login', login.views.user_login),
     path('user/logout', login.views.user_logout),
@@ -36,4 +37,5 @@ urlpatterns = [
     path('user/get', login.views.get),
     path('user/search_by_username', login.views.search_by_username),
     path('user/delete_user', login.views.delete_user),
+    path('admin/remove_user', admin.views.remove_user), 
 ]
