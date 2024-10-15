@@ -1,5 +1,6 @@
 #recentMatchHistoryContainer{
 	width: -webkit-fill-available;
+	width: -moz-available;
 	position: absolute;
 	bottom: 0;
 	display: flex;
@@ -9,6 +10,7 @@
 }
 
 #recentMatchHistory{
+	width: -moz-available;
 	width: -webkit-fill-available;
 	display: flex;
 	height: 20vh;
@@ -52,6 +54,11 @@
 
 .resultScoreName:hover{
 	text-decoration: underline from-font solid var(--main-text-rgb);
+}
+
+.deletedUser{
+	text-decoration: line-through !important;
+	font-style: italic;
 }
 
 #profileInfoContainer {

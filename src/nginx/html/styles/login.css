@@ -1,16 +1,3 @@
-.loginBtn {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	font-size: min(4vh, 2vw);
-	padding: 1vh 0;
-	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-}
-
 .loginBtn:hover, .loginBtn:focus {
 	color: var(--page-bg-rgb);
 	border-color: var(--page-bg-rgb);
@@ -20,7 +7,7 @@
 .loginOpt{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-size: min(3vh, 2vw);
+	font-size: 1rem;
 	font-weight:thin;
 	padding-top:2vh;
 	margin-left:auto;
@@ -65,14 +52,12 @@
 }
 
 
-#loginSlideSelector div:hover{
-	font-size: calc(1ch + 2px);
+#loginSlideSelector div:hover, #loginSlideSelector .activeSelector {
+	font-size: calc(1em + 2px);
 }
 
 
 .loginSlide{
 	width: fit-content;
 	min-width: 40vw;
-	position: absolute;
-	top: 4vh;
 }

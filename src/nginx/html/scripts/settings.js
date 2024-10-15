@@ -1,4 +1,4 @@
-deleteBtn = document.getElementById('deleteBtn');
+deleteAccountBtn = document.getElementById('deleteAccountBtn');
 confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 usernameInput = document.getElementById("inputChangeUsername");
 saveUsernameBtn = document.getElementById("saveUsernameBtn");
@@ -16,7 +16,7 @@ confirmDeleteInput = document.getElementById("confirmDeleteInput");
 confirmPfpBtn = document.getElementById("confirmPfpBtn");
 var buf = "";
 
-var slideIdx = 0;
+var slideIdx = 1;
 for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
 settingsSlides[slideIdx].style.display = "block";
@@ -56,6 +56,7 @@ pfpInput.addEventListener("change", (e) => {
 		reader.onloadend = function(){
 			buf = reader.result;
 			buf = buf.substr(buf.indexOf(',') + 1);
+			window.removeEventListener("keydown", settingsKeyDownEvent)
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
 			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
@@ -87,6 +88,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		}
 	})
+	window.addEventListener("keydown", settingsKeyDownEvent)
 })
 
 saveUsernameBtn.addEventListener("keydown", (e) => {
@@ -116,6 +118,12 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					success.className = "success";
 					success.text = "username successfully updated";
 					usernameInput.before(success);
+
+					(async () => {
+						client = await new Client();
+						if (!client)
+							myReplaceState(`https://${hostname.host}/login`);
+					})()
 				}
 				else {
 					response.json().then(response => {
@@ -135,10 +143,11 @@ saveUsernameBtn.addEventListener("click", (e) => {
 	}
 })
 
-deleteBtn.addEventListener("click", (e) => {
+deleteAccountBtn.addEventListener("click", (e) => {
+	window.removeEventListener("keydown", settingsKeyDownEvent)
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
-	document.getElementById("confirmDeleteDialogVar").innerText = 'delete';
+	document.getElementById("confirmDeleteDialogVar").innerText = client.username;
 })
 
 
@@ -164,7 +173,7 @@ function deleteRequest(){
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok){
-				history.pushState("", "", `https://${hostname.host}/login`);
+				myPushState(`https://${hostname.host}/login`);
 			}
 		})
 	}
@@ -172,10 +181,12 @@ function deleteRequest(){
 
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "settings"){
-		if (e.key == "Escape"){
+		if (e.key == "Escape" && 
+			document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+			window.addEventListener("keydown", settingsKeyDownEvent)
 		}
 	}
 })
@@ -259,7 +270,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/DE_GE.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/DE_GE.svg)`);
 				}
 			}
 			catch{
@@ -270,7 +281,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
-		langDropDownBtn.style.setProperty("background-image", `url(icons/DE_GE.svg)`);
+		dropDownLangBtn.style.setProperty("background-image", `url(icons/DE_GE.svg)`);
 	})
 
 	englishBtn[i].addEventListener("click", (e) => {
@@ -293,7 +304,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
 				}
 			}
 			catch{
@@ -304,7 +315,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
-		langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
+		dropDownLangBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
 	})
 }
 
@@ -340,7 +351,56 @@ for (var i=0; i< lightTheme.length; i++)
 }
 
 {
-	inputSearchUser.style.setProperty("display", "none");
+	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+	document.getElementById("fontSizeRange").value = client.fontAmplifier;
 }
+
+window.addEventListener("keydown", settingsKeyDownEvent)
+
+function settingsKeyDownEvent(e) {
+	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		if (e.key == "ArrowLeft")
+			slideIdx -= 1;
+		else
+			slideIdx += 1;
+		if (slideIdx > settingsSlides.length - 1)
+			slideIdx = 0;
+		if (slideIdx < 0)
+			slideIdx = settingsSlides.length - 1;
+		for (let i = 0; i < settingsSlides.length; i++)
+			settingsSlides[i].style.display = "none";
+		settingsSlides[slideIdx].style.display = "block";
+	}
+}
+
+document.getElementById("fontSizeRange").addEventListener("input", (e) => {
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ "font_amplifier":  e.target.value}),
+		credentials: 'include'
+	})
+	client.fontAmplifier = e.target.value;
+	document.documentElement.style.setProperty("--font-size-amplifier", e.target.value);
+})
+
+document.getElementById("fontSizeRange").addEventListener("focus", (e) =>{
+	window.removeEventListener("keydown", settingsKeyDownEvent)
+})
+
+document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
+	window.addEventListener("keydown", settingsKeyDownEvent)
+})
+
+usernameInput.addEventListener("focus", (e) => {
+	window.removeEventListener("keydown", settingsKeyDownEvent)
+})
+
+
+usernameInput.addEventListener("focusout", (e) => {
+	window.addEventListener("keydown", settingsKeyDownEvent)
+})
