@@ -8,9 +8,9 @@ userPfp = document.getElementById("pfp");
 dropDownUserContainer = document.getElementById("dropDownUserContainer");
 dropDownUser = document.getElementById("dropDownUser");
 pageContentContainer = document.getElementById("pageContentContainer");
-langDropDown = document.getElementById("langDropDown");
-langDropDownBtn = document.getElementById("langDropDownBtn");
-langDropDownOption = document.querySelectorAll(".langDropDownOptions");
+dropDownLang = document.getElementById("dropDownLang");
+dropDownLangBtn = document.getElementById("dropDownLangBtn");
+dropDownLangOption = document.querySelectorAll(".dropDownLangOptions");
 myProfileBtn = document.getElementById("myProfileBtn");
 friendsBtn = document.getElementById("friendsBtn");
 settingsBtn = document.getElementById("settingsBtn");
@@ -103,7 +103,7 @@ class Client{
 				this.fontAmplifier = result.font_amplifier;
 				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
-				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 				usernameBtn.innerHTML = result.username;
 
@@ -206,7 +206,7 @@ class Client{
 			}
 			else{
 				dropDownUserContainer.style.setProperty("display", "none");
-				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 		
 				fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 					(response.text().then(response => {
@@ -236,8 +236,8 @@ window.addEventListener("popstate", (e) =>{
 
 function load(){
 	const url =  new URL( window.location.href);
-	if (langDropDown.classList.contains("activeDropDown"))
-		langDropDown.classList.replace("activeDropDown", "inactiveDropDown");
+	if (dropDownLang.classList.contains("activeDropDown"))
+		dropDownLang.classList.replace("activeDropDown", "inactiveDropDown");
 	if (dropDownUser.classList.contains("activeDropDown"))
 		dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
 
@@ -259,7 +259,7 @@ function load(){
 		client.loadPage(url.pathname)
 	else {
 		dropDownUserContainer.style.setProperty("display", "none");
-		langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
 		fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 			(response.text().then(response => {
@@ -427,7 +427,7 @@ async function loadCurrentLang(){
 		if (fetchResult.ok){
 			try{
 				contentJson = await fetchResult.json()
-				langDropDownBtn.style.setProperty("background-image", `url(${svgPath})`);
+				dropDownLangBtn.style.setProperty("background-image", `url(${svgPath})`);
 			}
 			catch{
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -455,7 +455,7 @@ async function loadCurrentLang(){
 		if (fetchResult.ok){
 			try {
 				contentJson = await fetchResult.json();
-				langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
 			}
 			catch {
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -652,7 +652,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 	}
 })
 
-langDropDownBtn.addEventListener("click", (e) => {
+dropDownLangBtn.addEventListener("click", (e) => {
 	if (dropDownUser.classList.contains("activeDropDown")){
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
@@ -661,33 +661,33 @@ langDropDownBtn.addEventListener("click", (e) => {
 			dropDownUser.classList.remove("inactiveDropDown");
 		}, 300, dropDownUser)
 	}
-	if (langDropDown.classList.contains("activeDropDown")){
-		langDropDown.classList.remove("activeDropDown");
-		void langDropDown.offsetWidth;
-		langDropDown.classList.add("inactiveDropDown");
+	if (dropDownLang.classList.contains("activeDropDown")){
+		dropDownLang.classList.remove("activeDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("inactiveDropDown");
 
-		setTimeout((langDropDown) => {
-			langDropDown.classList.remove("inactiveDropDown");
-		}, 300, langDropDown)
+		setTimeout((dropDownLang) => {
+			dropDownLang.classList.remove("inactiveDropDown");
+		}, 300, dropDownLang)
 	}
-	else if (langDropDown.classList.contains("inactiveDropDown")){
-		langDropDown.classList.remove("inactiveDropDown");
-		void langDropDown.offsetWidth;
-		langDropDown.classList.add("activeDropDown");
+	else if (dropDownLang.classList.contains("inactiveDropDown")){
+		dropDownLang.classList.remove("inactiveDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("activeDropDown");
 	}
 	else
-		langDropDown.classList.add("activeDropDown");
+		dropDownLang.classList.add("activeDropDown");
 })
 
 usernameBtn.addEventListener("click", (e) => {
-	if (langDropDown.classList.contains("activeDropDown")){
-		langDropDown.classList.remove("activeDropDown");
-		void langDropDown.offsetWidth;
-		langDropDown.classList.add("inactiveDropDown");
+	if (dropDownLang.classList.contains("activeDropDown")){
+		dropDownLang.classList.remove("activeDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("inactiveDropDown");
 
-		setTimeout((langDropDown) => {
-			langDropDown.classList.remove("inactiveDropDown");
-		}, 300, langDropDown)
+		setTimeout((dropDownLang) => {
+			dropDownLang.classList.remove("inactiveDropDown");
+		}, 300, dropDownLang)
 	}
 	if (dropDownUser.classList.contains("activeDropDown")){
 		dropDownUser.classList.remove("activeDropDown");
@@ -707,9 +707,9 @@ usernameBtn.addEventListener("click", (e) => {
 })
 
 
-langDropDownBtn.addEventListener("keydown", (e) => {
+dropDownLangBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
-		langDropDownBtn.click();
+		dropDownLangBtn.click();
 	}
 })
 
@@ -719,7 +719,7 @@ usernameBtn.addEventListener("keydown", (e) => {
 	}
 })
 
-langDropDownOption.forEach(function (button) {
+dropDownLangOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		(async() => {
 			currentLang = `lang/${button.id}.json`;
@@ -740,7 +740,7 @@ langDropDownOption.forEach(function (button) {
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
 				}
 			}
 			catch{
@@ -756,14 +756,14 @@ langDropDownOption.forEach(function (button) {
 
 window.addEventListener("click", (e) => {
 	if (!e.target.closest(".activeDropDown")) {
-		if (langDropDown.classList.contains("activeDropDown")){
-			langDropDown.classList.remove("activeDropDown");
-			void langDropDown.offsetWidth;
-			langDropDown.classList.add("inactiveDropDown");
+		if (dropDownLang.classList.contains("activeDropDown")){
+			dropDownLang.classList.remove("activeDropDown");
+			void dropDownLang.offsetWidth;
+			dropDownLang.classList.add("inactiveDropDown");
 	
-			setTimeout((langDropDown) => {
-				langDropDown.classList.remove("inactiveDropDown");
-			}, 300, langDropDown)
+			setTimeout((dropDownLang) => {
+				dropDownLang.classList.remove("inactiveDropDown");
+			}, 300, dropDownLang)
 		}
 		if (dropDownUser.classList.contains("activeDropDown")){
 			dropDownUser.classList.remove("activeDropDown");

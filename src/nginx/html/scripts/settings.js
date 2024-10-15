@@ -270,7 +270,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/DE_GE.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/DE_GE.svg)`);
 				}
 			}
 			catch{
@@ -281,7 +281,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
-		langDropDownBtn.style.setProperty("background-image", `url(icons/DE_GE.svg)`);
+		dropDownLangBtn.style.setProperty("background-image", `url(icons/DE_GE.svg)`);
 	})
 
 	englishBtn[i].addEventListener("click", (e) => {
@@ -304,7 +304,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					langDropDownBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
 				}
 			}
 			catch{
@@ -315,7 +315,7 @@ for (var i = 0 ;i < germanBtn.length; i++)
 			germanBtn[j].classList.remove("dropDownContentAHover");
 			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
-		langDropDownBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
+		dropDownLangBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
 	})
 }
 

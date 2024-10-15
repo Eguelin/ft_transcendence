@@ -200,7 +200,7 @@
 
 
 
-#dropDownUserContainer, #langDropDownContainer {
+#dropDownUserContainer, #dropDownLangContainer {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
@@ -212,7 +212,7 @@
 	gap: .5rem;
 }
 
-#dropDownUser {
+#dropDownUser, #dropDownLang {
 	position: relative;
 	display: flex;
 	padding-right: 0.1vw;
@@ -221,11 +221,11 @@
 	flex-direction: column;
 }
 
-#langDropDown {
+#dropDownLang {
 	z-index: 1;
 }
 
-.dropDownUserContent, #langDropDownContent{
+.dropDownUserContent, #dropDownLangContent{
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -248,13 +248,13 @@
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent, .activeDropDown #langDropDownContent{
+.activeDropDown .dropDownUserContent, .activeDropDown #dropDownLangContent{
 	z-index: 1;
 	display: block;
 }
 
 
-.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
+.inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent{
 	z-index: 1;
 	display: block;
 }
@@ -264,7 +264,7 @@
 	border-color: var(--main-text-rgb);
 	background: var(--input-bg-rgb);
 	animation: backgroundNone 300ms forwards;
-	animation-delay: 100ms;
+	animation-delay: 300ms;
 }
 
 .activeDropDown .dropDownUserContent .dropDownMenuBtn{
@@ -275,7 +275,7 @@
 
 .inactiveDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
-	animation: scaleZText 200ms reverse;
+	animation: scaleZText 300ms reverse;
 	font-size: 0;
 }
 
@@ -300,12 +300,12 @@
 	}
 }
 
-.inactiveDropDown .dropDownUserContent, .inactiveDropDown #langDropDownContent{
+.inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent{
 	animation: backgroundNone 300ms forwards;
 	animation: displayToNone 1ms  300ms forwards;
 }
 
-#langDropDownContent .langDropDownOptionsContainer{
+#dropDownLangContent .dropDownLangOptionsContainer{
 	height: 0;
 }
 
@@ -313,14 +313,14 @@
 	font-size: 0;
 }
 
-.activeDropDown #langDropDownContent .langDropDownOptionsContainer{
+.activeDropDown #dropDownLangContent .dropDownLangOptionsContainer{
 	animation: scaleZLang 300ms forwards;
 	opacity: 1;
 	scale: 1;
 	height: 3.5rem;
 }
 
-.inactiveDropDown #langDropDownContent .langDropDownOptionsContainer{
+.inactiveDropDown #dropDownLangContent .dropDownLangOptionsContainer{
 	animation: scaleZLang 300ms reverse;
 	opacity: 0;
 	height: 0;
@@ -349,7 +349,7 @@
 }
 
 
-.langDropDownOptions, #langDropDownBtn{
+.dropDownLangOptions, #dropDownLangBtn{
 	height: 2.5rem;
 	width: 4rem;
 	margin: 0 1vmin;
@@ -365,17 +365,17 @@
 	transform: translateY(-50%);
 }
 
-.langDropDownOptionsContainer{
+.dropDownLangOptionsContainer{
 	height: 3.5rem;
 }
 
-#langDropDown:focus #langDropDownContent{
+#dropDownLang:focus #dropDownLangContent{
 	display: block;
 }
 
 
 @media screen and (max-width:700px){
-	#langDropDownContainer{
+	#dropDownLangContainer{
 		display: none;
 	}
 }
