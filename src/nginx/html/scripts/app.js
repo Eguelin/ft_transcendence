@@ -258,6 +258,10 @@ function load(){
 	if (currentPage == "login"){
 		window.removeEventListener("keydown", loginKeyDownEvent)
 	}
+	if (currentPage == "friends"){
+		window.removeEventListener("keydown", friendKeyDownEvent)
+	}
+	
 	if (client)
 		client.loadPage(url.pathname)
 	else {
@@ -537,28 +541,6 @@ swichTheme.addEventListener("keydown", (e) => {
 		swichTheme.focus();
 	}
 })
-
-window.addEventListener("keydown", (e) => {
-	if (currentPage == "friends") {
-		if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
-			friendSlides[friendSlideIdx].className = "friendSlide";
-			slideSelector[friendSlideIdx].className = "slideSelector";
-			if (e.key == "ArrowLeft")
-				friendSlideIdx -= 1;
-			else
-				friendSlideIdx += 1;
-			if (friendSlideIdx > friendSlides.length - 1)
-				friendSlideIdx = 0;
-			if (friendSlideIdx < 0)
-				friendSlideIdx = friendSlides.length - 1;
-			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
-			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
-		}
-	}
-	if (currentPage == "login"){
-	}
-})
-
 
 function createMatchResumeContainer(match) {
 	matchContainer = document.createElement("div");
