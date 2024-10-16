@@ -134,11 +134,11 @@
 	display: flex;
 }
 
-.friendsOptionContainer:hover .moreBtn{
+.activeListSelector .moreBtn{
 	display: none;
 }
 
-.friendsOptionContainer:hover .friendsOption{
+.activeListSelector .friendsOption{
 	display: flex;
 }
 

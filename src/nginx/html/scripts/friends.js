@@ -147,8 +147,12 @@ function createFriendContainer(user){
 	friendTabIdx += 1;
 
 	removeFriendBtn.className = "removeFriendBtn";
+	removeFriendBtn.tabIndex = friendTabIdx;
+	friendTabIdx += 1;
 
 	blockFriendBtn.className = "blockFriendBtn";
+	blockFriendBtn.tabIndex = friendTabIdx;
+	friendTabIdx += 1;
 
 	friendsOption.id = user.username;
 
@@ -279,33 +283,6 @@ function checkUpdate(){
 					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
 					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
 
-					for (var i = 0; i < removeFriendBtn.length; i++){
-						removeFriendBtn[i].addEventListener("click", (e) => {
-							deleteFriendPopup.style.setProperty("display", "flex");
-							deleteFriendPopup.className = e.srcElement.parentElement.id;
-
-							var bg = document.createElement("div");
-							bg.id = "popupBg";
-							bg.style.display = "block";
-							pos = friendInfo.getBoundingClientRect();
-							bg.style.left = `${-pos.left}px`;
-							bg.style.top = `${-pos.top}px`;
-							deleteFriendPopup.before(bg);
-						})
-						blockFriendBtn[i].addEventListener("click", (e) => {
-							blockFriendPopup.style.setProperty("display", "flex");
-							blockFriendPopup.className = e.srcElement.parentElement.id;
-
-							var bg = document.createElement("div");
-							bg.id = "popupBg";
-							bg.style.display = "block";
-							pos = friendInfo.getBoundingClientRect();
-							bg.style.left = `${-pos.left}px`;
-							bg.style.top = `${-pos.top}px`;
-							blockFriendPopup.before(bg);
-						})
-					}
-
 					for (var i = 0; i < acceptRequestBtn.length; i++){
 						acceptRequestBtn[i].addEventListener("click", (e) => {
 							const data = {username: e.srcElement.parentElement.id};
@@ -333,10 +310,63 @@ function checkUpdate(){
 					document.querySelectorAll(".friendsOptionContainer").forEach(function (elem) {
 						elem.addEventListener("focus", (e)=>{
 							window.removeEventListener("keydown", friendKeyDownEvent);
-						})
+							document.querySelectorAll(".activeListSelector").forEach(function (active){
+								active.classList.remove("activeListSelector");
+							})
+						});
 						
 						elem.addEventListener("focusout", (e)=>{
 							window.addEventListener("keydown", friendKeyDownEvent);
+						});
+						elem.addEventListener("keydown", (e) => {
+							if (e.key == "Enter")
+								elem.click();
+						});
+						elem.addEventListener("click", (e) => {
+							elem.classList.add("activeListSelector");
+						})
+					})
+					document.querySelectorAll(".friendsOption div").forEach(function (elem) {
+						elem.addEventListener("focus", (e)=>{
+							window.removeEventListener("keydown", friendKeyDownEvent);
+						});
+						elem.addEventListener("focusout", (e)=>{
+							window.addEventListener("keydown", friendKeyDownEvent);
+						});
+						elem.addEventListener("keydown", (e) => {
+							if (e.key == "Enter")
+								elem.click();
+						});
+						elem.addEventListener("keyup", (e) => {
+							if (elem.className == "removeFriendBtn")
+								document.getElementById("confirmDelete").focus();
+							else if (elem.className == "blockFriendBtn")
+								document.getElementById("confirmBlock").focus();
+						})
+						elem.addEventListener("click", (e) => {
+							if (document.getElementById("popupBg")){
+								document.getElementById("popupBg").remove();
+								blockFriendPopup.style.setProperty("display", "none");
+								deleteFriendPopup.style.setProperty("display", "none");
+							}
+							if (elem.className == "removeFriendBtn"){
+								deleteFriendPopup.style.setProperty("display", "flex");
+								deleteFriendPopup.className = e.target.parentElement.id;
+							}
+							else if (elem.className == "blockFriendBtn"){
+								blockFriendPopup.style.setProperty("display", "flex");
+								blockFriendPopup.className = e.target.parentElement.id;
+							}
+							var bg = document.createElement("div");
+							bg.id = "popupBg";
+							bg.style.display = "block";
+							pos = friendInfo.getBoundingClientRect();
+							bg.style.left = `${-pos.left}px`;
+							bg.style.top = `${-pos.top}px`;
+							if (elem.className == "removeFriendBtn")
+								deleteFriendPopup.before(bg);
+							else if (elem.className == "blockFriendBtn")
+								blockFriendPopup.before(bg);
 						})
 					})
 				});
