@@ -196,7 +196,8 @@ def user_logout(request):
 		request.user.profile.is_active = False
 		request.user.save()
 		logout(request)
-	return JsonResponse({'message': 'User logged out'}, status=200)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def delete_user(request):
 	if request.method != 'POST':
@@ -207,7 +208,8 @@ def delete_user(request):
 			return JsonResponse({'message': 'User deleted'}, status=200)
 		except Exception as e:
 			return JsonResponse({'message': e}, status=500)
-	return JsonResponse({'message': 'can\'t delete user'}, status=200)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
@@ -249,7 +251,8 @@ def profile_update(request):
 				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
 				return JsonResponse({'message': 'Invalid JSON'}, status=400)
-	return JsonResponse({'message': 'Can\'t update user profile'}, status=400)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def get_all_user_match_json(matches):
 	matches_json = {}
@@ -372,7 +375,7 @@ def current_user(request):
 			'font_amplifier' : request.user.profile.font_amplifier
 		})
 	else:
-		return JsonResponse({'username': None}, status=404)
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def get(request):
 	if request.method != 'POST':
@@ -383,6 +386,8 @@ def get(request):
 			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
 		except Exception as error:
 			return JsonResponse({'message': "can't find user"}, status=400)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def search_by_username(request):
 	if (request.method != 'POST'):
