@@ -267,6 +267,7 @@ function load(){
 	else {
 		dropDownUserContainer.style.setProperty("display", "none");
 		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+		history.replaceState("","",`https://${hostname.host}/login`);
 
 		fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 			(response.text().then(response => {
