@@ -11,27 +11,37 @@
             body: JSON.stringify({ "name": url.searchParams.get("query") }),
             credentials: 'include'
         }).then(user => {
-            user.json().then(((user) => {
-                document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-                document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
-                Object.keys(user).forEach(function (key) {
-                    createUserResumeContainer(user[key]);
-                })
-
-                userResume = document.querySelectorAll(".userResume");
-                for (i = 0; i<  userResume.length; i++){
-                    userResume[i].addEventListener("click", (e) => {
-                        var username = e.target.closest(".userResume").id;
-                        myPushState(`https://${hostname.host}/user/${username}`);
+            if (user.ok){
+                user.json().then(((user) => {
+                    document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
+                    document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
+                    Object.keys(user).forEach(function (key) {
+                        createUserResumeContainer(user[key]);
                     })
-                    userResume[i].addEventListener("keydown", (e) => {
-                        if (e.key == "Enter"){
+
+                    userResume = document.querySelectorAll(".userResume");
+                    for (i = 0; i<  userResume.length; i++){
+                        userResume[i].addEventListener("click", (e) => {
                             var username = e.target.closest(".userResume").id;
                             myPushState(`https://${hostname.host}/user/${username}`);
-                        }
-                    })
+                        })
+                        userResume[i].addEventListener("keydown", (e) => {
+                            if (e.key == "Enter"){
+                                var username = e.target.closest(".userResume").id;
+                                myPushState(`https://${hostname.host}/user/${username}`);
+                            }
+                        })
+                    }
+                }))
+            }
+            else{
+                if (user.status == 401){
+                    popUpError("how dare you >:("); //TODO change popup message
+                    myReplaceState(`https://${hostname.host}/login`);
                 }
-            }))
+                else
+                   myReplaceState(`https://${hostname.host}/home`);
+            }
         })
     }
     else{
