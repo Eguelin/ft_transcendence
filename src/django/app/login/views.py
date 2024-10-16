@@ -401,3 +401,5 @@ def search_by_username(request):
 			return JsonResponse(users_json, status=200)
 		except Exception as error:
 			return JsonResponse({'message': error}, status=500)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
