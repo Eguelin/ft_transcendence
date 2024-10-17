@@ -90,7 +90,7 @@
 	mask-image:url("../icons/check-mark-1.svg");
 }
 
-.acceptRequestBtn:focus, .acceptRequestBtn:hover{
+.acceptRequestBtn:focus, .acceptRequestBtn:hover, .unblockBtn:hover, .unblockBtn:focus{
 	background: green;
 }
 

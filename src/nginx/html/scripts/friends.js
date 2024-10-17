@@ -84,7 +84,7 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			e.target.parentElement.remove();
+			e.target.parentElement.parentElement.remove();
 		}
 	}
 })
@@ -230,6 +230,9 @@ function createBlockedUserContainer(user){
 		elem.remove();
 	})
 
+	friendContainer.getElementsByClassName("unblockBtn")[0].tabIndex = blockedUserTabIdx;
+	blockedUserTabIdx += 1;
+
 	blockedListContainer.appendChild(friendContainer);
 }
 
@@ -253,7 +256,8 @@ function setListeners(){
 			elem.classList.add("activeListSelector");
 		})
 	})
-	document.querySelectorAll(".friendsOption div, .acceptRequestBtn, .rejectRequestBtn").forEach(function (elem) {
+
+	document.querySelectorAll(".friendsOption div, .acceptRequestBtn, .rejectRequestBtn, .unblockBtn").forEach(function (elem) {
 		elem.addEventListener("focus", (e)=>{
 			window.removeEventListener("keydown", friendKeyDownEvent);
 		});
@@ -266,6 +270,8 @@ function setListeners(){
 			}
 
 		});
+	});
+	document.querySelectorAll(".friendsOption div").forEach(function (elem) {
 		elem.addEventListener("keyup", (e) => {
 			if (elem.className == "removeFriendBtn"){
 				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
