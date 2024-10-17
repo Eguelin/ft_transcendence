@@ -89,6 +89,15 @@ document.addEventListener("click", (e) => {
 	}
 })
 
+document.querySelectorAll("#confirmDelete, #confirmBlock, #unblockBtn").forEach(function (elem) {
+	elem.addEventListener("focus", (e)=>{
+		window.removeEventListener("keydown", friendKeyDownEvent);
+	});
+	elem.addEventListener("focusout", (e)=>{
+		window.addEventListener("keydown", friendKeyDownEvent);
+	});
+})
+
 window.addEventListener("resize", (e) => {
 	if (currentPage == "friends"){
 		var bg = document.getElementById("popupBg");
@@ -102,6 +111,9 @@ window.addEventListener("resize", (e) => {
 
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "friends"){
+		if (e.key == "Tab" && (e.target.id == "confirmDelete" || e.target.id == "confirmBlock")){
+			e.preventDefault();
+		}
 		if (e.key == "Escape"){
 			deleteFriendPopup.style.setProperty("display", "none");
 			blockFriendPopup.style.setProperty("display", "none");
@@ -236,6 +248,82 @@ function createBlockedUserContainer(user){
 	blockedListContainer.appendChild(friendContainer);
 }
 
+function setListeners(){
+	document.querySelectorAll(".friendsOptionContainer").forEach(function (elem) {
+		elem.addEventListener("focus", (e)=>{
+			window.removeEventListener("keydown", friendKeyDownEvent);
+			document.querySelectorAll(".activeListSelector").forEach(function (active){
+				active.classList.remove("activeListSelector");
+			})
+		});
+		
+		elem.addEventListener("focusout", (e)=>{
+			window.addEventListener("keydown", friendKeyDownEvent);
+		});
+		elem.addEventListener("keydown", (e) => {
+			if (e.key == "Enter")
+				elem.click();
+		});
+		elem.addEventListener("click", (e) => {
+			elem.classList.add("activeListSelector");
+		})
+	})
+	document.querySelectorAll(".friendsOption div").forEach(function (elem) {
+		elem.addEventListener("focus", (e)=>{
+			window.removeEventListener("keydown", friendKeyDownEvent);
+		});
+		elem.addEventListener("focusout", (e)=>{
+			window.addEventListener("keydown", friendKeyDownEvent);
+		});
+		elem.addEventListener("keydown", (e) => {
+			if (e.key == "Enter"){
+				elem.click();
+			}
+
+		});
+		elem.addEventListener("keyup", (e) => {
+			if (elem.className == "removeFriendBtn"){
+				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmDelete").focus();
+			}
+			else if (elem.className == "blockFriendBtn"){
+				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmBlock").focus();
+			}
+			if (e.key == "Enter"){
+				document.querySelectorAll(".activeListSelector").forEach(function (active){
+					active.classList.remove("activeListSelector");
+				})
+			}
+		})
+		elem.addEventListener("click", (e) => {
+			if (document.getElementById("popupBg")){
+				document.getElementById("popupBg").remove();
+				blockFriendPopup.style.setProperty("display", "none");
+				deleteFriendPopup.style.setProperty("display", "none");
+			}
+			if (elem.className == "removeFriendBtn"){
+				deleteFriendPopup.style.setProperty("display", "flex");
+				deleteFriendPopup.className = e.target.parentElement.id;
+			}
+			else if (elem.className == "blockFriendBtn"){
+				blockFriendPopup.style.setProperty("display", "flex");
+				blockFriendPopup.className = e.target.parentElement.id;
+			}
+			var bg = document.createElement("div");
+			bg.id = "popupBg";
+			bg.style.display = "block";
+			pos = friendInfo.getBoundingClientRect();
+			bg.style.left = `${-pos.left}px`;
+			bg.style.top = `${-pos.top}px`;
+			if (elem.className == "removeFriendBtn")
+				deleteFriendPopup.before(bg);
+			else if (elem.className == "blockFriendBtn")
+				blockFriendPopup.before(bg);
+		})
+	})
+}
+
 function checkUpdate(){
 	if (currentPage == "friends"){
 		friendTabIdx = 12;
@@ -307,68 +395,7 @@ function checkUpdate(){
 							})
 						})
 					}
-					document.querySelectorAll(".friendsOptionContainer").forEach(function (elem) {
-						elem.addEventListener("focus", (e)=>{
-							window.removeEventListener("keydown", friendKeyDownEvent);
-							document.querySelectorAll(".activeListSelector").forEach(function (active){
-								active.classList.remove("activeListSelector");
-							})
-						});
-						
-						elem.addEventListener("focusout", (e)=>{
-							window.addEventListener("keydown", friendKeyDownEvent);
-						});
-						elem.addEventListener("keydown", (e) => {
-							if (e.key == "Enter")
-								elem.click();
-						});
-						elem.addEventListener("click", (e) => {
-							elem.classList.add("activeListSelector");
-						})
-					})
-					document.querySelectorAll(".friendsOption div").forEach(function (elem) {
-						elem.addEventListener("focus", (e)=>{
-							window.removeEventListener("keydown", friendKeyDownEvent);
-						});
-						elem.addEventListener("focusout", (e)=>{
-							window.addEventListener("keydown", friendKeyDownEvent);
-						});
-						elem.addEventListener("keydown", (e) => {
-							if (e.key == "Enter")
-								elem.click();
-						});
-						elem.addEventListener("keyup", (e) => {
-							if (elem.className == "removeFriendBtn")
-								document.getElementById("confirmDelete").focus();
-							else if (elem.className == "blockFriendBtn")
-								document.getElementById("confirmBlock").focus();
-						})
-						elem.addEventListener("click", (e) => {
-							if (document.getElementById("popupBg")){
-								document.getElementById("popupBg").remove();
-								blockFriendPopup.style.setProperty("display", "none");
-								deleteFriendPopup.style.setProperty("display", "none");
-							}
-							if (elem.className == "removeFriendBtn"){
-								deleteFriendPopup.style.setProperty("display", "flex");
-								deleteFriendPopup.className = e.target.parentElement.id;
-							}
-							else if (elem.className == "blockFriendBtn"){
-								blockFriendPopup.style.setProperty("display", "flex");
-								blockFriendPopup.className = e.target.parentElement.id;
-							}
-							var bg = document.createElement("div");
-							bg.id = "popupBg";
-							bg.style.display = "block";
-							pos = friendInfo.getBoundingClientRect();
-							bg.style.left = `${-pos.left}px`;
-							bg.style.top = `${-pos.top}px`;
-							if (elem.className == "removeFriendBtn")
-								deleteFriendPopup.before(bg);
-							else if (elem.className == "blockFriendBtn")
-								blockFriendPopup.before(bg);
-						})
-					})
+					setListeners();
 				});
 			}
 			else {
