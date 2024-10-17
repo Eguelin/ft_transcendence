@@ -216,6 +216,10 @@ function createFriendRequestContainer(user){
 		elem.remove();
 	})
 
+	friendContainer.getElementsByClassName("acceptRequestBtn")[0].tabIndex = pendingFriendTabIdx;
+	pendingFriendTabIdx += 1;
+	friendContainer.getElementsByClassName("rejectRequestBtn")[0].tabIndex = pendingFriendTabIdx;
+	pendingFriendTabIdx += 1;
 	pendingFriendRequestListContainer.appendChild(friendContainer);
 }
 
@@ -249,7 +253,7 @@ function setListeners(){
 			elem.classList.add("activeListSelector");
 		})
 	})
-	document.querySelectorAll(".friendsOption div").forEach(function (elem) {
+	document.querySelectorAll(".friendsOption div, .acceptRequestBtn, .rejectRequestBtn").forEach(function (elem) {
 		elem.addEventListener("focus", (e)=>{
 			window.removeEventListener("keydown", friendKeyDownEvent);
 		});
