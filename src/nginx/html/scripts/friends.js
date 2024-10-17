@@ -36,9 +36,7 @@ document.addEventListener("click", (e) => {
 		if (e.target.parentElement == null || e.target.id == "popupBg"){
 			deleteFriendPopup.style.setProperty("display", "none");
 			blockFriendPopup.style.setProperty("display", "none");
-			var bg = document.getElementById("popupBg");
-			if (bg != null)
-				bg.remove();
+			document.getElementById("popupBg").style.display = "none";
 		}
 		if (e.target.id == "confirmDelete"){
 			const data = {username: e.target.parentElement.className};
@@ -52,9 +50,7 @@ document.addEventListener("click", (e) => {
 			})
 			var friend = document.getElementById(e.target.parentElement.className);
 			deleteFriendPopup.style.setProperty("display", "none");
-			var bg = document.getElementById("popupBg");
-			if (bg != null)
-				bg.remove();
+			document.getElementById("popupBg").style.display = "none";
 			friend.remove();
 		}
 		if (e.target.id == "confirmBlock"){
@@ -69,9 +65,7 @@ document.addEventListener("click", (e) => {
 			})
 			var friend = document.getElementById(e.target.parentElement.className);
 			blockFriendPopup.style.setProperty("display", "none");
-			var bg = document.getElementById("popupBg");
-			if (bg != null)
-				bg.remove();
+			document.getElementById("popupBg").style.display = "none";
 			friend.remove();
 		}
 		if (e.target.className == "unblockBtn"){
@@ -98,17 +92,6 @@ document.querySelectorAll("#confirmDelete, #confirmBlock, #unblockBtn").forEach(
 	});
 })
 
-window.addEventListener("resize", (e) => {
-	if (currentPage == "friends"){
-		var bg = document.getElementById("popupBg");
-		if (bg != null){
-			pos = friendInfo.getBoundingClientRect();
-			bg.style.left = `${-pos.left}px`;
-			bg.style.top = `${-pos.top}px`;
-		}
-	}
-})
-
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "friends"){
 		if (e.key == "Tab" && (e.target.id == "confirmDelete" || e.target.id == "confirmBlock")){
@@ -117,9 +100,7 @@ document.addEventListener("keydown", (e) => {
 		if (e.key == "Escape"){
 			deleteFriendPopup.style.setProperty("display", "none");
 			blockFriendPopup.style.setProperty("display", "none");
-			var bg = document.getElementById("popupBg");
-			if (bg != null)
-				bg.remove();
+			document.getElementById("popupBg").style.display = "none";
 		}
 	}
 })
@@ -288,8 +269,8 @@ function setListeners(){
 			}
 		})
 		elem.addEventListener("click", (e) => {
-			if (document.getElementById("popupBg")){
-				document.getElementById("popupBg").remove();
+			if (document.getElementById("popupBg").style.getPropertyValue("display") == "block"){
+				document.getElementById("popupBg").style.display = "none";
 				blockFriendPopup.style.setProperty("display", "none");
 				deleteFriendPopup.style.setProperty("display", "none");
 			}
@@ -301,16 +282,7 @@ function setListeners(){
 				blockFriendPopup.style.setProperty("display", "flex");
 				blockFriendPopup.className = e.target.parentElement.id;
 			}
-			var bg = document.createElement("div");
-			bg.id = "popupBg";
-			bg.style.display = "block";
-			pos = friendInfo.getBoundingClientRect();
-			bg.style.left = `${-pos.left}px`;
-			bg.style.top = `${-pos.top}px`;
-			if (elem.className == "removeFriendBtn")
-				deleteFriendPopup.before(bg);
-			else if (elem.className == "blockFriendBtn")
-				blockFriendPopup.before(bg);
+			document.getElementById("popupBg").style.display = "block";
 		})
 	})
 }
