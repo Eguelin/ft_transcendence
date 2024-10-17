@@ -126,30 +126,59 @@ document.addEventListener("keydown", (e) => {
 
 var friendTabIdx, pendingFriendTabIdx, blockedUserTabIdx; 
 
-function createFriendContainer(user){
+function createUserContainer(user){
 	var friendContainer = document.createElement("div");
 	var pfpContainer = document.createElement("div");
 	var pfp = document.createElement("img");
 	var friendName = document.createElement("a");
+	var unblockBtn = document.createElement("div");
+	var acceptBtn = document.createElement("div");
+	var rejectBtn = document.createElement("div");
+
+	var userOptionContainer = document.createElement("div");
+
+	friendContainer.className = "friendContainer"
+	friendContainer.id = user.username;
+
+	pfpContainer.className = "pfpContainer";
+	pfp.className = "profilePicture";
+	addPfpUrlToImgSrc(pfp, user.pfp);
+
+	pfpContainer.appendChild(pfp);
+
+	friendName.innerHTML = user.username;
+
+	friendContainer.appendChild(pfpContainer);
+	friendContainer.appendChild(friendName);
+
+	acceptBtn.className = "acceptRequestBtn";
+	rejectBtn.className = "rejectRequestBtn";
+	unblockBtn.className = "unblockBtn";
+
+	userOptionContainer.className = "friendsOptionContainer";
+	userOptionContainer.id = user.username;
+	userOptionContainer.appendChild(unblockBtn);
+	userOptionContainer.appendChild(acceptBtn);
+	userOptionContainer.appendChild(rejectBtn);
+
+	friendContainer.appendChild(userOptionContainer);
+	return (friendContainer);
+}
+
+function createFriendContainer(user){
+	var friendContainer = document.createElement("div");
 	var friendsOptionContainer = document.createElement("div");
 	var friendsOption = document.createElement("div");
 	var moreBtn = document.createElement("div");
 	var removeFriendBtn = document.createElement("div");
 	var blockFriendBtn = document.createElement("div");
 
-	friendContainer.className = "friendContainer"
-	friendContainer.id = user.username;
-	pfpContainer.className = "pfpContainer";
-	pfp.className = "profilePicture";
-	addPfpUrlToImgSrc(pfp, user.pfp);
-	pfpContainer.appendChild(pfp);
-
-	friendName.innerHTML = user.username;
+	friendContainer = createUserContainer(user);
+	friendContainer.getElementsByClassName("friendsOptionContainer")[0].remove();
 
 	friendsOptionContainer.className = "friendsOptionContainer"
 
 	friendsOption.className = "friendsOption"
-
 
 	moreBtn.className = "moreBtn";
 
@@ -171,8 +200,6 @@ function createFriendContainer(user){
 	friendsOption.appendChild(removeFriendBtn);
 	friendsOption.appendChild(blockFriendBtn);
 
-	friendContainer.appendChild(pfpContainer);
-	friendContainer.appendChild(friendName);
 	friendContainer.appendChild(friendsOptionContainer);
 
 	if (user.is_active == true){
@@ -183,68 +210,22 @@ function createFriendContainer(user){
 }
 
 function createFriendRequestContainer(user){
-	var friendContainer = document.createElement("div");
-	var pfpContainer = document.createElement("div");
-	var pfp = document.createElement("img");
-	var friendName = document.createElement("a");
-	var requestOptionContainer = document.createElement("div");
-	var acceptBtn = document.createElement("div");
-	var rejectBtn = document.createElement("div");
+	var friendContainer = createUserContainer(user);
 
-	friendContainer.className = "friendContainer"
-	friendContainer.id = user.username;
-	pfpContainer.className = "pfpContainer";
-	pfp.className = "profilePicture";
-	addPfpUrlToImgSrc(pfp, user.pfp);
-
-	pfpContainer.appendChild(pfp);
-	friendName.innerHTML = user.username;
-	friendContainer.appendChild(pfpContainer);
-	friendContainer.appendChild(friendName);
-
-	requestOptionContainer.className = "requestOptionContainer";
-
-	acceptBtn.className = "acceptRequestBtn";
-	requestOptionContainer.appendChild(acceptBtn);
-
-	rejectBtn.className = "rejectRequestBtn";
-	requestOptionContainer.appendChild(rejectBtn);
-
-	requestOptionContainer.id = user.username;
-
-	friendContainer.appendChild(requestOptionContainer);
+	friendContainer.querySelectorAll(".unblockBtn").forEach(function (elem) {
+		elem.remove();
+	})
 
 	pendingFriendRequestListContainer.appendChild(friendContainer);
 }
 
 function createBlockedUserContainer(user){
-	var friendContainer = document.createElement("div");
-	var pfpContainer = document.createElement("div");
-	var pfp = document.createElement("img");
-	var friendName = document.createElement("a");
-	var unblockBtn = document.createElement("div");
-	var requestOptionContainer = document.createElement("div");
+	var friendContainer = createUserContainer(user);
 
-	friendContainer.className = "friendContainer"
-	friendContainer.id = user.username;
+	friendContainer.querySelectorAll(".acceptRequestBtn, .rejectRequestBtn").forEach(function (elem) {
+		elem.remove();
+	})
 
-	pfpContainer.className = "pfpContainer";
-	pfp.className = "profilePicture";
-	addPfpUrlToImgSrc(pfp, user.pfp);
-
-	pfpContainer.appendChild(pfp);
-
-	friendName.innerHTML = user.username;
-	friendContainer.appendChild(pfpContainer);
-	friendContainer.appendChild(friendName);
-
-	unblockBtn.className = "unblockBtn";
-
-	requestOptionContainer.className = "requestOptionContainer";
-	requestOptionContainer.id = user.username;
-	requestOptionContainer.appendChild(unblockBtn);
-
-	friendContainer.appendChild(requestOptionContainer);
 	blockedListContainer.appendChild(friendContainer);
 }
 
