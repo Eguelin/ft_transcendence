@@ -34,9 +34,7 @@ createMatchesBtn.addEventListener("click", (e) => {
     })
 })
 
-
-createFriendshipBtn = document.getElementById("createFriendshipBtn");
-createFriendshipBtn.addEventListener("click", (e) => {
+document.getElementById("createFriendshipBtn").addEventListener("click", (e) => {
     document.getElementById("loaderBg").style.setProperty("display", "block");
 
 
@@ -44,6 +42,44 @@ createFriendshipBtn.addEventListener("click", (e) => {
     playerTwo = document.getElementById("userTwoF").value;
 
     fetch('/api/admin/create_friendship', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({'userOne': playerOne, 'userTwo': playerTwo})
+}).then(() => {
+        document.getElementById("loaderBg").style.setProperty("display", "none");
+    })
+})
+
+document.getElementById("createFriendshipRequestBtn").addEventListener("click", (e) => {
+    document.getElementById("loaderBg").style.setProperty("display", "block");
+
+
+    playerOne = document.getElementById("userOneFr").value;
+    playerTwo = document.getElementById("userTwoFr").value;
+
+    fetch('/api/admin/create_friendship_request', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({'to': playerOne, 'from': playerTwo})
+}).then(() => {
+        document.getElementById("loaderBg").style.setProperty("display", "none");
+    })
+})
+
+document.getElementById("createblockedFriendshipBtn").addEventListener("click", (e) => {
+    document.getElementById("loaderBg").style.setProperty("display", "block");
+
+
+    playerOne = document.getElementById("userOneBf").value;
+    playerTwo = document.getElementById("userTwoBf").value;
+
+    fetch('/api/admin/create_blocked_friendship', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
