@@ -19,6 +19,7 @@ if (sendFriendRequestBtn){
 
 {
 	inputSearchUserContainer.style.setProperty("display", "block");
+	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	
