@@ -354,6 +354,7 @@ for (var i=0; i< lightTheme.length; i++)
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+	homeBtn.focus();
 	document.getElementById("fontSizeRange").value = client.fontAmplifier;
 }
 

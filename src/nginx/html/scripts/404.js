@@ -5,6 +5,7 @@ homeBtn404.addEventListener("click", (e) => {
 })
 
 {
+	homeBtn404.focus();
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");

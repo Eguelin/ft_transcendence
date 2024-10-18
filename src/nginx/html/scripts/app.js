@@ -236,10 +236,23 @@ window.addEventListener("popstate", (e) =>{
 
 function load(){
 	const url =  new URL( window.location.href);
-	if (dropDownLang.classList.contains("activeDropDown"))
-		dropDownLang.classList.replace("activeDropDown", "inactiveDropDown");
-	if (dropDownUser.classList.contains("activeDropDown"))
-		dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
+	if (dropDownLang.classList.contains("activeDropDown")){
+		dropDownLang.classList.remove("activeDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("inactiveDropDown");
+
+		setTimeout((dropDownLang) => {
+			dropDownLang.classList.remove("inactiveDropDown");
+		}, 300, dropDownLang)
+	}
+	if (dropDownUser.classList.contains("activeDropDown")){
+		dropDownUser.classList.remove("activeDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("inactiveDropDown");
+		setTimeout((dropDownUser) => {
+			dropDownUser.classList.remove("inactiveDropDown");
+		}, 300, dropDownUser)
+	}
 
 	if (client && !(client instanceof Client)){
 		client = null;
