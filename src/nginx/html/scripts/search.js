@@ -1,5 +1,6 @@
 {
     inputSearchUserContainer.style.setProperty("display", "block");
+	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
 

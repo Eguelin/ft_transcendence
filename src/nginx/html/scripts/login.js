@@ -250,6 +250,8 @@ function register(){
 	}
 
 	inputSearchUserContainer.style.setProperty("display", "none");
+	homeBtn.style.setProperty("display", "none");
+	dropDownLangBtn.focus();
 	dropDownUserContainer.style.setProperty("display", "none");
 }
 

@@ -16,6 +16,7 @@ slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].class
 
 homeBtn.style.setProperty("display", "block");
 inputSearchUserContainer.style.setProperty("display", "block");
+document.getElementById("inputSearchUser").focus();
 dropDownUserContainer.style.setProperty("display", "flex");
 
 Object.keys(slideSelector).forEach(function(key) {
