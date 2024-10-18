@@ -189,7 +189,7 @@ function register(){
 		if (registerBtn.previousElementSibling)
 			registerBtn.previousElementSibling.remove();
 
-		const data = {username: username, password: pw, 'lang': currentLang};
+		const data = {username: username, password: pw, 'lang': currentLang, use_browser_theme: use_browser_theme};
 		fetch('/api/user/create', {
 			method: 'POST',
 			headers: {

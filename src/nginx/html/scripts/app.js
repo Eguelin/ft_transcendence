@@ -24,6 +24,7 @@ const defaultLastXDaysDisplayed = 7;
 
 var client = null;
 var pageName;
+var use_browser_theme = true;
 
 const routes = {
 	"/home": `https://${hostname.host}/bodyLess/home.html`,
@@ -70,6 +71,7 @@ class Client{
 	langJson;
 	pfpUrl;
 	use_dark_theme;
+	use_browser_theme;
 	friends;
 	friend_requests;
 	blocked_user;
@@ -98,9 +100,12 @@ class Client{
 				this.blocked_user = result.blocked_user;
 				this.recentMatches = result.matches;
 				this.#is_admin = result.is_admin;
-				switchTheme(this.use_dark_theme);
 				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 				this.fontAmplifier = result.font_amplifier;
+				this.use_browser_theme = result.use_browser_theme;
+				use_browser_theme = result.use_browser_theme;
+				if (use_browser_theme == false)
+					switchTheme(this.use_dark_theme);
 				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
@@ -316,6 +321,12 @@ function handleToken() {
 			if (response.ok){
 				(async () => {
 					client = await new Client()
+					if (use_browser_theme){
+						if (window.matchMedia) {
+							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+						}
+						window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', browserThemeEvent);
+					}
 					if (!client)
 						myReplaceState(`https://${hostname.host}/login`);
 					else
@@ -336,6 +347,12 @@ function handleToken() {
 					myReplaceState(`https://${hostname.host}/home`);
 				else
 					load();
+				if (use_browser_theme){
+					if (window.matchMedia) {
+						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+					}
+					window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', browserThemeEvent);
+				}
 			})()
 	}
 }
@@ -396,8 +413,10 @@ logOutBtn.addEventListener("click", (e) => {
 
 function switchTheme(darkTheme) {
 	if (darkTheme == 1 || darkTheme == true) {
-		if (client)
+		if (client){
 			client.mainTextRgb = "#FDFDFB";
+			client.use_dark_theme = 1;
+		}
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
@@ -409,8 +428,10 @@ function switchTheme(darkTheme) {
 			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-night-mode.svg)`;
 	}
 	else {
-		if (client)
+		if (client){
 			client.mainTextRgb = "#110026";
+			client.use_dark_theme = 0;
+		}
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
@@ -541,13 +562,20 @@ swichTheme.addEventListener("click", () => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ is_dark_theme: theme }),
+			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false}),
 			credentials: 'include'
 		})
+		client.use_browser_theme = false;
 	}
+	use_browser_theme = false;
+	window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', browserThemeEvent)
 	switchTheme(theme);
 	swichTheme.blur();
-})
+})	
+
+function browserThemeEvent(event){
+	switchTheme(event.matches);	
+}
 
 swichTheme.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
