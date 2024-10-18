@@ -145,7 +145,8 @@ def create_user(request):
 
 		if 'lang' in data:
 			user.profile.language_pack = data['lang']
-
+		if 'use_browser_theme' in data:
+			user.profiel.use_browser_theme = data['use_browser_theme']
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
@@ -247,6 +248,9 @@ def profile_update(request):
 					user.profile.is_active = data['is_active']
 				if ("font_amplifier" in data):
 					user.profile.font_amplifier = data['font_amplifier']
+				if ("use_browser_theme" in data):
+					user.profile.use_browser_theme = data['use_browser_theme']
+					
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
@@ -364,6 +368,7 @@ def current_user(request):
 		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
+			'use_browser_theme': request.user.profile.use_browser_theme,
 			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
 			'friends': friend_json,
