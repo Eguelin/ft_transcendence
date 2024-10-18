@@ -108,10 +108,9 @@
 
 #notPlayedTodayContainer{
 	color: var(--main-text-rgb);
-	position: absolute;
+	position: relative;
 	display: flex;
 	gap: 1ch;
-	top: 50%;
 	left: 50%;
 	translate: -50%;
 	width: max-content;
@@ -136,7 +135,7 @@
 
 	@keyframes recentMatchHistoryContainerScale {
 		from{
-			height: fit-content;
+			height: 2ch;
 		}
 		to{
 			height: 20vh;
@@ -171,7 +170,7 @@
 			height: 20vh;
 		}
 		to{
-			height: fit-content;
+			height: 2ch;
 		}
 	}
 	#recentMatchHistory{
