@@ -146,7 +146,7 @@ def create_user(request):
 		if 'lang' in data:
 			user.profile.language_pack = data['lang']
 		if 'use_browser_theme' in data:
-			user.profiel.use_browser_theme = data['use_browser_theme']
+			user.profile.use_browser_theme = data['use_browser_theme']
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
