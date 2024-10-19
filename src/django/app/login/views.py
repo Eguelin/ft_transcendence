@@ -128,8 +128,11 @@ def create_user(request):
 
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
+	if len(password) == 0:
+		return JsonResponse({'message': 'Password too short'}, status=400)
 	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and os.getenv('DEBUG') == 'False':
+	#if result['score'] < 4 and os.getenv('DEBUG') == 'False':
+	if result['score'] < 4:
 		return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	if User.objects.filter(username=username).exists():
