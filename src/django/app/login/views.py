@@ -131,8 +131,7 @@ def create_user(request):
 	if len(password) == 0:
 		return JsonResponse({'message': 'Password too short'}, status=400)
 	result = zxcvbn.zxcvbn(password)
-	#if result['score'] < 4 and os.getenv('DEBUG') == 'False':
-	if result['score'] < 4:
+	if result['score'] < 4 and os.getenv('DEBUG') == 'False':
 		return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	if User.objects.filter(username=username).exists():
@@ -160,11 +159,11 @@ def create_user(request):
 
 def user_login(request):
 	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request', 'logged' : 0}, status=405)
+		return JsonResponse({'message': 'Invalid request'}, status=405)
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
-		return JsonResponse({'message': 'Invalid JSON', 'logged' : 0}, status=400)
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
 	try :
 		username = data.get('username')
@@ -173,25 +172,25 @@ def user_login(request):
 		return JsonResponse({'message': str(e)}, status=500)
 
 	if not username or not password:
-		return JsonResponse({'message': 'Username and password are required', 'logged' : 0}, status=400)
+		return JsonResponse({'message': 'Username and password are required'}, status=400)
 	try:
 		user = User.objects.get(username=username)
 
 		if user.profile.id42 != 0:
-			return JsonResponse({'message': 'Forbidden', 'logged' : 0}, status=403)
+			return JsonResponse({'message': 'Forbidden'}, status=403)
 
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			user.profile.is_active = True
 			user.save()
 			login(request, user)
-			return JsonResponse({'message': 'User logged in', 'logged' : 1}, status=200)
+			return JsonResponse({'message': 'User logged in'}, status=200)
 		else:
-			return JsonResponse({'message': 'Invalid credentials', 'logged' : 0}, status=400)
+			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': 'Invalid credentials', 'logged' : 0}, status=400)
+		return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except Exception as e:
-		return JsonResponse({'message': str(e), 'logged' : 0}, status=500)
+		return JsonResponse({'message': str(e)}, status=500)
 
 def user_logout(request):
 	if request.method != 'POST':
@@ -225,11 +224,17 @@ def profile_update(request):
 				data = json.loads(request.body)
 				user = request.user
 				if "is_dark_theme" in data:
-					user.profile.dark_theme = data['is_dark_theme']
+					if (isinstance(data['is_dark_theme'], (bool))):
+						user.profile.dark_theme = data['is_dark_theme']
+					else:
+						return JsonResponse({'message': 'Invalid is_dark_theme value, should be a boolean'}, status=400)
 				if "username" in data:
-					if User.objects.filter(username=data['username']).exists():
-						return JsonResponse({'message': 'Username is already taken'}, status=400)
-					user.username = data['username']
+					if (isinstance(data['username'], (str))):
+						if User.objects.filter(username=data['username']).exists():
+							return JsonResponse({'message': 'Username is already taken'}, status=400)
+						user.username = data['username']
+					else:
+						return JsonResponse({'message': 'Invalid username value, should be a string'}, status=400)
 				username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
 				max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
 				try:
@@ -238,21 +243,39 @@ def profile_update(request):
 				except ValidationError as e:
 					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
-					if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
-						os.remove(user.profile.profile_picture)
-					raw = data['pfp']
-					pfpName = "/images/{0}.jpg".format(user.username)
-					with open(pfpName, "wb", opener=file_opener) as f:
-						f.write(base64.b64decode(raw))
-					user.profile.profile_picture = pfpName
+					if (isinstance(data['pfp'], (str, bytearray))):
+						if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
+							os.remove(user.profile.profile_picture)
+						try:
+							raw = base64.b64decode(data['pfp'])
+						except:
+							return JsonResponse({'message': 'Invalid base64 string'}, status=400)
+						pfpName = "/images/{0}.jpg".format(user.username)
+						with open(pfpName, "wb", opener=file_opener) as f:
+							f.write(raw)
+						user.profile.profile_picture = pfpName
+					else:
+						return JsonResponse({'message': 'Invalid pfp value, should be a string'}, status=400)
 				if ("language_pack" in data):
-					user.profile.language_pack = data['language_pack']
+					if (isinstance(data['language_pack'], (str))):	#TODO check if path is valid
+						user.profile.language_pack = data['language_pack']
+					else:
+						return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
 				if ("is_active" in data):
-					user.profile.is_active = data['is_active']
+					if (isinstance(data['is_active'], (bool))):
+						user.profile.is_active = data['is_active']
+					else:
+						return JsonResponse({'message': 'Invalid is_active value, should be a boolean'}, status=400)
 				if ("font_amplifier" in data):
-					user.profile.font_amplifier = data['font_amplifier']
+					if (isinstance(data['is_active'], (float))):
+						user.profile.font_amplifier = data['font_amplifier']
+					else:
+						return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
 				if ("use_browser_theme" in data):
-					user.profile.use_browser_theme = data['use_browser_theme']
+					if (isinstance(data['use_browser_theme'], (bool))):
+						user.profile.use_browser_theme = data['use_browser_theme']
+					else:
+						return JsonResponse({'message': 'Invalid use_browser_theme value, should be a boolean'}, status=400)
 					
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
