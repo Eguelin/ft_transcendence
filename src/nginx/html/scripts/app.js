@@ -21,6 +21,7 @@ var currentLang = "lang/EN_UK.json"
 var username = "";
 const hostname = new URL(window.location.href);
 const defaultLastXDaysDisplayed = 7;
+const preferedColorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
 var client = null;
 var pageName;
@@ -325,7 +326,7 @@ function handleToken() {
 						if (window.matchMedia) {
 							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
 						}
-						window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', browserThemeEvent);
+						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 					}
 					if (!client)
 						myReplaceState(`https://${hostname.host}/login`);
@@ -351,7 +352,7 @@ function handleToken() {
 					if (window.matchMedia) {
 						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
 					}
-					window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', browserThemeEvent);
+					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 				}
 			})()
 	}
@@ -568,7 +569,7 @@ swichTheme.addEventListener("click", () => {
 		client.use_browser_theme = false;
 	}
 	use_browser_theme = false;
-	window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', browserThemeEvent)
+	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent)
 	switchTheme(theme);
 	swichTheme.blur();
 })	
