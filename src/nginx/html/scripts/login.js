@@ -11,15 +11,19 @@ for (i = 0; i < slides.length; i++)
 slides[slideIdx].style.display = "block";
 
 
-Object.keys(loginSlideSelector).forEach(function(key) {
+loginSlideSelector.forEach(function(key) {
 	if (currentPage == "login"){
-		loginSlideSelector[key].addEventListener("click", (e) => {
+		key.addEventListener("click", (e) => {
 			loginSlideSelector[slideIdx].classList.remove("activeSelector");
 			slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
 			for (i = 0; i < slides.length; i++)
 				slides[i].style.display = "none";
 			slides[slideIdx].style.display = "block";
 			loginSlideSelector[slideIdx].classList.add('activeSelector');
+		})
+		key.addEventListener("keydown", (e) => {
+			if (e.key == "Enter")
+				key.click();
 		})
 	}
 })
@@ -278,6 +282,7 @@ function loginKeyDownEvent(e) {
 			slides[i].style.display = "none";
 		loginSlideSelector[slideIdx].classList.add('activeSelector');
 		slides[slideIdx].style.display = "block";
+		loginSlideSelector[slideIdx].focus();
 	}
 }
 
