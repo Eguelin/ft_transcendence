@@ -15,7 +15,7 @@
 		<div id="browseFlexContainer" >
 			<div tabindex="1" id="goHomeButton" style="display: none"></div>
 			<div id="inputSearchUserContainer">
-				<input tabindex="1" id="inputSearchUser" placeholder="Search user">
+				<input tabindex="1" id="inputSearchUser" placeholder="Search user" aria-label="Search user input field">
 			</div>
 			<div id="subtitleContainer">
 				<h2 id="subtitle"></h2>
@@ -25,7 +25,7 @@
 		<div id="quickSettingContainer">
 			<div  id="dropDownUserContainer" style="display: none;">
 				<div id="dropDownUser">
-					<span tabindex="7" id="usernameBtn"></span>
+					<div tabindex="7" id="usernameBtn" aria-label="Profile dropdown menu"></div>
 					<ul class="dropDownUserContent">
 						<li>
 							<button class="dropDownMenuBtn" tabindex="8" id="myProfileBtn">Profile</button>
@@ -45,24 +45,24 @@
 					<img id="pfp">
 				</div>
 			</div>
-			<div tabindex="6" id="themeButton"></div>
+			<div tabindex="6" id="themeButton" aria-label="Theme toggle button"></div>
 			<div id="dropDownLangContainer">
 				<div id="dropDownLang">
 					<div class="dropDownLangOptionsContainer">
-						<div tabindex="1" id="dropDownLangBtn"></div>
+						<div tabindex="1" id="dropDownLangBtn" aria-label="Language selection menu"></div>
 					</div>
 					<ul id="dropDownLangContent">
 						<li class="dropDownLangOptionsContainer">
-							<div class="dropDownLangOptions" id="EN_UK" style="background-image: url(/icons/EN_UK.svg);" tabindex="2"></div>
+							<div class="dropDownLangOptions" id="EN_UK" style="background-image: url(/icons/EN_UK.svg);" tabindex="2" aria-label="English"></div>
 						</li>
 						<li class="dropDownLangOptionsContainer">
-							<div class="dropDownLangOptions" id="FR_FR" style="background-image: url(/icons/FR_FR.svg);" tabindex="3"></div>
+							<div class="dropDownLangOptions" id="FR_FR" style="background-image: url(/icons/FR_FR.svg);" tabindex="3" aria-label="Francais"></div>
 						</li>
 						<li class="dropDownLangOptionsContainer">
-							<div class="dropDownLangOptions" id="DE_GE" style="background-image: url(/icons/DE_GE.svg);" tabindex="4"></div>
+							<div class="dropDownLangOptions" id="DE_GE" style="background-image: url(/icons/DE_GE.svg);" tabindex="4" aria-label="Deutsch"></div>
 						</li>
 						<li class="dropDownLangOptionsContainer">
-							<div class="dropDownLangOptions" id="IT_IT" style="background-image: url(/icons/IT_IT.svg);" tabindex="5"></div>
+							<div class="dropDownLangOptions" id="IT_IT" style="background-image: url(/icons/IT_IT.svg);" tabindex="5" aria-label="Italiano"></div>
 						</li>
 					</ul>
 				</div>
