@@ -60,6 +60,7 @@ function createUserResumeContainer(user) {
 	userResume = document.createElement("div");
 	userResume.className = "userResume";
 	userResume.id = user.username
+	userResume.setAttribute("aria-label", `${user.username} profile redirection`);
 
 	img = document.createElement("img");
 	imgContainer = document.createElement("div");
