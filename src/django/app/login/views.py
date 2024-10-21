@@ -2,11 +2,10 @@ from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random, string, subprocess, datetime
-import login.models as customModels
+import json, os, requests, base64, random, datetime, zxcvbn, re, io
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
-import json, os, requests, base64, random, zxcvbn, re
+from PIL import Image
 
 def generate_unique_username(base_username):
 	username = base_username
@@ -213,8 +212,8 @@ def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
 
 def profile_update(request):
-	if (request.user.is_authenticated):
-		if (request.method == 'POST'):
+	if request.user.is_authenticated:
+		if request.method == 'POST':
 			try:
 				data = json.loads(request.body)
 				user = request.user
@@ -231,19 +230,34 @@ def profile_update(request):
 					max_length_validator(user.username)
 				except ValidationError as e:
 					return JsonResponse({'message': e.message}, status=400)
+
 				if "pfp" in data:
-					if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
-						os.remove(user.profile.profile_picture)
+					# Décodage de l'image base64
 					raw = data['pfp']
-					pfpName = "/images/{0}.jpg".format(user.username)
-					with open(pfpName, "wb", opener=file_opener) as f:
-						f.write(base64.b64decode(raw))
-					user.profile.profile_picture = pfpName
-				if ("language_pack" in data):
+					try:
+						image_data = base64.b64decode(raw)
+						image = Image.open(io.BytesIO(image_data))
+						image.verify()
+
+						image = Image.open(io.BytesIO(image_data))
+
+						if image.format not in ['JPEG', 'PNG']:
+							return JsonResponse({'message': 'Image format not supported, use JPEG or PNG'}, status=400)
+						if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
+							os.remove(user.profile.profile_picture)
+						pfpName = "/images/{0}.jpg".format(user.username)
+						with open(pfpName, "wb", opener=file_opener) as f:
+							f.write(image_data)
+						user.profile.profile_picture = pfpName
+
+					except (base64.binascii.Error, IOError) as e:
+						return JsonResponse({'message': 'Invalid image data'}, status=400)
+
+				if "language_pack" in data:
 					user.profile.language_pack = data['language_pack']
-				if ("is_active" in data):
+				if "is_active" in data:
 					user.profile.is_active = data['is_active']
-				if ("font_amplifier" in data):
+				if "font_amplifier" in data:
 					user.profile.font_amplifier = data['font_amplifier']
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
