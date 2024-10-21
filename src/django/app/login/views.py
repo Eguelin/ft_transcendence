@@ -232,7 +232,6 @@ def profile_update(request):
 					return JsonResponse({'message': e.message}, status=400)
 
 				if "pfp" in data:
-					# Décodage de l'image base64
 					raw = data['pfp']
 					try:
 						image_data = base64.b64decode(raw)
