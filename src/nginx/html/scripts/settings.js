@@ -75,26 +75,24 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		credentials: 'include'
 	}).then(response => {
 		return response.json().then(data => {
-			if (!response.ok) {
-				// Créer un élément d'avertissement avec le message retourné par le backend
+			if (!response.ok)
+			{
 				warning = document.createElement("a");
 				warning.className = "warning";
-				warning.textContent = data.message; // Utiliser le message du backend
-				// S'assurer qu'il n'y a pas déjà un avertissement
+				warning.textContent = data.message;
 				if (!pfpInputLabel.previousElementSibling)
 					pfpInputLabel.before(warning);
-			} else {
-				// Supprimer l'avertissement précédent s'il y en a un
+			}
+			else
+			{
 				if (pfpInputLabel.previousElementSibling)
 					pfpInputLabel.previousElementSibling.remove();
-				// Fermer le popup
 				document.getElementById("popupBg").style.setProperty("display", "none");
 				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
 			}
 		});
 	}).catch(error => {
 		console.error('Error during profile update:', error);
-		// Gestion des erreurs inattendues (par exemple, problème réseau)
 		warning = document.createElement("a");
 		warning.className = "warning";
 		warning.textContent = "An unexpected error occurred.";
