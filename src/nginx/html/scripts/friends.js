@@ -19,14 +19,24 @@ inputSearchUserContainer.style.setProperty("display", "block");
 document.getElementById("inputSearchUser").focus();
 dropDownUserContainer.style.setProperty("display", "flex");
 
-Object.keys(slideSelector).forEach(function(key) {
+slideSelector.forEach(function(key) {
 	if (currentPage == "friends"){
-		slideSelector[key].addEventListener("click", (e) => {
+		key.addEventListener("click", (e) => {
 			friendSlides[friendSlideIdx].className = "friendSlide";
 			slideSelector[friendSlideIdx].className = "slideSelector";
 			friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
 			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+			if (friendSlides[friendSlideIdx].childElementCount > 0){
+				if (friendSlideIdx == 0 || friendSlideIdx == 1){
+					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
+				}
+			}
 			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+		})
+		key.addEventListener("keydown", (e) => {
+			if (e.key == "Enter"){
+				key.click();
+			}
 		})
 	}
 })
@@ -159,6 +169,7 @@ function createFriendContainer(user){
 	friendContainer.getElementsByClassName("friendsOptionContainer")[0].remove();
 
 	friendsOptionContainer.className = "friendsOptionContainer"
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} user options`)
 
 	friendsOption.className = "friendsOption"
 
@@ -170,10 +181,12 @@ function createFriendContainer(user){
 	friendTabIdx += 1;
 
 	removeFriendBtn.className = "removeFriendBtn";
+	removeFriendBtn.setAttribute("aria-label", `remove friend button`);
 	removeFriendBtn.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
 
 	blockFriendBtn.className = "blockFriendBtn";
+	blockFriendBtn.setAttribute("aria-label", `Block friend button`);
 	blockFriendBtn.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
 
@@ -290,9 +303,9 @@ function setListeners(){
 
 function checkUpdate(){
 	if (currentPage == "friends"){
-		friendTabIdx = 12;
-		pendingFriendTabIdx = 12;
-		blockedUserTabIdx = 12;
+		friendTabIdx = 15;
+		pendingFriendTabIdx = 15;
+		blockedUserTabIdx = 15;
 	
 		fetch('/api/user/current', {
 			method: 'GET',
