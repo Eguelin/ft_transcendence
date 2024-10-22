@@ -39,7 +39,6 @@ playBtn = document.getElementById("playBtn");
 			
 			document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
 				var tabIdx = 14;
-				console.log(e.key);
 				if (e.key == "Enter"){
 					document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
 						elem.tabIndex = tabIdx;
