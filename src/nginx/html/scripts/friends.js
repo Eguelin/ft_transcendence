@@ -126,8 +126,13 @@ function createUserContainer(user){
 	var unblockBtn = document.createElement("div");
 	var acceptBtn = document.createElement("div");
 	var rejectBtn = document.createElement("div");
+	var removeFriendBtn = document.createElement("div");
+	var blockFriendBtn = document.createElement("div");
+	var friendsOption = document.createElement("div");
+	var moreBtn = document.createElement("div");
 
 	var userOptionContainer = document.createElement("div");
+	var userOption = document.createElement("div");
 
 	friendContainer.className = "friendContainer"
 	friendContainer.id = user.username;
@@ -143,15 +148,36 @@ function createUserContainer(user){
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
+	friendsOption.className = "friendsOption"
+	moreBtn.className = "moreBtn";
+	
+	removeFriendBtn.className = "removeFriendBtn";
+	removeFriendBtn.setAttribute("aria-label", `Remove friend button`);
+	
+	blockFriendBtn.className = "blockFriendBtn";
+	blockFriendBtn.setAttribute("aria-label", `Block friend button`);
+	
 	acceptBtn.className = "acceptRequestBtn";
+	acceptBtn.setAttribute("aria-label", "Accept friend request");
+	
 	rejectBtn.className = "rejectRequestBtn";
+	rejectBtn.setAttribute("aria-label", "Reject friend request");
+	
 	unblockBtn.className = "unblockBtn";
+	unblockBtn.setAttribute("aria-label", "Unblock user");
 
 	userOptionContainer.className = "friendsOptionContainer";
-	userOptionContainer.id = user.username;
-	userOptionContainer.appendChild(unblockBtn);
-	userOptionContainer.appendChild(acceptBtn);
-	userOptionContainer.appendChild(rejectBtn);
+	userOption.className = "friendsOption";
+	userOption.id = user.username;
+	
+	userOption.appendChild(unblockBtn);
+	userOption.appendChild(acceptBtn);
+	userOption.appendChild(rejectBtn);
+	userOption.appendChild(removeFriendBtn);
+	userOption.appendChild(blockFriendBtn);
+
+	userOptionContainer.appendChild(moreBtn);
+	userOptionContainer.appendChild(userOption);
 
 	friendContainer.appendChild(userOptionContainer);
 	return (friendContainer);
@@ -160,57 +186,44 @@ function createUserContainer(user){
 function createFriendContainer(user){
 	var friendContainer = document.createElement("div");
 	var friendsOptionContainer = document.createElement("div");
-	var friendsOption = document.createElement("div");
-	var moreBtn = document.createElement("div");
 	var removeFriendBtn = document.createElement("div");
 	var blockFriendBtn = document.createElement("div");
 
 	friendContainer = createUserContainer(user);
-	friendContainer.getElementsByClassName("friendsOptionContainer")[0].remove();
-
-	friendsOptionContainer.className = "friendsOptionContainer"
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} user options`)
-
-	friendsOption.className = "friendsOption"
-
-	moreBtn.className = "moreBtn";
-
-	friendsOptionContainer.appendChild(moreBtn);
-	friendsOptionContainer.appendChild(friendsOption);
+	
+	friendContainer.querySelectorAll(".unblockBtn, .acceptRequestBtn, .rejectRequestBtn").forEach(function (elem) {
+		elem.remove();
+	})
+	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
+	
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} friend options`);
 	friendsOptionContainer.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
 
-	removeFriendBtn.className = "removeFriendBtn";
-	removeFriendBtn.setAttribute("aria-label", `remove friend button`);
+	removeFriendBtn = friendsOptionContainer.getElementsByClassName("removeFriendBtn")[0];
 	removeFriendBtn.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
 
-	blockFriendBtn.className = "blockFriendBtn";
-	blockFriendBtn.setAttribute("aria-label", `Block friend button`);
+	blockFriendBtn = friendsOptionContainer.getElementsByClassName("blockFriendBtn")[0];
 	blockFriendBtn.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
-
-	friendsOption.id = user.username;
-
-	friendsOption.appendChild(removeFriendBtn);
-	friendsOption.appendChild(blockFriendBtn);
-
-	friendContainer.appendChild(friendsOptionContainer);
 
 	if (user.is_active == true){
 		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
 	}
-
 	allFriendListContainer.appendChild(friendContainer);
 }
 
 function createFriendRequestContainer(user){
 	var friendContainer = createUserContainer(user);
 
-	friendContainer.querySelectorAll(".unblockBtn").forEach(function (elem) {
+	friendContainer.querySelectorAll(".unblockBtn, .removeFriendBtn, .blockFriendBtn").forEach(function (elem) {
 		elem.remove();
 	})
-
+	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} incoming pending friend request options`);
+	friendsOptionContainer.tabIndex = pendingFriendTabIdx;
+	pendingFriendTabIdx += 1;
 	friendContainer.getElementsByClassName("acceptRequestBtn")[0].tabIndex = pendingFriendTabIdx;
 	pendingFriendTabIdx += 1;
 	friendContainer.getElementsByClassName("rejectRequestBtn")[0].tabIndex = pendingFriendTabIdx;
@@ -221,10 +234,16 @@ function createFriendRequestContainer(user){
 function createBlockedUserContainer(user){
 	var friendContainer = createUserContainer(user);
 
-	friendContainer.querySelectorAll(".acceptRequestBtn, .rejectRequestBtn").forEach(function (elem) {
+	friendContainer.querySelectorAll(".acceptRequestBtn, .rejectRequestBtn, .removeFriendBtn, .blockFriendBtn").forEach(function (elem) {
 		elem.remove();
 	})
 
+	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
+	
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} blocked user options`);
+	friendsOptionContainer.tabIndex = blockedUserTabIdx;
+	blockedUserTabIdx += 1;
+	
 	friendContainer.getElementsByClassName("unblockBtn")[0].tabIndex = blockedUserTabIdx;
 	blockedUserTabIdx += 1;
 
