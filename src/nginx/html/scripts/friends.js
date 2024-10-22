@@ -27,9 +27,7 @@ slideSelector.forEach(function(key) {
 			friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
 			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
 			if (friendSlides[friendSlideIdx].childElementCount > 0){
-				if (friendSlideIdx == 0 || friendSlideIdx == 1){
-					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
-				}
+				friendSlides[friendSlideIdx].firstChild.lastChild.focus();
 			}
 			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		})
