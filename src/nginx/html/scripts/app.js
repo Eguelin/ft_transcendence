@@ -621,9 +621,14 @@ function createMatchResumeContainer(match) {
 
 	if (scoreUserName.innerHTML == "deleted")
 		scoreUserName.classList.add("deletedUser");
+	else
+		scoreUserName.setAttribute("aria-label", `redirect to ${scoreUserName.innerText} profile`);
+	
 
 	if (scoreOpponentName.innerHTML == "deleted")
 		scoreOpponentName.classList.add("deletedUser");
+	else
+		scoreOpponentName.setAttribute("aria-label", `redirect to ${scoreOpponentName.innerText} profile`);
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
@@ -652,6 +657,8 @@ function createMatchResumeContainer(match) {
 	matchContainer.appendChild(result);
 	matchContainer.appendChild(scoreContainer);
 	matchContainer.appendChild(date);
+	
+	matchContainer.setAttribute("aria-label", `${result.innerText} match against ${scoreOpponentName.innerText} on the ${date.innerText}`);
 
 	recentMatchHistoryContainer.appendChild(matchContainer);
 }
