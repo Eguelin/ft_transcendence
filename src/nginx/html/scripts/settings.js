@@ -84,22 +84,34 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		body: JSON.stringify({'pfp': buf}),
 		credentials: 'include'
 	}).then(response => {
-		if (!response.ok){
-			warning = document.createElement("a");
-			warning.className = "warning";
-			warning.text = "File is too heavy";
-			if (!pfpInputLabel.previousElementSibling)
-				pfpInputLabel.before(warning);
-		}
-		else{
-			if (pfpInputLabel.previousElementSibling)
-				pfpInputLabel.previousElementSibling.remove();
-			document.getElementById("popupBg").style.setProperty("display", "none");
-			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
-		}
-	})
-	window.addEventListener("keydown", settingsKeyDownEvent)
-})
+		return response.json().then(data => {
+			if (!response.ok)
+			{
+				warning = document.createElement("a");
+				warning.className = "warning";
+				warning.textContent = data.message;
+				if (!pfpInputLabel.previousElementSibling)
+					pfpInputLabel.before(warning);
+			}
+			else
+			{
+				if (pfpInputLabel.previousElementSibling)
+					pfpInputLabel.previousElementSibling.remove();
+				document.getElementById("popupBg").style.setProperty("display", "none");
+				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
+			}
+		});
+	}).catch(error => {
+		console.error('Error during profile update:', error);
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.textContent = "An unexpected error occurred.";
+		if (!pfpInputLabel.previousElementSibling)
+			pfpInputLabel.before(warning);
+	});
+
+	window.addEventListener("keydown", settingsKeyDownEvent);
+});
 
 saveUsernameBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter")
@@ -191,7 +203,7 @@ function deleteRequest(){
 
 document.addEventListener("keydown", (e) => {
 	if (currentPage == "settings"){
-		if (e.key == "Escape" && 
+		if (e.key == "Escape" &&
 			document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
