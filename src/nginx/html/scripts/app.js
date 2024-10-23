@@ -148,20 +148,20 @@ class Client{
 			if (fetchResult.ok){
 				this.#is_admin = result.is_admin;
 				document.getElementById("loaderBg").style.setProperty("display", "block");
-		
+
 				var sep = page.indexOf("/", 1)
 				if (sep > 0)
 					pageName = page.substring(0, sep)
 				else
 					pageName = page;
-				
+
 				if (routes[pageName]){
 					if (!this.#is_admin && pageName == "/admin"){
 						fetch(routes[403]).then((response) => {
 							response.text().then(response => {
 								currentPage = '403';
 								container.innerHTML = response;
-		
+
 								document.getElementById("script").remove();
 								var s = document.createElement("script");
 								s.setAttribute('id', 'script');
@@ -179,7 +179,7 @@ class Client{
 							response.text().then(response => {
 								currentPage = pageName.substring(1);
 								container.innerHTML = response;
-		
+
 								document.getElementById("script").remove();
 								var s = document.createElement("script");
 								s.onload = function(){
@@ -198,7 +198,7 @@ class Client{
 						response.text().then(response => {
 							currentPage = '404';
 							container.innerHTML = response;
-		
+
 							document.getElementById("script").remove();
 							var s = document.createElement("script");
 							s.setAttribute('id', 'script');
@@ -213,7 +213,7 @@ class Client{
 			else{
 				dropDownUserContainer.style.setProperty("display", "none");
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
-		
+
 				fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 					(response.text().then(response => {
 						inputSearchUserContainer.style.setProperty("display", "none");
@@ -280,7 +280,7 @@ function load(){
 	if (currentPage == "friends"){
 		window.removeEventListener("keydown", friendKeyDownEvent)
 	}
-	
+
 	if (client)
 		client.loadPage(url.pathname)
 	else {
@@ -333,6 +333,14 @@ function handleToken() {
 					else
 						myReplaceState(`https://${hostname.host}/home`);
 				})()
+			}
+			else
+			{
+				response.json().then(data => {
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+					popUpError(data.message || "Error API 42 Invalid key or API down");
+					myReplaceState(`https://${hostname.host}/login`);
+				})
 			}
 		}).catch(error => console.error('Error:', error));
 	}
@@ -781,7 +789,7 @@ window.addEventListener("click", (e) => {
 			dropDownLang.classList.remove("activeDropDown");
 			void dropDownLang.offsetWidth;
 			dropDownLang.classList.add("inactiveDropDown");
-	
+
 			setTimeout((dropDownLang) => {
 				dropDownLang.classList.remove("inactiveDropDown");
 			}, 300, dropDownLang)
