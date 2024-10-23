@@ -22,14 +22,14 @@ dropDownUserContainer.style.setProperty("display", "flex");
 slideSelector.forEach(function(key) {
 	if (currentPage == "friends"){
 		key.addEventListener("click", (e) => {
-			friendSlides[friendSlideIdx].className = "friendSlide";
-			slideSelector[friendSlideIdx].className = "slideSelector";
+			friendSlides[friendSlideIdx].classList.remove("activeSlide");
+			slideSelector[friendSlideIdx].classList.remove("activeSelector");
 			friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-			friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+			friendSlides[friendSlideIdx].classList.add('activeSlide');
 			if (friendSlides[friendSlideIdx].childElementCount > 0){
 				friendSlides[friendSlideIdx].firstChild.lastChild.focus();
 			}
-			slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+			slideSelector[friendSlideIdx].classList.add("activeSelector");
 		})
 		key.addEventListener("keydown", (e) => {
 			if (e.key == "Enter"){
@@ -360,22 +360,19 @@ function checkUpdate(){
 					switchTheme(text.is_dark_theme);
 					currentLang = text.lang;
 					loadCurrentLang();
-					var friends = text.friends;
-					var friends_request = text.friend_requests;
-					var blocked_users = text.blocked_users
 					allFriendListContainer.innerText = "";
 					onlineFriendListContainer.innerText = ""
 					pendingFriendRequestListContainer.innerText = ""
 					blockedListContainer.innerText = ""
-					Object.keys(friends).forEach(function(key) {
-						createFriendContainer(friends[key]);
+					Object.keys(text.friends).forEach(function(key) {
+						createFriendContainer(text.friends[key]);
 					});
-					Object.keys(friends_request).forEach(function(key) {
-						createFriendRequestContainer(friends_request[key]);
+					Object.keys(text.friend_requests).forEach(function(key) {
+						createFriendRequestContainer(text.friend_requests[key]);
 					});
 
-					Object.keys(blocked_users).forEach(function(key) {
-						createBlockedUserContainer(blocked_users[key]);
+					Object.keys(text.blocked_users).forEach(function(key) {
+						createBlockedUserContainer(text.blocked_users[key]);
 					});
 
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
@@ -414,3 +411,8 @@ function friendKeyDownEvent(e) {
 }
 
 window.addEventListener("keydown", friendKeyDownEvent);
+
+inputSearchUserContainer.style.setProperty("display", "block");
+slideSelector[friendSlideIdx].focus();
+dropDownUserContainer.style.setProperty("display", "flex");
+homeBtn.style.setProperty("display", "block");

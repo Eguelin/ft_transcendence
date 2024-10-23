@@ -106,6 +106,10 @@
 	align-self: center;
 	display: none;
 }
+#inputSearchUser{
+	width: -webkit-fill-available;
+	width: -moz-available;
+}
 
 @media screen and (orientation:landscape){
 	#pfpContainer{
