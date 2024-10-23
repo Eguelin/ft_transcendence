@@ -35,10 +35,6 @@
 	height: fit-content;
 }
 
-.settingsDropDown:focus, .settingsDropDown:hover{
-	border: 0px;
-}
-
 .dropDownArrow{
 	mask-image:url("../icons/right_arrow.svg");
 	background:var(--main-text-rgb);
@@ -54,12 +50,16 @@
 .dropDownOptionContainer {
 	display: flex;
 	flex-flow: row;
+	border: 0.2px solid transparent;
 }
 
 .settingsDropDown:hover .dropDownOptionContainer, .settingsDropDown:focus .dropDownOptionContainer{
 	width: max-content;
-	border: 0.2px solid var(--main-text-rgb);
-	border-bottom: 0px;
+	border-color: var(--main-text-rgb);
+}
+
+.activeDropDown.settingsDropDown .dropDownOptionContainer{
+	border: 0 !important;
 }
 
 .settingsDropDown:hover .dropDownOptionContainer .dropDownArrow, .settingsDropDown:focus .dropDownOptionContainer .dropDownArrow{
@@ -68,28 +68,25 @@
 	border-block-start: var(--hover-text-rgb);
 }
 
-.settingsDropDown:hover .dropDownOptionContainer .dropDownBtn, .settingsDropDown:focus .dropDownOptionContainer .dropDownBtn{
+.activeDropDown.settingsDropDown .dropDownOptionContainer .dropDownBtn{
 	display: inline-block;
 	flex: 1;
 	outline: none;
 }
 
-.settingsDropDown:hover .dropDownContent, .settingsDropDown:focus .dropDownContent{
+.activeDropDown.settingsDropDown .dropDownContent{
 	width: -webkit-fill-available;
 	width: -moz-available;
 	display: block;
 	z-index: 2;
 	flex: 1;
 	outline: none;
-	border: 0.2px solid var(--main-text-rgb);
-	border-top: 0px;
 }
 
 
 
 .dropDownContent{
 	display: none;
-	width: 20vw;
 }
 
 
@@ -104,7 +101,8 @@
 	min-width: inherit;
 	display: block;
 }
-.dropDownContent a:hover, .dropDownContentAHover{
+
+.dropDownContent a:hover, .dropDownContent a:focus, .activeDropDown.settingsDropDown:focus div button{
 	color: var(--option-hover-text-rgb) !important;
 }	
 

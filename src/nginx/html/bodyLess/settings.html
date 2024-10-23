@@ -1,6 +1,6 @@
 <div style="height: fit-content; text-align: center; display: flex;">
 	<div id="leftSlideBtn" tabindex="12" aria-label="Switch settings page"></div>
-	<div id="rightSlideBtn" tabindex="20" aria-label="Switch settings page"></div>
+	<div id="rightSlideBtn" tabindex="22" aria-label="Switch settings page"></div>
 	<div class="settingSlide" style="width: fit-content;display: block;position: relative;left: 50%;translate: -50%;">
 		<h2 id="accountTitle">Account</h2>
 		<div class="forms" id="saveUsernameContainer">
@@ -44,21 +44,21 @@
 					<div class="dropDownArrow"></div>
 				</div>
 				<div class="dropDownContent">
-					<a class="loadLight" id="loadLightP" >Light</a>
-					<a class="loadDark"  id="loadDarkP"  >Dark</a>
+					<a class="settingsThemeDropDown" tabindex="14" id="settingsThemeLight" >Light</a>
+					<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeDark"  >Dark</a>
 				</div>
 			</div>
-			<div class="settingsDropDown" tabindex="14">
+			<div class="settingsDropDown" tabindex="16"> <!--activeDropDown-->
 				<div class="dropDownOptionContainer">
 					<button tabindex="-1" id="languagesDropDownP" class="dropDownBtn">Language</button>
 					<div class="dropDownArrow"></div>
 				</div>
 				<div class="dropDownContent">
-					<a id="englishBtnP" class="englishBtn">English</a>
-					<a id="frenchBtnP" class="frenchBtn">French</a>
-					<a id="germanBtnP" class="germanBtn">German</a>
-					<a id="italianBtnP" class="italianBtn">Italian</a>
-					<a id="pirateBtnP" class="pirateBtn">Pirate</a>
+					<a id="EN_UK" tabindex="17" class="settingsLangDropDown">English</a>
+					<a id="FR_FR" tabindex="18" class="settingsLangDropDown">French</a>
+					<a id="DE_GE" tabindex="19" class="settingsLangDropDown">German</a>
+					<a id="IT_IT" tabindex="20" class="settingsLangDropDown">Italian</a>
+					<a id="AR_GH" tabindex="21" class="settingsLangDropDown">Pirate</a>
 				</div>
 			</div>
 		</div>
