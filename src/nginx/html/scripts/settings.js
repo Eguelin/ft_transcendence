@@ -8,7 +8,7 @@ lightTheme = document.getElementsByClassName("loadLight");
 darkTheme = document.getElementsByClassName("loadDark");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
-dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandscape");
+dropDownContent = document.querySelectorAll(".settingsDropDown, .dropDownLandscape");
 settingsSlides = document.querySelectorAll(".settingSlide");
 rightSlideBtn = document.getElementById("rightSlideBtn");
 leftSlideBtn = document.getElementById("leftSlideBtn");
@@ -16,7 +16,7 @@ confirmDeleteInput = document.getElementById("confirmDeleteInput");
 confirmPfpBtn = document.getElementById("confirmPfpBtn");
 var buf = "";
 
-var slideIdx = 0;
+var slideIdx = 1;
 for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
 settingsSlides[slideIdx].style.display = "block";
@@ -372,16 +372,6 @@ for (var i=0; i< lightTheme.length; i++)
 	})
 }
 
-{
-	inputSearchUserContainer.style.setProperty("display", "none");
-	dropDownUserContainer.style.setProperty("display", "flex");
-	homeBtn.style.setProperty("display", "block");
-	homeBtn.focus();
-	document.getElementById("fontSizeRange").value = client.fontAmplifier;
-}
-
-window.addEventListener("keydown", settingsKeyDownEvent)
-
 function settingsKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
 		if (e.key == "ArrowLeft")
@@ -396,6 +386,15 @@ function settingsKeyDownEvent(e) {
 			settingsSlides[i].style.display = "none";
 		settingsSlides[slideIdx].style.display = "block";
 	}
+}
+
+{
+	inputSearchUserContainer.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
+	homeBtn.focus();
+	document.getElementById("fontSizeRange").value = client.fontAmplifier;
+	window.addEventListener("keydown", settingsKeyDownEvent)
 }
 
 document.getElementById("fontSizeRange").addEventListener("input", (e) => {
@@ -422,7 +421,6 @@ document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
 usernameInput.addEventListener("focus", (e) => {
 	window.removeEventListener("keydown", settingsKeyDownEvent)
 })
-
 
 usernameInput.addEventListener("focusout", (e) => {
 	window.addEventListener("keydown", settingsKeyDownEvent)

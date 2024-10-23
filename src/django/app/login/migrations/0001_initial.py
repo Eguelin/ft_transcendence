@@ -31,6 +31,7 @@ class Migration(migrations.Migration):
                 ('friends_request', models.ManyToManyField(related_name='friends_request_list', to=settings.AUTH_USER_MODEL)),
                 ('matches', models.ManyToManyField(related_name='matches_history', to='game.match')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('use_browser_theme', models.BooleanField(default=True)),
             ],
         ),
     ]
