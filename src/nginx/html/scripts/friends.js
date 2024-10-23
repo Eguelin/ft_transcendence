@@ -261,8 +261,10 @@ function setListeners(){
 			window.addEventListener("keydown", friendKeyDownEvent);
 		});
 		elem.addEventListener("keydown", (e) => {
-			if (e.key == "Enter")
-				elem.click();
+			if (e.key == "Enter"){
+				elem.classList.add("activeListSelector");
+				elem.lastChild.firstChild.focus();
+			}
 		});
 		elem.addEventListener("click", (e) => {
 			elem.classList.add("activeListSelector");
@@ -280,7 +282,6 @@ function setListeners(){
 			if (e.key == "Enter"){
 				elem.click();
 			}
-
 		});
 	});
 	document.querySelectorAll(".friendsOption div").forEach(function (elem) {
@@ -293,11 +294,6 @@ function setListeners(){
 				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
 				document.getElementById("confirmBlock").focus();
 			}
-			if (e.key == "Enter"){
-				document.querySelectorAll(".activeListSelector").forEach(function (active){
-					active.classList.remove("activeListSelector");
-				})
-			}
 		})
 		elem.addEventListener("click", (e) => {
 			if (document.getElementById("popupBg").style.getPropertyValue("display") == "block"){
@@ -306,14 +302,15 @@ function setListeners(){
 				deleteFriendPopup.style.setProperty("display", "none");
 			}
 			if (elem.className == "removeFriendBtn"){
+				document.getElementById("popupBg").style.display = "block";
 				deleteFriendPopup.style.setProperty("display", "flex");
 				deleteFriendPopup.className = e.target.parentElement.id;
 			}
 			else if (elem.className == "blockFriendBtn"){
+				document.getElementById("popupBg").style.display = "block"
 				blockFriendPopup.style.setProperty("display", "flex");
 				blockFriendPopup.className = e.target.parentElement.id;
 			}
-			document.getElementById("popupBg").style.display = "block";
 		})
 	})
 }
@@ -416,6 +413,7 @@ function friendKeyDownEvent(e) {
 			friendSlideIdx = friendSlides.length - 1;
 		friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
 		slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+		slideSelector[friendSlideIdx].focus();
 	}
 }
 
