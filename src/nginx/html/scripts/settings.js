@@ -16,10 +16,15 @@ confirmDeleteInput = document.getElementById("confirmDeleteInput");
 confirmPfpBtn = document.getElementById("confirmPfpBtn");
 var buf = "";
 
-var slideIdx = 1;
+var slideIdx = 0;
 for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
 settingsSlides[slideIdx].style.display = "block";
+
+rightSlideBtn.addEventListener("keydown", (e) =>{
+	if (e.key == "Enter")
+		rightSlideBtn.click();
+})
 
 rightSlideBtn.addEventListener("click", () => {
 	slideIdx += 1;
@@ -29,6 +34,11 @@ rightSlideBtn.addEventListener("click", () => {
 		settingsSlides[i].style.display = "none";
 	settingsSlides[slideIdx].style.display = "block";
 });
+
+leftSlideBtn.addEventListener("keydown", (e) =>{
+	if (e.key == "Enter")
+		leftSlideBtn.click();
+})
 
 leftSlideBtn.addEventListener("click", () => {
 	slideIdx -= 1;

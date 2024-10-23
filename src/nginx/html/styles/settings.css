@@ -115,3 +115,29 @@
 	width: 20vw;
 	color: var(--main-text-rgb);
 }
+
+#leftSlideBtn{
+	mask-image:url("../icons/left_arrow.svg");
+	background:var(--main-text-rgb);
+	height:5vw;
+	width:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	position: absolute;
+	top: 50%;
+}
+
+
+#rightSlideBtn{
+	mask-image:url("../icons/right_arrow.svg");
+	background:var(--main-text-rgb);
+	height:5vw;
+	width:5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	position: absolute;
+	top: 50%;
+	right: 0;
+}

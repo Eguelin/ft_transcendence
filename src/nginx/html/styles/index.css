@@ -56,7 +56,7 @@
 	}
 }
 
-#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover{
+#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover, #leftSlideBtn:focus, #rightSlideBtn:focus{
 	outline: none;
 	background: var(--hover-text-rgb);
 }
