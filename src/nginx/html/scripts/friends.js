@@ -87,7 +87,31 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			e.target.parentElement.parentElement.remove();
+			e.target.closest(".friendContainer").remove();
+		}
+		if (e.target.className == "acceptRequestBtn"){
+			const data = {username: e.target.parentElement.id};
+			fetch('/api/user/accept_friend_request', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			e.target.closest(".friendContainer").remove();
+		}
+		if (e.target.className == "rejectRequestBtn"){
+			const data = {username: e.target.parentElement.id};
+			fetch('/api/user/reject_friend_request', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			e.target.closest(".friendContainer").remove();
 		}
 	}
 })
@@ -262,8 +286,10 @@ function setListeners(){
 		});
 		elem.addEventListener("keydown", (e) => {
 			if (e.key == "Enter"){
-				elem.classList.add("activeListSelector");
-				elem.lastChild.firstChild.focus();
+				if (e.target.classList.contains("friendsOptionContainer")){	// to prevent this event to apply to children of .friendsOptionContainer
+					elem.classList.add("activeListSelector");
+					elem.lastChild.firstChild.focus();
+				}
 			}
 		});
 		elem.addEventListener("click", (e) => {
@@ -351,41 +377,11 @@ function checkUpdate(){
 					Object.keys(blocked_users).forEach(function(key) {
 						createBlockedUserContainer(blocked_users[key]);
 					});
-					acceptRequestBtn = document.querySelectorAll(".acceptRequestBtn");
-					rejectRequestBtn = document.querySelectorAll(".rejectRequestBtn");
-					removeFriendBtn = document.querySelectorAll(".removeFriendBtn");
-					blockFriendBtn = document.querySelectorAll(".blockFriendBtn");
-					unblockBtn = document.querySelectorAll(".unblockBtn");
 
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
 					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
-
-					for (var i = 0; i < acceptRequestBtn.length; i++){
-						acceptRequestBtn[i].addEventListener("click", (e) => {
-							const data = {username: e.srcElement.parentElement.id};
-							fetch('/api/user/accept_friend_request', {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json',
-								},
-								body: JSON.stringify(data),
-								credentials: 'include'
-							})
-						})
-						rejectRequestBtn[i].addEventListener("click", (e) => {
-							const data = {username: e.srcElement.parentElement.id};
-							fetch('/api/user/reject_friend_request', {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json',
-								},
-								body: JSON.stringify(data),
-								credentials: 'include'
-							})
-						})
-					}
 					setListeners();
 				});
 			}
