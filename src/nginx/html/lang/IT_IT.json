@@ -55,11 +55,11 @@
 		"#germanBtnL" : "Tedesco",
 		"#italianBtnL" : "Italiano",
 		"#pirateBtnL" : "Pirata",
-		"#englishBtnP" : "Inglese",
-		"#frenchBtnP" : "Francese",
-		"#germanBtnP" : "Tedesco",
-		"#italianBtnP" : "Italiano",
-		"#pirateBtnP" : "Pirata"
+		"#EN_UK" : "Inglese",
+		"#FR_FR" : "Francese",
+		"#DE_GE" : "Tedesco",
+		"#IT_IT" : "Italiano",
+		"#AR_GH" : "Pirata"
 	},
 	"friends":{
 		"#title" : "",

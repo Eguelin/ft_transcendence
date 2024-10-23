@@ -21,9 +21,11 @@ for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
 settingsSlides[slideIdx].style.display = "block";
 
-rightSlideBtn.addEventListener("keydown", (e) =>{
-	if (e.key == "Enter")
-		rightSlideBtn.click();
+document.querySelectorAll(".rightSlideBtn, .leftSlideBtn, #pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
+	elem.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			elem.click();
+	})
 })
 
 rightSlideBtn.addEventListener("click", () => {
@@ -35,11 +37,6 @@ rightSlideBtn.addEventListener("click", () => {
 	settingsSlides[slideIdx].style.display = "block";
 });
 
-leftSlideBtn.addEventListener("keydown", (e) =>{
-	if (e.key == "Enter")
-		leftSlideBtn.click();
-})
-
 leftSlideBtn.addEventListener("click", () => {
 	slideIdx -= 1;
 	if (slideIdx < 0 )
@@ -48,12 +45,6 @@ leftSlideBtn.addEventListener("click", () => {
 		settingsSlides[i].style.display = "none";
 	settingsSlides[slideIdx].style.display = "block";
 });
-
-pfpInputLabel.addEventListener("keydown", (ek) => {
-	if (ek.key == "Enter"){
-		pfpInput.click();
-	}
-})
 
 pfpInput.addEventListener("change", (e) => {
 	if (pfpInput.files.length >= 1){
@@ -112,11 +103,6 @@ confirmPfpBtn.addEventListener("click", (e) => {
 
 	window.addEventListener("keydown", settingsKeyDownEvent);
 });
-
-saveUsernameBtn.addEventListener("keydown", (e) => {
-	if (e.key == "Enter")
-		saveUsernameBtn.click();
-})
 
 saveUsernameBtn.addEventListener("click", (e) => {
 	username = usernameInput.value;
@@ -178,13 +164,6 @@ confirmDeleteBtn.addEventListener("click", (e) => {
 	deleteRequest();
 })
 
-confirmDeleteInput.addEventListener("keydown", (e) => {
-	if (e.key == "Enter"){
-		val = confirmDeleteInput.value;
-		deleteRequest();
-	}
-})
-
 function deleteRequest(){
 	if (val == document.getElementById("confirmDeleteDialogVar").innerText){
 		fetch('/api/user/delete_user', {
@@ -223,61 +202,13 @@ document.addEventListener("click", (e) => {
 	}
 })
 
-dropDownContent.forEach(function(button) {
-	var a = button.getElementsByTagName('a');
-	var j = 0;
-	button.addEventListener("focus", (even) => {
-		j = 0;
-		a[0].classList.add("dropDownContentAHover");
-	});
-	button.addEventListener("keydown", (ek) => {
-		if (ek.key == "ArrowDown" || ek.key == "Enter"){
-			if (j >= a.length)
-				j--;
-			if (ek.key == "Enter"){
-				a[j].click();
-			}
-			else if (j == a.length - 1){
-				a[j].classList.remove("dropDownContentAHover");
-				j = 0;
-			}
-			else {
-				a[j].classList.remove("dropDownContentAHover");
-				j += 1;
-			}
-			a[j].classList.add("dropDownContentAHover");
-		}
-		else if (ek.key == "ArrowUp"){
-			if (j == 0){
-				a[j].classList.remove("dropDownContentAHover");
-				j = a.length - 1;
-			}
-			else {
-				a[j].classList.remove("dropDownContentAHover");
-				j--;
-			}
-			a[j].classList.add("dropDownContentAHover");
-
-		}
-	});
-	button.addEventListener("focusout", (even) => {
-		a[j].classList.remove("dropDownContentAHover");
-		j = 0;
-	});
-	button.addEventListener("blur", (even) => {
-		a[j].classList.remove("dropDownContentAHover");
-		j = 0;
-	});
-});
-
-for (var i = 0 ;i < germanBtn.length; i++)
-{
-	germanBtn[i].addEventListener("click", (e) => {
+document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
+	elem.addEventListener("click", (e) => {
 		(async() => {
-			currentLang = `lang/DE_GE.json`;
+			currentLang = `lang/${elem.id}.json`;
 			try{
 				if (client){
-					client.currentLang = currentLang;
+					client.currentLang = `lang/${elem.id}.json`;
 					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 					content = await fetchResult.json();
 					client.langJson = content;
@@ -292,85 +223,68 @@ for (var i = 0 ;i < germanBtn.length; i++)
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/DE_GE.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
 				}
 			}
 			catch{
-				popUpError(`Could not load DE_GE language pack`);
+				popUpError(`Could not load ${elem.id} language pack`);
 			}
 		})();
-		for (var j=0; j< germanBtn.length; j++){
-			germanBtn[j].classList.remove("dropDownContentAHover");
-			englishBtn[j].classList.remove("dropDownContentAHover");
+	})
+	elem.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			elem.click();
+	})
+})
+
+document.getElementById("settingsThemeLight").addEventListener("click", (e) => {
+	switchTheme(0);
+	const data = {is_dark_theme: 0};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
+})
+document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
+	switchTheme(1);
+	const data = {is_dark_theme: 1};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
+})
+
+document.querySelectorAll(".settingsThemeDropDown").forEach(function (elem) {
+	elem.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			elem.click();
+	})
+})
+
+document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
+	elem.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			elem.click();
+	})
+	elem.addEventListener("click", (e) => {
+		if (elem.classList.contains("activeDropDown"))
+			elem.classList.remove("activeDropDown");
+		else{
+			document.querySelectorAll(".activeDropDown").forEach(function(elem) {
+				elem.classList.remove("activeDropDown");
+			})
+			elem.classList.add("activeDropDown");
 		}
-		dropDownLangBtn.style.setProperty("background-image", `url(icons/DE_GE.svg)`);
 	})
-
-	englishBtn[i].addEventListener("click", (e) => {
-		(async() => {
-			currentLang = `lang/EN_UK.json`;
-			try{
-				if (client){
-					client.currentLang = currentLang;
-					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
-					content = await fetchResult.json();
-					client.langJson = content;
-				}
-				loadCurrentLang();
-				if (client){
-					fetch('/api/user/update', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({ language_pack: currentLang }),
-						credentials: 'include'
-					})
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
-				}
-			}
-			catch{
-				popUpError(`Could not load EN_UK language pack`);
-			}
-		})();
-		for (var j=0; j< germanBtn.length; j++){
-			germanBtn[j].classList.remove("dropDownContentAHover");
-			englishBtn[j].classList.remove("dropDownContentAHover");
-		}
-		dropDownLangBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
-	})
-}
-
-for (var i=0; i< lightTheme.length; i++)
-{
-	lightTheme[i].addEventListener("click", (e) => {
-		switchTheme(0);
-		const data = {is_dark_theme: 0};
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		e.srcElement.classList.remove("dropDownContentAHover");
-	})
-
-	darkTheme[i].addEventListener("click", (e) => {
-		switchTheme(1);
-		const data = {is_dark_theme: 1};
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		e.srcElement.classList.remove("dropDownContentAHover");
-	})
-}
+})
 
 function settingsKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
