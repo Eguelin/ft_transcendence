@@ -91,8 +91,6 @@
 
 #fontSizeRangeContainer{
 	width: fit-content;
-	margin-top: 2vh;
-	margin-left: 25vw;
 	display: flex;
 }
 
@@ -140,4 +138,12 @@
 	position: absolute;
 	top: 50%;
 	right: 0;
+}
+
+.settingSlide{
+	position: relative;
+	left: 50%;
+	translate: -50%;
+	display: flex;
+	flex-direction: column;
 }
