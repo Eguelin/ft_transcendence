@@ -23,6 +23,8 @@ function game() {
 
 	socket.onopen = function() {
 		console.log("Connection established");
+		const url =  new URL(window.location.href);
+		gamesend(url.searchParams.get("mode"), url.searchParams.get("room"));
 		setInterval(() => gameRender(), 16);
 	}
 

@@ -10,7 +10,9 @@
 	"home" : {
 		"#title" : "PONG",
 		"#subtitle" : "",
-		"#playBtn" : "Jouer",
+		"#playBtn1v1" : "Jouer 1v1",
+		"#playBtnLocal" : "Jouer local",
+		"#playBtnAI" : "Jouer IA",
 		"#notPlayedToday" : "Vous n'avez joué aucun match aujourd'hui",
 		".victory" : "VICTOIRE",
 		".loss" : "DÉFAITE",

@@ -8,9 +8,13 @@ import math
 import time
 
 class Matchmaking():
+	_instance = None
 
-	def __init__(self):
-		self.waiting_players = []
+	def __new__(cls):
+		if cls._instance is None:
+			cls._instance = super(Matchmaking, cls).__new__(cls)
+			cls._instance.waiting_players = []
+		return cls._instance
 
 	def add_player(self, player):
 		self.waiting_players.append(player)
@@ -468,8 +472,6 @@ class PlayerLocal(Player):
 		new_player.__dict__.update(self.__dict__)
 		return new_player
 
-MATCHMAKING = Matchmaking()
-
 class GameConsumer(AsyncWebsocketConsumer):
 
 	def __init__(self, *args, **kwargs):
@@ -480,25 +482,45 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if not self.scope['user'].is_authenticated:
 			await self.close()
 		await self.accept()
-		# self.player = PlayerLocal(self)
-		# game = Gamelocal(self.player)
-		# await game.start()
-		self.player = Player(self)
-		game = GameFullAI(self.player)
-		await game.start()
-		# MATCHMAKING.add_player(self.player)
-		# await MATCHMAKING.run()
+
+		if Matchmaking._instance is None:
+			Matchmaking()
 
 	async def disconnect(self, close_code):
-		MATCHMAKING.remove_player(self.player)
+		Matchmaking._instance.remove_player(self.player)
 		self.player.socket = None
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
-		if data['type'] == 'game_keydown':
-			self.player.input = data['message']
-		elif data['type'] == 'game_ready':
-			self.player.isReady = True
+		if self.player:
+			if data['type'] == 'game_keydown':
+				self.player.input = data['message']
+			elif data['type'] == 'game_ready':
+				self.player.isReady = True
+
+		if data['type'] == 'game_remote':
+			self.player = Player(self)
+			Matchmaking._instance.add_player(self.player)
+			await Matchmaking._instance.run()
+			return
+
+		elif data['type'] == 'game_ai':
+			self.player = Player(self)
+			game = GameAI(self.player)
+			await game.start()
+			return
+
+		elif data['type'] == 'game_full_ai':
+			self.player = Player(self)
+			game = GameFullAI(self.player)
+			await game.start()
+			return
+
+		elif data['type'] == 'game_local':
+			self.player = PlayerLocal(self)
+			game = Gamelocal(self.player)
+			await game.start()
+			return
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
