@@ -38,28 +38,42 @@
 		
 		
 		<div id="settingsDropDownContainer" style="height:fit-content;">
-			<div class="settingsDropDown" tabindex="13">
+			<div class="settingsDropDown" tabindex="13" aria-label="Theme dropdown menu">
 				<div class="dropDownOptionContainer">
-					<button tabindex="-1" id="themesDropDownP" class="dropDownBtn">Themes</button>
+					<button tabindex="-1" id="themesDropDown" class="dropDownBtn">Themes</button>
 					<div class="dropDownArrow"></div>
 				</div>
-				<div class="dropDownContent">
-					<a class="settingsThemeDropDown" tabindex="14" id="settingsThemeLight" >Light</a>
-					<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeDark"  >Dark</a>
-				</div>
+				<ul class="dropDownContent">
+					<li>
+						<a class="settingsThemeDropDown" tabindex="14" id="settingsThemeLight" >Light</a>
+					</li>
+					<li>
+						<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeDark"  >Dark</a>
+					</li>
+				</ul>
 			</div>
-			<div class="settingsDropDown" tabindex="16"> <!--activeDropDown-->
+			<div class="settingsDropDown" tabindex="16" aria-label="Language dropdown menu">
 				<div class="dropDownOptionContainer">
-					<button tabindex="-1" id="languagesDropDownP" class="dropDownBtn">Language</button>
+					<button tabindex="-1" id="languagesDropDown" class="dropDownBtn">Language</button>
 					<div class="dropDownArrow"></div>
 				</div>
-				<div class="dropDownContent">
-					<a id="EN_UK" tabindex="17" class="settingsLangDropDown">English</a>
-					<a id="FR_FR" tabindex="18" class="settingsLangDropDown">French</a>
-					<a id="DE_GE" tabindex="19" class="settingsLangDropDown">German</a>
-					<a id="IT_IT" tabindex="20" class="settingsLangDropDown">Italian</a>
-					<a id="AR_GH" tabindex="21" class="settingsLangDropDown">Pirate</a>
-				</div>
+				<ul class="dropDownContent">
+					<li>
+						<a id="EN_UK" tabindex="17" class="settingsLangDropDown">English</a>
+					</li>
+					<li>
+						<a id="FR_FR" tabindex="18" class="settingsLangDropDown">French</a>
+					</li>
+					<li>
+						<a id="DE_GE" tabindex="19" class="settingsLangDropDown">German</a>
+					</li>
+					<li>
+						<a id="IT_IT" tabindex="20" class="settingsLangDropDown">Italian</a>
+					</li>
+					<li>
+						<a id="AR_GH" tabindex="21" class="settingsLangDropDown">Pirate</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 		
