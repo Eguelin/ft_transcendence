@@ -46,11 +46,11 @@
 		"#settingsThemeLight" : "Chiaro",
 		"#settingsThemeDark" : "Scuro",
 		"#languagesDropDown" : "Lingue",
-		"#EN_UK" : "Inglese",
-		"#FR_FR" : "Francese",
-		"#DE_GE" : "Tedesco",
-		"#IT_IT" : "Italiano",
-		"#AR_GH" : "Pirata"
+		"#DD_EN_UK" : "Inglese",
+		"#DD_FR_FR" : "Francese",
+		"#DD_DE_GE" : "Tedesco",
+		"#DD_IT_IT" : "Italiano",
+		"#DD_AR_GH" : "Pirata"
 	},
 	"friends":{
 		"#title" : "",
