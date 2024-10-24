@@ -45,6 +45,30 @@
 	mask-position:center;
 	mask-repeat:no-repeat;
 	mask-clip: no-clip;
+	position: relative;
+	right: 0;
+	rotate: 0deg;
+}
+
+@keyframes rotateArrow {
+	0%{
+		rotate: 0deg;
+		right: 0rem;
+	}
+	100%{
+		rotate: 90deg;
+		right: 1rem;
+	}
+}
+
+.settingsDropDown.activeDropDown .dropDownOptionContainer .dropDownArrow{
+	animation: rotateArrow 300ms forwards;
+	rotate: 90deg;
+	right: 1rem;
+}
+
+.settingsDropDown.inactiveSettingsDropDown .dropDownOptionContainer .dropDownArrow{
+	animation: rotateArrow 300ms reverse;
 }
 
 .dropDownOptionContainer {
@@ -62,12 +86,6 @@
 	border: 0 !important;
 }
 
-.settingsDropDown:hover .dropDownOptionContainer .dropDownArrow, .settingsDropDown:focus .dropDownOptionContainer .dropDownArrow{
-	right: 12.5vw;
-	outline: none;
-	border-block-start: var(--hover-text-rgb);
-}
-
 .activeDropDown.settingsDropDown .dropDownOptionContainer .dropDownBtn{
 	display: inline-block;
 	flex: 1;
@@ -83,7 +101,32 @@
 	outline: none;
 }
 
+.dropDownContent {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
 
+.activeDropDown.settingsDropDown .dropDownContent li a{
+	transform-origin: top;
+	animation: scaleZText 300ms forwards;
+}
+
+.inactiveSettingsDropDown{
+	border: .2px solid var(--main-text-rgb);
+}
+
+.inactiveSettingsDropDown.settingsDropDown .dropDownContent li a{
+	transform-origin: top center;
+	animation: scaleZText 300ms reverse;
+	font-size: 0;
+}
+
+
+.inactiveSettingsDropDown.settingsDropDown:hover .dropDownOptionContainer, .inactiveSettingsDropDown.settingsDropDown:focus .dropDownOptionContainer{
+	width: max-content;
+	border-color: transparent !important;
+}
 
 .dropDownContent{
 	display: none;
@@ -156,13 +199,7 @@
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent, .activeDropDown #dropDownLangContent{
-	z-index: 1;
-	display: block;
-}
-
-
-.inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent{
+.activeDropDown .dropDownUserContent, .activeDropDown #dropDownLangContent, .inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent, .inactiveSettingsDropDown.settingsDropDown .dropDownContent{
 	z-index: 1;
 	display: block;
 }
