@@ -5,7 +5,16 @@
 		"#settingsBtn" :  "Paramètres",
 		"#logOutBtn" :  "Déconnexion",
 		"#inputSearchUser" : "Rechercher un utilisateur",
-		".deletedUser" : "Supprimé"
+		".deletedUser" : "Supprimé",
+		"aria#goHomeButton" : "Bouton d'accueil",
+		"aria#inputSearchUser" : "Champ de saisie de l'utilisateur de recherche",
+		"aria#usernameBtn" : "Menu déroulant du profil",
+		"aria#themeButton" : "Bouton de basculement du thème",
+		"aria#dropDownLangBtn" : "Menu de sélection de la langue",
+		"aria#EN_UK" : "English",
+		"aria#FR_FR" : "Français",
+		"aria#DE_GE" : "Deutsch",
+		"aria#IT_IT" : "Italiano"
 	},
 	"home" : {
 		"#title" : "PONG",
