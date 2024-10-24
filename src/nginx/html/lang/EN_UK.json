@@ -5,7 +5,16 @@
 		"#settingsBtn" :  "Settings",
 		"#logOutBtn" :  "Log out",
 		"#inputSearchUser" : "Search user",
-		".deletedUser" : "Deleted"
+		".deletedUser" : "Deleted",
+		"aria#goHomeButton" : "Home button",
+		"aria#inputSearchUser" : "Search user input field",
+		"aria#usernameBtn" : "Profile dropdown menu",
+		"aria#themeButton" : "Theme toggle button",
+		"aria#dropDownLangBtn" : "Language selection menu",
+		"aria#EN_UK" : "English",
+		"aria#FR_FR" : "Français",
+		"aria#DE_GE" : "Deutsch",
+		"aria#IT_IT" : "Italiano"
 	},
 	"home" : {
 		"#title" : "PONG",
