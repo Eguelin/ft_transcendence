@@ -275,26 +275,28 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 			elem.click();
 	})
 	elem.addEventListener("click", (e) => {
-		if (elem.classList.contains("activeDropDown")){
-			elem.classList.remove("activeDropDown");
-			void elem.offsetWidth;
-			elem.classList.add("inactiveSettingsDropDown");
-
-			setTimeout((elem) => {
-				elem.classList.remove("inactiveSettingsDropDown");
-			}, 300, elem)
-		}
-		else{
-			document.querySelectorAll(".activeDropDown").forEach(function(elem) {
+		if (!e.target.closest(".dropDownContent")){
+			if (elem.classList.contains("activeDropDown")){
 				elem.classList.remove("activeDropDown");
 				void elem.offsetWidth;
 				elem.classList.add("inactiveSettingsDropDown");
-	
+
 				setTimeout((elem) => {
 					elem.classList.remove("inactiveSettingsDropDown");
-				}, 300, elem)
-			})
-			elem.classList.add("activeDropDown");
+				}, 300, elem);
+			}
+			else{
+				document.querySelectorAll(".activeDropDown").forEach(function(elem) {
+					elem.classList.remove("activeDropDown");
+					void elem.offsetWidth;
+					elem.classList.add("inactiveSettingsDropDown");
+		
+					setTimeout((elem) => {
+						elem.classList.remove("inactiveSettingsDropDown");
+					}, 300, elem);
+				});
+				elem.classList.add("activeDropDown");
+			}
 		}
 	})
 })

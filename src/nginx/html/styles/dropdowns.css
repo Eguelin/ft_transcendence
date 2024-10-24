@@ -57,14 +57,14 @@
 	}
 	100%{
 		rotate: 90deg;
-		right: 1rem;
+		right: .5rem;
 	}
 }
 
 .settingsDropDown.activeDropDown .dropDownOptionContainer .dropDownArrow{
 	animation: rotateArrow 300ms forwards;
 	rotate: 90deg;
-	right: 1rem;
+	right: .5rem;
 }
 
 .settingsDropDown.inactiveSettingsDropDown .dropDownOptionContainer .dropDownArrow{
