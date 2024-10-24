@@ -199,16 +199,28 @@ document.addEventListener("click", (e) => {
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		}
+		if (!e.target.closest(".settingsDropDown")){
+			document.querySelectorAll(".settingsDropDown.activeDropDown").forEach(function(elem) {
+				elem.classList.remove("activeDropDown");
+				void elem.offsetWidth;
+				elem.classList.add("inactiveSettingsDropDown");
+	
+				setTimeout((elem) => {
+					elem.classList.remove("inactiveSettingsDropDown");
+				}, 300, elem);
+			});
+		}
 	}
 })
 
 document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 	elem.addEventListener("click", (e) => {
 		(async() => {
-			currentLang = `lang/${elem.id}.json`;
+			lang = elem.id.substring(3);
+			currentLang = `lang/${lang}.json`;
 			try{
 				if (client){
-					client.currentLang = `lang/${elem.id}.json`;
+					client.currentLang = `lang/${lang}.json`;
 					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 					content = await fetchResult.json();
 					client.langJson = content;
@@ -223,11 +235,11 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${lang}.svg)`);
 				}
 			}
 			catch{
-				popUpError(`Could not load ${elem.id} language pack`);
+				popUpError(`Could not load ${lang} language pack`);
 			}
 		})();
 	})
@@ -271,8 +283,10 @@ document.querySelectorAll(".settingsThemeDropDown").forEach(function (elem) {
 
 document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 	elem.addEventListener("keydown", (e) => {
-		if (e.key == "Enter")
-			elem.click();
+		if (!e.target.closest(".dropDownContent")){
+			if (e.key == "Enter")
+				elem.click();
+		}
 	})
 	elem.addEventListener("click", (e) => {
 		if (!e.target.closest(".dropDownContent")){
