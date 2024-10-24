@@ -156,12 +156,26 @@ deleteAccountBtn.addEventListener("click", (e) => {
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 	document.getElementById("confirmDeleteDialogVar").innerText = client.username;
+	confirmDeleteInput.focus();
 })
 
 
 confirmDeleteBtn.addEventListener("click", (e) => {
 	val = confirmDeleteInput.value;
 	deleteRequest();
+})
+
+confirmDeleteBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Tab"){
+		e.preventDefault();
+		confirmDeleteInput.focus();
+	}
+})
+confirmDeleteInput.addEventListener("keydown", (e) => {
+	if (e.key == "Tab"){
+		e.preventDefault();
+		confirmDeleteBtn.focus();
+	}
 })
 
 function deleteRequest(){
@@ -314,7 +328,7 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 		}
 	})
 })
-	
+
 function settingsKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
 		if (e.key == "ArrowLeft")
