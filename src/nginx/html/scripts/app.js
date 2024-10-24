@@ -540,9 +540,15 @@ async function loadCurrentLang(){
 					chartAverage.update();
 					chartAbs.update();
 				}
+				else if (key.startsWith("aria")){
+					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+						elem.setAttribute("aria-label", content[key]);
+					})
+				}
 				else{
-					for (var i=0; i< Object.keys(instances).length; i++)
-						instances[i].innerHTML = content[key];
+					document.querySelectorAll(key).forEach( function (elem) {
+						elem.innerHTML = content[key];
+					})
 				}
 			});
 		}
@@ -553,6 +559,11 @@ async function loadCurrentLang(){
 				if (key.startsWith('#input')){
 					for (var i=0; i< Object.keys(instances).length; i++)
 						instances[i].placeholder = content[key];
+				}
+				else if (key.startsWith("aria")){
+					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+						elem.setAttribute("aria-label", content[key]);
+					})
 				}
 				else{
 					for (var i=0; i< Object.keys(instances).length; i++)
