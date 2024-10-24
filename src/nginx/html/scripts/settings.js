@@ -19,7 +19,7 @@ var buf = "";
 var slideIdx = 1;
 for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
-settingsSlides[slideIdx].style.display = "block";
+settingsSlides[slideIdx].style.display = "flex";
 
 document.querySelectorAll(".rightSlideBtn, .leftSlideBtn, #pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
 	elem.addEventListener("keydown", (e) => {
@@ -34,7 +34,7 @@ rightSlideBtn.addEventListener("click", () => {
 		slideIdx = 0;
 	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
-	settingsSlides[slideIdx].style.display = "block";
+	settingsSlides[slideIdx].style.display = "flex";
 });
 
 leftSlideBtn.addEventListener("click", () => {
@@ -43,7 +43,7 @@ leftSlideBtn.addEventListener("click", () => {
 		slideIdx = settingsSlides.length - 1;
 	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
-	settingsSlides[slideIdx].style.display = "block";
+	settingsSlides[slideIdx].style.display = "flex";
 });
 
 pfpInput.addEventListener("change", (e) => {
@@ -314,7 +314,7 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 		}
 	})
 })
-
+	
 function settingsKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
 		if (e.key == "ArrowLeft")
@@ -327,7 +327,7 @@ function settingsKeyDownEvent(e) {
 			slideIdx = settingsSlides.length - 1;
 		for (let i = 0; i < settingsSlides.length; i++)
 			settingsSlides[i].style.display = "none";
-		settingsSlides[slideIdx].style.display = "block";
+		settingsSlides[slideIdx].style.display = "flex";
 	}
 }
 
