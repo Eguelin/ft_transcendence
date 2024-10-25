@@ -1,5 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
 import game.models as models
 import json
 import asyncio
@@ -8,9 +8,13 @@ import math
 import time
 
 class Matchmaking():
+	_instance = None
 
-	def __init__(self):
-		self.waiting_players = []
+	def __new__(cls):
+		if cls._instance is None:
+			cls._instance = super(Matchmaking, cls).__new__(cls)
+			cls._instance.waiting_players = []
+		return cls._instance
 
 	def add_player(self, player):
 		self.waiting_players.append(player)
@@ -114,12 +118,14 @@ class GameTemplate():
 		self.playerRight: PlayerTemplate = player2
 		self.ball: Ball = Ball()
 		self.timeLastPoint: float = 0
+		self.running: bool = False
 
 	async def init(self):
 		pass
 
 	async def start(self):
 		await self.init()
+		self.running = True
 		asyncio.create_task(self.run())
 
 	async def run(self):
@@ -229,6 +235,7 @@ class Game(GameTemplate):
 			'winner': self.playerRight.score == 5 or not self.playerLeft.socket
 		})
 		await self.save()
+		self.running = False
 
 class Gamelocal(GameTemplate):
 
@@ -267,6 +274,7 @@ class Gamelocal(GameTemplate):
 				'winner': 'left' if self.playerLeft.score == 5 else 'right'
 			})
 		await self.save()
+		self.running = False
 
 class GameAI(GameTemplate):
 
@@ -302,6 +310,39 @@ class GameAI(GameTemplate):
 				'winner': self.playerLeft.score == 5
 			})
 		await self.save()
+		self.running = False
+
+class GameFullAI(GameTemplate):
+
+	def __init__(self, player):
+		super().__init__(PlayerAI(), PlayerAI())
+		self.player = player
+
+
+	async def init(self):
+		self.playerLeft.init(self, 'left')
+		self.playerRight.init(self, 'right')
+		self.ball.init()
+		asyncio.create_task(self.playerRight.run())
+		asyncio.create_task(self.playerLeft.run())
+		await self.send('game_init', self.getInfo(True))
+
+	@sync_to_async
+	def save(self):
+		pass
+
+	async def send(self, type, message):
+		await self.player.send(type, message)
+
+	async def run(self):
+		await self.countdown()
+		await self.send('game_start', None)
+		while self.player.socket:
+			await self.loop()
+		await self.end()
+
+	async def end(self):
+		self.running = False
 
 class PlayerTemplate():
 
@@ -384,14 +425,21 @@ class PlayerAI(PlayerTemplate):
 
 	def init(self, game, side):
 		super().init(game, side)
-		self.Y = 0
+		self.Y = GameTemplate.demieHeight
 
 	async def run(self):
-		while self.game.playerLeft.score != 5 and self.game.playerRight.score != 5:
+		while self.game.running:
+			rand = random.uniform(0, Paddle.height)
 			ball = self.game.ball.copy()
-			while time.time() - self.game.timeLastPoint > 2 and ball.x < GameTemplate.width and ball.x > 0:
-				ball.move()
-			self.Y = ball.y
+			if (ball.dx > 0 and self.side == 'right') or (ball.dx < 0 and self.side == 'left'):
+				while time.time() - self.game.timeLastPoint > 2 and ball.x < self.game.playerRight.x and ball.x > self.game.playerLeft.x:
+					ball.move()
+					if ball.y <= Ball.demieSize or ball.y + Ball.demieSize >= GameTemplate.height:
+						ball.dy = -ball.dy
+				if self.y < ball.y:
+					self.Y = ball.y + rand
+				else:
+					self.Y = ball.y - rand
 			await asyncio.sleep(1)
 
 	def move(self):
@@ -424,8 +472,6 @@ class PlayerLocal(Player):
 		new_player.__dict__.update(self.__dict__)
 		return new_player
 
-MATCHMAKING = Matchmaking()
-
 class GameConsumer(AsyncWebsocketConsumer):
 
 	def __init__(self, *args, **kwargs):
@@ -436,25 +482,45 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if not self.scope['user'].is_authenticated:
 			await self.close()
 		await self.accept()
-		# self.player = PlayerLocal(self)
-		# game = Gamelocal(self.player)
-		# await game.start()
-		self.player = Player(self)
-		game = GameAI(self.player)
-		await game.start()
-		# MATCHMAKING.add_player(self.player)
-		# await MATCHMAKING.run()
+
+		if Matchmaking._instance is None:
+			Matchmaking()
 
 	async def disconnect(self, close_code):
-		MATCHMAKING.remove_player(self.player)
+		Matchmaking._instance.remove_player(self.player)
 		self.player.socket = None
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
-		if data['type'] == 'game_keydown':
-			self.player.input = data['message']
-		elif data['type'] == 'game_ready':
-			self.player.isReady = True
+		if self.player:
+			if data['type'] == 'game_keydown':
+				self.player.input = data['message']
+			elif data['type'] == 'game_ready':
+				self.player.isReady = True
+
+		if data['type'] == 'game_remote':
+			self.player = Player(self)
+			Matchmaking._instance.add_player(self.player)
+			await Matchmaking._instance.run()
+			return
+
+		elif data['type'] == 'game_ai':
+			self.player = Player(self)
+			game = GameAI(self.player)
+			await game.start()
+			return
+
+		elif data['type'] == 'game_full_ai':
+			self.player = Player(self)
+			game = GameFullAI(self.player)
+			await game.start()
+			return
+
+		elif data['type'] == 'game_local':
+			self.player = PlayerLocal(self)
+			game = Gamelocal(self.player)
+			await game.start()
+			return
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
