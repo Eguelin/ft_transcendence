@@ -1,6 +1,6 @@
 <div style="height: fit-content; text-align: center; display: flex;">
 	<div id="leftSlideBtn" tabindex="12" aria-label="Switch settings page"></div>
-	<div id="rightSlideBtn" tabindex="22" aria-label="Switch settings page"></div>
+	<div id="rightSlideBtn" tabindex="23" aria-label="Switch settings page"></div>
 	<div class="settingSlide">
 		<h2 id="accountTitle">Account</h2>
 		<div class="forms" id="saveUsernameContainer">
@@ -25,7 +25,7 @@
 		<div style="height: fit-content;" id="fontSizeRangeContainer">
 			<span id="fontSizeRangeText">Font size amplifier</span>
 			<div>
-				<input id="fontSizeRange" type="range" min="0.1" max="2" value="1" step="0.1" list="fontSizeList">
+				<input tabindex="13" id="fontSizeRange" type="range" min="0.1" max="2" value="1" step="0.1" list="fontSizeList">
 				<datalist id="fontSizeList">
 					<option value="0.1" label="XS"></option>
 					<option value="0.5" ></option>
@@ -38,40 +38,40 @@
 		
 		
 		<div id="settingsDropDownContainer" style="height:fit-content;">
-			<div id="settingsDropDownTheme" class="settingsDropDown" tabindex="13" aria-label="Theme dropdown menu">
+			<div id="settingsDropDownTheme" class="settingsDropDown" tabindex="14" aria-label="Theme dropdown menu">
 				<div class="dropDownOptionContainer">
 					<button tabindex="-1" id="themesDropDown" class="dropDownBtn">Themes</button>
 					<div class="dropDownArrow"></div>
 				</div>
 				<ul class="dropDownContent">
 					<li>
-						<a class="settingsThemeDropDown" tabindex="14" id="settingsThemeLight" >Light</a>
+						<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeLight" >Light</a>
 					</li>
 					<li>
-						<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeDark"  >Dark</a>
+						<a class="settingsThemeDropDown" tabindex="16" id="settingsThemeDark"  >Dark</a>
 					</li>
 				</ul>
 			</div>
-			<div id="settingsDropDownLang" class="settingsDropDown" tabindex="16" aria-label="Language dropdown menu">
+			<div id="settingsDropDownLang" class="settingsDropDown" tabindex="17" aria-label="Language dropdown menu">
 				<div class="dropDownOptionContainer">
 					<button tabindex="-1" id="languagesDropDown" class="dropDownBtn">Language</button>
 					<div class="dropDownArrow"></div>
 				</div>
 				<ul class="dropDownContent">
 					<li>
-						<a id="EN_UK" tabindex="17" class="settingsLangDropDown">English</a>
+						<a id="EN_UK" tabindex="18" class="settingsLangDropDown">English</a>
 					</li>
 					<li>
-						<a id="FR_FR" tabindex="18" class="settingsLangDropDown">Français</a>
+						<a id="FR_FR" tabindex="19" class="settingsLangDropDown">Français</a>
 					</li>
 					<li>
-						<a id="DE_GE" tabindex="19" class="settingsLangDropDown">Deutsch</a>
+						<a id="DE_GE" tabindex="20" class="settingsLangDropDown">Deutsch</a>
 					</li>
 					<li>
-						<a id="IT_IT" tabindex="20" class="settingsLangDropDown">Italiano</a>
+						<a id="IT_IT" tabindex="21" class="settingsLangDropDown">Italiano</a>
 					</li>
 					<li>
-						<a id="AR_GH" tabindex="21" class="settingsLangDropDown">Pirate</a>
+						<a id="AR_GH" tabindex="22" class="settingsLangDropDown">Pirate</a>
 					</li>
 				</ul>
 			</div>
