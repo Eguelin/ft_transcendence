@@ -78,7 +78,17 @@
 		"#onlineFriendSelectorText": "Online",
 		"#allFriendSelectorText": "Tutti",
 		"#pendingFriendRequestSelectorText": "In sospeso",
-		"#blockedSelectorText": "Bloccati"
+		"#blockedSelectorText": "Bloccati",
+		"aria#confirmDelete" : "Sei sicuro di voler rimuovere questo amico? Premi invio per 'sì', esc per 'no'",
+		"aria#confirmBlock" : "Sei sicuro di voler bloccare questo amico? Premi invio per 'sì', esc per 'no'",
+		"aria.removeFriendBtn" : "Pulsante Rimuovi amico",
+		"aria.blockFriendBtn" : "Pulsante Blocca amico",
+		"aria.acceptFriendBtn" : "Pulsante Accetta amico",
+		"aria.rejectFriendBtn" : "Pulsante Rifiuta amico",
+		"aria.unblockBtn" : "Sblocca utente",
+		"ariaAll.friendsOptionContainer" : "opzioni amico",
+		"ariaPending.friendsOptionContainer" : "opzioni richiesta amicizia in arrivo",
+		"ariaBlocked.friendsOptionContainer" : "opzioni utente bloccato"
 	},
 	"user":{
 		"#title" : "",
