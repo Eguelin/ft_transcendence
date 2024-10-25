@@ -8,7 +8,7 @@ lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
 
 lastWeekSelection.addEventListener("click", (e) => {
-	document.getElementById("loaderBg").style.setProperty("display", "block");
+	setLoader()
     loadUserDashboard(7);
     if (lastMonthSelection.classList.contains("activeTimeline"))
         lastMonthSelection.classList.remove("activeTimeline");
@@ -18,7 +18,7 @@ lastWeekSelection.addEventListener("click", (e) => {
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
-	document.getElementById("loaderBg").style.setProperty("display", "block");
+	setLoader()
     loadUserDashboard(31);
     if (lastWeekSelection.classList.contains("activeTimeline"))
         lastWeekSelection.classList.remove("activeTimeline");
@@ -28,7 +28,7 @@ lastMonthSelection.addEventListener("click", (e) => {
 })
 
 lastYearSelection.addEventListener("click", (e) => {
-	document.getElementById("loaderBg").style.setProperty("display", "block");
+	setLoader()
     loadUserDashboard(365);
     if (lastWeekSelection.classList.contains("activeTimeline"))
         lastWeekSelection.classList.remove("activeTimeline");
@@ -376,12 +376,12 @@ function loadUserDashboard(LastXDaysDisplayed){
                 }).then(client => {
                     if (client.ok){
                         client.json().then((client) => {
-                            document.getElementById("loaderBg").style.setProperty("display", "none");
+                            unsetLoader()
                             drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
                         })
                     }
                     else
-                        document.getElementById("loaderBg").style.setProperty("display", "none");
+                        unsetLoader()
                 })
                 var countWin = 0, countLost = 0, countMatch = 0;
                 matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
