@@ -15,7 +15,7 @@ createUserBtn.addEventListener("click", (e) => {
 
 createMatchesBtn = document.getElementById("createMatchesBtn");
 createMatchesBtn.addEventListener("click", (e) => {
-    document.getElementById("loaderBg").style.setProperty("display", "block");
+    setLoader()
 
 
     playerOne = document.getElementById("userOne").value;
@@ -30,12 +30,12 @@ createMatchesBtn.addEventListener("click", (e) => {
         credentials: 'include',
         body: JSON.stringify({'userOne': playerOne, 'userTwo': playerTwo, 'range': range - 0})
     }).then(() => {
-        document.getElementById("loaderBg").style.setProperty("display", "none");
+        unsetLoader()
     })
 })
 
 document.getElementById("createFriendshipBtn").addEventListener("click", (e) => {
-    document.getElementById("loaderBg").style.setProperty("display", "block");
+    setLoader()
 
 
     playerOne = document.getElementById("userOneF").value;
@@ -49,12 +49,12 @@ document.getElementById("createFriendshipBtn").addEventListener("click", (e) => 
         credentials: 'include',
         body: JSON.stringify({'userOne': playerOne, 'userTwo': playerTwo})
 }).then(() => {
-        document.getElementById("loaderBg").style.setProperty("display", "none");
+        unsetLoader()
     })
 })
 
 document.getElementById("createFriendshipRequestBtn").addEventListener("click", (e) => {
-    document.getElementById("loaderBg").style.setProperty("display", "block");
+    setLoader()
 
 
     playerOne = document.getElementById("userOneFr").value;
@@ -68,12 +68,12 @@ document.getElementById("createFriendshipRequestBtn").addEventListener("click", 
         credentials: 'include',
         body: JSON.stringify({'to': playerOne, 'from': playerTwo})
 }).then(() => {
-        document.getElementById("loaderBg").style.setProperty("display", "none");
+        unsetLoader()
     })
 })
 
 document.getElementById("createblockedFriendshipBtn").addEventListener("click", (e) => {
-    document.getElementById("loaderBg").style.setProperty("display", "block");
+    setLoader()
 
 
     playerOne = document.getElementById("userOneBf").value;
@@ -87,12 +87,12 @@ document.getElementById("createblockedFriendshipBtn").addEventListener("click", 
         credentials: 'include',
         body: JSON.stringify({'userOne': playerOne, 'userTwo': playerTwo})
 }).then(() => {
-        document.getElementById("loaderBg").style.setProperty("display", "none");
+        unsetLoader()
     })
 })
 
 document.getElementById("deleteUserBtn").addEventListener("click", (e) => {
-    document.getElementById("loaderBg").style.setProperty("display", "block");
+    setLoader()
     fetch('/api/admin/remove_user', {
         method: 'POST',
         headers: {
@@ -101,6 +101,6 @@ document.getElementById("deleteUserBtn").addEventListener("click", (e) => {
         credentials: 'include',
         body: JSON.stringify({username: document.getElementById("deleteUserUsername").value})
     }).then(() => {
-        document.getElementById("loaderBg").style.setProperty("display", "none");
+        unsetLoader()
     })
 })
