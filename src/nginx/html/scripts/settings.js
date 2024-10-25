@@ -21,7 +21,7 @@ for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
 settingsSlides[slideIdx].style.display = "flex";
 
-document.querySelectorAll(".rightSlideBtn, .leftSlideBtn, #pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
+document.querySelectorAll("#rightSlideBtn, #leftSlideBtn, #pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
 	elem.addEventListener("keydown", (e) => {
 		if (e.key == "Enter")
 			elem.click();
