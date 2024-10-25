@@ -22,7 +22,7 @@ def create_user(request):
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
 		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=400)
+			return JsonResponse({'message': 'user is not admin'}, status=403)
 		try:
 			data = json.loads(request.body)
 		except json.JSONDecodeError:
@@ -52,7 +52,7 @@ def create_user(request):
 			return JsonResponse({'message': 'Password too weak'}, status=400)
 
 		if User.objects.filter(username=username).exists():
-			return JsonResponse({'message': 'User with same username already exist'}, status=400)
+			return JsonResponse({'message': 'User with same username already exists'}, status=400)
 		try:
 			user = User.objects.create_user(username=username, password=password)
 			user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
@@ -65,14 +65,14 @@ def create_user(request):
 		except Exception as e:
 			return JsonResponse({'message': str(e)}, status=500)
 	else:
-		return JsonResponse({'message': 'User is not authenticated'}, status=400)
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def remove_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
 		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=400)
+			return JsonResponse({'message': 'user is not admin'}, status=403)
 		try:
 			data = json.loads(request.body)
 		except json.JSONDecodeError:
@@ -80,7 +80,8 @@ def remove_user(request):
 		print(data['username'])
 		User.objects.get(username=data['username']).delete()
 		return JsonResponse({'message': 'User deleted'}, status=200)
-	return JsonResponse({'message': 'can\'t delete user'}, status=200)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 
 def create_match(request):
@@ -88,7 +89,7 @@ def create_match(request):
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
 		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=400)
+			return JsonResponse({'message': 'user is not admin'}, status=403)
 		try:
 			data = json.loads(request.body)
 		except json.JSONDecodeError:
@@ -102,6 +103,8 @@ def create_match(request):
 				 'playerTwoPts': match.player_two_pts,
 				 'date': match.date,}
 		return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 		
 
 def create_friendship(request):
@@ -109,7 +112,7 @@ def create_friendship(request):
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:	
 		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=400)
+			return JsonResponse({'message': 'user is not admin'}, status=403)
 		try:
 			data = json.loads(request.body)
 		except json.JSONDecodeError:
@@ -127,12 +130,105 @@ def create_friendship(request):
 			user2.id42 = 0
 		else:
 			user2 = User.objects.get(username=data['userTwo'])
+
+		if (user1.profile.friends_request.filter(pk=user2.pk).exists()):
+			user1.profile.friends_request.remove(user2)
+		if (user2.profile.friends_request.filter(pk=user1.pk).exists()):
+			user2.profile.friends_request.remove(user1)
+
+		if (user1.profile.blocked_users.filter(pk=user2.pk).exists()):
+			user1.profile.blocked_users.remove(user2)
+		if (user2.profile.blocked_users.filter(pk=user1.pk).exists()):
+			user2.profile.blocked_users.remove(user1)
 		user1.profile.friends.add(user2)
 		user1.save()
 		user2.profile.friends.add(user1)
 		user2.save()
 		return JsonResponse({'message': 'Friendship created'}, status=201)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
+def create_friendship_request(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.user.is_authenticated:	
+		if not request.user.is_staff:
+			return JsonResponse({'message': 'user is not admin'}, status=403)
+		try:
+			data = json.loads(request.body)
+		except json.JSONDecodeError:
+			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		
+		if not User.objects.filter(username=data['to']).exists():
+			user1 = User.objects.create_user(username=data['to'], password="password")
+			user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user1.id42 = 0
+		else:
+			user1 = User.objects.get(username=data['to'])
+		if not User.objects.filter(username=data['from']).exists():
+			user2 = User.objects.create_user(username=data['from'], password="password")
+			user2.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user2.id42 = 0
+		else:
+			user2 = User.objects.get(username=data['from'])
+
+		if ((user1.profile.friends.filter(pk=user2.pk)).exists()):
+			user1.profile.friends.remove(user2)
+		if ((user2.profile.friends.filter(pk=user1.pk)).exists()):
+			user2.profile.friends.remove(user1)
+
+		if ((user1.profile.blocked_users.filter(pk=user2.pk)).exists()):
+			user1.profile.blocked_users.remove(user2)
+		if ((user2.profile.blocked_users.filter(pk=user1.pk)).exists()):
+			user2.profile.blocked_users.remove(user1)
+		if not ((user1.profile.friends_request.filter(pk=user2.pk)).exists()):	
+			user1.profile.friends_request.add(user2)
+			user1.save()
+		return JsonResponse({'message': 'Friendship request created'}, status=201)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+def create_blocked_friendship(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.user.is_authenticated:	
+		if not request.user.is_staff:
+			return JsonResponse({'message': 'user is not admin'}, status=403)
+		try:
+			data = json.loads(request.body)
+		except json.JSONDecodeError:
+			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		
+		if not User.objects.filter(username=data['userOne']).exists():
+			user1 = User.objects.create_user(username=data['userOne'], password="password")
+			user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user1.id42 = 0
+		else:
+			user1 = User.objects.get(username=data['userOne'])
+		if not User.objects.filter(username=data['userTwo']).exists():
+			user2 = User.objects.create_user(username=data['userTwo'], password="password")
+			user2.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+			user2.id42 = 0
+		else:
+			user2 = User.objects.get(username=data['userTwo'])
+
+		if (user1.profile.friends.filter(pk=user2.pk).exists()):
+			user1.profile.friends.remove(user2)
+		if (user2.profile.friends.filter(pk=user1.pk).exists()):
+			user2.profile.friends.remove(user1)
+
+		if (user1.profile.friends_request.filter(pk=user2.pk).exists()):
+			user1.profile.friends_request.remove(user2)
+		if (user2.profile.friends_request.filter(pk=user1.pk).exists()):
+			user2.profile.friends_request.remove(user1)
+
+		user1.profile.blocked_users.add(user2)
+		user1.save()
+		user2.profile.blocked_users.add(user1)
+		user2.save()
+		return JsonResponse({'message': 'Blocked friendship created'}, status=201)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def delete_user(request):
 	if request.method != 'POST':
@@ -143,43 +239,11 @@ def delete_user(request):
 			return JsonResponse({'message': 'User deleted'}, status=200)
 		except Exception as e:
 			return JsonResponse({'message': e}, status=500)
-	return JsonResponse({'message': 'can\'t delete user'}, status=200)
+	else:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
-
-def profile_update(request):
-	if (request.user.is_authenticated):
-		if (request.method == 'POST'):
-			try:
-				data = json.loads(request.body)
-				user = request.user
-				if "is_dark_theme" in data:
-					user.profile.dark_theme = data['is_dark_theme']
-				if "username" in data:
-					user.username = data['username']
-				username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
-				max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
-				try:
-					username_validator(user.username)
-					max_length_validator(user.username)
-				except ValidationError as e:
-					return JsonResponse({'message': e.message}, status=400)
-				if "pfp" in data:
-					raw = data['pfp']
-					pfpName = "/images/{0}.jpg".format(user.username)
-					with open(pfpName, "wb", opener=file_opener) as f:
-						f.write(base64.b64decode(raw))
-					user.profile.profile_picture = pfpName
-				if ("language_pack" in data):
-					user.profile.language_pack = data['language_pack']
-				if ("is_active" in data):
-					user.profile.is_active = data['is_active']
-				user.save()
-				return JsonResponse({'message': 'User profile updated'}, status=200)
-			except json.JSONDecodeError:
-				return JsonResponse({'message': 'Invalid JSON'}, status=400)
-	return JsonResponse({'message': 'Can\'t update user profile'}, status=400)
 
 def get_all_user_match_json(matches):
 	matches_json = {}
@@ -251,31 +315,3 @@ def get_user_preview_json(user):
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
 	}
-
-def get(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		try:
-			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
-		except Exception as error:
-			return JsonResponse({'message': "can't find user"}, status=400)
-
-def search_by_username(request):
-	if (request.method != 'POST'):
-		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		users_json = {}
-		try:
-			query_users = User.objects.filter(username__icontains=data['name'])
-			i = 0
-			for user in query_users:
-				users_json[i] = get_user_preview_json(user)
-				i += 1
-			if i == 0:
-				return JsonResponse({}, status=200)
-			return JsonResponse(users_json, status=200)
-		except Exception as error:
-			return JsonResponse({'message': error}, status=500)

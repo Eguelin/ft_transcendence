@@ -8,7 +8,7 @@ lightTheme = document.getElementsByClassName("loadLight");
 darkTheme = document.getElementsByClassName("loadDark");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
-dropDownContent = document.querySelectorAll(".dropDownPortrait, .dropDownLandscape");
+dropDownContent = document.querySelectorAll(".settingsDropDown, .dropDownLandscape");
 settingsSlides = document.querySelectorAll(".settingSlide");
 rightSlideBtn = document.getElementById("rightSlideBtn");
 leftSlideBtn = document.getElementById("leftSlideBtn");
@@ -19,7 +19,14 @@ var buf = "";
 var slideIdx = 1;
 for (i = 0; i < settingsSlides.length; i++)
 	settingsSlides[i].style.display = "none";
-settingsSlides[slideIdx].style.display = "block";
+settingsSlides[slideIdx].style.display = "flex";
+
+document.querySelectorAll("#rightSlideBtn, #leftSlideBtn, #pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
+	elem.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			elem.click();
+	})
+})
 
 rightSlideBtn.addEventListener("click", () => {
 	slideIdx += 1;
@@ -27,7 +34,7 @@ rightSlideBtn.addEventListener("click", () => {
 		slideIdx = 0;
 	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
-	settingsSlides[slideIdx].style.display = "block";
+	settingsSlides[slideIdx].style.display = "flex";
 });
 
 leftSlideBtn.addEventListener("click", () => {
@@ -36,14 +43,8 @@ leftSlideBtn.addEventListener("click", () => {
 		slideIdx = settingsSlides.length - 1;
 	for (let i = 0; i < settingsSlides.length; i++)
 		settingsSlides[i].style.display = "none";
-	settingsSlides[slideIdx].style.display = "block";
+	settingsSlides[slideIdx].style.display = "flex";
 });
-
-pfpInputLabel.addEventListener("keydown", (ek) => {
-	if (ek.key == "Enter"){
-		pfpInput.click();
-	}
-})
 
 pfpInput.addEventListener("change", (e) => {
 	if (pfpInput.files.length >= 1){
@@ -103,11 +104,6 @@ confirmPfpBtn.addEventListener("click", (e) => {
 	window.addEventListener("keydown", settingsKeyDownEvent);
 });
 
-saveUsernameBtn.addEventListener("keydown", (e) => {
-	if (e.key == "Enter")
-		saveUsernameBtn.click();
-})
-
 saveUsernameBtn.addEventListener("click", (e) => {
 	username = usernameInput.value;
 
@@ -160,6 +156,7 @@ deleteAccountBtn.addEventListener("click", (e) => {
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 	document.getElementById("confirmDeleteDialogVar").innerText = client.username;
+	confirmDeleteInput.focus();
 })
 
 
@@ -168,10 +165,16 @@ confirmDeleteBtn.addEventListener("click", (e) => {
 	deleteRequest();
 })
 
+confirmDeleteBtn.addEventListener("keydown", (e) => {
+	if (e.key == "Tab"){
+		e.preventDefault();
+		confirmDeleteInput.focus();
+	}
+})
 confirmDeleteInput.addEventListener("keydown", (e) => {
-	if (e.key == "Enter"){
-		val = confirmDeleteInput.value;
-		deleteRequest();
+	if (e.key == "Tab"){
+		e.preventDefault();
+		confirmDeleteBtn.focus();
 	}
 })
 
@@ -210,64 +213,27 @@ document.addEventListener("click", (e) => {
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		}
+		if (!e.target.closest(".settingsDropDown")){
+			document.querySelectorAll(".settingsDropDown.activeDropDown").forEach(function(elem) {
+				elem.classList.remove("activeDropDown");
+				void elem.offsetWidth;
+				elem.classList.add("inactiveSettingsDropDown");
+	
+				setTimeout((elem) => {
+					elem.classList.remove("inactiveSettingsDropDown");
+				}, 300, elem);
+			});
+		}
 	}
 })
 
-dropDownContent.forEach(function(button) {
-	var a = button.getElementsByTagName('a');
-	var j = 0;
-	button.addEventListener("focus", (even) => {
-		j = 0;
-		a[0].classList.add("dropDownContentAHover");
-	});
-	button.addEventListener("keydown", (ek) => {
-		if (ek.key == "ArrowDown" || ek.key == "Enter"){
-			if (j >= a.length)
-				j--;
-			if (ek.key == "Enter"){
-				a[j].click();
-			}
-			else if (j == a.length - 1){
-				a[j].classList.remove("dropDownContentAHover");
-				j = 0;
-			}
-			else {
-				a[j].classList.remove("dropDownContentAHover");
-				j += 1;
-			}
-			a[j].classList.add("dropDownContentAHover");
-		}
-		else if (ek.key == "ArrowUp"){
-			if (j == 0){
-				a[j].classList.remove("dropDownContentAHover");
-				j = a.length - 1;
-			}
-			else {
-				a[j].classList.remove("dropDownContentAHover");
-				j--;
-			}
-			a[j].classList.add("dropDownContentAHover");
-
-		}
-	});
-	button.addEventListener("focusout", (even) => {
-		a[j].classList.remove("dropDownContentAHover");
-		j = 0;
-	});
-	button.addEventListener("blur", (even) => {
-		a[j].classList.remove("dropDownContentAHover");
-		j = 0;
-	});
-});
-
-for (var i = 0 ;i < germanBtn.length; i++)
-{
-	germanBtn[i].addEventListener("click", (e) => {
+document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
+	elem.addEventListener("click", (e) => {
 		(async() => {
-			currentLang = `lang/DE_GE.json`;
+			currentLang = `lang/${elem.id}.json`;
 			try{
 				if (client){
-					client.currentLang = currentLang;
+					client.currentLang = `lang/${elem.id}.json`;
 					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 					content = await fetchResult.json();
 					client.langJson = content;
@@ -282,94 +248,85 @@ for (var i = 0 ;i < germanBtn.length; i++)
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/DE_GE.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
 				}
 			}
 			catch{
-				popUpError(`Could not load DE_GE language pack`);
+				popUpError(`Could not load ${elem.id} language pack`);
 			}
 		})();
-		for (var j=0; j< germanBtn.length; j++){
-			germanBtn[j].classList.remove("dropDownContentAHover");
-			englishBtn[j].classList.remove("dropDownContentAHover");
+	})
+	elem.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			elem.click();
+	})
+})
+
+document.getElementById("settingsThemeLight").addEventListener("click", (e) => {
+	switchTheme(0);
+	const data = {is_dark_theme: 0};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
+})
+document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
+	switchTheme(1);
+	const data = {is_dark_theme: 1};
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'include'
+	})
+})
+
+document.querySelectorAll(".settingsThemeDropDown").forEach(function (elem) {
+	elem.addEventListener("keydown", (e) => {
+		if (e.key == "Enter")
+			elem.click();
+	})
+})
+
+document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
+	elem.addEventListener("keydown", (e) => {
+		if (!e.target.closest(".dropDownContent")){
+			if (e.key == "Enter")
+				elem.click();
 		}
-		dropDownLangBtn.style.setProperty("background-image", `url(icons/DE_GE.svg)`);
 	})
+	elem.addEventListener("click", (e) => {
+		if (!e.target.closest(".dropDownContent")){
+			if (elem.classList.contains("activeDropDown")){
+				elem.classList.remove("activeDropDown");
+				void elem.offsetWidth;
+				elem.classList.add("inactiveSettingsDropDown");
 
-	englishBtn[i].addEventListener("click", (e) => {
-		(async() => {
-			currentLang = `lang/EN_UK.json`;
-			try{
-				if (client){
-					client.currentLang = currentLang;
-					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
-					content = await fetchResult.json();
-					client.langJson = content;
-				}
-				loadCurrentLang();
-				if (client){
-					fetch('/api/user/update', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({ language_pack: currentLang }),
-						credentials: 'include'
-					})
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
-				}
+				setTimeout((elem) => {
+					elem.classList.remove("inactiveSettingsDropDown");
+				}, 300, elem);
 			}
-			catch{
-				popUpError(`Could not load EN_UK language pack`);
+			else{
+				document.querySelectorAll(".activeDropDown").forEach(function(elem) {
+					elem.classList.remove("activeDropDown");
+					void elem.offsetWidth;
+					elem.classList.add("inactiveSettingsDropDown");
+		
+					setTimeout((elem) => {
+						elem.classList.remove("inactiveSettingsDropDown");
+					}, 300, elem);
+				});
+				elem.classList.add("activeDropDown");
 			}
-		})();
-		for (var j=0; j< germanBtn.length; j++){
-			germanBtn[j].classList.remove("dropDownContentAHover");
-			englishBtn[j].classList.remove("dropDownContentAHover");
 		}
-		dropDownLangBtn.style.setProperty("background-image", `url(icons/EN_UK.svg)`);
 	})
-}
-
-for (var i=0; i< lightTheme.length; i++)
-{
-	lightTheme[i].addEventListener("click", (e) => {
-		switchTheme(0);
-		const data = {is_dark_theme: 0};
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		e.srcElement.classList.remove("dropDownContentAHover");
-	})
-
-	darkTheme[i].addEventListener("click", (e) => {
-		switchTheme(1);
-		const data = {is_dark_theme: 1};
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		e.srcElement.classList.remove("dropDownContentAHover");
-	})
-}
-
-{
-	inputSearchUserContainer.style.setProperty("display", "none");
-	dropDownUserContainer.style.setProperty("display", "flex");
-	homeBtn.style.setProperty("display", "block");
-	document.getElementById("fontSizeRange").value = client.fontAmplifier;
-}
-
-window.addEventListener("keydown", settingsKeyDownEvent)
+})
 
 function settingsKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
@@ -383,8 +340,17 @@ function settingsKeyDownEvent(e) {
 			slideIdx = settingsSlides.length - 1;
 		for (let i = 0; i < settingsSlides.length; i++)
 			settingsSlides[i].style.display = "none";
-		settingsSlides[slideIdx].style.display = "block";
+		settingsSlides[slideIdx].style.display = "flex";
 	}
+}
+
+{
+	inputSearchUserContainer.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
+	homeBtn.focus();
+	document.getElementById("fontSizeRange").value = client.fontAmplifier;
+	window.addEventListener("keydown", settingsKeyDownEvent)
 }
 
 document.getElementById("fontSizeRange").addEventListener("input", (e) => {
@@ -411,7 +377,6 @@ document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
 usernameInput.addEventListener("focus", (e) => {
 	window.removeEventListener("keydown", settingsKeyDownEvent)
 })
-
 
 usernameInput.addEventListener("focusout", (e) => {
 	window.addEventListener("keydown", settingsKeyDownEvent)

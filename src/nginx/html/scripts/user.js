@@ -19,6 +19,7 @@ if (sendFriendRequestBtn){
 
 {
 	inputSearchUserContainer.style.setProperty("display", "block");
+	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	
@@ -55,11 +56,37 @@ if (sendFriendRequestBtn){
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
                         createMatchResumeContainer(matchObj[i]);
                     };
+                    document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                        elem.addEventListener("keydown", (e) => {
+                            if (e.key == "Enter"){
+                                var idx = elem.tabIndex + 1
+                                elem.querySelectorAll(".resultScoreName").forEach(function (names){
+                                    names.tabIndex = idx;
+                                    idx++;
+                                })
+                            }
+                        })
+                    });
+                    
+                    document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
+                        var tabIdx = 14;
+                        console.log(e.key);
+                        if (e.key == "Enter"){
+                            document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                                elem.tabIndex = tabIdx;
+                                tabIdx += 3;
+                            });
+                        }
+                    });
                     matchUsersName = document.querySelectorAll(".resultScoreName")
                     Object.keys(matchUsersName).forEach(function(key){
                         if (!matchUsersName[key].classList.contains("deletedUser")){
                             matchUsersName[key].addEventListener("click", (e) => {
                                 myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);	
+                            })
+                            matchUsersName[key].addEventListener("keydown", (e) => {
+                                if (e.key == "Enter")
+                                    matchUsersName[key].click();
                             })
                         }
                         else{
