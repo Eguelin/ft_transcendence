@@ -23,7 +23,8 @@
 		"#notPlayedToday" : "Sie haben heute kein Spiel gespielt",
 		".victory" : "SIEG",
 		".loss" : "VERLOREN",
-		".draw" : "UNENTSCHIDEN"
+		".draw" : "UNENTSCHIDEN",
+		"aria#recentMatchHistoryContainer" : "Die heutigen Spiele des Benutzers"
 	},
 	"login" : {
 		"#title" : "ANMELDUNG",
@@ -39,7 +40,13 @@
 		"#registerSelectorText" : "Registrieren",
 		"#inputRegisterUsername" : "Nutzername",
 		"#inputRegisterPassword" : "Passwort",
-		"#inputRegisterCPassword" : "Bestätige das Passwort"
+		"#inputRegisterCPassword" : "Bestätige das Passwort",
+		"aria#inputUsername" : "Benutzername für Anmeldung",
+		"aria#inputPassword" : "Passwort für Anmeldung",
+		"aria#fortyTwoLogin" : "Mit 42-Konto anmelden",
+		"aria#inputRegisterUsername" : "Benutzernamen registrieren",
+		"aria#inputRegisterPassword" : "Passwort registrieren",
+		"aria#inputRegisterCPassword" : "Registrierungspasswort bestätigen"
 	},
 	"settings": {
 		"#title" : "",

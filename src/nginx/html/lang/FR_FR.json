@@ -23,7 +23,8 @@
 		"#notPlayedToday" : "Vous n'avez joué aucun match aujourd'hui",
 		".victory" : "VICTOIRE",
 		".loss" : "DÉFAITE",
-		".draw" : "ÉGALITÉ"
+		".draw" : "ÉGALITÉ",
+		"aria#recentMatchHistoryContainer" : "Matchs d'aujourd'hui de l'utilisateur"
 	},
 	"login" : {
 		"#title" : "CONNEXION",
@@ -39,7 +40,13 @@
 		"#registerSelectorText" : "S'inscrire",
 		"#inputRegisterUsername" : "Nom d'utilisateur",
 		"#inputRegisterPassword" : "Mot de passe",
-		"#inputRegisterCPassword" : "Confirmer le mot de passe"
+		"#inputRegisterCPassword" : "Confirmer le mot de passe",
+		"aria#inputUsername" : "Nom d'utilisateur de connexion",
+		"aria#inputPassword" : "Mot de passe de connexion",
+		"aria#fortyTwoLogin" : "Connexion avec un compte 42",
+		"aria#inputRegisterUsername" : "Enregistrer le nom d'utilisateur",
+		"aria#inputRegisterPassword" : "Enregistrer le mot de passe",
+		"aria#inputRegisterCPassword" : "Confirmer le mot de passe d'enregistrement"
 	},
 	"settings": {
 		"#title" : "",
