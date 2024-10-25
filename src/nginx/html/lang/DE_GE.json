@@ -65,11 +65,13 @@
 		"#settingsThemeLight" : "Licht",
 		"#settingsThemeDark" : "Dunkel",
 		"#languagesDropDown" : "Sprachen",
-		"#DD_EN_UK" : "Englisch",
-		"#DD_FR_FR" : "Französisch",
-		"#DD_DE_GE" : "Deutsch",
-		"#DD_IT_IT" : "Italienisch",
-		"#DD_AR_GH" : "Pirat"
+		"aria#leftSlideBtn" : "Einstellungsseite wechseln",
+		"aria#rightSlideBtn" : "Einstellungsseite wechseln",
+		"aria#settingsDropDownTheme" : "Dropdown-Menü Design",
+		"aria#settingsDropDownLang" : "Dropdown-Menü Sprache",
+		"aria#confirmDeleteInput" : "Geben Sie Ihren Benutzernamen ein und drücken Sie dann die Eingabetaste, um das Löschen zu bestätigen",
+		"aria#pfpLabel" : "Profilbild ändern",
+		"aria#confirmPfpBtn" : "Profilbild bestätigen"
 	},
 	"friends":{
 		"#title" : "",

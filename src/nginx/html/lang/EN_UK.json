@@ -65,11 +65,13 @@
 		"#settingsThemeLight" : "Light",
 		"#settingsThemeDark" : "Dark",
 		"#languagesDropDown" : "Languages",
-		"#DD_EN_UK" : "English",
-		"#DD_FR_FR" : "French",
-		"#DD_DE_GE" : "German",
-		"#DD_IT_IT" : "Italian",
-		"#DD_AR_GH" : "Pirate"
+		"aria#leftSlideBtn" : "Switch settings page",
+		"aria#rightSlideBtn" : "Switch settings page",
+		"aria#settingsDropDownTheme" : "Theme dropdown menu",
+		"aria#settingsDropDownLang" : "Language dropdown menu",
+		"aria#confirmDeleteInput" : "Type you username, then press enter to confirm deletion",
+		"aria#pfpLabel" : "Change profile picture",
+		"aria#confirmPfpBtn" : "Confirm profile picture"
 	},
 	"friends":{
 		"#title" : "",

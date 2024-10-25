@@ -65,11 +65,13 @@
 		"#settingsThemeLight" : "Chiaro",
 		"#settingsThemeDark" : "Scuro",
 		"#languagesDropDown" : "Lingue",
-		"#DD_EN_UK" : "Inglese",
-		"#DD_FR_FR" : "Francese",
-		"#DD_DE_GE" : "Tedesco",
-		"#DD_IT_IT" : "Italiano",
-		"#DD_AR_GH" : "Pirata"
+		"aria#leftSlideBtn" : "Cambia pagina impostazioni",
+		"aria#rightSlideBtn" : "Cambia pagina impostazioni",
+		"aria#settingsDropDownTheme" : "Menu a discesa tema",
+		"aria#settingsDropDownLang" : "Menu a discesa lingua",
+		"aria#confirmDeleteInput" : "Digita il tuo nome utente, quindi premi invio per confermare l'eliminazione",
+		"aria#pfpLabel" : "Cambia immagine del profilo",
+		"aria#confirmPfpBtn" : "Conferma immagine del profilo"
 	},
 	"friends":{
 		"#title" : "",
