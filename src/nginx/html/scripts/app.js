@@ -684,8 +684,7 @@ function createMatchResumeContainer(match) {
 	matchContainer.appendChild(result);
 	matchContainer.appendChild(scoreContainer);
 	matchContainer.appendChild(date);
-	
-	recentMatchHistoryContainer.appendChild(matchContainer);
+	return (matchContainer);
 }
 
 async function updateUserAriaLabel(key, content){
