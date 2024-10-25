@@ -78,7 +78,17 @@
 		"#onlineFriendSelectorText": "Online",
 		"#allFriendSelectorText": "Alle",
 		"#pendingFriendRequestSelectorText": "Ausstehend",
-		"#blockedSelectorText": "Blockiert"
+		"#blockedSelectorText": "Blockiert",
+		"aria#confirmDelete" : "Möchten Sie diesen Freund wirklich entfernen? Drücken Sie die Eingabetaste für 'Ja', Escape für 'Nein'",
+		"aria#confirmBlock" : "Möchten Sie diesen Freund wirklich blockieren? Drücken Sie die Eingabetaste für 'Ja', Escape für 'Nein'",
+		"aria.removeFriendBtn" : "Freund entfernen-Button",
+		"aria.blockFriendBtn" : "Freund blockieren-Button",
+		"aria.acceptFriendBtn" : "Freund annehmen-Button",
+		"aria.rejectFriendBtn" : "Freund ablehnen-Button",
+		"aria.unblockBtn" : "Benutzer entsperren",
+		"ariaAll.friendsOptionContainer" : "Freundschaftsoptionen",
+		"ariaPending.friendsOptionContainer" : "Optionen für eingehende, ausstehende Freundschaftsanfragen",
+		"ariaBlocked.friendsOptionContainer" : "Optionen für blockierte Benutzer"
 	},
 	"user":{
 		"#title" : "",

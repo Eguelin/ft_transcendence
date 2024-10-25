@@ -544,6 +544,8 @@ async function loadCurrentLang(){
 					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
 						elem.setAttribute("aria-label", content[key]);
 					})
+					if (currentPage == 'friends')
+						updateFriendsAriaLabel(key.substring(4), content[key]);
 				}
 				else{
 					document.querySelectorAll(key).forEach( function (elem) {

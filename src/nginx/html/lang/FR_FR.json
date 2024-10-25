@@ -78,7 +78,17 @@
 		"#onlineFriendSelectorText": "En ligne",
 		"#allFriendSelectorText": "Tous",
 		"#pendingFriendRequestSelectorText": "En attente",
-		"#blockedSelectorText": "Bloqués"
+		"#blockedSelectorText": "Bloqués",
+		"aria#confirmDelete" : "Êtes-vous sûr de vouloir supprimer cet ami, appuyez sur Entrée pour « oui », sur Échap pour « non »",
+		"aria#confirmBlock" : "Êtes-vous sûr de vouloir bloquer cet ami, appuyez sur Entrée pour « oui », sur Échap pour « non »",
+		"aria.removeFriendBtn" : "Bouton Supprimer de la liste d'amis",
+		"aria.blockFriendBtn" : "Bouton Bloquer l'utilisateur",
+		"aria.acceptFriendBtn" : "Bouton Accepter la demande",
+		"aria.rejectFriendBtn" : "Bouton Refuser la demande",
+		"aria.unblockBtn" : "Débloqué l'utilisateur",
+		"ariaAll.friendsOptionContainer" : "options ami",
+		"ariaPending.friendsOptionContainer" : "options demande d'ami entrante en attente",
+		"ariaBlocked.friendsOptionContainer" : "options utilisateur bloqué"
 	},
 	"user":{
 		"#title" : "",

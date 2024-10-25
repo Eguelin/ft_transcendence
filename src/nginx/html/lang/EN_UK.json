@@ -78,7 +78,18 @@
 		"#onlineFriendSelectorText": "Online",
 		"#allFriendSelectorText": "All",
 		"#pendingFriendRequestSelectorText": "Pending",
-		"#blockedSelectorText": "Blocked"
+		"#blockedSelectorText": "Blocked",
+		"aria#confirmDelete" : "Are you sure you want to remove this friend, press enter for 'yes', escape for no",
+		"aria#confirmBlock" : "Are you sure you want to block this friend, press enter for 'yes', escape for no",
+		"aria.removeFriendBtn" : "Remove friend button",
+		"aria.blockFriendBtn" : "Block friend button",
+		"aria.acceptFriendBtn" : "Accept friend button",
+		"aria.rejectFriendBtn" : "Reject friend button",
+		"aria.unblockBtn" : "Unlock user",
+		"ariaAll.friendsOptionContainer" : "friend options",
+		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
+		"ariaBlocked.friendsOptionContainer" : "blocked user options"
+		
 	},
 	"user":{
 		"#title" : "",
