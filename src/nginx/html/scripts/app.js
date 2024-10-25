@@ -308,6 +308,14 @@ function handleToken() {
 						myReplaceState(`https://${hostname.host}/home`);
 				})()
 			}
+			else
+			{
+				response.json().then(data => {
+					document.getElementById("loaderBg").style.setProperty("display", "none");
+					popUpError(data.message || "Error API 42 Invalid key or API down");
+					myReplaceState(`https://${hostname.host}/login`);
+				})
+			}
 		}).catch(error => console.error('Error:', error));
 	}
 	else {
