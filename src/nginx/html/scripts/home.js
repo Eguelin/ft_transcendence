@@ -23,7 +23,7 @@ playBtn = document.getElementById("playBtn");
 		}
 		else{
 			for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
-				createMatchResumeContainer(client.recentMatches[i], tabIdx);			
+				recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i]));
 			}
 			document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
 				elem.addEventListener("keydown", (e) => {

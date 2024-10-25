@@ -54,7 +54,7 @@ if (sendFriendRequestBtn){
                 try{
                     matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
-                        createMatchResumeContainer(matchObj[i]);
+                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i]));
                     };
                     document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                         elem.addEventListener("keydown", (e) => {
