@@ -147,7 +147,7 @@ class Client{
 			const result = await fetchResult.json();
 			if (fetchResult.ok){
 				this.#is_admin = result.is_admin;
-				document.getElementById("loaderBg").style.setProperty("display", "block");
+				setLoader()
 
 				var sep = page.indexOf("/", 1)
 				if (sep > 0)
@@ -170,7 +170,7 @@ class Client{
 								}
 								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 								document.body.appendChild(s);
-								document.getElementById("loaderBg").style.setProperty("display", "none");
+								unsetLoader()
 							})
 						})
 					}
@@ -188,7 +188,7 @@ class Client{
 								s.setAttribute('id', 'script');
 								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 								document.body.appendChild(s);
-								document.getElementById("loaderBg").style.setProperty("display", "none");
+								unsetLoader()
 							})
 						})
 					}
@@ -204,7 +204,7 @@ class Client{
 							s.setAttribute('id', 'script');
 							s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 							document.body.appendChild(s);
-							document.getElementById("loaderBg").style.setProperty("display", "none");
+							unsetLoader()
 							(async () => (loadCurrentLang()))();
 						})
 					})
@@ -337,7 +337,7 @@ function handleToken() {
 			else
 			{
 				response.json().then(data => {
-					document.getElementById("loaderBg").style.setProperty("display", "none");
+					unsetLoader()
 					popUpError(data.message || "Error API 42 Invalid key or API down");
 					myReplaceState(`https://${hostname.host}/login`);
 				})
@@ -347,7 +347,7 @@ function handleToken() {
 	else {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
-			document.getElementById("loaderBg").style.setProperty("display", "none");
+			unsetLoader();
 			(async () => {
 				client = await new Client();
 				if (!client)
@@ -867,3 +867,12 @@ window.addEventListener("resize", (e) => {
 		loadUserDashboard(defaultLastXDaysDisplayed)
 	}
 })
+
+function setLoader(){
+	document.getElementById("loaderBg").style.setProperty("display", "block");
+	window.onscroll=function(){window.scrollTo(0, 0);};
+}
+function unsetLoader(){
+	document.getElementById("loaderBg").style.setProperty("display", "none");
+	window.onscroll=function(){};
+}
