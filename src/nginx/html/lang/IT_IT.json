@@ -24,7 +24,10 @@
 		".victory" : "VITTORIA",
 		".loss" : "SCONFITTA",
 		".draw" : "PAREGGIO",
-		"aria#recentMatchHistoryContainer" : "Partite di oggi dell'utente"
+		"aria#recentMatchHistoryContainer" : "Partite di oggi dell'utente",
+		"ariaP1.matchDescContainer": "Partita contro",
+		"ariaP2.matchDescContainer": "su cui",
+		"aria.resultScoreName": "Reindirizzamento del profilo"
 	},
 	"login" : {
 		"#title" : "ACCESSO",
@@ -99,7 +102,10 @@
 		"#allMatchesHistoryBtn" : "Tutte le partite",
 		".victory" : "VITTORIA",
 		".loss" : "SCONFITTA",
-		".draw" : "PAREGGIO"
+		".draw" : "PAREGGIO",
+		"ariaP1.matchDescContainer": "Partita contro",
+		"ariaP2.matchDescContainer": "su cui",
+		"aria.resultScoreName": "Reindirizzamento del profilo"
 	},
 	"dashboard":{
 		"#title" : "",
