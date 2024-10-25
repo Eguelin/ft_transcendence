@@ -79,8 +79,8 @@
 		"#allFriendSelectorText": "All",
 		"#pendingFriendRequestSelectorText": "Pending",
 		"#blockedSelectorText": "Blocked",
-		"aria#confirmDelete" : "Are you sure you want to remove this friend, press enter for 'yes', escape for no",
-		"aria#confirmBlock" : "Are you sure you want to block this friend, press enter for 'yes', escape for no",
+		"aria#confirmDelete" : "Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'",
+		"aria#confirmBlock" : "Are you sure you want to block this friend, press enter for 'yes', escape for 'no'",
 		"aria.removeFriendBtn" : "Remove friend button",
 		"aria.blockFriendBtn" : "Block friend button",
 		"aria.acceptFriendBtn" : "Accept friend button",
@@ -123,7 +123,8 @@
 	},
 	"search": {
 		"#title" : "Search",
-		"#subtitle" : ""
+		"#subtitle" : "",
+		"aria.userResume" : "profile redirection"
 	},
 	"game":{
 		"#title" : "",
