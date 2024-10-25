@@ -24,7 +24,10 @@
 		".victory" : "SIEG",
 		".loss" : "VERLOREN",
 		".draw" : "UNENTSCHIDEN",
-		"aria#recentMatchHistoryContainer" : "Die heutigen Spiele des Benutzers"
+		"aria#recentMatchHistoryContainer" : "Die heutigen Spiele des Benutzers",
+		"ariaP1.matchDescContainer" : "Match gegen",
+		"ariaP2.matchDescContainer" : "auf dem",
+		"aria.resultScoreName" : "Profilumleitung"
 	},
 	"login" : {
 		"#title" : "ANMELDUNG",
@@ -99,7 +102,10 @@
 		"#allMatchesHistoryBtn" : "Alle Spiele",
 		".victory" : "SIEG",
 		".loss" : "VERLOREN",
-		".draw" : "UNENTSCHIDEN"
+		".draw" : "UNENTSCHIDEN",
+		"ariaP1.matchDescContainer" : "Match gegen",
+		"ariaP2.matchDescContainer" : "auf dem",
+		"aria.resultScoreName" : "Profilumleitung"
 	},
 	"dashboard":{
 		"#title" : "",

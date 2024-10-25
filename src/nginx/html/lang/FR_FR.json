@@ -24,7 +24,10 @@
 		".victory" : "VICTOIRE",
 		".loss" : "DÉFAITE",
 		".draw" : "ÉGALITÉ",
-		"aria#recentMatchHistoryContainer" : "Matchs d'aujourd'hui de l'utilisateur"
+		"aria#recentMatchHistoryContainer" : "Matchs d'aujourd'hui de l'utilisateur",
+		"ariaP1.matchDescContainer" : "Match contre",
+		"ariaP2.matchDescContainer" : "sur lequel",
+		"aria.resultScoreName" : "Redirection du profil"
 	},
 	"login" : {
 		"#title" : "CONNEXION",
@@ -99,7 +102,10 @@
 		"#allMatchesHistoryBtn" : "Tous les matchs",
 		".victory" : "VICTOIRE",
 		".loss" : "DÉFAITE",
-		".draw" : "ÉGALITÉ"
+		".draw" : "ÉGALITÉ",
+		"ariaP1.matchDescContainer" : "Match contre",
+		"ariaP2.matchDescContainer" : "sur lequel",
+		"aria.resultScoreName" : "Redirection du profil"
 	},
 	"dashboard":{
 		"#title" : "",
