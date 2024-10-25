@@ -84,15 +84,22 @@
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+	background:var(--main-text-rgb);
 }
 .acceptRequestBtn{
 	mask-image:url("../icons/check-mark-1.svg");
-	background:green;
+}
+
+.acceptRequestBtn:focus, .acceptRequestBtn:hover, .unblockBtn:hover, .unblockBtn:focus{
+	background: green;
 }
 
 .rejectRequestBtn{
 	mask-image:url("../icons/cross-17.svg");
-	background:red;
+}
+
+.rejectRequestBtn:focus, .rejectRequestBtn:hover{
+	background: red;
 }
 
 .moreBtn, .removeFriendBtn, .blockFriendBtn, .unblockBtn{
@@ -126,19 +133,19 @@
 	margin-right: 1.5vw;
 }
 
-.friendsOptionContainer, .requestOptionContainer{
+.friendsOptionContainer{
 	flex: none;
 }
 
-.requestOptionContainer {
-	display: flex;
+#pendingFriendRequestList .friendContainer .friendsOptionContainer {
+    display: flex;
 }
 
-.friendsOptionContainer:hover .moreBtn{
+.activeListSelector .moreBtn{
 	display: none;
 }
 
-.friendsOptionContainer:hover .friendsOption{
+.activeListSelector .friendsOption{
 	display: flex;
 }
 

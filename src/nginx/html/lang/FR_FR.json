@@ -5,7 +5,16 @@
 		"#settingsBtn" :  "Paramètres",
 		"#logOutBtn" :  "Déconnexion",
 		"#inputSearchUser" : "Rechercher un utilisateur",
-		".deletedUser" : "Supprimé"
+		".deletedUser" : "Supprimé",
+		"aria#goHomeButton" : "Bouton d'accueil",
+		"aria#inputSearchUser" : "Champ de saisie de l'utilisateur de recherche",
+		"aria#usernameBtn" : "Menu déroulant du profil",
+		"aria#themeButton" : "Bouton de basculement du thème",
+		"aria#dropDownLangBtn" : "Menu de sélection de la langue",
+		"aria#EN_UK" : "English",
+		"aria#FR_FR" : "Français",
+		"aria#DE_GE" : "Deutsch",
+		"aria#IT_IT" : "Italiano"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -16,7 +25,11 @@
 		"#notPlayedToday" : "Vous n'avez joué aucun match aujourd'hui",
 		".victory" : "VICTOIRE",
 		".loss" : "DÉFAITE",
-		".draw" : "ÉGALITÉ"
+		".draw" : "ÉGALITÉ",
+		"aria#recentMatchHistoryContainer" : "Matchs d'aujourd'hui de l'utilisateur",
+		"ariaP1.matchDescContainer" : "Match contre",
+		"ariaP2.matchDescContainer" : "sur lequel",
+		"aria.resultScoreName" : "Redirection du profil"
 	},
 	"login" : {
 		"#title" : "CONNEXION",
@@ -32,7 +45,13 @@
 		"#registerSelectorText" : "S'inscrire",
 		"#inputRegisterUsername" : "Nom d'utilisateur",
 		"#inputRegisterPassword" : "Mot de passe",
-		"#inputRegisterCPassword" : "Confirmer le mot de passe"
+		"#inputRegisterCPassword" : "Confirmer le mot de passe",
+		"aria#inputUsername" : "Nom d'utilisateur de connexion",
+		"aria#inputPassword" : "Mot de passe de connexion",
+		"aria#fortyTwoLogin" : "Connexion avec un compte 42",
+		"aria#inputRegisterUsername" : "Enregistrer le nom d'utilisateur",
+		"aria#inputRegisterPassword" : "Enregistrer le mot de passe",
+		"aria#inputRegisterCPassword" : "Confirmer le mot de passe d'enregistrement"
 	},
 	"settings": {
 		"#title" : "",
@@ -44,24 +63,17 @@
 		"#inputPfp" : "Photo de profil",
 		"#pfpLabel" : "Photo de profil",
 		"#deleteAccountBtn" : "SUPPRIMER LE COMPTE",
-		"#themesDropDownL" : "Thèmes",
-		"#themesDropDownP" : "Thèmes",
-		"#loadLightL" : "Clair",
-		"#loadDarkL" : "Sombre",
-		"#loadLightP" : "Clair",
-		"#loadDarkP" : "Sombre",
-		"#languagesDropDownL" : "Langues",
-		"#languagesDropDownP" : "Langues",
-		"#englishBtnL" : "Anglais",
-		"#frenchBtnL" : "Français",
-		"#germanBtnL" : "Allemand",
-		"#italianBtnL" : "Italien",
-		"#pirateBtnL" : "Pirate",
-		"#englishBtnP" : "Anglais",
-		"#frenchBtnP" : "Français",
-		"#germanBtnP" : "Allemand",
-		"#italianBtnP" : "Italien",
-		"#pirateBtnP" : "Pirate"
+		"#themesDropDown" : "Thèmes",
+		"#settingsThemeLight" : "Clair",
+		"#settingsThemeDark" : "Sombre",
+		"#languagesDropDown" : "Langues",
+		"aria#leftSlideBtn" : "Changer de page de paramètres",
+		"aria#rightSlideBtn" : "Changer de page de paramètres",
+		"aria#settingsDropDownTheme" : "Menu déroulant Thème",
+		"aria#settingsDropDownLang" : "Menu déroulant Langue",
+		"aria#confirmDeleteInput" : "Tapez votre nom d'utilisateur, puis appuyez sur Entrée pour confirmer la suppression",
+		"aria#pfpLabel" : "Modifier la photo de profil",
+		"aria#confirmPfpBtn" : "Confirmer la photo de profil"
 	},
 	"friends":{
 		"#title" : "",
@@ -73,7 +85,17 @@
 		"#onlineFriendSelectorText": "En ligne",
 		"#allFriendSelectorText": "Tous",
 		"#pendingFriendRequestSelectorText": "En attente",
-		"#blockedSelectorText": "Bloqués"
+		"#blockedSelectorText": "Bloqués",
+		"aria#confirmDelete" : "Êtes-vous sûr de vouloir supprimer cet ami, appuyez sur Entrée pour « oui », sur Échap pour « non »",
+		"aria#confirmBlock" : "Êtes-vous sûr de vouloir bloquer cet ami, appuyez sur Entrée pour « oui », sur Échap pour « non »",
+		"aria.removeFriendBtn" : "Bouton Supprimer de la liste d'amis",
+		"aria.blockFriendBtn" : "Bouton Bloquer l'utilisateur",
+		"aria.acceptFriendBtn" : "Bouton Accepter la demande",
+		"aria.rejectFriendBtn" : "Bouton Refuser la demande",
+		"aria.unblockBtn" : "Débloqué l'utilisateur",
+		"ariaAll.friendsOptionContainer" : "options ami",
+		"ariaPending.friendsOptionContainer" : "options demande d'ami entrante en attente",
+		"ariaBlocked.friendsOptionContainer" : "options utilisateur bloqué"
 	},
 	"user":{
 		"#title" : "",
@@ -84,7 +106,10 @@
 		"#allMatchesHistoryBtn" : "Tous les matchs",
 		".victory" : "VICTOIRE",
 		".loss" : "DÉFAITE",
-		".draw" : "ÉGALITÉ"
+		".draw" : "ÉGALITÉ",
+		"ariaP1.matchDescContainer" : "Match contre",
+		"ariaP2.matchDescContainer" : "sur lequel",
+		"aria.resultScoreName" : "Redirection du profil"
 	},
 	"dashboard":{
 		"#title" : "",
@@ -100,11 +125,15 @@
 		"CVwinLossGraph" : "Moyenne par date",
 		"CVwinLossAbsGraph" : "Nombre de victoires par rapport aux défaites par date",
 		"CVwinLossGraphClient" : "vous",
-		"CVwinLossAbsGraphClient" : "vous"
+		"CVwinLossAbsGraphClient" : "vous",
+		"aria#lastWeekSelection" : "Afficher les statistiques des 7 derniers jours",
+		"aria#lastMonthSelection" : "Afficher les statistiques du mois dernier",
+		"aria#lastYearSelection" : "Afficher les statistiques de l'année dernière"
 	},
 	"search": {
 		"#title" : "Recherche",
-		"#subtitle" : ""
+		"#subtitle" : "",
+		"aria.userResume" : "redirection"
 	},
 	"game":{
 		"#title" : "",

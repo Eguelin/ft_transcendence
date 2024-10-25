@@ -5,7 +5,16 @@
 		"#settingsBtn" :  "Einstellungen",
 		"#logOutBtn" :  "Ausloggen",
 		"#inputSearchUser" : "Benutzer suchen",
-		".deletedUser" : "Gelöscht"
+		".deletedUser" : "Gelöscht",
+		"aria#goHomeButton" : "Home-Button",
+		"aria#inputSearchUser" : "Benutzereingabefeld suchen",
+		"aria#usernameBtn" : "Profil-Dropdown-Menü",
+		"aria#themeButton" : "Theme-Umschalttaste",
+		"aria#dropDownLangBtn" : "Sprachauswahlmenü",
+		"aria#EN_UK" : "English",
+		"aria#FR_FR" : "Français",
+		"aria#DE_GE" : "Deutsch",
+		"aria#IT_IT" : "Italiano"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -16,7 +25,11 @@
 		"#notPlayedToday" : "Sie haben heute kein Spiel gespielt",
 		".victory" : "SIEG",
 		".loss" : "VERLOREN",
-		".draw" : "UNENTSCHIDEN"
+		".draw" : "UNENTSCHIDEN",
+		"aria#recentMatchHistoryContainer" : "Die heutigen Spiele des Benutzers",
+		"ariaP1.matchDescContainer" : "Match gegen",
+		"ariaP2.matchDescContainer" : "auf dem",
+		"aria.resultScoreName" : "Profilumleitung"
 	},
 	"login" : {
 		"#title" : "ANMELDUNG",
@@ -32,7 +45,13 @@
 		"#registerSelectorText" : "Registrieren",
 		"#inputRegisterUsername" : "Nutzername",
 		"#inputRegisterPassword" : "Passwort",
-		"#inputRegisterCPassword" : "Bestätige das Passwort"
+		"#inputRegisterCPassword" : "Bestätige das Passwort",
+		"aria#inputUsername" : "Benutzername für Anmeldung",
+		"aria#inputPassword" : "Passwort für Anmeldung",
+		"aria#fortyTwoLogin" : "Mit 42-Konto anmelden",
+		"aria#inputRegisterUsername" : "Benutzernamen registrieren",
+		"aria#inputRegisterPassword" : "Passwort registrieren",
+		"aria#inputRegisterCPassword" : "Registrierungspasswort bestätigen"
 	},
 	"settings": {
 		"#title" : "",
@@ -44,24 +63,17 @@
 		"#inputPfp" : "Profilbild",
 		"#pfpLabel" : "Profilbild",
 		"#deleteAccountBtn" : "KONTO LÖSCHEN",
-		"#themesDropDownL" : "Themen",
-		"#themesDropDownP" : "Themen",
-		"#loadLightL" : "Licht",
-		"#loadDarkL" : "Dunkel",
-		"#loadLightP" : "Licht",
-		"#loadDarkP" : "Dunkel",
-		"#languagesDropDownL" : "Sprachen",
-		"#languagesDropDownP" : "Sprachen",
-		"#englishBtnL" : "Englisch",
-		"#frenchBtnL" : "Französisch",
-		"#germanBtnL" : "Deutsch",
-		"#italianBtnL" : "Italienisch",
-		"#pirateBtnL" : "Pirat",
-		"#englishBtnP" : "Englisch",
-		"#frenchBtnP" : "Französisch",
-		"#germanBtnP" : "Deutsch",
-		"#italianBtnP" : "Italienisch",
-		"#pirateBtnP" : "Pirat"
+		"#themesDropDown" : "Themen",
+		"#settingsThemeLight" : "Licht",
+		"#settingsThemeDark" : "Dunkel",
+		"#languagesDropDown" : "Sprachen",
+		"aria#leftSlideBtn" : "Einstellungsseite wechseln",
+		"aria#rightSlideBtn" : "Einstellungsseite wechseln",
+		"aria#settingsDropDownTheme" : "Dropdown-Menü Design",
+		"aria#settingsDropDownLang" : "Dropdown-Menü Sprache",
+		"aria#confirmDeleteInput" : "Geben Sie Ihren Benutzernamen ein und drücken Sie dann die Eingabetaste, um das Löschen zu bestätigen",
+		"aria#pfpLabel" : "Profilbild ändern",
+		"aria#confirmPfpBtn" : "Profilbild bestätigen"
 	},
 	"friends":{
 		"#title" : "",
@@ -73,7 +85,17 @@
 		"#onlineFriendSelectorText": "Online",
 		"#allFriendSelectorText": "Alle",
 		"#pendingFriendRequestSelectorText": "Ausstehend",
-		"#blockedSelectorText": "Blockiert"
+		"#blockedSelectorText": "Blockiert",
+		"aria#confirmDelete" : "Möchten Sie diesen Freund wirklich entfernen? Drücken Sie die Eingabetaste für 'Ja', Escape für 'Nein'",
+		"aria#confirmBlock" : "Möchten Sie diesen Freund wirklich blockieren? Drücken Sie die Eingabetaste für 'Ja', Escape für 'Nein'",
+		"aria.removeFriendBtn" : "Freund entfernen-Button",
+		"aria.blockFriendBtn" : "Freund blockieren-Button",
+		"aria.acceptFriendBtn" : "Freund annehmen-Button",
+		"aria.rejectFriendBtn" : "Freund ablehnen-Button",
+		"aria.unblockBtn" : "Benutzer entsperren",
+		"ariaAll.friendsOptionContainer" : "Freundschaftsoptionen",
+		"ariaPending.friendsOptionContainer" : "Optionen für eingehende, ausstehende Freundschaftsanfragen",
+		"ariaBlocked.friendsOptionContainer" : "Optionen für blockierte Benutzer"
 	},
 	"user":{
 		"#title" : "",
@@ -84,7 +106,10 @@
 		"#allMatchesHistoryBtn" : "Alle Spiele",
 		".victory" : "SIEG",
 		".loss" : "VERLOREN",
-		".draw" : "UNENTSCHIDEN"
+		".draw" : "UNENTSCHIDEN",
+		"ariaP1.matchDescContainer" : "Match gegen",
+		"ariaP2.matchDescContainer" : "auf dem",
+		"aria.resultScoreName" : "Profilumleitung"
 	},
 	"dashboard":{
 		"#title" : "",
@@ -100,11 +125,15 @@
 		"CVwinLossGraph" : "Durchschnitt nach Datum",
 		"CVwinLossAbsGraph" : "Anzahl der Siege gegenüber der Anzahl der Niederlagen nach Datum",
 		"CVwinLossGraphClient" : "du",
-		"CVwinLossAbsGraphClient" : "du"
+		"CVwinLossAbsGraphClient" : "du",
+		"aria#lastWeekSelection" : "Statistiken der letzten 7 Tage anzeigen",
+		"aria#lastMonthSelection" : "Statistiken des letzten Monats anzeigen",
+		"aria#lastYearSelection" : "Statistiken des letzten Jahres anzeigen"
 	},
 	"search": {
 		"#title" : "Suchen",
-		"#subtitle" : ""
+		"#subtitle" : "",
+		"aria.userResume" : "Profilumleitung"
 	},
 	"game":{
 		"#title" : "",
