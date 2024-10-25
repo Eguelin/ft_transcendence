@@ -21,9 +21,11 @@ var currentLang = "lang/EN_UK.json"
 var username = "";
 const hostname = new URL(window.location.href);
 const defaultLastXDaysDisplayed = 7;
+const preferedColorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
 var client = null;
 var pageName;
+var use_browser_theme = true;
 
 const routes = {
 	"/home": `https://${hostname.host}/bodyLess/home.html`,
@@ -70,6 +72,7 @@ class Client{
 	langJson;
 	pfpUrl;
 	use_dark_theme;
+	use_browser_theme;
 	friends;
 	friend_requests;
 	blocked_user;
@@ -98,9 +101,12 @@ class Client{
 				this.blocked_user = result.blocked_user;
 				this.recentMatches = result.matches;
 				this.#is_admin = result.is_admin;
-				switchTheme(this.use_dark_theme);
 				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 				this.fontAmplifier = result.font_amplifier;
+				this.use_browser_theme = result.use_browser_theme;
+				use_browser_theme = result.use_browser_theme;
+				if (use_browser_theme == false)
+					switchTheme(this.use_dark_theme);
 				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
@@ -236,10 +242,23 @@ window.addEventListener("popstate", (e) =>{
 
 function load(){
 	const url =  new URL( window.location.href);
-	if (dropDownLang.classList.contains("activeDropDown"))
-		dropDownLang.classList.replace("activeDropDown", "inactiveDropDown");
-	if (dropDownUser.classList.contains("activeDropDown"))
-		dropDownUser.classList.replace("activeDropDown", "inactiveDropDown");
+	if (dropDownLang.classList.contains("activeDropDown")){
+		dropDownLang.classList.remove("activeDropDown");
+		void dropDownLang.offsetWidth;
+		dropDownLang.classList.add("inactiveDropDown");
+
+		setTimeout((dropDownLang) => {
+			dropDownLang.classList.remove("inactiveDropDown");
+		}, 300, dropDownLang)
+	}
+	if (dropDownUser.classList.contains("activeDropDown")){
+		dropDownUser.classList.remove("activeDropDown");
+		void dropDownUser.offsetWidth;
+		dropDownUser.classList.add("inactiveDropDown");
+		setTimeout((dropDownUser) => {
+			dropDownUser.classList.remove("inactiveDropDown");
+		}, 300, dropDownUser)
+	}
 
 	if (client && !(client instanceof Client)){
 		client = null;
@@ -267,6 +286,7 @@ function load(){
 	else {
 		dropDownUserContainer.style.setProperty("display", "none");
 		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+		history.replaceState("","",`https://${hostname.host}/login`);
 
 		fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
 			(response.text().then(response => {
@@ -302,6 +322,12 @@ function handleToken() {
 			if (response.ok){
 				(async () => {
 					client = await new Client()
+					if (use_browser_theme){
+						if (window.matchMedia) {
+							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+						}
+						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+					}
 					if (!client)
 						myReplaceState(`https://${hostname.host}/login`);
 					else
@@ -330,6 +356,12 @@ function handleToken() {
 					myReplaceState(`https://${hostname.host}/home`);
 				else
 					load();
+				if (use_browser_theme){
+					if (window.matchMedia) {
+						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+					}
+					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+				}
 			})()
 	}
 }
@@ -390,8 +422,10 @@ logOutBtn.addEventListener("click", (e) => {
 
 function switchTheme(darkTheme) {
 	if (darkTheme == 1 || darkTheme == true) {
-		if (client)
+		if (client){
 			client.mainTextRgb = "#FDFDFB";
+			client.use_dark_theme = 1;
+		}
 		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
 		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
@@ -403,8 +437,10 @@ function switchTheme(darkTheme) {
 			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-night-mode.svg)`;
 	}
 	else {
-		if (client)
+		if (client){
 			client.mainTextRgb = "#110026";
+			client.use_dark_theme = 0;
+		}
 		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
 		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
 		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
@@ -504,9 +540,21 @@ async function loadCurrentLang(){
 					chartAverage.update();
 					chartAbs.update();
 				}
+				else if (key.startsWith("aria")){
+					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+						elem.setAttribute("aria-label", content[key]);
+					})
+					if (currentPage == 'friends')
+						updateFriendsAriaLabel(key.substring(4), content[key]);
+					if (currentPage == 'search')
+						updateSearchAriaLabel(key.substring(4), content[key]);
+					if (currentPage == "user" || currentPage == "home")
+						updateUserAriaLabel(key.substring(4), content[key]);
+				}
 				else{
-					for (var i=0; i< Object.keys(instances).length; i++)
-						instances[i].innerHTML = content[key];
+					document.querySelectorAll(key).forEach( function (elem) {
+						elem.innerHTML = content[key];
+					})
 				}
 			});
 		}
@@ -517,6 +565,11 @@ async function loadCurrentLang(){
 				if (key.startsWith('#input')){
 					for (var i=0; i< Object.keys(instances).length; i++)
 						instances[i].placeholder = content[key];
+				}
+				else if (key.startsWith("aria")){
+					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+						elem.setAttribute("aria-label", content[key]);
+					})
 				}
 				else{
 					for (var i=0; i< Object.keys(instances).length; i++)
@@ -535,13 +588,20 @@ swichTheme.addEventListener("click", () => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ is_dark_theme: theme }),
+			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false}),
 			credentials: 'include'
 		})
+		client.use_browser_theme = false;
 	}
+	use_browser_theme = false;
+	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent)
 	switchTheme(theme);
 	swichTheme.blur();
-})
+})	
+
+function browserThemeEvent(event){
+	switchTheme(event.matches);	
+}
 
 swichTheme.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
@@ -586,9 +646,14 @@ function createMatchResumeContainer(match) {
 
 	if (scoreUserName.innerHTML == "deleted")
 		scoreUserName.classList.add("deletedUser");
+	else
+		scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+	
 
 	if (scoreOpponentName.innerHTML == "deleted")
 		scoreOpponentName.classList.add("deletedUser");
+	else
+		scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
@@ -611,14 +676,40 @@ function createMatchResumeContainer(match) {
 		result.classList.add("draw");
 		result.innerHTML = client.langJson['user']['.draw'];
 	}
+	//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
+
 	scoreContainer.appendChild(scoreUser);
 	scoreContainer.appendChild(scoreOpponent);
 
 	matchContainer.appendChild(result);
 	matchContainer.appendChild(scoreContainer);
 	matchContainer.appendChild(date);
-
+	
 	recentMatchHistoryContainer.appendChild(matchContainer);
+}
+
+async function updateUserAriaLabel(key, content){
+	if (key.startsWith("P1")){
+		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
+			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
+			if (status.classList.contains("victory"))
+				status = client.langJson['user']['.victory'];
+			else if (status.classList.contains("loss"))
+				status = client.langJson['user']['.loss'];
+			else
+				status = client.langJson['user']['.draw'];
+			var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
+			var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
+			elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+		})	
+	}
+	else{
+		document.querySelectorAll(key).forEach(function (elem){
+			if (elem.classList.contains("resultScoreName")){
+				elem.setAttribute("aria-label", `${elem.innerText} ${content}`);
+			}
+		})
+	}
 }
 
 inputSearchUser.addEventListener("keydown", (e) => {

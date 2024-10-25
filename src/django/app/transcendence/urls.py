@@ -22,6 +22,8 @@ urlpatterns = [
     path('admin/create', admin.views.create_user),
     path('admin/create_match', admin.views.create_match),
     path('admin/create_friendship', admin.views.create_friendship),
+    path('admin/create_friendship_request', admin.views.create_friendship_request),
+    path('admin/create_blocked_friendship', admin.views.create_blocked_friendship),
     path('user/getClientId', login.views.getClientId),
     path('user/login', login.views.user_login),
     path('user/logout', login.views.user_logout),

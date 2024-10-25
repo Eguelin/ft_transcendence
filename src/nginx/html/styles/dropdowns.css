@@ -1,185 +1,141 @@
-.dropDownLandscape{
+#settingsDropDownContainer{
+	display: flex;
+	width: fit-content;
+	position: relative;
+	left: 50%;
+	translate: -50%;
+	gap: 4.2rem;
+}
+
+.settingsDropDown{
 	display: none;
 }
 
-.dropDownPortrait{
-	display: none;
+@media screen and (max-width: 700px){
+	#settingsDropDownContainer{
+		flex-direction: column;
+	}
 }
 
-@media screen and (orientation:landscape){
-	.dropDownBtn {
-		text-align: left;
-		background-color: transparent;
-		color: var(--main-text-rgb);
-		font-style: italic;
-		font-weight: thin;	
-		font-family: "pong";
-		font-size: min(4vh, 3vw);
-		padding: 1vh 0;
-		width: 20vw;
-		border: 0;
-	}
-	
-	.dropDownLandscape{
-		position: relative;	
-		display: flex;
-		border: 0.2px solid;
-		border-color: var(--main-text-rgb);
-		background-color: var(--input-bg-rgb);
-		margin: 2vh 0 0 25vw;	
-		width: fit-content;
-		outline: none;
-		border-radius: 25px;
-	}
-	
-	.dropDownLandscape:focus, .dropDownLandscape:hover{
-		border-right: 0;
-		border-radius: 25px 0px 0px 25px;
-	}
-	
-	.dropDownArrow{
-		mask-image:url("icons/right_arrow.svg");
-		background:var(--main-text-rgb);
-		height:min(5vh, 5vw);
-		width:5vw;
-		margin: 0.5vh 0vh 0.5vh 0vh;
-		mask-size:contain;
-		mask-position:center;
-		mask-repeat:no-repeat;
-		mask-clip: no-clip;
-	}
-	
-	.dropDownOptionContainer {
-		display: flex;
-		flex-flow: column;
-	}
-	
-	.dropDownLandscape:hover .dropDownOptionContainer, .dropDownLandscape:focus .dropDownOptionContainer{
-		position: absolute;
-		min-width: 25vw;
-		width: max-content;
-		left: 25vw;
-		border-right: 0.2px solid var(--main-text-rgb);
-		border-top: 0.2px solid var(--main-text-rgb);
-		background: var(--input-bg-rgb);
-		border-radius: 0px 25px 25px;
-		top: -1px;
-	}
-	
-	.dropDownLandscape:hover .dropDownOptionContainer .dropDownArrow, .dropDownLandscape:focus .dropDownOptionContainer .dropDownArrow{
-		/*transform: rotate(90deg);	*/
-		right: 12.5vw;
-		outline: none;
-		width: -webkit-fill-available;
-		width: -moz-available;
-		border-block-start: var(--hover-text-rgb);
-	}
-	
-	.dropDownLandscape:hover .dropDownBtn, .dropDownLandscape:focus .dropDownBtn{
-		display: inline-block;
-		width: 25vw;
-		flex: 1;
-		outline: none;
-	}
-	
-	.dropDownLandscape:hover .dropDownOptionContainer .dropDownContent, .dropDownLandscape:focus .dropDownOptionContainer .dropDownContent{
-		border-left: 0.2px solid var(--main-text-rgb);
-		border-bottom: 0.2px solid var(--main-text-rgb);
-		border-block-start: var(--hover-text-rgb);
-		width: -webkit-fill-available;
-		width: -moz-available;
-		display: block;
-		z-index: 2;
-		flex: 1;
-		outline: none;
-		border-radius: 0px 0px 25px 25px;
-	}	
+.dropDownBtn {
+	text-align: left;
+	background-color: transparent;
+	color: var(--main-text-rgb);
+	font-style: italic;
+	font-weight: thin;	
+	font-family: "pong";
+	font-size: 1rem;
+	padding: 1rem;
+	width: fit-content;
+	min-width: 10vw;
+	border: 0;
 }
 
-@media screen and (orientation:portrait){
-	.dropDownBtn {
-		text-align: left;
-		background-color: transparent;
-		color: var(--main-text-rgb);
-		font-style: italic;
-		font-weight: thin;	
-		font-family: "pong";
-		font-size: min(4vh, 3vw);
-		padding: 1vh 0;
-		width: 45vw;
-		border: 0;
-	}
-	
-	.dropDownPortrait{
-		position: relative;	
-		display: flex;
-		flex-flow: column;
-		border: 0.2px solid var(--main-text-rgb);
-		background-color: var(--input-bg-rgb);
-		margin: 2vh 0 0 25vw;	
-		width: fit-content;
-		outline: none;
-		border-radius: 25px;
-	}
+.settingsDropDown{
+	position: relative;	
+	display: flex;
+	flex-flow: column;
+	background-color: var(--input-bg-rgb);
+	width: fit-content;
+	outline: none;
+	height: fit-content;
+}
 
-	.dropDownPortrait:focus, .dropDownPortrait:hover{
-		border: 0px;
-		border-radius: 25px 25px 25px 25px;
+.dropDownArrow{
+	mask-image:url("../icons/right_arrow.svg");
+	background:var(--main-text-rgb);
+	height:2rem;
+	width:2rem;
+	align-self: center;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	mask-clip: no-clip;
+	position: relative;
+	right: 0;
+	rotate: 0deg;
+}
+
+@keyframes rotateArrow {
+	0%{
+		rotate: 0deg;
+		right: 0rem;
 	}
-	
-	.dropDownArrow{
-		mask-image:url("icons/right_arrow.svg");
-		background:var(--main-text-rgb);
-		height:min(5vh, 5vw);
-		width:5vw;
-		margin: 0.5vh 0vh 0.5vh 0vh;
-		mask-size:contain;
-		mask-position:center;
-		mask-repeat:no-repeat;
-		mask-clip: no-clip;
+	100%{
+		rotate: 90deg;
+		right: .5rem;
 	}
-	
-	.dropDownOptionContainer {
-		display: flex;
-		flex-flow: row;
-	}
-	
-	.dropDownPortrait:hover .dropDownOptionContainer, .dropDownPortrait:focus .dropDownOptionContainer{
-		min-width: 25vw;
-		width: max-content;
-		border-radius: 25px 25px 0px 0px;
-		border: 0.2px solid var(--main-text-rgb);
-		border-bottom: 0px;
-	}
-	
-	.dropDownPortrait:hover .dropDownOptionContainer .dropDownArrow, .dropDownPortrait:focus .dropDownOptionContainer .dropDownArrow{
-		right: 12.5vw;
-		outline: none;
-		border-block-start: var(--hover-text-rgb);
-	}
-	
-	.dropDownPortrait:hover .dropDownOptionContainer .dropDownBtn, .dropDownPortrait:focus .dropDownOptionContainer .dropDownBtn{
-		display: inline-block;
-		flex: 1;
-		outline: none;
-	}
-	
-	.dropDownPortrait:hover .dropDownContent, .dropDownPortrait:focus .dropDownContent{
-		width: -webkit-fill-available;
-		width: -moz-available;
-		display: block;
-		z-index: 2;
-		flex: 1;
-		outline: none;
-		border-radius: 0px 0px 25px 25px;
-		border: 0.2px solid var(--main-text-rgb);
-		border-top: 0px;
-	}	
+}
+
+.settingsDropDown.activeDropDown .dropDownOptionContainer .dropDownArrow{
+	animation: rotateArrow 300ms forwards;
+	rotate: 90deg;
+	right: .5rem;
+}
+
+.settingsDropDown.inactiveSettingsDropDown .dropDownOptionContainer .dropDownArrow{
+	animation: rotateArrow 300ms reverse;
+}
+
+.dropDownOptionContainer {
+	display: flex;
+	flex-flow: row;
+	border: 0.2px solid transparent;
+}
+
+.settingsDropDown:hover .dropDownOptionContainer, .settingsDropDown:focus .dropDownOptionContainer{
+	width: max-content;
+	border-color: var(--main-text-rgb);
+}
+
+.activeDropDown.settingsDropDown .dropDownOptionContainer{
+	border: 0 !important;
+}
+
+.activeDropDown.settingsDropDown .dropDownOptionContainer .dropDownBtn{
+	display: inline-block;
+	flex: 1;
+	outline: none;
+}
+
+.activeDropDown.settingsDropDown .dropDownContent{
+	width: -webkit-fill-available;
+	width: -moz-available;
+	display: block;
+	z-index: 2;
+	flex: 1;
+	outline: none;
+}
+
+.dropDownContent {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.activeDropDown.settingsDropDown .dropDownContent li a{
+	transform-origin: top;
+	animation: scaleZText 300ms forwards;
+}
+
+.inactiveSettingsDropDown{
+	border: .2px solid var(--main-text-rgb);
+}
+
+.inactiveSettingsDropDown.settingsDropDown .dropDownContent li a{
+	transform-origin: top center;
+	animation: scaleZText 300ms reverse;
+	font-size: 0;
+}
+
+
+.inactiveSettingsDropDown.settingsDropDown:hover .dropDownOptionContainer, .inactiveSettingsDropDown.settingsDropDown:focus .dropDownOptionContainer{
+	width: max-content;
+	border-color: transparent !important;
 }
 
 .dropDownContent{
 	display: none;
-	width: 20vw;
 }
 
 
@@ -187,14 +143,15 @@
 	text-align: center;
 	color: var(--option-text-rgb);
 	text-decoration: inherit;
-	font-size: min(4vh,3vw);
-	padding: 1vh 1vw;
+	font-size: 1rem;
+	padding: .5rem;
 	margin-left: auto;
 	margin-right: auto;
 	min-width: inherit;
 	display: block;
 }
-.dropDownContent a:hover, .dropDownContentAHover{
+
+.dropDownContent a:hover, .dropDownContent a:focus, .activeDropDown.settingsDropDown:focus div button{
 	color: var(--option-hover-text-rgb) !important;
 }	
 
@@ -248,13 +205,7 @@
 	color: var(--option-hover-text-rgb);
 }
 
-.activeDropDown .dropDownUserContent, .activeDropDown #dropDownLangContent{
-	z-index: 1;
-	display: block;
-}
-
-
-.inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent{
+.activeDropDown .dropDownUserContent, .activeDropDown #dropDownLangContent, .inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent, .inactiveSettingsDropDown.settingsDropDown .dropDownContent{
 	z-index: 1;
 	display: block;
 }

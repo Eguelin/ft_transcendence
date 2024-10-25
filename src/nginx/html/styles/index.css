@@ -56,7 +56,7 @@
 	}
 }
 
-#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover{
+#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover, #leftSlideBtn:focus, #rightSlideBtn:focus{
 	outline: none;
 	background: var(--hover-text-rgb);
 }
@@ -104,6 +104,11 @@
 	flex: 1; 
 	text-align: left; 
 	align-self: center;
+	display: none;
+}
+#inputSearchUser{
+	width: -webkit-fill-available;
+	width: -moz-available;
 }
 
 @media screen and (orientation:landscape){
