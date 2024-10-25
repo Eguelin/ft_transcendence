@@ -174,19 +174,19 @@ function createUserContainer(user){
 	moreBtn.className = "moreBtn";
 	
 	removeFriendBtn.className = "removeFriendBtn";
-	removeFriendBtn.setAttribute("aria-label", `Remove friend button`);
+	removeFriendBtn.setAttribute("aria-label", client.langJson['friends']['aria.removeFriendBtn']);
 	
 	blockFriendBtn.className = "blockFriendBtn";
-	blockFriendBtn.setAttribute("aria-label", `Block friend button`);
+	blockFriendBtn.setAttribute("aria-label", client.langJson['friends']['aria.blockFriendBtn']);
 	
 	acceptBtn.className = "acceptRequestBtn";
-	acceptBtn.setAttribute("aria-label", "Accept friend request");
+	acceptBtn.setAttribute("aria-label", client.langJson['friends']['aria.acceptFriendBtn']);
 	
 	rejectBtn.className = "rejectRequestBtn";
-	rejectBtn.setAttribute("aria-label", "Reject friend request");
+	rejectBtn.setAttribute("aria-label", client.langJson['friends']['aria.rejectFriendBtn']);
 	
 	unblockBtn.className = "unblockBtn";
-	unblockBtn.setAttribute("aria-label", "Unblock user");
+	unblockBtn.setAttribute("aria-label", client.langJson['friends']['aria.unblockBtn']);
 
 	userOptionContainer.className = "friendsOptionContainer";
 	userOption.className = "friendsOption";
@@ -218,7 +218,7 @@ function createFriendContainer(user){
 	})
 	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 	
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} friend options`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaAll.friendsOptionContainer]}`);
 	friendsOptionContainer.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
 
@@ -243,7 +243,7 @@ function createFriendRequestContainer(user){
 		elem.remove();
 	})
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} incoming pending friend request options`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaPending.friendsOptionContainer]}`);
 	friendsOptionContainer.tabIndex = pendingFriendTabIdx;
 	pendingFriendTabIdx += 1;
 	friendContainer.getElementsByClassName("acceptRequestBtn")[0].tabIndex = pendingFriendTabIdx;
@@ -262,7 +262,7 @@ function createBlockedUserContainer(user){
 
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 	
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} blocked user options`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaBlocked.friendsOptionContainer]}`);
 	friendsOptionContainer.tabIndex = blockedUserTabIdx;
 	blockedUserTabIdx += 1;
 	
@@ -359,7 +359,6 @@ function checkUpdate(){
 				(response.json()).then((text) => {
 					switchTheme(text.is_dark_theme);
 					currentLang = text.lang;
-					loadCurrentLang();
 					allFriendListContainer.innerText = "";
 					onlineFriendListContainer.innerText = ""
 					pendingFriendRequestListContainer.innerText = ""
@@ -374,7 +373,7 @@ function checkUpdate(){
 					Object.keys(text.blocked_users).forEach(function(key) {
 						createBlockedUserContainer(text.blocked_users[key]);
 					});
-
+					loadCurrentLang();
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
@@ -416,3 +415,14 @@ inputSearchUserContainer.style.setProperty("display", "block");
 slideSelector[friendSlideIdx].focus();
 dropDownUserContainer.style.setProperty("display", "flex");
 homeBtn.style.setProperty("display", "block");
+
+async function updateFriendsAriaLabel(key, content){
+	if (key.startsWith("All"))
+		document.querySelectorAll(key.substring(3)).forEach(function (elem) {
+			elem.setAttribute("aria-label", `${elem.parentElement.id} ${content}`);
+	})
+	if (key.startsWith("Pending") || key.startsWith("Blocked"))
+		document.querySelectorAll(key.substring(7)).forEach(function (elem) {
+			elem.setAttribute("aria-label", `${elem.parentElement.id} ${content}`);
+	})
+}
