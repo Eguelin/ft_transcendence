@@ -546,6 +546,8 @@ async function loadCurrentLang(){
 					})
 					if (currentPage == 'friends')
 						updateFriendsAriaLabel(key.substring(4), content[key]);
+					if (currentPage == 'search')
+						updateSearchAriaLabel(key.substring(4), content[key]);
 				}
 				else{
 					document.querySelectorAll(key).forEach( function (elem) {
