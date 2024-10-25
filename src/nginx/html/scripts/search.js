@@ -52,6 +52,11 @@
 
 }
 
+async function updateSearchAriaLabel(key, content){
+    document.querySelectorAll(key).forEach(function (elem) {
+        elem.setAttribute("aria-label", `${elem.id} ${content}`);
+	})
+}
 
 function createUserResumeContainer(user) {
 	userResumeContainer = document.createElement("div");
@@ -60,7 +65,7 @@ function createUserResumeContainer(user) {
 	userResume = document.createElement("div");
 	userResume.className = "userResume";
 	userResume.id = user.username
-	userResume.setAttribute("aria-label", `${user.username} profile redirection`);
+	userResume.setAttribute("aria-label", `${user.username} ${client.langJson['search']['aria.userResume']}`);
 
 	img = document.createElement("img");
 	imgContainer = document.createElement("div");

@@ -122,7 +122,8 @@
 	},
 	"search": {
 		"#title" : "Recherche",
-		"#subtitle" : ""
+		"#subtitle" : "",
+		"aria.userResume" : "redirection"
 	},
 	"game":{
 		"#title" : "",

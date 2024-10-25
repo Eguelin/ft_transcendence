@@ -122,7 +122,8 @@
 	},
 	"search": {
 		"#title" : "Suchen",
-		"#subtitle" : ""
+		"#subtitle" : "",
+		"aria.userResume" : "Profilumleitung"
 	},
 	"game":{
 		"#title" : "",
