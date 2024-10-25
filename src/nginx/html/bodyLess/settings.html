@@ -9,7 +9,7 @@
 		</div>
 
 		<div class="forms">
-			<label tabindex="15" for="inputPfp" id="pfpLabel">Profile picture</label>
+			<label tabindex="15" for="inputPfp" id="pfpLabel" aria-label="Change profile picture">Profile picture</label>
 			<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
 		</div>
 
@@ -38,7 +38,7 @@
 		
 		
 		<div id="settingsDropDownContainer" style="height:fit-content;">
-			<div class="settingsDropDown" tabindex="13" aria-label="Theme dropdown menu">
+			<div id="settingsDropDownTheme" class="settingsDropDown" tabindex="13" aria-label="Theme dropdown menu">
 				<div class="dropDownOptionContainer">
 					<button tabindex="-1" id="themesDropDown" class="dropDownBtn">Themes</button>
 					<div class="dropDownArrow"></div>
@@ -52,26 +52,26 @@
 					</li>
 				</ul>
 			</div>
-			<div class="settingsDropDown" tabindex="16" aria-label="Language dropdown menu">
+			<div id="settingsDropDownLang" class="settingsDropDown" tabindex="16" aria-label="Language dropdown menu">
 				<div class="dropDownOptionContainer">
 					<button tabindex="-1" id="languagesDropDown" class="dropDownBtn">Language</button>
 					<div class="dropDownArrow"></div>
 				</div>
 				<ul class="dropDownContent">
 					<li>
-						<a id="DD_EN_UK" tabindex="17" class="settingsLangDropDown">English</a>
+						<a id="EN_UK" tabindex="17" class="settingsLangDropDown">English</a>
 					</li>
 					<li>
-						<a id="DD_FR_FR" tabindex="18" class="settingsLangDropDown">French</a>
+						<a id="FR_FR" tabindex="18" class="settingsLangDropDown">Français</a>
 					</li>
 					<li>
-						<a id="DD_DE_GE" tabindex="19" class="settingsLangDropDown">German</a>
+						<a id="DE_GE" tabindex="19" class="settingsLangDropDown">Deutsch</a>
 					</li>
 					<li>
-						<a id="DD_IT_IT" tabindex="20" class="settingsLangDropDown">Italian</a>
+						<a id="IT_IT" tabindex="20" class="settingsLangDropDown">Italiano</a>
 					</li>
 					<li>
-						<a id="DD_AR_GH" tabindex="21" class="settingsLangDropDown">Pirate</a>
+						<a id="AR_GH" tabindex="21" class="settingsLangDropDown">Pirate</a>
 					</li>
 				</ul>
 			</div>
@@ -87,13 +87,13 @@
 			<img id="confirmPfpImg">
 			<div class="pfpMask" id="confirmPfpMask"></div>
 		</div>
-		<button tabindex="16" id="confirmPfpBtn">Save</button>
+		<button tabindex="16" id="confirmPfpBtn" aria-label="Confirm profile picture">Save</button>
 	</div>
 
 	<div id="confirmDeletePopup" style="z-index: 2;">
 		<a id="confirmDeleteDialog">To confirm you want to delete your account, please enter </a>
 		<a id="confirmDeleteDialogVar" style="background: var(--page-bg-rgb);padding: .3ch;"></a>
-		<input tabindex="18" type="text" id="confirmDeleteInput" placeholder="Confirmation">
+		<input tabindex="18" type="text" id="confirmDeleteInput" placeholder="Confirmation" aria-label="Type you username, then press enter to confirm deletion">
 		<button tabindex="19" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
 	</div>
 </div>

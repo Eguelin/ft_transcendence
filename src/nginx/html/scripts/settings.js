@@ -230,11 +230,10 @@ document.addEventListener("click", (e) => {
 document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 	elem.addEventListener("click", (e) => {
 		(async() => {
-			lang = elem.id.substring(3);
-			currentLang = `lang/${lang}.json`;
+			currentLang = `lang/${elem.id}.json`;
 			try{
 				if (client){
-					client.currentLang = `lang/${lang}.json`;
+					client.currentLang = `lang/${elem.id}.json`;
 					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 					content = await fetchResult.json();
 					client.langJson = content;
@@ -249,11 +248,11 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 						body: JSON.stringify({ language_pack: currentLang }),
 						credentials: 'include'
 					})
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${lang}.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
 				}
 			}
 			catch{
-				popUpError(`Could not load ${lang} language pack`);
+				popUpError(`Could not load ${elem.id} language pack`);
 			}
 		})();
 	})
