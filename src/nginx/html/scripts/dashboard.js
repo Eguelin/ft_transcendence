@@ -386,6 +386,8 @@ function loadUserDashboard(LastXDaysDisplayed){
                 var countWin = 0, countLost = 0, countMatch = 0;
                 matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
 
+                var historyContainer = document.getElementById("matchHistoryContainer");
+                historyContainer.innerHTML = "";
                 for (var i=0; i<Object.keys(user.matches).length;i++){
                     yearObj = user.matches[Object.keys(user.matches)[i]];
                     for (j = 0; j < Object.keys(yearObj).length; j++){
@@ -399,10 +401,43 @@ function loadUserDashboard(LastXDaysDisplayed){
                                 else
                                     countWin += matchObj.player_one_pts < matchObj.player_two_pts;
                                 countMatch += 1;
+                                historyContainer.appendChild(createMatchResumeContainer(matchObj));
                             }
                         }
                     }
                 }
+
+                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                    elem.addEventListener("keydown", (e) => {
+                        if (e.key == "Enter"){
+                            var idx = elem.tabIndex + 1
+                            elem.querySelectorAll(".resultScoreName").forEach(function (names){
+                                names.tabIndex = idx;
+                                idx++;
+                            })
+                        }
+                    })
+                });
+                var tabIdx = 15;
+                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                    elem.tabIndex = tabIdx;
+                    tabIdx += 3;
+                });
+                
+                document.querySelectorAll(".resultScoreName").forEach(function (elem){
+                    if (!elem.classList.contains("deletedUser")){
+                        elem.addEventListener("click", (e) => {
+                            myPushState(`https://${hostname.host}/user/${elem.innerHTML}`);	
+                        })
+                        elem.addEventListener("keydown", (e) => {
+                            if (e.key == "Enter")
+                                elem.click();
+                        })
+                    }
+                    else{
+                        elem.innerText = client.langJson["index"][".deletedUser"];
+                    }
+                })
 
                 if (countMatch == 0)
                     document.getElementById("ratioValue").innerHTML = `100%`;
