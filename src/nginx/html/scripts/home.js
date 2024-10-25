@@ -27,7 +27,7 @@ playBtn = document.getElementById("playBtn");
 		Object.keys(matchUsersName).forEach(function(key){
 			if (!matchUsersName[key].classList.contains("deletedUser")){
 				matchUsersName[key].addEventListener("click", (e) => {
-					myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);	
+					myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
 				})
 			}
 			else{
@@ -39,6 +39,14 @@ playBtn = document.getElementById("playBtn");
 		myReplaceState(`https://${hostname.host}/login`);
 }
 
-playBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/game`);
+playBtn1v1.addEventListener("click", (e) => {
+	myPushState(`https://${hostname.host}/game?mode=game_remote`);
+})
+
+playBtnLocal.addEventListener("click", (e) => {
+	myPushState(`https://${hostname.host}/game?mode=game_local`);
+})
+
+playBtnAI.addEventListener("click", (e) => {
+	myPushState(`https://${hostname.host}/game?mode=game_ai`);
 })
