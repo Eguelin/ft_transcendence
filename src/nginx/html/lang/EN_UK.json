@@ -24,7 +24,10 @@
 		".victory" : "VICTORY",
 		".loss" : "LOST",
 		".draw" : "DRAW",
-		"aria#recentMatchHistoryContainer" : "User today's matches"
+		"aria#recentMatchHistoryContainer" : "User today's matches",
+		"ariaP1.matchDescContainer" : "match against",
+		"ariaP2.matchDescContainer" : "on the",
+		"aria.resultScoreName" : "profile redirection"
 	},
 	"login" : {
 		"#title" : "LOGIN",
@@ -100,7 +103,10 @@
 		"#allMatchesHistoryBtn" : "All matches",
 		".victory" : "VICTORY",
 		".loss" : "LOST",
-		".draw" : "DRAW"
+		".draw" : "DRAW",
+		"ariaP1.matchDescContainer" : "match against",
+		"ariaP2.matchDescContainer" : "on the",
+		"aria.resultScoreName" : "profile redirection"
 	},
 	"dashboard":{
 		"#title" : "",

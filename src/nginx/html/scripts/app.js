@@ -548,6 +548,8 @@ async function loadCurrentLang(){
 						updateFriendsAriaLabel(key.substring(4), content[key]);
 					if (currentPage == 'search')
 						updateSearchAriaLabel(key.substring(4), content[key]);
+					if (currentPage == "user" || currentPage == "home")
+						updateUserAriaLabel(key.substring(4), content[key]);
 				}
 				else{
 					document.querySelectorAll(key).forEach( function (elem) {
@@ -645,13 +647,13 @@ function createMatchResumeContainer(match) {
 	if (scoreUserName.innerHTML == "deleted")
 		scoreUserName.classList.add("deletedUser");
 	else
-		scoreUserName.setAttribute("aria-label", `redirect to ${scoreUserName.innerText} profile`);
+		scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
 	
 
 	if (scoreOpponentName.innerHTML == "deleted")
 		scoreOpponentName.classList.add("deletedUser");
 	else
-		scoreOpponentName.setAttribute("aria-label", `redirect to ${scoreOpponentName.innerText} profile`);
+		scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
 	scoreUserScore.innerHTML = `${match.player_one_pts}`;
 	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
@@ -674,6 +676,8 @@ function createMatchResumeContainer(match) {
 		result.classList.add("draw");
 		result.innerHTML = client.langJson['user']['.draw'];
 	}
+	//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
+
 	scoreContainer.appendChild(scoreUser);
 	scoreContainer.appendChild(scoreOpponent);
 
@@ -681,9 +685,31 @@ function createMatchResumeContainer(match) {
 	matchContainer.appendChild(scoreContainer);
 	matchContainer.appendChild(date);
 	
-	matchContainer.setAttribute("aria-label", `${result.innerText} match against ${scoreOpponentName.innerText} on the ${date.innerText}`);
-
 	recentMatchHistoryContainer.appendChild(matchContainer);
+}
+
+async function updateUserAriaLabel(key, content){
+	if (key.startsWith("P1")){
+		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
+			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
+			if (status.classList.contains("victory"))
+				status = client.langJson['user']['.victory'];
+			else if (status.classList.contains("loss"))
+				status = client.langJson['user']['.loss'];
+			else
+				status = client.langJson['user']['.draw'];
+			var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
+			var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
+			elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+		})	
+	}
+	else{
+		document.querySelectorAll(key).forEach(function (elem){
+			if (elem.classList.contains("resultScoreName")){
+				elem.setAttribute("aria-label", `${elem.innerText} ${content}`);
+			}
+		})
+	}
 }
 
 inputSearchUser.addEventListener("keydown", (e) => {
