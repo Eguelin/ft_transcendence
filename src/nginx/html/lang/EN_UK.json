@@ -105,7 +105,10 @@
 		"CVwinLossGraph" : "Average by date",
 		"CVwinLossAbsGraph" : "Number of victory over number of defeat by date",
 		"CVwinLossGraphClient" : "you",
-		"CVwinLossAbsGraphClient" : "you" 
+		"CVwinLossAbsGraphClient" : "you",
+		"aria#lastWeekSelection" : "Display stats from the last 7 days",
+		"aria#lastMonthSelection" : "Display stats from the last month",
+		"aria#lastYearSelection" : "Display stats from the last year"
 	},
 	"search": {
 		"#title" : "Search",

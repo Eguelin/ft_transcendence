@@ -105,7 +105,10 @@
 		"CVwinLossGraph" : "Media per data",
 		"CVwinLossAbsGraph" : "Numero di vittorie rispetto al numero di sconfitte per data",
 		"CVwinLossGraphClient" : "tu",
-		"CVwinLossAbsGraphClient" : "tu"
+		"CVwinLossAbsGraphClient" : "tu",
+		"aria#lastWeekSelection" : "Visualizza le statistiche degli ultimi 7 giorni",
+		"aria#lastMonthSelection" : "Visualizza le statistiche dell'ultimo mese",
+		"aria#lastYearSelection" : "Visualizza le statistiche dell'ultimo anno"
 	},
 	"search": {
 		"#title" : "Cerca",

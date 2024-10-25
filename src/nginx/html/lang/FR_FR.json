@@ -105,7 +105,10 @@
 		"CVwinLossGraph" : "Moyenne par date",
 		"CVwinLossAbsGraph" : "Nombre de victoires par rapport aux défaites par date",
 		"CVwinLossGraphClient" : "vous",
-		"CVwinLossAbsGraphClient" : "vous"
+		"CVwinLossAbsGraphClient" : "vous",
+		"aria#lastWeekSelection" : "Afficher les statistiques des 7 derniers jours",
+		"aria#lastMonthSelection" : "Afficher les statistiques du mois dernier",
+		"aria#lastYearSelection" : "Afficher les statistiques de l'année dernière"
 	},
 	"search": {
 		"#title" : "Recherche",
