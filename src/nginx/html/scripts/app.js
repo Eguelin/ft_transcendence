@@ -73,6 +73,7 @@ class Client{
 	pfpUrl;
 	use_dark_theme;
 	use_browser_theme;
+	theme_name;
 	friends;
 	friend_requests;
 	blocked_user;
@@ -96,6 +97,7 @@ class Client{
 				this.currentLang = result.lang;
 				this.pfpUrl = result.pfp;
 				this.use_dark_theme = result.is_dark_theme;
+				this.theme_name = result.theme_name;
 				this.friends = result.friends;
 				this.friend_requests = result.friend_requests;
 				this.blocked_user = result.blocked_user;
@@ -106,7 +108,7 @@ class Client{
 				this.use_browser_theme = result.use_browser_theme;
 				use_browser_theme = result.use_browser_theme;
 				if (use_browser_theme == false)
-					switchTheme(this.use_dark_theme);
+					switchTheme(this.theme_name);
 				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
@@ -324,7 +326,7 @@ function handleToken() {
 					client = await new Client()
 					if (use_browser_theme){
 						if (window.matchMedia) {
-							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
 						}
 						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 					}
@@ -358,7 +360,7 @@ function handleToken() {
 					load();
 				if (use_browser_theme){
 					if (window.matchMedia) {
-						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
 					}
 					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 				}
@@ -420,37 +422,42 @@ logOutBtn.addEventListener("click", (e) => {
 	myReplaceState(`https://${hostname.host}/login`);
 });
 
-function switchTheme(darkTheme) {
-	if (darkTheme == 1 || darkTheme == true) {
-		if (client){
-			client.mainTextRgb = "#FDFDFB";
-			client.use_dark_theme = 1;
-		}
-		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
-		document.documentElement.style.setProperty("--option-hover-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-		document.documentElement.style.setProperty("--is-dark-theme", 1);
-		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-night-mode.svg)`;
+const themeMap = {
+	"dark" : {
+		"--page-bg-rgb" : "#110026",
+		"--main-text-rgb" : "#FDFDFB",
+		"--hover-text-rgb" : "#3A3053",
+		"--option-hover-text-rgb" : "#110026",
+		"--option-text-rgb" : "#FDFDFB",
+		"--input-bg-rgb" : "#3A3053",
+		"is-dark" : 1,
+		"svg-path" : "/icons/button-night-mode.svg"
+	},
+	"light" : {
+		"--page-bg-rgb" : "#F5EDED",
+		"--main-text-rgb" : "#110026",
+		"--hover-text-rgb" : "#FFC6C6",
+		"--option-hover-text-rgb" : "#F5EDED",
+		"--option-text-rgb" : "#110026",
+		"--input-bg-rgb" : "#FFC6C6",
+		"is-dark" : 0,
+		"svg-path" : "/icons/button-light-mode.svg"
 	}
-	else {
-		if (client){
-			client.mainTextRgb = "#110026";
-			client.use_dark_theme = 0;
-		}
-		document.documentElement.style.setProperty("--page-bg-rgb", "#F5EDED");
-		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--hover-text-rgb", "#FFC6C6");
-		document.documentElement.style.setProperty("--option-hover-text-rgb", "#F5EDED");
-		document.documentElement.style.setProperty("--option-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#FFC6C6");
-		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-light-mode.svg)`;
-		document.documentElement.style.setProperty("--is-dark-theme", 0);
+}
+
+function switchTheme(theme) {
+	Object.keys(themeMap[theme]).forEach(function (key){
+		document.documentElement.style.setProperty(key, themeMap[theme][key])
+	})
+	if (client){
+		client.mainTextRgb = themeMap[theme]["--main-text-rgb"];
+		client.use_dark_theme = themeMap[theme]["is-dark"];
 	}
+
+	document.documentElement.style.setProperty("--is-dark-theme", themeMap[theme]["is-dark"]);
+	if (document.getElementById("themeButton"))
+		document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}${themeMap[theme]["svg-path"]})`;
+
 	if (currentPage == "dashboard"){
 		chartAverage.options.scales.x._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 		chartAverage.options.scales.y._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
@@ -582,25 +589,26 @@ async function loadCurrentLang(){
 
 swichTheme.addEventListener("click", () => {
 	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
+	var theme_name = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? 'light' : 'dark';
 	if (client){
 		fetch('/api/user/update', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false}),
+			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false, theme_name : theme_name}),
 			credentials: 'include'
 		})
 		client.use_browser_theme = false;
 	}
 	use_browser_theme = false;
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent)
-	switchTheme(theme);
+	switchTheme(theme_name);
 	swichTheme.blur();
 })	
 
 function browserThemeEvent(event){
-	switchTheme(event.matches);	
+	switchTheme(event.matches == 1 ? 'dark' : 'light');	
 }
 
 swichTheme.addEventListener("keydown", (e) => {

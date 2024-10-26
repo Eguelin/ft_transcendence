@@ -264,6 +264,8 @@ def profile_update(request):
 					user.profile.font_amplifier = data['font_amplifier']
 				if ("use_browser_theme" in data):
 					user.profile.use_browser_theme = data['use_browser_theme']
+				if ("theme_name" in data):
+					user.profile.theme_name = data['theme_name']
 					
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
@@ -383,6 +385,7 @@ def current_user(request):
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'use_browser_theme': request.user.profile.use_browser_theme,
+			'theme_name' : request.user.profile.theme_name,
 			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
 			'friends': friend_json,
