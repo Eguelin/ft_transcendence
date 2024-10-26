@@ -84,6 +84,8 @@ confirmPfpBtn.addEventListener("click", (e) => {
 				warning.textContent = data.message;
 				if (!pfpInputLabel.previousElementSibling)
 					pfpInputLabel.before(warning);
+				document.getElementById("popupBg").style.setProperty("display", "none");
+				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
 			}
 			else
 			{
@@ -91,6 +93,11 @@ confirmPfpBtn.addEventListener("click", (e) => {
 					pfpInputLabel.previousElementSibling.remove();
 				document.getElementById("popupBg").style.setProperty("display", "none");
 				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
+				(async () => {
+					client = await new Client()
+					if (!client)
+						myReplaceState(`https://${hostname.host}/login`);
+				})()
 			}
 		});
 	}).catch(error => {
