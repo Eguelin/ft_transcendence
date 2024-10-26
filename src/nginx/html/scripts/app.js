@@ -441,12 +441,12 @@ function switchTheme(darkTheme) {
 			client.mainTextRgb = "#110026";
 			client.use_dark_theme = 0;
 		}
-		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
+		document.documentElement.style.setProperty("--page-bg-rgb", "#F5EDED");
 		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
-		document.documentElement.style.setProperty("--option-hover-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
+		document.documentElement.style.setProperty("--hover-text-rgb", "#FFC6C6");
+		document.documentElement.style.setProperty("--option-hover-text-rgb", "#F5EDED");
+		document.documentElement.style.setProperty("--option-text-rgb", "#110026");
+		document.documentElement.style.setProperty("--input-bg-rgb", "#FFC6C6");
 		if (document.getElementById("themeButton"))
 			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-light-mode.svg)`;
 		document.documentElement.style.setProperty("--is-dark-theme", 0);
