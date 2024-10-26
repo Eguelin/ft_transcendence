@@ -64,6 +64,7 @@
 		"#themesDropDown" : "Temi",
 		"#settingsThemeLight" : "Chiaro",
 		"#settingsThemeDark" : "Scuro",
+		"#settingsThemeDevice": "Modalità dispositivi",
 		"#languagesDropDown" : "Lingue",
 		"aria#leftSlideBtn" : "Cambia pagina impostazioni",
 		"aria#rightSlideBtn" : "Cambia pagina impostazioni",

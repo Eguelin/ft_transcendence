@@ -6,6 +6,7 @@ pfpInput = document.getElementById("inputPfp");
 pfpInputLabel = document.getElementById("pfpLabel");
 lightTheme = document.getElementsByClassName("loadLight");
 darkTheme = document.getElementsByClassName("loadDark");
+settingsThemeDevice = document.getElementById("settingsThemeDevice");
 germanBtn = document.getElementsByClassName("germanBtn");
 englishBtn = document.getElementsByClassName("englishBtn");
 dropDownContent = document.querySelectorAll(".settingsDropDown, .dropDownLandscape");
@@ -264,27 +265,49 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 
 document.getElementById("settingsThemeLight").addEventListener("click", (e) => {
 	switchTheme(0);
-	const data = {is_dark_theme: 0};
+	
+	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(data),
+		body: JSON.stringify({ is_dark_theme: false, use_browser_theme: false}),
 		credentials: 'include'
 	})
+	client.use_browser_theme = false;
 })
 document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
 	switchTheme(1);
-	const data = {is_dark_theme: 1};
+
+	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(data),
+		body: JSON.stringify({ is_dark_theme: true, use_browser_theme: false}),
 		credentials: 'include'
 	})
+	client.use_browser_theme = false;
+})
+
+settingsThemeDevice.addEventListener("click", (e) => {
+	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
+	if (window.matchMedia) {
+		switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+	}
+	preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: true}),
+		credentials: 'include'
+	})
+	client.use_browser_theme = true;
 })
 
 document.querySelectorAll(".settingsThemeDropDown").forEach(function (elem) {
