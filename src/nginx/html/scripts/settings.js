@@ -264,7 +264,7 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 })
 
 document.getElementById("settingsThemeLight").addEventListener("click", (e) => {
-	switchTheme(0);
+	switchTheme('light');
 	
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
 	fetch('/api/user/update', {
@@ -278,7 +278,7 @@ document.getElementById("settingsThemeLight").addEventListener("click", (e) => {
 	client.use_browser_theme = false;
 })
 document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
-	switchTheme(1);
+	switchTheme('dark');
 
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
 	fetch('/api/user/update', {
@@ -295,7 +295,7 @@ document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
 settingsThemeDevice.addEventListener("click", (e) => {
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
 	if (window.matchMedia) {
-		switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+		switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == true ? 'dark' : 'light');
 	}
 	preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
