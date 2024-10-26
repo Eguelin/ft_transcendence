@@ -287,7 +287,7 @@ def profile_update(request):
 					else:
 						return JsonResponse({'message': 'Invalid use_browser_theme value, should be a boolean'}, status=400)
 				if ("theme_name" in data):
-					if (isinstance(data['theme_name', (str)])):
+					if (isinstance(data['theme_name'], (str))):
 						max_length_validator = MaxLengthValidator(10, message='Theme_name must be 10 characters or fewer')
 						try:
 							max_length_validator(data['theme_name'])
