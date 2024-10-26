@@ -64,6 +64,7 @@
 		"#themesDropDown" : "Themen",
 		"#settingsThemeLight" : "Licht",
 		"#settingsThemeDark" : "Dunkel",
+		"#settingsThemeDevice" : "Gerätemodus",
 		"#languagesDropDown" : "Sprachen",
 		"aria#leftSlideBtn" : "Einstellungsseite wechseln",
 		"aria#rightSlideBtn" : "Einstellungsseite wechseln",
