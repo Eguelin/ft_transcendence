@@ -853,8 +853,9 @@ window.addEventListener("click", (e) => {
 		}
 	}
 	if (!e.target.closest("#notifContainer")){
-		if (notifContainer.classList.contains("openCenter")){
+		if (notifContainer.classList.contains("openCenter") || notifContainer.classList.contains("quickOpenCenter")){
 			notifContainer.classList.remove("openCenter")
+			notifContainer.classList.remove("quickOpenCenter")
 			notifContainer.offsetWidth;
 			notifContainer.classList.add("closeCenter")
 			setTimeout((container) => {
@@ -907,18 +908,27 @@ function incomingPushNotif(message){
 	btnText.innerText = message;
 	btn.classList.add("incoming");
 	setTimeout((btn, btnText) => {
-		btn.classList.remove("incoming");
-		btn.offsetWidth;
-		btn.classList.add("leaving");
-		setTimeout((btn) => {
-			btnText.innerText = "";
-			btn.classList.remove("leaving");
-		}, 300, btn, btnText);
+		if (btn.classList.contains("incoming")){
+			btn.classList.remove("incoming");
+			btn.offsetWidth;
+			btn.classList.add("leaving");
+			setTimeout((btn) => {
+				btnText.innerText = "";
+				btn.classList.remove("leaving");
+			}, 300, btn, btnText);
+		}
 	}, 5300, btn, btnText);
 }
 
 var notifBtn = document.getElementById("pushNotif");
 notifBtn.addEventListener("click", (e) => {
-	if (!notifContainer.classList.contains("closeCenter"))
-		notifContainer.classList.add("openCenter");
+	if (!notifContainer.classList.contains("closeCenter")){
+		if (document.getElementById("pushNotif").classList.contains("incoming")){
+			document.getElementById("pushNotif").classList.remove("incoming");
+			document.getElementById("pushNotifMessage").innerText = "";
+			notifContainer.classList.add("quickOpenCenter");
+		}
+		else
+			notifContainer.classList.add("openCenter");
+	}
 })

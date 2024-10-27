@@ -296,7 +296,11 @@
 	animation: pushNotifAppear 300ms linear forwards;
 }
 
-.openCenter #pushNotif, .closeCenter #pushNotif{
+.quickOpenCenter#notifContainer{
+	width: 20rem;
+}
+
+.openCenter #pushNotif, .closeCenter #pushNotif, .quickOpenCenter #pushNotif{
 	width: auto;
 	flex: none;
 	border-radius: 0;
@@ -316,6 +320,13 @@
 	display: block;
     height: 0%;
 	animation: openNotifCenter 300ms linear 300ms forwards;
+}
+
+.quickOpenCenter #notifCenter{
+	display: block;
+    height: 0%;
+	animation: openNotifCenter 300ms linear forwards;
+
 }
 
 #notifCenter{
