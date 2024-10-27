@@ -328,6 +328,8 @@
 .quickOpenCenter #notifCenter{
 	display: block;
     height: 0%;
+	gap: 1rem;
+	padding-top: 1rem;
 	animation: openNotifCenter 300ms linear forwards;
 
 }
@@ -389,7 +391,21 @@
 
 .notifContainer{
 	background: var(--input-bg-rgb);
-	color: var(--main-text-rgb)
+	color: var(--main-text-rgb);
+	font-size: 1rem;
+	height: 4.1rem;
+	animation: appearNotif 300ms linear forwards;
+}
+.openCenter #notifCenter .notifContainer, .quickOpenCenter #notifCenter .notifContainer{
+	height: 0;
+	font-size: 0;
+	animation: appearNotif 300ms linear 300ms forwards;
+}
+
+.closeCenter #notifCenter .notifContainer{
+	height: 0;
+	font-size: 0;
+	animation: appearNotif 300ms linear reverse;
 }
 
 .notifMessage{
@@ -400,7 +416,6 @@
 
 .notifOptionContainer{
 	display: flex;
-	gap: 1;
 }
 
 .notifAccept, .notifReject{
@@ -408,8 +423,8 @@
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
-	height: 2rem;
-	width: 2rem;
+	height: 2em;
+	width: 2em;
 	flex: auto;
 }
 
@@ -423,4 +438,17 @@
 } 
 .notifReject{
 	mask-image: url(../icons/cross.svg);
+}
+
+@keyframes appearNotif {
+	0%{
+		display: block;
+		font-size: 0rem;
+		height: 0rem;
+	}
+	100%{
+		display: block;
+		font-size: 1rem;
+		height: 4.1rem;
+	}
 }
