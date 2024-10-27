@@ -859,7 +859,7 @@ window.addEventListener("click", (e) => {
 			notifContainer.classList.add("closeCenter")
 			setTimeout((container) => {
 				container.classList.remove("closeCenter");
-			}, 400, notifContainer)
+			}, 550, notifContainer)
 		}
 	}
 })
