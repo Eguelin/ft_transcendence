@@ -15,7 +15,7 @@ myProfileBtn = document.getElementById("myProfileBtn");
 friendsBtn = document.getElementById("friendsBtn");
 settingsBtn = document.getElementById("settingsBtn");
 logOutBtn = document.getElementById('logOutBtn');
-notifContainer = document.getElementById("notifContainer")
+notifCenterContainer = document.getElementById("notifCenterContainer")
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -852,15 +852,15 @@ window.addEventListener("click", (e) => {
 			}, 300, dropDownUser)
 		}
 	}
-	if (!e.target.closest("#notifContainer")){
-		if (notifContainer.classList.contains("openCenter") || notifContainer.classList.contains("quickOpenCenter")){
-			notifContainer.classList.remove("openCenter")
-			notifContainer.classList.remove("quickOpenCenter")
-			notifContainer.offsetWidth;
-			notifContainer.classList.add("closeCenter")
+	if (!e.target.closest("#notifCenterContainer")){
+		if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
+			notifCenterContainer.classList.remove("openCenter")
+			notifCenterContainer.classList.remove("quickOpenCenter")
+			notifCenterContainer.offsetWidth;
+			notifCenterContainer.classList.add("closeCenter")
 			setTimeout((container) => {
 				container.classList.remove("closeCenter");
-			}, 550, notifContainer)
+			}, 550, notifCenterContainer)
 		}
 	}
 })
@@ -922,13 +922,28 @@ function incomingPushNotif(message){
 
 var notifBtn = document.getElementById("pushNotif");
 notifBtn.addEventListener("click", (e) => {
-	if (!notifContainer.classList.contains("closeCenter")){
+	if (!notifCenterContainer.classList.contains("closeCenter")){
 		if (document.getElementById("pushNotif").classList.contains("incoming")){
 			document.getElementById("pushNotif").classList.remove("incoming");
 			document.getElementById("pushNotifMessage").innerText = "";
-			notifContainer.classList.add("quickOpenCenter");
+			notifCenterContainer.classList.add("quickOpenCenter");
 		}
 		else
-			notifContainer.classList.add("openCenter");
+			notifCenterContainer.classList.add("openCenter");
 	}
 })
+
+function sendNotif(message){
+	var notifContainer = document.createElement("div");
+	notifContainer.classList.add("notifContainer");
+	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
+<div class="notifOptionContainer">
+<div class="notifAccept"></div>
+<div class="separator"></div>
+<div class="notifReject"></div>
+</div>`;
+	document.getElementById("notifCenter").appendChild(notifContainer);
+	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")))
+		incomingPushNotif(message);
+
+}
