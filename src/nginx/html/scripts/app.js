@@ -15,6 +15,7 @@ myProfileBtn = document.getElementById("myProfileBtn");
 friendsBtn = document.getElementById("friendsBtn");
 settingsBtn = document.getElementById("settingsBtn");
 logOutBtn = document.getElementById('logOutBtn');
+notifContainer = document.getElementById("notifContainer")
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -851,6 +852,16 @@ window.addEventListener("click", (e) => {
 			}, 300, dropDownUser)
 		}
 	}
+	if (!e.target.closest("#notifContainer")){
+		if (notifContainer.classList.contains("openCenter")){
+			notifContainer.classList.remove("openCenter")
+			notifContainer.offsetWidth;
+			notifContainer.classList.add("closeCenter")
+			setTimeout((container) => {
+				container.classList.remove("closeCenter");
+			}, 400, notifContainer)
+		}
+	}
 })
 
 function popUpError(error){
@@ -905,3 +916,9 @@ function incomingPushNotif(message){
 		}, 300, btn, btnText);
 	}, 5300, btn, btnText);
 }
+
+var notifBtn = document.getElementById("pushNotif");
+notifBtn.addEventListener("click", (e) => {
+	if (!notifContainer.classList.contains("closeCenter"))
+		notifContainer.classList.add("openCenter");
+})
