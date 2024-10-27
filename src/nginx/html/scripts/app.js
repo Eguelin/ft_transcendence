@@ -884,3 +884,23 @@ function unsetLoader(){
 	document.getElementById("loaderBg").style.setProperty("display", "none");
 	window.onscroll=function(){};
 }
+
+function incomingPushNotif(message){
+	btn = document.getElementById("pushNotif");
+	if (message == undefined || message == "" || (typeof message !== 'string' && !(message instanceof String)))
+		message = "PUSH NOTIFICATION";
+	else if (message.length > 20){
+		message = `${message.substring(0, 20)}...`;
+	}
+	btn.innerText = message;
+	btn.classList.add("incoming");
+	setTimeout((btn) => {
+		btn.classList.remove("incoming");
+		btn.innerText = "";
+		btn.offsetWidth;
+		btn.classList.add("leaving");
+		setTimeout((btn) => {
+			btn.classList.remove("leaving");
+		}, 300, btn);
+	}, 5300, btn);
+}
