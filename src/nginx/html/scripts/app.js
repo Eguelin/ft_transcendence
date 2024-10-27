@@ -887,20 +887,21 @@ function unsetLoader(){
 
 function incomingPushNotif(message){
 	btn = document.getElementById("pushNotif");
+	btnText = document.getElementById("pushNotifMessage");
 	if (message == undefined || message == "" || (typeof message !== 'string' && !(message instanceof String)))
 		message = "PUSH NOTIFICATION";
 	else if (message.length > 20){
 		message = `${message.substring(0, 20)}...`;
 	}
-	btn.innerText = message;
+	btnText.innerText = message;
 	btn.classList.add("incoming");
-	setTimeout((btn) => {
+	setTimeout((btn, btnText) => {
 		btn.classList.remove("incoming");
-		btn.innerText = "";
 		btn.offsetWidth;
 		btn.classList.add("leaving");
 		setTimeout((btn) => {
+			btnText.innerText = "";
 			btn.classList.remove("leaving");
-		}, 300, btn);
-	}, 5300, btn);
+		}, 300, btn, btnText);
+	}, 5300, btn, btnText);
 }
