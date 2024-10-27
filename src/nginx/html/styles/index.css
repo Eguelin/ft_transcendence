@@ -134,7 +134,7 @@
 }
 
 .leaving#pushNotif{
-	animation: pushNotifAppear 300ms reverse;
+	animation: pushNotifAppear 300ms reverse, pushNotifDisappearBg 300ms reverse;
 }
 
 #pushNotif{
@@ -154,6 +154,26 @@
 	translate: 0 -100%;
 }
 
+#pushNotif #pushNotifMessage{
+	white-space: nowrap;
+}
+
+#pushNotif #pushNotifIcon{
+	mask-image:url("../icons/notif_bell.svg");
+	mask-repeat: no-repeat;
+	background-color: var(--main-text-rgb);
+
+    height: 1.5em;
+    width: 1.5em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+}
+
+.incoming#pushNotif #pushNotifIcon, .leaving#pushNotif #pushNotifIcon {
+	display: none;
+}
 @keyframes pushNotifAppear {
 	0%{
 		width: 1rem;
