@@ -898,6 +898,8 @@ function unsetLoader(){
 }
 
 function incomingPushNotif(message){
+	if (notifCenterContainer.classList.contains("dnd"))
+		return ;
 	btn = document.getElementById("pushNotif");
 	btnText = document.getElementById("pushNotifMessage");
 	if (message == undefined || message == "" || (typeof message !== 'string' && !(message instanceof String)))
@@ -932,6 +934,15 @@ notifBtn.addEventListener("click", (e) => {
 			notifCenterContainer.classList.add("openCenter");
 		if (notifCenterContainer.classList.contains("pendingNotification"))
 			notifCenterContainer.classList.remove("pendingNotification");
+	}
+})
+
+document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
+	if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
+		if (notifCenterContainer.classList.contains("dnd"))
+			notifCenterContainer.classList.remove("dnd");
+		else
+			notifCenterContainer.classList.add("dnd");
 	}
 })
 

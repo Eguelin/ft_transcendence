@@ -176,6 +176,11 @@
     translate: -50% -50%;
 }
 
+.dnd #pushNotifIcon{
+	mask-image:url("../icons/do_not_disturb_bell.svg") !important;
+	animation: none !important;
+}
+
 .pendingNotification #pushNotifIcon{
 	animation: ringBell 1000ms infinite linear;
 }
