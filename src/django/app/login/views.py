@@ -277,7 +277,7 @@ def profile_update(request):
 					else:
 						return JsonResponse({'message': 'Invalid is_active value, should be a boolean'}, status=400)
 				if ("font_amplifier" in data):
-					if (isinstance(data['is_active'], (float))):
+					if (isinstance(data['font_amplifier'], (float))):
 						user.profile.font_amplifier = data['font_amplifier']
 					else:
 						return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)

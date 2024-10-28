@@ -1,0 +1,49 @@
+#gameContainer{
+	display: flex;
+	left: 50%;
+	translate: -50%;
+	position: relative;
+	width: fit-content;
+	gap: 5rem;
+}
+
+.game{
+	width: 50vw;
+	height: 37.5vw;
+	border: var(--main-text-rgb) 5px solid;
+}
+
+.playerInfoContainer{
+	display: flex;
+	flex-direction: column;
+	gap: 5rem;
+	width: 20ch;
+	color: var(--main-text-rgb);
+}
+
+.playerPfp{
+	position: relative;
+	left: 50%;
+	translate: -50%;
+	height: 7vw;
+	width: 7vw;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.playerPfp img{
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: 50% 50%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	translate: -50% -50%;
+}
+
+.playerName{
+	margin: 0;
+	display: block;
+	text-align: center;
+}
