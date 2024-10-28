@@ -982,8 +982,13 @@ function sendNotif(message){
 <div class="notifReject"></div>
 </div>`;
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
-	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")))
+	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))){
+		if (!(notifCenterContainer.classList.contains("pendingNotification")))
+			notifCenterContainer.classList.add("pendingNotification");
 		incomingPushNotif(message);
-	if (!(notifCenterContainer.classList.contains("pendingNotification")))
-		notifCenterContainer.classList.add("pendingNotification");
+	}
 }
+
+for (i = 0; i< 50; i++)
+	sendNotif(`test${i}`)
+sendNotif("They said it could not be done")
