@@ -930,7 +930,7 @@ notifBtn.addEventListener("click", (e) => {
 			document.getElementById("pushNotifMessage").innerText = "";
 			notifCenterContainer.classList.add("quickOpenCenter");
 		}
-		else
+		else if (!notifCenterContainer.classList.contains("quickOpenCenter"))
 			notifCenterContainer.classList.add("openCenter");
 		if (notifCenterContainer.classList.contains("pendingNotification"))
 			notifCenterContainer.classList.remove("pendingNotification");
