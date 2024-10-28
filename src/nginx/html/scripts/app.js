@@ -988,7 +988,3 @@ function sendNotif(message){
 		incomingPushNotif(message);
 	}
 }
-
-for (i = 0; i< 50; i++)
-	sendNotif(`test${i}`)
-sendNotif("They said it could not be done")

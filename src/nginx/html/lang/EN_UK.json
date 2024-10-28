@@ -139,7 +139,8 @@
 	},
 	"game":{
 		"#title" : "",
-		"#subtitle" : ""
+		"#subtitle" : "",
+		"local" : "Local"
 	},
 	"404":{
 		"#title" : "ERROR 404",
