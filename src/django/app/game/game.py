@@ -7,6 +7,8 @@ import random
 import math
 import time
 
+maxScore = 1
+
 class Matchmaking():
 	_instance = None
 
@@ -154,13 +156,13 @@ class GameTemplate():
 		if self.ball.x <= -Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
-			if self.playerRight.score != 5:
+			if self.playerRight.score != maxScore:
 				self.ball.init()
 
 		elif self.ball.x >= GameTemplate.width + Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerLeft.score += 1
-			if self.playerLeft.score != 5:
+			if self.playerLeft.score != maxScore:
 				self.ball.init()
 			self.ball.dx = -self.ball.dx
 
@@ -221,7 +223,7 @@ class Game(GameTemplate):
 		if not self.playerLeft.socket or not self.playerRight.socket:
 			return
 		await self.send('game_start', None)
-		while self.playerLeft.score != 5 and self.playerRight.score != 5 and self.playerLeft.socket and self.playerRight.socket:
+		while self.playerLeft.score != maxScore and self.playerRight.score != maxScore and self.playerLeft.socket and self.playerRight.socket:
 			await self.loop()
 		await self.end()
 
@@ -229,10 +231,10 @@ class Game(GameTemplate):
 		if not self.playerLeft.socket and not self.playerRight.socket:
 			return
 		await self.playerLeft.send('game_end', {
-			'winner': self.playerLeft.score == 5 or not self.playerRight.socket
+			'winner': self.playerLeft.score == maxScore or not self.playerRight.socket
 		})
 		await self.playerRight.send('game_end', {
-			'winner': self.playerRight.score == 5 or not self.playerLeft.socket
+			'winner': self.playerRight.score == maxScore or not self.playerLeft.socket
 		})
 		await self.save()
 		self.running = False
@@ -260,7 +262,7 @@ class Gamelocal(GameTemplate):
 			await asyncio.sleep(0.1)
 		await self.countdown()
 		await self.send('game_start', None)
-		while self.playerLeft.score != 5 and self.playerRight.score != 5 and self.playerLeft.socket:
+		while self.playerLeft.score != maxScore and self.playerRight.score != maxScore and self.playerLeft.socket:
 			await self.loop()
 		await self.end()
 
@@ -269,9 +271,9 @@ class Gamelocal(GameTemplate):
 		await super().loop()
 
 	async def end(self):
-		if not self.playerLeft.socket:
+		if self.playerLeft.socket:
 			await self.playerLeft.send('game_end', {
-				'winner': 'left' if self.playerLeft.score == 5 else 'right'
+				'winner': 'left' if self.playerLeft.score == maxScore else 'right'
 			})
 		await self.save()
 		self.running = False
@@ -300,14 +302,14 @@ class GameAI(GameTemplate):
 			await asyncio.sleep(0.1)
 		await self.countdown()
 		await self.send('game_start', None)
-		while self.playerLeft.score != 5 and self.playerRight.score != 5 and self.playerLeft.socket:
+		while self.playerLeft.score != maxScore and self.playerRight.score != maxScore and self.playerLeft.socket:
 			await self.loop()
 		await self.end()
 
 	async def end(self):
 		if self.playerLeft.socket:
 			await self.playerLeft.send('game_end', {
-				'winner': self.playerLeft.score == 5
+				'winner': self.playerLeft.score == maxScore
 			})
 		await self.save()
 		self.running = False
