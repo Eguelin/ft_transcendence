@@ -901,10 +901,10 @@ function unsetLoader(){
 }
 
 function incomingPushNotif(message){
-	if (notifCenterContainer.classList.contains("dnd"))
-		return ;
 	btn = document.getElementById("pushNotif");
 	btnText = document.getElementById("pushNotifMessage");
+	if (notifCenterContainer.classList.contains("dnd") || btnText.innerText != "")
+		return ;
 	if (message == undefined || message == "" || (typeof message !== 'string' && !(message instanceof String)))
 		message = "PUSH NOTIFICATION";
 	else if (message.length > 20){
