@@ -930,6 +930,8 @@ notifBtn.addEventListener("click", (e) => {
 		}
 		else
 			notifCenterContainer.classList.add("openCenter");
+		if (notifCenterContainer.classList.contains("pendingNotification"))
+			notifCenterContainer.classList.remove("pendingNotification");
 	}
 })
 
@@ -945,5 +947,8 @@ function sendNotif(message){
 	document.getElementById("notifCenter").appendChild(notifContainer);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")))
 		incomingPushNotif(message);
-
+	if (!(notifCenterContainer.classList.contains("pendingNotification")))
+		notifCenterContainer.classList.add("pendingNotification");
 }
+
+sendNotif("TEST");
