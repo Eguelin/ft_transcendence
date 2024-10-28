@@ -9,4 +9,5 @@ homeBtn404.addEventListener("click", (e) => {
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "none");
 }

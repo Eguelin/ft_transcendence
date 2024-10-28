@@ -22,6 +22,7 @@ if (sendFriendRequestBtn){
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+	notifCenterContainer.style.setProperty("display", "flex");
 	
     var splitPath = window.location.href.split('/');
     
