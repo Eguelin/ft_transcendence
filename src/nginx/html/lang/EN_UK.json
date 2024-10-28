@@ -19,7 +19,9 @@
 	"home" : {
 		"#title" : "PONG",
 		"#subtitle" : "",
-		"#playBtn" : "Play",
+		"#playBtn1v1" : "Play 1v1",
+		"#playBtnLocal" : "Play local",
+		"#playBtnAI" : "Play AI",
 		"#notPlayedToday" : "You have not played any match today",
 		".victory" : "VICTORY",
 		".loss" : "LOST",
@@ -95,7 +97,7 @@
 		"ariaAll.friendsOptionContainer" : "friend options",
 		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
 		"ariaBlocked.friendsOptionContainer" : "blocked user options"
-		
+
 	},
 	"user":{
 		"#title" : "",
