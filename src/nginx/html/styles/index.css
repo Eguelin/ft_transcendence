@@ -334,7 +334,7 @@
 	animation: roundUpPushNotif 300ms linear 300ms forwards, removeBorderBottom 300ms linear reverse;
 }
 
-.openCenter #notifCenter{
+.openCenter #notifCenter, .quickOpenCenter #notifCenter{
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
@@ -344,12 +344,7 @@
 }
 
 .quickOpenCenter #notifCenter{
-	display: block;
-    height: 0%;
-	gap: 1rem;
-	padding-top: 1rem;
-	animation: openNotifCenter 300ms linear forwards;
-
+	animation: openNotifCenter 300ms linear forwards !important;
 }
 
 #notifCenter{
