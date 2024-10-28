@@ -139,7 +139,13 @@
 	},
 	"game":{
 		"#title" : "",
-		"game_local" : "Local"
+		"game_local" : "Local",
+		"game_full_ai" : "Full ai",
+		"game_remote" : "Remote",
+		"game_ai" : "Ai",
+		"playerOne" : "Player one",
+		"playerTwo" : "Player two",
+		"winnedText" : "has won!!"
 	},
 	"404":{
 		"#title" : "ERROR 404",
