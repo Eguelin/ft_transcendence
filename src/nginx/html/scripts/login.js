@@ -257,6 +257,7 @@ function register(){
 	homeBtn.style.setProperty("display", "none");
 	dropDownLangBtn.focus();
 	dropDownUserContainer.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "none");
 }
 
 registerBtn = document.getElementById("registerBtn");

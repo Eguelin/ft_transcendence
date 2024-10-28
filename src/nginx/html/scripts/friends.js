@@ -415,6 +415,7 @@ inputSearchUserContainer.style.setProperty("display", "block");
 slideSelector[friendSlideIdx].focus();
 dropDownUserContainer.style.setProperty("display", "flex");
 homeBtn.style.setProperty("display", "block");
+notifCenterContainer.style.setProperty("display", "flex");
 
 async function updateFriendsAriaLabel(key, content){
 	if (key.startsWith("All"))

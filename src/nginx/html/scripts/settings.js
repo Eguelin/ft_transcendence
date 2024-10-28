@@ -380,6 +380,7 @@ function settingsKeyDownEvent(e) {
 	homeBtn.style.setProperty("display", "block");
 	homeBtn.focus();
 	document.getElementById("fontSizeRange").value = client.fontAmplifier;
+	notifCenterContainer.style.setProperty("display", "flex");
 	window.addEventListener("keydown", settingsKeyDownEvent)
 }
 

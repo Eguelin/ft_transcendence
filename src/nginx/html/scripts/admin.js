@@ -1,3 +1,8 @@
+{
+	notifCenterContainer.style.setProperty("display", "none");
+
+}
+
 createUserBtn = document.getElementById("createUserBtn");
 createUserBtn.addEventListener("click", (e) => {
     username = document.getElementById("createUserUsername").value;
