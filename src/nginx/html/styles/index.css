@@ -350,7 +350,29 @@
 #notifCenter{
 	display: none;
     background: var(--option-hover-text-rgb);
+	overflow-y: scroll;
 }
+
+#notifCenter::-webkit-scrollbar{
+	width: 10px;
+}
+
+#notifCenter::-webkit-scrollbar-track{
+	background: var(--page-bg-rgb);
+}
+
+#notifCenter::-webkit-scrollbar-thumb{
+	background: var(--input-bg-rgb);
+}
+
+#notifCenter::-webkit-scrollbar-thumb:hover{
+	background: var(--main-text-rgb);
+}
+
+#notifCenter::-webkit-scrollbar-corner{
+	height: 0px;
+}
+
 
 .closeCenter#notifCenterContainer{
 	width: 20rem;

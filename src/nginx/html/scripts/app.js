@@ -966,4 +966,5 @@ function sendNotif(message){
 		notifCenterContainer.classList.add("pendingNotification");
 }
 
-sendNotif("TEST");
+for (i=0; i<10; i++)
+	sendNotif(`TEST${i}`);
