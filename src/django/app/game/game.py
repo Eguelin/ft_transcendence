@@ -454,7 +454,7 @@ class PlayerAI(PlayerTemplate):
 		if init:
 			info['user'] = {
 				'username': 'AI',
-				'profile_picture': 'ai.png'
+				'profile_picture': '/images/defaults/defaultAi.gif'
 			}
 
 		return info
