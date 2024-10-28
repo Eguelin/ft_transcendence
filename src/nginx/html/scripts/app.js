@@ -951,6 +951,7 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 
 function sendNotif(message){
 	var notifContainer = document.createElement("div");
+	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
 	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
 <div class="notifOptionContainer">
@@ -958,7 +959,7 @@ function sendNotif(message){
 <div class="separator"></div>
 <div class="notifReject"></div>
 </div>`;
-	document.getElementById("notifCenter").appendChild(notifContainer);
+	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")))
 		incomingPushNotif(message);
 	if (!(notifCenterContainer.classList.contains("pendingNotification")))
