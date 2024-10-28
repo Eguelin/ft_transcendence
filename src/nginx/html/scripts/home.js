@@ -6,6 +6,7 @@ playBtn = document.getElementById("playBtn");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "flex");
 	tabIdx = 13;
 
 	if (client){

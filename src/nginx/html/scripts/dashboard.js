@@ -457,5 +457,6 @@ function loadUserDashboard(LastXDaysDisplayed){
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+	notifCenterContainer.style.setProperty("display", "flex");
     loadUserDashboard(defaultLastXDaysDisplayed)
 }
