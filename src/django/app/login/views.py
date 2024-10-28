@@ -296,6 +296,11 @@ def profile_update(request):
 						user.profile.theme_name = data['theme_name']
 					else:
 						return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
+				if ("do_not_disturb" in data):
+					if (isinstance(data['do_not_disturb'], (bool))):
+						user.profile.do_not_disturb = data['do_not_disturb']
+					else:
+						return JsonResponse({'message': 'Invalid do_not_disturb value, should be a boolean'}, status=400)
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
@@ -423,7 +428,8 @@ def current_user(request):
 			'is_active': request.user.profile.is_active,
 			'matches' : matches,
 			'is_admin' : request.user.is_staff,
-			'font_amplifier' : request.user.profile.font_amplifier
+			'font_amplifier' : request.user.profile.font_amplifier,
+			'do_not_disturb' : request.user.profile.do_not_disturb
 		})
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)

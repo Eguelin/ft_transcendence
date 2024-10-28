@@ -81,7 +81,8 @@ class Client{
 	recentMatches;
 	#is_admin;
 	mainTextRgb;
-	fontAmplifier
+	fontAmplifier;
+	doNotDisturb;
 
 	constructor (){
 		return (async () =>{
@@ -107,9 +108,12 @@ class Client{
 				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 				this.fontAmplifier = result.font_amplifier;
 				this.use_browser_theme = result.use_browser_theme;
+				this.doNotDisturb = result.do_not_disturb;
 				use_browser_theme = result.use_browser_theme;
 				if (use_browser_theme == false)
 					switchTheme(this.theme_name);
+				if (this.doNotDisturb == true)
+					notifCenterContainer.classList.add("dnd");
 				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
@@ -942,10 +946,28 @@ notifBtn.addEventListener("click", (e) => {
 
 document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
-		if (notifCenterContainer.classList.contains("dnd"))
+		if (notifCenterContainer.classList.contains("dnd")){
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ "do_not_disturb": false }),
+				credentials: 'include'
+			})
 			notifCenterContainer.classList.remove("dnd");
-		else
+		}
+		else{
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ "do_not_disturb": true }),
+				credentials: 'include'
+			})
 			notifCenterContainer.classList.add("dnd");
+		}
 	}
 })
 
@@ -965,6 +987,3 @@ function sendNotif(message){
 	if (!(notifCenterContainer.classList.contains("pendingNotification")))
 		notifCenterContainer.classList.add("pendingNotification");
 }
-
-for (i=0; i<10; i++)
-	sendNotif(`TEST${i}`);

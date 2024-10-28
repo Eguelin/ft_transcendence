@@ -19,6 +19,7 @@ class Profile(models.Model):
 	id42 = models.IntegerField(default=0)
 	matches = models.ManyToManyField(Match, related_name="matches_history")
 	font_amplifier = models.FloatField(default=1, validators=[MinValueValidator(0.1), MaxValueValidator(2.0)],)
+	do_not_disturb = models.BooleanField(default=False);
 
 
 @receiver(post_save, sender=User)
