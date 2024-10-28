@@ -2,13 +2,27 @@ playerOneScore = document.querySelector("#playerOne > h1");
 playerTwoScore = document.querySelector("#playerTwo > h1");
 maxScore = 5;
 const url =  new URL(window.location.href);
-
+const mode = url.searchParams.get("mode");
 {
 	inputSearchUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	notifCenterContainer.style.setProperty("display", "flex");
 	document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
+}
+
+function displayWinner(username, profile_picture){
+	var container = document.createElement("div");
+	container.id = "winContainer";
+	container.innerHTML = `<div id=winBlur></div>
+	<div id="winBg">
+		<div id="winPfpContainer">
+			<img id="winPfp">
+		</div>
+		<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
+	</div>`;
+	addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
+	document.body.appendChild(container);
 }
 
 function game() {
@@ -54,6 +68,12 @@ function game() {
 		} else if (data.type === "game_end") {
 			clearInterval(KeyPressInterval);
 			endMessage = data.message;
+			if (mode == "game_local"){
+				if (endMessage == "left")
+					displayWinner(player1.name, player1.profile_picture)
+				else
+					displayWinner(player2.name, player2.profile_picture)
+			}
 		}
 	}
 
@@ -83,10 +103,14 @@ function game() {
 		player1.x = message.player1.x;
 		player1.y = message.player1.y;
 		player1.score = message.player1.score;
+		player1.name = message.player1.user.username;
+		player1.profile_picture = message.player1.user.profile_picture;
 
 		player2.x = message.player2.x;
 		player2.y = message.player2.y;
 		player2.score = message.player2.score;
+		player2.name = message.player2.user.username;
+		player2.profile_picture = message.player2.user.profile_picture;
 
 		ball.size = message.ball.size;
 		ball.x = message.ball.x;
@@ -94,12 +118,19 @@ function game() {
 
 		ctx.lineWidth = paddle.width / 4;
 
-		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), message.player2.user.profile_picture);
-		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), message.player2.user.profile_picture);
-		document.querySelector("#playerOne > h2").innerText = message.player1.user.username
-		document.querySelector("#playerTwo > h2").innerText = message.player2.user.username
+		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
+		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
+		
+		if (mode != "game_local"){
+			document.querySelector("#playerOne > h2").innerText = player1.name;
+			document.querySelector("#playerTwo > h2").innerText = player2.name;
+		}
+		else{
+			document.querySelector("#playerOne > h2").innerText = client.langJson['game']['playerOne'];
+			document.querySelector("#playerTwo > h2").innerText = client.langJson['game']['playerTwo'];
+		}
 
-		if (url.searchParams.get("mode") == "game_full_ai")
+		if (mode == "game_full_ai")
 			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 		gamesend("game_ready");
 	}
