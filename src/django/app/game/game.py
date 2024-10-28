@@ -16,10 +16,10 @@ class Matchmaking():
 			cls._instance.waiting_players = []
 		return cls._instance
 
-	def add_player(self, player):
+	def add_PlayerRemote(self, player):
 		self.waiting_players.append(player)
 
-	def remove_player(self, player):
+	def remove_PlayerRemote(self, player):
 		if player in self.waiting_players:
 			self.waiting_players.remove(player)
 
@@ -33,7 +33,7 @@ class Matchmaking():
 	async def run(self):
 		player1, player2 = self.match_players()
 		if player1 and player2:
-			game = Game(player1, player2)
+			game = GameRemote(player1, player2)
 			await game.start()
 
 class Ball():
@@ -49,8 +49,8 @@ class Ball():
 		self.angle = 0
 
 	def init(self):
-		self.x = GameTemplate.demieWidth
-		self.y = GameTemplate.demieHeight
+		self.x = Game.demieWidth
+		self.y = Game.demieHeight
 		self.speed = 3
 
 		self.angle = random.uniform(2 * math.pi / 3, 4 * math.pi / 3)
@@ -107,15 +107,15 @@ class Paddle():
 			'height': Paddle.height
 		}
 
-class GameTemplate():
+class Game():
 	width = 800
 	height = 600
 	demieWidth = width / 2
 	demieHeight = height / 2
 
 	def __init__(self, player1, player2):
-		self.playerLeft: PlayerTemplate = player1
-		self.playerRight: PlayerTemplate = player2
+		self.playerLeft: Player = player1
+		self.playerRight: Player = player2
 		self.ball: Ball = Ball()
 		self.timeLastPoint: float = 0
 		self.running: bool = False
@@ -157,7 +157,7 @@ class GameTemplate():
 			if self.playerRight.score != 5:
 				self.ball.init()
 
-		elif self.ball.x >= GameTemplate.width + Ball.size * 2:
+		elif self.ball.x >= Game.width + Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerLeft.score += 1
 			if self.playerLeft.score != 5:
@@ -170,7 +170,7 @@ class GameTemplate():
 		elif self.ball.x >= self.playerRight.x and self.ball.x <= self.playerRight.x + self.ball.speed:
 			self.ball.paddleCollision(self.playerRight)
 
-		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= GameTemplate.height:
+		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= Game.height:
 			self.ball.dy = -self.ball.dy
 
 	async def send(self, type, message):
@@ -178,8 +178,8 @@ class GameTemplate():
 
 	def getSize():
 		return {
-			'width': GameTemplate.width,
-			'height': GameTemplate.height
+			'width': Game.width,
+			'height': Game.height
 		}
 
 	def getInfo(self, init=False):
@@ -190,12 +190,12 @@ class GameTemplate():
 		}
 
 		if init:
-			info['canvas'] = GameTemplate.getSize()
+			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
 
 		return info
 
-class Game(GameTemplate):
+class GameRemote(Game):
 
 	def __init__(self, player1, player2):
 		super().__init__(player1, player2)
@@ -237,7 +237,7 @@ class Game(GameTemplate):
 		await self.save()
 		self.running = False
 
-class Gamelocal(GameTemplate):
+class Gamelocal(Game):
 
 	def __init__(self, player):
 		super().__init__(player, player.copy())
@@ -276,7 +276,7 @@ class Gamelocal(GameTemplate):
 		await self.save()
 		self.running = False
 
-class GameAI(GameTemplate):
+class GameAI(Game):
 
 	def __init__(self, player1):
 		super().__init__(player1, PlayerAI())
@@ -312,7 +312,7 @@ class GameAI(GameTemplate):
 		await self.save()
 		self.running = False
 
-class GameFullAI(GameTemplate):
+class GameFullAI(Game):
 
 	def __init__(self, player):
 		super().__init__(PlayerAI(), PlayerAI())
@@ -344,7 +344,7 @@ class GameFullAI(GameTemplate):
 	async def end(self):
 		self.running = False
 
-class PlayerTemplate():
+class Player():
 
 	def __init__(self):
 		self.x = 0
@@ -361,8 +361,8 @@ class PlayerTemplate():
 		if self.side == 'left':
 			self.x = Paddle.margin + Paddle.width
 		elif self.side == 'right':
-			self.x = GameTemplate.width - Paddle.width - Paddle.margin
-		self.y = GameTemplate.height / 2
+			self.x = Game.width - Paddle.width - Paddle.margin
+		self.y = Game.height / 2
 		self.isReady = False
 
 	def move(self):
@@ -380,7 +380,7 @@ class PlayerTemplate():
 
 		return info
 
-class Player(PlayerTemplate):
+class PlayerRemote(Player):
 
 	def __init__(self, socket):
 		super().__init__()
@@ -392,7 +392,7 @@ class Player(PlayerTemplate):
 	def move(self):
 		if ((self.input.get('ArrowUp') and self.input['ArrowUp']) or (self.input.get('KeyW') and self.input['KeyW'])) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		if ((self.input.get('ArrowDown') and self.input['ArrowDown']) or (self.input.get('KeyS') and self.input['KeyS'])) and self.y < GameTemplate.height - Paddle.demieHeight:
+		if ((self.input.get('ArrowDown') and self.input['ArrowDown']) or (self.input.get('KeyS') and self.input['KeyS'])) and self.y < Game.height - Paddle.demieHeight:
 			self.y += Paddle.speed
 
 	@sync_to_async
@@ -418,14 +418,14 @@ class Player(PlayerTemplate):
 
 		return info
 
-class PlayerAI(PlayerTemplate):
+class PlayerAI(Player):
 
 	def __init__(self):
 		super().__init__()
 
 	def init(self, game, side):
 		super().init(game, side)
-		self.Y = GameTemplate.demieHeight
+		self.Y = Game.demieHeight
 
 	async def run(self):
 		while self.game.running:
@@ -434,7 +434,7 @@ class PlayerAI(PlayerTemplate):
 			if (ball.dx > 0 and self.side == 'right') or (ball.dx < 0 and self.side == 'left'):
 				while time.time() - self.game.timeLastPoint > 2 and ball.x < self.game.playerRight.x and ball.x > self.game.playerLeft.x:
 					ball.move()
-					if ball.y <= Ball.demieSize or ball.y + Ball.demieSize >= GameTemplate.height:
+					if ball.y <= Ball.demieSize or ball.y + Ball.demieSize >= Game.height:
 						ball.dy = -ball.dy
 				if self.y < ball.y:
 					self.Y = ball.y + rand
@@ -443,7 +443,7 @@ class PlayerAI(PlayerTemplate):
 			await asyncio.sleep(1)
 
 	def move(self):
-		if self.y < GameTemplate.height - Paddle.demieHeight and self.Y > self.y + Paddle.demieHeight:
+		if self.y < Game.height - Paddle.demieHeight and self.Y > self.y + Paddle.demieHeight:
 			self.y += Paddle.speed
 		elif self.y > Paddle.demieHeight and self.Y < self.y - Paddle.demieHeight:
 			self.y -= Paddle.speed
@@ -459,12 +459,12 @@ class PlayerAI(PlayerTemplate):
 
 		return info
 
-class PlayerLocal(Player):
+class PlayerLocal(PlayerRemote):
 
 	def move(self):
 		if ((self.input.get('ArrowUp') and self.input['ArrowUp'] and self.side == 'right') or (self.input.get('KeyW') and self.input['KeyW'] and self.side == 'left')) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		if ((self.input.get('ArrowDown') and self.input['ArrowDown'] and self.side == 'right') or (self.input.get('KeyS') and self.input['KeyS'] and self.side == 'left')) and self.y < GameTemplate.height - Paddle.demieHeight:
+		if ((self.input.get('ArrowDown') and self.input['ArrowDown'] and self.side == 'right') or (self.input.get('KeyS') and self.input['KeyS'] and self.side == 'left')) and self.y < Game.height - Paddle.demieHeight:
 			self.y += Paddle.speed
 
 	def copy(self):
@@ -487,7 +487,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			Matchmaking()
 
 	async def disconnect(self, close_code):
-		Matchmaking._instance.remove_player(self.player)
+		Matchmaking._instance.remove_PlayerRemote(self.player)
 		self.player.socket = None
 
 	async def receive(self, text_data):
@@ -499,19 +499,19 @@ class GameConsumer(AsyncWebsocketConsumer):
 				self.player.isReady = True
 
 		if data['type'] == 'game_remote':
-			self.player = Player(self)
-			Matchmaking._instance.add_player(self.player)
+			self.player = PlayerRemote(self)
+			Matchmaking._instance.add_PlayerRemote(self.player)
 			await Matchmaking._instance.run()
 			return
 
 		elif data['type'] == 'game_ai':
-			self.player = Player(self)
+			self.player = PlayerRemote(self)
 			game = GameAI(self.player)
 			await game.start()
 			return
 
 		elif data['type'] == 'game_full_ai':
-			self.player = Player(self)
+			self.player = PlayerRemote(self)
 			game = GameFullAI(self.player)
 			await game.start()
 			return
