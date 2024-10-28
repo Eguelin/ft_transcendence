@@ -863,6 +863,9 @@ window.addEventListener("click", (e) => {
 			}, 550, notifCenterContainer)
 		}
 	}
+	if (e.target.classList.contains("notifReject")){
+		e.target.parentElement.parentElement.remove();
+	}
 })
 
 function popUpError(error){
