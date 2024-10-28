@@ -1,14 +1,14 @@
 playerOneScore = document.querySelector("#playerOne > h1");
 playerTwoScore = document.querySelector("#playerTwo > h1");
 maxScore = 5;
+const url =  new URL(window.location.href);
 
 {
 	inputSearchUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	notifCenterContainer.style.setProperty("display", "flex");
-	console.log(client.langJson['game']['local']);
-	document.querySelector("#subtitle").innerText = client.langJson['game']['local'];
+	document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
 }
 
 function game() {
@@ -36,7 +36,6 @@ function game() {
 
 	socket.onopen = function() {
 		console.log("Connection established");
-		const url =  new URL(window.location.href);
 		gamesend(url.searchParams.get("mode"), url.searchParams.get("room"));
 		setInterval(() => gameRender(), 16);
 	}
@@ -99,12 +98,22 @@ function game() {
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), message.player2.user.profile_picture);
 		document.querySelector("#playerOne > h2").innerText = message.player1.user.username
 		document.querySelector("#playerTwo > h2").innerText = message.player2.user.username
+
+		if (url.searchParams.get("mode") == "game_full_ai")
+			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 		gamesend("game_ready");
 	}
 
 	function updateGame(message) {
-		playerOneScore.innerText = `${message.player1.score}/${maxScore}`;
-		playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
+
+		if (url.searchParams.get("mode") != "game_full_ai"){
+			playerOneScore.innerText = `${message.player1.score}/${maxScore}`;
+			playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
+		}
+		else{
+			playerOneScore.innerText = message.player1.score;
+			playerTwoScore.innerText = message.player2.score;
+		}
 		player1.x = message.player1.x;
 		player1.y = message.player1.y;
 		player1.score = message.player1.score;
