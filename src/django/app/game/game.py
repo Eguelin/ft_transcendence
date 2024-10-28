@@ -1,5 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import sync_to_async, async_to_sync
+from asgiref.sync import sync_to_async
 import game.models as models
 import json
 import asyncio
@@ -527,3 +527,61 @@ class GameConsumer(AsyncWebsocketConsumer):
 			'type': type,
 			'message': message
 		}))
+
+class Tournament():
+	def __init__(self):
+		self.matches = [[GameTournament() for i in range(2**j)] for j in range(3)]
+		self.running = False
+		self.nbrPlayers = 0
+
+	def show(self):
+		for i in range(len(self.matches)):
+			print('Round', i, ':')
+			for j in range(2**i):
+				print('Match', j, ':', self.matches[i][j].playerLeft, 'vs', self.matches[i][j].playerRight)
+
+	def addPlayers(self, player):
+		if self.running:
+			return
+		for i in range(len(self.matches[-1])):
+			if not self.matches[-1][i].playerLeft:
+				self.matches[-1][i].playerLeft = player
+				self.nbrPlayers += 1
+				if self.nbrPlayers == len(self.matches[-1]):
+					self.running = True
+				break
+			elif not self.matches[-1][i].playerRight:
+				self.matches[-1][i].playerRight = player
+				self.nbrPlayers += 1
+				if self.nbrPlayers == len(self.matches[-1]):
+					self.running = True
+				break
+
+	def removePlayers(self, player):
+		if self.running:
+			return
+		for i in range(len(self.matches[-1])):
+			if self.matches[-1][i].playerLeft == player:
+				self.matches[-1][i].playerLeft = None
+				self.nbrPlayers -= 1
+				break
+			elif self.matches[-1][i].playerRight == player:
+				self.matches[-1][i].playerRight = None
+				self.nbrPlayers -= 1
+				break
+
+	async def run(self):
+		for i in range(len(self.matches)):
+			for j in range(len(self.matches[i])):
+				await self.matches[i][j].start()
+
+class GameTournament(GameRemote):
+
+	def __init__(self, tournament):
+		super().__init__(None, None)
+		self.tournament = tournament
+
+	async def start(self):
+		if not self.playerLeft or not self.playerRight:
+			return
+		await super().start()
