@@ -101,7 +101,13 @@ function game() {
 		ball.y = message.ball.y;
 
 		ctx.lineWidth = paddle.width / 4;
-
+		
+		if (mode == "game_local"){
+			player1.profile_picture = "";
+			player2.profile_picture = "";
+		
+		}
+		
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
 		
@@ -293,7 +299,10 @@ function game() {
 				<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
 			</div>
 		</div>`;
-		addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
+		if (mode == "game_local")
+			container.querySelector("#winPfpContainer").remove();
+		else
+			addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
 		document.body.appendChild(container);
 		
 		confetti({
