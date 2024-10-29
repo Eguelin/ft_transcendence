@@ -189,7 +189,7 @@ function register(){
 			cpwRegisterInput.previousElementSibling.remove();
 	}
 	else if (lock == 0){
-		document.getElementById("loaderBg").style.setProperty("display", "block");
+		setLoader()
 		if (registerBtn.previousElementSibling)
 			registerBtn.previousElementSibling.remove();
 
@@ -222,7 +222,7 @@ function register(){
 				});
 			} else {
 				response.json().then(response => {
-					document.getElementById("loaderBg").style.setProperty("display", "none");
+					unsetLoader()
 					warning = document.createElement("a");
 					warning.className = "warning";
 					warning.text = response.message;
@@ -257,6 +257,7 @@ function register(){
 	homeBtn.style.setProperty("display", "none");
 	dropDownLangBtn.focus();
 	dropDownUserContainer.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "none");
 }
 
 registerBtn = document.getElementById("registerBtn");

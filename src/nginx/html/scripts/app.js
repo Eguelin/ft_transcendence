@@ -15,6 +15,7 @@ myProfileBtn = document.getElementById("myProfileBtn");
 friendsBtn = document.getElementById("friendsBtn");
 settingsBtn = document.getElementById("settingsBtn");
 logOutBtn = document.getElementById('logOutBtn');
+notifCenterContainer = document.getElementById("notifCenterContainer")
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
@@ -73,13 +74,15 @@ class Client{
 	pfpUrl;
 	use_dark_theme;
 	use_browser_theme;
+	theme_name;
 	friends;
 	friend_requests;
 	blocked_user;
 	recentMatches;
 	#is_admin;
 	mainTextRgb;
-	fontAmplifier
+	fontAmplifier;
+	doNotDisturb;
 
 	constructor (){
 		return (async () =>{
@@ -96,6 +99,7 @@ class Client{
 				this.currentLang = result.lang;
 				this.pfpUrl = result.pfp;
 				this.use_dark_theme = result.is_dark_theme;
+				this.theme_name = result.theme_name;
 				this.friends = result.friends;
 				this.friend_requests = result.friend_requests;
 				this.blocked_user = result.blocked_user;
@@ -104,9 +108,12 @@ class Client{
 				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 				this.fontAmplifier = result.font_amplifier;
 				this.use_browser_theme = result.use_browser_theme;
+				this.doNotDisturb = result.do_not_disturb;
 				use_browser_theme = result.use_browser_theme;
 				if (use_browser_theme == false)
-					switchTheme(this.use_dark_theme);
+					switchTheme(this.theme_name);
+				if (this.doNotDisturb == true)
+					notifCenterContainer.classList.add("dnd");
 				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
@@ -147,7 +154,7 @@ class Client{
 			const result = await fetchResult.json();
 			if (fetchResult.ok){
 				this.#is_admin = result.is_admin;
-				document.getElementById("loaderBg").style.setProperty("display", "block");
+				setLoader()
 
 				var sep = page.indexOf("/", 1)
 				if (sep > 0)
@@ -170,7 +177,7 @@ class Client{
 								}
 								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 								document.body.appendChild(s);
-								document.getElementById("loaderBg").style.setProperty("display", "none");
+								unsetLoader()
 							})
 						})
 					}
@@ -188,7 +195,7 @@ class Client{
 								s.setAttribute('id', 'script');
 								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 								document.body.appendChild(s);
-								document.getElementById("loaderBg").style.setProperty("display", "none");
+								unsetLoader()
 							})
 						})
 					}
@@ -204,7 +211,7 @@ class Client{
 							s.setAttribute('id', 'script');
 							s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
 							document.body.appendChild(s);
-							document.getElementById("loaderBg").style.setProperty("display", "none");
+							unsetLoader()
 							(async () => (loadCurrentLang()))();
 						})
 					})
@@ -324,7 +331,7 @@ function handleToken() {
 					client = await new Client()
 					if (use_browser_theme){
 						if (window.matchMedia) {
-							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
 						}
 						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 					}
@@ -337,7 +344,7 @@ function handleToken() {
 			else
 			{
 				response.json().then(data => {
-					document.getElementById("loaderBg").style.setProperty("display", "none");
+					unsetLoader()
 					popUpError(data.message || "Error API 42 Invalid key or API down");
 					myReplaceState(`https://${hostname.host}/login`);
 				})
@@ -347,7 +354,7 @@ function handleToken() {
 	else {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
-			document.getElementById("loaderBg").style.setProperty("display", "none");
+			unsetLoader();
 			(async () => {
 				client = await new Client();
 				if (!client)
@@ -358,7 +365,7 @@ function handleToken() {
 					load();
 				if (use_browser_theme){
 					if (window.matchMedia) {
-						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
 					}
 					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 				}
@@ -420,50 +427,55 @@ logOutBtn.addEventListener("click", (e) => {
 	myReplaceState(`https://${hostname.host}/login`);
 });
 
-function switchTheme(darkTheme) {
-	if (darkTheme == 1 || darkTheme == true) {
-		if (client){
-			client.mainTextRgb = "#FDFDFB";
-			client.use_dark_theme = 1;
-		}
-		document.documentElement.style.setProperty("--page-bg-rgb", "#110026");
-		document.documentElement.style.setProperty("--main-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--hover-text-rgb", "#3A3053");
-		document.documentElement.style.setProperty("--option-hover-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#3A3053");
-		document.documentElement.style.setProperty("--is-dark-theme", 1);
-		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-night-mode.svg)`;
+const themeMap = {
+	"dark" : {
+		"--page-bg-rgb" : "#110026",
+		"--main-text-rgb" : "#FDFDFB",
+		"--hover-text-rgb" : "#3A3053",
+		"--option-hover-text-rgb" : "#110026",
+		"--option-text-rgb" : "#FDFDFB",
+		"--input-bg-rgb" : "#3A3053",
+		"is-dark" : 1,
+		"svg-path" : "/icons/button-night-mode.svg"
+	},
+	"light" : {
+		"--page-bg-rgb" : "#F5EDED",
+		"--main-text-rgb" : "#110026",
+		"--hover-text-rgb" : "#FFC6C6",
+		"--option-hover-text-rgb" : "#F5EDED",
+		"--option-text-rgb" : "#110026",
+		"--input-bg-rgb" : "#FFC6C6",
+		"is-dark" : 0,
+		"svg-path" : "/icons/button-light-mode.svg"
 	}
-	else {
-		if (client){
-			client.mainTextRgb = "#110026";
-			client.use_dark_theme = 0;
-		}
-		document.documentElement.style.setProperty("--page-bg-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--main-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--hover-text-rgb", "#FFDBDE");
-		document.documentElement.style.setProperty("--option-hover-text-rgb", "#110026");
-		document.documentElement.style.setProperty("--option-text-rgb", "#FDFDFB");
-		document.documentElement.style.setProperty("--input-bg-rgb", "#FFDBDE");
-		if (document.getElementById("themeButton"))
-			document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}/icons/button-light-mode.svg)`;
-		document.documentElement.style.setProperty("--is-dark-theme", 0);
+}
+
+function switchTheme(theme) {
+	Object.keys(themeMap[theme]).forEach(function (key){
+		document.documentElement.style.setProperty(key, themeMap[theme][key])
+	})
+	if (client){
+		client.mainTextRgb = themeMap[theme]["--main-text-rgb"];
+		client.use_dark_theme = themeMap[theme]["is-dark"];
 	}
+
+	document.documentElement.style.setProperty("--is-dark-theme", themeMap[theme]["is-dark"]);
+	if (document.getElementById("themeButton"))
+		document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}${themeMap[theme]["svg-path"]})`;
+
 	if (currentPage == "dashboard"){
-		chartAverage.options.scales.x._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAverage.options.scales.y._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAverage.options.scales.x._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAverage.options.scales.y._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAverage._plugins._cache[5].options.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAverage.options.scales.x._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
+		chartAverage.options.scales.y._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
+		chartAverage.options.scales.x._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
+		chartAverage.options.scales.y._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
+		chartAverage._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
 		chartAverage.update();
 
-		chartAbs.options.scales.x._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAbs.options.scales.y._proxy.ticks.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAbs.options.scales.x._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAbs.options.scales.y._proxy.grid.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		chartAbs._plugins._cache[5].options.color = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		chartAbs.options.scales.x._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
+		chartAbs.options.scales.y._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
+		chartAbs.options.scales.x._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
+		chartAbs.options.scales.y._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
+		chartAbs._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
 		chartAbs.update();
 	}
 }
@@ -582,25 +594,26 @@ async function loadCurrentLang(){
 
 swichTheme.addEventListener("click", () => {
 	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
+	var theme_name = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? 'light' : 'dark';
 	if (client){
 		fetch('/api/user/update', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false}),
+			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false, theme_name : theme_name}),
 			credentials: 'include'
 		})
 		client.use_browser_theme = false;
 	}
 	use_browser_theme = false;
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent)
-	switchTheme(theme);
+	switchTheme(theme_name);
 	swichTheme.blur();
 })	
 
 function browserThemeEvent(event){
-	switchTheme(event.matches);	
+	switchTheme(event.matches == 1 ? 'dark' : 'light');	
 }
 
 swichTheme.addEventListener("keydown", (e) => {
@@ -684,8 +697,7 @@ function createMatchResumeContainer(match) {
 	matchContainer.appendChild(result);
 	matchContainer.appendChild(scoreContainer);
 	matchContainer.appendChild(date);
-	
-	recentMatchHistoryContainer.appendChild(matchContainer);
+	return (matchContainer);
 }
 
 async function updateUserAriaLabel(key, content){
@@ -844,6 +856,20 @@ window.addEventListener("click", (e) => {
 			}, 300, dropDownUser)
 		}
 	}
+	if (!e.target.closest("#notifCenterContainer")){
+		if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
+			notifCenterContainer.classList.remove("openCenter")
+			notifCenterContainer.classList.remove("quickOpenCenter")
+			notifCenterContainer.offsetWidth;
+			notifCenterContainer.classList.add("closeCenter")
+			setTimeout((container) => {
+				container.classList.remove("closeCenter");
+			}, 550, notifCenterContainer)
+		}
+	}
+	if (e.target.classList.contains("notifReject")){
+		e.target.parentElement.parentElement.remove();
+	}
 })
 
 function popUpError(error){
@@ -868,3 +894,97 @@ window.addEventListener("resize", (e) => {
 		loadUserDashboard(defaultLastXDaysDisplayed)
 	}
 })
+
+function setLoader(){
+	document.getElementById("loaderBg").style.setProperty("display", "block");
+	window.onscroll=function(){window.scrollTo(0, 0);};
+}
+function unsetLoader(){
+	document.getElementById("loaderBg").style.setProperty("display", "none");
+	window.onscroll=function(){};
+}
+
+function incomingPushNotif(message){
+	btn = document.getElementById("pushNotif");
+	btnText = document.getElementById("pushNotifMessage");
+	if (notifCenterContainer.classList.contains("dnd") || btnText.innerText != "")
+		return ;
+	if (message == undefined || message == "" || (typeof message !== 'string' && !(message instanceof String)))
+		message = "PUSH NOTIFICATION";
+	else if (message.length > 20){
+		message = `${message.substring(0, 20)}...`;
+	}
+	btnText.innerText = message;
+	btn.classList.add("incoming");
+	setTimeout((btn, btnText) => {
+		if (btn.classList.contains("incoming")){
+			btn.classList.remove("incoming");
+			btn.offsetWidth;
+			btn.classList.add("leaving");
+			setTimeout((btn) => {
+				btnText.innerText = "";
+				btn.classList.remove("leaving");
+			}, 300, btn, btnText);
+		}
+	}, 5300, btn, btnText);
+}
+
+var notifBtn = document.getElementById("pushNotif");
+notifBtn.addEventListener("click", (e) => {
+	if (!notifCenterContainer.classList.contains("closeCenter")){
+		if (document.getElementById("pushNotif").classList.contains("incoming")){
+			document.getElementById("pushNotif").classList.remove("incoming");
+			document.getElementById("pushNotifMessage").innerText = "";
+			notifCenterContainer.classList.add("quickOpenCenter");
+		}
+		else if (!notifCenterContainer.classList.contains("quickOpenCenter"))
+			notifCenterContainer.classList.add("openCenter");
+		if (notifCenterContainer.classList.contains("pendingNotification"))
+			notifCenterContainer.classList.remove("pendingNotification");
+	}
+})
+
+document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
+	if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
+		if (notifCenterContainer.classList.contains("dnd")){
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ "do_not_disturb": false }),
+				credentials: 'include'
+			})
+			notifCenterContainer.classList.remove("dnd");
+		}
+		else{
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ "do_not_disturb": true }),
+				credentials: 'include'
+			})
+			notifCenterContainer.classList.add("dnd");
+		}
+	}
+})
+
+function sendNotif(message){
+	var notifContainer = document.createElement("div");
+	var notifCenter = document.getElementById("notifCenter");
+	notifContainer.classList.add("notifContainer");
+	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
+<div class="notifOptionContainer">
+<div class="notifAccept"></div>
+<div class="separator"></div>
+<div class="notifReject"></div>
+</div>`;
+	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
+	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))){
+		if (!(notifCenterContainer.classList.contains("pendingNotification")))
+			notifCenterContainer.classList.add("pendingNotification");
+		incomingPushNotif(message);
+	}
+}

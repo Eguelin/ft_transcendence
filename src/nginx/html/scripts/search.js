@@ -3,6 +3,7 @@
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
+	notifCenterContainer.style.setProperty("display", "flex");
 
     url = new URL(window.location.href);
     if (url.searchParams.get("query")) {

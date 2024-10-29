@@ -9,6 +9,7 @@
 <link id="style" rel="stylesheet" href="/styles/friends.css">
 <link id="style" rel="stylesheet" href="/styles/settings.css">
 <link id="style" rel="stylesheet" href="/styles/dropdowns.css">
+<link id="style" rel="stylesheet" href="/styles/game.css">
 </head>
 <body>
 	<div id="titleFlexContainer">
@@ -71,10 +72,19 @@
 		</div>
 	</div>
 	<div id="container"></div>
+	<div id="notifCenterContainer">
+		<div id="pushNotif">
+			<div id="pushNotifMessage"></div>
+			<div id="pushNotifIcon"></div>
+		</div>
+		<div id="notifCenter">
+		</div>
+	</div>
 	<div id="loaderBg">
 		<div class="loader"></div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 	<script id="script" src="/scripts/app.js"></script>
 </body>
 </html>
