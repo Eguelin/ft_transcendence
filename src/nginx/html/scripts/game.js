@@ -53,7 +53,7 @@ function game() {
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
 		} else if (data.type === "game_end") {
 			clearInterval(KeyPressInterval);
-			endMessage = data.message;
+			endMessage = data.message.winner;
 			if (endMessage == "left")
 				displayWinner(player1.name, player1.profile_picture)
 			else
@@ -120,6 +120,8 @@ function game() {
 
 		if (mode == "game_full_ai")
 			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
+
+		document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
 		gamesend("game_ready");
 	}
 
@@ -275,7 +277,8 @@ function game() {
 		if (event.key == "Escape"){
 			cleanup();
 			myPushState(`https://${hostname.host}/home`);
-			document.getElementById("winContainer").remove();
+			if (document.getElementById("winContainer"))
+				document.getElementById("winContainer").remove();
 		}
 	}
 
@@ -283,7 +286,8 @@ function game() {
 		if (event.target.id == "winBlur"){
 			cleanup();
 			myPushState(`https://${hostname.host}/home`);
-			document.getElementById("winContainer").remove();
+			if (document.getElementById("winContainer"))
+				document.getElementById("winContainer").remove();
 		}
 	}
 
@@ -297,6 +301,7 @@ function game() {
 					<img id="winPfp">
 				</div>
 				<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
+				<button id="replayButton">${client.langJson['game']['replay']}</button>
 			</div>
 		</div>`;
 		if (mode == "game_local")
@@ -304,6 +309,10 @@ function game() {
 		else
 			addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
 		document.body.appendChild(container);
+		container.querySelector("#replayButton").addEventListener("click", (e) => {
+			gamesend(url.searchParams.get("mode"), url.searchParams.get("room"))
+			document.getElementById("winContainer").remove();
+		})
 
 		confetti({
 			particleCount: 500,
