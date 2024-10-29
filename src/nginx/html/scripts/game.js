@@ -1,4 +1,17 @@
+playerOneScore = document.querySelector("#playerOne > h1");
+playerTwoScore = document.querySelector("#playerTwo > h1");
+maxScore = 5;
+{
+	inputSearchUserContainer.style.setProperty("display", "none");
+	homeBtn.style.setProperty("display", "block");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	notifCenterContainer.style.setProperty("display", "flex");
+}
+
 function game() {
+	const url =  new URL(window.location.href);
+	const mode = url.searchParams.get("mode");
+	document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
 	const socket = new WebSocket("/ws/game/");
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
@@ -23,7 +36,6 @@ function game() {
 
 	socket.onopen = function() {
 		console.log("Connection established");
-		const url =  new URL(window.location.href);
 		gamesend(url.searchParams.get("mode"), url.searchParams.get("room"));
 		setInterval(() => gameRender(), 16);
 	}
@@ -42,6 +54,10 @@ function game() {
 		} else if (data.type === "game_end") {
 			clearInterval(KeyPressInterval);
 			endMessage = data.message;
+			if (endMessage == "left")
+				displayWinner(player1.name, player1.profile_picture)
+			else
+				displayWinner(player2.name, player2.profile_picture)
 		}
 	}
 
@@ -71,21 +87,52 @@ function game() {
 		player1.x = message.player1.x;
 		player1.y = message.player1.y;
 		player1.score = message.player1.score;
+		player1.name = message.player1.user.username;
+		player1.profile_picture = message.player1.user.profile_picture;
 
 		player2.x = message.player2.x;
 		player2.y = message.player2.y;
 		player2.score = message.player2.score;
+		player2.name = message.player2.user.username;
+		player2.profile_picture = message.player2.user.profile_picture;
 
 		ball.size = message.ball.size;
 		ball.x = message.ball.x;
 		ball.y = message.ball.y;
 
 		ctx.lineWidth = paddle.width / 4;
+		
+		if (mode == "game_local"){
+			player1.profile_picture = "";
+			player2.profile_picture = "";
+		
+		}
+		
+		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
+		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
+		
+		if (mode == "game_local"){
+			player1.name = client.langJson['game']['playerOne'];
+			player2.name = client.langJson['game']['playerTwo'];
+		}
+		document.querySelector("#playerOne > h2").innerText = player1.name;
+		document.querySelector("#playerTwo > h2").innerText = player2.name;
 
+		if (mode == "game_full_ai")
+			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 		gamesend("game_ready");
 	}
 
 	function updateGame(message) {
+
+		if (url.searchParams.get("mode") != "game_full_ai"){
+			playerOneScore.innerText = `${message.player1.score}/${maxScore}`;
+			playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
+		}
+		else{
+			playerOneScore.innerText = message.player1.score;
+			playerTwoScore.innerText = message.player2.score;
+		}
 		player1.x = message.player1.x;
 		player1.y = message.player1.y;
 		player1.score = message.player1.score;
@@ -188,7 +235,9 @@ function game() {
 		window.removeEventListener('popstate', handlePopState);
 		document.removeEventListener("keydown", handleKeyDown);
 		document.removeEventListener("keyup", handleKeyUp);
-
+		window.addEventListener("keydown", keydownExitEventListener);
+		window.addEventListener("click", clickExitEventListener);
+		
 		socket.close();
 	}
 
@@ -219,6 +268,60 @@ function game() {
 			gamesend("game_keydown", keysDown);
 			oldKeysDown = JSON.parse(JSON.stringify(keysDown));
 		}
+	}
+	
+	
+	function keydownExitEventListener(event){
+		if (event.key == "Escape"){
+			cleanup();
+			myPushState(`https://${hostname.host}/home`);
+			document.getElementById("winContainer").remove();
+		}
+	}
+	
+	function clickExitEventListener(event){
+		if (event.target.id == "winBlur"){
+			cleanup();
+			myPushState(`https://${hostname.host}/home`);
+			document.getElementById("winContainer").remove();
+		}
+	}
+
+	function displayWinner(username, profile_picture){
+		var container = document.createElement("div");
+		container.id = "winContainer";
+		container.innerHTML = `<div id=winBlur></div>
+		<div id="winBg">
+			<div>
+				<div id="winPfpContainer">
+					<img id="winPfp">
+				</div>
+				<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
+			</div>
+		</div>`;
+		if (mode == "game_local")
+			container.querySelector("#winPfpContainer").remove();
+		else
+			addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
+		document.body.appendChild(container);
+		
+		confetti({
+			particleCount: 500,
+			spread: 40,
+			origin: { y: 1, x: -0.1 },
+			startVelocity : 100,
+			angle: 45
+		})
+
+		confetti({
+			particleCount: 500,
+			spread: 40,
+			origin: { y: 1, x: 1.1 },
+			startVelocity : 100,
+			angle: -225
+		})
+		window.addEventListener("keydown", keydownExitEventListener);
+		window.addEventListener("click", clickExitEventListener);
 	}
 }
 

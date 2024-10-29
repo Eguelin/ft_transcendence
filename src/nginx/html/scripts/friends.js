@@ -357,7 +357,7 @@ function checkUpdate(){
 		.then(response => {
 			if (response.ok) {
 				(response.json()).then((text) => {
-					switchTheme(text.is_dark_theme);
+					switchTheme(text.theme_name);
 					currentLang = text.lang;
 					allFriendListContainer.innerText = "";
 					onlineFriendListContainer.innerText = ""
@@ -415,6 +415,7 @@ inputSearchUserContainer.style.setProperty("display", "block");
 slideSelector[friendSlideIdx].focus();
 dropDownUserContainer.style.setProperty("display", "flex");
 homeBtn.style.setProperty("display", "block");
+notifCenterContainer.style.setProperty("display", "flex");
 
 async function updateFriendsAriaLabel(key, content){
 	if (key.startsWith("All"))

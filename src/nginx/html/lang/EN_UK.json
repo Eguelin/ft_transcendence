@@ -66,6 +66,7 @@
 		"#themesDropDown" : "Themes",
 		"#settingsThemeLight" : "Light",
 		"#settingsThemeDark" : "Dark",
+		"#settingsThemeDevice" : "Devices mode",
 		"#languagesDropDown" : "Languages",
 		"aria#leftSlideBtn" : "Switch settings page",
 		"aria#rightSlideBtn" : "Switch settings page",
@@ -138,7 +139,13 @@
 	},
 	"game":{
 		"#title" : "",
-		"#subtitle" : ""
+		"game_local" : "Local",
+		"game_full_ai" : "Full ai",
+		"game_remote" : "Remote",
+		"game_ai" : "Ai",
+		"playerOne" : "Player one",
+		"playerTwo" : "Player two",
+		"winnedText" : "won!!"
 	},
 	"404":{
 		"#title" : "ERROR 404",

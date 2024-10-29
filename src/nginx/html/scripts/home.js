@@ -6,8 +6,9 @@ playBtn = document.getElementById("playBtn");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "flex");
 	tabIdx = 13;
-
+	
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 		recentMatchHistoryContainer.innerHTML = "";
@@ -23,7 +24,7 @@ playBtn = document.getElementById("playBtn");
 		}
 		else{
 			for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
-				createMatchResumeContainer(client.recentMatches[i], tabIdx);			
+				recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i]));
 			}
 			document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
 				elem.addEventListener("keydown", (e) => {

@@ -8,7 +8,7 @@ lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
 
 lastWeekSelection.addEventListener("click", (e) => {
-	document.getElementById("loaderBg").style.setProperty("display", "block");
+	setLoader()
     loadUserDashboard(7);
     if (lastMonthSelection.classList.contains("activeTimeline"))
         lastMonthSelection.classList.remove("activeTimeline");
@@ -18,7 +18,7 @@ lastWeekSelection.addEventListener("click", (e) => {
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
-	document.getElementById("loaderBg").style.setProperty("display", "block");
+	setLoader()
     loadUserDashboard(31);
     if (lastWeekSelection.classList.contains("activeTimeline"))
         lastWeekSelection.classList.remove("activeTimeline");
@@ -28,7 +28,7 @@ lastMonthSelection.addEventListener("click", (e) => {
 })
 
 lastYearSelection.addEventListener("click", (e) => {
-	document.getElementById("loaderBg").style.setProperty("display", "block");
+	setLoader()
     loadUserDashboard(365);
     if (lastWeekSelection.classList.contains("activeTimeline"))
         lastWeekSelection.classList.remove("activeTimeline");
@@ -376,16 +376,18 @@ function loadUserDashboard(LastXDaysDisplayed){
                 }).then(client => {
                     if (client.ok){
                         client.json().then((client) => {
-                            document.getElementById("loaderBg").style.setProperty("display", "none");
+                            unsetLoader()
                             drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
                         })
                     }
                     else
-                        document.getElementById("loaderBg").style.setProperty("display", "none");
+                        unsetLoader()
                 })
                 var countWin = 0, countLost = 0, countMatch = 0;
                 matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
 
+                var historyContainer = document.getElementById("matchHistoryContainer");
+                historyContainer.innerHTML = "";
                 for (var i=0; i<Object.keys(user.matches).length;i++){
                     yearObj = user.matches[Object.keys(user.matches)[i]];
                     for (j = 0; j < Object.keys(yearObj).length; j++){
@@ -399,10 +401,43 @@ function loadUserDashboard(LastXDaysDisplayed){
                                 else
                                     countWin += matchObj.player_one_pts < matchObj.player_two_pts;
                                 countMatch += 1;
+                                historyContainer.appendChild(createMatchResumeContainer(matchObj));
                             }
                         }
                     }
                 }
+
+                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                    elem.addEventListener("keydown", (e) => {
+                        if (e.key == "Enter"){
+                            var idx = elem.tabIndex + 1
+                            elem.querySelectorAll(".resultScoreName").forEach(function (names){
+                                names.tabIndex = idx;
+                                idx++;
+                            })
+                        }
+                    })
+                });
+                var tabIdx = 15;
+                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                    elem.tabIndex = tabIdx;
+                    tabIdx += 3;
+                });
+                
+                document.querySelectorAll(".resultScoreName").forEach(function (elem){
+                    if (!elem.classList.contains("deletedUser")){
+                        elem.addEventListener("click", (e) => {
+                            myPushState(`https://${hostname.host}/user/${elem.innerHTML}`);	
+                        })
+                        elem.addEventListener("keydown", (e) => {
+                            if (e.key == "Enter")
+                                elem.click();
+                        })
+                    }
+                    else{
+                        elem.innerText = client.langJson["index"][".deletedUser"];
+                    }
+                })
 
                 if (countMatch == 0)
                     document.getElementById("ratioValue").innerHTML = `100%`;
@@ -422,5 +457,6 @@ function loadUserDashboard(LastXDaysDisplayed){
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+	notifCenterContainer.style.setProperty("display", "flex");
     loadUserDashboard(defaultLastXDaysDisplayed)
 }

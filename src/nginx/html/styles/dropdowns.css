@@ -84,7 +84,6 @@
 }
 
 .settingsDropDown:hover .dropDownOptionContainer, .settingsDropDown:focus .dropDownOptionContainer{
-	width: max-content;
 	border-color: var(--main-text-rgb);
 }
 
