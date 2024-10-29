@@ -273,7 +273,10 @@ class Gamelocal(Game):
 	async def end(self):
 		if self.playerLeft.socket:
 			await self.playerLeft.send('game_end', {
-				'winner': 'left' if self.playerLeft.score == maxScore else 'right'
+				'winner': 'left' if self.playerLeft.score == maxScore else 'right',
+				'leftPoint' : self.playerLeft.score,
+				'rightPoint' : self.playerRight.score,
+				'maxScore' : maxScore
 			})
 		await self.save()
 		self.running = False

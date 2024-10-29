@@ -34,6 +34,9 @@
 #winPfpContainer{
 	height: 10vw;
 	width: 10vw;
+	left: 0;
+	top: 0;
+	translate: 0 0;
 }
 
 #winPfpContainer img{
@@ -108,4 +111,5 @@
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+	align-items: center;
 }
