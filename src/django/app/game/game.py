@@ -231,10 +231,10 @@ class Game(GameTemplate):
 		if not self.playerLeft.socket and not self.playerRight.socket:
 			return
 		await self.playerLeft.send('game_end', {
-			'winner': self.playerLeft.score == maxScore or not self.playerRight.socket
+			'winner': 'left' if self.playerLeft.score == maxScore else 'right'
 		})
 		await self.playerRight.send('game_end', {
-			'winner': self.playerRight.score == maxScore or not self.playerLeft.socket
+			'winner': 'left' if self.playerLeft.score == maxScore else 'right'
 		})
 		await self.save()
 		self.running = False
@@ -309,7 +309,7 @@ class GameAI(GameTemplate):
 	async def end(self):
 		if self.playerLeft.socket:
 			await self.playerLeft.send('game_end', {
-				'winner': self.playerLeft.score == maxScore
+				'winner': 'left' if self.playerLeft.score == maxScore else 'right'
 			})
 		await self.save()
 		self.running = False
