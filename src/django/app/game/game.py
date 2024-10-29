@@ -138,7 +138,7 @@ class Game():
 			self.ball.move()
 		self.playerLeft.move()
 		self.playerRight.move()
-		await self.checkCollision()
+		self.checkCollision()
 		await self.send('game_update', self.getInfo())
 		await asyncio.sleep(0.016)
 
@@ -152,7 +152,7 @@ class Game():
 		await self.send('game_countdown', 'GO')
 		await asyncio.sleep(1)
 
-	async def checkCollision(self):
+	def checkCollision(self):
 		if self.ball.x <= -Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
@@ -332,6 +332,27 @@ class GameFullAI(Game):
 	@sync_to_async
 	def save(self):
 		pass
+
+	def checkCollision(self):
+		if self.ball.x <= -Ball.size * 2:
+			self.timeLastPoint = time.time()
+			self.playerRight.score += 1
+			self.ball.init()
+
+		elif self.ball.x >= Game.width + Ball.size * 2:
+			self.timeLastPoint = time.time()
+			self.playerLeft.score += 1
+			self.ball.init()
+			self.ball.dx = -self.ball.dx
+
+		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - self.ball.speed:
+			self.ball.paddleCollision(self.playerLeft)
+
+		elif self.ball.x >= self.playerRight.x and self.ball.x <= self.playerRight.x + self.ball.speed:
+			self.ball.paddleCollision(self.playerRight)
+
+		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= Game.height:
+			self.ball.dy = -self.ball.dy
 
 	async def send(self, type, message):
 		await self.player.send(type, message)
