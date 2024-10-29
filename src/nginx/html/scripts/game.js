@@ -1,50 +1,17 @@
 playerOneScore = document.querySelector("#playerOne > h1");
 playerTwoScore = document.querySelector("#playerTwo > h1");
 maxScore = 5;
-const url =  new URL(window.location.href);
-const mode = url.searchParams.get("mode");
 {
 	inputSearchUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	notifCenterContainer.style.setProperty("display", "flex");
-	document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
-}
-
-function displayWinner(username, profile_picture){
-	var container = document.createElement("div");
-	container.id = "winContainer";
-	container.innerHTML = `<div id=winBlur></div>
-	<div id="winBg">
-		<div>
-			<div id="winPfpContainer">
-				<img id="winPfp">
-			</div>
-			<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
-		</div>
-	</div>`;
-	addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
-	document.body.appendChild(container);
-	
-    confetti({
-        particleCount: 500,
-        spread: 40,
-        origin: { y: 1, x: -0.1 },
-        startVelocity : 100,
-        angle: 45
-	})
-
-    confetti({
-        particleCount: 500,
-        spread: 40,
-        origin: { y: 1, x: 1.1 },
-        startVelocity : 100,
-        angle: -225
-	})
-	
 }
 
 function game() {
+	const url =  new URL(window.location.href);
+	const mode = url.searchParams.get("mode");
+	document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
 	const socket = new WebSocket("/ws/game/");
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
@@ -87,13 +54,10 @@ function game() {
 		} else if (data.type === "game_end") {
 			clearInterval(KeyPressInterval);
 			endMessage = data.message;
-			displayWinner("eliseeliseelise", player2.profile_picture)/*
-			if (mode == "game_local"){
-				if (endMessage == "left")
-					displayWinner(player1.name, player1.profile_picture)
-				else
-					displayWinner(player2.name, player2.profile_picture)
-			}*/
+			if (endMessage == "left")
+				displayWinner(player1.name, player1.profile_picture)
+			else
+				displayWinner(player2.name, player2.profile_picture)
 		}
 	}
 
@@ -265,7 +229,9 @@ function game() {
 		window.removeEventListener('popstate', handlePopState);
 		document.removeEventListener("keydown", handleKeyDown);
 		document.removeEventListener("keyup", handleKeyUp);
-
+		window.addEventListener("keydown", keydownExitEventListener);
+		window.addEventListener("click", clickExitEventListener);
+		
 		socket.close();
 	}
 
@@ -296,6 +262,57 @@ function game() {
 			gamesend("game_keydown", keysDown);
 			oldKeysDown = JSON.parse(JSON.stringify(keysDown));
 		}
+	}
+	
+	
+	function keydownExitEventListener(event){
+		if (event.key == "Escape"){
+			cleanup();
+			myPushState(`https://${hostname.host}/home`);
+			document.getElementById("winContainer").remove();
+		}
+	}
+	
+	function clickExitEventListener(event){
+		if (event.target.id == "winBlur"){
+			cleanup();
+			myPushState(`https://${hostname.host}/home`);
+			document.getElementById("winContainer").remove();
+		}
+	}
+
+	function displayWinner(username, profile_picture){
+		var container = document.createElement("div");
+		container.id = "winContainer";
+		container.innerHTML = `<div id=winBlur></div>
+		<div id="winBg">
+			<div>
+				<div id="winPfpContainer">
+					<img id="winPfp">
+				</div>
+				<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
+			</div>
+		</div>`;
+		addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
+		document.body.appendChild(container);
+		
+		confetti({
+			particleCount: 500,
+			spread: 40,
+			origin: { y: 1, x: -0.1 },
+			startVelocity : 100,
+			angle: 45
+		})
+
+		confetti({
+			particleCount: 500,
+			spread: 40,
+			origin: { y: 1, x: 1.1 },
+			startVelocity : 100,
+			angle: -225
+		})
+		window.addEventListener("keydown", keydownExitEventListener);
+		window.addEventListener("click", clickExitEventListener);
 	}
 }
 
