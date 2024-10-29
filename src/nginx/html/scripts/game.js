@@ -16,13 +16,32 @@ function displayWinner(username, profile_picture){
 	container.id = "winContainer";
 	container.innerHTML = `<div id=winBlur></div>
 	<div id="winBg">
-		<div id="winPfpContainer">
-			<img id="winPfp">
+		<div>
+			<div id="winPfpContainer">
+				<img id="winPfp">
+			</div>
+			<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
 		</div>
-		<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
 	</div>`;
 	addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
 	document.body.appendChild(container);
+	
+    confetti({
+        particleCount: 500,
+        spread: 40,
+        origin: { y: 1, x: -0.1 },
+        startVelocity : 100,
+        angle: 45
+	})
+
+    confetti({
+        particleCount: 500,
+        spread: 40,
+        origin: { y: 1, x: 1.1 },
+        startVelocity : 100,
+        angle: -225
+	})
+	
 }
 
 function game() {
@@ -68,12 +87,13 @@ function game() {
 		} else if (data.type === "game_end") {
 			clearInterval(KeyPressInterval);
 			endMessage = data.message;
+			displayWinner("eliseeliseelise", player2.profile_picture)/*
 			if (mode == "game_local"){
 				if (endMessage == "left")
 					displayWinner(player1.name, player1.profile_picture)
 				else
 					displayWinner(player2.name, player2.profile_picture)
-			}
+			}*/
 		}
 	}
 
@@ -121,14 +141,12 @@ function game() {
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
 		
-		if (mode != "game_local"){
-			document.querySelector("#playerOne > h2").innerText = player1.name;
-			document.querySelector("#playerTwo > h2").innerText = player2.name;
+		if (mode == "game_local"){
+			player1.name = client.langJson['game']['playerOne'];
+			player2.name = client.langJson['game']['playerTwo'];
 		}
-		else{
-			document.querySelector("#playerOne > h2").innerText = client.langJson['game']['playerOne'];
-			document.querySelector("#playerTwo > h2").innerText = client.langJson['game']['playerTwo'];
-		}
+		document.querySelector("#playerOne > h2").innerText = player1.name;
+		document.querySelector("#playerTwo > h2").innerText = player2.name;
 
 		if (mode == "game_full_ai")
 			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");

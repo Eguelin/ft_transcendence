@@ -81,4 +81,11 @@
     translate: -50% -50%;
     background: var(--hover-text-rgb);
 	z-index: 11;
+	align-content: center;
+}
+
+#winBg > div{
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
 }

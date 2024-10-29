@@ -8,7 +8,7 @@ playBtn = document.getElementById("playBtn");
 	homeBtn.style.setProperty("display", "none");
 	notifCenterContainer.style.setProperty("display", "flex");
 	tabIdx = 13;
-
+	
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 		recentMatchHistoryContainer.innerHTML = "";
