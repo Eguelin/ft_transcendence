@@ -36,7 +36,10 @@ function game() {
 
 	socket.onopen = function() {
 		console.log("Connection established");
-		gamesend(url.searchParams.get("mode"), url.searchParams.get("room"));
+		gamesend(mode, url.searchParams.get("room"));
+		if (mode == "game_remote"){
+			displayWaiting();
+		}
 		setInterval(() => gameRender(), 16);
 	}
 
@@ -105,16 +108,18 @@ function game() {
 		if (mode == "game_local"){
 			player1.profile_picture = "";
 			player2.profile_picture = "";
+			player1.name = client.langJson['game']['playerOne'];
+			player2.name = client.langJson['game']['playerTwo'];
 		
 		}
-		
+		if (mode == "game_remote"){
+			if (document.getElementById("waitContainer"))
+				document.getElementById("waitContainer").remove();
+			window.removeEventListener("keydown", keydownExitEventListener);
+		}
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
 		
-		if (mode == "game_local"){
-			player1.name = client.langJson['game']['playerOne'];
-			player2.name = client.langJson['game']['playerTwo'];
-		}
 		document.querySelector("#playerOne > h2").innerText = player1.name;
 		document.querySelector("#playerTwo > h2").innerText = player2.name;
 
@@ -277,8 +282,9 @@ function game() {
 		if (event.key == "Escape"){
 			cleanup();
 			myPushState(`https://${hostname.host}/home`);
-			if (document.getElementById("winContainer"))
-				document.getElementById("winContainer").remove();
+			document.querySelectorAll("#winContainer, #waitContainer").forEach(function (elem){
+				elem.remove();
+			})
 		}
 	}
 	
@@ -286,9 +292,26 @@ function game() {
 		if (event.target.id == "winBlur"){
 			cleanup();
 			myPushState(`https://${hostname.host}/home`);
-			if (document.getElementById("winContainer"))
-				document.getElementById("winContainer").remove();
+			document.querySelectorAll("#winContainer, #waitContainer").forEach(function (elem){
+				elem.remove();
+			})
 		}
+	}
+
+	function displayWaiting(){
+		var container = document.createElement("div");
+		container.id = "waitContainer";
+		container.innerHTML = `<div id="waitBlur"></div>
+			<div id="wait">${client.langJson['game']['wait']}</div>
+		`
+		document.body.appendChild(container);
+		window.addEventListener("keydown", keydownExitEventListener);
+		document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
+		document.querySelectorAll(".playerName").forEach(function (e){e.innerText = "";});
+		
+		document.querySelector("#playerOne > h2").innerText = client.username;
+		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
+		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
 	}
 
 	function displayWinner(username, profile_picture){
@@ -312,6 +335,9 @@ function game() {
 		container.querySelector("#replayButton").addEventListener("click", (e) => {
 			gamesend(url.searchParams.get("mode"), url.searchParams.get("room"))
 			document.getElementById("winContainer").remove();
+			if (mode == "game_remote"){
+				displayWaiting();
+			}
 		})
 		
 		confetti({
