@@ -136,7 +136,7 @@ class Game():
 			self.ball.move()
 		self.playerLeft.move()
 		self.playerRight.move()
-		self.checkCollision()
+		await self.checkCollision()
 		await self.send('game_update', self.getInfo())
 		await asyncio.sleep(0.016)
 
@@ -150,7 +150,7 @@ class Game():
 		await self.send('game_countdown', 'GO')
 		await asyncio.sleep(1)
 
-	def checkCollision(self):
+	async def checkCollision(self):
 		if self.ball.x <= -Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
@@ -488,6 +488,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def disconnect(self, close_code):
 		Matchmaking._instance.remove_PlayerRemote(self.player)
+
 		self.player.socket = None
 
 	async def receive(self, text_data):
@@ -502,6 +503,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.player = PlayerRemote(self)
 			Matchmaking._instance.add_PlayerRemote(self.player)
 			await Matchmaking._instance.run()
+			return
+
+		elif data['type'] == 'game_tournament':
+			self.player = PlayerRemote(self)
+			if not Tournament()._instance:
+				Tournament()
+			Tournament().addPlayers(self.player)
+			await Tournament().run()
 			return
 
 		elif data['type'] == 'game_ai':
@@ -529,10 +538,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 		}))
 
 class Tournament():
-	def __init__(self):
-		self.matches = [[GameTournament() for i in range(2**j)] for j in range(3)]
-		self.running = False
-		self.nbrPlayers = 0
+	_instance = None
+
+	def __new__(cls):
+		if cls._instance is None:
+			cls._instance = super(Tournament, cls).__new__(cls)
+			cls._instance.matches = [[GameTournament(cls._instance) for i in range(2**j)] for j in range(3)]
+			cls._instance.running = False
+			cls._instance.nbrPlayers = 0
+		return cls._instance
 
 	def show(self):
 		for i in range(len(self.matches)):
@@ -547,13 +561,13 @@ class Tournament():
 			if not self.matches[-1][i].playerLeft:
 				self.matches[-1][i].playerLeft = player
 				self.nbrPlayers += 1
-				if self.nbrPlayers == len(self.matches[-1]):
+				if self.nbrPlayers == len(self.matches[-1]) * 2:
 					self.running = True
 				break
 			elif not self.matches[-1][i].playerRight:
 				self.matches[-1][i].playerRight = player
 				self.nbrPlayers += 1
-				if self.nbrPlayers == len(self.matches[-1]):
+				if self.nbrPlayers == len(self.matches[-1]) * 2:
 					self.running = True
 				break
 
@@ -571,6 +585,8 @@ class Tournament():
 				break
 
 	async def run(self):
+		if not self.running:
+			return
 		for i in range(len(self.matches)):
 			for j in range(len(self.matches[i])):
 				await self.matches[i][j].start()
