@@ -145,7 +145,8 @@
 		"game_ai" : "Ai",
 		"playerOne" : "Player one",
 		"playerTwo" : "Player two",
-		"winnedText" : "won!!"
+		"winnedText" : "won!!",
+		"replay" : "Replay"
 	},
 	"404":{
 		"#title" : "ERROR 404",
