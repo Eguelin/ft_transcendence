@@ -146,7 +146,8 @@
 		"playerOne" : "Player one",
 		"playerTwo" : "Player two",
 		"winnedText" : "won!!",
-		"replay" : "Replay"
+		"replay" : "Replay",
+		"wait" : "Waiting for another player to arrive..."
 	},
 	"404":{
 		"#title" : "ERROR 404",
