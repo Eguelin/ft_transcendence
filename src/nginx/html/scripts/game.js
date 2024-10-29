@@ -101,16 +101,16 @@ function game() {
 		ball.y = message.ball.y;
 
 		ctx.lineWidth = paddle.width / 4;
-		
+
 		if (mode == "game_local"){
 			player1.profile_picture = "";
 			player2.profile_picture = "";
-		
+
 		}
-		
+
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
-		
+
 		if (mode == "game_local"){
 			player1.name = client.langJson['game']['playerOne'];
 			player2.name = client.langJson['game']['playerTwo'];
@@ -237,7 +237,7 @@ function game() {
 		document.removeEventListener("keyup", handleKeyUp);
 		window.addEventListener("keydown", keydownExitEventListener);
 		window.addEventListener("click", clickExitEventListener);
-		
+
 		socket.close();
 	}
 
@@ -269,8 +269,8 @@ function game() {
 			oldKeysDown = JSON.parse(JSON.stringify(keysDown));
 		}
 	}
-	
-	
+
+
 	function keydownExitEventListener(event){
 		if (event.key == "Escape"){
 			cleanup();
@@ -278,7 +278,7 @@ function game() {
 			document.getElementById("winContainer").remove();
 		}
 	}
-	
+
 	function clickExitEventListener(event){
 		if (event.target.id == "winBlur"){
 			cleanup();
@@ -304,7 +304,7 @@ function game() {
 		else
 			addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
 		document.body.appendChild(container);
-		
+
 		confetti({
 			particleCount: 500,
 			spread: 40,
