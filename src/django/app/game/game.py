@@ -610,17 +610,11 @@ class Tournament():
 	async def run(self):
 		if not self.running:
 			return
-		for i in range(len(self.matches)):
-			for j in range(len(self.matches[i])):
-				await self.matches[i][j].start()
+		for match in self.matches[-1]:
+			await match.start()
 
 class GameTournament(GameRemote):
 
 	def __init__(self, tournament):
 		super().__init__(None, None)
 		self.tournament = tournament
-
-	async def start(self):
-		if not self.playerLeft or not self.playerRight:
-			return
-		await super().start()
