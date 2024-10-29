@@ -36,6 +36,25 @@
 	width: 10vw;
 }
 
+#winPfpContainer img{
+	animation: rotatePfp 1s ease-in;
+}
+
+@keyframes rotatePfp {
+	0%{
+		rotate: 0deg;
+	}
+	5%{
+		rotate: -10deg;
+	}
+	80%{
+		rotate: 380deg;
+	}
+	100%{
+		rotate: 360deg;
+	}
+}
+
 .playerPfp img, #winPfpContainer img{
 	width: 100%;
 	background-repeat: no-repeat;
@@ -82,6 +101,7 @@
     background: var(--hover-text-rgb);
 	z-index: 11;
 	align-content: center;
+	border-radius: 1rem;
 }
 
 #winBg > div{
