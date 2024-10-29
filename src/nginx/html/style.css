@@ -433,12 +433,6 @@ a {
 	color: var(--hover-text-rgb);
 }
 
-.game{
-	width: 50vw;
-	height: 37.5vw;
-	border: var(--main-text-rgb) 5px solid;
-}
-
 #popupErrorContainer, #popupErrorContainerClose{
     background: red;
     color: var(--main-text-rgb);

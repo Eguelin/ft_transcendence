@@ -184,3 +184,14 @@
 		display: none;
 	}
 }
+
+
+#matchHistoryContainer {
+	position: relative;
+	top: 5rem;
+}
+
+#matchHistoryContainer .matchDescContainer{
+	min-height: 5rem;
+	height: 7rem;
+}

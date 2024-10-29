@@ -36,7 +36,7 @@
 }
 
 #saveUsernameBtn:hover, #saveUsernameBtn:focus {
-	background-color: var(--option-hover-text-rgb);
+	background-color: var(--page-bg-rgb);
 }
 
 #saveUsernameContainer{

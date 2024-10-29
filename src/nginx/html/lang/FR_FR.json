@@ -66,6 +66,7 @@
 		"#themesDropDown" : "Thèmes",
 		"#settingsThemeLight" : "Clair",
 		"#settingsThemeDark" : "Sombre",
+		"#settingsThemeDevice" : "Mode de l'appareils",
 		"#languagesDropDown" : "Langues",
 		"aria#leftSlideBtn" : "Changer de page de paramètres",
 		"aria#rightSlideBtn" : "Changer de page de paramètres",
