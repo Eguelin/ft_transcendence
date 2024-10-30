@@ -139,3 +139,35 @@
 		color: var(--main-text-rgb);
 	}
 }
+
+
+@media screen and (orientation:portrait){
+	#gameContainer{
+		flex-direction: column;
+		align-items: center;
+		gap: 7rem;
+	}
+
+	#game{
+		rotate: 90deg;
+	}
+
+	.playerInfoContainer{
+		width: 37.5vw;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.playerPfp{
+		left: 0;
+		translate: 0;
+
+	}
+
+	.playerName, .playerScore{
+		flex: auto;
+		height: fit-content;
+		margin: 0;
+	}
+	
+}
