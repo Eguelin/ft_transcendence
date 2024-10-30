@@ -15,7 +15,26 @@ function game() {
 	const socket = new WebSocket("/ws/game/");
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
-	const keysDown = {};
+	const keysDown = {
+		"KeyS" : false,
+		"KeyW" : false,
+		"KeyA" : false,
+		"KeyD" : false,
+		"ArrowUp" : false,
+		"ArrowDown" : false,
+		"ArrowLeft" : false,
+		"ArrowRight" : false,
+	};
+	const mapAvailableKeyCode = {
+		"KeyS" : 1,
+		"KeyW" : 1,
+		"KeyA" : 1,
+		"KeyD" : 1,
+		"ArrowUp" : 1,
+		"ArrowDown" : 1,
+		"ArrowLeft" : 1,
+		"ArrowRight" : 1,
+	}
 	const paddle = {};
 	const player1 = {};
 	const player2 = {};
@@ -174,7 +193,7 @@ function game() {
 		ctx.strokeStyle = client.mainTextRgb;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		if (countdown !== "")
+		if (countdown !== "" && document.getElementById("countdownText"))
 			document.getElementById("countdownText").innerText = countdown;
 		drawMiddleLine();
 		drawBallTrail();
@@ -265,12 +284,12 @@ function game() {
 	}
 
 	function handleKeyDown(event) {
-		if (event.code === "KeyS" || event.code === "KeyW" || event.code === "ArrowUp" || event.code === "ArrowDown")
+		if (mapAvailableKeyCode[event.code])
 			keysDown[event.code] = true;
 	}
 
 	function handleKeyUp(event) {
-		if (event.code === "KeyS" || event.code === "KeyW" || event.code === "ArrowUp" || event.code === "ArrowDown")
+		if (mapAvailableKeyCode[event.code])
 			keysDown[event.code] = false;
 	}
 

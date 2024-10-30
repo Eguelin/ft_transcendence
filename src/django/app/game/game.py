@@ -394,6 +394,9 @@ class Player(PlayerTemplate):
 		self.input = {}
 		self.profile = None
 
+	def hasAndIsInput(self, keyName):
+		return (self.input.get(keyName) and self.input[keyName])
+
 	def move(self):
 		if ((self.input.get('ArrowUp') and self.input['ArrowUp']) or (self.input.get('KeyW') and self.input['KeyW'])) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
@@ -467,10 +470,16 @@ class PlayerAI(PlayerTemplate):
 class PlayerLocal(Player):
 
 	def move(self):
-		if ((self.input.get('ArrowUp') and self.input['ArrowUp'] and self.side == 'right') or (self.input.get('KeyW') and self.input['KeyW'] and self.side == 'left')) and self.y > Paddle.demieHeight:
-			self.y -= Paddle.speed
-		if ((self.input.get('ArrowDown') and self.input['ArrowDown'] and self.side == 'right') or (self.input.get('KeyS') and self.input['KeyS'] and self.side == 'left')) and self.y < GameTemplate.height - Paddle.demieHeight:
-			self.y += Paddle.speed
+		if (self.side == 'left'):
+			if ((self.hasAndIsInput('KeyW') or self.hasAndIsInput('KeyD')) and self.y > Paddle.demieHeight):
+				self.y -= Paddle.speed
+			elif ((self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA')) and self.y < GameTemplate.height - Paddle.demieHeight):
+				self.y += Paddle.speed
+		elif (self.side == 'right'):
+			if ((self.hasAndIsInput('ArrowUp') or self.hasAndIsInput('ArrowRight')) and self.y > Paddle.demieHeight):
+				self.y -= Paddle.speed
+			elif ((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) and self.y < GameTemplate.height - Paddle.demieHeight):
+				self.y += Paddle.speed
 
 	def copy(self):
 		new_player = PlayerLocal(self.socket)
