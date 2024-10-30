@@ -25,9 +25,6 @@ function game() {
 	let oldKeysDown = {};
 	let countdown = "";
 
-	canvas.width = 800;
-	canvas.height = 600;
-
 	window.addEventListener('beforeunload', handleBeforeUnload);
 	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
 	window.addEventListener('popstate', handlePopState);
@@ -54,6 +51,8 @@ function game() {
 			updateGame(data.message);
 		} else if (data.type === "game_start") {
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
+			if(document.getElementById("countdownContainer"))
+				document.getElementById("countdownContainer").remove();
 		} else if (data.type === "game_end") {
 			clearInterval(KeyPressInterval);
 			endMessage = data.message.winner;
@@ -127,6 +126,11 @@ function game() {
 			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 
 		document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
+
+		var countdownBg = document.createElement("div");
+		countdownBg.id = "countdownContainer";
+		countdownBg.innerHTML = `<div id=countdownBlur></div><h1 id="countdownText"></h1>`
+		document.body.appendChild(countdownBg);
 		gamesend("game_ready");
 	}
 
@@ -171,7 +175,7 @@ function game() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		if (countdown !== "")
-			drawCountdown(countdown);
+			document.getElementById("countdownText").innerText = countdown;
 		drawMiddleLine();
 		drawBallTrail();
 		drawBall();
