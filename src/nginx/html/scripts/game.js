@@ -358,6 +358,9 @@ function game() {
 		container.querySelector("#replayButton").addEventListener("click", (e) => {
 			gamesend(url.searchParams.get("mode"), url.searchParams.get("room"))
 			document.getElementById("winContainer").remove();
+
+			window.removeEventListener("keydown", keydownExitEventListener);
+			window.removeEventListener("click", clickExitEventListener);
 			if (mode == "game_remote"){
 				displayWaiting();
 			}
