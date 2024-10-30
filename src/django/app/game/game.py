@@ -398,9 +398,9 @@ class Player(PlayerTemplate):
 		return (self.input.get(keyName) and self.input[keyName])
 
 	def move(self):
-		if ((self.input.get('ArrowUp') and self.input['ArrowUp']) or (self.input.get('KeyW') and self.input['KeyW'])) and self.y > Paddle.demieHeight:
+		if ((self.hasAndIsInput('ArrowUp') or self.hasAndIsInput('ArrowRight')) or (self.hasAndIsInput('KeyW') or self.hasAndIsInput('KeyD'))) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		if ((self.input.get('ArrowDown') and self.input['ArrowDown']) or (self.input.get('KeyS') and self.input['KeyS'])) and self.y < GameTemplate.height - Paddle.demieHeight:
+		if ((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) or (self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA'))) and self.y < GameTemplate.height - Paddle.demieHeight:
 			self.y += Paddle.speed
 
 	@sync_to_async
@@ -470,17 +470,11 @@ class PlayerAI(PlayerTemplate):
 class PlayerLocal(Player):
 
 	def move(self):
-		if (self.side == 'left'):
-			if ((self.hasAndIsInput('KeyW') or self.hasAndIsInput('KeyD')) and self.y > Paddle.demieHeight):
-				self.y -= Paddle.speed
-			elif ((self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA')) and self.y < GameTemplate.height - Paddle.demieHeight):
-				self.y += Paddle.speed
-		elif (self.side == 'right'):
-			if ((self.hasAndIsInput('ArrowUp') or self.hasAndIsInput('ArrowRight')) and self.y > Paddle.demieHeight):
-				self.y -= Paddle.speed
-			elif ((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) and self.y < GameTemplate.height - Paddle.demieHeight):
-				self.y += Paddle.speed
-
+		if (((self.hasAndIsInput('ArrowUp') or self.hasAndIsInput('ArrowRight')) and self.side == 'right') or ((self.hasAndIsInput('KeyW') or self.hasAndIsInput('KeyD')) and self.side == 'left')) and self.y > Paddle.demieHeight:
+			self.y -= Paddle.speed
+		if (((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) and self.side == 'right') or ((self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA')) and self.side == 'left')) and self.y < GameTemplate.height - Paddle.demieHeight:
+			self.y += Paddle.speed
+		
 	def copy(self):
 		new_player = PlayerLocal(self.socket)
 		new_player.__dict__.update(self.__dict__)
