@@ -436,7 +436,7 @@ const themeMap = {
 		"--option-text-rgb" : "#FDFDFB",
 		"--input-bg-rgb" : "#3A3053",
 		"is-dark" : 1,
-		"svg-path" : "/icons/button-night-mode.svg"
+		"svg-path" : "/icons/moon.svg"
 	},
 	"light" : {
 		"--page-bg-rgb" : "#F5EDED",
@@ -446,7 +446,7 @@ const themeMap = {
 		"--option-text-rgb" : "#110026",
 		"--input-bg-rgb" : "#FFC6C6",
 		"is-dark" : 0,
-		"svg-path" : "/icons/button-light-mode.svg"
+		"svg-path" : "/icons/sun.svg"
 	}
 }
 

@@ -44,8 +44,8 @@
 #themeButton{
 	mask-image:url("../icons/button-night-mode.svg");
 	background:var(--main-text-rgb);
-	height:5rem;
-	width:5rem;
+	height:3rem;
+	width:3rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
