@@ -279,7 +279,7 @@ document.getElementById("settingsThemeLight").addEventListener("click", (e) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ is_dark_theme: false, use_browser_theme: false}),
+		body: JSON.stringify({ is_dark_theme: false, use_browser_theme: false, theme_name: 'light'}),
 		credentials: 'include'
 	})
 	client.use_browser_theme = false;
@@ -293,7 +293,36 @@ document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ is_dark_theme: true, use_browser_theme: false}),
+		body: JSON.stringify({ is_dark_theme: true, use_browser_theme: false, theme_name: 'dark'}),
+		credentials: 'include'
+	})
+	client.use_browser_theme = false;
+})
+
+document.getElementById("settingsThemeHCLight").addEventListener("click", (e) => {
+	switchTheme('high_light');
+	
+	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ is_dark_theme: false, use_browser_theme: false, theme_name: 'high_light'}),
+		credentials: 'include'
+	})
+	client.use_browser_theme = false;
+})
+document.getElementById("settingsThemeHCDark").addEventListener("click", (e) => {
+	switchTheme('high_dark');
+
+	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
+	fetch('/api/user/update', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ is_dark_theme: true, use_browser_theme: false, theme_name: 'high_dark'}),
 		credentials: 'include'
 	})
 	client.use_browser_theme = false;
