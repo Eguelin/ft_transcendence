@@ -58,6 +58,10 @@ function game() {
 				displayWinner(player1.name, player1.profile_picture)
 			else
 				displayWinner(player2.name, player2.profile_picture)
+		} else if (data.type === "game_tournament") {
+			console.log(data);
+		} else if (data.type === "game_tournament_end") {
+			console.log(data);
 		}
 	}
 
