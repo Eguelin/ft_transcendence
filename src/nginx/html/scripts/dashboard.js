@@ -1,5 +1,6 @@
 var chartAverage, chartAbs;
 var width, height, gradient;
+var today = new Date();
 chartAverage = null;
 chartAbs = null;
 
@@ -8,8 +9,11 @@ lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
 
 lastWeekSelection.addEventListener("click", (e) => {
-	setLoader()
-    loadUserDashboard(7);
+	setLoader();
+	
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    loadUserDashboard(startDate, today);
     if (lastMonthSelection.classList.contains("activeTimeline"))
         lastMonthSelection.classList.remove("activeTimeline");
     if (lastYearSelection.classList.contains("activeTimeline"))
@@ -18,8 +22,10 @@ lastWeekSelection.addEventListener("click", (e) => {
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
-	setLoader()
-    loadUserDashboard(31);
+	setLoader();
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 31);
+    loadUserDashboard(startDate, today);
     if (lastWeekSelection.classList.contains("activeTimeline"))
         lastWeekSelection.classList.remove("activeTimeline");
     if (lastYearSelection.classList.contains("activeTimeline"))
@@ -28,8 +34,10 @@ lastMonthSelection.addEventListener("click", (e) => {
 })
 
 lastYearSelection.addEventListener("click", (e) => {
-	setLoader()
-    loadUserDashboard(365);
+	setLoader();
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 365);
+    loadUserDashboard(startDate, today);
     if (lastWeekSelection.classList.contains("activeTimeline"))
         lastWeekSelection.classList.remove("activeTimeline");
     if (lastMonthSelection.classList.contains("activeTimeline"))
@@ -53,14 +61,19 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
-function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, clientUsername){
+function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
+    if ((startDate instanceof Date && endDate instanceof Date)){
+        console.log("Wrong arguments");
+        return ;    
+    }
+        
     if (chartAverage)
         chartAverage.destroy();
     if (chartAbs)
         chartAbs.destroy();
-    var endDate = new Date();
-    var startDate = new Date();
-    startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
+    console.log(endDate, startDate);
+    var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)); 
+    console.log(LastXDaysDisplayed);
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
@@ -328,7 +341,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 
 }
 
-function loadUserDashboard(LastXDaysDisplayed){
+function loadUserDashboard(startDate, endDate){
 
     wLGraph = document.getElementById("winLossGraph").remove();
     wLAbsGraph = document.getElementById("winLossAbsGraph").remove();
@@ -355,15 +368,12 @@ function loadUserDashboard(LastXDaysDisplayed){
 
 
     var splitPath = window.location.href.split('/');
-    var endDate = new Date();
-    var startDate = new Date();
-    startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
-    startDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
-    endDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+    var startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+    var endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDate, "endDate" : endDate}),
+        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDateStr, "endDate" : endDateStr}),
         credentials: 'include'
     }).then(user => {
         if (user.ok){
@@ -371,13 +381,13 @@ function loadUserDashboard(LastXDaysDisplayed){
                 fetch('/api/user/get', {
                     method: 'POST', //GET forbid the use of body :(
                     headers: {'Content-Type': 'application/json',},
-                    body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDate, "endDate" : endDate}),
+                    body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDateStr, "endDate" : endDateStr}),
                     credentials: 'include'
                 }).then(client => {
                     if (client.ok){
                         client.json().then((client) => {
                             unsetLoader()
-                            drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
+                            drawWinLossGraph(user.matches, user.username, startDate, endDate, client.matches, client.username);
                         })
                     }
                     else
@@ -458,5 +468,7 @@ function loadUserDashboard(LastXDaysDisplayed){
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
-    loadUserDashboard(defaultLastXDaysDisplayed)
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    loadUserDashboard(startDate, today);
 }
