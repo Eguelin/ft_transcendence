@@ -133,8 +133,8 @@ function game() {
 		if (mode == "game_remote"){
 			if (document.getElementById("waitContainer"))
 				document.getElementById("waitContainer").remove();
-			window.removeEventListener("keydown", keydownExitEventListener);
 		}
+		window.removeEventListener("keydown", keydownExitEventListener);
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
 		
@@ -181,13 +181,6 @@ function game() {
 		}
 	}
 
-	function drawMessage(message, x = canvas.width / 2, y = canvas.height / 2) {
-		ctx.fillStyle = client.mainTextRgb;
-		ctx.font = `80px pong`;
-		ctx.textAlign = "center";
-		ctx.fillText(message, x, y);
-	}
-
 	function gameRender() {
 		ctx.fillStyle = client.mainTextRgb;
 		ctx.strokeStyle = client.mainTextRgb;
@@ -199,11 +192,6 @@ function game() {
 		drawBallTrail();
 		drawBall();
 		drawPaddles();
-	}
-
-	function drawCountdown(countdown) {
-		drawMessage(countdown, canvas.width / 4, canvas.height / 2);
-		drawMessage(countdown, canvas.width * 3 / 4, canvas.height / 2);
 	}
 
 	function drawMiddleLine() {
@@ -265,8 +253,8 @@ function game() {
 		window.removeEventListener('popstate', handlePopState);
 		document.removeEventListener("keydown", handleKeyDown);
 		document.removeEventListener("keyup", handleKeyUp);
-		window.addEventListener("keydown", keydownExitEventListener);
-		window.addEventListener("click", clickExitEventListener);
+		window.removeEventListener("keydown", keydownExitEventListener);
+		window.removeEventListener("click", clickExitEventListener);
 		
 		socket.close();
 	}
@@ -356,11 +344,10 @@ function game() {
 			addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
 		document.body.appendChild(container);
 		container.querySelector("#replayButton").addEventListener("click", (e) => {
-			gamesend(url.searchParams.get("mode"), url.searchParams.get("room"))
-			document.getElementById("winContainer").remove();
-
 			window.removeEventListener("keydown", keydownExitEventListener);
 			window.removeEventListener("click", clickExitEventListener);
+			gamesend(url.searchParams.get("mode"), url.searchParams.get("room"))
+			document.getElementById("winContainer").remove();
 			if (mode == "game_remote"){
 				displayWaiting();
 			}
