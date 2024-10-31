@@ -1,5 +1,6 @@
 #recentMatchHistoryContainer{
 	width: -webkit-fill-available;
+	width: -moz-available;
 	position: absolute;
 	bottom: 0;
 	display: flex;
@@ -9,6 +10,7 @@
 }
 
 #recentMatchHistory{
+	width: -moz-available;
 	width: -webkit-fill-available;
 	display: flex;
 	height: 20vh;
@@ -50,8 +52,13 @@
 	text-align: left;
 }
 
-.resultScoreName:hover{
+.resultScoreName:hover, .resultScoreName:focus{
 	text-decoration: underline from-font solid var(--main-text-rgb);
+}
+
+.deletedUser{
+	text-decoration: line-through !important;
+	font-style: italic;
 }
 
 #profileInfoContainer {
@@ -69,6 +76,7 @@
 	height: 7vw;
 	width: 7vw;
 	overflow: hidden;
+	border-radius: 50%;
 }
 
 #profilePfp {
@@ -100,10 +108,9 @@
 
 #notPlayedTodayContainer{
 	color: var(--main-text-rgb);
-	position: absolute;
+	position: relative;
 	display: flex;
 	gap: 1ch;
-	top: 50%;
 	left: 50%;
 	translate: -50%;
 	width: max-content;
@@ -128,7 +135,7 @@
 
 	@keyframes recentMatchHistoryContainerScale {
 		from{
-			height: fit-content;
+			height: 2ch;
 		}
 		to{
 			height: 20vh;
@@ -163,7 +170,7 @@
 			height: 20vh;
 		}
 		to{
-			height: fit-content;
+			height: 2ch;
 		}
 	}
 	#recentMatchHistory{
@@ -176,4 +183,15 @@
 	#recentMatchHistory{
 		display: none;
 	}
+}
+
+
+#matchHistoryContainer {
+	position: relative;
+	top: 5rem;
+}
+
+#matchHistoryContainer .matchDescContainer{
+	min-height: 5rem;
+	height: 7rem;
 }

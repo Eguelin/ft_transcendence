@@ -23,9 +23,9 @@
     <div id="timelineSelectionContainer">
         <a id="timelineSelectionText">Display stats from the last </a>
         <div id="timelineSelectorContainer">
-            <button class="activeTimeline" id="lastWeekSelection">7 days</button>
-            <button id="lastMonthSelection">Month</button>
-            <button id="lastYearSelection">Year</button>
+            <button tabindex="12" aria-label="Display stats from the last 7 days" class="activeTimeline" id="lastWeekSelection">7 days</button>
+            <button tabindex="13" aria-label="Display stats from the last month" id="lastMonthSelection">Month</button>
+            <button tabindex="14" aria-label="Display stats from the last year" id="lastYearSelection">Year</button>
         </div>
     </div>
     <div id="profileGraphs">
@@ -38,4 +38,5 @@
             </canvas>
         </div>
     </div>
+    <div id="matchHistoryContainer"></div>
 </div>

@@ -15,10 +15,8 @@ python manage.py migrate
 
 if [ "$1" == "dev" ]; then
   echo "Starting development server"
-  export DJANGO_DEBUG=True
 elif [ "$1" == "prod" ]; then
   echo "Starting production server"
-  export DJANGO_DEBUG=False
 else
   exit 1
 fi

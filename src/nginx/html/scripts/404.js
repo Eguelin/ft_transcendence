@@ -1,11 +1,13 @@
-homeBtn404 = document.getElementById("NotFoundtitle");
+homeBtn404 = document.getElementById("NotFoundBtn");
 
 homeBtn404.addEventListener("click", (e) => {
-	history.pushState("", "", `https://${hostname.host}/home`);
+	myPushState(`https://${hostname.host}/home`);
 })
 
 {
-	inputSearchUser.style.setProperty("display", "none");
+	homeBtn404.focus();
+	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "none");
 }

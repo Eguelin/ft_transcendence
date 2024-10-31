@@ -1,9 +1,9 @@
 <div id="pageContentContainer" style="width: fit-content;left: 50%;position: relative;translate: -50%;min-width: 40vw;">
 	<div id="loginSlideSelector">
-		<div id="loginSelector" class="slideSelector activeSelector">
-			<div id="loginSelectorText">Online</div>
+		<div tabindex="12" id="loginSelector" class="slideSelector activeSelector">
+			<div id="loginSelectorText">Login</div>
 		</div>
-		<div id="registerSelector" class="slideSelector">
+		<div tabindex="13" id="registerSelector" class="slideSelector">
 			<div id="registerSelectorText">Register</div>
 		</div>
 	</div>
@@ -11,33 +11,33 @@
 	<div class="loginSlide">
 		<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
 		<div class="forms">
-			<input autocomplete="username" tabindex="7" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username"/>
+			<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
 		</div>
 		<div class="forms">
-			<input tabindex="8" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password"/>
+			<input tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
 		</div>
 	
 		<div class="forms">
-			<button tabindex="11" id="loginBtn" class="loginBtn">LOGIN</button>
+			<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
 		</div>
 		<div class="loginOpt" id="externalLoginOpt" style="margin-top:3vh;">Other login options</div>
 		<div id="externalLogin">
-			<div tabindex="12" id="fortyTwoLogin"></div>
+			<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
 		</div>
 	</div>
 	<div class="loginSlide">
 		<div class="loginOpt" id="createAcc">Create your account</div>
 		<div class="forms">
-			<input tabindex="11" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username"/>
+			<input tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
 		</div>
 		<div class="forms">
-			<input tabindex="12" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password"/>
+			<input tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
 		</div>
 		<div class="forms">
-			<input tabindex="13" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password"/>
+			<input tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
 		</div>
 		<div class="forms">
-			<button tabindex="14" id="registerBtn" class="loginBtn">REGISTER</button>
+			<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
 		</div>
 	</div>
 </div>

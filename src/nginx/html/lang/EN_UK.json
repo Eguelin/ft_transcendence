@@ -4,58 +4,81 @@
 		"#friendsBtn" :  "Friends",
 		"#settingsBtn" :  "Settings",
 		"#logOutBtn" :  "Log out",
-		"#inputSearchUser" : "Search user"
+		"#inputSearchUser" : "Search user",
+		".deletedUser" : "Deleted",
+		"aria#goHomeButton" : "Home button",
+		"aria#inputSearchUser" : "Search user input field",
+		"aria#usernameBtn" : "Profile dropdown menu",
+		"aria#themeButton" : "Theme toggle button",
+		"aria#dropDownLangBtn" : "Language selection menu",
+		"aria#EN_UK" : "English",
+		"aria#FR_FR" : "Français",
+		"aria#DE_GE" : "Deutsch",
+		"aria#IT_IT" : "Italiano"
 	},
 	"home" : {
 		"#title" : "PONG",
-		"#playBtn" : "Play",
+		"#subtitle" : "",
+		"#playBtn1v1" : "Play 1v1",
+		"#playBtnLocal" : "Play local",
+		"#playBtnAI" : "Play AI",
 		"#notPlayedToday" : "You have not played any match today",
 		".victory" : "VICTORY",
 		".loss" : "LOST",
-		".draw" : "DRAW"
+		".draw" : "DRAW",
+		"aria#recentMatchHistoryContainer" : "User today's matches",
+		"ariaP1.matchDescContainer" : "match against",
+		"ariaP2.matchDescContainer" : "on the",
+		"aria.resultScoreName" : "profile redirection"
 	},
 	"login" : {
 		"#title" : "LOGIN",
+		"#subtitle" : "",
 		"#internalLoginOpt" : "Login with credentials",
 		"#loginBtn" : "LOGIN",
+		"#loginSelectorText" : "Login",
 		"#externalLoginOpt" : "Other login options",
 		"#inputUsername" : "Username",
 		"#inputPassword" : "Password",
 		"#createAcc" : "Create your account",
 		"#registerBtn" : "REGISTER",
+		"#registerSelectorText" : "Register",
 		"#inputRegisterUsername" : "Username",
 		"#inputRegisterPassword" : "Password",
-		"#inputRegisterCPassword" : "Confirm password"
+		"#inputRegisterCPassword" : "Confirm password",
+		"aria#inputUsername" : "Login username",
+		"aria#inputPassword" : "Login password",
+		"aria#fortyTwoLogin" : "Login with 42 account",
+		"aria#inputRegisterUsername" : "Register username",
+		"aria#inputRegisterPassword" : "Register password",
+		"aria#inputRegisterCPassword" : "Confirm register password"
 	},
 	"settings": {
-		"#title" : "Settings",
+		"#title" : "",
+		"#subtitle" : "Settings",
 		"#accountTitle" : "Account",
 		"#accessibilityTitle" : "Accessibility",
 		"#saveBtn" : "SAVE",
-		"#inputUsername" : "Username",
+		"#inputChangeUsername" : "Username",
 		"#inputPfp" : "Profile picture",
 		"#pfpLabel" : "Profile picture",
-		"#themesDropDownL" : "Themes",
-		"#themesDropDownP" : "Themes",
-		"#loadLightL" : "Light",
-		"#loadDarkL" : "Dark",
-		"#loadLightP" : "Light",
-		"#loadDarkP" : "Dark",
-		"#languagesDropDownL" : "Languages",
-		"#languagesDropDownP" : "Languages",
-		"#englishBtnL" : "English",
-		"#frenchBtnL" : "French",
-		"#germanBtnL" : "German",
-		"#italianBtnL" : "Italian",
-		"#pirateBtnL" : "Pirate",
-		"#englishBtnP" : "English",
-		"#frenchBtnP" : "French",
-		"#germanBtnP" : "German",
-		"#italianBtnP" : "Italian",
-		"#pirateBtnP" : "Pirate"
+		"#deleteAccountBtn" : "DELETE ACCOUNT",
+		"#themesDropDown" : "Themes",
+		"#settingsThemeLight" : "Light",
+		"#settingsThemeDark" : "Dark",
+		"#settingsThemeDevice" : "Devices mode",
+		"#languagesDropDown" : "Languages",
+		"aria#leftSlideBtn" : "Switch settings page",
+		"aria#rightSlideBtn" : "Switch settings page",
+		"aria#settingsDropDownTheme" : "Theme dropdown menu",
+		"aria#settingsDropDownLang" : "Language dropdown menu",
+		"aria#confirmDeleteInput" : "Type you username, then press enter to confirm deletion",
+		"aria#pfpLabel" : "Change profile picture",
+		"aria#confirmPfpBtn" : "Confirm profile picture"
 	},
 	"friends":{
-		"#title" : "Friends",
+		"#title" : "",
+		"#subtitle" : "Friends",
 		"#confirmDeleteQuestion" : "Are you sure you want to remove this friend?",
 		"#confirmBlockQuestion" : "Are you sure you want to block this friend?",
 		"#confirmDelete" : "I'm sure",
@@ -63,20 +86,36 @@
 		"#onlineFriendSelectorText": "Online",
 		"#allFriendSelectorText": "All",
 		"#pendingFriendRequestSelectorText": "Pending",
-		"#blockedSelectorText": "Blocked"
+		"#blockedSelectorText": "Blocked",
+		"aria#confirmDelete" : "Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'",
+		"aria#confirmBlock" : "Are you sure you want to block this friend, press enter for 'yes', escape for 'no'",
+		"aria.removeFriendBtn" : "Remove friend button",
+		"aria.blockFriendBtn" : "Block friend button",
+		"aria.acceptFriendBtn" : "Accept friend button",
+		"aria.rejectFriendBtn" : "Reject friend button",
+		"aria.unblockBtn" : "Unlock user",
+		"ariaAll.friendsOptionContainer" : "friend options",
+		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
+		"ariaBlocked.friendsOptionContainer" : "blocked user options"
+
 	},
 	"user":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Send friend request",
 		"#notPlayedToday" : "has not played any match today",
 		"#recentMatchHistoryText" : "Recent matches",
 		"#allMatchesHistoryBtn" : "All matches",
 		".victory" : "VICTORY",
 		".loss" : "LOST",
-		".draw" : "DRAW"
+		".draw" : "DRAW",
+		"ariaP1.matchDescContainer" : "match against",
+		"ariaP2.matchDescContainer" : "on the",
+		"aria.resultScoreName" : "profile redirection"
 	},
 	"dashboard":{
 		"#title" : "",
+		"#subtitle" : "",
 		"#ratioText" : "wins/loses ratio",
 		"#nbMatchText" : "Number of games played",
 		"#nbWinText" : "Number of games winned",
@@ -88,17 +127,38 @@
 		"CVwinLossGraph" : "Average by date",
 		"CVwinLossAbsGraph" : "Number of victory over number of defeat by date",
 		"CVwinLossGraphClient" : "you",
-		"CVwinLossAbsGraphClient" : "you" 
+		"CVwinLossAbsGraphClient" : "you",
+		"aria#lastWeekSelection" : "Display stats from the last 7 days",
+		"aria#lastMonthSelection" : "Display stats from the last month",
+		"aria#lastYearSelection" : "Display stats from the last year"
 	},
 	"search": {
-		"#title" : "Search"
+		"#title" : "Search",
+		"#subtitle" : "",
+		"aria.userResume" : "profile redirection"
 	},
 	"game":{
-		"#title" : ""
+		"#title" : "",
+		"game_local" : "Local",
+		"game_full_ai" : "Full ai",
+		"game_remote" : "Remote",
+		"game_ai" : "Ai",
+		"playerOne" : "Player one",
+		"playerTwo" : "Player two",
+		"winnedText" : "won!!",
+		"replay" : "Replay",
+		"wait" : "Waiting for another player to arrive..."
 	},
 	"404":{
 		"#title" : "ERROR 404",
+		"#subtitle" : "",
 		"#NotFoundtitle" : "Ho no, this page does not exist :(",
-		"#NotFoundhomeBtn" : "HOME"
+		"#NotFoundBtn" : "HOME"
+	},
+	"403":{
+		"#title" : "ERROR 403",
+		"#subtitle" : "",
+		"#ForbidenTitle" : "You're not supposed to be here >:(",
+		"#ForbidenBtn" : "HOME"
 	}
 }

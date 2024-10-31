@@ -6,21 +6,27 @@
 <link id="style" rel="stylesheet" href="/styles/index.css">
 <link id="style" rel="stylesheet" href="/styles/login.css">
 <link id="style" rel="stylesheet" href="/styles/user.css">
+<link id="style" rel="stylesheet" href="/styles/friends.css">
+<link id="style" rel="stylesheet" href="/styles/settings.css">
 <link id="style" rel="stylesheet" href="/styles/dropdowns.css">
+<link id="style" rel="stylesheet" href="/styles/game.css">
 </head>
 <body>
 	<div id="titleFlexContainer">
 		<div id="browseFlexContainer" >
-			<div tabindex="1" id="goHomeButton" style="display: none"></div>
-			<div style="flex: 1; text-align: left; align-self: center;">
-				<input tabindex="1" id="inputSearchUser" placeholder="Search user">
+			<div tabindex="1" id="goHomeButton" aria-label="Home button" style="display: none"></div>
+			<div id="inputSearchUserContainer">
+				<input tabindex="1" id="inputSearchUser" placeholder="Search user" aria-label="Search user input field">
+			</div>
+			<div id="subtitleContainer">
+				<h2 id="subtitle"></h2>
 			</div>
 		</div>
 		<h1 id="title"></h1>
 		<div id="quickSettingContainer">
 			<div  id="dropDownUserContainer" style="display: none;">
 				<div id="dropDownUser">
-					<span tabindex="7" id="usernameBtn"></span>
+					<div tabindex="7" id="usernameBtn" aria-label="Profile dropdown menu"></div>
 					<ul class="dropDownUserContent">
 						<li>
 							<button class="dropDownMenuBtn" tabindex="8" id="myProfileBtn">Profile</button>
@@ -38,39 +44,47 @@
 				</div>
 				<div id="pfpContainer">
 					<img id="pfp">
-					<div class="pfpMask"></div>
 				</div>
 			</div>
-			<div tabindex="6" id="themeButton"></div>
-			<div id="langDropDownContainer">
-				<div id="langDropDown">
-					<div class="langDropDownOptionsContainer">
-						<div tabindex="1" id="langDropDownBtn"></div>
+			<div tabindex="6" id="themeButton" aria-label="Theme toggle button"></div>
+			<div id="dropDownLangContainer">
+				<div id="dropDownLang">
+					<div class="dropDownLangOptionsContainer">
+						<div tabindex="1" id="dropDownLangBtn" aria-label="Language selection menu"></div>
 					</div>
-					<div id="langDropDownContent">
-						<div class="langDropDownOptionsContainer">
-							<div class="langDropDownOptions" id="EN_UK" style="background-image: url(/icons/EN_UK.svg);" tabindex="2"></div>
-						</div>
-						<div class="langDropDownOptionsContainer">
-							<div class="langDropDownOptions" id="FR_FR" style="background-image: url(/icons/FR_FR.svg);" tabindex="3"></div>
-						</div>
-						<div class="langDropDownOptionsContainer">
-							<div class="langDropDownOptions" id="DE_GE" style="background-image: url(/icons/DE_GE.svg);" tabindex="4"></div>
-						</div>
-						<div class="langDropDownOptionsContainer">
-							<div class="langDropDownOptions" id="IT_IT" style="background-image: url(/icons/IT_IT.svg);" tabindex="5"></div>
-						</div>
-					</div>
+					<ul id="dropDownLangContent">
+						<li class="dropDownLangOptionsContainer">
+							<div class="dropDownLangOptions" id="EN_UK" style="background-image: url(/icons/EN_UK.svg);" tabindex="2" aria-label="English"></div>
+						</li>
+						<li class="dropDownLangOptionsContainer">
+							<div class="dropDownLangOptions" id="FR_FR" style="background-image: url(/icons/FR_FR.svg);" tabindex="3" aria-label="Français"></div>
+						</li>
+						<li class="dropDownLangOptionsContainer">
+							<div class="dropDownLangOptions" id="DE_GE" style="background-image: url(/icons/DE_GE.svg);" tabindex="4" aria-label="Deutsch"></div>
+						</li>
+						<li class="dropDownLangOptionsContainer">
+							<div class="dropDownLangOptions" id="IT_IT" style="background-image: url(/icons/IT_IT.svg);" tabindex="5" aria-label="Italiano"></div>
+						</li>
+					</ul>
 				</div>
 			</div>
 
 		</div>
 	</div>
 	<div id="container"></div>
+	<div id="notifCenterContainer">
+		<div id="pushNotif">
+			<div id="pushNotifMessage"></div>
+			<div id="pushNotifIcon"></div>
+		</div>
+		<div id="notifCenter">
+		</div>
+	</div>
 	<div id="loaderBg">
 		<div class="loader"></div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 	<script id="script" src="/scripts/app.js"></script>
 </body>
 </html>
