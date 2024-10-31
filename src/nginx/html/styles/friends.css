@@ -1,0 +1,270 @@
+
+#friendInfo {
+	text-align: center;
+	display: flex;
+	flex-flow: column;
+	min-width: -webkit-fill-available;
+	min-width: -moz-available;
+	width: fit-content;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+#friendInfo span{
+	color: var(--main-text-rgb);
+}
+
+#sendFriendRequestBtn {
+	text-align: center;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	font-weight: thin;
+	font-family: "pong";
+	padding: 1.5vh 1.5vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+	width: min-content;
+}
+
+#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
+	color: var(--page-bg-rgb);
+	border-color: var(--page-bg-rgb);
+	outline: none;
+}
+
+#deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup{
+	background: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	position: fixed;
+	left: 50%;
+	right: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	padding: min(5vh, 4vw);
+	width: fit-content;
+	border: 2px solid var(--main-text-rgb);
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	gap: 2vmax;
+}
+
+#popupBg{
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	background-color: black;
+	opacity: 0.5;
+	display: none;
+}
+
+.friendContainer{
+	display: flex;
+	align-items: center;
+	flex-wrap: inherit;
+	color: var(--main-text-rgb);
+}
+
+.friendContainer:not(:first-child){
+	border-top: 1px solid var(--main-text-rgb);
+}
+
+.friendContainer a{
+	margin-left: 1vw;
+	flex: auto;
+	width: 15ch;
+	text-align: left;
+}
+
+.acceptRequestBtn, .rejectRequestBtn{
+	height:3.5vw;
+	width:3.5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	background:var(--main-text-rgb);
+}
+.acceptRequestBtn{
+	mask-image:url("../icons/check-mark-1.svg");
+}
+
+.acceptRequestBtn:focus, .acceptRequestBtn:hover, .unblockBtn:hover, .unblockBtn:focus{
+	background: green;
+}
+
+.rejectRequestBtn{
+	mask-image:url("../icons/cross-17.svg");
+}
+
+.rejectRequestBtn:focus, .rejectRequestBtn:hover{
+	background: red;
+}
+
+.moreBtn, .removeFriendBtn, .blockFriendBtn, .unblockBtn{
+	background:var(--main-text-rgb);
+	height:3.5vw;
+	width:3.5vw;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+.moreBtn{
+	mask-position: 0;
+	mask-image: url("../icons/more-vertical.svg");
+}
+
+.removeFriendBtn{
+	mask-image:url("../icons/minus-circle.svg");
+}
+
+.removeFriendBtn:focus, .removeFriendBtn:hover, .blockFriendBtn:focus, .blockFriendBtn:hover{
+	background: red;
+}
+
+.blockFriendBtn{
+	mask-image: url("../icons/checkbox-cross.svg");
+}
+
+.unblockBtn{
+	mask-image: url("../icons/unblock.svg");
+	margin-right: 1.5vw;
+}
+
+.friendsOptionContainer{
+	flex: none;
+}
+
+#pendingFriendRequestList .friendContainer .friendsOptionContainer {
+    display: flex;
+}
+
+.activeListSelector .moreBtn{
+	display: none;
+}
+
+.activeListSelector .friendsOption{
+	display: flex;
+}
+
+.friendsOption{
+	display: none;
+}
+
+.friendsOption div{
+	margin-right: 1.5vmin;
+}
+
+.friendContainer .friendStatus{
+	flex: auto;
+	margin-right: 1.5vmin;
+}
+
+#deleteFriendPopup, #blockFriendPopup{
+	flex-direction: column;
+	align-items: center;
+}
+
+#confirmDelete, #confirmBlock {
+	text-align: center;
+	background-color: red;
+	color: var(--main-text-rgb);
+	font-weight: thin;
+	font-family: "pong";
+	padding: 1vh 0;
+	width: 20vw;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+}
+
+#confirmDelete:hover, #confirmDelete:focus, #confirmBlock:hover, #confirmBlock:focus {
+	color: var(--hover-text-rgb);
+	border: 0.2px solid var(--hover-text-rgb);
+}
+
+#friendSlideSelector{
+	color: var(--main-text-rgb);
+	display: flex;
+	margin-top: 2vmin;
+}
+#friendSlideSelector div{
+	flex: 1;
+}
+#friendSlideSelector div div{
+	padding: 2px;
+}
+
+.friendSlide{
+	display: none;
+	background: var(--hover-text-rgb);
+	border: 1px solid var(--main-text-rgb);
+	border-radius: 2vw;
+	margin-top: 2vmin;
+	min-height: 1vh;
+}
+
+.friendSlide .friendContainer:first-child .pfpContainer{
+	border-radius: 2vw 0 0 0;
+}
+
+.friendSlide .friendContainer:last-child .pfpContainer{
+	border-radius: 0 0 0 2vw;
+}
+
+.friendSlide .friendContainer:only-child .pfpContainer{
+	border-radius: 2vw 0 0 2vw;
+}
+
+.slideSelector{
+	font-size: 1em;
+}
+
+.slideSelector div{
+	padding: .5rem;
+	z-index: -1;
+	position: relative;
+}
+
+.activeSlide{
+	display: block !important;
+}
+
+.activeSelector div{
+	background: var(--hover-text-rgb);
+}
+
+.activeSelector{
+	border-bottom: 2px solid var(--main-text-rgb);
+}	
+
+.pfpContainer{
+	width: 4vw;
+	height: 4vw;
+	display: flex;
+	position: relative;
+	overflow: hidden;
+}
+
+.pfpStatusOnline, .pfpStatusOffline{
+	height:1.5vw;
+	width:1.5vw;
+	position:absolute;
+	bottom: 0px;
+	right: 0px;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+.pfpStatusOffline{
+	mask-image:url("../icons/circle.svg");
+	background: grey;
+}
+
+.pfpStatusOnline{
+	mask-image: url("../icons/circle.svg");
+	background: green;
+}
+

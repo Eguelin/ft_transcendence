@@ -2,72 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import random
-import datetime
-
-# IF and WHEN fields are added 'python manage.py makemigrations' AND 'python manage.py migrate' must be executed in the transcendence container
-
-class MatchManager(models.Manager):
-	def createWithRandomOpps(self, creator):
-		startDate = datetime.datetime(2024,1,1)
-		endDate = datetime.datetime(2024,12,31)
-
-		try:
-			player_two = User.objects.get(username="random")
-		except:
-			player_two = User.objects.get_or_create(username="random")[0]
-			player_two.save()
-		match = self.create(player_one=creator, player_two=player_two)
-		match.player_one_pts = random.randint(0, 10)
-		match.player_two_pts = random.randint(0, 10)
-		match.save()
-		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds()))) 
-		match.save()
-		player_two.profile.matches.add(match)
-		return match
-
-	def createWithTwoOpps(self, userOne, userTwo):
-		startDate = datetime.datetime(2024,1,1)
-		endDate = datetime.datetime(2024,12,31)
-
-		try:
-			player_one = User.objects.get(username=userOne)
-		except:
-			player_one = User.objects.get_or_create(username=userOne)[0]
-			player_one.save()
-
-		try:
-			player_two = User.objects.get(username=userTwo)
-		except:
-			player_two = User.objects.get_or_create(username=userTwo)[0]
-			player_two.save()
-		
-		match = self.create(player_one=player_one, player_two=player_two)
-		match.player_one_pts = random.randint(0, 10)
-		match.player_two_pts = random.randint(0, 10)
-		match.save()
-		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds()))) 
-		match.save()
-		player_one.profile.matches.add(match)
-		player_two.profile.matches.add(match)
-		return match
-
-	def save(self):
-		super().save()
-
-class Match(models.Model):
-	player_one = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
-	player_two = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
-	date = models.DateField(auto_now=False, auto_now_add=True)
-	player_one_pts = models.IntegerField(default=0)
-	player_two_pts = models.IntegerField(default=0)
-
-	objects = MatchManager()
+from game.models import Match
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	use_browser_theme = models.BooleanField(default=True)
 	dark_theme = models.BooleanField(default=True)
-	profile_picture = models.TextField(default="profilePictures/defaults/default0.jpg")
+	theme_name = models.CharField(max_length=10, default="dark")
+	profile_picture = models.TextField(default="/images/defaults/default0.jpg")
 	language_pack = models.CharField(max_length=40, default="lang/EN_UK.json")
 	friends = models.ManyToManyField(User, related_name="friends_list")
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
@@ -75,6 +18,8 @@ class Profile(models.Model):
 	blocked_users = models.ManyToManyField(User, related_name="block_user_list")
 	id42 = models.IntegerField(default=0)
 	matches = models.ManyToManyField(Match, related_name="matches_history")
+	font_amplifier = models.FloatField(default=1, validators=[MinValueValidator(0.1), MaxValueValidator(2.0)],)
+	do_not_disturb = models.BooleanField(default=False);
 
 
 @receiver(post_save, sender=User)

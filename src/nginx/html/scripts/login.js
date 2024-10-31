@@ -11,15 +11,19 @@ for (i = 0; i < slides.length; i++)
 slides[slideIdx].style.display = "block";
 
 
-Object.keys(loginSlideSelector).forEach(function(key) {
+loginSlideSelector.forEach(function(key) {
 	if (currentPage == "login"){
-		loginSlideSelector[key].addEventListener("click", (e) => {
+		key.addEventListener("click", (e) => {
 			loginSlideSelector[slideIdx].classList.remove("activeSelector");
 			slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
 			for (i = 0; i < slides.length; i++)
 				slides[i].style.display = "none";
 			slides[slideIdx].style.display = "block";
 			loginSlideSelector[slideIdx].classList.add('activeSelector');
+		})
+		key.addEventListener("keydown", (e) => {
+			if (e.key == "Enter")
+				key.click();
 		})
 	}
 })
@@ -44,15 +48,53 @@ fortyTwoLogin.addEventListener("keydown", (e) => {
 	}
 });
 
+usernameLogin = document.getElementById('inputUsername');
+pwLogin = document.getElementById('inputPassword');
+usernameRegisterInput = document.getElementById('inputRegisterUsername');
+pwRegisterInput = document.getElementById('inputRegisterPassword');
+cpwRegisterInput = document.getElementById('inputRegisterCPassword');
+
+usernameLogin.addEventListener("keydown", (e) => {
+	usernameRegisterInput.value = usernameLogin.value;
+})
+
+usernameRegisterInput.addEventListener("keydown", (e) => {
+	usernameLogin.value = usernameRegisterInput.value;
+})
+
+
+pwLogin.addEventListener("keydown", (e) => {
+	if(e.key == "Enter"){
+		login();
+	}
+	else
+		pwRegisterInput.value = pwLogin.value;
+})
+
+pwRegisterInput.addEventListener("keydown", (e) => {
+	pwLogin.value = pwRegisterInput.value;
+})
+
+
+cpwRegisterInput.addEventListener("keydown", (e) => {
+	if(e.key == "Enter"){
+		register();
+	}
+})
+
 loginBtn.addEventListener("click", (e) => {
+	login()
+})
+
+function login(){
 	username = document.getElementById('inputUsername').value;
 	pw = document.getElementById('inputPassword').value;
 	inputs = document.getElementsByClassName('formInput');
 	warning = document.createElement("a");
 	warning.className = "warning";
 	warning.text = "Field can't be empty";
-	if (e.previousElementSibling)
-		e.previousElementSibling.remove();
+	if (loginBtn.previousElementSibling)
+		loginBtn.previousElementSibling.remove();
 	for (i=0;i<inputs.length;i++){
 		if (inputs[i].value == "" && !inputs[i].previousElementSibling){
 			warningTmp = warning.cloneNode(true);
@@ -84,9 +126,9 @@ loginBtn.addEventListener("click", (e) => {
 						(async () => {
 							client = await new Client()
 							if (client == null)
-								history.replaceState("", "", `https://${hostname.host}/login`);
+								myReplaceState(`https://${hostname.host}/login`);
 							else
-								history.replaceState("", "", `https://${hostname.host}/home`);
+								myReplaceState(`https://${hostname.host}/home`);
 						})();
 					}
 				})
@@ -104,33 +146,9 @@ loginBtn.addEventListener("click", (e) => {
 			console.error('Error:', error);
 		});
 	}
-})
-
-{
-	if (client){
-		fetch('/api/user/logout', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			credentials: 'include'
-		}).then(response => {
-			inputSearchUser.style.setProperty("display", "none");
-			dropDownUserContainer.style.setProperty("display", "none");
-		});
-		client = null;
-	}
-
-	inputSearchUser.style.setProperty("display", "none");
-	dropDownUserContainer.style.setProperty("display", "none");
 }
 
-registerBtn = document.getElementById("registerBtn");
-usernameRegisterInput = document.getElementById('inputRegisterUsername');
-pwRegisterInput = document.getElementById('inputRegisterPassword');
-cpwRegisterInput = document.getElementById('inputRegisterCPassword');
-
-registerBtn.addEventListener("click", (e) => {
+function register(){
 	var lock = 0;
 	username = usernameRegisterInput.value;
 	pw = pwRegisterInput.value;
@@ -171,11 +189,11 @@ registerBtn.addEventListener("click", (e) => {
 			cpwRegisterInput.previousElementSibling.remove();
 	}
 	else if (lock == 0){
-		document.getElementById("loaderBg").style.setProperty("display", "block");
+		setLoader()
 		if (registerBtn.previousElementSibling)
 			registerBtn.previousElementSibling.remove();
 
-		const data = {username: username, password: pw, 'lang': currentLang};
+		const data = {username: username, password: pw, 'lang': currentLang, use_browser_theme: use_browser_theme};
 		fetch('/api/user/create', {
 			method: 'POST',
 			headers: {
@@ -197,14 +215,14 @@ registerBtn.addEventListener("click", (e) => {
 					(async () => {
 						client = await new Client()
 						if (client == null)
-							history.replaceState("", "", `https://${hostname.host}/login`);
+							myReplaceState(`https://${hostname.host}/login`);
 						else
-							history.replaceState("", "", `https://${hostname.host}/home`);
+							myReplaceState(`https://${hostname.host}/home`);
 					})();
 				});
 			} else {
 				response.json().then(response => {
-					document.getElementById("loaderBg").style.setProperty("display", "none");
+					unsetLoader()
 					warning = document.createElement("a");
 					warning.className = "warning";
 					warning.text = response.message;
@@ -218,4 +236,63 @@ registerBtn.addEventListener("click", (e) => {
 			console.error('There was a problem with the fetch operation:', error);
 		});
 	}
+}
+
+{
+	if (client){
+		fetch('/api/user/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		}).then(response => {
+			inputSearchUserContainer.style.setProperty("display", "none");
+			dropDownUserContainer.style.setProperty("display", "none");
+		});
+		client = null;
+	}
+
+	inputSearchUserContainer.style.setProperty("display", "none");
+	homeBtn.style.setProperty("display", "none");
+	dropDownLangBtn.focus();
+	dropDownUserContainer.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "none");
+}
+
+registerBtn = document.getElementById("registerBtn");
+
+registerBtn.addEventListener("click", (e) => {
+	register()
 })
+
+window.addEventListener("keydown", loginKeyDownEvent)
+
+function loginKeyDownEvent(e) {
+	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		loginSlideSelector[slideIdx].classList.remove('activeSelector');
+		if (e.key == "ArrowLeft")
+			slideIdx -= 1;
+		else
+			slideIdx += 1;
+		if (slideIdx > slides.length - 1)
+			slideIdx = 0;
+		if (slideIdx < 0)
+			slideIdx = slides.length - 1;
+		for (let i = 0; i < slides.length; i++)
+			slides[i].style.display = "none";
+		loginSlideSelector[slideIdx].classList.add('activeSelector');
+		slides[slideIdx].style.display = "block";
+		loginSlideSelector[slideIdx].focus();
+	}
+}
+
+inputs = document.querySelectorAll("input");
+inputs.forEach(function (input) {
+	input.addEventListener("focus", (e) => {
+		window.removeEventListener("keydown", loginKeyDownEvent);
+	})
+	input.addEventListener("focusout", (e) => {
+		window.addEventListener("keydown", loginKeyDownEvent);
+	})
+});

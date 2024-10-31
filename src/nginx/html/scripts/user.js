@@ -1,10 +1,10 @@
-var splitPath = window.location.href.split('/');
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
 sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 allMatchesButton = document.getElementById("allMatchesHistoryBtn");
 
 
 if (sendFriendRequestBtn){
+    var splitPath = window.location.href.split('/');
     sendFriendRequestBtn.addEventListener("click", (e) => {
         fetch('/api/user/send_friend_request', {
             method: 'POST',
@@ -18,9 +18,11 @@ if (sendFriendRequestBtn){
 }
 
 {
-	inputSearchUser.style.setProperty("display", "block");
+	inputSearchUserContainer.style.setProperty("display", "block");
+	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
+	notifCenterContainer.style.setProperty("display", "flex");
 	
     var splitPath = window.location.href.split('/');
     
@@ -53,13 +55,44 @@ if (sendFriendRequestBtn){
                 try{
                     matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
-                        createMatchResumeContainer(matchObj[i]);
+                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i]));
                     };
+                    document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                        elem.addEventListener("keydown", (e) => {
+                            if (e.key == "Enter"){
+                                var idx = elem.tabIndex + 1
+                                elem.querySelectorAll(".resultScoreName").forEach(function (names){
+                                    names.tabIndex = idx;
+                                    idx++;
+                                })
+                            }
+                        })
+                    });
+                    
+                    document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
+                        var tabIdx = 14;
+                        console.log(e.key);
+                        if (e.key == "Enter"){
+                            document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+                                elem.tabIndex = tabIdx;
+                                tabIdx += 3;
+                            });
+                        }
+                    });
                     matchUsersName = document.querySelectorAll(".resultScoreName")
                     Object.keys(matchUsersName).forEach(function(key){
-                        matchUsersName[key].addEventListener("click", (e) => {
-                            history.pushState("", "", `https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
-                        })
+                        if (!matchUsersName[key].classList.contains("deletedUser")){
+                            matchUsersName[key].addEventListener("click", (e) => {
+                                myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);	
+                            })
+                            matchUsersName[key].addEventListener("keydown", (e) => {
+                                if (e.key == "Enter")
+                                    matchUsersName[key].click();
+                            })
+                        }
+                        else{
+                            matchUsersName[key].innerText = client.langJson["index"][".deletedUser"];
+                        }
                     })
                 }
                 catch{
@@ -79,16 +112,16 @@ if (sendFriendRequestBtn){
             })
         }
         else{
-            history.replaceState("","", `https://${hostname.host}/home`);   // TODO replace with page 404
+            client.loadPage("/404");
         }
     })
 }
 
 allMatchesButton.addEventListener("click", (e) => {
-    history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
+    myPushState(`https://${hostname.host}/dashboard/${splitPath[4]}`);
 })
 
 allMatchesButton.addEventListener("keydown", (e) => {
     if (e.key == "Enter")
-        history.pushState("", "", `https://${hostname.host}/dashboard/${splitPath[4]}`);
+        myPushState(`https://${hostname.host}/dashboard/${splitPath[4]}`);
 })

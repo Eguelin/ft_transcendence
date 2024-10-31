@@ -1,8 +1,9 @@
 #titleFlexContainer{
-	height:fit-content;
+	height:10rem;
 	text-align: center;
 	display: flex;
 	width: -webkit-fill-available;
+	width: -moz-available;
 	align-items: center;
 }
 
@@ -12,6 +13,7 @@
 
 #browseFlexContainer {
 	width: 30vw;
+	height: inherit;
 	display: flex;
 }
 
@@ -26,11 +28,13 @@
 #goHomeButton{
 	mask-image:url("../icons/left_arrow.svg");
 	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
+	height:inherit;
+	width:5rem;
+	margin: 0 !important;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+	flex: none;
 }
 
 #goHomeButton:focus, #goHomeButton:hover{
@@ -40,15 +44,22 @@
 #themeButton{
 	mask-image:url("../icons/button-night-mode.svg");
 	background:var(--main-text-rgb);
-	height:5vw;
-	width:5vw;
-	margin: 1vmax;
+	height:3rem;
+	width:3rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+	flex: none;
+	display: none;
 }
 
-#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover{
+@media screen and (min-width:500px){
+	#themeButton{
+		display: block;
+	}
+}
+
+#themeButton:focus, #themeButton:hover, #leftSlideBtn:hover, #rightSlideBtn:hover, #leftSlideBtn:focus, #rightSlideBtn:focus{
 	outline: none;
 	background: var(--hover-text-rgb);
 }
@@ -60,34 +71,47 @@
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+	z-index: -1;
 }
 
 #pfpContainer{
-	height: 4vw;
-	width: 4vw;
-	margin: 0 1vmax;
+	height: 4rem;
+	width: 4rem;
+	align-self: center;
 	background-position: center center;
 	background-repeat: no-repeat;
 	overflow: hidden;
 	position: relative;
+	border-radius: 50%;
 }
 
 #quickSettingContainer{
 	flex-direction: row-reverse;
+	gap: .5rem;
 	display: flex;
 	width: 30vw;
 	align-items: center;
+	margin-right: .5rem;
 }
 
 #usernameBtn {
 	color: var(--main-text-rgb);
-	line-height: 4vw;
 	display: block;
 	text-align: center;
+	height: 3.5rem;
+	align-content: center;
+	min-width: 7ch;
 }
 
-#inputSearchUser{
+#inputSearchUserContainer{
+	flex: 1; 
+	text-align: left; 
+	align-self: center;
 	display: none;
+}
+#inputSearchUser{
+	width: -webkit-fill-available;
+	width: -moz-available;
 }
 
 @media screen and (orientation:landscape){
@@ -99,5 +123,368 @@
 @media screen and (orientation:portrait), (max-height:590px){
 	#pfpContainer{
 		display: none;
+	}
+}
+
+#subtitleContainer{
+	align-content: center;
+}
+
+
+.incoming#pushNotif{
+	width: 20rem;
+	animation: pushNotifAppear 300ms forwards, pushNotifDisappearBg 5s linear 300ms forwards;
+}
+
+.leaving#pushNotif{
+	animation: pushNotifAppear 300ms reverse, pushNotifDisappearBg 300ms reverse;
+}
+
+#notifCenterContainer{
+	position: absolute;
+	right: 0;
+	top: 40%;
+	height: fit-content;
+	display: none;
+	flex-direction: column;
+}
+
+#pushNotif{
+	color: var(--main-text-rgb);
+	background: var(--hover-text-rgb);
+	width: 1rem;
+	height: 1rem;
+	padding: 1rem;
+	border-radius: 2rem 0 0 2rem;
+	border: .1rem solid var(--main-text-rgb);
+    border-right: 0;
+	overflow: hidden;
+}
+
+#pushNotif #pushNotifMessage{
+	white-space: nowrap;
+}
+
+#pushNotif #pushNotifIcon{
+	mask-image:url("../icons/notif_bell.svg");
+	mask-repeat: no-repeat;
+	background-color: var(--main-text-rgb);
+
+    height: 1.5em;
+    width: 1.5em;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+}
+
+.dnd #pushNotifIcon{
+	mask-image:url("../icons/do_not_disturb_bell.svg") !important;
+	animation: none !important;
+}
+
+.pendingNotification #pushNotifIcon{
+	animation: ringBell 1000ms infinite linear;
+}
+
+@keyframes ringBell {
+	0%{rotate: 0deg;}
+	25%{rotate: 10deg;}
+	50%{rotate: -10deg;}
+	75%{rotate: 0deg;}
+	100%{rotate: 0deg;}
+
+}
+
+.incoming#pushNotif #pushNotifIcon, .leaving#pushNotif #pushNotifIcon {
+	display: none;
+}
+@keyframes pushNotifAppear {
+	0%{
+		width: 1rem;
+	}
+	100%{
+		width: 18rem;
+	}
+}
+
+@keyframes pushNotifDisappearBg {
+	0%{background: linear-gradient(90deg, var(--page-bg-rgb) 0%, var(--input-bg-rgb) 0%);}
+	1%{background: linear-gradient(90deg, var(--page-bg-rgb) 1%, var(--input-bg-rgb) 1%);}
+	2%{background: linear-gradient(90deg, var(--page-bg-rgb) 2%, var(--input-bg-rgb) 2%);}
+	3%{background: linear-gradient(90deg, var(--page-bg-rgb) 3%, var(--input-bg-rgb) 3%);}
+	4%{background: linear-gradient(90deg, var(--page-bg-rgb) 4%, var(--input-bg-rgb) 4%);}
+	5%{background: linear-gradient(90deg, var(--page-bg-rgb) 5%, var(--input-bg-rgb) 5%);}
+	6%{background: linear-gradient(90deg, var(--page-bg-rgb) 6%, var(--input-bg-rgb) 6%);}
+	7%{background: linear-gradient(90deg, var(--page-bg-rgb) 7%, var(--input-bg-rgb) 7%);}
+	8%{background: linear-gradient(90deg, var(--page-bg-rgb) 8%, var(--input-bg-rgb) 8%);}
+	9%{background: linear-gradient(90deg, var(--page-bg-rgb) 9%, var(--input-bg-rgb) 9%);}
+	10%{background: linear-gradient(90deg, var(--page-bg-rgb) 10%, var(--input-bg-rgb) 10%);}
+	11%{background: linear-gradient(90deg, var(--page-bg-rgb) 11%, var(--input-bg-rgb) 11%);}
+	12%{background: linear-gradient(90deg, var(--page-bg-rgb) 12%, var(--input-bg-rgb) 12%);}
+	13%{background: linear-gradient(90deg, var(--page-bg-rgb) 13%, var(--input-bg-rgb) 13%);}
+	14%{background: linear-gradient(90deg, var(--page-bg-rgb) 14%, var(--input-bg-rgb) 14%);}
+	15%{background: linear-gradient(90deg, var(--page-bg-rgb) 15%, var(--input-bg-rgb) 15%);}
+	16%{background: linear-gradient(90deg, var(--page-bg-rgb) 16%, var(--input-bg-rgb) 16%);}
+	17%{background: linear-gradient(90deg, var(--page-bg-rgb) 17%, var(--input-bg-rgb) 17%);}
+	18%{background: linear-gradient(90deg, var(--page-bg-rgb) 18%, var(--input-bg-rgb) 18%);}
+	19%{background: linear-gradient(90deg, var(--page-bg-rgb) 19%, var(--input-bg-rgb) 19%);}
+	20%{background: linear-gradient(90deg, var(--page-bg-rgb) 20%, var(--input-bg-rgb) 20%);}
+	21%{background: linear-gradient(90deg, var(--page-bg-rgb) 21%, var(--input-bg-rgb) 21%);}
+	22%{background: linear-gradient(90deg, var(--page-bg-rgb) 22%, var(--input-bg-rgb) 22%);}
+	23%{background: linear-gradient(90deg, var(--page-bg-rgb) 23%, var(--input-bg-rgb) 23%);}
+	24%{background: linear-gradient(90deg, var(--page-bg-rgb) 24%, var(--input-bg-rgb) 24%);}
+	25%{background: linear-gradient(90deg, var(--page-bg-rgb) 25%, var(--input-bg-rgb) 25%);}
+	26%{background: linear-gradient(90deg, var(--page-bg-rgb) 26%, var(--input-bg-rgb) 26%);}
+	27%{background: linear-gradient(90deg, var(--page-bg-rgb) 27%, var(--input-bg-rgb) 27%);}
+	28%{background: linear-gradient(90deg, var(--page-bg-rgb) 28%, var(--input-bg-rgb) 28%);}
+	29%{background: linear-gradient(90deg, var(--page-bg-rgb) 29%, var(--input-bg-rgb) 29%);}
+	30%{background: linear-gradient(90deg, var(--page-bg-rgb) 30%, var(--input-bg-rgb) 30%);}
+	31%{background: linear-gradient(90deg, var(--page-bg-rgb) 31%, var(--input-bg-rgb) 31%);}
+	32%{background: linear-gradient(90deg, var(--page-bg-rgb) 32%, var(--input-bg-rgb) 32%);}
+	33%{background: linear-gradient(90deg, var(--page-bg-rgb) 33%, var(--input-bg-rgb) 33%);}
+	34%{background: linear-gradient(90deg, var(--page-bg-rgb) 34%, var(--input-bg-rgb) 34%);}
+	35%{background: linear-gradient(90deg, var(--page-bg-rgb) 35%, var(--input-bg-rgb) 35%);}
+	36%{background: linear-gradient(90deg, var(--page-bg-rgb) 36%, var(--input-bg-rgb) 36%);}
+	37%{background: linear-gradient(90deg, var(--page-bg-rgb) 37%, var(--input-bg-rgb) 37%);}
+	38%{background: linear-gradient(90deg, var(--page-bg-rgb) 38%, var(--input-bg-rgb) 38%);}
+	39%{background: linear-gradient(90deg, var(--page-bg-rgb) 39%, var(--input-bg-rgb) 39%);}
+	40%{background: linear-gradient(90deg, var(--page-bg-rgb) 40%, var(--input-bg-rgb) 40%);}
+	41%{background: linear-gradient(90deg, var(--page-bg-rgb) 41%, var(--input-bg-rgb) 41%);}
+	42%{background: linear-gradient(90deg, var(--page-bg-rgb) 42%, var(--input-bg-rgb) 42%);}
+	43%{background: linear-gradient(90deg, var(--page-bg-rgb) 43%, var(--input-bg-rgb) 43%);}
+	44%{background: linear-gradient(90deg, var(--page-bg-rgb) 44%, var(--input-bg-rgb) 44%);}
+	45%{background: linear-gradient(90deg, var(--page-bg-rgb) 45%, var(--input-bg-rgb) 45%);}
+	46%{background: linear-gradient(90deg, var(--page-bg-rgb) 46%, var(--input-bg-rgb) 46%);}
+	47%{background: linear-gradient(90deg, var(--page-bg-rgb) 47%, var(--input-bg-rgb) 47%);}
+	48%{background: linear-gradient(90deg, var(--page-bg-rgb) 48%, var(--input-bg-rgb) 48%);}
+	49%{background: linear-gradient(90deg, var(--page-bg-rgb) 49%, var(--input-bg-rgb) 49%);}
+	50%{background: linear-gradient(90deg, var(--page-bg-rgb) 50%, var(--input-bg-rgb) 50%);}
+	51%{background: linear-gradient(90deg, var(--page-bg-rgb) 51%, var(--input-bg-rgb) 51%);}
+	52%{background: linear-gradient(90deg, var(--page-bg-rgb) 52%, var(--input-bg-rgb) 52%);}
+	53%{background: linear-gradient(90deg, var(--page-bg-rgb) 53%, var(--input-bg-rgb) 53%);}
+	54%{background: linear-gradient(90deg, var(--page-bg-rgb) 54%, var(--input-bg-rgb) 54%);}
+	55%{background: linear-gradient(90deg, var(--page-bg-rgb) 55%, var(--input-bg-rgb) 55%);}
+	56%{background: linear-gradient(90deg, var(--page-bg-rgb) 56%, var(--input-bg-rgb) 56%);}
+	57%{background: linear-gradient(90deg, var(--page-bg-rgb) 57%, var(--input-bg-rgb) 57%);}
+	58%{background: linear-gradient(90deg, var(--page-bg-rgb) 58%, var(--input-bg-rgb) 58%);}
+	59%{background: linear-gradient(90deg, var(--page-bg-rgb) 59%, var(--input-bg-rgb) 59%);}
+	60%{background: linear-gradient(90deg, var(--page-bg-rgb) 60%, var(--input-bg-rgb) 60%);}
+	61%{background: linear-gradient(90deg, var(--page-bg-rgb) 61%, var(--input-bg-rgb) 61%);}
+	62%{background: linear-gradient(90deg, var(--page-bg-rgb) 62%, var(--input-bg-rgb) 62%);}
+	63%{background: linear-gradient(90deg, var(--page-bg-rgb) 63%, var(--input-bg-rgb) 63%);}
+	64%{background: linear-gradient(90deg, var(--page-bg-rgb) 64%, var(--input-bg-rgb) 64%);}
+	65%{background: linear-gradient(90deg, var(--page-bg-rgb) 65%, var(--input-bg-rgb) 65%);}
+	66%{background: linear-gradient(90deg, var(--page-bg-rgb) 66%, var(--input-bg-rgb) 66%);}
+	67%{background: linear-gradient(90deg, var(--page-bg-rgb) 67%, var(--input-bg-rgb) 67%);}
+	68%{background: linear-gradient(90deg, var(--page-bg-rgb) 68%, var(--input-bg-rgb) 68%);}
+	69%{background: linear-gradient(90deg, var(--page-bg-rgb) 69%, var(--input-bg-rgb) 69%);}
+	70%{background: linear-gradient(90deg, var(--page-bg-rgb) 70%, var(--input-bg-rgb) 70%);}
+	71%{background: linear-gradient(90deg, var(--page-bg-rgb) 71%, var(--input-bg-rgb) 71%);}
+	72%{background: linear-gradient(90deg, var(--page-bg-rgb) 72%, var(--input-bg-rgb) 72%);}
+	73%{background: linear-gradient(90deg, var(--page-bg-rgb) 73%, var(--input-bg-rgb) 73%);}
+	74%{background: linear-gradient(90deg, var(--page-bg-rgb) 74%, var(--input-bg-rgb) 74%);}
+	75%{background: linear-gradient(90deg, var(--page-bg-rgb) 75%, var(--input-bg-rgb) 75%);}
+	76%{background: linear-gradient(90deg, var(--page-bg-rgb) 76%, var(--input-bg-rgb) 76%);}
+	77%{background: linear-gradient(90deg, var(--page-bg-rgb) 77%, var(--input-bg-rgb) 77%);}
+	78%{background: linear-gradient(90deg, var(--page-bg-rgb) 78%, var(--input-bg-rgb) 78%);}
+	79%{background: linear-gradient(90deg, var(--page-bg-rgb) 79%, var(--input-bg-rgb) 79%);}
+	80%{background: linear-gradient(90deg, var(--page-bg-rgb) 80%, var(--input-bg-rgb) 80%);}
+	81%{background: linear-gradient(90deg, var(--page-bg-rgb) 81%, var(--input-bg-rgb) 81%);}
+	82%{background: linear-gradient(90deg, var(--page-bg-rgb) 82%, var(--input-bg-rgb) 82%);}
+	83%{background: linear-gradient(90deg, var(--page-bg-rgb) 83%, var(--input-bg-rgb) 83%);}
+	84%{background: linear-gradient(90deg, var(--page-bg-rgb) 84%, var(--input-bg-rgb) 84%);}
+	85%{background: linear-gradient(90deg, var(--page-bg-rgb) 85%, var(--input-bg-rgb) 85%);}
+	86%{background: linear-gradient(90deg, var(--page-bg-rgb) 86%, var(--input-bg-rgb) 86%);}
+	87%{background: linear-gradient(90deg, var(--page-bg-rgb) 87%, var(--input-bg-rgb) 87%);}
+	88%{background: linear-gradient(90deg, var(--page-bg-rgb) 88%, var(--input-bg-rgb) 88%);}
+	89%{background: linear-gradient(90deg, var(--page-bg-rgb) 89%, var(--input-bg-rgb) 89%);}
+	90%{background: linear-gradient(90deg, var(--page-bg-rgb) 90%, var(--input-bg-rgb) 90%);}
+	91%{background: linear-gradient(90deg, var(--page-bg-rgb) 91%, var(--input-bg-rgb) 91%);}
+	92%{background: linear-gradient(90deg, var(--page-bg-rgb) 92%, var(--input-bg-rgb) 92%);}
+	93%{background: linear-gradient(90deg, var(--page-bg-rgb) 93%, var(--input-bg-rgb) 93%);}
+	94%{background: linear-gradient(90deg, var(--page-bg-rgb) 94%, var(--input-bg-rgb) 94%);}
+	95%{background: linear-gradient(90deg, var(--page-bg-rgb) 95%, var(--input-bg-rgb) 95%);}
+	96%{background: linear-gradient(90deg, var(--page-bg-rgb) 96%, var(--input-bg-rgb) 96%);}
+	97%{background: linear-gradient(90deg, var(--page-bg-rgb) 97%, var(--input-bg-rgb) 97%);}
+	98%{background: linear-gradient(90deg, var(--page-bg-rgb) 98%, var(--input-bg-rgb) 98%);}
+	99%{background: linear-gradient(90deg, var(--page-bg-rgb) 99%, var(--input-bg-rgb) 99%);}
+	100%{background: linear-gradient(90deg, var(--page-bg-rgb) 100%, var(--input-bg-rgb) 100%);}
+}
+
+.openCenter#notifCenterContainer{
+	animation: pushNotifAppear 300ms linear forwards;
+	height: 50%;
+}
+
+.quickOpenCenter#notifCenterContainer{
+	width: 20rem;
+}
+
+.openCenter #pushNotif, .closeCenter #pushNotif, .quickOpenCenter #pushNotif{
+	width: auto;
+	flex: none;
+	border-bottom-left-radius: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.openCenter #pushNotif{	
+	animation: roundUpPushNotif 300ms linear reverse, removeBorderBottom 300ms linear 300ms forwards;
+}
+
+.closeCenter #pushNotif{	
+	animation: roundUpPushNotif 300ms linear 300ms forwards, removeBorderBottom 300ms linear reverse;
+}
+
+.openCenter #notifCenter, .quickOpenCenter #notifCenter{
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding-top: 1rem;
+    height: 0%;
+	overflow-y: hidden;
+	animation: openNotifCenter 300ms linear 300ms forwards;
+}
+
+.quickOpenCenter #notifCenter{
+	animation: openNotifCenter 300ms linear forwards !important;
+}
+
+#notifCenter{
+	display: none;
+    background: var(--option-hover-text-rgb);
+	overflow-y: scroll;
+}
+
+#notifCenter::-webkit-scrollbar{
+	width: 10px;
+}
+
+#notifCenter::-webkit-scrollbar-track{
+	background: var(--page-bg-rgb);
+}
+
+#notifCenter::-webkit-scrollbar-thumb{
+	background: var(--input-bg-rgb);
+}
+
+#notifCenter::-webkit-scrollbar-thumb:hover{
+	background: var(--main-text-rgb);
+}
+
+#notifCenter::-webkit-scrollbar-corner{
+	height: 0px;
+}
+
+
+.closeCenter#notifCenterContainer{
+	width: 20rem;
+	height: 50%;
+	animation: pushNotifAppear 300ms linear 300ms reverse;
+}
+
+.closeCenter #notifCenter{
+    display: block;
+	animation: openNotifCenter 300ms linear reverse;
+}
+
+@keyframes removeBorderBottom {
+	0%{
+		border-bottom: var(--main-text-rgb);
+	}
+	100%{
+		border-bottom: transparent;
+	}
+}
+
+@keyframes roundUpPushNotif {
+	0%{
+		border-bottom-left-radius: 0rem;
+	}
+	50%{
+		border-bottom-left-radius: 1rem;
+	}
+	100%{
+		border-bottom-left-radius: 2rem;
+	}
+}
+
+@keyframes openNotifCenter {
+	0% {
+		display: block;
+		height: 0%;
+		border-left: .1rem solid var(--main-text-rgb);
+		border-bottom: .1rem solid var(--main-text-rgb);
+	}
+	100% {
+		height: 100%;
+		border-left: .1rem solid var(--main-text-rgb);
+		border-bottom: .1rem solid var(--main-text-rgb);
+		overflow-y: scroll;
+	}
+}
+
+.notifContainer{
+	background: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	font-size: 1rem;
+	height: 4.1rem;
+	animation: appearNotif 300ms linear forwards;
+}
+.openCenter #notifCenter .notifContainer, .quickOpenCenter #notifCenter .notifContainer{
+	height: 0;
+	font-size: 0;
+	animation: appearNotif 300ms linear 300ms forwards;
+}
+
+.closeCenter #notifCenter .notifContainer{
+	height: 0;
+	font-size: 0;
+	animation: appearNotif 300ms linear reverse;
+}
+
+.notifMessage{
+	padding: .5rem;
+	display: block;
+	border-bottom: 1px solid var(--page-bg-rgb);
+}
+
+.notifOptionContainer{
+	display: flex;
+}
+
+.notifAccept, .notifReject{
+	background: var(--main-text-rgb);;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	height: 2em;
+	width: 2em;
+	flex: auto;
+}
+
+.separator{
+	width: 1px;
+	background: var(--page-bg-rgb);
+}
+
+.notifAccept{
+	mask-image: url(../icons/check.svg);
+} 
+.notifReject{
+	mask-image: url(../icons/cross.svg);
+}
+
+@keyframes appearNotif {
+	0%{
+		display: block;
+		font-size: 0rem;
+		height: 0rem;
+	}
+	100%{
+		display: block;
+		font-size: 1rem;
+		height: fit-content;
 	}
 }
