@@ -1,94 +1,108 @@
 <div style="height: fit-content; text-align: center; display: flex;">
-	<div id="leftSlideBtn"></div>
-	<div id="rightSlideBtn"></div>
-	<div class="settingSlide" style="width: -webkit-fill-available;">
+	<div id="leftSlideBtn" tabindex="12" aria-label="Switch settings page"></div>
+	<div id="rightSlideBtn" tabindex="23" aria-label="Switch settings page"></div>
+	<div class="settingSlide">
 		<h2 id="accountTitle">Account</h2>
 		<div class="forms" id="saveUsernameContainer">
-			<input tabindex="12" type="text" id="inputChangeUsername" class="formInput" name="username" placeholder="Username"/>
-			<div tabindex="13" id="saveUsernameBtn"></div>
+			<input tabindex="13" type="text" id="inputChangeUsername" class="formInput" name="username" placeholder="Username"/>
+			<div tabindex="14" id="saveUsernameBtn"></div>
 		</div>
 
 		<div class="forms">
-			<label tabindex="14" for="inputPfp" id="pfpLabel">Profile picture</label>
+			<label tabindex="15" for="inputPfp" id="pfpLabel" aria-label="Change profile picture">Profile picture</label>
 			<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
 		</div>
 
 
 		<div class="forms">
-			<button tabindex="16" id="deleteBtn" class="deleteBtn">DELETE ACCOUNT</button>
-		</div>
-		<div id="popupBg">
-		</div>
-
-
-		<div id="confirmPfpContainer">
-			<div style="position: relative;">
-				<img id="confirmPfpImg">
-				<div class="pfpMask" id="confirmPfpMask"></div>
-			</div>
-			<button tabindex="15" id="confirmPfpBtn">Save</button>
-		</div>
-
-		<div id="confirmDeletePopup">
-			<a id="confirmDeleteDialog">To confirm you want to delete your account, please enter </a>
-			<a id="confirmDeleteDialogVar" style="background-color: var(--option-hover-text-rgb); padding: .5vmin;"></a>
-			<input tabindex="17" type="text" id="confirmDeleteInput" placeholder="Confirmation">
-			<button tabindex="18" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
+			<button tabindex="17" id="deleteAccountBtn" class="deleteBtn">DELETE ACCOUNT</button>
 		</div>
 	</div>
 
 
-	<div class="settingSlide" style="width: -webkit-fill-available;">
+	<div class="settingSlide">
 		<h2 id="accessibilityTitle">Accessibility</h2>
-		<div style="height:fit-content;">
-			<div class="dropDownLandscape" tabindex="12">
-				<button tabindex="-1" id="themesDropDownL" class="dropDownBtn">Themes</button>
-				<div class="dropDownOptionContainer">
-					<div class="dropDownArrow"></div>
-					<div class="dropDownContent">
-						<a class="loadLight" id="loadLightL" >Light</a>
-						<a class="loadDark"  id="loadDarkL"  >Dark</a>
-					</div>
-				</div>
-			</div>
-			<div class="dropDownPortrait" tabindex="12">
-				<div class="dropDownOptionContainer">
-					<button tabindex="-1" id="themesDropDownP" class="dropDownBtn">Themes</button>
-					<div class="dropDownArrow"></div>
-				</div>
-				<div class="dropDownContent">
-					<a class="loadLight" id="loadLightP" >Light</a>
-					<a class="loadDark"  id="loadDarkP"  >Dark</a>
-				</div>
+		<div style="height: fit-content;" id="fontSizeRangeContainer">
+			<span id="fontSizeRangeText">Font size amplifier</span>
+			<div>
+				<input tabindex="13" id="fontSizeRange" type="range" min="0.25" max="1.75" value="1" step="0.1" list="fontSizeList">
+				<datalist id="fontSizeList">
+					<option value="0.25" label="XS"></option>
+					<option value="0.5" ></option>
+					<option value="1.0" label="M"></option>
+					<option value="1.5" ></option>
+					<option value="1.75" label="XL"></option>
+				</datalist>				
 			</div>
 		</div>
-		<div style="height:fit-content;">
-			<div class="dropDownLandscape" tabindex="13">
-				<button tabindex="-1" id="languagesDropDownL" class="dropDownBtn">Language</button>
+		
+		
+		<div id="settingsDropDownContainer" style="height:fit-content;">
+			<div id="settingsDropDownTheme" class="settingsDropDown" tabindex="14" aria-label="Theme dropdown menu">
 				<div class="dropDownOptionContainer">
+					<button tabindex="-1" id="themesDropDown" class="dropDownBtn">Themes</button>
 					<div class="dropDownArrow"></div>
-					<div class="dropDownContent">
-						<a id="englishBtnL" class="englishBtn">English</a>
-						<a id="frenchBtnL" class="frenchBtn">French</a>
-						<a id="germanBtnL" class="germanBtn">German</a>
-						<a id="italianBtnL" class="italianBtn">Italian</a>
-						<a id="pirateBtnL" class="pirateBtn">Pirate</a>
-					</div>
 				</div>
+				<ul class="dropDownContent">
+					<li>
+						<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeLight" >Light</a>
+					</li>
+					<li>
+						<a class="settingsThemeDropDown" tabindex="16" id="settingsThemeDark"  >Dark</a>
+					</li>
+					<li>
+						<a class="settingsThemeDropDown" tabindex="17" id="settingsThemeHCLight"  >High contrast light</a>
+					</li>
+					<li>
+						<a class="settingsThemeDropDown" tabindex="18" id="settingsThemeHCDark"  >High contrast dark</a>
+					</li>
+					<li>
+						<a class="settingsThemeDropDown" tabindex="19" id="settingsThemeDevice"  >Devices mode</a>
+					</li>
+				</ul>
 			</div>
-			<div class="dropDownPortrait" tabindex="13">
+			<div id="settingsDropDownLang" class="settingsDropDown" tabindex="20" aria-label="Language dropdown menu">
 				<div class="dropDownOptionContainer">
-					<button tabindex="-1" id="languagesDropDownP" class="dropDownBtn">Language</button>
+					<button tabindex="-1" id="languagesDropDown" class="dropDownBtn">Language</button>
 					<div class="dropDownArrow"></div>
 				</div>
-				<div class="dropDownContent">
-					<a id="englishBtnP" class="englishBtn">English</a>
-					<a id="frenchBtnP" class="frenchBtn">French</a>
-					<a id="germanBtnP" class="germanBtn">German</a>
-					<a id="italianBtnP" class="italianBtn">Italian</a>
-					<a id="pirateBtnP" class="pirateBtn">Pirate</a>
-				</div>
+				<ul class="dropDownContent">
+					<li>
+						<a id="EN_UK" tabindex="21" class="settingsLangDropDown">English</a>
+					</li>
+					<li>
+						<a id="FR_FR" tabindex="22" class="settingsLangDropDown">Français</a>
+					</li>
+					<li>
+						<a id="DE_GE" tabindex="23" class="settingsLangDropDown">Deutsch</a>
+					</li>
+					<li>
+						<a id="IT_IT" tabindex="24" class="settingsLangDropDown">Italiano</a>
+					</li>
+					<li>
+						<a id="AR_GH" tabindex="25" class="settingsLangDropDown">Pirate</a>
+					</li>
+				</ul>
 			</div>
 		</div>
+		
+	</div>
+
+	<div id="popupBg" style="z-index: 1;">
+	</div>
+
+	<div id="confirmPfpContainer" style="z-index: 2;">
+		<div style="position: relative;">
+			<img id="confirmPfpImg">
+			<div class="pfpMask" id="confirmPfpMask"></div>
+		</div>
+		<button tabindex="16" id="confirmPfpBtn" aria-label="Confirm profile picture">Save</button>
+	</div>
+
+	<div id="confirmDeletePopup" style="z-index: 2;">
+		<a id="confirmDeleteDialog">To confirm you want to delete your account, please enter </a>
+		<a id="confirmDeleteDialogVar" style="background: var(--page-bg-rgb);padding: .3ch;"></a>
+		<input tabindex="18" type="text" id="confirmDeleteInput" placeholder="Confirmation" aria-label="Type you username, then press enter to confirm deletion">
+		<button tabindex="19" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
 	</div>
 </div>
