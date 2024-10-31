@@ -390,7 +390,7 @@ document.getElementById("fontSizeRange").addEventListener("input", (e) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ "font_amplifier":  e.target.value}),
+		body: JSON.stringify({ "font_amplifier":  parseFloat(e.target.value)}),
 		credentials: 'include'
 	})
 	client.fontAmplifier = e.target.value;
