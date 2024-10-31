@@ -13,6 +13,7 @@
 
 #browseFlexContainer {
 	width: 30vw;
+	height: inherit;
 	display: flex;
 }
 
@@ -27,11 +28,13 @@
 #goHomeButton{
 	mask-image:url("../icons/left_arrow.svg");
 	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
+	height:inherit;
+	width:5rem;
+	margin: 0 !important;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+	flex: none;
 }
 
 #goHomeButton:focus, #goHomeButton:hover{
