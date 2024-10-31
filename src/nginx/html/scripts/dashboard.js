@@ -1,12 +1,25 @@
 var chartAverage, chartAbs;
 var width, height, gradient;
 var today = new Date();
+var customStartDayInput = document.getElementById("customStartDay");
+var customEndDayInput = document.getElementById("customEndDay");
 chartAverage = null;
 chartAbs = null;
 
 lastWeekSelection = document.getElementById("lastWeekSelection");
 lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
+
+
+document.getElementById("search").addEventListener("click", (e)=>{
+    if (isNaN(Date.parse(customStartDayInput.value)) || isNaN(Date.parse(customEndDayInput.value))){
+        popUpError("Invalid date");
+        return;
+    }
+    customStartDay = new Date(Date.parse(customStartDayInput.value));
+    customEndDay = new Date(Date.parse(customEndDayInput.value));
+    loadUserDashboard(customStartDay, customEndDay);
+})
 
 lastWeekSelection.addEventListener("click", (e) => {
 	setLoader();
@@ -62,7 +75,7 @@ function getGradient(ctx, chartArea) {
 }
 
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
-    if ((startDate instanceof Date && endDate instanceof Date)){
+    if (!(startDate instanceof Date && endDate instanceof Date)){
         console.log("Wrong arguments");
         return ;    
     }
@@ -71,9 +84,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         chartAverage.destroy();
     if (chartAbs)
         chartAbs.destroy();
-    console.log(endDate, startDate);
     var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)); 
-    console.log(LastXDaysDisplayed);
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
@@ -428,7 +439,7 @@ function loadUserDashboard(startDate, endDate){
                         }
                     })
                 });
-                var tabIdx = 15;
+                var tabIdx = 19;
                 document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                     elem.tabIndex = tabIdx;
                     tabIdx += 3;
