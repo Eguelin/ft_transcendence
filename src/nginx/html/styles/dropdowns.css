@@ -307,8 +307,9 @@
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 50% 50%;
+	background-color: var(--option-hover-text-rgb);
 
-	border: .2vmin solid var(--option-hover-text-rgb);
+	border: 1px solid var(--option-hover-text-rgb);
 	border-radius: 10%;
 
 	top: 50%;
