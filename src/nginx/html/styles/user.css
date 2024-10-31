@@ -195,3 +195,76 @@
 	min-height: 5rem;
 	height: 7rem;
 }
+
+input[type="date"]{
+	width: fit-content;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.active#customPeriodSelectionContainer{
+	display: flex;
+}
+.active#customPeriodSelectionContainer :nth-child(1){
+	animation: activeCustomPeriodSelectionAnim 300ms forwards linear;
+}
+.active#customPeriodSelectionContainer :nth-child(2){
+	animation: activeCustomPeriodSelectionAnim 300ms 300ms forwards linear;
+}
+
+.active#customPeriodSelectionContainer :nth-child(3){
+	animation: activeCustomPeriodSelectionAnim 300ms 600ms forwards linear;
+}
+
+.inactive#customPeriodSelectionContainer{
+	display: flex;
+}
+.inactive#customPeriodSelectionContainer :nth-child(1){
+	animation: activeCustomPeriodSelectionAnim 300ms 600ms forwards reverse linear;
+}
+.inactive#customPeriodSelectionContainer :nth-child(2){
+	animation: activeCustomPeriodSelectionAnim 300ms 300ms forwards reverse linear;
+}
+
+.inactive#customPeriodSelectionContainer :nth-child(3){
+	animation: activeCustomPeriodSelectionAnim 300ms forwards reverse linear;
+}
+
+
+@keyframes activeCustomPeriodSelectionAnim {
+	0%{
+		width: 0;
+		padding: 0;
+	}
+	100%{
+		width: 7rem;
+		padding: .5rem;
+	}
+}
+
+#customPeriodSelectionContainer{
+	display: none;
+	gap: 1ch;
+	overflow: hidden;
+}
+
+#customPeriodSelectionContainer input{
+	border: 0;
+}
+
+#customPeriodSelectionContainer input, #customPeriodSelectionContainer button{
+	display: block;
+	padding: .5rem;
+}
+
+
+.active#customPeriodSelectionContainer input, .active#customPeriodSelectionContainer button{
+	width: 0;
+} 
+.inactive#customPeriodSelectionContainer input, .inactive#customPeriodSelectionContainer button{
+	width: 7rem;
+}

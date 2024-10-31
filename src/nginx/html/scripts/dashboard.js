@@ -10,6 +10,23 @@ lastWeekSelection = document.getElementById("lastWeekSelection");
 lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
 
+document.getElementById("customPeriodSelection").addEventListener("click", (e) => {
+    var container = document.getElementById("customPeriodSelectionContainer");
+    if (container.classList.contains("active")){
+        container.classList.remove("active");
+        container.offsetHeight;
+        container.classList.add("inactive");
+        e.target.innerText = "+";
+        setTimeout((container)=>{
+            container.classList.remove("inactive");
+        }, 1000, container);
+    }
+    else{
+        container.offsetHeight;
+        container.classList.add("active");
+        e.target.innerText = "-";
+    }
+})
 
 document.getElementById("search").addEventListener("click", (e)=>{
     if (isNaN(Date.parse(customStartDayInput.value)) || isNaN(Date.parse(customEndDayInput.value))){
