@@ -438,6 +438,16 @@ const themeMap = {
 		"is-dark" : 1,
 		"svg-path" : "/icons/moon.svg"
 	},
+	"high_dark" : {
+		"--page-bg-rgb" : "#222831",
+		"--main-text-rgb" : "#00FFF5",
+		"--hover-text-rgb" : "#00ADB5",
+		"--option-hover-text-rgb" : "#222831",
+		"--option-text-rgb" : "#00FFF5",
+		"--input-bg-rgb" : "#393E46",
+		"is-dark" : 1,
+		"svg-path" : "/icons/moon.svg"
+	},
 	"light" : {
 		"--page-bg-rgb" : "#F5EDED",
 		"--main-text-rgb" : "#110026",
@@ -445,6 +455,16 @@ const themeMap = {
 		"--option-hover-text-rgb" : "#F5EDED",
 		"--option-text-rgb" : "#110026",
 		"--input-bg-rgb" : "#FFC6C6",
+		"is-dark" : 0,
+		"svg-path" : "/icons/sun.svg"
+	},
+	"high_light" : {
+		"--page-bg-rgb" : "#FFFBF5",
+		"--main-text-rgb" : "#7743DB",
+		"--hover-text-rgb" : "#C3ACD0",
+		"--option-hover-text-rgb" : "#FFFBF5",
+		"--option-text-rgb" : "#7743DB",
+		"--input-bg-rgb" : "#F7EFE5",
 		"is-dark" : 0,
 		"svg-path" : "/icons/sun.svg"
 	}
