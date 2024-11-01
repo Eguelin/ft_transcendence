@@ -152,6 +152,8 @@ var template = `
 </div>
 `
 
+var tournament;
+
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -292,9 +294,8 @@ const tournamentMap = {
 	".semi.right div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
 	".semi.right div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
 }
-var tmp;
 
-function displayTournament(tournament){
+function displayTournament(){
 	gameContainer = document.getElementById("gameContainer");
 	tournamentContainer = document.getElementById("tournamentContainer");
 
@@ -369,10 +370,12 @@ function displayTournament(tournament){
 			document.querySelector(".contestMatchResume.final.match .contestUserContainer.right").classList.add("winner");
 	}
 
+	if (document.getElementById("treeCanva"))
+		document.getElementById("treeCanva").remove();
 	treeCanva = document.createElement("canvas");
 	treeCanva.id = "treeCanva";
-	treeCanva.width = tournamentContainer.clientWidth;
-	treeCanva.height = tournamentContainer.clientHeight;
+	treeCanva.width = document.body.clientWidth;
+	treeCanva.height = document.body.clientHeight;
 	tournamentContainer.appendChild(treeCanva);
 	treeCtx = treeCanva.getContext("2d");
 	treeCtx.strokeStyle = client.mainTextRgb;
@@ -393,7 +396,6 @@ function displayTournament(tournament){
 			treeCtx.lineTo(endPoint.x, endPoint.y);
 			treeCtx.stroke();
 			treeCtx.closePath();
-			tmp = pointTwo;
 		}
 	})
 }
@@ -452,6 +454,7 @@ function game() {
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
+			window.removeEventListener("resize", displayTournament);
 			gameInit(data.message);
 		} else if (data.type === "game_countdown") {
 			countdown = data.message;
@@ -471,10 +474,14 @@ function game() {
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "game_tournament") {
 			console.log(tmp_contest);
-			displayTournament(tmp_contest);
+			tournament = tmp_contest;
+			displayTournament();
+			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "game_tournament_end") {
 			console.log(tmp_contest);
-			displayTournament(tmp_contest);
+			tournament = tmp_contest;
+			displayTournament();
+			window.addEventListener("resize", displayTournament);
 		}
 	}
 
