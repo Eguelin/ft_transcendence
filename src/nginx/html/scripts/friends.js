@@ -1,43 +1,111 @@
-deleteRequestPopup = document.getElementById("deleteRequestPopup");
-blockFriendPopup = document.getElementById("blockFriendPopup");
-popupBg = document.getElementById("popupBg");
-sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
-allFriendListContainer = document.getElementById("allFriendList");
-onlineFriendListContainer = document.getElementById("onlineFriendList");
-pendingFriendRequestListContainer = document.getElementById("pendingFriendRequestList");
-blockedListContainer = document.getElementById("blockedList");
-friendInfo = document.getElementById("friendInfo");
-
-friendSlides = document.querySelectorAll(".friendSlide");
-slideSelector = document.querySelectorAll(".slideSelector");
+var deleteRequestPopup;
+var blockFriendPopup;
+var popupBg;
+var sendFriendRequestBtn;
+var allFriendListContainer;
+var onlineFriendListContainer;
+var pendingFriendRequestListContainer;
+var blockedListContainer;
+var friendInfo;
+var friendSlides;
+var slideSelector;
 var friendSlideIdx = 0;
-friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
-slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 
-homeBtn.style.setProperty("display", "block");
-inputSearchUserContainer.style.setProperty("display", "block");
-document.getElementById("inputSearchUser").focus();
-dropDownUserContainer.style.setProperty("display", "flex");
+var template = `
+<div id="friendInfo">
+	<div id="friendSlideSelector">
+		<div id="onlineFriendSelector" class="slideSelector" tabindex="12">
+			<div id="onlineFriendSelectorText">Online</div>
+			<div id="onlineFriendSelectorCount" class="userSlideCount">(0)</div>
+		</div>
+		<div id="allFriendSelector" class="slideSelector" tabindex="13">
+			<div id="allFriendSelectorText">All</div>
+			<div id="allFriendSelectorCount" class="userSlideCount">(0)</div>
+		</div>
+		<div id="pendingFriendRequestSelector" class="slideSelector" tabindex="14">
+			<div id="pendingFriendRequestSelectorText">Pending</div>
+			<div id="pendingFriendRequestSelectorCount" class="userSlideCount">(0)</div>
+		</div>
+		<div id="blockedSelector" class="slideSelector" tabindex="15">
+			<div id="blockedSelectorText">Blocked</div>
+			<div id="blockedSelectorCount" class="userSlideCount">(0)</div>
+		</div>
+	</div>
 
-slideSelector.forEach(function(key) {
-	if (currentPage == "friends"){
-		key.addEventListener("click", (e) => {
-			friendSlides[friendSlideIdx].classList.remove("activeSlide");
-			slideSelector[friendSlideIdx].classList.remove("activeSelector");
-			friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-			friendSlides[friendSlideIdx].classList.add('activeSlide');
-			if (friendSlides[friendSlideIdx].childElementCount > 0){
-				friendSlides[friendSlideIdx].firstChild.lastChild.focus();
-			}
-			slideSelector[friendSlideIdx].classList.add("activeSelector");
-		})
-		key.addEventListener("keydown", (e) => {
-			if (e.key == "Enter"){
-				key.click();
-			}
-		})
-	}
-})
+	<div id="onlineFriendList" class="friendSlide activeSlide"></div>
+	<div id="allFriendList" class="friendSlide"></div>
+	<div id="pendingFriendRequestList" class="friendSlide"></div>
+	<div id="blockedList" class="friendSlide"></div>
+
+</div>
+<div style="z-index: 1;">
+	<div id="popupBg" style="display: none;"></div>
+	<div id="deleteFriendPopup">
+		<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
+		<button id="confirmDelete" aria-label="Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+	</div>
+	<div id="blockFriendPopup">
+		<a id="confirmBlockQuestion">Are you sure you want to block this friend</a>
+		<button id="confirmBlock" aria-label="Are you sure you want to block this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+	</div>
+</div>`
+
+{	
+	document.getElementById("container").innerHTML = template;
+
+	deleteRequestPopup = document.getElementById("deleteRequestPopup");
+	blockFriendPopup = document.getElementById("blockFriendPopup");
+	popupBg = document.getElementById("popupBg");
+	sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
+	allFriendListContainer = document.getElementById("allFriendList");
+	onlineFriendListContainer = document.getElementById("onlineFriendList");
+	pendingFriendRequestListContainer = document.getElementById("pendingFriendRequestList");
+	blockedListContainer = document.getElementById("blockedList");
+	friendInfo = document.getElementById("friendInfo");
+	friendSlides = document.querySelectorAll(".friendSlide");
+	slideSelector = document.querySelectorAll(".slideSelector");
+
+	friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+	
+	slideSelector.forEach(function(key) {
+		if (currentPage == "friends"){
+			key.addEventListener("click", (e) => {
+				friendSlides[friendSlideIdx].classList.remove("activeSlide");
+				slideSelector[friendSlideIdx].classList.remove("activeSelector");
+				friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
+				friendSlides[friendSlideIdx].classList.add('activeSlide');
+				if (friendSlides[friendSlideIdx].childElementCount > 0){
+					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
+				}
+				slideSelector[friendSlideIdx].classList.add("activeSelector");
+			})
+			key.addEventListener("keydown", (e) => {
+				if (e.key == "Enter"){
+					key.click();
+				}
+			})
+		}
+	})
+
+	inputSearchUserContainer.style.setProperty("display", "block");
+	slideSelector[friendSlideIdx].focus();
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
+	notifCenterContainer.style.setProperty("display", "flex");
+
+	checkUpdate();
+
+	document.querySelectorAll("#confirmDelete, #confirmBlock, #unblockBtn").forEach(function (elem) {
+		elem.addEventListener("focus", (e)=>{
+			window.removeEventListener("keydown", friendKeyDownEvent);
+		});
+		elem.addEventListener("focusout", (e)=>{
+			window.addEventListener("keydown", friendKeyDownEvent);
+		});
+	})
+}
+
 
 
 document.addEventListener("click", (e) => {
@@ -114,15 +182,6 @@ document.addEventListener("click", (e) => {
 			e.target.closest(".friendContainer").remove();
 		}
 	}
-})
-
-document.querySelectorAll("#confirmDelete, #confirmBlock, #unblockBtn").forEach(function (elem) {
-	elem.addEventListener("focus", (e)=>{
-		window.removeEventListener("keydown", friendKeyDownEvent);
-	});
-	elem.addEventListener("focusout", (e)=>{
-		window.addEventListener("keydown", friendKeyDownEvent);
-	});
 })
 
 document.addEventListener("keydown", (e) => {
@@ -389,7 +448,6 @@ function checkUpdate(){
 	}
 }
 
-checkUpdate();
 
 function friendKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
@@ -410,12 +468,6 @@ function friendKeyDownEvent(e) {
 }
 
 window.addEventListener("keydown", friendKeyDownEvent);
-
-inputSearchUserContainer.style.setProperty("display", "block");
-slideSelector[friendSlideIdx].focus();
-dropDownUserContainer.style.setProperty("display", "flex");
-homeBtn.style.setProperty("display", "block");
-notifCenterContainer.style.setProperty("display", "flex");
 
 async function updateFriendsAriaLabel(key, content){
 	if (key.startsWith("All"))

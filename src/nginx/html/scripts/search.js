@@ -1,4 +1,17 @@
+var template = `
+<div id="pageContentContainer">
+    <div id="userResumeCountContainer">
+        <a id="userResumeCount"></a>
+        <a id="userResumeCountText">results matched</a>
+        <a id="userResumeSearch"></a>
+    </div>
+    <div id="resumeContainer">
+
+    </div>
+</div>`
+
 {
+    document.getElementById("container").innerHTML = template;
     inputSearchUserContainer.style.setProperty("display", "block");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "none");

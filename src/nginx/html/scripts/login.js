@@ -1,90 +1,183 @@
-container = document.getElementById("container");
-loginBtn = document.getElementById('loginBtn');
-swichTheme = document.getElementById("themeButton");
-fortyTwoLogin = document.getElementById("fortyTwoLogin");
-loginSlideSelector = document.querySelectorAll(".slideSelector");
+var loginBtn;
+var swichTheme;
+var fortyTwoLogin;
+var loginSlideSelector;
 
-slides = document.querySelectorAll(".loginSlide");
+var slides;
 var slideIdx = 0;
-for (i = 0; i < slides.length; i++)
-	slides[i].style.display = "none";
-slides[slideIdx].style.display = "block";
 
+var template = `
+<div id="pageContentContainer" style="width: fit-content;left: 50%;position: relative;translate: -50%;min-width: 40vw;">
+	<div id="loginSlideSelector">
+		<div tabindex="12" id="loginSelector" class="slideSelector activeSelector">
+			<div id="loginSelectorText">Login</div>
+		</div>
+		<div tabindex="13" id="registerSelector" class="slideSelector">
+			<div id="registerSelectorText">Register</div>
+		</div>
+	</div>
 
-loginSlideSelector.forEach(function(key) {
-	if (currentPage == "login"){
-		key.addEventListener("click", (e) => {
-			loginSlideSelector[slideIdx].classList.remove("activeSelector");
-			slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-			for (i = 0; i < slides.length; i++)
-				slides[i].style.display = "none";
-			slides[slideIdx].style.display = "block";
-			loginSlideSelector[slideIdx].classList.add('activeSelector');
-		})
-		key.addEventListener("keydown", (e) => {
-			if (e.key == "Enter")
-				key.click();
-		})
-	}
-})
+	<div class="loginSlide">
+		<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
+		<div class="forms">
+			<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
+		</div>
+		<div class="forms">
+			<input tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
+		</div>
+	
+		<div class="forms">
+			<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
+		</div>
+		<div class="loginOpt" id="externalLoginOpt" style="margin-top:3vh;">Other login options</div>
+		<div id="externalLogin">
+			<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
+		</div>
+	</div>
+	<div class="loginSlide">
+		<div class="loginOpt" id="createAcc">Create your account</div>
+		<div class="forms">
+			<input tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
+		</div>
+		<div class="forms">
+			<input tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
+		</div>
+		<div class="forms">
+			<input tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
+		</div>
+		<div class="forms">
+			<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
+		</div>
+	</div>
+</div>
+`
 
-fortyTwoLogin.addEventListener("click", (e) => {
-	fetch('/api/user/getClientId')
-		.then(response => response.json())
-		.then(data => {
-			const url = `https://${hostname.host}/`;
-			const encodedUrl = encodeURIComponent(url);
-			const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${data.clientId}&redirect_uri=${encodedUrl}&response_type=code`;
-			window.location.href = authUrl;
-		})
-		.catch(error => {
-			console.error('Error:', error);
+{
+	document.getElementById("container").innerHTML = template;
+
+	if (client){
+		fetch('/api/user/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include'
+		}).then(response => {
+			inputSearchUserContainer.style.setProperty("display", "none");
+			dropDownUserContainer.style.setProperty("display", "none");
 		});
-});
-
-fortyTwoLogin.addEventListener("keydown", (e) => {
-	if (e.key == "Enter"){
-		fortyTwoLogin.click()
+		client = null;
 	}
-});
 
-usernameLogin = document.getElementById('inputUsername');
-pwLogin = document.getElementById('inputPassword');
-usernameRegisterInput = document.getElementById('inputRegisterUsername');
-pwRegisterInput = document.getElementById('inputRegisterPassword');
-cpwRegisterInput = document.getElementById('inputRegisterCPassword');
+	inputSearchUserContainer.style.setProperty("display", "none");
+	homeBtn.style.setProperty("display", "none");
+	dropDownLangBtn.focus();
+	dropDownUserContainer.style.setProperty("display", "none");
+	notifCenterContainer.style.setProperty("display", "none");
 
-usernameLogin.addEventListener("keydown", (e) => {
-	usernameRegisterInput.value = usernameLogin.value;
-})
+	loginBtn = document.getElementById('loginBtn')
+	swichTheme = document.getElementById("themeButton")
+	fortyTwoLogin = document.getElementById("fortyTwoLogin")
+	loginSlideSelector = document.querySelectorAll(".slideSelector")
+	slides = document.querySelectorAll(".loginSlide")
 
-usernameRegisterInput.addEventListener("keydown", (e) => {
-	usernameLogin.value = usernameRegisterInput.value;
-})
-
-
-pwLogin.addEventListener("keydown", (e) => {
-	if(e.key == "Enter"){
-		login();
-	}
-	else
-		pwRegisterInput.value = pwLogin.value;
-})
-
-pwRegisterInput.addEventListener("keydown", (e) => {
-	pwLogin.value = pwRegisterInput.value;
-})
+	usernameLogin = document.getElementById('inputUsername');
+	pwLogin = document.getElementById('inputPassword');
+	usernameRegisterInput = document.getElementById('inputRegisterUsername');
+	pwRegisterInput = document.getElementById('inputRegisterPassword');
+	cpwRegisterInput = document.getElementById('inputRegisterCPassword');
 
 
-cpwRegisterInput.addEventListener("keydown", (e) => {
-	if(e.key == "Enter"){
-		register();
-	}
-})
+	for (i = 0; i < slides.length; i++)
+		slides[i].style.display = "none";
+	slides[slideIdx].style.display = "block";
 
-loginBtn.addEventListener("click", (e) => {
-	login()
-})
+	loginSlideSelector.forEach(function(key) {
+		if (currentPage == "login"){
+			key.addEventListener("click", (e) => {
+				loginSlideSelector[slideIdx].classList.remove("activeSelector");
+				slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
+				for (i = 0; i < slides.length; i++)
+					slides[i].style.display = "none";
+				slides[slideIdx].style.display = "block";
+				loginSlideSelector[slideIdx].classList.add('activeSelector');
+			})
+			key.addEventListener("keydown", (e) => {
+				if (e.key == "Enter")
+					key.click();
+			})
+		}
+	})
+
+	fortyTwoLogin.addEventListener("click", (e) => {
+		fetch('/api/user/getClientId')
+			.then(response => response.json())
+			.then(data => {
+				const url = `https://${hostname.host}/`;
+				const encodedUrl = encodeURIComponent(url);
+				const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${data.clientId}&redirect_uri=${encodedUrl}&response_type=code`;
+				window.location.href = authUrl;
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+	});
+
+	fortyTwoLogin.addEventListener("keydown", (e) => {
+		if (e.key == "Enter"){
+			fortyTwoLogin.click()
+		}
+	});
+
+
+	usernameLogin.addEventListener("keydown", (e) => {
+		usernameRegisterInput.value = usernameLogin.value;
+	})
+
+	usernameRegisterInput.addEventListener("keydown", (e) => {
+		usernameLogin.value = usernameRegisterInput.value;
+	})
+
+
+	pwLogin.addEventListener("keydown", (e) => {
+		if(e.key == "Enter"){
+			login();
+		}
+		else
+			pwRegisterInput.value = pwLogin.value;
+	})
+
+	pwRegisterInput.addEventListener("keydown", (e) => {
+		pwLogin.value = pwRegisterInput.value;
+	})
+
+
+	cpwRegisterInput.addEventListener("keydown", (e) => {
+		if(e.key == "Enter"){
+			register();
+		}
+	})
+
+	loginBtn.addEventListener("click", (e) => {
+		login()
+	})
+
+	registerBtn = document.getElementById("registerBtn");
+
+	registerBtn.addEventListener("click", (e) => {
+		register()
+	})
+
+	inputs = document.querySelectorAll("input");
+	inputs.forEach(function (input) {
+		input.addEventListener("focus", (e) => {
+			window.removeEventListener("keydown", loginKeyDownEvent);
+		})
+		input.addEventListener("focusout", (e) => {
+			window.addEventListener("keydown", loginKeyDownEvent);
+		})
+	});
+}
 
 function login(){
 	username = document.getElementById('inputUsername').value;
@@ -238,34 +331,6 @@ function register(){
 	}
 }
 
-{
-	if (client){
-		fetch('/api/user/logout', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			credentials: 'include'
-		}).then(response => {
-			inputSearchUserContainer.style.setProperty("display", "none");
-			dropDownUserContainer.style.setProperty("display", "none");
-		});
-		client = null;
-	}
-
-	inputSearchUserContainer.style.setProperty("display", "none");
-	homeBtn.style.setProperty("display", "none");
-	dropDownLangBtn.focus();
-	dropDownUserContainer.style.setProperty("display", "none");
-	notifCenterContainer.style.setProperty("display", "none");
-}
-
-registerBtn = document.getElementById("registerBtn");
-
-registerBtn.addEventListener("click", (e) => {
-	register()
-})
-
 window.addEventListener("keydown", loginKeyDownEvent)
 
 function loginKeyDownEvent(e) {
@@ -286,13 +351,3 @@ function loginKeyDownEvent(e) {
 		loginSlideSelector[slideIdx].focus();
 	}
 }
-
-inputs = document.querySelectorAll("input");
-inputs.forEach(function (input) {
-	input.addEventListener("focus", (e) => {
-		window.removeEventListener("keydown", loginKeyDownEvent);
-	})
-	input.addEventListener("focusout", (e) => {
-		window.addEventListener("keydown", loginKeyDownEvent);
-	})
-});

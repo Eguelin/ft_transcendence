@@ -29,18 +29,19 @@ var pageName;
 var use_browser_theme = true;
 
 const routes = {
-	"/home": `https://${hostname.host}/bodyLess/home.html`,
-	"/": `https://${hostname.host}/bodyLess/home.html`,
-	"/game" : `https://${hostname.host}/bodyLess/game.html`,
-	"/settings" : `https://${hostname.host}/bodyLess/settings.html`,
-	"/user" : `https://${hostname.host}/bodyLess/user.html`,
-	"/dashboard" : `https://${hostname.host}/bodyLess/dashboard.html`,
-	"/search" : `https://${hostname.host}/bodyLess/search.html`,
-	"/friends" : `https://${hostname.host}/bodyLess/friends.html`,
-	"/login" : `https://${hostname.host}/bodyLess/login.html`,
-	404 : `https://${hostname.host}/bodyLess/404.html`,
-	403 : `https://${hostname.host}/bodyLess/403.html`,
-	"/admin": `https://${hostname.host}/bodyLess/admin.html`
+	"/home": `https://${hostname.host}/scripts/home.js`,
+	"/": `https://${hostname.host}/scripts/home.js`,
+	"/game" : `https://${hostname.host}/scripts/game.js`,
+	"/tournament" : `https://${hostname.host}/scripts/game.js`,
+	"/settings" : `https://${hostname.host}/scripts/settings.js`,
+	"/user" : `https://${hostname.host}/scripts/user.js`,
+	"/dashboard" : `https://${hostname.host}/scripts/dashboard.js`,
+	"/search" : `https://${hostname.host}/scripts/search.js`,
+	"/friends" : `https://${hostname.host}/scripts/friends.js`,
+	"/login" : `https://${hostname.host}/scripts/login.js`,
+	404 : `https://${hostname.host}/scripts/404.js`,
+	403 : `https://${hostname.host}/scripts/403.js`,
+	"/admin": `https://${hostname.host}/script/admin.js`
 }
 
 function addPfpUrlToImgSrc(img, path){
@@ -164,76 +165,62 @@ class Client{
 
 				if (routes[pageName]){
 					if (!this.#is_admin && pageName == "/admin"){
-						fetch(routes[403]).then((response) => {
-							response.text().then(response => {
-								currentPage = '403';
-								container.innerHTML = response;
+						currentPage = 403;
 
-								document.getElementById("script").remove();
-								var s = document.createElement("script");
-								s.setAttribute('id', 'script');
-								s.onload = function(){
-									(async () => (loadCurrentLang()))();
-								}
-								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
-								document.body.appendChild(s);
-								unsetLoader()
-							})
-						})
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.onload = function(){
+							(async () => (loadCurrentLang()))();
+						}
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', routes[403]);
+						document.body.appendChild(s);
+						unsetLoader()
 					}
 					else{
-						fetch(routes[pageName]).then((response) => {
-							response.text().then(response => {
-								currentPage = pageName.substring(1);
-								container.innerHTML = response;
+						currentPage = pageName.substring(1);
 
-								document.getElementById("script").remove();
-								var s = document.createElement("script");
-								s.onload = function(){
-									(async () => (loadCurrentLang()))();
-								}
-								s.setAttribute('id', 'script');
-								s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
-								document.body.appendChild(s);
-								unsetLoader()
-							})
-						})
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.onload = function(){
+							(async () => (loadCurrentLang()))();
+						}
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', routes[pageName]);
+						document.body.appendChild(s);
+						unsetLoader()
 					}
 				}
 				else{
-					fetch(routes[404]).then((response) => {
-						response.text().then(response => {
-							currentPage = '404';
-							container.innerHTML = response;
+					currentPage = 404;
 
-							document.getElementById("script").remove();
-							var s = document.createElement("script");
-							s.setAttribute('id', 'script');
-							s.setAttribute('src', `https://${hostname.host}/scripts/${currentPage}.js`);
-							document.body.appendChild(s);
-							unsetLoader()
+						document.getElementById("script").remove();
+						var s = document.createElement("script");
+						s.onload = function(){
 							(async () => (loadCurrentLang()))();
-						})
-					})
+						}
+						s.setAttribute('id', 'script');
+						s.setAttribute('src', routes[403]);
+						document.body.appendChild(s);
+						unsetLoader()
 				}
 			}
 			else{
 				dropDownUserContainer.style.setProperty("display", "none");
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
-				fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
-					(response.text().then(response => {
-						inputSearchUserContainer.style.setProperty("display", "none");
-						container.innerHTML = response;
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
-						document.body.appendChild(s);
-						currentPage = "login";
-						(async () => (loadCurrentLang()))();
-					}))
-				});
+
+				currentPage = 'login';
+
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.onload = function(){
+					(async () => (loadCurrentLang()))();
+				}
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
+				document.body.appendChild(s);
+				unsetLoader()
 			}
 		})();
 	}

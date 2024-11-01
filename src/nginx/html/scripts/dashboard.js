@@ -1,14 +1,84 @@
 var chartAverage, chartAbs;
 var width, height, gradient;
 var today = new Date();
-var customStartDayInput = document.getElementById("customStartDay");
-var customEndDayInput = document.getElementById("customEndDay");
+var customStartDayInput;
+var customEndDayInput;
 chartAverage = null;
 chartAbs = null;
 
-lastWeekSelection = document.getElementById("lastWeekSelection");
-lastMonthSelection = document.getElementById("lastMonthSelection");
-lastYearSelection = document.getElementById("lastYearSelection");
+var lastWeekSelection;
+var lastMonthSelection;
+var lastYearSelection;
+
+var template = `
+<div id="pageContentContainer">
+    <div id="statsContainer">
+        <div id="ratioContainer">
+            <a id="ratioText">wins/loses ratio</a>
+            <a id="ratioValue"></a>
+        </div>
+
+        <div id="nbMatchContainer">
+            <a id="nbMatchText">Number of games played</a>
+            <a id="nbMatchValue"></a>
+        </div>
+
+        <div id="nbWinContainer">
+            <a id="nbWinText">Number of games winned</a>
+            <a id="nbWinValue"></a>
+        </div>
+
+        <div id="nbLossContainer">
+            <a id="nbLossText">Number of games lost</a>
+            <a id="nbLossValue"></a>
+        </div>
+    </div>
+    <div id="timelineSelectionContainer">
+        <a id="timelineSelectionText">Display stats from the last </a>
+        <div id="timelineSelectorContainer">
+            <button tabindex="12" aria-label="Display stats from the last 7 days" class="activeTimeline" id="lastWeekSelection">7 days</button>
+            <button tabindex="13" aria-label="Display stats from the last month" id="lastMonthSelection">Month</button>
+            <button tabindex="14" aria-label="Display stats from the last year" id="lastYearSelection">Year</button>
+            <button tabindex="15" aria-label="Custom period selection" id="customPeriodSelection">+</button>
+            <div id="customPeriodSelectionContainer">
+                <input tabindex="16" aria-label="Custom start day" id="customStartDay" type="date">
+                <input tabindex="17" aria-label="Custom end day" id="customEndDay" type="date">
+                <button tabindex="18" aria-label="Search" id="search">Search</button>
+            </div>
+        </div>
+    </div>
+    <div id="profileGraphs">
+        <div id="winLossGraphContainer">
+            <canvas width="400" height="200" id="winLossGraph">
+            </canvas>
+        </div>
+        <div id="winLossAbsGraphContainer">
+            <canvas width="400" height="200" id="winLossAbsGraph">
+            </canvas>
+        </div>
+    </div>
+    <div id="matchHistoryContainer"></div>
+</div>`
+
+{
+	document.getElementById("container").innerHTML = template;
+
+    customStartDayInput = document.getElementById("customStartDay");
+    customEndDayInput = document.getElementById("customEndDay");
+    lastWeekSelection = document.getElementById("lastWeekSelection")
+    lastMonthSelection = document.getElementById("lastMonthSelection")
+    lastYearSelection = document.getElementById("lastYearSelection")
+
+
+	inputSearchUserContainer.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
+	notifCenterContainer.style.setProperty("display", "flex");
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    loadUserDashboard(startDate, today);
+}
+
 
 document.getElementById("customPeriodSelection").addEventListener("click", (e) => {
     var container = document.getElementById("customPeriodSelectionContainer");
@@ -491,14 +561,4 @@ function loadUserDashboard(startDate, endDate){
         else
 		    myPushState(`https://${hostname.host}/home`);
     })
-}
-
-{
-	inputSearchUserContainer.style.setProperty("display", "none");
-	dropDownUserContainer.style.setProperty("display", "flex");
-	homeBtn.style.setProperty("display", "block");
-	notifCenterContainer.style.setProperty("display", "flex");
-    var startDate = new Date();
-    startDate.setDate(startDate.getDate() - 7);
-    loadUserDashboard(startDate, today);
 }
