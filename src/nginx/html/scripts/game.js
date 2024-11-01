@@ -35,11 +35,13 @@ var template = `
         <div class="round quarter left">
 			<div class="contestMatchResume quarter match one">
 				<div class="contestUserContainer left">
+					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 					<div class="exit anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
+					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 					<div class="exit anchor"></div>
@@ -47,11 +49,13 @@ var template = `
 			</div>
 			<div class="contestMatchResume quarter match two">
 				<div class="contestUserContainer left">
+					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 					<div class="exit anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
+					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 					<div class="exit anchor"></div>
@@ -84,8 +88,10 @@ var template = `
 					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="exit anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
+					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 					<div class="entry anchor"></div>
@@ -118,11 +124,13 @@ var template = `
 					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="entry anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
 					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="entry anchor"></div>
 				</div>
 			</div>
 			<div class="contestMatchResume quarter match four">
@@ -130,11 +138,13 @@ var template = `
 					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="entry anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
 					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="entry anchor"></div>
 				</div>
 			</div>
 		</div>
@@ -263,6 +273,27 @@ var template = `
 	game();
 }
 
+const tournamentMap = {
+	".quarter.match.one div.contestUserContainer.left div.exit.anchor" : "div.round.semi.left .contestUserContainer.left div.entry.anchor",
+	".quarter.match.one div.contestUserContainer.right div.exit.anchor" : "div.round.semi.left .contestUserContainer.left div.entry.anchor",
+
+	".quarter.match.two div.contestUserContainer.left div.exit.anchor" : "div.round.semi.left .contestUserContainer.right div.entry.anchor",
+	".quarter.match.two div.contestUserContainer.right div.exit.anchor" : "div.round.semi.left .contestUserContainer.right div.entry.anchor",
+
+	".quarter.match.three div.contestUserContainer.left div.exit.anchor" : "div.round.semi.right .contestUserContainer.left div.entry.anchor",
+	".quarter.match.three div.contestUserContainer.right div.exit.anchor" : "div.round.semi.right .contestUserContainer.left div.entry.anchor",
+
+	".quarter.match.four div.contestUserContainer.left div.exit.anchor" : "div.round.semi.right .contestUserContainer.right div.entry.anchor",
+	".quarter.match.four div.contestUserContainer.right div.exit.anchor" : "div.round.semi.right .contestUserContainer.right div.entry.anchor",
+
+	".semi.left div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
+	".semi.left div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
+
+	".semi.right div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
+	".semi.right div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
+}
+var tmp;
+
 function displayTournament(tournament){
 	gameContainer = document.getElementById("gameContainer");
 	tournamentContainer = document.getElementById("tournamentContainer");
@@ -270,51 +301,72 @@ function displayTournament(tournament){
 	gameContainer.style.setProperty("display", "none");
 	tournamentContainer.style.setProperty("display", "flex");
 	{
-		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_0']['playerLeft']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_0']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left .username").innerText = tmp_contest['round_1']['match_0']['playerLeft']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left .score").innerText = tmp_contest['round_1']['match_0']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.right .username").innerText = tmp_contest['round_1']['match_0']['playerRight']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.right .score").innerText = tmp_contest['round_1']['match_0']['playerRight']['score'];
+		if (tmp_contest['round_1']['match_0']['playerLeft']['winner'])
+			document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left").classList.add("winner");
+		else
+			document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.right").classList.add("winner");
 
-		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_0']['playerRight']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_0']['playerRight']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.left .username").innerText = tmp_contest['round_1']['match_1']['playerLeft']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.left .score").innerText = tmp_contest['round_1']['match_1']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.right .username").innerText = tmp_contest['round_1']['match_1']['playerRight']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.right .score").innerText = tmp_contest['round_1']['match_1']['playerRight']['score'];
+		if (tmp_contest['round_1']['match_1']['playerLeft']['winner'])
+			document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.left").classList.add("winner");
+		else
+			document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.right").classList.add("winner");
 
-		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_1']['playerLeft']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_1']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.left .username").innerText = tmp_contest['round_1']['match_2']['playerLeft']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.left .score").innerText = tmp_contest['round_1']['match_2']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.right .username").innerText = tmp_contest['round_1']['match_2']['playerRight']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.right .score").innerText = tmp_contest['round_1']['match_2']['playerRight']['score'];
+		if (tmp_contest['round_1']['match_2']['playerLeft']['winner'])
+			document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.left").classList.add("winner");
+		else
+			document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.right").classList.add("winner");
 
-		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_1']['playerRight']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_1']['playerRight']['score'];
-
-		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_2']['playerLeft']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_2']['playerLeft']['score'];
-
-		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_2']['playerRight']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_2']['playerRight']['score'];
-
-		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_3']['playerLeft']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_3']['playerLeft']['score'];
-
-		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_3']['playerRight']['username'];
-		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_3']['playerRight']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.left .username").innerText = tmp_contest['round_1']['match_3']['playerLeft']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.left .score").innerText = tmp_contest['round_1']['match_3']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.right .username").innerText = tmp_contest['round_1']['match_3']['playerRight']['username'];
+		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.right .score").innerText = tmp_contest['round_1']['match_3']['playerRight']['score'];
+		if (tmp_contest['round_1']['match_3']['playerLeft']['winner'])
+			document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.left").classList.add("winner");
+		else
+			document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.right").classList.add("winner");
 	}
 
 	{
-		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.left .username")[0].innerText = tmp_contest['round_2']['match_0']['playerLeft']['username'];
-		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.left .score")[0].innerText = tmp_contest['round_2']['match_0']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.left .username").innerText = tmp_contest['round_2']['match_0']['playerLeft']['username'];
+		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.left .score").innerText = tmp_contest['round_2']['match_0']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.right .username").innerText = tmp_contest['round_2']['match_0']['playerRight']['username'];
+		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.right .score").innerText = tmp_contest['round_2']['match_0']['playerRight']['score'];
+		if (tmp_contest['round_2']['match_0']['playerLeft']['winner'])
+			document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.left").classList.add("winner");
+		else
+			document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.right").classList.add("winner");
 
-		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.right .username")[0].innerText = tmp_contest['round_2']['match_0']['playerRight']['username'];
-		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.right .score")[0].innerText = tmp_contest['round_2']['match_0']['playerRight']['score'];
-
-		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.left .username")[0].innerText = tmp_contest['round_2']['match_1']['playerLeft']['username'];
-		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.left .score")[0].innerText = tmp_contest['round_2']['match_1']['playerLeft']['score'];
-
-		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.right .username")[0].innerText = tmp_contest['round_2']['match_1']['playerRight']['username'];
-		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.right .score")[0].innerText = tmp_contest['round_2']['match_1']['playerRight']['score'];
+		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.left .username").innerText = tmp_contest['round_2']['match_1']['playerLeft']['username'];
+		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.left .score").innerText = tmp_contest['round_2']['match_1']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.right .username").innerText = tmp_contest['round_2']['match_1']['playerRight']['username'];
+		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.right .score").innerText = tmp_contest['round_2']['match_1']['playerRight']['score'];
+		if (tmp_contest['round_2']['match_1']['playerLeft']['winner'])
+			document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.left").classList.add("winner");
+		else
+			document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.right").classList.add("winner");
 	}
 
 	{
-		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.left .username")[0].innerText = tmp_contest['round_3']['match_0']['playerLeft']['username'];
-		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.left .score")[0].innerText = tmp_contest['round_3']['match_0']['playerLeft']['score'];
-
-		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.right .username")[0].innerText = tmp_contest['round_3']['match_0']['playerRight']['username'];
-		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.right .score")[0].innerText = tmp_contest['round_3']['match_0']['playerRight']['score'];
+		document.querySelector(".contestMatchResume.final.match .contestUserContainer.left .username").innerText = tmp_contest['round_3']['match_0']['playerLeft']['username'];
+		document.querySelector(".contestMatchResume.final.match .contestUserContainer.left .score").innerText = tmp_contest['round_3']['match_0']['playerLeft']['score'];
+		document.querySelector(".contestMatchResume.final.match .contestUserContainer.right .username").innerText = tmp_contest['round_3']['match_0']['playerRight']['username'];
+		document.querySelector(".contestMatchResume.final.match .contestUserContainer.right .score").innerText = tmp_contest['round_3']['match_0']['playerRight']['score'];
+		if (tmp_contest['round_3']['match_0']['playerLeft']['winner'])
+			document.querySelector(".contestMatchResume.final.match .contestUserContainer.left").classList.add("winner");
+		else
+			document.querySelector(".contestMatchResume.final.match .contestUserContainer.right").classList.add("winner");
 	}
 
 	treeCanva = document.createElement("canvas");
@@ -322,6 +374,28 @@ function displayTournament(tournament){
 	treeCanva.width = tournamentContainer.clientWidth;
 	treeCanva.height = tournamentContainer.clientHeight;
 	tournamentContainer.appendChild(treeCanva);
+	treeCtx = treeCanva.getContext("2d");
+	treeCtx.strokeStyle = client.mainTextRgb;
+
+	Object.keys(tournamentMap).forEach(function (key){
+		pointOne = document.querySelector(key);
+		if (pointOne.parentElement.classList.contains("winner")){
+			pointTwo = document.querySelector(tournamentMap[key]);
+			treeCtx.beginPath();
+			rect = pointOne.getBoundingClientRect();
+			startPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
+			rect = pointTwo.getBoundingClientRect();
+			endPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
+			midX = startPoint.x + ((endPoint.x - startPoint.x) / 2)
+			treeCtx.moveTo(startPoint.x, startPoint.y);
+			treeCtx.lineTo(midX, startPoint.y);
+			treeCtx.lineTo(midX, endPoint.y);
+			treeCtx.lineTo(endPoint.x, endPoint.y);
+			treeCtx.stroke();
+			treeCtx.closePath();
+			tmp = pointTwo;
+		}
+	})
 }
 
 function game() {
