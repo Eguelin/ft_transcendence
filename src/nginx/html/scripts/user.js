@@ -1,23 +1,53 @@
 var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the points will appeare on graph)
-sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
-allMatchesButton = document.getElementById("allMatchesHistoryBtn");
+var sendFriendRequestBtn;
+var allMatchesButton;
 
+var template = `
+<div id="pageContentContainer">
+    <div id="profileInfoContainer">
+        <div id="profilePfpContainer">
+            <img id="profilePfp"></img>
+        </div>
+        <div id="profileNameContainer">
+            <h1 id="profileName">Default</h1>
+        </div>
+        <button tabindex="12" id="sendFriendRequestBtn">Send friend request</button>
+        <button tabindex="12" id="deleteFriendBtn">Remove friend</button>
+    </div>
 
-if (sendFriendRequestBtn){
-    var splitPath = window.location.href.split('/');
-    sendFriendRequestBtn.addEventListener("click", (e) => {
-        fetch('/api/user/send_friend_request', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({'username': splitPath[4]}),
-            credentials: 'include'
-        })
-    })
-}
+    <div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
+        <div id="MatchHistoryTextContainer">
+            <div id="recentMatchHistoryText">Recent matches</div>
+            <a> | </a>
+            <div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
+        </div>
+        <div id="recentMatchHistory">
+            
+        </div>
+    </div>
+</div>
+`
 
 {
+	document.getElementById("container").innerHTML = template;
+
+    sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
+    allMatchesButton = document.getElementById("allMatchesHistoryBtn");
+
+    if (sendFriendRequestBtn){
+        var splitPath = window.location.href.split('/');
+        sendFriendRequestBtn.addEventListener("click", (e) => {
+            fetch('/api/user/send_friend_request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'username': splitPath[4]}),
+                credentials: 'include'
+            })
+        })
+    }
+
 	inputSearchUserContainer.style.setProperty("display", "block");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");

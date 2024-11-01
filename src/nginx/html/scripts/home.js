@@ -1,7 +1,28 @@
-container = document.getElementById("container");
-playBtn = document.getElementById("playBtn");
+var playBtn;
+
+var template = `
+<div id="pageContentContainer">
+	<div class="options">
+		<button id="playBtn1v1" tabindex="12">Play</button>
+	</div>
+	<div class="options">
+		<button id="playBtnLocal" tabindex="12">Play</button>
+	</div>
+	<div class="options">
+		<button id="playBtnAI" tabindex="12">Play</button>
+	</div>
+    <div id="recentMatchHistoryContainer" tabindex="13" aria-label="User today's matches">
+        <div id="recentMatchHistory">
+
+        </div>
+	</div>
+</div>
+`
 
 {
+	document.getElementById("container").innerHTML = template;
+	playBtn = document.getElementById("playBtn");
+
 	inputSearchUserContainer.style.setProperty("display", "block");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");

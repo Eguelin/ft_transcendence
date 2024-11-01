@@ -184,3 +184,8 @@
 	translate: -50% -100%;
 	font-size: 4rem;
 }
+
+
+#tournamentContainer{
+	background-color: aqua;
+}

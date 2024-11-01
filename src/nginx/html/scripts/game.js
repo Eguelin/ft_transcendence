@@ -1,11 +1,43 @@
-playerOneScore = document.querySelector("#playerOne > h1");
-playerTwoScore = document.querySelector("#playerTwo > h1");
+var playerOneScore;
+var playerTwoScore;
 maxScore = 5;
+
+var template = `
+<div id="pageContentContainer">
+    <div id="gameContainer">
+        <div class="playerInfoContainer" id="playerOne">
+            <div class="playerPfp">
+                <img id="playerOnePfp">
+            </div>
+            <h2 class="playerName"></h2>
+            <h1 class="playerScore">-</h1>
+        </div>
+        <canvas id="game" class="game">
+        </canvas>
+        <div class="playerInfoContainer" id="playerTwo">
+            <div class="playerPfp">
+                <img id="playerTwoPfp">
+            </div>
+            <h2 class="playerName"></h2>
+            <h1 class="playerScore">-</h1>
+        </div>
+    </div>
+    <div id="tournamentContiner">
+        
+    </div>
+</div>
+`
+
 {
+	document.getElementById("container").innerHTML = template;
+
 	inputSearchUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	notifCenterContainer.style.setProperty("display", "flex");
+
+	playerOneScore = document.querySelector("#playerOne > h1");
+	playerTwoScore = document.querySelector("#playerTwo > h1");
 }
 
 function game() {
