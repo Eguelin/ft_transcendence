@@ -187,5 +187,44 @@
 
 
 #tournamentContainer{
-	background-color: aqua;
+	display: none;
+	height: 100%;
+	color: var(--main-text-rgb);
+}
+
+.round{
+	height: 100%;
+	flex: 1;
+	
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.quarter.match, .semi.match, .final.match{
+	background-color: var(--hover-text-rgb);
+	display: flex;
+	flex-direction: column;
+	gap: 1ch;
+}
+
+.contestMatchResume{
+	width: fit-content;
+	padding: 1rem;
+}
+
+.contestUserContainer{
+	display: flex;
+	width: fit-content;
+	gap: 1ch;
+}
+.contestUserContainer .username{
+	text-align: left;
+	min-width: 15ch;
+}
+
+.contestMatchResume.final.match {
+    position: relative;
+    top: -4.2rem;
 }
