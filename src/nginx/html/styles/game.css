@@ -211,37 +211,39 @@
 
 .contestMatchResume{
 	width: fit-content;
-	padding: 1rem;
+	padding: 1ch 0;
 }
 
 .contestUserContainer{
 	display: flex;
 	width: fit-content;
+	align-items: center;
 	gap: 1ch;
 }
 .contestUserContainer .username{
 	text-align: left;
 	min-width: 15ch;
+	text-decoration: line-through;
+}
+
+.contestUserContainer.winner .username{
+	text-decoration: none;
+}
+
+.contestMatchResume {
+	position: relative;
 }
 
 .contestMatchResume.final.match {
-    position: relative;
     top: -4.2rem;
 }
 
-.exit.anchor{
-	width: 1ch;
-	height: 1ch;
-	background-color: red;
-}
-
-.entry.anchor{
-	width: 1ch;
-	height: 1ch;
-	background-color: blue;
+.exit.anchor, .entry.anchor{
+	flex: none;
 }
 
 #treeCanva{
 	position: absolute;
 	z-index: -1;
+	top: 0;
 }
