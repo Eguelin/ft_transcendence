@@ -228,3 +228,20 @@
     position: relative;
     top: -4.2rem;
 }
+
+.exit.anchor{
+	width: 1ch;
+	height: 1ch;
+	background-color: red;
+}
+
+.entry.anchor{
+	width: 1ch;
+	height: 1ch;
+	background-color: blue;
+}
+
+#treeCanva{
+	position: absolute;
+	z-index: -1;
+}
