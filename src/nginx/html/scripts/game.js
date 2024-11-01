@@ -22,8 +22,100 @@ var template = `
             <h1 class="playerScore">-</h1>
         </div>
     </div>
-    <div id="tournamentContiner">
-        
+
+
+
+
+
+    <div id="tournamentContainer">
+        <div class="round quarter left">
+			<div class="contestMatchResume quarter match one">
+				<div class="contestUserContainer left">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+				<div class="contestUserContainer right">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+			</div>
+			<div class="contestMatchResume quarter match two">
+				<div class="contestUserContainer left">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+				<div class="contestUserContainer right">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+			</div>
+		</div>
+
+
+        <div class="round semi left">
+			<div class="contestMatchResume semi match one">
+				<div class="contestUserContainer left">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+				<div class="contestUserContainer right">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+			</div>
+		</div>
+
+
+        <div class="round final">
+			<div class="contestMatchResume final match">
+				<div class="contestUserContainer left">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+				<div class="contestUserContainer right">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+			</div>
+		</div>
+
+
+        <div class="round semi right">
+			<div class="contestMatchResume semi match two">
+				<div class="contestUserContainer left">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+				<div class="contestUserContainer right">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+			</div>
+		</div>
+
+
+        <div class="round quarter right">
+			<div class="contestMatchResume quarter match three">
+				<div class="contestUserContainer left">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+				<div class="contestUserContainer right">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+			</div>
+			<div class="contestMatchResume quarter match four">
+				<div class="contestUserContainer left">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+				<div class="contestUserContainer right">
+					<div class="username"></div>
+					<div class="score"></div>
+				</div>
+			</div>
+		</div>
     </div>
 </div>
 `
@@ -38,6 +130,169 @@ var template = `
 
 	playerOneScore = document.querySelector("#playerOne > h1");
 	playerTwoScore = document.querySelector("#playerTwo > h1");
+
+	tmp_contest = {
+		"round_1": {
+			"match_0": {
+				"playerLeft": {
+					"username": "elise",
+					"profile_picture": "/images/defaults/default1.jpg",
+					"winner": "left",
+					"score": 2
+				},
+				"playerRight": {
+					"username": "test",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": null,
+					"score": 0
+				}
+			},
+			"match_1": {
+				"playerLeft": {
+					"username": "test1",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": null,
+					"score": 1
+				},
+				"playerRight": {
+					"username": "test2",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": 'right',
+					"score": 2
+				}
+			},
+			"match_2": {
+				"playerLeft": {
+					"username": "test3",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": 'left',
+					"score": 1
+				},
+				"playerRight": {
+					"username": "test4",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": null,
+					"score": 0
+				}
+			},
+			"match_3": {
+				"playerLeft": {
+					"username": "test5",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": null,
+					"score": 3
+				},
+				"playerRight": {
+					"username": "test6",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": 'right',
+					"score": 4
+				}
+			}
+		},
+		"round_2": {
+			"match_0": {
+				"playerLeft": {
+					"username": "elise",
+					"profile_picture": "/images/defaults/default1.jpg",
+					"winner": "left",
+					"score": 4
+				},
+				"playerRight": {
+					"username": "test2",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": null,
+					"score": 2
+				}
+			},
+			"match_1": {
+				"playerLeft": {
+					"username": "test3",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": null,
+					"score": 1
+				},
+				"playerRight": {
+					"username": "test6",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": 'right',
+					"score": 4
+				}
+			}
+		},
+		"round_3": {
+			"match_0": {
+				"playerLeft": {
+					"username": "elise",
+					"profile_picture": "/images/defaults/default1.jpg",
+					"winner": "left",
+					"score": 5
+				},
+				"playerRight": {
+					"username": "test6",
+					"profile_picture": "/images/defaults/defaultAi.gif",
+					"winner": null,
+					"score": 4
+				}
+			}
+		}
+	}
+
+
+	game();
+	
+}
+
+function displayTournament(tournament){
+	document.getElementById("gameContainer").style.setProperty("display", "none");
+	document.getElementById("tournamentContainer").style.setProperty("display", "flex");
+	{
+		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_0']['playerLeft']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_0']['playerLeft']['score'];
+
+		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_0']['playerRight']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_0']['playerRight']['score'];
+
+		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_1']['playerLeft']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_1']['playerLeft']['score'];
+
+		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_1']['playerRight']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.two .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_1']['playerRight']['score'];
+
+		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_2']['playerLeft']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_2']['playerLeft']['score'];
+
+		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_2']['playerRight']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.three .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_2']['playerRight']['score'];
+
+		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_3']['playerLeft']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_3']['playerLeft']['score'];
+
+		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.right .username")[0].innerText = tmp_contest['round_1']['match_3']['playerRight']['username'];
+		document.querySelectorAll(".contestMatchResume.quarter.match.four .contestUserContainer.right .score")[0].innerText = tmp_contest['round_1']['match_3']['playerRight']['score'];
+	}
+
+	{
+		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.left .username")[0].innerText = tmp_contest['round_2']['match_0']['playerLeft']['username'];
+		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.left .score")[0].innerText = tmp_contest['round_2']['match_0']['playerLeft']['score'];
+
+		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.right .username")[0].innerText = tmp_contest['round_2']['match_0']['playerRight']['username'];
+		document.querySelectorAll(".contestMatchResume.semi.match.one .contestUserContainer.right .score")[0].innerText = tmp_contest['round_2']['match_0']['playerRight']['score'];
+
+		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.left .username")[0].innerText = tmp_contest['round_2']['match_1']['playerLeft']['username'];
+		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.left .score")[0].innerText = tmp_contest['round_2']['match_1']['playerLeft']['score'];
+
+		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.right .username")[0].innerText = tmp_contest['round_2']['match_1']['playerRight']['username'];
+		document.querySelectorAll(".contestMatchResume.semi.match.two .contestUserContainer.right .score")[0].innerText = tmp_contest['round_2']['match_1']['playerRight']['score'];
+	}
+
+	{
+		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.left .username")[0].innerText = tmp_contest['round_3']['match_0']['playerLeft']['username'];
+		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.left .score")[0].innerText = tmp_contest['round_3']['match_0']['playerLeft']['score'];
+		
+		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.right .username")[0].innerText = tmp_contest['round_3']['match_0']['playerRight']['username'];
+		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.right .score")[0].innerText = tmp_contest['round_3']['match_0']['playerRight']['score'];
+	}
 }
 
 function game() {
@@ -112,9 +367,11 @@ function game() {
 			else
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "game_tournament") {
-			console.log(data);
+			console.log(tmp_contest);
+			displayTournament(tmp_contest);
 		} else if (data.type === "game_tournament_end") {
-			console.log(data);
+			console.log(tmp_contest);
+			displayTournament(tmp_contest);
 		}
 	}
 
@@ -408,5 +665,3 @@ function game() {
 		window.addEventListener("click", clickExitEventListener);
 	}
 }
-
-game();
