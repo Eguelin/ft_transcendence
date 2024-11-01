@@ -407,7 +407,7 @@ class PlayerRemote(Player):
 	def move(self):
 		if ((self.hasAndIsInput('ArrowUp') or self.hasAndIsInput('ArrowRight')) or (self.hasAndIsInput('KeyW') or self.hasAndIsInput('KeyD'))) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		if ((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) or (self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA'))) and self.y < GameTemplate.height - Paddle.demieHeight:
+		if ((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) or (self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA'))) and self.y < Game.height - Paddle.demieHeight:
 			self.y += Paddle.speed
 
 	@sync_to_async
@@ -485,7 +485,7 @@ class PlayerLocal(PlayerRemote):
 	def move(self):
 		if (((self.hasAndIsInput('ArrowUp') or self.hasAndIsInput('ArrowRight')) and self.side == 'right') or ((self.hasAndIsInput('KeyW') or self.hasAndIsInput('KeyD')) and self.side == 'left')) and self.y > Paddle.demieHeight:
 			self.y -= Paddle.speed
-		if (((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) and self.side == 'right') or ((self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA')) and self.side == 'left')) and self.y < GameTemplate.height - Paddle.demieHeight:
+		if (((self.hasAndIsInput('ArrowDown') or self.hasAndIsInput('ArrowLeft')) and self.side == 'right') or ((self.hasAndIsInput('KeyS') or self.hasAndIsInput('KeyA')) and self.side == 'left')) and self.y < Game.height - Paddle.demieHeight:
 			self.y += Paddle.speed
 
 	def copy(self):
