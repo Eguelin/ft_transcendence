@@ -2,6 +2,10 @@ var playerOneScore;
 var playerTwoScore;
 maxScore = 5;
 
+var gameContainer;
+var tournamentContainer;
+var treeCanva;
+
 var template = `
 <div id="pageContentContainer">
     <div id="gameContainer">
@@ -33,20 +37,24 @@ var template = `
 				<div class="contestUserContainer left">
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="exit anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="exit anchor"></div>
 				</div>
 			</div>
 			<div class="contestMatchResume quarter match two">
 				<div class="contestUserContainer left">
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="exit anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="exit anchor"></div>
 				</div>
 			</div>
 		</div>
@@ -55,12 +63,16 @@ var template = `
         <div class="round semi left">
 			<div class="contestMatchResume semi match one">
 				<div class="contestUserContainer left">
+					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="exit anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
+					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="exit anchor"></div>
 				</div>
 			</div>
 		</div>
@@ -69,12 +81,14 @@ var template = `
         <div class="round final">
 			<div class="contestMatchResume final match">
 				<div class="contestUserContainer left">
+					<div class="entry anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 				</div>
 				<div class="contestUserContainer right">
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="entry anchor"></div>
 				</div>
 			</div>
 		</div>
@@ -83,12 +97,16 @@ var template = `
         <div class="round semi right">
 			<div class="contestMatchResume semi match two">
 				<div class="contestUserContainer left">
+					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="entry anchor"></div>
 				</div>
 				<div class="contestUserContainer right">
+					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
+					<div class="entry anchor"></div>
 				</div>
 			</div>
 		</div>
@@ -97,20 +115,24 @@ var template = `
         <div class="round quarter right">
 			<div class="contestMatchResume quarter match three">
 				<div class="contestUserContainer left">
+					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 				</div>
 				<div class="contestUserContainer right">
+					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 				</div>
 			</div>
 			<div class="contestMatchResume quarter match four">
 				<div class="contestUserContainer left">
+					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 				</div>
 				<div class="contestUserContainer right">
+					<div class="exit anchor"></div>
 					<div class="username"></div>
 					<div class="score"></div>
 				</div>
@@ -238,14 +260,15 @@ var template = `
 		}
 	}
 
-
 	game();
-	
 }
 
 function displayTournament(tournament){
-	document.getElementById("gameContainer").style.setProperty("display", "none");
-	document.getElementById("tournamentContainer").style.setProperty("display", "flex");
+	gameContainer = document.getElementById("gameContainer");
+	tournamentContainer = document.getElementById("tournamentContainer");
+
+	gameContainer.style.setProperty("display", "none");
+	tournamentContainer.style.setProperty("display", "flex");
 	{
 		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.left .username")[0].innerText = tmp_contest['round_1']['match_0']['playerLeft']['username'];
 		document.querySelectorAll(".contestMatchResume.quarter.match.one .contestUserContainer.left .score")[0].innerText = tmp_contest['round_1']['match_0']['playerLeft']['score'];
@@ -289,10 +312,16 @@ function displayTournament(tournament){
 	{
 		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.left .username")[0].innerText = tmp_contest['round_3']['match_0']['playerLeft']['username'];
 		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.left .score")[0].innerText = tmp_contest['round_3']['match_0']['playerLeft']['score'];
-		
+
 		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.right .username")[0].innerText = tmp_contest['round_3']['match_0']['playerRight']['username'];
 		document.querySelectorAll(".contestMatchResume.final.match .contestUserContainer.right .score")[0].innerText = tmp_contest['round_3']['match_0']['playerRight']['score'];
 	}
+
+	treeCanva = document.createElement("canvas");
+	treeCanva.id = "treeCanva";
+	treeCanva.width = tournamentContainer.clientWidth;
+	treeCanva.height = tournamentContainer.clientHeight;
+	tournamentContainer.appendChild(treeCanva);
 }
 
 function game() {
