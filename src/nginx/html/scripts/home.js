@@ -8,7 +8,7 @@ playBtn = document.getElementById("playBtn");
 	homeBtn.style.setProperty("display", "none");
 	notifCenterContainer.style.setProperty("display", "flex");
 	tabIdx = 13;
-	
+
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 		recentMatchHistoryContainer.innerHTML = "";
@@ -37,7 +37,7 @@ playBtn = document.getElementById("playBtn");
 					}
 				})
 			});
-			
+
 			document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
 				var tabIdx = 14;
 				if (e.key == "Enter"){
@@ -69,14 +69,14 @@ playBtn = document.getElementById("playBtn");
 }
 
 playBtn1v1.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/game?mode=game_remote`);
+	myPushState(`https://${hostname.host}/game?mode=remote`);
 })
 
 playBtnLocal.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/game?mode=game_local`);
+	myPushState(`https://${hostname.host}/game?mode=local`);
 })
 
 playBtnAI.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/game?mode=game_ai`);
+	myPushState(`https://${hostname.host}/game?mode=ai`);
 })
 
