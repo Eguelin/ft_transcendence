@@ -33,8 +33,19 @@ document.getElementById("search").addEventListener("click", (e)=>{
         popUpError("Invalid date");
         return;
     }
+    setLoader();
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
+    document.getElementById("customPeriodSelection").classList.add("activeTimeline");
     customStartDay = new Date(Date.parse(customStartDayInput.value));
     customEndDay = new Date(Date.parse(customEndDayInput.value));
+    if((Math.round((customEndDay.getTime() - customStartDay.getTime()) / (1000 * 3600 * 24))) < 0){
+        var tmp = customStartDayInput.value;
+        customStartDayInput.value = customEndDayInput.value;
+        customEndDayInput.value = tmp;
+        tmp = customStartDay;
+        customStartDay = customEndDay;
+        customEndDay = tmp;
+    }
     loadUserDashboard(customStartDay, customEndDay);
 })
 
@@ -44,10 +55,7 @@ lastWeekSelection.addEventListener("click", (e) => {
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
     loadUserDashboard(startDate, today);
-    if (lastMonthSelection.classList.contains("activeTimeline"))
-        lastMonthSelection.classList.remove("activeTimeline");
-    if (lastYearSelection.classList.contains("activeTimeline"))
-        lastYearSelection.classList.remove("activeTimeline");
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
     lastWeekSelection.classList.add("activeTimeline");
 })
 
@@ -56,10 +64,7 @@ lastMonthSelection.addEventListener("click", (e) => {
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - 31);
     loadUserDashboard(startDate, today);
-    if (lastWeekSelection.classList.contains("activeTimeline"))
-        lastWeekSelection.classList.remove("activeTimeline");
-    if (lastYearSelection.classList.contains("activeTimeline"))
-        lastYearSelection.classList.remove("activeTimeline");
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
     lastMonthSelection.classList.add("activeTimeline");
 })
 
@@ -68,10 +73,7 @@ lastYearSelection.addEventListener("click", (e) => {
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - 365);
     loadUserDashboard(startDate, today);
-    if (lastWeekSelection.classList.contains("activeTimeline"))
-        lastWeekSelection.classList.remove("activeTimeline");
-    if (lastMonthSelection.classList.contains("activeTimeline"))
-        lastMonthSelection.classList.remove("activeTimeline");
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
     lastYearSelection.classList.add("activeTimeline");
 })
 

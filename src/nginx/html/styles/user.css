@@ -196,6 +196,56 @@
 	height: 7rem;
 }
 
+
+#profileGraphs {
+	display: flex;
+	gap: 1vw;
+	position: relative;
+	left: 50%;
+	translate: -50%;
+	width: fit-content;
+}
+
+.activeTimeline{
+	border: 2px solid var(--main-text-rgb) !important;
+}
+
+#timelineSelectionContainer{
+	color: var(--main-text-rgb);
+	display: flex;
+	gap: 1ch;
+	width: fit-content;
+}
+
+#timelineSelectionText{
+	align-self: center;
+}
+
+#timelineSelectorContainer{
+	display: flex;
+	width: max-content;
+	border: none;
+	height: fit-content;
+	gap: 1ch;
+}
+
+#timelineSelectorContainer button{
+	border: none;
+	width: fit-content;
+	padding: .5em;
+	font-size: unset;
+}
+
+#timelineSelectorContainer button:focus, #timelineSelectorContainer button:hover, #timelineSelectorContainer input:focus, #timelineSelectorContainer input:hover{
+	outline: none;
+	border: 1px solid var(--main-text-rgb);
+}
+
+
+#allMatchesHistoryBtn:hover, #allMatchesHistoryBtn:focus{
+	color: var(--hover-text-rgb);
+}
+
 input[type="date"]{
 	width: fit-content;
 }
@@ -217,6 +267,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .active#customPeriodSelectionContainer :nth-child(3){
+	overflow: hidden;
 	animation: activeCustomPeriodSelectionAnim 300ms 600ms forwards linear;
 }
 
@@ -231,6 +282,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .inactive#customPeriodSelectionContainer :nth-child(3){
+	overflow: hidden;
 	animation: activeCustomPeriodSelectionAnim 300ms forwards reverse linear;
 }
 
@@ -240,8 +292,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 		width: 0;
 		padding: 0;
 	}
+	99%{
+		overflow: hidden;
+	}
 	100%{
 		width: 7rem;
+		overflow: visible;
 		padding: .5rem;
 	}
 }
@@ -249,7 +305,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #customPeriodSelectionContainer{
 	display: none;
 	gap: 1ch;
-	overflow: hidden;
 }
 
 #customPeriodSelectionContainer input{
@@ -259,8 +314,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #customPeriodSelectionContainer input, #customPeriodSelectionContainer button{
 	display: block;
 	padding: .5rem;
+	outline: none;
 }
 
+#customPeriodSelectionContainer input:focus, #customPeriodSelectionContainer button:focus{
+	display: block;
+	padding: .5rem;
+}
 
 .active#customPeriodSelectionContainer input, .active#customPeriodSelectionContainer button{
 	width: 0;
