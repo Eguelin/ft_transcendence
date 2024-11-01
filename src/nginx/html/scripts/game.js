@@ -79,6 +79,10 @@ function game() {
 				displayWinner(player1.name, player1.profile_picture)
 			else
 				displayWinner(player2.name, player2.profile_picture)
+		} else if (data.type === "game_tournament") {
+			console.log(data);
+		} else if (data.type === "game_tournament_end") {
+			console.log(data);
 		}
 	}
 
@@ -122,13 +126,13 @@ function game() {
 		ball.y = message.ball.y;
 
 		ctx.lineWidth = paddle.width / 4;
-		
+
 		if (mode == "game_local"){
 			player1.profile_picture = "";
 			player2.profile_picture = "";
 			player1.name = client.langJson['game']['playerOne'];
 			player2.name = client.langJson['game']['playerTwo'];
-		
+
 		}
 		if (mode == "game_remote"){
 			if (document.getElementById("waitContainer"))
@@ -137,7 +141,7 @@ function game() {
 		window.removeEventListener("keydown", keydownExitEventListener);
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
-		
+
 		document.querySelector("#playerOne > h2").innerText = player1.name;
 		document.querySelector("#playerTwo > h2").innerText = player2.name;
 
@@ -255,7 +259,7 @@ function game() {
 		document.removeEventListener("keyup", handleKeyUp);
 		window.removeEventListener("keydown", keydownExitEventListener);
 		window.removeEventListener("click", clickExitEventListener);
-		
+
 		socket.close();
 	}
 
@@ -287,8 +291,8 @@ function game() {
 			oldKeysDown = JSON.parse(JSON.stringify(keysDown));
 		}
 	}
-	
-	
+
+
 	function keydownExitEventListener(event){
 		if (event.key == "Escape"){
 			cleanup();
@@ -298,7 +302,7 @@ function game() {
 			})
 		}
 	}
-	
+
 	function clickExitEventListener(event){
 		if (event.target.id == "winBlur"){
 			cleanup();
@@ -319,7 +323,7 @@ function game() {
 		window.addEventListener("keydown", keydownExitEventListener);
 		document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
 		document.querySelectorAll(".playerName").forEach(function (e){e.innerText = "";});
-		
+
 		document.querySelector("#playerOne > h2").innerText = client.username;
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
@@ -352,7 +356,7 @@ function game() {
 				displayWaiting();
 			}
 		})
-		
+
 		confetti({
 			particleCount: 500,
 			spread: 40,
