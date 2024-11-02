@@ -91,7 +91,11 @@ var template = `
 	</div>
 </div>
 `
+/*
+const contestMatchPlacementMap{
 
+}
+*/
 var tournament;
 
 {
@@ -215,24 +219,24 @@ var tournament;
 	game();
 }
 
-const tournamentMap = {
-	".quarter.match.one div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.left div.entry.anchor",
-	".quarter.match.one div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.left div.entry.anchor",
+const tournamentAnchorMap = {
+	".quarter.one .left .exit" : ".round.semi .one .left .entry",
+	".quarter.one .right .exit" : ".round.semi .one .left .entry",
 
-	".quarter.match.two div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.right div.entry.anchor",
-	".quarter.match.two div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.right div.entry.anchor",
+	".quarter.two .left .exit" : ".round.semi .one .right .entry",
+	".quarter.two .right .exit" : ".round.semi .one .right .entry",
 
-	".quarter.match.three div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.left div.entry.anchor",
-	".quarter.match.three div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.left div.entry.anchor",
+	".quarter.three .left .exit" : ".round.semi .two .left .entry",
+	".quarter.three .right .exit" : ".round.semi .two .left .entry",
 
-	".quarter.match.four div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.right div.entry.anchor",
-	".quarter.match.four div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.right div.entry.anchor",
+	".quarter.four .left .exit" : ".round.semi .two .right .entry",
+	".quarter.four .right .exit" : ".round.semi .two .right .entry",
 
-	".semi.match.one div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
-	".semi.match.one div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
+	".semi.one .left .exit" : ".round.final .left .entry",
+	".semi.one .right .exit" : ".round.final .left .entry",
 
-	".semi.match.two div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
-	".semi.match.two div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
+	".semi.two .left .exit" : ".round.final .right .entry",
+	".semi.two .right .exit" : ".round.final .right .entry",
 }
 
 function displayTournament(){
@@ -320,10 +324,10 @@ function displayTournament(){
 	treeCtx = treeCanva.getContext("2d");
 	treeCtx.strokeStyle = client.mainTextRgb;
 
-	Object.keys(tournamentMap).forEach(function (key){
+	Object.keys(tournamentAnchorMap).forEach(function (key){
 		pointOne = document.querySelector(key);
 		if (pointOne.parentElement.classList.contains("winner")){
-			pointTwo = document.querySelector(tournamentMap[key]);
+			pointTwo = document.querySelector(tournamentAnchorMap[key]);
 			treeCtx.beginPath();
 			rect = pointOne.getBoundingClientRect();
 			startPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
