@@ -7,19 +7,12 @@ var gameContainer;
 var tournamentContainer;
 var treeCanva;
 
-var userContainerLeftEntry = `
-<div class="entry anchor"></div>
+var userContainerAnchor = `
+<div class="anchor"></div>
 <div class="username"></div>
 <div class="score"></div>
-<div class="exit anchor"></div>
 `
 
-var userContainerRightEntry = `
-<div class="exit anchor"></div>
-<div class="username"></div>
-<div class="score"></div>
-<div class="entry anchor"></div>
-`
 /*
 <div id="leftSlideBtn" tabindex="12" aria-label="Switch tournament section"></div>
 <div id="rightSlideBtn" tabindex="13" aria-label="Switch tournament section"></div>*/
@@ -48,45 +41,45 @@ var template = `
 	<div id="tournamentContainer">
 		<div class="round quarter left">
 			<div class="contestMatchResume quarter match one">
-				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
-				<div class="contestUserContainer right">${userContainerLeftEntry}</div>
+				<div class="contestUserContainer left">${userContainerAnchor}</div>
+				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 			<div class="contestMatchResume quarter match two">
-				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
-				<div class="contestUserContainer right">${userContainerLeftEntry}</div>
+				<div class="contestUserContainer left">${userContainerAnchor}</div>
+				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 		</div>
 
 
 		<div class="round semi left">
 			<div class="contestMatchResume semi match one">
-				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
-				<div class="contestUserContainer right">${userContainerLeftEntry}</div>
+				<div class="contestUserContainer left">${userContainerAnchor}</div>
+				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 		</div>
 
 
 		<div class="round final">
 			<div class="contestMatchResume final match">
-				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
-				<div class="contestUserContainer right">${userContainerRightEntry}</div>
+				<div class="contestUserContainer left">${userContainerAnchor}</div>
+				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 		</div>
 
 		<div class="round semi right">
 			<div class="contestMatchResume semi match two">
-				<div class="contestUserContainer left">${userContainerRightEntry}</div>
-				<div class="contestUserContainer right">${userContainerRightEntry}</div>
+				<div class="contestUserContainer left">${userContainerAnchor}</div>
+				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 		</div>
 		<div class="round quarter right">
 			<div class="contestMatchResume quarter match three">
-				<div class="contestUserContainer left">${userContainerRightEntry}</div>
-				<div class="contestUserContainer right">${userContainerRightEntry}</div>
+				<div class="contestUserContainer left">${userContainerAnchor}</div>
+				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 			<div class="contestMatchResume quarter match four">
-				<div class="contestUserContainer left">${userContainerRightEntry}</div>
-				<div class="contestUserContainer right">${userContainerRightEntry}</div>
+				<div class="contestUserContainer left">${userContainerAnchor}</div>
+				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 		</div>
 		<div class="unused tournament result">
@@ -97,19 +90,42 @@ var template = `
 
 function leftSlideBtn(){
 	var contest = document.querySelector(".singleRoundDisplay");
+	var left = contest.getBoundingClientRect().left;
 
 	if (contest.getBoundingClientRect().left + getWindowWidth() <= 0){
-		contest.style.setProperty("left", `${contest.getBoundingClientRect().left + getWindowWidth()}px`)
-		document.querySelector("#treeCanva").style.setProperty("left", `${contest.getBoundingClientRect().left}px`)
+
+		const move = [
+			{ left: `${left}px`},
+			{ left: `${left + getWindowWidth()}px`}
+		];
+		const time = {
+			duration: 500,
+			iterations: 1,
+		}
+		contest.animate(move, time);
+		document.querySelector("#treeCanva").animate(move, time);
+		contest.style.setProperty("left", `${left + getWindowWidth()}px`)
+		document.querySelector("#treeCanva").style.setProperty("left", `${left + getWindowWidth()}px`)
 	}
 }
 
 function rightSlideBtn(){
 	var contest = document.querySelector(".singleRoundDisplay");
+	var left = contest.getBoundingClientRect().left;
 
 	if (contest.getBoundingClientRect().left > -(getWindowWidth() * 2)){
-		contest.style.setProperty("left", `${contest.getBoundingClientRect().left - getWindowWidth()}px`)
-		document.querySelector("#treeCanva").style.setProperty("left", `${contest.getBoundingClientRect().left}px`)
+		const move = [
+			{ left: `${left}px`},
+			{ left: `${left - getWindowWidth()}px`}
+		];
+		const time = {
+			duration: 500,
+			iterations: 1,
+		}
+		contest.animate(move, time);
+		document.querySelector("#treeCanva").animate(move, time);
+		contest.style.setProperty("left", `${left - getWindowWidth()}px`)
+		document.querySelector("#treeCanva").style.setProperty("left", `${left - getWindowWidth()}px`)
 	}
 }
 
@@ -238,23 +254,23 @@ var tournament;
 }
 
 const tournamentAnchorMap = {
-	".quarter.one .left .exit" : ".semi .one .left .entry",
-	".quarter.one .right .exit" : ".semi .one .left .entry",
+	".quarter.one .left .anchor" : ".semi .one .left .anchor",
+	".quarter.one .right .anchor" : ".semi .one .left .anchor",
 
-	".quarter.two .left .exit" : ".semi .one .right .entry",
-	".quarter.two .right .exit" : ".semi .one .right .entry",
+	".quarter.two .left .anchor" : ".semi .one .right .anchor",
+	".quarter.two .right .anchor" : ".semi .one .right .anchor",
 
-	".quarter.three .left .exit" : ".semi .two .left .entry",
-	".quarter.three .right .exit" : ".semi .two .left .entry",
+	".quarter.three .left .anchor" : ".semi .two .left .anchor",
+	".quarter.three .right .anchor" : ".semi .two .left .anchor",
 
-	".quarter.four .left .exit" : ".semi .two .right .entry",
-	".quarter.four .right .exit" : ".semi .two .right .entry",
+	".quarter.four .left .anchor" : ".semi .two .right .anchor",
+	".quarter.four .right .anchor" : ".semi .two .right .anchor",
 
-	".semi.one .left .exit" : ".final .left .entry",
-	".semi.one .right .exit" : ".final .left .entry",
+	".semi.one .left .anchor" : ".final .left .anchor",
+	".semi.one .right .anchor" : ".final .left .anchor",
 
-	".semi.two .left .exit" : ".final .right .entry",
-	".semi.two .right .exit" : ".final .right .entry",
+	".semi.two .left .anchor" : ".final .right .anchor",
+	".semi.two .right .anchor" : ".final .right .anchor",
 }
 
 function getWindowWidth() {
@@ -387,7 +403,8 @@ function displayTournament(){
 		if (document.querySelector("#tournamentContainer").classList.contains("singleRoundDisplay"))
 			document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
-		document.querySelector("#treeCanva").style.setProperty("left", `0px`)
+		if (document.getElementById("treeCanva"))
+			document.querySelector("#treeCanva").style.setProperty("left", `0px`)
 	}
 
 	if (getWindowWidth() < minFullTreeWidth)
