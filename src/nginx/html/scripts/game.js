@@ -6,149 +6,89 @@ var gameContainer;
 var tournamentContainer;
 var treeCanva;
 
+var userContainerLeftEntry = `
+<div class="entry anchor"></div>
+<div class="username"></div>
+<div class="score"></div>
+<div class="exit anchor"></div>
+`
+
+var userContainerRightEntry = `
+<div class="exit anchor"></div>
+<div class="username"></div>
+<div class="score"></div>
+<div class="entry anchor"></div>
+`
+
 var template = `
 <div id="pageContentContainer">
-    <div id="gameContainer">
-        <div class="playerInfoContainer" id="playerOne">
-            <div class="playerPfp">
-                <img id="playerOnePfp">
-            </div>
-            <h2 class="playerName"></h2>
-            <h1 class="playerScore">-</h1>
-        </div>
-        <canvas id="game" class="game">
-        </canvas>
-        <div class="playerInfoContainer" id="playerTwo">
-            <div class="playerPfp">
-                <img id="playerTwoPfp">
-            </div>
-            <h2 class="playerName"></h2>
-            <h1 class="playerScore">-</h1>
-        </div>
-    </div>
+	<div id="gameContainer">
+		<div class="playerInfoContainer" id="playerOne">
+			<div class="playerPfp">
+				<img id="playerOnePfp">
+			</div>
+			<h2 class="playerName"></h2>
+			<h1 class="playerScore">-</h1>
+		</div>
+		<canvas id="game" class="game">
+		</canvas>
+		<div class="playerInfoContainer" id="playerTwo">
+			<div class="playerPfp">
+				<img id="playerTwoPfp">
+			</div>
+			<h2 class="playerName"></h2>
+			<h1 class="playerScore">-</h1>
+		</div>
+	</div>
 
 
-
-
-
-    <div id="tournamentContainer">
-        <div class="round quarter left">
+	<div id="tournamentContainer">
+		<div class="round quarter left">
 			<div class="contestMatchResume quarter match one">
-				<div class="contestUserContainer left">
-					<div class="entry anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="exit anchor"></div>
-				</div>
-				<div class="contestUserContainer right">
-					<div class="entry anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="exit anchor"></div>
-				</div>
+				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
+				<div class="contestUserContainer right">${userContainerLeftEntry}</div>
 			</div>
 			<div class="contestMatchResume quarter match two">
-				<div class="contestUserContainer left">
-					<div class="entry anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="exit anchor"></div>
-				</div>
-				<div class="contestUserContainer right">
-					<div class="entry anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="exit anchor"></div>
-				</div>
+				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
+				<div class="contestUserContainer right">${userContainerLeftEntry}</div>
 			</div>
 		</div>
 
 
-        <div class="round semi left">
+		<div class="round semi left">
 			<div class="contestMatchResume semi match one">
-				<div class="contestUserContainer left">
-					<div class="entry anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="exit anchor"></div>
-				</div>
-				<div class="contestUserContainer right">
-					<div class="entry anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="exit anchor"></div>
-				</div>
+				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
+				<div class="contestUserContainer right">${userContainerLeftEntry}</div>
 			</div>
 		</div>
 
 
-        <div class="round final">
+		<div class="round final">
 			<div class="contestMatchResume final match">
-				<div class="contestUserContainer left">
-					<div class="entry anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="exit anchor"></div>
-				</div>
-				<div class="contestUserContainer right">
-					<div class="exit anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="entry anchor"></div>
-				</div>
+				<div class="contestUserContainer left">${userContainerLeftEntry}</div>
+				<div class="contestUserContainer right">${userContainerRightEntry}</div>
 			</div>
 		</div>
 
-
-        <div class="round semi right">
+		<div class="round semi right">
 			<div class="contestMatchResume semi match two">
-				<div class="contestUserContainer left">
-					<div class="exit anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="entry anchor"></div>
-				</div>
-				<div class="contestUserContainer right">
-					<div class="exit anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="entry anchor"></div>
-				</div>
+				<div class="contestUserContainer left">${userContainerRightEntry}</div>
+				<div class="contestUserContainer right">${userContainerRightEntry}</div>
 			</div>
 		</div>
-
-
-        <div class="round quarter right">
+		<div class="round quarter right">
 			<div class="contestMatchResume quarter match three">
-				<div class="contestUserContainer left">
-					<div class="exit anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="entry anchor"></div>
-				</div>
-				<div class="contestUserContainer right">
-					<div class="exit anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="entry anchor"></div>
-				</div>
+				<div class="contestUserContainer left">${userContainerRightEntry}</div>
+				<div class="contestUserContainer right">${userContainerRightEntry}</div>
 			</div>
 			<div class="contestMatchResume quarter match four">
-				<div class="contestUserContainer left">
-					<div class="exit anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="entry anchor"></div>
-				</div>
-				<div class="contestUserContainer right">
-					<div class="exit anchor"></div>
-					<div class="username"></div>
-					<div class="score"></div>
-					<div class="entry anchor"></div>
-				</div>
+				<div class="contestUserContainer left">${userContainerRightEntry}</div>
+				<div class="contestUserContainer right">${userContainerRightEntry}</div>
 			</div>
 		</div>
-    </div>
+		<div class="unused tournament result">
+		</div>
+	</div>
 </div>
 `
 
@@ -276,23 +216,23 @@ var tournament;
 }
 
 const tournamentMap = {
-	".quarter.match.one div.contestUserContainer.left div.exit.anchor" : "div.round.semi.left .contestUserContainer.left div.entry.anchor",
-	".quarter.match.one div.contestUserContainer.right div.exit.anchor" : "div.round.semi.left .contestUserContainer.left div.entry.anchor",
+	".quarter.match.one div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.left div.entry.anchor",
+	".quarter.match.one div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.left div.entry.anchor",
 
-	".quarter.match.two div.contestUserContainer.left div.exit.anchor" : "div.round.semi.left .contestUserContainer.right div.entry.anchor",
-	".quarter.match.two div.contestUserContainer.right div.exit.anchor" : "div.round.semi.left .contestUserContainer.right div.entry.anchor",
+	".quarter.match.two div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.right div.entry.anchor",
+	".quarter.match.two div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.one .contestUserContainer.right div.entry.anchor",
 
-	".quarter.match.three div.contestUserContainer.left div.exit.anchor" : "div.round.semi.right .contestUserContainer.left div.entry.anchor",
-	".quarter.match.three div.contestUserContainer.right div.exit.anchor" : "div.round.semi.right .contestUserContainer.left div.entry.anchor",
+	".quarter.match.three div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.left div.entry.anchor",
+	".quarter.match.three div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.left div.entry.anchor",
 
-	".quarter.match.four div.contestUserContainer.left div.exit.anchor" : "div.round.semi.right .contestUserContainer.right div.entry.anchor",
-	".quarter.match.four div.contestUserContainer.right div.exit.anchor" : "div.round.semi.right .contestUserContainer.right div.entry.anchor",
+	".quarter.match.four div.contestUserContainer.left div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.right div.entry.anchor",
+	".quarter.match.four div.contestUserContainer.right div.exit.anchor" : "div.round.semi .match.two .contestUserContainer.right div.entry.anchor",
 
-	".semi.left div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
-	".semi.left div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
+	".semi.match.one div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
+	".semi.match.one div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.left div.entry.anchor",
 
-	".semi.right div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
-	".semi.right div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
+	".semi.match.two div.contestUserContainer.left div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
+	".semi.match.two div.contestUserContainer.right div.exit.anchor" : "div.round.final .contestUserContainer.right div.entry.anchor",
 }
 
 function displayTournament(){
