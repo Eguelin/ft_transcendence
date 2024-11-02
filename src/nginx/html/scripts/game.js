@@ -102,9 +102,21 @@ function leftSlideBtn(){
 			iterations: 1,
 		}
 		contest.animate(move, time);
+		
+		document.querySelector("#leftBtn").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#leftBtn").removeEventListener("keydown", leftBtnKeydownEvent);
+		document.querySelector("#rightBtn").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#rightBtn").removeEventListener("keydown", rightBtnKeydownEvent);
+
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `${left + getWindowWidth()}px`)
-		document.querySelector("#treeCanva").style.setProperty("left", `${left + getWindowWidth()}px`)
+		document.querySelector("#treeCanva").style.setProperty("left", `${left + getWindowWidth()}px`)		
+		setTimeout(()=>{
+			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
+			document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
+			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
+			document.querySelector("#rightBtn").addEventListener("keydown", rightBtnKeydownEvent);
+		}, 500);
 	}
 }
 
@@ -122,12 +134,34 @@ function rightSlideBtn(){
 			iterations: 1,
 		}
 		contest.animate(move, time);
+
+		document.querySelector("#leftBtn").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#leftBtn").removeEventListener("keydown", leftBtnKeydownEvent);
+		document.querySelector("#rightBtn").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#rightBtn").removeEventListener("keydown", rightBtnKeydownEvent);
+
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `${left - getWindowWidth()}px`)
 		document.querySelector("#treeCanva").style.setProperty("left", `${left - getWindowWidth()}px`)
+
+		setTimeout(()=>{
+			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
+			document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
+			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
+			document.querySelector("#rightBtn").addEventListener("keydown", rightBtnKeydownEvent);
+		}, 500);
 	}
 }
 
+function leftBtnKeydownEvent(e){
+	if (e.key == "Enter")
+		leftSlideBtn();
+}
+
+function rightBtnKeydownEvent(e){
+	if (e.key == "Enter")
+		rightSlideBtn();
+}
 
 var tournament;
 
@@ -248,6 +282,11 @@ var tournament;
 			}
 		}
 	}
+
+	document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
+	document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
+	document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
+	document.querySelector("#rightBtn").addEventListener("keydown", rightBtnKeydownEvent);
 
 	game();
 }
