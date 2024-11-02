@@ -192,7 +192,12 @@
 	color: var(--main-text-rgb);
 }
 
-.round{
+.unused {
+	flex: none !important;
+	display: none;
+}
+
+.round, .tournament.result{
 	height: 100%;
 	flex: 1;
 	
@@ -234,14 +239,19 @@
 	position: relative;
 }
 
-.contestMatchResume.final.match {
-    top: -4.2rem;
-}
-
 .exit.anchor, .entry.anchor{
-	flex: none;
+	flex: none;/*
+	width: 1ch;
+	height: 1ch;*/
 }
-
+/*
+.exit.anchor{
+	background-color: red;
+} 
+.entry.anchor{
+	background-color: blue;
+}
+*/
 #treeCanva{
 	position: absolute;
 	z-index: -1;
