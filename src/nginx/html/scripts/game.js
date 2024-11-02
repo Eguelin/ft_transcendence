@@ -98,12 +98,21 @@ var template = `
 function leftSlideBtn(){
 	var contest = document.querySelector(".singleRoundDisplay");
 
-	if (contest.getBoundingClientRect().left <= 0 && contest.getBoundingClientRect().left > -(getWindowWidth() * 2)){
+	if (contest.getBoundingClientRect().left + getWindowWidth() <= 0){
+		contest.style.setProperty("left", `${contest.getBoundingClientRect().left + getWindowWidth()}px`)
+		document.querySelector("#treeCanva").style.setProperty("left", `${contest.getBoundingClientRect().left}px`)
+	}
+}
+
+function rightSlideBtn(){
+	var contest = document.querySelector(".singleRoundDisplay");
+
+	if (contest.getBoundingClientRect().left > -(getWindowWidth() * 2)){
 		contest.style.setProperty("left", `${contest.getBoundingClientRect().left - getWindowWidth()}px`)
 		document.querySelector("#treeCanva").style.setProperty("left", `${contest.getBoundingClientRect().left}px`)
 	}
-	drawTree();
 }
+
 
 var tournament;
 
@@ -275,35 +284,6 @@ const contestMatchPlacementMap = {
 	".semi.two" : {full : ".semi.right", semi : ".semi.left"},
 }
 
-function drawTree(){
-
-	treeCanva = document.getElementById("treeCanva");
-	treeCtx = treeCanva.getContext("2d");
-	treeCtx.strokeStyle = client.mainTextRgb;
-	Object.keys(tournamentAnchorMap).forEach(function (key){
-		pointOne = document.querySelector(key);
-		if (pointOne.parentElement.classList.contains("winner")){
-			pointTwo = document.querySelector(tournamentAnchorMap[key]);
-
-			if (pointTwo.scrollWidth > pointTwo.offsetWidth) {
-				console.log(`${pointTwo} overflows`);
-			}
-			treeCtx.beginPath();
-			rect = pointOne.getBoundingClientRect();
-			startPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
-			rect = pointTwo.getBoundingClientRect();
-			endPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
-			midX = startPoint.x + ((endPoint.x - startPoint.x) / 2)
-			treeCtx.moveTo(startPoint.x, startPoint.y);
-			treeCtx.lineTo(midX, startPoint.y);
-			treeCtx.lineTo(midX, endPoint.y);
-			treeCtx.lineTo(endPoint.x, endPoint.y);
-			treeCtx.stroke();
-			treeCtx.closePath();
-		}
-	})
-}
-
 function displayTournament(){
 	var minFullTreeWidth = 870;
 	gameContainer = document.getElementById("gameContainer");
@@ -380,14 +360,6 @@ function displayTournament(){
 			document.querySelector(".contestMatchResume.final.match .contestUserContainer.right").classList.add("winner");
 	}
 
-	if (document.getElementById("treeCanva"))
-		document.getElementById("treeCanva").remove();
-	treeCanva = document.createElement("canvas");
-	treeCanva.id = "treeCanva";
-	treeCanva.width = document.body.clientWidth;
-	treeCanva.height = document.body.clientHeight;
-	tournamentContainer.appendChild(treeCanva);
-
 	minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
 	minSemiTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 3) + minConnectionWidth;
 
@@ -420,7 +392,40 @@ function displayTournament(){
 		document.querySelector(".final.match").style.setProperty("top", "0")
 	else
 		document.querySelector(".final.match").style.setProperty("top", "-4.2rem")
-	drawTree();
+	
+	if (document.getElementById("treeCanva"))
+		document.getElementById("treeCanva").remove();
+	treeCanva = document.createElement("canvas");
+	treeCanva.id = "treeCanva";
+	treeCanva.width = tournamentContainer.getBoundingClientRect().width;
+	treeCanva.height = document.body.clientHeight;
+	tournamentContainer.appendChild(treeCanva);
+
+	treeCanva = document.getElementById("treeCanva");
+	treeCtx = treeCanva.getContext("2d");
+	treeCtx.strokeStyle = client.mainTextRgb;
+	Object.keys(tournamentAnchorMap).forEach(function (key){
+		pointOne = document.querySelector(key);
+		if (pointOne.parentElement.classList.contains("winner")){
+			pointTwo = document.querySelector(tournamentAnchorMap[key]);
+
+			if (pointTwo.scrollWidth > pointTwo.offsetWidth) {
+				console.log(`${pointTwo} overflows`);
+			}
+			treeCtx.beginPath();
+			rect = pointOne.getBoundingClientRect();
+			startPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
+			rect = pointTwo.getBoundingClientRect();
+			endPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
+			midX = startPoint.x + ((endPoint.x - startPoint.x) / 2)
+			treeCtx.moveTo(startPoint.x, startPoint.y);
+			treeCtx.lineTo(midX, startPoint.y);
+			treeCtx.lineTo(midX, endPoint.y);
+			treeCtx.lineTo(endPoint.x, endPoint.y);
+			treeCtx.stroke();
+			treeCtx.closePath();
+		}
+	})
 
 }
 

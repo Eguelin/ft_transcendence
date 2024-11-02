@@ -256,12 +256,11 @@
 	position: fixed;
 	z-index: -1;
 	top: 0;
-	left: 0;
 }
 
 #tournamentContainer{
 	position: fixed;
-	width: fit-content;
+	width: 100vw;
 	height: calc(100% - 10rem);
 }
 
@@ -270,7 +269,9 @@
 	left: 0;
 }
 
-
+.singleRoundDisplay#tournamentContainer{
+	width: fit-content;
+}
 
 .singleRoundDisplay .round{
 	flex: none;
