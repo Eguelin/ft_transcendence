@@ -265,7 +265,7 @@ const contestMatchPlacementMap = {
 
 function displayTournament(){
 	const minConnectionWidth = 10;
-	const minFullTreeWidth = 870;
+	var minFullTreeWidth = 870;
 	gameContainer = document.getElementById("gameContainer");
 	tournamentContainer = document.getElementById("tournamentContainer");
 
@@ -350,15 +350,20 @@ function displayTournament(){
 	treeCtx = treeCanva.getContext("2d");
 	treeCtx.strokeStyle = client.mainTextRgb;
 
+	minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
+
 	Object.keys(contestMatchPlacementMap).forEach(function (key){
 		var full = document.querySelector(contestMatchPlacementMap[key].full);
 		var semi = document.querySelector(contestMatchPlacementMap[key].semi);
 		if (getWindowWidth() < minFullTreeWidth && full.querySelector(key)){
 			semi.appendChild(full.querySelector(key).cloneNode(true));
 			full.querySelector(key).remove();
+			if (!full.classList.contains("unused"))
+				full.classList.add("unused");
 		}
 		else if (getWindowWidth() >= minFullTreeWidth && semi.querySelector(key)){
 			full.appendChild(semi.querySelector(key).cloneNode(true));
+			full.classList.remove("unused");
 			semi.querySelector(key).remove();
 		}
 	})
