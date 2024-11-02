@@ -262,6 +262,7 @@
 
 .singleRoundDisplay#tournamentContainer{
 	width: fit-content;
+	height: calc(100% - 20rem);
 }
 
 .singleRoundDisplay .round{
@@ -272,4 +273,42 @@
 .anchor{
 	position: absolute;
 	left: 50%;
+}
+
+#controler{
+	display: none;
+	height: 10rem;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	background: var(--hover-text-rgb);
+	width: 100vw;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.singleRoundDisplay #controler{
+	display: flex;
+}
+
+#controler #leftBtn, #controler #rightBtn{
+	background:var(--main-text-rgb);
+	height:5rem;
+	width:5rem;
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+}
+
+#controler #leftBtn{
+	mask-image:url("../icons/left_arrow.svg");
+}
+
+#controler #rightBtn{
+	mask-image:url("../icons/right_arrow.svg");
+	right: 0;
+}
+
+#controler #leftBtn:focus, #controler #rightBtn:focus, #controler #leftBtn:hover, #controler #rightBtn:hover{
+	background: var(--page-bg-rgb);
 }

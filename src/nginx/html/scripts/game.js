@@ -13,9 +13,6 @@ var userContainerAnchor = `
 <div class="score"></div>
 `
 
-/*
-<div id="leftSlideBtn" tabindex="12" aria-label="Switch tournament section"></div>
-<div id="rightSlideBtn" tabindex="13" aria-label="Switch tournament section"></div>*/
 var template = `
 <div id="pageContentContainer">
 	<div id="gameContainer">
@@ -82,7 +79,9 @@ var template = `
 				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
 		</div>
-		<div class="unused tournament result">
+		<div id="controler">
+			<div id="leftBtn" tabindex="12" aria-label="Switch tournament section"></div>
+			<div id="rightBtn" tabindex="13" aria-label="Switch tournament section"></div>
 		</div>
 	</div>
 </div>
