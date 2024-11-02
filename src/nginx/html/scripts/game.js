@@ -386,6 +386,8 @@ function displayTournament(){
 	else {
 		if (document.querySelector("#tournamentContainer").classList.contains("singleRoundDisplay"))
 			document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
+		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
+		document.querySelector("#treeCanva").style.setProperty("left", `0px`)
 	}
 
 	if (getWindowWidth() < minFullTreeWidth)
