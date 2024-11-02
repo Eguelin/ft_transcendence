@@ -216,7 +216,7 @@
 
 .contestMatchResume{
 	width: fit-content;
-	padding: 1ch 0;
+	padding: 1ch;
 }
 
 .contestUserContainer{
@@ -240,18 +240,9 @@
 }
 
 .exit.anchor, .entry.anchor{
-	flex: none;/*
-	width: 1ch;
-	height: 1ch;*/
+	flex: none;
 }
-/*
-.exit.anchor{
-	background-color: red;
-} 
-.entry.anchor{
-	background-color: blue;
-}
-*/
+
 #treeCanva{
 	position: fixed;
 	z-index: -1;
@@ -276,4 +267,9 @@
 .singleRoundDisplay .round{
 	flex: none;
 	width: 100vw;
+}
+
+.anchor{
+	position: absolute;
+	left: 50%;
 }
