@@ -91,11 +91,8 @@ var template = `
 	</div>
 </div>
 `
-/*
-const contestMatchPlacementMap{
 
-}
-*/
+
 var tournament;
 
 {
@@ -220,26 +217,55 @@ var tournament;
 }
 
 const tournamentAnchorMap = {
-	".quarter.one .left .exit" : ".round.semi .one .left .entry",
-	".quarter.one .right .exit" : ".round.semi .one .left .entry",
+	".quarter.one .left .exit" : ".semi .one .left .entry",
+	".quarter.one .right .exit" : ".semi .one .left .entry",
 
-	".quarter.two .left .exit" : ".round.semi .one .right .entry",
-	".quarter.two .right .exit" : ".round.semi .one .right .entry",
+	".quarter.two .left .exit" : ".semi .one .right .entry",
+	".quarter.two .right .exit" : ".semi .one .right .entry",
 
-	".quarter.three .left .exit" : ".round.semi .two .left .entry",
-	".quarter.three .right .exit" : ".round.semi .two .left .entry",
+	".quarter.three .left .exit" : ".semi .two .left .entry",
+	".quarter.three .right .exit" : ".semi .two .left .entry",
 
-	".quarter.four .left .exit" : ".round.semi .two .right .entry",
-	".quarter.four .right .exit" : ".round.semi .two .right .entry",
+	".quarter.four .left .exit" : ".semi .two .right .entry",
+	".quarter.four .right .exit" : ".semi .two .right .entry",
 
-	".semi.one .left .exit" : ".round.final .left .entry",
-	".semi.one .right .exit" : ".round.final .left .entry",
+	".semi.one .left .exit" : ".final .left .entry",
+	".semi.one .right .exit" : ".final .left .entry",
 
-	".semi.two .left .exit" : ".round.final .right .entry",
-	".semi.two .right .exit" : ".round.final .right .entry",
+	".semi.two .left .exit" : ".final .right .entry",
+	".semi.two .right .exit" : ".final .right .entry",
+}
+
+function getWindowWidth() {
+	return Math.max(
+	  document.body.scrollWidth,
+	  document.documentElement.scrollWidth,
+	  document.body.offsetWidth,
+	  document.documentElement.offsetWidth,
+	  document.documentElement.clientWidth
+	);
+}
+  
+function getWindowHeight() {
+	return Math.max(
+	  document.body.scrollHeight,
+	  document.documentElement.scrollHeight,
+	  document.body.offsetHeight,
+	  document.documentElement.offsetHeight,
+	  document.documentElement.clientHeight
+	);
+}
+
+const contestMatchPlacementMap = {
+	".quarter.three" : {full : ".quarter.right", semi : ".quarter.left"},
+	".quarter.four" : {full : ".quarter.right", semi : ".quarter.left"},
+
+	".semi.two" : {full : ".semi.right", semi : ".semi.left"},
 }
 
 function displayTournament(){
+	const minConnectionWidth = 10;
+	const minFullTreeWidth = 870;
 	gameContainer = document.getElementById("gameContainer");
 	tournamentContainer = document.getElementById("tournamentContainer");
 
@@ -324,10 +350,27 @@ function displayTournament(){
 	treeCtx = treeCanva.getContext("2d");
 	treeCtx.strokeStyle = client.mainTextRgb;
 
+	Object.keys(contestMatchPlacementMap).forEach(function (key){
+		var full = document.querySelector(contestMatchPlacementMap[key].full);
+		var semi = document.querySelector(contestMatchPlacementMap[key].semi);
+		if (getWindowWidth() < minFullTreeWidth && full.querySelector(key)){
+			semi.appendChild(full.querySelector(key).cloneNode(true));
+			full.querySelector(key).remove();
+		}
+		else if (getWindowWidth() >= minFullTreeWidth && semi.querySelector(key)){
+			full.appendChild(semi.querySelector(key).cloneNode(true));
+			semi.querySelector(key).remove();
+		}
+	})
+
 	Object.keys(tournamentAnchorMap).forEach(function (key){
 		pointOne = document.querySelector(key);
 		if (pointOne.parentElement.classList.contains("winner")){
 			pointTwo = document.querySelector(tournamentAnchorMap[key]);
+
+			if (pointTwo.scrollWidth > pointTwo.offsetWidth) {
+				console.log(`${pointTwo} overflows`);
+			}
 			treeCtx.beginPath();
 			rect = pointOne.getBoundingClientRect();
 			startPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
