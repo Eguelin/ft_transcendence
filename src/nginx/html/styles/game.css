@@ -228,11 +228,11 @@
 .contestUserContainer .username{
 	text-align: left;
 	min-width: 15ch;
-	text-decoration: line-through;
 }
 
-.contestUserContainer.winner .username{
-	text-decoration: none;
+.contestUserContainer.loser .username{
+	text-decoration: line-through;
+	opacity: .7;
 }
 
 .contestMatchResume {
