@@ -351,7 +351,7 @@ function setTournamentTreeValue(){
 		"playerLeft" : ".contestUserContainer.left",
 		"playerRight" : ".contestUserContainer.right",
 	}
-	console.log(tournament);
+	//console.log(tournament);
 	Object.keys(tournament).forEach(function(round){
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
@@ -527,6 +527,9 @@ function game() {
 	let oldKeysDown = {};
 	let countdown = "";
 
+	var tournamentContainer = document.getElementById("tournamentContainer");
+	var gameContainer = document.getElementById("gameContainer");
+
 	window.addEventListener('beforeunload', handleBeforeUnload);
 	document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
 	window.addEventListener('popstate', handlePopState);
@@ -545,9 +548,10 @@ function game() {
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
-			clearInterval(tournamentDisplayInterval);
+			//clearInterval(tournamentDisplayInterval);
 			window.removeEventListener("resize", displayTournament);
-			switchTournamentDisplay();
+			gameContainer.style.setProperty("display", "flex");
+			tournamentContainer.style.setProperty("display", "none");
 			gameInit(data.message);
 		} else if (data.type === "game_countdown") {
 			countdown = data.message;
@@ -566,17 +570,17 @@ function game() {
 			else
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "tournament") {
-			//tournament = data.message;
+			tournament = data.message;
 			tournament = tmp_contest;
-			if (document.getElementById("tournamentContainer").style.getPropertyValue("display") == "none");
-				switchTournamentDisplay();
-			tournamentDisplayInterval = setInterval(displayTournament, 16);
+			displayTournament()
+			gameContainer.style.setProperty("display", "none");
+			tournamentContainer.style.setProperty("display", "flex");
+			//tournamentDisplayInterval = setInterval(displayTournament, 16);
 			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "tournament_end") {
-			/*
-			if (document.getElementById("tournamentContainer").style.getPropertyValue("display") == "none");
-				switchTournamentDisplay();
-			displayTournament();*/
+			gameContainer.style.setProperty("display", "none");
+			tournamentContainer.style.setProperty("display", "flex");
+			displayWinner(data.message.winner, data.message.profile_picture)
 			window.addEventListener("resize", displayTournament);
 		}
 	}
