@@ -349,15 +349,29 @@ function setTournamentTreeValue(){
 		"match_3": ".match.four",
 
 		"playerLeft" : ".contestUserContainer.left",
+		"playerRight" : ".contestUserContainer.right",
 	}
-
+	console.log(tournament);
 	Object.keys(tournament).forEach(function(round){
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
-				document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
-				document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
-				document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
+				if (tournament[round][matchNumber][player]['username']){
+					document.querySelector(`${selector} .username`).classList.remove("waiting");
+					document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+					if (tournament[round][matchNumber][player]['score']){
+						document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
+						document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
+					}
+					else
+						document.querySelector(`${selector} .score`).innerText = '-';
+				}
+				else{
+					document.querySelector(`${selector} .username`).innerText = client.langJson['game']['waiting'];
+					if (!document.querySelector(`${selector} .username`).classList.contains("waiting"));
+						document.querySelector(`${selector} .username`).classList.add("waiting");
+					document.querySelector(`${selector} .score`).innerText = '';
+				}
 			})
 		})
 	})
@@ -397,6 +411,8 @@ function displayTournament(){
 		".semi.two .left .anchor" : ".final .right .anchor",
 		".semi.two .right .anchor" : ".final .right .anchor",
 	}
+
+	setTournamentTreeValue();
 
 	minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
 	minSemiTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 3) + minConnectionWidth;
@@ -540,15 +556,13 @@ function game() {
 			else
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "tournament") {
-			//tournament = data.message;
-			tournament = tmp_contest;
-			setTournamentTreeValue();
+			tournament = data.message;
+			//tournament = tmp_contest;
 			displayTournament();
 			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "tournament_end") {
-			//tournament = data.message;
-			tournament = tmp_contest;
-			setTournamentTreeValue();
+			tournament = data.message;
+			//tournament = tmp_contest;
 			displayTournament();
 			window.addEventListener("resize", displayTournament);
 		}
