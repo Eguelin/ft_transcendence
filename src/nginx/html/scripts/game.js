@@ -359,7 +359,7 @@ function setTournamentTreeValue(){
 				if (tournament[round][matchNumber][player]['username']){
 					document.querySelector(`${selector} .username`).classList.remove("waiting");
 					document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
-					if (tournament[round][matchNumber][player]['score']){
+					if (tournament[round][matchNumber][player]['score'] != null){
 						document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
 						document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
 					}
@@ -375,6 +375,13 @@ function setTournamentTreeValue(){
 			})
 		})
 	})
+}
+
+function switchTournamentDisplay(){
+	tournamentContainer = document.getElementById("tournamentContainer");
+	gameContainer = document.getElementById("gameContainer");
+	gameContainer.style.setProperty("display", gameContainer.style.getPropertyValue("display") == "none" ? "flex" : "none");
+	tournamentContainer.style.setProperty("display", tournamentContainer.style.getPropertyValue("display") == "none" ? "flex" : "none");
 }
 
 function displayTournament(){
@@ -516,6 +523,7 @@ function game() {
 	const ball = {};
 	const ballTrail = [];
 	let KeyPressInterval;
+	var tournamentDisplayInterval;
 	let oldKeysDown = {};
 	let countdown = "";
 
@@ -537,7 +545,9 @@ function game() {
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
+			clearInterval(tournamentDisplayInterval);
 			window.removeEventListener("resize", displayTournament);
+			switchTournamentDisplay();
 			gameInit(data.message);
 		} else if (data.type === "game_countdown") {
 			countdown = data.message;
@@ -556,14 +566,17 @@ function game() {
 			else
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "tournament") {
-			tournament = data.message;
-			//tournament = tmp_contest;
-			displayTournament();
+			//tournament = data.message;
+			tournament = tmp_contest;
+			if (document.getElementById("tournamentContainer").style.getPropertyValue("display") == "none");
+				switchTournamentDisplay();
+			tournamentDisplayInterval = setInterval(displayTournament, 16);
 			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "tournament_end") {
-			tournament = data.message;
-			//tournament = tmp_contest;
-			displayTournament();
+			/*
+			if (document.getElementById("tournamentContainer").style.getPropertyValue("display") == "none");
+				switchTournamentDisplay();
+			displayTournament();*/
 			window.addEventListener("resize", displayTournament);
 		}
 	}
