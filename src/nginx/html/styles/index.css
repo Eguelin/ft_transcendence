@@ -112,6 +112,9 @@
 	display: none;
 }
 #inputSearchUser{
+	position: absolute;
+	top: 50%;
+	translate: 0 -50%;
 	width: -webkit-fill-available;
 	width: -moz-available;
 }
@@ -457,7 +460,7 @@
 }
 
 .notifAccept, .notifReject{
-	background: var(--main-text-rgb);;
+	background: var(--main-text-rgb);
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
