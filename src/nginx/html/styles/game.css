@@ -235,6 +235,10 @@
 	opacity: .7;
 }
 
+.username.waiting{
+	font-style: italic;	
+}
+
 .contestMatchResume {
 	position: relative;
 }
