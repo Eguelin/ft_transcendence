@@ -1,4 +1,4 @@
-const minConnectionWidth = 25;
+var minConnectionWidth = 25;
 var playerOneScore;
 var playerTwoScore;
 maxScore = 5;
@@ -320,26 +320,6 @@ var tournament;
 	game();
 }
 
-const tournamentAnchorMap = {
-	".quarter.one .left .anchor" : ".semi .one .left .anchor",
-	".quarter.one .right .anchor" : ".semi .one .left .anchor",
-
-	".quarter.two .left .anchor" : ".semi .one .right .anchor",
-	".quarter.two .right .anchor" : ".semi .one .right .anchor",
-
-	".quarter.three .left .anchor" : ".semi .two .left .anchor",
-	".quarter.three .right .anchor" : ".semi .two .left .anchor",
-
-	".quarter.four .left .anchor" : ".semi .two .right .anchor",
-	".quarter.four .right .anchor" : ".semi .two .right .anchor",
-
-	".semi.one .left .anchor" : ".final .left .anchor",
-	".semi.one .right .anchor" : ".final .left .anchor",
-
-	".semi.two .left .anchor" : ".final .right .anchor",
-	".semi.two .right .anchor" : ".final .right .anchor",
-}
-
 function getWindowWidth() {
 	return Math.max(
 	  document.body.scrollWidth,
@@ -360,13 +340,6 @@ function getWindowHeight() {
 	);
 }
 
-const contestMatchPlacementMap = {
-	".quarter.three" : {full : ".quarter.right", semi : ".quarter.left"},
-	".quarter.four" : {full : ".quarter.right", semi : ".quarter.left"},
-
-	".semi.two" : {full : ".semi.right", semi : ".semi.left"},
-}
-
 function displayTournament(){
 	var minFullTreeWidth = 870;
 	gameContainer = document.getElementById("gameContainer");
@@ -374,6 +347,34 @@ function displayTournament(){
 
 	gameContainer.style.setProperty("display", "none");
 	tournamentContainer.style.setProperty("display", "flex");
+
+	const contestMatchPlacementMap = {
+		".quarter.three" : {full : ".quarter.right", semi : ".quarter.left"},
+		".quarter.four" : {full : ".quarter.right", semi : ".quarter.left"},
+	
+		".semi.two" : {full : ".semi.right", semi : ".semi.left"},
+	}
+
+	const tournamentAnchorMap = {
+		".quarter.one .left .anchor" : ".semi .one .left .anchor",
+		".quarter.one .right .anchor" : ".semi .one .left .anchor",
+
+		".quarter.two .left .anchor" : ".semi .one .right .anchor",
+		".quarter.two .right .anchor" : ".semi .one .right .anchor",
+
+		".quarter.three .left .anchor" : ".semi .two .left .anchor",
+		".quarter.three .right .anchor" : ".semi .two .left .anchor",
+
+		".quarter.four .left .anchor" : ".semi .two .right .anchor",
+		".quarter.four .right .anchor" : ".semi .two .right .anchor",
+
+		".semi.one .left .anchor" : ".final .left .anchor",
+		".semi.one .right .anchor" : ".final .left .anchor",
+
+		".semi.two .left .anchor" : ".final .right .anchor",
+		".semi.two .right .anchor" : ".final .right .anchor",
+	}
+
 	{
 		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left .username").innerText = tmp_contest['round_1']['match_0']['playerLeft']['username'];
 		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left .score").innerText = tmp_contest['round_1']['match_0']['playerLeft']['score'];
