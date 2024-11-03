@@ -445,6 +445,7 @@ function displayTournament(){
 
 	minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
 	minSemiTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 3) + minConnectionWidth;
+	//console.log(`minFullTreeWidth : ${minFullTreeWidth}, minSemiTreeWidth : ${minSemiTreeWidth}`);
 
 	Object.keys(contestMatchPlacementMap).forEach(function (key){
 		var full = document.querySelector(contestMatchPlacementMap[key].full);
@@ -462,7 +463,7 @@ function displayTournament(){
 		}
 	})
 
-	if (getWindowWidth() < minSemiTreeWidth){
+	if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
 		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
 		if (!document.querySelector("#tournamentContainer").classList.contains("singleRoundDisplay"))
 			document.querySelector("#tournamentContainer").classList.add("singleRoundDisplay")
@@ -492,6 +493,7 @@ function displayTournament(){
 	treeCanva = document.getElementById("treeCanva");
 	treeCtx = treeCanva.getContext("2d");
 	treeCtx.strokeStyle = client.mainTextRgb;
+	treeCtx.lineWidth = 3;
 	Object.keys(tournamentAnchorMap).forEach(function (key){
 		pointOne = document.querySelector(key);
 		if (pointOne.parentElement.classList.contains("winner")){
