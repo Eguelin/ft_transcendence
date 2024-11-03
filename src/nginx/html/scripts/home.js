@@ -11,7 +11,10 @@ var template = `
 	<div class="options">
 		<button id="playBtnAI" tabindex="12">Play</button>
 	</div>
-    <div id="recentMatchHistoryContainer" tabindex="13" aria-label="User today's matches">
+	<div class="options">
+		<button id="playTournament" tabindex="13">Play</button>
+	</div>
+    <div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
         <div id="recentMatchHistory">
 
         </div>
@@ -87,17 +90,20 @@ var template = `
 	}
 	else
 		myReplaceState(`https://${hostname.host}/login`);
+	document.querySelector("#playBtn1v1").addEventListener("click", (e) => {
+		myPushState(`https://${hostname.host}/game?mode=remote`);
+	})
+	
+	document.querySelector("#playBtnLocal").addEventListener("click", (e) => {
+		myPushState(`https://${hostname.host}/game?mode=local`);
+	})
+	
+	document.querySelector("#playBtnAI").addEventListener("click", (e) => {
+		myPushState(`https://${hostname.host}/game?mode=ai`);
+	})
+	
+	document.querySelector("#playTournament").addEventListener("click", (e) => {
+		myPushState(`https://${hostname.host}/game?mode=tournament`);
+	})
+		
 }
-
-playBtn1v1.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/game?mode=remote`);
-})
-
-playBtnLocal.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/game?mode=local`);
-})
-
-playBtnAI.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/game?mode=ai`);
-})
-
