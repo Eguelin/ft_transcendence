@@ -112,11 +112,26 @@ function leftSlideBtn(){
 		contest.style.setProperty("left", `${left + getWindowWidth()}px`)
 		document.querySelector("#treeCanva").style.setProperty("left", `${left + getWindowWidth()}px`)		
 		setTimeout(()=>{
+
+			switch (Math.abs((left + getWindowWidth()) / getWindowWidth())){
+				default:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']}`
+				case 0:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+					break ;
+				case 1:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
+					break ;
+				case 2:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
+					break ;
+			}
 			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
 			document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
 			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
 			document.querySelector("#rightBtn").addEventListener("keydown", rightBtnKeydownEvent);
 		}, 500);
+
 	}
 }
 
@@ -145,6 +160,20 @@ function rightSlideBtn(){
 		document.querySelector("#treeCanva").style.setProperty("left", `${left - getWindowWidth()}px`)
 
 		setTimeout(()=>{
+
+			switch (Math.abs((left - getWindowWidth()) / getWindowWidth())){
+				default:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']}`
+				case 0:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+					break ;
+				case 1:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
+					break ;
+				case 2:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
+					break ;
+			}
 			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
 			document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
 			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
@@ -434,10 +463,12 @@ function displayTournament(){
 	})
 
 	if (getWindowWidth() < minSemiTreeWidth){
+		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
 		if (!document.querySelector("#tournamentContainer").classList.contains("singleRoundDisplay"))
 			document.querySelector("#tournamentContainer").classList.add("singleRoundDisplay")
 	}
 	else {
+		document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentSubtitle']
 		if (document.querySelector("#tournamentContainer").classList.contains("singleRoundDisplay"))
 			document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
@@ -465,10 +496,6 @@ function displayTournament(){
 		pointOne = document.querySelector(key);
 		if (pointOne.parentElement.classList.contains("winner")){
 			pointTwo = document.querySelector(tournamentAnchorMap[key]);
-
-			if (pointTwo.scrollWidth > pointTwo.offsetWidth) {
-				console.log(`${pointTwo} overflows`);
-			}
 			treeCtx.beginPath();
 			rect = pointOne.getBoundingClientRect();
 			startPoint = {x : rect.left, y : rect.top + ((rect.bottom - rect.top) / 2)};
