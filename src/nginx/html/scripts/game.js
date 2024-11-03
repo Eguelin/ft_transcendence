@@ -588,12 +588,12 @@ function game() {
 				displayWinner(player1.name, player1.profile_picture)
 			else
 				displayWinner(player2.name, player2.profile_picture)
-		} else if (data.type === "game_tournament") {
+		} else if (data.type === "tournament") {
 			console.log(tmp_contest);
 			tournament = tmp_contest;
 			displayTournament();
 			window.addEventListener("resize", displayTournament);
-		} else if (data.type === "game_tournament_end") {
+		} else if (data.type === "tournament_end") {
 			console.log(tmp_contest);
 			tournament = tmp_contest;
 			displayTournament();
@@ -642,7 +642,7 @@ function game() {
 
 		ctx.lineWidth = paddle.width / 4;
 
-		if (mode == "game_local"){
+		if (mode == "local"){
 			player1.profile_picture = "";
 			player2.profile_picture = "";
 			player1.name = client.langJson['game']['playerOne'];
@@ -660,7 +660,7 @@ function game() {
 		document.querySelector("#playerOne > h2").innerText = player1.name;
 		document.querySelector("#playerTwo > h2").innerText = player2.name;
 
-		if (mode == "game_full_ai")
+		if (mode == "full_ai")
 			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 
 		document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
@@ -674,7 +674,7 @@ function game() {
 
 	function updateGame(message) {
 
-		if (url.searchParams.get("mode") != "game_full_ai"){
+		if (url.searchParams.get("mode") != "full_ai"){
 			playerOneScore.innerText = `${message.player1.score}/${maxScore}`;
 			playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
 		}
@@ -857,7 +857,7 @@ function game() {
 				<button id="replayButton">${client.langJson['game']['replay']}</button>
 			</div>
 		</div>`;
-		if (mode == "game_local")
+		if (mode == "local")
 			container.querySelector("#winPfpContainer").remove();
 		else
 			addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
