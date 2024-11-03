@@ -58,7 +58,7 @@ var template = `
 
 
 		<div class="round final">
-			<div class="contestMatchResume final match">
+			<div class="contestMatchResume final match one">
 				<div class="contestUserContainer left">${userContainerAnchor}</div>
 				<div class="contestUserContainer right">${userContainerAnchor}</div>
 			</div>
@@ -337,6 +337,32 @@ function getWindowHeight() {
 	);
 }
 
+function setTournamentTreeValue(){
+	const positionMap = {
+		"round_1" : ".contestMatchResume.quarter",
+		"round_2" : ".contestMatchResume.semi",
+		"round_3" : ".contestMatchResume.final",
+
+		"match_0": ".match.one",
+		"match_1": ".match.two",
+		"match_2": ".match.three",
+		"match_3": ".match.four",
+
+		"playerLeft" : ".contestUserContainer.left",
+	}
+
+	Object.keys(tournament).forEach(function(round){
+		Object.keys(tournament[round]).forEach(function(matchNumber){
+			Object.keys(tournament[round][matchNumber]).forEach(function(player){
+				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
+				document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+				document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
+				document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
+			})
+		})
+	})
+}
+
 function displayTournament(){
 	var minFullTreeWidth = 870;
 	gameContainer = document.getElementById("gameContainer");
@@ -370,103 +396,6 @@ function displayTournament(){
 
 		".semi.two .left .anchor" : ".final .right .anchor",
 		".semi.two .right .anchor" : ".final .right .anchor",
-	}
-
-	{
-		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left .username").innerText = tournament['round_1']['match_0']['playerLeft']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left .score").innerText = tournament['round_1']['match_0']['playerLeft']['score'];
-		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.right .username").innerText = tournament['round_1']['match_0']['playerRight']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.right .score").innerText = tournament['round_1']['match_0']['playerRight']['score'];
-		if (tournament['round_1']['match_0']['playerLeft']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left").classList.add("winner");
-			document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.right").classList.add("loser");
-		}
-		else if (tournament['round_1']['match_0']['playerRight']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.left").classList.add("loser");
-			document.querySelector(".contestMatchResume.quarter.match.one .contestUserContainer.right").classList.add("winner");
-		}
-
-		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.left .username").innerText = tournament['round_1']['match_1']['playerLeft']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.left .score").innerText = tournament['round_1']['match_1']['playerLeft']['score'];
-		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.right .username").innerText = tournament['round_1']['match_1']['playerRight']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.right .score").innerText = tournament['round_1']['match_1']['playerRight']['score'];
-		if (tournament['round_1']['match_1']['playerLeft']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.left").classList.add("winner");
-			document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.right").classList.add("loser");
-		}
-		else if (tournament['round_1']['match_1']['playerRight']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.left").classList.add("loser");
-			document.querySelector(".contestMatchResume.quarter.match.two .contestUserContainer.right").classList.add("winner");
-		}
-
-		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.left .username").innerText = tournament['round_1']['match_2']['playerLeft']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.left .score").innerText = tournament['round_1']['match_2']['playerLeft']['score'];
-		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.right .username").innerText = tournament['round_1']['match_2']['playerRight']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.right .score").innerText = tournament['round_1']['match_2']['playerRight']['score'];
-		if (tournament['round_1']['match_2']['playerLeft']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.left").classList.add("winner");
-			document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.right").classList.add("loser");
-		}
-		else if (tournament['round_1']['match_2']['playerRight']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.left").classList.add("loser");
-			document.querySelector(".contestMatchResume.quarter.match.three .contestUserContainer.right").classList.add("winner");
-		}
-
-		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.left .username").innerText = tournament['round_1']['match_3']['playerLeft']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.left .score").innerText = tournament['round_1']['match_3']['playerLeft']['score'];
-		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.right .username").innerText = tournament['round_1']['match_3']['playerRight']['username'];
-		document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.right .score").innerText = tournament['round_1']['match_3']['playerRight']['score'];
-		if (tournament['round_1']['match_3']['playerLeft']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.left").classList.add("winner");
-			document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.right").classList.add("loser");
-		}
-		else if (tournament['round_1']['match_3']['playerRight']['winner']){
-			document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.left").classList.add("loser");
-			document.querySelector(".contestMatchResume.quarter.match.four .contestUserContainer.right").classList.add("winner");
-		}
-	}
-
-	{
-		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.left .username").innerText = tournament['round_2']['match_0']['playerLeft']['username'];
-		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.left .score").innerText = tournament['round_2']['match_0']['playerLeft']['score'];
-		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.right .username").innerText = tournament['round_2']['match_0']['playerRight']['username'];
-		document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.right .score").innerText = tournament['round_2']['match_0']['playerRight']['score'];
-		if (tournament['round_2']['match_0']['playerLeft']['winner']){
-			document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.left").classList.add("winner");
-			document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.right").classList.add("loser");
-		}
-		else if (tournament['round_2']['match_0']['playerRight']['winner']){
-			document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.left").classList.add("loser");
-			document.querySelector(".contestMatchResume.semi.match.one .contestUserContainer.right").classList.add("winner");
-		}
-
-		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.left .username").innerText = tournament['round_2']['match_1']['playerLeft']['username'];
-		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.left .score").innerText = tournament['round_2']['match_1']['playerLeft']['score'];
-		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.right .username").innerText = tournament['round_2']['match_1']['playerRight']['username'];
-		document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.right .score").innerText = tournament['round_2']['match_1']['playerRight']['score'];
-		if (tournament['round_2']['match_1']['playerLeft']['winner']){
-			document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.left").classList.add("winner");
-			document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.right").classList.add("loser");
-		}
-		else if (tournament['round_2']['match_1']['playerRight']['winner']){
-			document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.left").classList.add("loser");
-			document.querySelector(".contestMatchResume.semi.match.two .contestUserContainer.right").classList.add("winner");
-		}
-	}
-
-	{
-		document.querySelector(".contestMatchResume.final.match .contestUserContainer.left .username").innerText = tournament['round_3']['match_0']['playerLeft']['username'];
-		document.querySelector(".contestMatchResume.final.match .contestUserContainer.left .score").innerText = tournament['round_3']['match_0']['playerLeft']['score'];
-		document.querySelector(".contestMatchResume.final.match .contestUserContainer.right .username").innerText = tournament['round_3']['match_0']['playerRight']['username'];
-		document.querySelector(".contestMatchResume.final.match .contestUserContainer.right .score").innerText = tournament['round_3']['match_0']['playerRight']['score'];
-		if (tournament['round_3']['match_0']['playerLeft']['winner']){
-			document.querySelector(".contestMatchResume.final.match .contestUserContainer.left").classList.add("winner");
-			document.querySelector(".contestMatchResume.final.match .contestUserContainer.right").classList.add("loser");
-		}
-		else if (tournament['round_3']['match_0']['playerRight']['winner']){
-			document.querySelector(".contestMatchResume.final.match .contestUserContainer.left").classList.add("loser");
-			document.querySelector(".contestMatchResume.final.match .contestUserContainer.right").classList.add("winner");
-		}
 	}
 
 	minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
@@ -516,11 +445,6 @@ function displayTournament(){
 	treeCanva.height = document.body.clientHeight;
 	tournamentContainer.appendChild(treeCanva);
 
-
-	if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-		document.querySelector("#tournamentContainer").style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
-	}
-
 	treeCtx = treeCanva.getContext("2d");
 	treeCtx.strokeStyle = client.mainTextRgb;
 	treeCtx.lineWidth = 3;
@@ -559,7 +483,6 @@ function displayTournament(){
 			treeCtx.closePath();
 		}
 	})
-
 }
 
 function game() {
@@ -569,26 +492,8 @@ function game() {
 	const socket = new WebSocket("/ws/game/");
 	const canvas = document.getElementById('game');
 	const ctx = canvas.getContext('2d');
-	const keysDown = {
-		"KeyS" : false,
-		"KeyW" : false,
-		"KeyA" : false,
-		"KeyD" : false,
-		"ArrowUp" : false,
-		"ArrowDown" : false,
-		"ArrowLeft" : false,
-		"ArrowRight" : false,
-	};
-	const mapAvailableKeyCode = {
-		"KeyS" : 1,
-		"KeyW" : 1,
-		"KeyA" : 1,
-		"KeyD" : 1,
-		"ArrowUp" : 1,
-		"ArrowDown" : 1,
-		"ArrowLeft" : 1,
-		"ArrowRight" : 1,
-	}
+	const keysDown = {"KeyS" : false, "KeyW" : false, "KeyA" : false, "KeyD" : false, "ArrowUp" : false, "ArrowDown" : false, "ArrowLeft" : false, "ArrowRight" : false,};
+	const mapAvailableKeyCode = {"KeyS" : 1, "KeyW" : 1, "KeyA" : 1, "KeyD" : 1, "ArrowUp" : 1, "ArrowDown" : 1, "ArrowLeft" : 1, "ArrowRight" : 1,}
 	const paddle = {};
 	const player1 = {};
 	const player2 = {};
@@ -637,11 +542,13 @@ function game() {
 		} else if (data.type === "tournament") {
 			tournament = data.message;
 			tournament = tmp_contest;
+			setTournamentTreeValue();
 			displayTournament();
 			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "tournament_end") {
 			tournament = data.message;
 			tournament = tmp_contest;
+			setTournamentTreeValue();
 			displayTournament();
 			window.addEventListener("resize", displayTournament);
 		}
