@@ -274,6 +274,9 @@ function load(){
 	if (currentPage == "friends"){
 		window.removeEventListener("keydown", friendKeyDownEvent)
 	}
+	if (currentPage == "game"){
+		window.removeEventListener("resize", displayTournament)
+	}
 
 	if (client)
 		client.loadPage(url.pathname)
