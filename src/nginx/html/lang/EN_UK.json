@@ -147,7 +147,11 @@
 		"playerTwo" : "Player two",
 		"winnedText" : "won!!",
 		"replay" : "Replay",
-		"wait" : "Waiting for another player to arrive..."
+		"wait" : "Waiting for another player to arrive...",
+		"tournamentSubtitle" : "Tournament",
+		"quarter" : "Quarter",
+		"semi" : "Semi",
+		"final" : "final"
 	},
 	"404":{
 		"#title" : "ERROR 404",
