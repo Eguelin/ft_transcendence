@@ -540,13 +540,13 @@ function game() {
 			else
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "tournament") {
-			tournament = data.message;
+			//tournament = data.message;
 			tournament = tmp_contest;
 			setTournamentTreeValue();
 			displayTournament();
 			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "tournament_end") {
-			tournament = data.message;
+			//tournament = data.message;
 			tournament = tmp_contest;
 			setTournamentTreeValue();
 			displayTournament();
