@@ -125,7 +125,7 @@
 	}
 }
 
-@media screen and (orientation:portrait), (max-height:590px){
+@media screen and (orientation:portrait) and (max-width:1480px), (max-height:590px){
 	#pfpContainer{
 		display: none;
 	}
