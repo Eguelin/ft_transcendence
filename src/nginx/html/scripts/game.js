@@ -375,7 +375,6 @@ function setTournamentTreeValue(){
 		"playerRight" : ".contestUserContainer.right",
 	}
 	var players = 0;
-	//console.log(tournament);
 	Object.keys(tournament).forEach(function(round){
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
@@ -394,8 +393,7 @@ function setTournamentTreeValue(){
 				}
 				else{
 					document.querySelector(`${selector} .username`).innerText = client.langJson['game']['waiting'];
-					if (!document.querySelector(`${selector} .username`).classList.contains("waiting"));
-						document.querySelector(`${selector} .username`).classList.add("waiting");
+					document.querySelector(`${selector} .username`).classList.add("waiting");
 					document.querySelector(`${selector} .score`).innerText = '';
 				}
 			})
@@ -492,8 +490,7 @@ function displayTournament(){
 			if (getWindowWidth() < minFullTreeWidth && full.querySelector(key)){
 				semi.appendChild(full.querySelector(key).cloneNode(true));
 				full.querySelector(key).remove();
-				if (!full.classList.contains("unused"))
-					full.classList.add("unused");
+				full.classList.add("unused");
 			}
 			else if (getWindowWidth() >= minFullTreeWidth && semi.querySelector(key)){
 				full.appendChild(semi.querySelector(key).cloneNode(true));
@@ -503,12 +500,10 @@ function displayTournament(){
 		})
 
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-			if (!tournamentContainer.classList.contains("singleRoundDisplay"))
-				tournamentContainer.classList.add("singleRoundDisplay")
+			tournamentContainer.classList.add("singleRoundDisplay")
 		}
 		else {
-			if (tournamentContainer.classList.contains("singleRoundDisplay"))
-				tournamentContainer.classList.remove("singleRoundDisplay")
+			tournamentContainer.classList.remove("singleRoundDisplay")
 			tournamentContainer.style.setProperty("left", `0px`)
 			if (document.getElementById("treeCanva"))
 				document.querySelector("#treeCanva").style.setProperty("left", `0px`)

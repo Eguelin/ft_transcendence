@@ -762,13 +762,11 @@ dropDownLangBtn.addEventListener("click", (e) => {
 			dropDownLang.classList.remove("inactiveDropDown");
 		}, 300, dropDownLang)
 	}
-	else if (dropDownLang.classList.contains("inactiveDropDown")){
+	else{
 		dropDownLang.classList.remove("inactiveDropDown");
 		void dropDownLang.offsetWidth;
 		dropDownLang.classList.add("activeDropDown");
 	}
-	else
-		dropDownLang.classList.add("activeDropDown");
 })
 
 usernameBtn.addEventListener("click", (e) => {
@@ -995,8 +993,7 @@ function sendNotif(message){
 </div>`;
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))){
-		if (!(notifCenterContainer.classList.contains("pendingNotification")))
-			notifCenterContainer.classList.add("pendingNotification");
+		notifCenterContainer.classList.add("pendingNotification");
 		incomingPushNotif(message);
 	}
 }
