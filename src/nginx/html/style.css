@@ -31,7 +31,7 @@ html{
 }
 
 
-@media screen and (orientation:landscape){
+@media screen and (orientation:landscape), (min-width:1010px){
 	body{
 		font-size: calc(24px * var(--font-size-amplifier));
 		transition: 500ms;
@@ -61,7 +61,7 @@ html{
 	}
 }
 
-@media screen and (orientation:portrait), (max-height:590px){
+@media screen and (orientation:portrait) and (max-width:920px), (max-height:590px){
 	body{
 		font-size: calc(12px * var(--font-size-amplifier));
 		transition: 500ms;
@@ -183,9 +183,9 @@ input{
 	border: 0.2px solid var(--main-text-rgb);
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 	font-size: .5rem;
-	padding: 1.5vh 1vw;
+	padding: 1rem;
 	width: 18vw;
 }
 
