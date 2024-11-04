@@ -615,6 +615,10 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
+		if (data.type === "error"){
+			popUpError(data.message);
+			myPushState(`https://${hostname.host}/home`);
+		}
 		if (data.type === "game_init") {
 			window.removeEventListener("resize", displayTournament);
 			gameContainer.style.setProperty("display", "flex");

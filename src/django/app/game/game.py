@@ -517,7 +517,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			elif data['type'] == 'game_ready':
 				self.player.isReady = True
 
-		if data['type'] == 'remote':
+		elif data['type'] == 'remote':
 			self.player = PlayerRemote(self)
 			Matchmaking().add_PlayerRemote(self.player)
 			await Matchmaking().run()
@@ -546,6 +546,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			game = Gamelocal(self.player)
 			await game.start()
 			return
+		else:
+			await self.send('error', 'Game mode unavailable')
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
