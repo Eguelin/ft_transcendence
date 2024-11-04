@@ -410,6 +410,27 @@ function switchTournamentDisplay(){
 	tournamentContainer.style.setProperty("display", tournamentContainer.style.getPropertyValue("display") == "none" ? "flex" : "none");
 }
 
+function checkTournementRound(){
+	if (tournament["round_3"]["match_0"]["playerLeft"]["username"] || tournament["round_3"]["match_0"]["playerRight"]["username"]){
+		singleRoundDisplayIdx = 2;
+	}
+	else if (tournament["round_2"]["match_0"]["playerLeft"]["username"] || tournament["round_2"]["match_0"]["playerRight"]["username"] || tournament["round_2"]["match_1"]["playerLeft"]["username"] || tournament["round_2"]["match_1"]["playerRight"]["username"]){
+		singleRoundDisplayIdx = 1;
+	}
+
+	switch (singleRoundDisplayIdx){
+		case 0:
+			document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+			break ;
+		case 1:
+			document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
+			break ;
+		case 2:
+			document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
+			break ;
+	}
+}
+
 function displayTournament(){
 	document.querySelectorAll(".loser, .winner").forEach(function(elem){
 		elem.classList.remove("loser");
@@ -482,12 +503,10 @@ function displayTournament(){
 		})
 
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-			document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
 			if (!tournamentContainer.classList.contains("singleRoundDisplay"))
 				tournamentContainer.classList.add("singleRoundDisplay")
 		}
 		else {
-			document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentSubtitle']
 			if (tournamentContainer.classList.contains("singleRoundDisplay"))
 				tournamentContainer.classList.remove("singleRoundDisplay")
 			tournamentContainer.style.setProperty("left", `0px`)
@@ -515,18 +534,6 @@ function displayTournament(){
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
 			document.querySelector("#tournamentContainer").style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
 			offset = getWindowWidth() * singleRoundDisplayIdx;
-
-			switch (singleRoundDisplayIdx){
-				case 0:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
-					break ;
-				case 1:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
-					break ;
-				case 2:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
-					break ;
-			}
 		}
 		Object.keys(tournamentAnchorMap).forEach(function (key){
 			pointOne = document.querySelector(key);
@@ -617,6 +624,8 @@ function game() {
 			window.removeEventListener("resize", displayTournament);
 			gameContainer.style.setProperty("display", "flex");
 			tournamentContainer.style.setProperty("display", "none");
+			if (mode == "tournament")
+				checkTournementRound();
 			gameInit(data.message);
 		} else if (data.type === "game_countdown") {
 			countdown = data.message;
@@ -635,15 +644,17 @@ function game() {
 			else
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "tournament") {
-			tournament = data.message;
-			//tournament = tmp_contest;
-			displayTournament()
+			//tournament = data.message;
+			tournament = tmp_contest;
+			checkTournementRound();
+			displayTournament();
 			gameContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
 			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "tournament_end") {
 			gameContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
+			checkTournementRound();
 			displayWinner(data.message.winner, data.message.profile_picture)
 			window.addEventListener("resize", displayTournament);
 		}
