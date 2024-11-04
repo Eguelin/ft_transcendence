@@ -465,7 +465,6 @@ function displayTournament(){
 
 		minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
 		minSemiTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 3) + minConnectionWidth;
-		console.log(`minFullTreeWidth : ${minFullTreeWidth}, minSemiTreeWidth : ${minSemiTreeWidth}`);
 
 		Object.keys(contestMatchPlacementMap).forEach(function (key){
 			var full = document.querySelector(contestMatchPlacementMap[key].full);
@@ -550,10 +549,19 @@ function displayTournament(){
 		})
 	}
 	else{
+		document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentLobby']
+		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
+		document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
+		if (document.getElementById("treeCanva"))
+			document.getElementById("treeCanva").remove();
 		document.querySelector("#lobby").style.setProperty("display", "flex");
 		document.querySelector("#tournament").style.setProperty("display", "none");
 		var idx = 0;
 		lobbyPlayerElem = document.querySelectorAll(".lobbyPlayer");
+		lobbyPlayerElem.forEach(function(elem) {
+			elem.querySelector(".username").innerText = "";
+			elem.querySelector(".lobbyPlayerPfp").src = "";
+		})
 		round = "round_1";
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
