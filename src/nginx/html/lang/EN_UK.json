@@ -153,7 +153,8 @@
 		"tournamentSubtitle" : "Tournament",
 		"quarter" : "Quarter",
 		"semi" : "Semi",
-		"final" : "final"
+		"final" : "final",
+		"tournamentLobby" : "Lobby"
 	},
 	"404":{
 		"#title" : "ERROR 404",
