@@ -45,6 +45,7 @@ var template = `
 `
 
 {
+	document.getElementById("container").innerHTML = template;
 	notifCenterContainer.style.setProperty("display", "none");
 
     createUserBtn = document.getElementById("createUserBtn");
