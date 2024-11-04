@@ -14,6 +14,15 @@ var userContainerAnchor = `
 <div class="score"></div>
 `
 
+var lobbyPlayerContainer= `
+<div class="lobbyPlayer">
+	<div class="username"></div>
+	<div class="lobbyPlayerPfpContainer">
+		<img class="lobbyPlayerPfp">
+	</div>
+</div>
+`
+
 var template = `
 <div id="pageContentContainer">
 	<div id="gameContainer">
@@ -37,52 +46,64 @@ var template = `
 
 
 	<div id="tournamentContainer">
-		<div class="round quarter left">
-			<div class="contestMatchResume quarter match one">
-				<div class="contestUserContainer left">${userContainerAnchor}</div>
-				<div class="contestUserContainer right">${userContainerAnchor}</div>
-			</div>
-			<div class="contestMatchResume quarter match two">
-				<div class="contestUserContainer left">${userContainerAnchor}</div>
-				<div class="contestUserContainer right">${userContainerAnchor}</div>
-			</div>
+		<div id="lobby">
+			${lobbyPlayerContainer}
+			${lobbyPlayerContainer}
+			${lobbyPlayerContainer}
+			${lobbyPlayerContainer}
+			${lobbyPlayerContainer}
+			${lobbyPlayerContainer}
+			${lobbyPlayerContainer}
+			${lobbyPlayerContainer}
 		</div>
+		<div id="tournament">
+			<div class="round quarter left">
+				<div class="contestMatchResume quarter match one">
+					<div class="contestUserContainer left">${userContainerAnchor}</div>
+					<div class="contestUserContainer right">${userContainerAnchor}</div>
+				</div>
+				<div class="contestMatchResume quarter match two">
+					<div class="contestUserContainer left">${userContainerAnchor}</div>
+					<div class="contestUserContainer right">${userContainerAnchor}</div>
+				</div>
+			</div>
 
 
-		<div class="round semi left">
-			<div class="contestMatchResume semi match one">
-				<div class="contestUserContainer left">${userContainerAnchor}</div>
-				<div class="contestUserContainer right">${userContainerAnchor}</div>
+			<div class="round semi left">
+				<div class="contestMatchResume semi match one">
+					<div class="contestUserContainer left">${userContainerAnchor}</div>
+					<div class="contestUserContainer right">${userContainerAnchor}</div>
+				</div>
 			</div>
-		</div>
 
 
-		<div class="round final">
-			<div class="contestMatchResume final match one">
-				<div class="contestUserContainer left">${userContainerAnchor}</div>
-				<div class="contestUserContainer right">${userContainerAnchor}</div>
+			<div class="round final">
+				<div class="contestMatchResume final match one">
+					<div class="contestUserContainer left">${userContainerAnchor}</div>
+					<div class="contestUserContainer right">${userContainerAnchor}</div>
+				</div>
 			</div>
-		</div>
 
-		<div class="round semi right">
-			<div class="contestMatchResume semi match two">
-				<div class="contestUserContainer left">${userContainerAnchor}</div>
-				<div class="contestUserContainer right">${userContainerAnchor}</div>
+			<div class="round semi right">
+				<div class="contestMatchResume semi match two">
+					<div class="contestUserContainer left">${userContainerAnchor}</div>
+					<div class="contestUserContainer right">${userContainerAnchor}</div>
+				</div>
 			</div>
-		</div>
-		<div class="round quarter right">
-			<div class="contestMatchResume quarter match three">
-				<div class="contestUserContainer left">${userContainerAnchor}</div>
-				<div class="contestUserContainer right">${userContainerAnchor}</div>
+			<div class="round quarter right">
+				<div class="contestMatchResume quarter match three">
+					<div class="contestUserContainer left">${userContainerAnchor}</div>
+					<div class="contestUserContainer right">${userContainerAnchor}</div>
+				</div>
+				<div class="contestMatchResume quarter match four">
+					<div class="contestUserContainer left">${userContainerAnchor}</div>
+					<div class="contestUserContainer right">${userContainerAnchor}</div>
+				</div>
 			</div>
-			<div class="contestMatchResume quarter match four">
-				<div class="contestUserContainer left">${userContainerAnchor}</div>
-				<div class="contestUserContainer right">${userContainerAnchor}</div>
+			<div id="controler">
+				<div id="leftBtn" tabindex="12" aria-label="Switch tournament section"></div>
+				<div id="rightBtn" tabindex="13" aria-label="Switch tournament section"></div>
 			</div>
-		</div>
-		<div id="controler">
-			<div id="leftBtn" tabindex="12" aria-label="Switch tournament section"></div>
-			<div id="rightBtn" tabindex="13" aria-label="Switch tournament section"></div>
 		</div>
 	</div>
 </div>
@@ -393,127 +414,154 @@ function displayTournament(){
 		elem.classList.remove("loser");
 		elem.classList.remove("winner");
 	})
-	var minFullTreeWidth = 870;
-	gameContainer = document.getElementById("gameContainer");
-	tournamentContainer = document.getElementById("tournamentContainer");
-
-	gameContainer.style.setProperty("display", "none");
-	tournamentContainer.style.setProperty("display", "flex");
-
-	const contestMatchPlacementMap = {
-		".quarter.three" : {full : ".quarter.right", semi : ".quarter.left"},
-		".quarter.four" : {full : ".quarter.right", semi : ".quarter.left"},
-	
-		".semi.two" : {full : ".semi.right", semi : ".semi.left"},
-	}
-
-	const tournamentAnchorMap = {
-		".quarter.one .left .anchor" : ".semi .one .left .anchor",
-		".quarter.one .right .anchor" : ".semi .one .left .anchor",
-
-		".quarter.two .left .anchor" : ".semi .one .right .anchor",
-		".quarter.two .right .anchor" : ".semi .one .right .anchor",
-
-		".quarter.three .left .anchor" : ".semi .two .left .anchor",
-		".quarter.three .right .anchor" : ".semi .two .left .anchor",
-
-		".quarter.four .left .anchor" : ".semi .two .right .anchor",
-		".quarter.four .right .anchor" : ".semi .two .right .anchor",
-
-		".semi.one .left .anchor" : ".final .left .anchor",
-		".semi.one .right .anchor" : ".final .left .anchor",
-
-		".semi.two .left .anchor" : ".final .right .anchor",
-		".semi.two .right .anchor" : ".final .right .anchor",
-	}
-
+	var playersCount = 0;
+	Object.keys(tournament['round_1']).forEach(function(matchNumber){
+		Object.keys(tournament['round_1'][matchNumber]).forEach(function(player){
+			if (tournament['round_1'][matchNumber][player]['username']){
+					playersCount += 1;
+			}
+		})
+	})
 	setTournamentTreeValue();
+	if (playersCount == 8/* || 1*/){
+		document.querySelector("#lobby").style.setProperty("display", "none");
+		document.querySelector("#tournament").style.setProperty("display", "flex");
+		var minFullTreeWidth = 870;
+		gameContainer = document.getElementById("gameContainer");
+		tournamentContainer = document.getElementById("tournamentContainer");
 
-	minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
-	minSemiTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 3) + minConnectionWidth;
-	//console.log(`minFullTreeWidth : ${minFullTreeWidth}, minSemiTreeWidth : ${minSemiTreeWidth}`);
+		gameContainer.style.setProperty("display", "none");
+		tournamentContainer.style.setProperty("display", "flex");
 
-	Object.keys(contestMatchPlacementMap).forEach(function (key){
-		var full = document.querySelector(contestMatchPlacementMap[key].full);
-		var semi = document.querySelector(contestMatchPlacementMap[key].semi);
-		if (getWindowWidth() < minFullTreeWidth && full.querySelector(key)){
-			semi.appendChild(full.querySelector(key).cloneNode(true));
-			full.querySelector(key).remove();
-			if (!full.classList.contains("unused"))
-				full.classList.add("unused");
+		const contestMatchPlacementMap = {
+			".quarter.three" : {full : ".quarter.right", semi : ".quarter.left"},
+			".quarter.four" : {full : ".quarter.right", semi : ".quarter.left"},
+		
+			".semi.two" : {full : ".semi.right", semi : ".semi.left"},
 		}
-		else if (getWindowWidth() >= minFullTreeWidth && semi.querySelector(key)){
-			full.appendChild(semi.querySelector(key).cloneNode(true));
-			full.classList.remove("unused");
-			semi.querySelector(key).remove();
-		}
-	})
 
-	if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
-		if (!document.querySelector("#tournamentContainer").classList.contains("singleRoundDisplay"))
-			document.querySelector("#tournamentContainer").classList.add("singleRoundDisplay")
-	}
-	else {
-		document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentSubtitle']
-		if (document.querySelector("#tournamentContainer").classList.contains("singleRoundDisplay"))
-			document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
-		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
+		const tournamentAnchorMap = {
+			".quarter.one .left .anchor" : ".semi .one .left .anchor",
+			".quarter.one .right .anchor" : ".semi .one .left .anchor",
+
+			".quarter.two .left .anchor" : ".semi .one .right .anchor",
+			".quarter.two .right .anchor" : ".semi .one .right .anchor",
+
+			".quarter.three .left .anchor" : ".semi .two .left .anchor",
+			".quarter.three .right .anchor" : ".semi .two .left .anchor",
+
+			".quarter.four .left .anchor" : ".semi .two .right .anchor",
+			".quarter.four .right .anchor" : ".semi .two .right .anchor",
+
+			".semi.one .left .anchor" : ".final .left .anchor",
+			".semi.one .right .anchor" : ".final .left .anchor",
+
+			".semi.two .left .anchor" : ".final .right .anchor",
+			".semi.two .right .anchor" : ".final .right .anchor",
+		}
+
+
+		minFullTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 5) + (minConnectionWidth * 4);
+		minSemiTreeWidth = (document.querySelector(".quarter.one").getBoundingClientRect().width * 3) + minConnectionWidth;
+		console.log(`minFullTreeWidth : ${minFullTreeWidth}, minSemiTreeWidth : ${minSemiTreeWidth}`);
+
+		Object.keys(contestMatchPlacementMap).forEach(function (key){
+			var full = document.querySelector(contestMatchPlacementMap[key].full);
+			var semi = document.querySelector(contestMatchPlacementMap[key].semi);
+			if (getWindowWidth() < minFullTreeWidth && full.querySelector(key)){
+				semi.appendChild(full.querySelector(key).cloneNode(true));
+				full.querySelector(key).remove();
+				if (!full.classList.contains("unused"))
+					full.classList.add("unused");
+			}
+			else if (getWindowWidth() >= minFullTreeWidth && semi.querySelector(key)){
+				full.appendChild(semi.querySelector(key).cloneNode(true));
+				full.classList.remove("unused");
+				semi.querySelector(key).remove();
+			}
+		})
+
+		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
+			document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+			if (!tournamentContainer.classList.contains("singleRoundDisplay"))
+				tournamentContainer.classList.add("singleRoundDisplay")
+		}
+		else {
+			document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentSubtitle']
+			if (tournamentContainer.classList.contains("singleRoundDisplay"))
+				tournamentContainer.classList.remove("singleRoundDisplay")
+			tournamentContainer.style.setProperty("left", `0px`)
+			if (document.getElementById("treeCanva"))
+				document.querySelector("#treeCanva").style.setProperty("left", `0px`)
+		}
+
+		if (getWindowWidth() < minFullTreeWidth)
+			document.querySelector(".final.match").style.setProperty("top", "0")
+		else
+			document.querySelector(".final.match").style.setProperty("top", "-4.2rem")
+		
 		if (document.getElementById("treeCanva"))
-			document.querySelector("#treeCanva").style.setProperty("left", `0px`)
-	}
+			document.getElementById("treeCanva").remove();
+		treeCanva = document.createElement("canvas");
+		treeCanva.id = "treeCanva";
+		treeCanva.width = tournamentContainer.getBoundingClientRect().width;
+		treeCanva.height = document.body.clientHeight;
+		tournamentContainer.appendChild(treeCanva);
 
-	if (getWindowWidth() < minFullTreeWidth)
-		document.querySelector(".final.match").style.setProperty("top", "0")
-	else
-		document.querySelector(".final.match").style.setProperty("top", "-4.2rem")
-	
-	if (document.getElementById("treeCanva"))
-		document.getElementById("treeCanva").remove();
-	treeCanva = document.createElement("canvas");
-	treeCanva.id = "treeCanva";
-	treeCanva.width = tournamentContainer.getBoundingClientRect().width;
-	treeCanva.height = document.body.clientHeight;
-	tournamentContainer.appendChild(treeCanva);
+		treeCtx = treeCanva.getContext("2d");
+		treeCtx.strokeStyle = client.mainTextRgb;
+		treeCtx.lineWidth = 3;
+		var offset = 0;
+		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
+			document.querySelector("#tournamentContainer").style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
+			offset = getWindowWidth() * singleRoundDisplayIdx;
 
-	treeCtx = treeCanva.getContext("2d");
-	treeCtx.strokeStyle = client.mainTextRgb;
-	treeCtx.lineWidth = 3;
-	var offset = 0;
-	if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-		document.querySelector("#tournamentContainer").style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
-		offset = getWindowWidth() * singleRoundDisplayIdx;
-
-		switch (singleRoundDisplayIdx){
-			case 0:
-				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
-				break ;
-			case 1:
-				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
-				break ;
-			case 2:
-				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
-				break ;
+			switch (singleRoundDisplayIdx){
+				case 0:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+					break ;
+				case 1:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
+					break ;
+				case 2:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
+					break ;
+			}
 		}
+		Object.keys(tournamentAnchorMap).forEach(function (key){
+			pointOne = document.querySelector(key);
+			if (pointOne.parentElement.classList.contains("winner")){
+				pointTwo = document.querySelector(tournamentAnchorMap[key]);
+				treeCtx.beginPath();
+				rect = pointOne.getBoundingClientRect();
+				startPoint = {x : rect.left + offset, y : rect.top + ((rect.bottom - rect.top) / 2)};
+				rect = pointTwo.getBoundingClientRect();
+				endPoint = {x : rect.left + offset, y : rect.top + ((rect.bottom - rect.top) / 2)};
+				midX = startPoint.x + ((endPoint.x - startPoint.x) / 2)
+				treeCtx.moveTo(startPoint.x, startPoint.y);
+				treeCtx.lineTo(midX, startPoint.y);
+				treeCtx.lineTo(midX, endPoint.y);
+				treeCtx.lineTo(endPoint.x, endPoint.y);
+				treeCtx.stroke();
+				treeCtx.closePath();
+			}
+		})
 	}
-	Object.keys(tournamentAnchorMap).forEach(function (key){
-		pointOne = document.querySelector(key);
-		if (pointOne.parentElement.classList.contains("winner")){
-			pointTwo = document.querySelector(tournamentAnchorMap[key]);
-			treeCtx.beginPath();
-			rect = pointOne.getBoundingClientRect();
-			startPoint = {x : rect.left + offset, y : rect.top + ((rect.bottom - rect.top) / 2)};
-			rect = pointTwo.getBoundingClientRect();
-			endPoint = {x : rect.left + offset, y : rect.top + ((rect.bottom - rect.top) / 2)};
-			midX = startPoint.x + ((endPoint.x - startPoint.x) / 2)
-			treeCtx.moveTo(startPoint.x, startPoint.y);
-			treeCtx.lineTo(midX, startPoint.y);
-			treeCtx.lineTo(midX, endPoint.y);
-			treeCtx.lineTo(endPoint.x, endPoint.y);
-			treeCtx.stroke();
-			treeCtx.closePath();
-		}
-	})
+	else{
+		document.querySelector("#lobby").style.setProperty("display", "flex");
+		document.querySelector("#tournament").style.setProperty("display", "none");
+		var idx = 0;
+		lobbyPlayerElem = document.querySelectorAll(".lobbyPlayer");
+		round = "round_1";
+		Object.keys(tournament[round]).forEach(function(matchNumber){
+			Object.keys(tournament[round][matchNumber]).forEach(function(player){
+				if (tournament[round][matchNumber][player]['username']){
+					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament[round][matchNumber][player]['username'];
+					idx += 1;
+				}
+			})
+		})
+	}
 }
 
 function game() {

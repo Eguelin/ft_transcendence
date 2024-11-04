@@ -259,6 +259,11 @@
 	height: calc(100% - 10rem);
 }
 
+#tournament{
+	display: flex;
+	width: inherit;
+}
+
 .singleRoundDisplay{
 	overflow: hidden;
 	left: 0;
@@ -315,4 +320,10 @@
 
 #controler #leftBtn:focus, #controler #rightBtn:focus, #controler #leftBtn:hover, #controler #rightBtn:hover{
 	background: var(--page-bg-rgb);
+}
+
+.lobbyPlayer{
+	width: 15ch;
+	padding: 1ch;
+	background: var(--hover-text-rgb);
 }
