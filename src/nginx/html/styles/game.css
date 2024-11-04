@@ -322,8 +322,45 @@
 	background: var(--page-bg-rgb);
 }
 
+#lobby{
+	width: 100vw;
+	flex-wrap: wrap;
+	gap: 1ch;
+}
+
+.lobbyPlayerContainer{
+	height: fit-content;
+	flex: 1 0 21%;
+}
+
 .lobbyPlayer{
+	background: var(--hover-text-rgb);
+	display: flex;
+	flex-direction: column;
+	gap: 1ch;
 	width: 15ch;
 	padding: 1ch;
-	background: var(--hover-text-rgb);
+	position: relative;
+	left: 50%;
+	translate: -50%;
+	border-radius: 1rem;
+}
+
+.lobbyPlayerPfpContainer{
+	width: 15ch;
+	height: 15ch;
+	align-self: center;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: relative;
+	border-radius: 1rem;
+}
+
+.lobbyPlayerPfp{
+	width: 100%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }

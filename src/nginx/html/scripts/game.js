@@ -10,15 +10,17 @@ var treeCanva;
 
 var userContainerAnchor = `
 <div class="anchor"></div>
-<div class="username"></div>
+<div class="username"> </div>
 <div class="score"></div>
 `
 
 var lobbyPlayerContainer= `
-<div class="lobbyPlayer">
-	<div class="username"></div>
-	<div class="lobbyPlayerPfpContainer">
-		<img class="lobbyPlayerPfp">
+<div class="lobbyPlayerContainer">
+	<div class="lobbyPlayer">
+		<div class="username"></div>
+		<div class="lobbyPlayerPfpContainer">
+			<img class="lobbyPlayerPfp">
+		</div>
 	</div>
 </div>
 `
@@ -557,7 +559,9 @@ function displayTournament(){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				if (tournament[round][matchNumber][player]['username']){
 					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament[round][matchNumber][player]['username'];
+					addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament[round][matchNumber][player]['profile_picture']);
 					idx += 1;
+					
 				}
 			})
 		})
