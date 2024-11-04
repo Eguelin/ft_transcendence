@@ -41,7 +41,7 @@ const routes = {
 	"/login" : `https://${hostname.host}/scripts/login.js`,
 	404 : `https://${hostname.host}/scripts/404.js`,
 	403 : `https://${hostname.host}/scripts/403.js`,
-	"/admin": `https://${hostname.host}/script/admin.js`
+	"/admin": `https://${hostname.host}/scripts/admin.js`
 }
 
 function addPfpUrlToImgSrc(img, path){
