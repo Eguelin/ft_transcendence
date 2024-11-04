@@ -351,12 +351,15 @@ function setTournamentTreeValue(){
 		"playerLeft" : ".contestUserContainer.left",
 		"playerRight" : ".contestUserContainer.right",
 	}
+	var players = 0;
 	//console.log(tournament);
 	Object.keys(tournament).forEach(function(round){
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
 				if (tournament[round][matchNumber][player]['username']){
+					if (round == "round_1")
+						players += 1;
 					document.querySelector(`${selector} .username`).classList.remove("waiting");
 					document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
 					if (tournament[round][matchNumber][player]['score'] != null){
@@ -375,6 +378,7 @@ function setTournamentTreeValue(){
 			})
 		})
 	})
+	console.log(`${players}/8`);
 }
 
 function switchTournamentDisplay(){
@@ -385,6 +389,10 @@ function switchTournamentDisplay(){
 }
 
 function displayTournament(){
+	document.querySelectorAll(".loser, .winner").forEach(function(elem){
+		elem.classList.remove("loser");
+		elem.classList.remove("winner");
+	})
 	var minFullTreeWidth = 870;
 	gameContainer = document.getElementById("gameContainer");
 	tournamentContainer = document.getElementById("tournamentContainer");
@@ -548,7 +556,6 @@ function game() {
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
 		if (data.type === "game_init") {
-			//clearInterval(tournamentDisplayInterval);
 			window.removeEventListener("resize", displayTournament);
 			gameContainer.style.setProperty("display", "flex");
 			tournamentContainer.style.setProperty("display", "none");
@@ -571,11 +578,10 @@ function game() {
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "tournament") {
 			tournament = data.message;
-			tournament = tmp_contest;
+			//tournament = tmp_contest;
 			displayTournament()
 			gameContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
-			//tournamentDisplayInterval = setInterval(displayTournament, 16);
 			window.addEventListener("resize", displayTournament);
 		} else if (data.type === "tournament_end") {
 			gameContainer.style.setProperty("display", "none");
