@@ -401,7 +401,6 @@ function setTournamentTreeValue(){
 			})
 		})
 	})
-	console.log(`${players}/8`);
 }
 
 function switchTournamentDisplay(){
@@ -549,7 +548,7 @@ function displayTournament(){
 		})
 	}
 	else{
-		document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentLobby']
+		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentLobby']} ${playersCount}/8`
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
 		document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
 		if (document.getElementById("treeCanva"))
@@ -558,19 +557,18 @@ function displayTournament(){
 		document.querySelector("#tournament").style.setProperty("display", "none");
 		var idx = 0;
 		lobbyPlayerElem = document.querySelectorAll(".lobbyPlayer");
-		lobbyPlayerElem.forEach(function(elem) {
-			elem.querySelector(".username").innerText = "";
-			elem.querySelector(".lobbyPlayerPfp").src = "";
-		})
-		round = "round_1";
-		Object.keys(tournament[round]).forEach(function(matchNumber){
-			Object.keys(tournament[round][matchNumber]).forEach(function(player){
-				if (tournament[round][matchNumber][player]['username']){
-					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament[round][matchNumber][player]['username'];
-					addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament[round][matchNumber][player]['profile_picture']);
-					idx += 1;
-					
+		Object.keys(tournament["round_1"]).forEach(function(matchNumber){
+			Object.keys(tournament["round_1"][matchNumber]).forEach(function(player){
+				if (tournament["round_1"][matchNumber][player]['username']){
+					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_1"][matchNumber][player]['username'];
+					if (lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp").src != tournament["round_1"][matchNumber][player]['profile_picture'])
+						addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament["round_1"][matchNumber][player]['profile_picture']);					
 				}
+				else{
+					lobbyPlayerElem[idx].querySelector(".username").innerText = "";
+					lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp").src = "";
+				}
+				idx += 1;
 			})
 		})
 	}
