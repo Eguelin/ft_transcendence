@@ -1,5 +1,8 @@
 var chartAverage, chartAbs;
 var width, height, gradient;
+var today = new Date();
+var customStartDayInput = document.getElementById("customStartDay");
+var customEndDayInput = document.getElementById("customEndDay");
 chartAverage = null;
 chartAbs = null;
 
@@ -7,33 +10,70 @@ lastWeekSelection = document.getElementById("lastWeekSelection");
 lastMonthSelection = document.getElementById("lastMonthSelection");
 lastYearSelection = document.getElementById("lastYearSelection");
 
+document.getElementById("customPeriodSelection").addEventListener("click", (e) => {
+    var container = document.getElementById("customPeriodSelectionContainer");
+    if (container.classList.contains("active")){
+        container.classList.remove("active");
+        container.offsetHeight;
+        container.classList.add("inactive");
+        e.target.innerText = "+";
+        setTimeout((container)=>{
+            container.classList.remove("inactive");
+        }, 1000, container);
+    }
+    else{
+        container.offsetHeight;
+        container.classList.add("active");
+        e.target.innerText = "-";
+    }
+})
+
+document.getElementById("search").addEventListener("click", (e)=>{
+    if (isNaN(Date.parse(customStartDayInput.value)) || isNaN(Date.parse(customEndDayInput.value))){
+        popUpError("Invalid date");
+        return;
+    }
+    setLoader();
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
+    document.getElementById("customPeriodSelection").classList.add("activeTimeline");
+    customStartDay = new Date(Date.parse(customStartDayInput.value));
+    customEndDay = new Date(Date.parse(customEndDayInput.value));
+    if((Math.round((customEndDay.getTime() - customStartDay.getTime()) / (1000 * 3600 * 24))) < 0){
+        var tmp = customStartDayInput.value;
+        customStartDayInput.value = customEndDayInput.value;
+        customEndDayInput.value = tmp;
+        tmp = customStartDay;
+        customStartDay = customEndDay;
+        customEndDay = tmp;
+    }
+    loadUserDashboard(customStartDay, customEndDay);
+})
+
 lastWeekSelection.addEventListener("click", (e) => {
-	setLoader()
-    loadUserDashboard(7);
-    if (lastMonthSelection.classList.contains("activeTimeline"))
-        lastMonthSelection.classList.remove("activeTimeline");
-    if (lastYearSelection.classList.contains("activeTimeline"))
-        lastYearSelection.classList.remove("activeTimeline");
+	setLoader();
+	
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    loadUserDashboard(startDate, today);
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
     lastWeekSelection.classList.add("activeTimeline");
 })
 
 lastMonthSelection.addEventListener("click", (e) => {
-	setLoader()
-    loadUserDashboard(31);
-    if (lastWeekSelection.classList.contains("activeTimeline"))
-        lastWeekSelection.classList.remove("activeTimeline");
-    if (lastYearSelection.classList.contains("activeTimeline"))
-        lastYearSelection.classList.remove("activeTimeline");
+	setLoader();
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 31);
+    loadUserDashboard(startDate, today);
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
     lastMonthSelection.classList.add("activeTimeline");
 })
 
 lastYearSelection.addEventListener("click", (e) => {
-	setLoader()
-    loadUserDashboard(365);
-    if (lastWeekSelection.classList.contains("activeTimeline"))
-        lastWeekSelection.classList.remove("activeTimeline");
-    if (lastMonthSelection.classList.contains("activeTimeline"))
-        lastMonthSelection.classList.remove("activeTimeline");
+	setLoader();
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 365);
+    loadUserDashboard(startDate, today);
+    document.querySelectorAll(".activeTimeline").forEach(function(elem){elem.classList.remove("activeTimeline")});
     lastYearSelection.classList.add("activeTimeline");
 })
 
@@ -53,14 +93,17 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
-function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, clientUsername){
+function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
+    if (!(startDate instanceof Date && endDate instanceof Date)){
+        console.log("Wrong arguments");
+        return ;    
+    }
+        
     if (chartAverage)
         chartAverage.destroy();
     if (chartAbs)
         chartAbs.destroy();
-    var endDate = new Date();
-    var startDate = new Date();
-    startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
+    var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)); 
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
@@ -328,7 +371,7 @@ function drawWinLossGraph(matches, username, LastXDaysDisplayed, clientMatches, 
 
 }
 
-function loadUserDashboard(LastXDaysDisplayed){
+function loadUserDashboard(startDate, endDate){
 
     wLGraph = document.getElementById("winLossGraph").remove();
     wLAbsGraph = document.getElementById("winLossAbsGraph").remove();
@@ -355,15 +398,12 @@ function loadUserDashboard(LastXDaysDisplayed){
 
 
     var splitPath = window.location.href.split('/');
-    var endDate = new Date();
-    var startDate = new Date();
-    startDate.setDate(startDate.getDate() - LastXDaysDisplayed);
-    startDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
-    endDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+    var startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+    var endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDate, "endDate" : endDate}),
+        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDateStr, "endDate" : endDateStr}),
         credentials: 'include'
     }).then(user => {
         if (user.ok){
@@ -371,13 +411,13 @@ function loadUserDashboard(LastXDaysDisplayed){
                 fetch('/api/user/get', {
                     method: 'POST', //GET forbid the use of body :(
                     headers: {'Content-Type': 'application/json',},
-                    body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDate, "endDate" : endDate}),
+                    body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDateStr, "endDate" : endDateStr}),
                     credentials: 'include'
                 }).then(client => {
                     if (client.ok){
                         client.json().then((client) => {
                             unsetLoader()
-                            drawWinLossGraph(user.matches, user.username, LastXDaysDisplayed, client.matches, client.username);
+                            drawWinLossGraph(user.matches, user.username, startDate, endDate, client.matches, client.username);
                         })
                     }
                     else
@@ -418,7 +458,7 @@ function loadUserDashboard(LastXDaysDisplayed){
                         }
                     })
                 });
-                var tabIdx = 15;
+                var tabIdx = 19;
                 document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                     elem.tabIndex = tabIdx;
                     tabIdx += 3;
@@ -458,5 +498,7 @@ function loadUserDashboard(LastXDaysDisplayed){
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
-    loadUserDashboard(defaultLastXDaysDisplayed)
+    var startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    loadUserDashboard(startDate, today);
 }
