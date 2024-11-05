@@ -153,6 +153,7 @@ class Client{
 				credentials: 'include'
 			})
 			const result = await fetchResult.json();
+			var search = 404;
 			if (fetchResult.ok){
 				this.#is_admin = result.is_admin;
 				setLoader()
@@ -162,66 +163,37 @@ class Client{
 					pageName = page.substring(0, sep)
 				else
 					pageName = page;
-
+				search = pageName;
 				if (routes[pageName]){
 					if (!this.#is_admin && pageName == "/admin"){
 						currentPage = 403;
-
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.onload = function(){
-							(async () => (loadCurrentLang()))();
-						}
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', routes[403]);
-						document.body.appendChild(s);
-						unsetLoader()
+						search = 403;
 					}
 					else{
 						currentPage = pageName.substring(1);
-
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.onload = function(){
-							(async () => (loadCurrentLang()))();
-						}
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', routes[pageName]);
-						document.body.appendChild(s);
-						unsetLoader()
 					}
 				}
 				else{
 					currentPage = 404;
-
-						document.getElementById("script").remove();
-						var s = document.createElement("script");
-						s.onload = function(){
-							(async () => (loadCurrentLang()))();
-						}
-						s.setAttribute('id', 'script');
-						s.setAttribute('src', routes[403]);
-						document.body.appendChild(s);
-						unsetLoader()
+					search = 404;
 				}
 			}
 			else{
 				dropDownUserContainer.style.setProperty("display", "none");
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
-
 				currentPage = 'login';
-
-				document.getElementById("script").remove();
-				var s = document.createElement("script");
-				s.onload = function(){
-					(async () => (loadCurrentLang()))();
-				}
-				s.setAttribute('id', 'script');
-				s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
-				document.body.appendChild(s);
-				unsetLoader()
+				search = "/login"
 			}
+			document.getElementById("script").remove();
+			var s = document.createElement("script");
+			s.onload = function(){
+				(async () => (loadCurrentLang()))();
+			}
+			s.setAttribute('id', 'script');
+			s.setAttribute('src', routes[search]);
+			document.body.appendChild(s);
+			unsetLoader()
 		})();
 	}
 }
