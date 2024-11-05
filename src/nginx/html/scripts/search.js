@@ -61,7 +61,7 @@ var template = `
     }
     else{
         myReplaceState(`https://${hostname.host}/home`);
-		popUpError("Can't seach empty query");
+		popUpError("Can't search empty query");
     }
 
 }

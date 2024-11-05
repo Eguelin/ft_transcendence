@@ -460,6 +460,9 @@ function switchTheme(theme) {
 		chartAbs._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
 		chartAbs.update();
 	}
+	if (currentPage == "game"){
+		displayTournament();
+	}
 }
 
 async function loadCurrentLang(){
