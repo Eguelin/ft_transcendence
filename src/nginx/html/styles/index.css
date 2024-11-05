@@ -44,7 +44,7 @@
 }
 
 #themeButton{
-	mask-image:url("../icons/button-night-mode.svg");
+	mask-image:url("../icons/moon.svg");
 	background:var(--main-text-rgb);
 	height:3rem;
 	width:3rem;
