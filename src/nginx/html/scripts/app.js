@@ -892,7 +892,7 @@ window.addEventListener("click", (e) => {
 	}
 })
 
-function popUpError(error){
+function 	popUpError(error){
 	if (document.getElementById("popupErrorContainer"))
 		document.getElementById("popupErrorContainer").remove();
 	var popupContainer = document.createElement("div");
@@ -911,7 +911,9 @@ function popUpError(error){
 
 window.addEventListener("resize", (e) => {
 	if(currentPage == "dashboard"){
-		loadUserDashboard(defaultLastXDaysDisplayed)
+		var startDate = new Date();
+		startDate.setDate(startDate.getDate() - 7);
+		loadUserDashboard(startDate, today);
 	}
 })
 
