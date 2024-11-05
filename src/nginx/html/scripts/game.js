@@ -617,6 +617,7 @@ function game() {
 		let data = JSON.parse(event.data);
 		if (data.type === "error"){
 			popUpError(data.message);
+			cleanup();
 			myPushState(`https://${hostname.host}/home`);
 		}
 		if (data.type === "game_init") {

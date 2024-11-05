@@ -511,43 +511,44 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
-		if self.player:
-			if data['type'] == 'game_keydown':
-				self.player.input = data['message']
-			elif data['type'] == 'game_ready':
-				self.player.isReady = True
+		if ("type" in data):
+			if self.player:
+				if data['type'] == 'game_keydown':
+					self.player.input = data['message']
+				elif data['type'] == 'game_ready':
+					self.player.isReady = True
 
-		elif data['type'] == 'remote':
-			self.player = PlayerRemote(self)
-			Matchmaking().add_PlayerRemote(self.player)
-			await Matchmaking().run()
-			return
+			elif data['type'] == 'remote':
+				self.player = PlayerRemote(self)
+				Matchmaking().add_PlayerRemote(self.player)
+				await Matchmaking().run()
+				return
 
-		elif data['type'] == 'tournament':
-			self.player = PlayerRemote(self)
-			await Tournament().addPlayers(self.player)
-			await Tournament().run()
-			return
+			elif data['type'] == 'tournament':
+				self.player = PlayerRemote(self)
+				await Tournament().addPlayers(self.player)
+				await Tournament().run()
+				return
 
-		elif data['type'] == 'ai':
-			self.player = PlayerRemote(self)
-			game = GameAI(self.player)
-			await game.start()
-			return
+			elif data['type'] == 'ai':
+				self.player = PlayerRemote(self)
+				game = GameAI(self.player)
+				await game.start()
+				return
 
-		elif data['type'] == 'full_ai':
-			self.player = PlayerRemote(self)
-			game = GameFullAI(self.player)
-			await game.start()
-			return
+			elif data['type'] == 'full_ai':
+				self.player = PlayerRemote(self)
+				game = GameFullAI(self.player)
+				await game.start()
+				return
 
-		elif data['type'] == 'local':
-			self.player = PlayerLocal(self)
-			game = Gamelocal(self.player)
-			await game.start()
-			return
-		else:
-			await self.send('error', 'Game mode unavailable')
+			elif data['type'] == 'local':
+				self.player = PlayerLocal(self)
+				game = Gamelocal(self.player)
+				await game.start()
+				return
+			else:
+				await self.send('error', 'Game mode unavailable')
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
