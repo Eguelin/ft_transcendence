@@ -47,10 +47,28 @@
 	display: flex;
 	margin-top: 2vmin;
 }
-#loginSlideSelector div{
-	flex: 1;
+
+#loginSlideSelector .slideSelector.activeSelector{
+	border: none;
 }
 
+#loginSlideSelector .slideSelector.activeSelector div{
+	background: none !important;
+}
+
+#slideSelectorBg{
+	background: var(--hover-text-rgb);
+	position: absolute;
+	width: 50%;
+	height: 2rem;
+	border-bottom: 1px solid var(--main-text-rgb);
+	z-index: -2;
+}
+
+
+#loginSlideSelector > div{
+	width: 50%;
+}
 
 #loginSlideSelector div:hover, #loginSlideSelector .activeSelector {
 	font-size: calc(1em + 2px);
