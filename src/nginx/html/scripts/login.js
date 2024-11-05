@@ -15,6 +15,7 @@ var template = `
 		<div tabindex="13" id="registerSelector" class="slideSelector">
 			<div id="registerSelectorText">Register</div>
 		</div>
+		<div id="slideSelectorBg"></div>
 	</div>
 
 	<div class="loginSlide">
@@ -95,12 +96,36 @@ var template = `
 	loginSlideSelector.forEach(function(key) {
 		if (currentPage == "login"){
 			key.addEventListener("click", (e) => {
-				loginSlideSelector[slideIdx].classList.remove("activeSelector");
+				save = slideIdx;
 				slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-				for (i = 0; i < slides.length; i++)
-					slides[i].style.display = "none";
-				slides[slideIdx].style.display = "block";
-				loginSlideSelector[slideIdx].classList.add('activeSelector');
+				if (save != slideIdx){
+					loginSlideSelector[save].classList.remove("activeSelector");
+					for (i = 0; i < slides.length; i++)
+						slides[i].style.display = "none";
+					slides[slideIdx].style.display = "block";
+					loginSlideSelector[slideIdx].classList.add('activeSelector');
+
+					const time = {
+						duration: 300,
+						iterations: 1,
+					}
+					if (loginSlideSelector[slideIdx].id == "loginSelector"){
+						move = [
+							{ left: `50%`},
+							{ left: `0%`}
+						];
+						document.getElementById("slideSelectorBg").animate(move, time);
+						document.getElementById("slideSelectorBg").style.setProperty("left", "0");
+					}
+					else{
+						move = [
+							{ left: `0%`},
+							{ left: `50%`}
+						];
+						document.getElementById("slideSelectorBg").animate(move, time);
+						document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
+					}
+				}
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter")
@@ -347,6 +372,27 @@ function loginKeyDownEvent(e) {
 		for (let i = 0; i < slides.length; i++)
 			slides[i].style.display = "none";
 		loginSlideSelector[slideIdx].classList.add('activeSelector');
+
+		const time = {
+			duration: 300,
+			iterations: 1,
+		}
+		if (loginSlideSelector[slideIdx].id == "loginSelector"){
+			const move = [
+				{ left: `50%`},
+				{ left: `0%`}
+			];
+			document.getElementById("slideSelectorBg").animate(move, time);
+			document.getElementById("slideSelectorBg").style.setProperty("left", "0");
+		}
+		else{
+			const move = [
+				{ left: `0%`},
+				{ left: `50%`}
+			];
+			document.getElementById("slideSelectorBg").animate(move, time);
+			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
+		}
 		slides[slideIdx].style.display = "block";
 		loginSlideSelector[slideIdx].focus();
 	}
