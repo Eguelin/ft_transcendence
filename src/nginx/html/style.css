@@ -105,16 +105,19 @@ h2{
 button{
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;
 	font-family: "pong";
-	font-size: 1rem;
+	font-size: 3rem;
 	padding: 1vh 0;
 	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
+	border: 0.2px solid transparent;
 	border-radius: 1.5vw;
 	background-color: var(--hover-text-rgb);
+	outline: none;
 }
 
+button:focus, button:hover{
+	border-color: var(--main-text-rgb);
+}
 
 @media screen and (max-width:960px) {
 	h1{
@@ -180,7 +183,7 @@ button{
 
 input{
 	font-family:'pong';
-	border: 0.2px solid var(--main-text-rgb);
+	border: 0.2px solid transparent;
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
@@ -191,6 +194,7 @@ input{
 
 input:focus{
 	outline: none;
+	border-color: var(--main-text-rgb);
 }
 
 .forms {
