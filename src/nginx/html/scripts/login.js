@@ -260,6 +260,7 @@ var template = `
 				}
 				else
 				{
+					unsetLoader();
 					response.json().then(text => {
 						warning.text = text.message;
 						if (!loginBtn.previousElementSibling)
