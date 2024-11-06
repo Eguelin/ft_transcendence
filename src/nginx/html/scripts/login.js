@@ -20,9 +20,15 @@ var template = `
 
 	<div class="loginSlide">
 		<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
-			<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
-			<input tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
-			<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
+			<div>
+				<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
+			</div>
+			<div>
+				<input tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
+			</div>
+			<div>
+				<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
+			</div>
 		<div class="loginOpt" id="externalLoginOpt">Other login options</div>
 		<div id="externalLogin">
 			<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
@@ -209,6 +215,7 @@ function login(){
 	}
 	if (username != "" && pw != ""){
 		const data = {username: username, password: pw};
+		setLoader();
 		fetch('/api/user/login', {
 			method: 'POST',
 			headers: {
