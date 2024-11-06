@@ -165,7 +165,6 @@ function getGradient(ctx, chartArea) {
 
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
     if (!(startDate instanceof Date && endDate instanceof Date)){
-        console.log("Wrong arguments");
         return ;    
     }
         

@@ -128,10 +128,10 @@ var template = `
 					}
 				}
 			})
-			key.addEventListener("keydown", (e) => {
+			key.onkeydown = (e) => {
 				if (e.key == "Enter")
 					key.click();
-			})
+			}
 		}
 	})
 
