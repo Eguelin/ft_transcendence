@@ -17,9 +17,10 @@ cpwInput = document.getElementById('inputCPassword');
 			inputSearchUserContainer.style.setProperty("display", "none");
 			dropDownUserContainer.style.setProperty("display", "none");
 		});
+		disconnectSocket();
 		client = null;
 	}
-	
+
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "none");
 }

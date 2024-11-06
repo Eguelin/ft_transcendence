@@ -85,7 +85,7 @@ function createUserResumeContainer(user) {
 	imgContainer = document.createElement("div");
 	img.className = "userResumePfp";
 	imgContainer.className = "userResumePfpContainer";
-    addPfpUrlToImgSrc(img, user.pfp);
+	addPfpUrlToImgSrc(img, user.pfp);
 	userResumeName = document.createElement("a");
 	userResumeName.className = "userResumeName"
 	userResumeName.innerHTML = user.username;

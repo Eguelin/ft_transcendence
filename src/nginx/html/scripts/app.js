@@ -235,6 +235,7 @@ function load(){
 			},
 			credentials: 'include'
 		})
+		disconnectSocket();
 		history.replaceState("","", `https://${hostname.host}/login`)
 	}
 	if (currentPage == "settings"){
@@ -298,7 +299,10 @@ function handleToken() {
 					if (!client)
 						myReplaceState(`https://${hostname.host}/login`);
 					else
+					{
 						myReplaceState(`https://${hostname.host}/home`);
+						friendUpdate();
+					}
 				})()
 			}
 			else
@@ -320,9 +324,14 @@ function handleToken() {
 				if (!client)
 					myReplaceState(`https://${hostname.host}/login`);
 				else if (url.pathname == "" || url.pathname == "/")
+				{
 					myReplaceState(`https://${hostname.host}/home`);
+				}
 				else
+				{
 					load();
+					friendUpdate();
+				}
 				if (use_browser_theme){
 					if (window.matchMedia) {
 						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
@@ -361,7 +370,10 @@ window.addEventListener("beforeunload", (e) => {
 
 homeBtn.addEventListener("click", (e) => {
 	if (currentPage != "register")
+	{
 		myPushState(`https://${hostname.host}/home`);
+		friendUpdate();
+	}
 	else
 		myPushState(`https://${hostname.host}/login`);
 })
@@ -385,6 +397,7 @@ homeBtn.addEventListener("keydown", (e) => {
 
 logOutBtn.addEventListener("click", (e) => {
 	myReplaceState(`https://${hostname.host}/login`);
+	disconnectSocket();
 });
 
 const themeMap = {
@@ -593,10 +606,10 @@ swichTheme.addEventListener("click", () => {
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent)
 	switchTheme(theme_name);
 	swichTheme.blur();
-})	
+})
 
 function browserThemeEvent(event){
-	switchTheme(event.matches == 1 ? 'dark' : 'light');	
+	switchTheme(event.matches == 1 ? 'dark' : 'light');
 }
 
 swichTheme.addEventListener("keydown", (e) => {
@@ -649,7 +662,7 @@ function createMatchResumeContainer(match) {
 		scoreUserName.classList.add("deletedUser");
 	else
 		scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	
+
 
 	if (scoreOpponentName.innerHTML == "deleted")
 		scoreOpponentName.classList.add("deletedUser");
@@ -701,7 +714,7 @@ async function updateUserAriaLabel(key, content){
 			var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
 			var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
 			elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
-		})	
+		})
 	}
 	else{
 		document.querySelectorAll(key).forEach(function (elem){
@@ -975,4 +988,77 @@ function sendNotif(message){
 		notifCenterContainer.classList.add("pendingNotification");
 		incomingPushNotif(message);
 	}
+}
+
+function friendUpdate()
+{
+	if (!client)
+		return;
+	var socket = new WebSocket("/ws/friend/");
+
+	socket.onopen = function()
+	{
+		console.log("Connection established");
+	}
+
+	socket.onmessage = function(event)
+	{
+		var data = JSON.parse(event.data);
+		console.log(data);
+	}
+
+	socket.onclose = function()
+	{
+		console.log("Connection closed");
+	}
+
+	window.addEventListener('beforeunload', function()
+	{
+		socket.close();
+	});
+
+	document.getElementById('goHomeButton').addEventListener('click', function()
+	{
+		socket.close();
+	});
+
+	window.addEventListener('popstate', function()
+	{
+		socket.close();
+	});
+
+	socket.onmessage = function(event) {
+		const data = JSON.parse(event.data);
+		if (data.new_request) {
+			sendNotif(`${client.langJson.friends['ariaPending.friendsOptionContainer']}`);
+		}
+	};
+
+	window.disconnectSocket = function()
+	{
+		if (socket)
+			socket.close();
+	};
+
+	window.sendFriendRequest = function(user)
+	{
+		fetch('/api/user/get_user_id', {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({"user" : user,}),
+			credentials: 'include'
+		}).then(response => {
+			if (response.ok) {
+				response.json().then((user) => {
+					const message = JSON.stringify({
+						type: 'send_friend_request',
+						target_user_id: user.id
+					});
+					socket.send(message);
+				});
+			}
+			else
+				console.log("Error: ", response);
+		});
+	};
 }

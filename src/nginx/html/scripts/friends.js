@@ -197,7 +197,7 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
-var friendTabIdx, pendingFriendTabIdx, blockedUserTabIdx; 
+var friendTabIdx, pendingFriendTabIdx, blockedUserTabIdx;
 
 function createUserContainer(user){
 	var friendContainer = document.createElement("div");
@@ -231,26 +231,26 @@ function createUserContainer(user){
 
 	friendsOption.className = "friendsOption"
 	moreBtn.className = "moreBtn";
-	
+
 	removeFriendBtn.className = "removeFriendBtn";
 	removeFriendBtn.setAttribute("aria-label", client.langJson['friends']['aria.removeFriendBtn']);
-	
+
 	blockFriendBtn.className = "blockFriendBtn";
 	blockFriendBtn.setAttribute("aria-label", client.langJson['friends']['aria.blockFriendBtn']);
-	
+
 	acceptBtn.className = "acceptRequestBtn";
 	acceptBtn.setAttribute("aria-label", client.langJson['friends']['aria.acceptFriendBtn']);
-	
+
 	rejectBtn.className = "rejectRequestBtn";
 	rejectBtn.setAttribute("aria-label", client.langJson['friends']['aria.rejectFriendBtn']);
-	
+
 	unblockBtn.className = "unblockBtn";
 	unblockBtn.setAttribute("aria-label", client.langJson['friends']['aria.unblockBtn']);
 
 	userOptionContainer.className = "friendsOptionContainer";
 	userOption.className = "friendsOption";
 	userOption.id = user.username;
-	
+
 	userOption.appendChild(unblockBtn);
 	userOption.appendChild(acceptBtn);
 	userOption.appendChild(rejectBtn);
@@ -271,12 +271,12 @@ function createFriendContainer(user){
 	var blockFriendBtn = document.createElement("div");
 
 	friendContainer = createUserContainer(user);
-	
+
 	friendContainer.querySelectorAll(".unblockBtn, .acceptRequestBtn, .rejectRequestBtn").forEach(function (elem) {
 		elem.remove();
 	})
 	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
-	
+
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaAll.friendsOptionContainer]}`);
 	friendsOptionContainer.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
@@ -320,11 +320,11 @@ function createBlockedUserContainer(user){
 	})
 
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
-	
+
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaBlocked.friendsOptionContainer]}`);
 	friendsOptionContainer.tabIndex = blockedUserTabIdx;
 	blockedUserTabIdx += 1;
-	
+
 	friendContainer.getElementsByClassName("unblockBtn")[0].tabIndex = blockedUserTabIdx;
 	blockedUserTabIdx += 1;
 
@@ -339,7 +339,7 @@ function setListeners(){
 				active.classList.remove("activeListSelector");
 			})
 		});
-		
+
 		elem.addEventListener("focusout", (e)=>{
 			window.onkeydown = friendKeyDownEvent;
 		});
@@ -405,7 +405,7 @@ function checkUpdate(){
 		friendTabIdx = 15;
 		pendingFriendTabIdx = 15;
 		blockedUserTabIdx = 15;
-	
+
 		fetch('/api/user/current', {
 			method: 'GET',
 			headers: {

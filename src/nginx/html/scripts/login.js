@@ -95,43 +95,41 @@ var template = `
 	slides[slideIdx].style.display = "flex";
 
 	loginSlideSelector.forEach(function(key) {
-		if (currentPage == "login"){
-			key.addEventListener("click", (e) => {
-				save = slideIdx;
-				slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-				if (save != slideIdx){
-					loginSlideSelector[save].classList.remove("activeSelector");
-					for (i = 0; i < slides.length; i++)
-						slides[i].style.display = "none";
-					slides[slideIdx].style.display = "flex";
-					loginSlideSelector[slideIdx].classList.add('activeSelector');
+		key.addEventListener("click", (e) => {
+			save = slideIdx;
+			slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
+			if (save != slideIdx){
+				loginSlideSelector[save].classList.remove("activeSelector");
+				for (i = 0; i < slides.length; i++)
+					slides[i].style.display = "none";
+				slides[slideIdx].style.display = "flex";
+				loginSlideSelector[slideIdx].classList.add('activeSelector');
 
-					const time = {
-						duration: 300,
-						iterations: 1,
-					}
-					if (loginSlideSelector[slideIdx].id == "loginSelector"){
-						move = [
-							{ left: `50%`},
-							{ left: `0%`}
-						];
-						document.getElementById("slideSelectorBg").animate(move, time);
-						document.getElementById("slideSelectorBg").style.setProperty("left", "0");
-					}
-					else{
-						move = [
-							{ left: `0%`},
-							{ left: `50%`}
-						];
-						document.getElementById("slideSelectorBg").animate(move, time);
-						document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
-					}
+				const time = {
+					duration: 300,
+					iterations: 1,
 				}
-			})
-			key.onkeydown = (e) => {
-				if (e.key == "Enter")
-					key.click();
+				if (loginSlideSelector[slideIdx].id == "loginSelector"){
+					move = [
+						{ left: `50%`},
+						{ left: `0%`}
+					];
+					document.getElementById("slideSelectorBg").animate(move, time);
+					document.getElementById("slideSelectorBg").style.setProperty("left", "0");
+				}
+				else{
+					move = [
+						{ left: `0%`},
+						{ left: `50%`}
+					];
+					document.getElementById("slideSelectorBg").animate(move, time);
+					document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
+				}
 			}
+		})
+		key.onkeydown = (e) => {
+			if (e.key == "Enter")
+				key.click();
 		}
 	})
 
@@ -370,7 +368,6 @@ var template = `
 			});
 		}
 	}
-
 }
 
 function loginKeyDownEvent(e) {
