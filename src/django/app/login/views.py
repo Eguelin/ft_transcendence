@@ -441,8 +441,10 @@ def get(request):
 		data = json.loads(request.body)
 		try:
 			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
+		except User.DoesNotExist:
+			return JsonResponse({'message': "can't find user"}, status=404)
 		except Exception as error:
-			return JsonResponse({'message': "can't find user"}, status=400)
+			return JsonResponse({'message': "can't find user"}, status=500)
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
@@ -465,3 +467,22 @@ def search_by_username(request):
 			return JsonResponse({'message': error}, status=500)
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+def get_user_id(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request method'}, status=405)
+	
+	try:
+		data = json.loads(request.body)
+		username = data.get("user")
+
+		if not username:
+			return JsonResponse({'message': 'Username is required'}, status=400)
+		user = User.objects.get(username=username)
+		return JsonResponse({'id': user.id}, status=200)
+
+	except User.DoesNotExist:
+		return JsonResponse({'message': 'User not found'}, status=404)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
