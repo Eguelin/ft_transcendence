@@ -608,23 +608,28 @@ swichTheme.addEventListener("keydown", (e) => {
 	}
 })
 
+function ft_create_element(element_name, map){
+	var elem = document.createElement(element_name);
+
+	Object.keys(map).forEach(function (key){
+		if (key == "innerText")
+			elem.innerText = map[key]
+		else
+			elem.setAttribute(key, map[key]);
+	})
+	return elem;
+}
+
 function createMatchResumeContainer(match) {
-	matchContainer = document.createElement("div");
-	matchContainer.className = "matchDescContainer";
+	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
 
-	result = document.createElement("a");
-	result.className = "matchDescContainerResult"
+	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
 
-	date = document.createElement("a");
-	date.className = "matchDescContainerDate"
-	date.innerHTML = match.date;
+	date = ft_create_element("a", {"class" : "matchDescContainerDate", "innerText" : match.date});
 
-	scoreContainer = document.createElement("div");
-	scoreContainer.className = "matchDescContainerScore";
-	scoreUser = document.createElement("div");
-	scoreOpponent = document.createElement("div");
-	scoreUser.className = "resultScore";
-	scoreOpponent.className = "resultScore";
+	scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
+	scoreUser = ft_create_element("div", {"class" : "resultScore"});
+	scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
 	scoreUserName = document.createElement("a");
 	scoreUserScore = document.createElement("a");
