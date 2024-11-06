@@ -128,9 +128,9 @@ function leftSlideBtn(){
 		contest.animate(move, time);
 		
 		document.querySelector("#leftBtn").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#leftBtn").removeEventListener("keydown", leftBtnKeydownEvent);
+		document.querySelector("#leftBtn").onkeydown = null;
 		document.querySelector("#rightBtn").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#rightBtn").removeEventListener("keydown", rightBtnKeydownEvent);
+		document.querySelector("#rightBtn").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -149,9 +149,9 @@ function leftSlideBtn(){
 					break ;
 			}
 			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
-			document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
+			document.querySelector("#leftBtn").onkeydown = leftBtnKeydownEvent;
 			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
-			document.querySelector("#rightBtn").addEventListener("keydown", rightBtnKeydownEvent);
+			document.querySelector("#rightBtn").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -173,9 +173,9 @@ function rightSlideBtn(){
 		contest.animate(move, time);
 
 		document.querySelector("#leftBtn").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#leftBtn").removeEventListener("keydown", leftBtnKeydownEvent);
+		document.querySelector("#leftBtn").onkeydown = null;
 		document.querySelector("#rightBtn").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#rightBtn").removeEventListener("keydown", rightBtnKeydownEvent);
+		document.querySelector("#rightBtn").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -195,9 +195,9 @@ function rightSlideBtn(){
 					break ;
 			}
 			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
-			document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
+			document.querySelector("#leftBtn").onkeydown = leftBtnKeydownEvent;
 			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
-			document.querySelector("#rightBtn").addEventListener("keydown", rightBtnKeydownEvent);
+			document.querySelector("#rightBtn").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -333,9 +333,9 @@ var tournament;
 	}
 
 	document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
-	document.querySelector("#leftBtn").addEventListener("keydown", leftBtnKeydownEvent);
+	document.querySelector("#leftBtn").onkeydown = leftBtnKeydownEvent;
 	document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
-	document.querySelector("#rightBtn").addEventListener("keydown", rightBtnKeydownEvent);
+	document.querySelector("#rightBtn").onkeydown = rightBtnKeydownEvent;
 
 	game();
 }

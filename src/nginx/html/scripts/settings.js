@@ -155,7 +155,7 @@ var template = `
 	homeBtn.focus();
 	document.getElementById("fontSizeRange").value = client.fontAmplifier;
 	notifCenterContainer.style.setProperty("display", "flex");
-	window.addEventListener("keydown", settingsKeyDownEvent)
+	window.onkeydown = settingsKeyDownEvent
 }
 
 
@@ -202,7 +202,7 @@ pfpInput.addEventListener("change", (e) => {
 		reader.onloadend = function(){
 			buf = reader.result;
 			buf = buf.substr(buf.indexOf(',') + 1);
-			window.removeEventListener("keydown", settingsKeyDownEvent)
+			window.onkeydown = null
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
 			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
@@ -253,7 +253,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 			pfpInputLabel.before(warning);
 	});
 
-	window.addEventListener("keydown", settingsKeyDownEvent);
+	window.onkeydown = settingsKeyDownEvent;
 });
 
 saveUsernameBtn.addEventListener("click", (e) => {
@@ -304,7 +304,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 })
 
 deleteAccountBtn.addEventListener("click", (e) => {
-	window.removeEventListener("keydown", settingsKeyDownEvent)
+	window.onkeydown = null
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 	document.getElementById("confirmDeleteDialogVar").innerText = client.username;
@@ -353,7 +353,7 @@ document.addEventListener("keydown", (e) => {
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
-			window.addEventListener("keydown", settingsKeyDownEvent)
+			window.onkeydown = settingsKeyDownEvent
 		}
 	}
 })
@@ -561,17 +561,17 @@ document.getElementById("fontSizeRange").addEventListener("input", (e) => {
 })
 
 document.getElementById("fontSizeRange").addEventListener("focus", (e) =>{
-	window.removeEventListener("keydown", settingsKeyDownEvent)
+	window.onkeydown = null
 })
 
 document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
-	window.addEventListener("keydown", settingsKeyDownEvent)
+	window.onkeydown = settingsKeyDownEvent
 })
 
 usernameInput.addEventListener("focus", (e) => {
-	window.removeEventListener("keydown", settingsKeyDownEvent)
+	window.onkeydown = null
 })
 
 usernameInput.addEventListener("focusout", (e) => {
-	window.addEventListener("keydown", settingsKeyDownEvent)
+	window.onkeydown = settingsKeyDownEvent
 })
