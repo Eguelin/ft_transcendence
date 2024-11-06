@@ -36,10 +36,18 @@ var template = `
 	</div>
 	<div class="loginSlide">
 		<div class="loginOpt" id="createAcc">Create your account</div>
-			<input tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
-			<input tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
-			<input tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
-			<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
+			<div>
+				<input tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
+			</div>
+			<div>
+				<input tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
+			</div>
+			<div>
+				<input tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
+			</div>
+			<div>
+				<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
+			</div>
 	</div>
 </div>
 `
