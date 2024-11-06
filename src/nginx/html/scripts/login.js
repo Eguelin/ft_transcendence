@@ -251,6 +251,7 @@ var template = `
 									slideIdx = 0;
 									window.onkeydown = null
 									myReplaceState(`https://${hostname.host}/home`);
+									friendUpdate();
 								}
 							})();
 						}
@@ -348,6 +349,7 @@ var template = `
 								slideIdx = 0;
 								window.onkeydown = null
 								myReplaceState(`https://${hostname.host}/home`);
+								friendUpdate();
 							}
 						})();
 					});

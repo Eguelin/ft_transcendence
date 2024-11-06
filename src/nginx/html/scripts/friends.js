@@ -277,7 +277,7 @@ function createFriendContainer(user){
 	})
 	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaAll.friendsOptionContainer]}`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaAll.friendsOptionContainer']}`);
 	friendsOptionContainer.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
 
@@ -302,7 +302,7 @@ function createFriendRequestContainer(user){
 		elem.remove();
 	})
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaPending.friendsOptionContainer]}`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaPending.friendsOptionContainer']}`);
 	friendsOptionContainer.tabIndex = pendingFriendTabIdx;
 	pendingFriendTabIdx += 1;
 	friendContainer.getElementsByClassName("acceptRequestBtn")[0].tabIndex = pendingFriendTabIdx;
@@ -321,7 +321,7 @@ function createBlockedUserContainer(user){
 
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends'][ariaBlocked.friendsOptionContainer]}`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaBlocked.friendsOptionContainer']}`);
 	friendsOptionContainer.tabIndex = blockedUserTabIdx;
 	blockedUserTabIdx += 1;
 
