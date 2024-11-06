@@ -14,6 +14,10 @@ if (sendFriendRequestBtn){
             body: JSON.stringify({'username': splitPath[4]}),
             credentials: 'include'
         })
+        .then(response => {
+            if (response.ok)
+                sendFriendRequest(splitPath[4]);
+        })
     })
 }
 
@@ -23,15 +27,15 @@ if (sendFriendRequestBtn){
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
-	
+
     var splitPath = window.location.href.split('/');
-    
+
     if (splitPath[4] == client.username || client.friends[splitPath[4]] != null) {
         document.getElementById("sendFriendRequestBtn").remove();
     }
     if (splitPath[4] == client.username || client.friends[splitPath[4]] == null)
         document.getElementById("deleteFriendBtn").remove();
-        
+
     var endDate = new Date();
     var startDate = new Date();
     startDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
@@ -68,7 +72,7 @@ if (sendFriendRequestBtn){
                             }
                         })
                     });
-                    
+
                     document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
                         var tabIdx = 14;
                         console.log(e.key);
@@ -83,7 +87,7 @@ if (sendFriendRequestBtn){
                     Object.keys(matchUsersName).forEach(function(key){
                         if (!matchUsersName[key].classList.contains("deletedUser")){
                             matchUsersName[key].addEventListener("click", (e) => {
-                                myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);	
+                                myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
                             })
                             matchUsersName[key].addEventListener("keydown", (e) => {
                                 if (e.key == "Enter")
