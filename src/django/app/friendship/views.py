@@ -82,8 +82,8 @@ def remove_friend(request):
 		try:
 			friend = User.objects.get(username=username)
 			user = request.user
-			friend.profile.friends.remove(user);
-			friend.save();
+			friend.profile.friends.remove(user)
+			friend.save()
 			user.profile.friends.remove(friend)
 			user.save()
 			return JsonResponse({'message': 'Succesfully added friend'})
@@ -101,10 +101,10 @@ def block_friend(request):
 		try:
 			ennemy = User.objects.get(username=username)
 			user = request.user
-			ennemy.profile.friends.remove(user);
-			ennemy.save();
+			ennemy.profile.friends.remove(user)
+			ennemy.save()
 			user.profile.friends.remove(ennemy)
-			user.profile.blocked_users.add(ennemy);
+			user.profile.blocked_users.add(ennemy)
 			user.save()
 			return JsonResponse({'message': 'Succesfully blocked user'})
 		except:
