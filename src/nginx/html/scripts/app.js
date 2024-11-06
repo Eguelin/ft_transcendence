@@ -227,6 +227,7 @@ function load(){
 	}
 
 	if (client && !(client instanceof Client)){
+		disconnectSocket();
 		client = null;
 		fetch('/api/user/logout', {
 			method: 'POST',
@@ -235,7 +236,6 @@ function load(){
 			},
 			credentials: 'include'
 		})
-		disconnectSocket();
 		history.replaceState("","", `https://${hostname.host}/login`)
 	}
 	if (currentPage == "settings"){
@@ -275,8 +275,9 @@ function load(){
 
 
 function handleToken() {
+	if (client)
+		disconnectSocket();
 	const code = window.location.href.split("code=")[1];
-
 	if (code) {
 		fetch('/api/user/fortyTwo/login', {
 			method: 'POST',
@@ -300,8 +301,8 @@ function handleToken() {
 						myReplaceState(`https://${hostname.host}/login`);
 					else
 					{
-						myReplaceState(`https://${hostname.host}/home`);
 						friendUpdate();
+						myReplaceState(`https://${hostname.host}/home`);
 					}
 				})()
 			}
@@ -323,12 +324,11 @@ function handleToken() {
 				client = await new Client();
 				if (!client)
 					myReplaceState(`https://${hostname.host}/login`);
-				else if (url.pathname == "" || url.pathname == "/")
-				{
+				else if (url.pathname == "" || url.pathname == "/"){
+					friendUpdate();
 					myReplaceState(`https://${hostname.host}/home`);
 				}
-				else
-				{
+				else{
 					load();
 					friendUpdate();
 				}

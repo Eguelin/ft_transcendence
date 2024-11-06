@@ -44,6 +44,10 @@ var template = `
                 },
                 body: JSON.stringify({'username': splitPath[4]}),
                 credentials: 'include'
+            }).then(response => {
+                if (response.ok){
+                    sendFriendRequest(splitPath[4]);
+                }
             })
         })
     }
