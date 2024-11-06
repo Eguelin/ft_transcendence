@@ -4,18 +4,12 @@
 	color: var(--main-text-rgb);
 	font-size: 1rem;
 	font-weight:thin;
-	padding-top:2vh;
-	margin-left:auto;
-	margin-right:auto;
 	width:fit-content;
 }
 
 #externalLogin {
-	margin-left:auto;
-	margin-right:auto;
-	margin-top: 3vh;
 	width:20vw;
-	height: 5vh;
+	height: 10vh;
 	display: flex;
 }
 
@@ -24,8 +18,6 @@
 	background:var(--main-text-rgb);
 	height:10vh;
 	width:5vw;
-	top:5vh;
-	left:5vw;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -80,4 +72,16 @@
 .loginSlide{
 	width: fit-content;
 	min-width: 40vw;
+	flex-direction: column;
+	gap: 3rem;
+	margin-top: 3rem;
+}
+
+.loginSlide *{
+	align-self: center;
+}
+
+.loginSlide button{
+	font-size: 1rem;
+	border-radius: 1rem;
 }

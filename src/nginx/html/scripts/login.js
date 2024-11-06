@@ -20,35 +20,20 @@ var template = `
 
 	<div class="loginSlide">
 		<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
-		<div class="forms">
 			<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
-		</div>
-		<div class="forms">
 			<input tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
-		</div>
-	
-		<div class="forms">
 			<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
-		</div>
-		<div class="loginOpt" id="externalLoginOpt" style="margin-top:3vh;">Other login options</div>
+		<div class="loginOpt" id="externalLoginOpt">Other login options</div>
 		<div id="externalLogin">
 			<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
 		</div>
 	</div>
 	<div class="loginSlide">
 		<div class="loginOpt" id="createAcc">Create your account</div>
-		<div class="forms">
 			<input tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
-		</div>
-		<div class="forms">
 			<input tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
-		</div>
-		<div class="forms">
 			<input tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
-		</div>
-		<div class="forms">
 			<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
-		</div>
 	</div>
 </div>
 `
@@ -91,7 +76,7 @@ var template = `
 
 	for (i = 0; i < slides.length; i++)
 		slides[i].style.display = "none";
-	slides[slideIdx].style.display = "block";
+	slides[slideIdx].style.display = "flex";
 
 	loginSlideSelector.forEach(function(key) {
 		if (currentPage == "login"){
@@ -102,7 +87,7 @@ var template = `
 					loginSlideSelector[save].classList.remove("activeSelector");
 					for (i = 0; i < slides.length; i++)
 						slides[i].style.display = "none";
-					slides[slideIdx].style.display = "block";
+					slides[slideIdx].style.display = "flex";
 					loginSlideSelector[slideIdx].classList.add('activeSelector');
 
 					const time = {
@@ -393,7 +378,7 @@ function loginKeyDownEvent(e) {
 			document.getElementById("slideSelectorBg").animate(move, time);
 			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
 		}
-		slides[slideIdx].style.display = "block";
+		slides[slideIdx].style.display = "flex";
 		loginSlideSelector[slideIdx].focus();
 	}
 }
