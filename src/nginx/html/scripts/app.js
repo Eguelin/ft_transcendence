@@ -145,6 +145,7 @@ class Client{
 
 	loadPage(page){
 		(async() => {
+			setLoader()
 			const fetchResult = await fetch('/api/user/current', {
 				method: 'GET',
 				headers: {
@@ -156,7 +157,6 @@ class Client{
 			var search = 404;
 			if (fetchResult.ok){
 				this.#is_admin = result.is_admin;
-				setLoader()
 
 				var sep = page.indexOf("/", 1)
 				if (sep > 0)
@@ -189,11 +189,11 @@ class Client{
 			var s = document.createElement("script");
 			s.onload = function(){
 				(async () => (loadCurrentLang()))();
+				unsetLoader()
 			}
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', routes[search]);
 			document.body.appendChild(s);
-			unsetLoader()
 		})();
 	}
 }
@@ -882,6 +882,7 @@ window.addEventListener("resize", (e) => {
 
 function setLoader(){
 	document.getElementById("loaderBg").style.setProperty("display", "block");
+
 	window.onscroll=function(){window.scrollTo(0, 0);};
 }
 function unsetLoader(){
