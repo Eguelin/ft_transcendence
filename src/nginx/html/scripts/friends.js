@@ -98,10 +98,10 @@ var template = `
 
 	document.querySelectorAll("#confirmDelete, #confirmBlock, #unblockBtn").forEach(function (elem) {
 		elem.addEventListener("focus", (e)=>{
-			window.removeEventListener("keydown", friendKeyDownEvent);
+			window.onkeydown = null;
 		});
 		elem.addEventListener("focusout", (e)=>{
-			window.addEventListener("keydown", friendKeyDownEvent);
+			window.onkeydown = friendKeyDownEvent;
 		});
 	})
 }
@@ -334,14 +334,14 @@ function createBlockedUserContainer(user){
 function setListeners(){
 	document.querySelectorAll(".friendsOptionContainer").forEach(function (elem) {
 		elem.addEventListener("focus", (e)=>{
-			window.removeEventListener("keydown", friendKeyDownEvent);
+			window.onkeydown = null;
 			document.querySelectorAll(".activeListSelector").forEach(function (active){
 				active.classList.remove("activeListSelector");
 			})
 		});
 		
 		elem.addEventListener("focusout", (e)=>{
-			window.addEventListener("keydown", friendKeyDownEvent);
+			window.onkeydown = friendKeyDownEvent;
 		});
 		elem.addEventListener("keydown", (e) => {
 			if (e.key == "Enter"){
@@ -358,10 +358,10 @@ function setListeners(){
 
 	document.querySelectorAll(".friendsOption div, .acceptRequestBtn, .rejectRequestBtn, .unblockBtn").forEach(function (elem) {
 		elem.addEventListener("focus", (e)=>{
-			window.removeEventListener("keydown", friendKeyDownEvent);
+			window.onkeydown = null;
 		});
 		elem.addEventListener("focusout", (e)=>{
-			window.addEventListener("keydown", friendKeyDownEvent);
+			window.onkeydown = friendKeyDownEvent;
 		});
 		elem.addEventListener("keydown", (e) => {
 			if (e.key == "Enter"){
@@ -467,7 +467,7 @@ function friendKeyDownEvent(e) {
 	}
 }
 
-window.addEventListener("keydown", friendKeyDownEvent);
+window.onkeydown = friendKeyDownEvent;
 
 async function updateFriendsAriaLabel(key, content){
 	if (key.startsWith("All"))

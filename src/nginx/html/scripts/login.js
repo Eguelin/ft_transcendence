@@ -4,7 +4,7 @@ var fortyTwoLogin;
 var loginSlideSelector;
 
 var slides;
-var slideIdx = 0;
+var slideIdx;
 
 var template = `
 <div id="pageContentContainer" style="width: fit-content;left: 50%;position: relative;translate: -50%;min-width: 40vw;">
@@ -53,7 +53,9 @@ var template = `
 `
 
 {
+	window.onkeydown = loginKeyDownEvent;
 	document.getElementById("container").innerHTML = template;
+	slideIdx = 0;
 
 	if (client){
 		fetch('/api/user/logout', {
@@ -195,168 +197,180 @@ var template = `
 	inputs = document.querySelectorAll("input");
 	inputs.forEach(function (input) {
 		input.addEventListener("focus", (e) => {
-			window.removeEventListener("keydown", loginKeyDownEvent);
+			window.onkeydown = null;
 		})
 		input.addEventListener("focusout", (e) => {
-			window.addEventListener("keydown", loginKeyDownEvent);
+			window.onkeydown = loginKeyDownEvent;
 		})
 	});
-}
-
-function login(){
-	username = document.getElementById('inputUsername').value;
-	pw = document.getElementById('inputPassword').value;
-	inputs = document.getElementsByClassName('formInput');
-	warning = document.createElement("a");
-	warning.className = "warning";
-	warning.text = "Field can't be empty";
-	if (loginBtn.previousElementSibling)
-		loginBtn.previousElementSibling.remove();
-	for (i=0;i<inputs.length;i++){
-		if (inputs[i].value == "" && !inputs[i].previousElementSibling){
-			warningTmp = warning.cloneNode(true);
-			inputs[i].before(warningTmp);
+	
+	function login(){
+		username = document.getElementById('inputUsername').value;
+		pw = document.getElementById('inputPassword').value;
+		inputs = document.getElementsByClassName('formInput');
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "Field can't be empty";
+		if (loginBtn.previousElementSibling)
+			loginBtn.previousElementSibling.remove();
+		for (i=0;i<inputs.length;i++){
+			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
+				warningTmp = warning.cloneNode(true);
+				inputs[i].before(warningTmp);
+			}
+			if (inputs[i].value != "" && inputs[i].previousElementSibling){
+				inputs[i].previousElementSibling.remove();
+			}
 		}
-		if (inputs[i].value != "" && inputs[i].previousElementSibling){
-			inputs[i].previousElementSibling.remove();
-		}
-	}
-	if (username != "" && pw != ""){
-		const data = {username: username, password: pw};
-		setLoader();
-		fetch('/api/user/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			credentials: 'include'
-		})
-		.then(response => {
-			if (response.ok) {
-				response.json().then(text => {
-					if (text.logged == 0){
+		if (username != "" && pw != ""){
+			const data = {username: username, password: pw};
+			setLoader();
+			fetch('/api/user/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			.then(response => {
+				if (response.ok) {
+					response.json().then(text => {
+						if (text.logged == 0){
+							warning.text = text.message;
+							if (!loginBtn.previousElementSibling)
+								loginBtn.before(warning.cloneNode(true));
+						}
+						else{
+							(async () => {
+								client = await new Client()
+								if (client == null){
+									slideIdx = 0;
+									window.onkeydown = null
+									myReplaceState(`https://${hostname.host}/login`);
+								}
+								else{
+									slideIdx = 0;
+									window.onkeydown = null
+									myReplaceState(`https://${hostname.host}/home`);
+								}
+							})();
+						}
+					})
+				}
+				else
+				{
+					response.json().then(text => {
 						warning.text = text.message;
 						if (!loginBtn.previousElementSibling)
 							loginBtn.before(warning.cloneNode(true));
-					}
-					else{
-						(async () => {
-							client = await new Client()
-							if (client == null)
-								myReplaceState(`https://${hostname.host}/login`);
-							else
-								myReplaceState(`https://${hostname.host}/home`);
-						})();
-					}
-				})
-			}
-			else
-			{
-				response.json().then(text => {
-					warning.text = text.message;
-					if (!loginBtn.previousElementSibling)
-						loginBtn.before(warning.cloneNode(true));
-				})
-			}
-		})
-		.catch(error => {
-			console.error('Error:', error);
-		});
-	}
-}
-
-function register(){
-	var lock = 0;
-	username = usernameRegisterInput.value;
-	pw = pwRegisterInput.value;
-	cpw = cpwRegisterInput.value;
-	inputs = document.getElementsByClassName('registerFormInput');
-	warning = document.createElement("a");
-	warning.className = "warning";
-	warning.text = "Field can't be empty";
-	for (i=0;i<inputs.length;i++){
-		if (inputs[i].previousElementSibling)
-			inputs[i].previousElementSibling.remove();
-		if (inputs[i].value == "" && !inputs[i].previousElementSibling){
-			warningTmp = warning.cloneNode(true);
-			inputs[i].before(warningTmp);
-			lock = 1;
+					})
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
 		}
 	}
 
-	if (username.length > 15){
+	function register(){
+		var lock = 0;
+		username = usernameRegisterInput.value;
+		pw = pwRegisterInput.value;
+		cpw = cpwRegisterInput.value;
+		inputs = document.getElementsByClassName('registerFormInput');
 		warning = document.createElement("a");
 		warning.className = "warning";
-		warning.text = "username name must not exceed 15 characters";
-		if (!usernameRegisterInput.previousElementSibling)
-			usernameRegisterInput.before(warning);
-		lock = 1;
-	}
-	else if (username != "" && usernameRegisterInput.previousElementSibling)
-			usernameRegisterInput.previousElementSibling.remove();
-	if (pw != cpw){
-		warning = document.createElement("a");
-		warning.className = "warning";
-		warning.text = "Passwords do not match";
-		if (cpwRegisterInput.previousElementSibling && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
-			cpwRegisterInput.previousElementSibling.remove();
-		if (!cpwRegisterInput.previousElementSibling || cpwRegisterInput.previousElementSibling.text != "Passwords do not match")
-			cpwRegisterInput.before(warning);
-		else if (cpw != "" && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
-			cpwRegisterInput.previousElementSibling.remove();
-	}
-	else if (lock == 0){
-		setLoader()
-		if (registerBtn.previousElementSibling)
-			registerBtn.previousElementSibling.remove();
-
-		const data = {username: username, password: pw, 'lang': currentLang, use_browser_theme: use_browser_theme};
-		fetch('/api/user/create', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			credentials: 'include',
-			body: JSON.stringify(data)
-		})
-		.then(response => {
-			if (response.ok) {
-				fetch('/api/user/login', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(data),
-					credentials: 'include'
-				}).then(response => {
-					(async () => {
-						client = await new Client()
-						if (client == null)
-							myReplaceState(`https://${hostname.host}/login`);
-						else
-							myReplaceState(`https://${hostname.host}/home`);
-					})();
-				});
-			} else {
-				response.json().then(response => {
-					unsetLoader()
-					warning = document.createElement("a");
-					warning.className = "warning";
-					warning.text = response.message;
-					if (!registerBtn.previousElementSibling)
-						registerBtn.before(warning);
-				})
-
+		warning.text = "Field can't be empty";
+		for (i=0;i<inputs.length;i++){
+			if (inputs[i].previousElementSibling)
+				inputs[i].previousElementSibling.remove();
+			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
+				warningTmp = warning.cloneNode(true);
+				inputs[i].before(warningTmp);
+				lock = 1;
 			}
-		})
-		.catch(error => {
-			console.error('There was a problem with the fetch operation:', error);
-		});
-	}
-}
+		}
 
-window.addEventListener("keydown", loginKeyDownEvent)
+		if (username.length > 15){
+			warning = document.createElement("a");
+			warning.className = "warning";
+			warning.text = "username name must not exceed 15 characters";
+			if (!usernameRegisterInput.previousElementSibling)
+				usernameRegisterInput.before(warning);
+			lock = 1;
+		}
+		else if (username != "" && usernameRegisterInput.previousElementSibling)
+				usernameRegisterInput.previousElementSibling.remove();
+		if (pw != cpw){
+			warning = document.createElement("a");
+			warning.className = "warning";
+			warning.text = "Passwords do not match";
+			if (cpwRegisterInput.previousElementSibling && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
+				cpwRegisterInput.previousElementSibling.remove();
+			if (!cpwRegisterInput.previousElementSibling || cpwRegisterInput.previousElementSibling.text != "Passwords do not match")
+				cpwRegisterInput.before(warning);
+			else if (cpw != "" && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
+				cpwRegisterInput.previousElementSibling.remove();
+		}
+		else if (lock == 0){
+			setLoader()
+			if (registerBtn.previousElementSibling)
+				registerBtn.previousElementSibling.remove();
+
+			const data = {username: username, password: pw, 'lang': currentLang, use_browser_theme: use_browser_theme};
+			fetch('/api/user/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+				body: JSON.stringify(data)
+			})
+			.then(response => {
+				if (response.ok) {
+					fetch('/api/user/login', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(data),
+						credentials: 'include'
+					}).then(response => {
+						(async () => {
+							client = await new Client()
+							
+							if (client == null){
+								slideIdx = 1;
+								window.onkeydown = null
+								myReplaceState(`https://${hostname.host}/login`);
+							}
+							else{
+								slideIdx = 0;
+								window.onkeydown = null
+								myReplaceState(`https://${hostname.host}/home`);
+							}
+						})();
+					});
+				} else {
+					response.json().then(response => {
+						unsetLoader()
+						warning = document.createElement("a");
+						warning.className = "warning";
+						warning.text = response.message;
+						if (!registerBtn.previousElementSibling)
+							registerBtn.before(warning);
+					})
+
+				}
+			})
+			.catch(error => {
+				console.error('There was a problem with the fetch operation:', error);
+			});
+		}
+	}
+
+}
 
 function loginKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
