@@ -389,54 +389,6 @@ function checkUpdate(){
 	}
 }
 
-function friendUpdate()
-{
-	var socket = new WebSocket("/ws/friend/");
-
-	socket.onopen = function()
-	{
-		console.log("Connection established");
-	}
-
-	socket.onmessage = function(event)
-	{
-		var data = JSON.parse(event.data);
-		console.log(data);
-	}
-
-	socket.onclose = function()
-	{
-		console.log("Connection closed");
-	}
-
-	window.addEventListener('beforeunload', function()
-	{
-		socket.close();
-	});
-
-	document.getElementById('goHomeButton').addEventListener('click', function()
-	{
-		socket.close();
-	});
-
-	window.addEventListener('popstate', function()
-	{
-		socket.close();
-	});
-
-	if (socket.readyState === WebSocket.OPEN)
-	{
-		console.log("Sending friend update request");
-		socket.send(JSON.stringify(
-			{
-				type: "friend_update",
-				content: "username",
-			}
-		));
-	}
-}
-
-friendUpdate();
 checkUpdate();
 
 function friendKeyDownEvent(e) {

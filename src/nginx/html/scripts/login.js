@@ -128,7 +128,10 @@ function login(){
 							if (client == null)
 								myReplaceState(`https://${hostname.host}/login`);
 							else
+							{
 								myReplaceState(`https://${hostname.host}/home`);
+								friendUpdate();
+							}
 						})();
 					}
 				})
@@ -217,7 +220,10 @@ function register(){
 						if (client == null)
 							myReplaceState(`https://${hostname.host}/login`);
 						else
+						{
 							myReplaceState(`https://${hostname.host}/home`);
+							friendUpdate();
+						}
 					})();
 				});
 			} else {
