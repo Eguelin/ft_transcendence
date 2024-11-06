@@ -238,13 +238,13 @@ function load(){
 		history.replaceState("","", `https://${hostname.host}/login`)
 	}
 	if (currentPage == "settings"){
-		window.removeEventListener("keydown", settingsKeyDownEvent)
+		window.onkeydown = null
 	}
 	if (currentPage == "login"){
-		window.removeEventListener("keydown", loginKeyDownEvent)
+		window.onkeydown = null
 	}
 	if (currentPage == "friends"){
-		window.removeEventListener("keydown", friendKeyDownEvent)
+		window.onkeydown = null
 	}
 	if (currentPage == "game"){
 		window.removeEventListener("resize", displayTournament)
@@ -253,23 +253,21 @@ function load(){
 	if (client)
 		client.loadPage(url.pathname)
 	else {
+		setLoader();
 		dropDownUserContainer.style.setProperty("display", "none");
 		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 		history.replaceState("","",`https://${hostname.host}/login`);
 
-		fetch(`https://${hostname.host}/bodyLess/login.html`).then((response) => {
-			(response.text().then(response => {
-				inputSearchUserContainer.style.setProperty("display", "none");
-				container.innerHTML = response;
-				document.getElementById("script").remove();
-				var s = document.createElement("script");
-				s.setAttribute('id', 'script');
-				s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
-				document.body.appendChild(s);
-				currentPage = "login";
-				(async () => (loadCurrentLang()))();
-			}))
-		});
+
+		document.getElementById("script").remove();
+		var s = document.createElement("script");
+		s.onload = function(){
+			(async () => (loadCurrentLang()))();
+			unsetLoader()
+		}
+		s.setAttribute('id', 'script');
+		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
+		document.body.appendChild(s);
 	}
 	homeBtn.focus();
 }
