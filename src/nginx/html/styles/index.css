@@ -323,7 +323,8 @@
 }
 
 .quickOpenCenter#notifCenterContainer{
-	width: 20rem;
+	width: 18rem;
+	height: 50%;
 }
 
 .openCenter #pushNotif, .closeCenter #pushNotif, .quickOpenCenter #pushNotif{
@@ -349,11 +350,14 @@
 	padding-top: 1rem;
     height: 0%;
 	overflow-y: hidden;
+}
+
+.openCenter #notifCenter{
 	animation: openNotifCenter 300ms linear 300ms forwards;
 }
 
 .quickOpenCenter #notifCenter{
-	animation: openNotifCenter 300ms linear forwards !important;
+	animation: openNotifCenter 300ms linear forwards;
 }
 
 #notifCenter{
