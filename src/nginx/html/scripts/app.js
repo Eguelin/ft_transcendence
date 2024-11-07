@@ -629,7 +629,7 @@ function ft_create_element(element_name, map){
 			elem.setAttribute(key, map[key]);
 	})
 	return elem;
-}
+}		
 
 function createMatchResumeContainer(match) {
 	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
