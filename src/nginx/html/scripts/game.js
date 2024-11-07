@@ -102,17 +102,19 @@ var template = `
 					<div class="contestUserContainer right">${userContainerAnchor}</div>
 				</div>
 			</div>
-			<div id="controler">
-				<div id="leftBtn" tabindex="12" aria-label="Switch tournament section"></div>
-				<div id="rightBtn" tabindex="13" aria-label="Switch tournament section"></div>
-			</div>
 		</div>
+	</div>
+	<div id="controler">
+		<button id="leftBtn" tabindex="12" aria-label="Switch tournament section"></button>
+		<button id="rightBtn" tabindex="13" aria-label="Switch tournament section"></button>
 	</div>
 </div>
 `
 
 function leftSlideBtn(){
 	var contest = document.querySelector(".singleRoundDisplay");
+	if (!contest)
+		return
 	var left = contest.getBoundingClientRect().left;
 
 	if (contest.getBoundingClientRect().left + getWindowWidth() <= 0){
@@ -158,6 +160,8 @@ function leftSlideBtn(){
 
 function rightSlideBtn(){
 	var contest = document.querySelector(".singleRoundDisplay");
+	if (!contest)
+		return
 	var left = contest.getBoundingClientRect().left;
 
 	if (contest.getBoundingClientRect().left > -(getWindowWidth() * 2)){
@@ -441,8 +445,18 @@ function displayTournament(){
 			}
 		})
 	})
+	document.getElementById("leftBtn").onmousedown = function() {};
+	document.getElementById("leftBtn").onmouseup = function() {};
+	document.getElementById("rightBtn").onmousedown = function() {};
+	document.getElementById("rightBtn").onmouseup = function() {};
 	setTournamentTreeValue();
 	if (playersCount == 8/* || 1*/){
+
+		document.getElementById("leftBtn").onclick = leftSlideBtn;
+		document.getElementById("rightBtn").onclick = rightSlideBtn;
+		document.getElementById("leftBtn").onkeydown = leftBtnKeydownEvent;
+		document.getElementById("rightBtn").onkeydown = rightBtnKeydownEvent;
+
 		document.querySelector("#lobby").style.setProperty("display", "none");
 		document.querySelector("#tournament").style.setProperty("display", "flex");
 		var minFullTreeWidth = 870;
@@ -646,6 +660,40 @@ function game() {
 			countdown = "";
 			updateGame(data.message);
 		} else if (data.type === "game_start") {
+			var leftBtnInterval;
+			var rightBtnInterval;
+
+			document.getElementById("leftBtn").onclick = function() {};
+			document.getElementById("rightBtn").onclick = function() {};
+			document.getElementById("leftBtn").onpointerdown = function() {
+				keysDown['KeyA'] = true;
+				leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+			};
+			document.getElementById("leftBtn").onpointerup = function() {
+				keysDown['KeyA'] = false;
+				gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
+			};
+
+			document.getElementById("rightBtn").onpointerdown = function() {
+				keysDown['KeyD'] = true;
+				rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+			};
+			document.getElementById("rightBtn").onpointerup = function() {
+				keysDown['KeyD'] = false;
+				gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
+			};
+
+			document.getElementById("leftBtn").oncontextmenu = function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				return false;
+			};
+			document.getElementById("rightBtn").oncontextmenu = function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				return false;
+			};
+
 			KeyPressInterval = setInterval(() => KeyPress(), 16);
 			if(document.getElementById("countdownContainer"))
 				document.getElementById("countdownContainer").remove();
