@@ -30,6 +30,23 @@ html{
 	transition: 500ms;
 }
 
+/* Mobile */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (                min-resolution: 192dpi) and (min-width: 320px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
+
+	html{
+		font-size: calc(32px * var(--font-size-amplifier));
+		transition: 500ms;
+	}
+	body{
+		font-size: calc(32px * var(--font-size-amplifier));
+	}
+}
 
 @media screen and (orientation:landscape), (min-width:1010px){
 	body{
@@ -107,8 +124,9 @@ button{
 	color: var(--main-text-rgb);
 	font-family: "pong";
 	font-size: 3rem;
-	padding: 1vh 0;
-	width: 20vw;
+	padding: .5rem;
+	width: fit-content;
+	min-width: 20vw;
 	border: 0.2px solid transparent;
 	border-radius: 1.5vw;
 	background-color: var(--hover-text-rgb);

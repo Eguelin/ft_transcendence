@@ -33,7 +33,7 @@ var template = `
 				<img id="playerOnePfp">
 			</div>
 			<h2 class="playerName"></h2>
-			<h1 class="playerScore">-</h1>
+			<h2 class="playerScore">-</h2>
 		</div>
 		<canvas id="game" class="game">
 		</canvas>
@@ -42,7 +42,7 @@ var template = `
 				<img id="playerTwoPfp">
 			</div>
 			<h2 class="playerName"></h2>
-			<h1 class="playerScore">-</h1>
+			<h2 class="playerScore">-</h2>
 		</div>
 	</div>
 
@@ -222,8 +222,8 @@ var tournament;
 	dropDownUserContainer.style.setProperty("display", "flex");
 	notifCenterContainer.style.setProperty("display", "flex");
 
-	playerOneScore = document.querySelector("#playerOne > h1");
-	playerTwoScore = document.querySelector("#playerTwo > h1");
+	playerOneScore = document.querySelector("#playerOne > .playerScore");
+	playerTwoScore = document.querySelector("#playerTwo > .playerScore");
 
 	tmp_contest = {
 		"round_1": {
@@ -336,7 +336,6 @@ var tournament;
 	document.querySelector("#leftBtn").onkeydown = leftBtnKeydownEvent;
 	document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
 	document.querySelector("#rightBtn").onkeydown = rightBtnKeydownEvent;
-
 	game();
 }
 
@@ -595,6 +594,20 @@ function game() {
 	let oldKeysDown = {};
 	let countdown = "";
 
+	if (mode == "local"){
+		document.querySelectorAll(".playerPfp").forEach(function (elem){
+			elem.style.setProperty("display", "none");
+		})
+		document.querySelectorAll(".playerInfoContainer").forEach(function (elem) {
+			elem.style.setProperty("justify-content", "center");
+		});
+	}
+	else{
+		document.querySelectorAll(".playerPfp").forEach(function (elem){
+			elem.style.setProperty("display", "block");
+		})
+	}
+
 	var tournamentContainer = document.getElementById("tournamentContainer");
 	var gameContainer = document.getElementById("gameContainer");
 
@@ -716,8 +729,8 @@ function game() {
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
 
-		document.querySelector("#playerOne > h2").innerText = player1.name;
-		document.querySelector("#playerTwo > h2").innerText = player2.name;
+		document.querySelector("#playerOne > .playerName").innerText = player1.name;
+		document.querySelector("#playerTwo > .playerName").innerText = player2.name;
 
 		if (mode == "full_ai")
 			document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
@@ -898,7 +911,7 @@ function game() {
 		document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
 		document.querySelectorAll(".playerName").forEach(function (e){e.innerText = "";});
 
-		document.querySelector("#playerOne > h2").innerText = client.username;
+		document.querySelector("#playerOne > .playerName").innerText = client.username;
 		addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
 		addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
 	}
