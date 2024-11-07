@@ -7,7 +7,7 @@ import random
 import math
 import time
 
-maxScore = 50
+maxScore = 5
 
 class Matchmaking():
 	_instance = None
@@ -210,7 +210,7 @@ class GameRemote(Game):
 
 	@sync_to_async
 	def save(self):
-		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
+		models.Match.objects.addMatch(self.playerLeft, self.playerRight, "remote")
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
@@ -286,6 +286,7 @@ class GameAI(Game):
 	@sync_to_async
 	def save(self):
 		pass
+		# models.Match.objects.addMatch(self.playerLeft, self.playerRight, "ai")
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)

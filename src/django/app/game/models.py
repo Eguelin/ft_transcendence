@@ -49,8 +49,9 @@ class MatchManager(models.Manager):
 		player_two.profile.matches.add(match)
 		return match
 
-	def addMatch(self, playerOne : Player, playerTwo : Player):
+	def addMatch(self, playerOne : Player, playerTwo : Player, matchType : str):
 		match = self.create(player_one=playerOne.user, player_two=playerTwo.user)
+		match.type = matchType
 		match.player_one_pts = playerOne.score if playerOne.socket else 0
 		match.player_two_pts = playerTwo.score if playerTwo.socket else 0
 		match.date = datetime.datetime.now()
@@ -63,6 +64,7 @@ class MatchManager(models.Manager):
 		super().save()
 
 class Match(models.Model):
+	type = models.CharField(max_length=10, default="random")
 	player_one = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
 	player_two = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
 	date = models.DateField(auto_now=False, auto_now_add=True)
