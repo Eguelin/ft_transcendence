@@ -168,37 +168,6 @@ button:focus, button:hover{
 	text-align: center;
 }
 
-.options {
-	text-align: center;
-	color: var(--main-text-rgb);
-	font-size: min(7vh, 4vw);
-	font-style:italic;
-	font-weight:thin;
-	margin-top:5vh;
-	margin-left:auto;
-	margin-right:auto;
-	width:fit-content;
-}
-
-.options button:hover, .options button:focus{
-	color: var(--hover-text-rgb);
-	outline: none;
-}
-
-.options button{
-	text-align: center;
-	color: var(--main-text-rgb);
-	font-size: 3rem;
-	font-style:italic;
-	font-weight:thin;
-	font-family: "pong";
-	margin-left:auto;
-	margin-right:auto;
-	width:fit-content;
-	background: none;
-	border: none;
-}
-
 input{
 	font-family:'pong';
 	border: 0.2px solid transparent;
