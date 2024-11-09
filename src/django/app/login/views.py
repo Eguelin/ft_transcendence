@@ -479,7 +479,7 @@ def get_user_id(request):
 		if not username:
 			return JsonResponse({'message': 'Username is required'}, status=400)
 		user = User.objects.get(username=username)
-		return JsonResponse({'id': user.id}, status=200)
+		return JsonResponse({'id': user.id, 'self_id' : request.user.id}, status=200)
 
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'User not found'}, status=404)
