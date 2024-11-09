@@ -1027,7 +1027,7 @@ function friendUpdate()
 	socket.onmessage = function(event) {
 		const data = JSON.parse(event.data);
 		if (data.new_request) {
-			sendNotif(`${client.langJson.friends['ariaPending.friendsOptionContainer']}`);
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`);
 		}
 	};
 
@@ -1049,7 +1049,8 @@ function friendUpdate()
 				response.json().then((user) => {
 					const message = JSON.stringify({
 						type: 'send_friend_request',
-						target_user_id: user.id
+						target_user_id: user.id,
+						sender_username: client.username
 					});
 					socket.send(message);
 				});

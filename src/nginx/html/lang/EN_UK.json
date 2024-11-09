@@ -97,7 +97,8 @@
 		"aria.unblockBtn" : "Unlock user",
 		"ariaAll.friendsOptionContainer" : "friend options",
 		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
-		"ariaBlocked.friendsOptionContainer" : "blocked user options"
+		"ariaBlocked.friendsOptionContainer" : "blocked user options",
+		"incoming pending request" : "Incoming friend request from USER"
 
 	},
 	"user":{
