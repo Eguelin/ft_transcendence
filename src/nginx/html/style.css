@@ -284,57 +284,6 @@ a {
 	translate: -50% -50%;
 }
 
-#resumeContainer{
-	margin-top: 2vmax;
-}
-
-.userResume {
-	display: flex;
-	flex-direction: column;
-}
-
-.userResumeContainer {
-	width: 10ch;
-	background: var(--input-bg-rgb);
-	border: 1px solid var(--main-text-rgb);
-	margin: 1vmax;
-	display: inline-block;
-	font-size: 1vmin;
-}
-
-.userResumePfpContainer{
-	height: 10ch;
-	width: 10ch;
-	background-position: center center;
-	background-repeat: no-repeat;
-	overflow: hidden;
-	position: relative;
-}
-
-.userResumePfp {
-	width: 120%;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.userResumeName{
-	padding: .5vmin .1vmin;
-	color: var(--main-text-rgb);
-	overflow-wrap: anywhere;
-}
-
-#userResumeCountContainer{
-	display: none;
-	color: var(--main-text-rgb);
-}
-
-#userResumeSearch{
-	background: var(--input-bg-rgb);
-	border: 3px solid var(--input-bg-rgb);
-}
-
 #statsContainer{
 	color: var(--main-text-rgb);
 	display: flex;
