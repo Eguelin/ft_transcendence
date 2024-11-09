@@ -37,6 +37,14 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	#userSearchContainer input{
 		width: 15ch;
 	}
+
+	.userResumeContainer{
+		width: 15ch !important;
+	}
+	.userResumePfpContainer{
+		width: 15ch !important;
+		height: 15ch !important;
+	}
 }
 
 #searchBtn{
@@ -51,4 +59,56 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 #searchBtn:focus, #searchBtn:hover{
 	background: var(--page-bg-rgb);
+}
+
+#resumeContainer{
+	margin-top: 1rem;
+}
+
+.userResume {
+	display: flex;
+	flex-direction: column;
+}
+
+.userResumeContainer {
+	width: 10ch;
+	background: var(--input-bg-rgb);
+	border: 1px solid var(--main-text-rgb);
+	margin: 1rem;
+	display: inline-block;
+	font-size: 1rem;
+}
+
+.userResumePfpContainer{
+	height: 10ch;
+	width: 10ch;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: relative;
+}
+
+.userResumePfp {
+	width: 120%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.userResumeName{
+	padding: .5vmin .1vmin;
+	color: var(--main-text-rgb);
+	overflow-wrap: anywhere;
+}
+
+#userResumeCountContainer{
+	display: none;
+	color: var(--main-text-rgb);
+	margin-bottom: 1rem;
+}
+
+#userResumeSearch{
+	background: var(--input-bg-rgb);
+	border: 3px solid var(--input-bg-rgb);
 }
