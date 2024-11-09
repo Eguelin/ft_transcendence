@@ -863,9 +863,6 @@ window.addEventListener("click", (e) => {
 			}, 550, notifCenterContainer)
 		}
 	}
-	if (e.target.classList.contains("notifReject")){
-		e.target.parentElement.parentElement.remove();
-	}
 })
 
 function 	popUpError(error){
@@ -970,16 +967,48 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	}
 })
 
-function sendNotif(message){
+function sendNotif(message, id, type){
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
 	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
+	<div style="display:none !important" id="notifId"></div>
 <div class="notifOptionContainer">
 <div class="notifAccept"></div>
 <div class="separator"></div>
 <div class="notifReject"></div>
 </div>`;
+
+	if (id != undefined && id){
+		notifContainer.querySelector("#notifId").classList.add(id);
+	}
+	if (type == "friend_request"){
+		notifContainer.querySelector(".notifAccept").addEventListener("click", function(e){
+			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
+			fetch('/api/user/accept_friend_request', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			e.target.closest(".notifContainer").remove();
+		})
+		notifContainer.querySelector(".notifReject").addEventListener("click", function(e){
+			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
+			fetch('/api/user/reject_friend_request', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			e.target.closest(".notifContainer").remove();
+		})
+	}
+
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))){
 		notifCenterContainer.classList.add("pendingNotification");
@@ -1027,7 +1056,7 @@ function friendUpdate()
 	socket.onmessage = function(event) {
 		const data = JSON.parse(event.data);
 		if (data.new_request) {
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`);
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
 		}
 	};
 
