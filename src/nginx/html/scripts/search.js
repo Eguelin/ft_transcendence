@@ -17,10 +17,12 @@ var template = `
 
 {
 	document.getElementById("container").innerHTML = template;
+	const inputSearch = document.querySelector("#inputSearch");
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "none");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
+	inputSearch.focus();
 
 	url = new URL(window.location.href);
 	if (url.searchParams.get("query")) {
@@ -63,21 +65,29 @@ var template = `
 			}
 		})
 	}
-	else{
-		var inputSearch = document.querySelector("#inputSearch");
-		document.querySelector("#searchBtn").addEventListener("click", function(){
-			myPushState(`https://${hostname.host}/search?query=${inputSearch.value}`);
-		});
-		inputSearch.onkeydown = function(e){
-			if (e.key == "Enter")
-				myPushState(`https://${hostname.host}/search?query=${inputSearch.value}`);
-		};
+	document.querySelector("#searchBtn").addEventListener("click", function(){
+		if (inputSearch.value.trim().length == 0)
+			popUpError("Can't search empty query");
+		else
+			myPushState(`https://${hostname.host}/search?query=${inputSearch.value.trim()}`);
+	});
+	inputSearch.onkeydown = function(e){
+		if (e.key == "Enter"){
+			if (inputSearch.value.trim().length == 0)
+				popUpError("Can't search empty query");
+			else
+				myPushState(`https://${hostname.host}/search?query=${inputSearch.value.trim()}`);
+		}
+	};
 
-		document.querySelector("#searchBtn").onkeydown = function(e){
-			if (e.key == "Enter")
-				myPushState(`https://${hostname.host}/search?query=${inputSearch.value}`);
-		};
-	}
+	document.querySelector("#searchBtn").onkeydown = function(e){
+		if (e.key == "Enter"){
+			if (inputSearch.value.trim().length == 0)
+				popUpError("Can't search empty query");
+			else
+				myPushState(`https://${hostname.host}/search?query=${inputSearch.value.trim()}`);
+		}
+	};
 }
 
 async function updateSearchAriaLabel(key, content){
@@ -108,7 +118,7 @@ function createUserResumeContainer(user) {
 	imgContainer.appendChild(img);
 	userResume.appendChild(imgContainer);
 	userResume.appendChild(userResumeName);
-	userResume.setAttribute("tabindex", 10);
+	userResume.setAttribute("tabindex", 13);
 	userResumeContainer.appendChild(userResume)
 	document.getElementById("resumeContainer").appendChild(userResumeContainer);
 }
