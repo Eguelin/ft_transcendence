@@ -728,10 +728,7 @@ async function updateUserAriaLabel(key, content){
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
 		query = inputSearchUser.value.trim();
-		if (query.length == 0)
-			popUpError("Can't search empty query");
-		else
-			myPushState(`https://${hostname.host}/search?query=${query}`);
+		myPushState(`https://${hostname.host}/search?query=${query}`);
 	}
 })
 
@@ -1062,3 +1059,7 @@ function friendUpdate()
 		});
 	};
 }
+
+document.querySelector("#mobileSearchBtn").addEventListener("click", function() {
+	myPushState(`https://${hostname.host}/search`);
+})

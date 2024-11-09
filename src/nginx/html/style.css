@@ -326,6 +326,7 @@ a {
 }
 
 #userResumeCountContainer{
+	display: none;
 	color: var(--main-text-rgb);
 }
 
