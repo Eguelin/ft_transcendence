@@ -30,21 +30,21 @@ class friend(AsyncWebsocketConsumer):
 		type = data.get('type')
 
 		if type == 'send_friend_request':
-			target_user_id = data.get('target_user_id')
-			if target_user_id:
-				await self.send_friend_request_notif(target_user_id)
+			await self.send_friend_request_notif(data.get('target_user_id'), data.get('sender_username'))
 
-	async def send_friend_request_notif(self, user_id):
+	async def send_friend_request_notif(self, user_id, sender_name):
 		channel_layer = get_channel_layer()
 		await channel_layer.group_send(
 			f"user_{user_id}",
 			{
 				'type': 'send_friend_request',
 				'new_request': True,
+				'sender_name' : sender_name
 			}
 		)
 
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
-			'new_request': event['new_request']
+			'new_request': event['new_request'],
+			'sender_name' : event['sender_name']
 		}))
