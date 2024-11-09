@@ -132,8 +132,8 @@
 		"aria#lastYearSelection" : "Afficher les statistiques de l'année dernière"
 	},
 	"search": {
-		"#title" : "Recherche",
-		"#subtitle" : "",
+		"#title" : "",
+		"#subtitle" : "Recherche",
 		"aria.userResume" : "redirection"
 	},
 	"game":{
