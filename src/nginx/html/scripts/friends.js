@@ -10,6 +10,7 @@ var friendInfo;
 var friendSlides;
 var slideSelector;
 var friendSlideIdx = 0;
+var slides;
 
 var template = `
 <div id="friendInfo">
@@ -32,10 +33,20 @@ var template = `
 		</div>
 	</div>
 
-	<div id="onlineFriendList" class="friendSlide activeSlide"></div>
-	<div id="allFriendList" class="friendSlide"></div>
-	<div id="pendingFriendRequestList" class="friendSlide"></div>
-	<div id="blockedList" class="friendSlide"></div>
+	<div id="friendSlides">
+		<div>
+			<div id="onlineFriendList" class="friendSlide activeSlide"></div>
+		</div>
+		<div>
+			<div id="allFriendList" class="friendSlide"></div>
+		</div>
+		<div>
+			<div id="pendingFriendRequestList" class="friendSlide"></div>
+		</div>
+		<div>
+			<div id="blockedList" class="friendSlide"></div>
+		</div>
+	<div>
 
 </div>
 <div style="z-index: 1;">
@@ -53,6 +64,7 @@ var template = `
 {	
 	document.getElementById("container").innerHTML = template;
 
+	slides = document.querySelectorAll(".friendSlide");
 	deleteRequestPopup = document.getElementById("deleteRequestPopup");
 	blockFriendPopup = document.getElementById("blockFriendPopup");
 	popupBg = document.getElementById("popupBg");
@@ -71,14 +83,24 @@ var template = `
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
 			key.addEventListener("click", (e) => {
-				friendSlides[friendSlideIdx].classList.remove("activeSlide");
 				slideSelector[friendSlideIdx].classList.remove("activeSelector");
 				friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-				friendSlides[friendSlideIdx].classList.add('activeSlide');
 				if (friendSlides[friendSlideIdx].childElementCount > 0){
 					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
 				}
 				slideSelector[friendSlideIdx].classList.add("activeSelector");
+				var tmp = document.querySelector("#friendSlides");
+				var left = tmp.getBoundingClientRect().left;
+				const move = [
+					{ left: `${left}px`},
+					{ left: `-${friendSlideIdx}00vw`}
+				];
+				const time = {
+					duration: 500,
+					iterations: 1,
+				}
+				tmp.animate(move, time);
+				tmp.style.setProperty("left", `-${friendSlideIdx}00vw`)
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -464,9 +486,22 @@ function friendKeyDownEvent(e) {
 			friendSlideIdx = 0;
 		if (friendSlideIdx < 0)
 			friendSlideIdx = friendSlides.length - 1;
-		friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
+		/*friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`*/
 		slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		slideSelector[friendSlideIdx].focus();
+
+		var tmp = document.querySelector("#friendSlides");
+		var left = tmp.getBoundingClientRect().left;
+		const move = [
+			{ left: `${left}px`},
+			{ left: `-${friendSlideIdx}00%`}
+		];
+		const time = {
+			duration: 500,
+			iterations: 1,
+		}
+		tmp.animate(move, time);
+		tmp.style.setProperty("left", `-${friendSlideIdx}00%`)
 	}
 }
 

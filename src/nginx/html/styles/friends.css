@@ -5,14 +5,26 @@
 	flex-flow: column;
 	min-width: -webkit-fill-available;
 	min-width: -moz-available;
-	width: fit-content;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
+	width: 100vw;
+	align-items: center;
+	overflow-x: hidden;
 }
 
 #friendInfo span{
 	color: var(--main-text-rgb);
+}
+
+#friendSlides{
+	display: flex;
+	flex-direction: row;
+	position: fixed;
+	width: 100vw;
+	top: 20vh;
+}
+
+#friendSlides > *{
+	width: 100vw;
+	flex: none;
 }
 
 #sendFriendRequestBtn {
@@ -191,6 +203,8 @@
 	color: var(--main-text-rgb);
 	display: flex;
 	margin-top: 2vmin;
+	width: fit-content;
+	min-width: 50vw;
 }
 #friendSlideSelector div{
 	flex: 1;
@@ -200,12 +214,16 @@
 }
 
 .friendSlide{
-	display: none;
+	display: block;
 	background: var(--hover-text-rgb);
 	border: 1px solid var(--main-text-rgb);
 	border-radius: 2vw;
 	margin-top: 2vmin;
 	min-height: 1vh;
+	width: 50vw;
+	position: relative;
+	left: 50%;
+	translate: -50%;
 }
 
 .friendSlide .friendContainer:first-child .pfpContainer{
