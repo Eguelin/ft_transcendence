@@ -241,17 +241,22 @@ var template = `
 						}
 						else{
 							(async () => {
-								client = await new Client()
-								if (client == null){
-									slideIdx = 0;
-									window.onkeydown = null
-									myReplaceState(`https://${hostname.host}/login`);
+								try {
+									client = await new Client()
+									if (client == null){
+										slideIdx = 0;
+										window.onkeydown = null
+										myReplaceState(`https://${hostname.host}/login`);
+									}
+									else{
+										slideIdx = 0;
+										window.onkeydown = null
+										myReplaceState(`https://${hostname.host}/home`);
+										friendUpdate();
+									}
 								}
-								else{
-									slideIdx = 0;
-									window.onkeydown = null
-									myReplaceState(`https://${hostname.host}/home`);
-									friendUpdate();
+								catch{
+									unsetLoader();
 								}
 							})();
 						}
@@ -338,18 +343,22 @@ var template = `
 						credentials: 'include'
 					}).then(response => {
 						(async () => {
-							client = await new Client()
-							
-							if (client == null){
-								slideIdx = 1;
-								window.onkeydown = null
-								myReplaceState(`https://${hostname.host}/login`);
+							try {
+								client = await new Client()
+								if (client == null){
+									slideIdx = 1;
+									window.onkeydown = null
+									myReplaceState(`https://${hostname.host}/login`);
+								}
+								else{
+									slideIdx = 0;
+									window.onkeydown = null
+									myReplaceState(`https://${hostname.host}/home`);
+									friendUpdate();
+								}
 							}
-							else{
-								slideIdx = 0;
-								window.onkeydown = null
-								myReplaceState(`https://${hostname.host}/home`);
-								friendUpdate();
+							catch{
+								unsetLoader();
 							}
 						})();
 					});
