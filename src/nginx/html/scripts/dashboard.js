@@ -244,7 +244,8 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 		data = {
 			datasets: [{
 					data: [totalWin, totalMatch - totalWin],
-					backgroundColor: ['green', 'red']
+					backgroundColor: ['green', 'red'],
+					borderWidth: 0
 				}
 			],
 			labels: [
