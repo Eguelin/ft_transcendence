@@ -1,10 +1,8 @@
-var chartAverage, chartAbs;
+var chartAverage = null, chartAbs = null, chartStats = null;
 var width, height, gradient;
 var today = new Date();
 var customStartDayInput;
 var customEndDayInput;
-chartAverage = null;
-chartAbs = null;
 
 var lastWeekSelection;
 var lastMonthSelection;
@@ -12,27 +10,6 @@ var lastYearSelection;
 
 var template = `
 <div id="pageContentContainer">
-    <div id="statsContainer">
-        <div id="ratioContainer">
-            <a id="ratioText">wins/loses ratio</a>
-            <a id="ratioValue"></a>
-        </div>
-
-        <div id="nbMatchContainer">
-            <a id="nbMatchText">Number of games played</a>
-            <a id="nbMatchValue"></a>
-        </div>
-
-        <div id="nbWinContainer">
-            <a id="nbWinText">Number of games winned</a>
-            <a id="nbWinValue"></a>
-        </div>
-
-        <div id="nbLossContainer">
-            <a id="nbLossText">Number of games lost</a>
-            <a id="nbLossValue"></a>
-        </div>
-    </div>
     <div id="timelineSelectionContainer">
         <a id="timelineSelectionText">Display stats from the last </a>
         <div id="timelineSelectorContainer">
@@ -48,14 +25,20 @@ var template = `
         </div>
     </div>
     <div id="profileGraphs">
-        <div id="winLossGraphContainer">
-            <canvas width="400" height="200" id="winLossGraph">
+        <div id="userStatPieGraphContainer">
+            <canvas width="400" height="200" id="userStatGraph">
             </canvas>
         </div>
-        <div id="winLossAbsGraphContainer">
-            <canvas width="400" height="200" id="winLossAbsGraph">
-            </canvas>
-        </div>
+		<div id="lineChartsContainer">
+			<div id="winLossGraphContainer">
+				<canvas width="400" height="200" id="winLossGraph">
+				</canvas>
+			</div>
+			<div id="winLossAbsGraphContainer">
+				<canvas width="400" height="200" id="winLossAbsGraph">
+				</canvas>
+			</div>
+		</div>
     </div>
     <div id="matchHistoryContainer"></div>
 </div>`
@@ -163,6 +146,8 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
+
+
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
     if (!(startDate instanceof Date && endDate instanceof Date)){
         return ;    
@@ -172,10 +157,13 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         chartAverage.destroy();
     if (chartAbs)
         chartAbs.destroy();
+	if (chartStats)
+		chartStats.destroy();
     var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)); 
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
+	var totalWin = 0, totalMatch = 0;
     while (startDate.valueOf() <= endDate.valueOf()){
         var countWin = 0, countMatch = 0;
         var clientCountWin = 0, clientCountMatch = 0;
@@ -206,6 +194,8 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         catch{
         }
         if (startedPlaying){
+			totalMatch += countMatch;
+			totalWin += countWin;
             average = (countWin / countMatch) * 100;
             absResult = (countWin - (countMatch - countWin));
             mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : average});
@@ -248,207 +238,248 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
           return ctx.index * delayBetweenPoints;
         }
       }
-    };
-    datasets = [
-        {
-            label: username,
-            data: mapAverage,
-            fill: false,
-            tension: 0,
-            borderColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
-
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            borderWidth: 2,
-            pointBackgroundColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
-
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        }
-    ]
-
-    if (username != clientUsername){
-        datasets.push({
-            label: client.langJson["dashboard"]["CVwinLossGraphClient"],
-            data: clientMapAverage,
-            fill: false,
-            tension: 0,
-            borderColor: "grey",
-            borderWidth: 2,
-            pointBackgroundColor: "grey",
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        })
     }
 
-    chartAverage = new Chart(document.getElementById("winLossGraph"), {
-        type: 'line',
-        data: {
-            datasets: datasets
-        },
-        options:{
-            animation,
-            parsing: {
-                xAxisKey: 'date',
-                yAxisKey: 'result'
-            },
-            plugins: {
-                title: {
-                    color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: client.langJson["dashboard"]["CVwinLossGraph"],
-                    display: true,
+	function drawStats(){
+		data = {
+			datasets: [{
+					data: [totalWin, totalMatch - totalWin],
+					backgroundColor: ['green', 'red']
+				}
+			],
+			labels: [
+				'win', 'loss'
+			]
+		}
+		chartStats = new Chart(document.getElementById("userStatGraph"), {
+			type: 'pie',
+			data: data,
+			options:{
+				plugins: {
+					title: {
+						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+						text: client.langJson["dashboard"]["CVuserStatsGraph"],
+						display: true,
+	
+					}
+				},
+			}
+		});
+	};
 
-                }
-            },
-            scales: {
-                y: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                        drawTicks: false,
-                    },
-                    min: 0,
-                    max: 100,
-                },
-                x: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                    }
-                }
-            }
-        }
-    });
+	function drawAverage(){
+		datasets = [
+			{
+				label: username,
+				data: mapAverage,
+				fill: false,
+				tension: 0,
+				borderColor: function(context){
+					const chart = context.chart;
+					const {ctx, chartArea} = chart;
+	
+					if (!chartArea)
+						return ;
+					return (getGradient(ctx, chartArea));
+				},
+				borderWidth: 2,
+				pointBackgroundColor: function(context){
+					const chart = context.chart;
+					const {ctx, chartArea} = chart;
+	
+					if (!chartArea)
+						return ;
+					return (getGradient(ctx, chartArea));
+				},
+				pointBorderWidth: 0,
+				pointhitRadius: 4,
+				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointStyle: 'circle',
+				borderJoinStyle: 'round',
+				spanGaps: true
+			}
+		]
+	
+		if (username != clientUsername){
+			datasets.push({
+				label: client.langJson["dashboard"]["CVwinLossGraphClient"],
+				data: clientMapAverage,
+				fill: false,
+				tension: 0,
+				borderColor: "grey",
+				borderWidth: 2,
+				pointBackgroundColor: "grey",
+				pointBorderWidth: 0,
+				pointhitRadius: 4,
+				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointStyle: 'circle',
+				borderJoinStyle: 'round',
+				spanGaps: true
+			})
+		}
+	
+		chartAverage = new Chart(document.getElementById("winLossGraph"), {
+			type: 'line',
+			data: {
+				datasets: datasets
+			},
+			options:{
+				animation,
+				parsing: {
+					xAxisKey: 'date',
+					yAxisKey: 'result'
+				},
+				plugins: {
+					title: {
+						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+						text: client.langJson["dashboard"]["CVwinLossGraph"],
+						display: true,
+	
+					}
+				},
+				scales: {
+					y: {
+						ticks: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+						},
+						grid: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							lineWidth: .5,
+							drawTicks: false,
+						},
+						min: 0,
+						max: 100,
+					},
+					x: {
+						ticks: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+						},
+						grid: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							lineWidth: .5,
+						}
+					}
+				}
+			}
+		});
+	
+	}
 
+	function drawAbs(){
+		datasets = [
+			{
+				label: username,
+				data: mapAbs,
+				fill: false,
+				tension: 0,
+				borderColor: function(context){
+					const chart = context.chart;
+					const {ctx, chartArea} = chart;
+	
+					if (!chartArea)
+						return ;
+					return (getGradient(ctx, chartArea));
+				},
+				borderWidth: 2,
+				pointBackgroundColor: function(context){
+					const chart = context.chart;
+					const {ctx, chartArea} = chart;
+	
+					if (!chartArea)
+						return ;
+					return (getGradient(ctx, chartArea));
+				},
+				pointBorderWidth: 0,
+				pointhitRadius: 4,
+				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointStyle: 'circle',
+				borderJoinStyle: 'round',
+				spanGaps: true
+			}
+		]
+	
+		if (username != clientUsername){
+			datasets.push({
+				label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
+				data: clientMapAbs,
+				fill: false,
+				tension: 0,
+				borderColor: "grey",
+				borderWidth: 2,
+				pointBackgroundColor: "grey",
+				pointBorderWidth: 0,
+				pointhitRadius: 4,
+				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointStyle: 'circle',
+				borderJoinStyle: 'round',
+				spanGaps: true
+			})
+		}
+	
+		chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
+			type: 'line',
+			data: {
+				datasets: datasets
+			},
+			options:{
+				animation,
+				parsing: {
+					xAxisKey: 'date',
+					yAxisKey: 'result'
+				},
+				plugins: {
+					title: {
+						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+						text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
+						display: true,
+	
+					}
+				},
+				scales: {
+					y: {
+						ticks: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+						},
+						grid: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							lineWidth: .5,
+							drawTicks: false,
+						}
+					},
+					x: {
+						ticks: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+						},
+						grid: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							lineWidth: .5,
+						}
+					}
+				}
+			}
+		});
+	
+	}
 
-    datasets = [
-        {
-            label: username,
-            data: mapAbs,
-            fill: false,
-            tension: 0,
-            borderColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
-
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            borderWidth: 2,
-            pointBackgroundColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
-
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        }
-    ]
-
-    if (username != clientUsername){
-        datasets.push({
-            label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
-            data: clientMapAbs,
-            fill: false,
-            tension: 0,
-            borderColor: "grey",
-            borderWidth: 2,
-            pointBackgroundColor: "grey",
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        })
-    }
-
-    chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
-        type: 'line',
-        data: {
-            datasets: datasets
-        },
-        options:{
-            animation,
-            parsing: {
-                xAxisKey: 'date',
-                yAxisKey: 'result'
-            },
-            plugins: {
-                title: {
-                    color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
-                    display: true,
-
-                }
-            },
-            scales: {
-                y: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                        drawTicks: false,
-                    }
-                },
-                x: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                    }
-                }
-            }
-        }
-    });
-
+	drawStats();
+	drawAverage();
+	drawAbs();
 }
 
 function loadUserDashboard(startDate, endDate){
-
-    wLGraph = document.getElementById("winLossGraph").remove();
-    wLAbsGraph = document.getElementById("winLossAbsGraph").remove();
+	if (document.getElementById("winLossGraph"))
+    	document.getElementById("winLossGraph").remove();
+    if (document.getElementById("winLossAbsGraph"))
+		document.getElementById("winLossAbsGraph").remove();
+    if (document.getElementById("userStatGraph"))
+		document.getElementById("userStatGraph").remove();
 
     wLGraph = document.createElement("canvas");
     wLGraph.id = "winLossGraph";
     wLAbsGraph = document.createElement("canvas");
     wLAbsGraph.id = "winLossAbsGraph";
+	userStatGraph = document.createElement("canvas");
+	userStatGraph.id = "userStatGraph";
 
     var w = window,
     d = document,
@@ -457,11 +488,14 @@ function loadUserDashboard(startDate, endDate){
     x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
     y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
 
-    wLGraph.width = x * 42;
-    wLAbsGraph.width = x * 42;
+    wLGraph.width = x * 30;
+    wLAbsGraph.width = x * 30;
+	userStatGraph.width = x * 30;
     wLGraph.height = y * 21;
     wLAbsGraph.height = y * 21;
+	userStatGraph.height = y * 21;
 
+    document.getElementById("userStatPieGraphContainer").appendChild(userStatGraph);
     document.getElementById("winLossGraphContainer").appendChild(wLGraph);
     document.getElementById("winLossAbsGraphContainer").appendChild(wLAbsGraph);
 
@@ -504,13 +538,7 @@ function loadUserDashboard(startDate, endDate){
                         for (k = 0; k < Object.keys(monthObj).length; k++){
                             dayObj = monthObj[Object.keys(monthObj)[k]];
                             for (l = 0; l < Object.keys(dayObj).length; l++){
-                                matchObj = dayObj[Object.keys(dayObj)[l]];
-                                if (matchObj.player_one == user.username)
-                                    countWin += matchObj.player_one_pts > matchObj.player_two_pts;
-                                else
-                                    countWin += matchObj.player_one_pts < matchObj.player_two_pts;
-                                countMatch += 1;
-                                historyContainer.appendChild(createMatchResumeContainer(matchObj));
+                                historyContainer.appendChild(createMatchResumeContainer(dayObj[Object.keys(dayObj)[l]]));
                             }
                         }
                     }
@@ -547,14 +575,14 @@ function loadUserDashboard(startDate, endDate){
                         elem.innerText = client.langJson["index"][".deletedUser"];
                     }
                 })
-
+/*
                 if (countMatch == 0)
                     document.getElementById("ratioValue").innerHTML = `100%`;
                 else
                     document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`;
                 document.getElementById("nbWinValue").innerHTML = `${countWin}`;
                 document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`;
-                document.getElementById("nbMatchValue").innerHTML = `${countMatch}`;
+                document.getElementById("nbMatchValue").innerHTML = `${countMatch}`;*/
             })
         }
         else
