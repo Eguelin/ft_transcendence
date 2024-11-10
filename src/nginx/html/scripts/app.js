@@ -863,6 +863,9 @@ window.addEventListener("click", (e) => {
 			}, 550, notifCenterContainer)
 		}
 	}
+	if (e.target.closest(".notifReject, .notifAccept")){
+		e.target.closest(".notifContainer").remove();
+	}
 })
 
 function 	popUpError(error){
@@ -993,7 +996,6 @@ function sendNotif(message, id, type){
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			e.target.closest(".notifContainer").remove();
 		})
 		notifContainer.querySelector(".notifReject").addEventListener("click", function(e){
 			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
@@ -1005,7 +1007,6 @@ function sendNotif(message, id, type){
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			e.target.closest(".notifContainer").remove();
 		})
 	}
 
