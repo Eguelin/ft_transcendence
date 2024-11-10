@@ -87,53 +87,64 @@ class Client{
 
 	constructor (){
 		return (async () =>{
-			const fetchResult = await fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			})
-			const result = await fetchResult.json();
-			if (fetchResult.ok){
-				this.username = result.username;
-				this.currentLang = result.lang;
-				this.pfpUrl = result.pfp;
-				this.use_dark_theme = result.is_dark_theme;
-				this.theme_name = result.theme_name;
-				this.friends = result.friends;
-				this.friend_requests = result.friend_requests;
-				this.blocked_user = result.blocked_user;
-				this.recentMatches = result.matches;
-				this.#is_admin = result.is_admin;
-				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-				this.fontAmplifier = result.font_amplifier;
-				this.use_browser_theme = result.use_browser_theme;
-				this.doNotDisturb = result.do_not_disturb;
-				use_browser_theme = result.use_browser_theme;
-				if (use_browser_theme == false)
-					switchTheme(this.theme_name);
-				if (this.doNotDisturb == true)
-					notifCenterContainer.classList.add("dnd");
-				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
-
-				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
-
-				usernameBtn.innerHTML = result.username;
-
-				addPfpUrlToImgSrc(userPfp, result.pfp)
-
-				fetch('/api/user/update', {
-					method: 'POST',
+			try{
+				const fetchResult = await fetch('/api/user/current', {
+					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({ "is_active": true }),
 					credentials: 'include'
 				})
+				const result = await fetchResult.json();
+				if (fetchResult.ok){
+					this.username = result.username;
+					this.currentLang = result.lang;
+					this.pfpUrl = result.pfp;
+					this.use_dark_theme = result.is_dark_theme;
+					this.theme_name = result.theme_name;
+					this.friends = result.friends;
+					this.friend_requests = result.friend_requests;
+					this.blocked_user = result.blocked_user;
+					this.recentMatches = result.matches;
+					this.#is_admin = result.is_admin;
+					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+					this.fontAmplifier = result.font_amplifier;
+					this.use_browser_theme = result.use_browser_theme;
+					this.doNotDisturb = result.do_not_disturb;
+					use_browser_theme = result.use_browser_theme;
+					if (use_browser_theme == false)
+						switchTheme(this.theme_name);
+					if (this.doNotDisturb == true)
+						notifCenterContainer.classList.add("dnd");
+					document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
+
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
+
+					usernameBtn.innerHTML = result.username;
+
+					addPfpUrlToImgSrc(userPfp, result.pfp)
+
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ "is_active": true }),
+						credentials: 'include'
+					})
+				}
+				else if (fetchResult.status == 401)
+					return null
 			}
-			else
-				return null
+			catch{
+				var template = `
+				<div id="pageContentContainer">
+					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
+				</div>
+				`
+				document.getElementById("container").innerHTML = template;
+				throw new Error("Error while reaching server");
+			}
 			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
 			if (fetchLangResult.ok)
 				this.langJson = await fetchLangResult.json()
@@ -292,19 +303,24 @@ function handleToken() {
 		.then(response => {
 			if (response.ok){
 				(async () => {
-					client = await new Client()
-					if (use_browser_theme){
-						if (window.matchMedia) {
-							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+					try {
+						client = await new Client()
+						if (use_browser_theme){
+							if (window.matchMedia) {
+								switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+							}
+							preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 						}
-						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+						if (!client)
+							myReplaceState(`https://${hostname.host}/login`);
+						else
+						{
+							friendUpdate();
+							myReplaceState(`https://${hostname.host}/home`);
+						}
 					}
-					if (!client)
-						myReplaceState(`https://${hostname.host}/login`);
-					else
-					{
-						friendUpdate();
-						myReplaceState(`https://${hostname.host}/home`);
+					catch{
+						unsetLoader();
 					}
 				})()
 			}
@@ -321,30 +337,36 @@ function handleToken() {
 	else {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
-			unsetLoader();
+			setLoader();
 			(async () => {
-				client = await new Client();
-				if (!client)
-					myReplaceState(`https://${hostname.host}/login`);
-				else if (url.pathname == "" || url.pathname == "/"){
-					friendUpdate();
-					myReplaceState(`https://${hostname.host}/home`);
-				}
-				else{
-					load();
-					friendUpdate();
-				}
-				if (use_browser_theme){
-					if (window.matchMedia) {
-						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+				try{
+					client = await new Client();
+					if (!client)
+						myReplaceState(`https://${hostname.host}/login`);
+					else if (url.pathname == "" || url.pathname == "/"){
+						friendUpdate();
+						myReplaceState(`https://${hostname.host}/home`);
 					}
-					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+					else{
+						load();
+						friendUpdate();
+					}
+					if (use_browser_theme){
+						if (window.matchMedia) {
+							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+						}
+						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+					}
+				}
+				catch{
+					unsetLoader();
 				}
 			})()
 	}
 }
 
 window.addEventListener('load', (e) => {
+	document.querySelector("#themeButton").style.setProperty("display", "none");
 	handleToken();
 });
 
