@@ -237,6 +237,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	display: flex;
 	gap: 1ch;
 	width: fit-content;
+	flex-wrap: wrap;
 }
 
 #timelineSelectionText{
@@ -245,9 +246,15 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 #timelineSelectorContainer{
 	display: flex;
-	width: max-content;
 	border: none;
 	height: fit-content;
+	gap: 1ch;
+	flex-wrap: wrap;
+	width: fit-content;
+}
+
+#customPeriod{
+	display: flex;
 	gap: 1ch;
 }
 
@@ -271,12 +278,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 input[type="date"]{
 	width: fit-content;
 }
-
+/*
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
-}
+}*/
 
 .active#customPeriodSelectionContainer{
 	display: flex;
@@ -349,4 +356,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 } 
 .inactive#customPeriodSelectionContainer input, .inactive#customPeriodSelectionContainer button{
 	width: 7rem;
+}
+
+.dashboard button{
+	min-width: unset;
+
+}
+
+/* Mobile */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (                min-resolution: 192dpi) and (min-width: 320px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 320px),
+only screen and (max-width:920px){ 
+	#timelineSelectionContainer{
+		flex-direction: column;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		align-items: center;
+		margin: 1rem;
+	}
+	#profileGraphs{
+		flex-direction: column;
+	}
 }

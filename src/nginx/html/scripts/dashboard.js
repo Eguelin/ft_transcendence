@@ -9,19 +9,21 @@ var lastMonthSelection;
 var lastYearSelection;
 
 var template = `
-<div id="pageContentContainer">
+<div id="pageContentContainer" class="dashboard">
     <div id="timelineSelectionContainer">
         <a id="timelineSelectionText">Display stats from the last </a>
         <div id="timelineSelectorContainer">
             <button tabindex="12" aria-label="Display stats from the last 7 days" class="activeTimeline" id="lastWeekSelection">7 days</button>
             <button tabindex="13" aria-label="Display stats from the last month" id="lastMonthSelection">Month</button>
             <button tabindex="14" aria-label="Display stats from the last year" id="lastYearSelection">Year</button>
-            <button tabindex="15" aria-label="Custom period selection" id="customPeriodSelection">+</button>
-            <div id="customPeriodSelectionContainer">
-                <input tabindex="16" aria-label="Custom start day" id="customStartDay" type="date">
-                <input tabindex="17" aria-label="Custom end day" id="customEndDay" type="date">
-                <button tabindex="18" aria-label="Search" id="search">Search</button>
-            </div>
+			<div id="customPeriod">
+				<button tabindex="15" aria-label="Custom period selection" id="customPeriodSelection">+</button>
+				<div id="customPeriodSelectionContainer">
+					<input tabindex="16" aria-label="Custom start day" id="customStartDay" type="date">
+					<input tabindex="17" aria-label="Custom end day" id="customEndDay" type="date">
+					<button tabindex="18" aria-label="Search" id="search">Search</button>
+				</div>
+			</div>
         </div>
     </div>
     <div id="profileGraphs">
@@ -163,7 +165,14 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
-	var totalWin = 0, totalMatch = 0;
+	var totalWin = 0, totalMatch = 0, graphLineWidth = .5, graphPointRadius = 2, lineWidth = 2;
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 1){
+		graphLineWidth = 3;
+		graphPointRadius = 0;
+		lineWidth = 4;
+	}
+
+
     while (startDate.valueOf() <= endDate.valueOf()){
         var countWin = 0, countMatch = 0;
         var clientCountWin = 0, clientCountMatch = 0;
@@ -249,7 +258,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				}
 			],
 			labels: [
-				'win', 'loss'
+				client.langJson["dashboard"]["CVwin"], client.langJson["dashboard"]["CVloss"]
 			]
 		}
 		chartStats = new Chart(document.getElementById("userStatGraph"), {
@@ -260,8 +269,19 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					title: {
 						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 						text: client.langJson["dashboard"]["CVuserStatsGraph"],
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+						},
 						display: true,
-	
+					},
+					legend: {
+						labels: {
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+							},
+						}
 					}
 				},
 			}
@@ -283,7 +303,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 						return ;
 					return (getGradient(ctx, chartArea));
 				},
-				borderWidth: 2,
+				borderWidth: lineWidth,
 				pointBackgroundColor: function(context){
 					const chart = context.chart;
 					const {ctx, chartArea} = chart;
@@ -294,10 +314,10 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				},
 				pointBorderWidth: 0,
 				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
 				pointStyle: 'circle',
 				borderJoinStyle: 'round',
-				spanGaps: true
+				spanGaps: true,
 			}
 		]
 	
@@ -308,11 +328,11 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				fill: false,
 				tension: 0,
 				borderColor: "grey",
-				borderWidth: 2,
+				borderWidth: lineWidth,
 				pointBackgroundColor: "grey",
 				pointBorderWidth: 0,
 				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
 				pointStyle: 'circle',
 				borderJoinStyle: 'round',
 				spanGaps: true
@@ -334,18 +354,33 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					title: {
 						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 						text: client.langJson["dashboard"]["CVwinLossGraph"],
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+						},
 						display: true,
-	
+					},
+					legend: {
+						labels: {
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+							},
+						}
 					}
 				},
 				scales: {
 					y: {
 						ticks: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+							},
 						},
 						grid: {
 							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth: .5,
+							lineWidth:graphLineWidth,
 							drawTicks: false,
 						},
 						min: 0,
@@ -353,11 +388,15 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					},
 					x: {
 						ticks: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+							},
 						},
 						grid: {
 							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth: .5,
+							lineWidth:graphLineWidth,
 						}
 					}
 				}
@@ -381,7 +420,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 						return ;
 					return (getGradient(ctx, chartArea));
 				},
-				borderWidth: 2,
+				borderWidth: lineWidth,
 				pointBackgroundColor: function(context){
 					const chart = context.chart;
 					const {ctx, chartArea} = chart;
@@ -392,7 +431,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				},
 				pointBorderWidth: 0,
 				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
 				pointStyle: 'circle',
 				borderJoinStyle: 'round',
 				spanGaps: true
@@ -406,11 +445,11 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				fill: false,
 				tension: 0,
 				borderColor: "grey",
-				borderWidth: 2,
+				borderWidth: lineWidth,
 				pointBackgroundColor: "grey",
 				pointBorderWidth: 0,
 				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
+				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
 				pointStyle: 'circle',
 				borderJoinStyle: 'round',
 				spanGaps: true
@@ -431,29 +470,49 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				plugins: {
 					title: {
 						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+						},
 						text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
 						display: true,
 	
+					},
+					legend: {
+						labels: {
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+							},
+						}
 					}
 				},
 				scales: {
 					y: {
 						ticks: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+							},
 						},
 						grid: {
 							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth: .5,
+							lineWidth:graphLineWidth,
 							drawTicks: false,
 						}
 					},
 					x: {
 						ticks: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+							},
 						},
 						grid: {
 							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth: .5,
+							lineWidth:graphLineWidth,
 						}
 					}
 				}
@@ -489,12 +548,22 @@ function loadUserDashboard(startDate, endDate){
     x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
     y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
 
-    wLGraph.width = x * 30;
-    wLAbsGraph.width = x * 30;
-	userStatGraph.width = x * 30;
-    wLGraph.height = y * 21;
-    wLAbsGraph.height = y * 21;
-	userStatGraph.height = y * 21;
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 0){
+		wLGraph.width = x * 30;
+		wLAbsGraph.width = x * 30;
+		userStatGraph.width = x * 30;
+		wLGraph.height = y * 21;
+		wLAbsGraph.height = y * 21;
+		userStatGraph.height = y * 21;
+	}
+	else{
+		wLGraph.width = x * 70;
+		wLAbsGraph.width = x * 70;
+		userStatGraph.width = x * 70;
+		wLGraph.height = y * 21;
+		wLAbsGraph.height = y * 21;
+		userStatGraph.height = y * 21;
+	}
 
     document.getElementById("userStatPieGraphContainer").appendChild(userStatGraph);
     document.getElementById("winLossGraphContainer").appendChild(wLGraph);

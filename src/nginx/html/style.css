@@ -14,6 +14,7 @@
 	--is-dark-theme : 1;
 
 	--font-size-amplifier: 1;
+	--is-mobile: 0;
 }
 
 body{
@@ -45,6 +46,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	}
 	body{
 		font-size: calc(32px * var(--font-size-amplifier));
+	}
+	:root {
+		--is-mobile: 1;
 	}
 }
 
