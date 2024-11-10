@@ -500,6 +500,10 @@ function switchTheme(theme) {
 		chartAbs.options.scales.y._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
 		chartAbs._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
 		chartAbs.update();
+
+
+		chartStats._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
+		chartStats.update();
 	}
 	if (currentPage == "game"){
 		displayTournament();
