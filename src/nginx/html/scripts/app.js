@@ -157,55 +157,61 @@ class Client{
 	loadPage(page){
 		(async() => {
 			setLoader()
-			const fetchResult = await fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			})
-			const result = await fetchResult.json();
-			var search = 404;
-			if (fetchResult.ok){
-				this.#is_admin = result.is_admin;
+			try{
+				const fetchResult = await fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
+				const result = await fetchResult.json();
+				var search = 404;
+				if (fetchResult.ok){
+					this.#is_admin = result.is_admin;
 
-				var sep = page.indexOf("/", 1)
-				if (sep > 0)
-					pageName = page.substring(0, sep)
-				else
-					pageName = page;
-				search = pageName;
-				if (routes[pageName]){
-					if (!this.#is_admin && pageName == "/admin"){
-						currentPage = 403;
-						search = 403;
+					var sep = page.indexOf("/", 1)
+					if (sep > 0)
+						pageName = page.substring(0, sep)
+					else
+						pageName = page;
+					search = pageName;
+					if (routes[pageName]){
+						if (!this.#is_admin && pageName == "/admin"){
+							currentPage = 403;
+							search = 403;
+						}
+						else{
+							currentPage = pageName.substring(1);
+						}
 					}
 					else{
-						currentPage = pageName.substring(1);
+						currentPage = 404;
+						search = 404;
 					}
 				}
 				else{
-					currentPage = 404;
-					search = 404;
-				}
-			}
-			else{
-				dropDownUserContainer.style.setProperty("display", "none");
-				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+					dropDownUserContainer.style.setProperty("display", "none");
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
-				currentPage = 'login';
-				search = "/login"
+					currentPage = 'login';
+					search = "/login"
+				}
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.onload = function(){
+					(async () => (loadCurrentLang()))();
+					unsetLoader()
+					checkResizeWindow();
+				}
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', routes[search]);
+				document.body.appendChild(s);
 			}
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.onload = function(){
-				(async () => (loadCurrentLang()))();
-				unsetLoader()
-				checkResizeWindow();
+			catch{
+				popUpError(client.langJson['index']['error reaching server']);
+				unsetLoader();
 			}
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', routes[search]);
-			document.body.appendChild(s);
 		})();
 	}
 }
@@ -366,8 +372,8 @@ function handleToken() {
 }
 
 window.addEventListener('load', (e) => {
-	document.querySelector("#themeButton").style.setProperty("display", "none");
 	handleToken();
+	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
 });
 
 
