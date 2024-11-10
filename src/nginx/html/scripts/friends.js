@@ -289,8 +289,11 @@ function createFriendContainer(user){
 	blockFriendBtn.tabIndex = friendTabIdx;
 	friendTabIdx += 1;
 
-	if (user.is_active == true){
-		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
+	if (user.is_active == true || true){ //DEBUG
+		var clone = friendContainer.cloneNode(true);
+		var img = clone.querySelector(".profilePicture");
+		addPfpUrlToImgSrc(img, `${img.src}`);
+		onlineFriendListContainer.appendChild(clone);
 	}
 	allFriendListContainer.appendChild(friendContainer);
 }
