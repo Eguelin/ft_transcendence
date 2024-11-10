@@ -14,7 +14,8 @@
 		"aria#EN_UK" : "English",
 		"aria#FR_FR" : "Français",
 		"aria#DE_GE" : "Deutsch",
-		"aria#IT_IT" : "Italiano"
+		"aria#IT_IT" : "Italiano",
+		"error reaching server" : "Error reaching server"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -106,7 +107,7 @@
 		"#title" : "",
 		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Send friend request",
-		"#notPlayedToday" : "has not played any match today",
+		"#notPlayedToday" : "USER has not played any match today",
 		"#recentMatchHistoryText" : "Recent matches",
 		"#allMatchesHistoryBtn" : "All matches",
 		".victory" : "VICTORY",
