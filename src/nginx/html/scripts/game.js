@@ -116,7 +116,6 @@ var template = `
 `
 
 function leftSlideBtn(){
-	console.log(singleRoundDisplayIdx);
 	var contest = document.querySelector(".singleRoundDisplay");
 	if (!contest)
 		return
@@ -168,7 +167,6 @@ function leftSlideBtn(){
 }
 
 function rightSlideBtn(){
-	console.log(singleRoundDisplayIdx);
 	var contest = document.querySelector(".singleRoundDisplay");
 	if (!contest)
 		return
@@ -354,26 +352,6 @@ var tournament;
 	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
 	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 	game();
-}
-
-function getWindowWidth() {
-	return Math.max(
-	  document.body.scrollWidth,
-	  document.documentElement.scrollWidth,
-	  document.body.offsetWidth,
-	  document.documentElement.offsetWidth,
-	  document.documentElement.clientWidth
-	);
-}
-  
-function getWindowHeight() {
-	return Math.max(
-	  document.body.scrollHeight,
-	  document.documentElement.scrollHeight,
-	  document.body.offsetHeight,
-	  document.documentElement.offsetHeight,
-	  document.documentElement.clientHeight
-	);
 }
 
 function setTournamentTreeValue(){
