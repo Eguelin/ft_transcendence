@@ -22,5 +22,8 @@ RUN sed -i 's/http {/http {\n    client_max_body_size 10M;/g' /etc/nginx/nginx.c
 # Copy configuration files
 COPY conf /etc/nginx/conf.d
 
-# run nginx
-CMD [ "nginx", "-g", "daemon off;" ]
+# Copy entrypoint
+COPY ./entry/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT [ "entrypoint.sh" ]
