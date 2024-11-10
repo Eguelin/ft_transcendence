@@ -479,7 +479,10 @@ def get_user_id(request):
 		if not username:
 			return JsonResponse({'message': 'Username is required'}, status=400)
 		user = User.objects.get(username=username)
-		return JsonResponse({'id': user.id, 'self_id' : request.user.id}, status=200)
+
+		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
+			return JsonResponse({'message': 'User blocked you', 'blocked': True}, status=200)
+		return JsonResponse({'id': user.id, 'self_id' : request.user.id, 'blocked': False}, status=200)
 
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'User not found'}, status=404)
