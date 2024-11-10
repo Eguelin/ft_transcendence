@@ -190,6 +190,7 @@ class Client{
 			s.onload = function(){
 				(async () => (loadCurrentLang()))();
 				unsetLoader()
+				checkResizeWindow();
 			}
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', routes[search]);
@@ -265,6 +266,7 @@ function load(){
 		s.onload = function(){
 			(async () => (loadCurrentLang()))();
 			unsetLoader()
+			checkResizeWindow();
 		}
 		s.setAttribute('id', 'script');
 		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
@@ -885,13 +887,33 @@ function 	popUpError(error){
 	document.body.appendChild(popupContainer);
 }
 
-window.addEventListener("resize", (e) => {
+function checkResizeWindow(){
 	if(currentPage == "dashboard"){
 		var startDate = new Date();
 		startDate.setDate(startDate.getDate() - 7);
 		loadUserDashboard(startDate, today);
 	}
-})
+
+	var tmp = document.querySelector("#inputSearchUserContainer");
+	var fontSize = window.getComputedStyle(document.documentElement).fontSize.replace("px", "");
+	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
+	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
+	if (window.getComputedStyle(tmp).display != "none"){
+		var sectionWidth = 0;
+		document.querySelectorAll("#browseFlexContainer > *").forEach(function(elem){
+			sectionWidth += elem.getBoundingClientRect().width;
+		})
+		var availableWidth = document.querySelector("#browseFlexContainer").getBoundingClientRect().width - sectionWidth;
+		if (availableWidth < fontSize * 1.5){
+			document.querySelector("#mobileSearchBtn").style.setProperty("display", "block");
+		}
+		else {
+			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
+		}
+	}
+}
+
+window.addEventListener("resize", checkResizeWindow);
 
 function setLoader(){
 	document.getElementById("loaderBg").style.setProperty("display", "block");
@@ -1077,12 +1099,17 @@ function friendUpdate()
 		}).then(response => {
 			if (response.ok) {
 				response.json().then((user) => {
-					const message = JSON.stringify({
-						type: 'send_friend_request',
-						target_user_id: user.id,
-						sender_username: client.username
-					});
-					socket.send(message);
+					if (!user.blocked){
+						const message = JSON.stringify({
+							type: 'send_friend_request',
+							target_user_id: user.id,
+							sender_username: client.username
+						});
+						socket.send(message);
+					}
+					else{
+						popUpError(client.langJson['friends']['error sending request'])
+					}
 				});
 			}
 			else
