@@ -12,7 +12,7 @@ def send_friend_request(request):
 		data = json.loads(request.body)
 		username = data['username']
 		if (username == request.user.username):
-			return JsonResponse({'message': 'Can\'t send friend request with yourself'})
+			return JsonResponse({'message': 'Can\'t send friend request to yourself'})
 		try:
 			new_friend = User.objects.get(username=username)
 			user = request.user
