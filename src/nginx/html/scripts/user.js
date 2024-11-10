@@ -130,15 +130,12 @@ var template = `
                 }
                 catch{
                     var messageContainer = document.createElement("div");
-                    var messageUsername = document.createElement("a");
                     var message = document.createElement("a");
                     recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
                     recentMatchHistoryContainer.style.setProperty("align-items", "center");
                     messageContainer.id = "notPlayedTodayContainer";
-                    messageUsername.innerText = splitPath[4]
                     message.id="notPlayedToday";
-			        message.innerText = client.langJson['user']['#notPlayedToday'];
-                    messageContainer.appendChild(messageUsername);
+			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("USER", splitPath[4]);
                     messageContainer.appendChild(message);
                     recentMatchHistoryContainer.appendChild(messageContainer);
                 }
