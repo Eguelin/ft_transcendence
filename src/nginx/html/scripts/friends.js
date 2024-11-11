@@ -38,16 +38,24 @@ var template = `
 
 	<div id="friendSlides">
 		<div>
+			<div class="gradient"></div>
 			<div id="onlineFriendList" class="friendSlide"></div>
+			<div class="endGradient"></div>
 		</div>
 		<div>
+			<div class="gradient"></div>
 			<div id="allFriendList" class="friendSlide"></div>
+			<div class="endGradient"></div>
 		</div>
 		<div>
+			<div class="gradient"></div>
 			<div id="pendingFriendRequestList" class="friendSlide"></div>
+			<div class="endGradient"></div>
 		</div>
 		<div>
+			<div class="gradient"></div>
 			<div id="blockedList" class="friendSlide"></div>
+			<div class="endGradient"></div>
 		</div>
 	<div>
 
