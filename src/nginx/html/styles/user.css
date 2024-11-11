@@ -383,3 +383,14 @@ only screen and (max-width:920px){
 		flex-direction: column;
 	}
 }
+
+#notPlayedPeriod{
+	color: var(--main-text-rgb);
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: max-content;
+	max-width: -moz-available;
+	max-width: -webkit-fill-available;
+}

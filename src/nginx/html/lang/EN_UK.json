@@ -128,6 +128,7 @@
 		"#lastWeekSelection" : "Past 7 days",
 		"#lastMonthSelection" : "Past month",
 		"#lastYearSelection" : "Past year",
+		"#notPlayedPeriod" : "USER has not played any match during this period",
 		"CVwinLossGraph" : "Percent of victories by date",
 		"CVwinLossAbsGraph" : "Number of victories over defeats by date",
 		"CVuserStatsGraph" : "Number of win and lost game",
