@@ -73,3 +73,20 @@ class Match(models.Model):
 	winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="winner")
 
 	objects = MatchManager()
+
+# class Tournament(models.Model):
+# 	date = models.DateField(auto_now=False, auto_now_add=True)
+# 	players = models.ManyToManyField(User, related_name="players")
+# 	matches = models.ManyToManyField(Match, related_name="matches")
+
+	# def addTournament(self, players : list):
+	# 	tournament = Tournament.objects.create()
+	# 	tournament.date = datetime.datetime.now()
+	# 	tournament.save()
+	# 	for player in players:
+	# 		tournament.players.add(player.user)
+	# 	tournament.save()
+
+	# def addMatchToTournament(self, tournament, match):
+	# 	tournament.matches.add(match)
+	# 	tournament.save()
