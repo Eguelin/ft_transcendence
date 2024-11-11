@@ -12,6 +12,8 @@ var slideSelector;
 var friendSlideIdx = 0;
 var slides;
 
+const baseTabIdx = 15;
+
 var template = `
 <div id="friendInfo">
 	<div id="friendSlideSelector">
@@ -36,7 +38,7 @@ var template = `
 
 	<div id="friendSlides">
 		<div>
-			<div id="onlineFriendList" class="friendSlide activeSlide"></div>
+			<div id="onlineFriendList" class="friendSlide"></div>
 		</div>
 		<div>
 			<div id="allFriendList" class="friendSlide"></div>
@@ -78,12 +80,12 @@ var template = `
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
 
-	friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 	
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
 			key.addEventListener("click", (e) => {
+				unsetTabIndexes(friendSlideIdx);
 				var save = friendSlideIdx;
 				slideSelector[friendSlideIdx].classList.remove("activeSelector");
 				friendSlideIdx = Array.from(slideSelector).indexOf(e.target.closest(".slideSelector"));
@@ -115,6 +117,7 @@ var template = `
 				}
 				tmp.animate(move, time);
 				tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
+				setTabIndexes(friendSlideIdx);
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -233,7 +236,6 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
-var friendTabIdx, pendingFriendTabIdx, blockedUserTabIdx;
 
 function createUserContainer(user){
 	var friendContainer = document.createElement("div");
@@ -300,11 +302,54 @@ function createUserContainer(user){
 	return (friendContainer);
 }
 
+function unsetTabIndexes(slideIdx){
+	var slide = slides[slideIdx];
+
+	slide.querySelectorAll(".friendsOptionContainer").forEach(function(elem){
+		elem.tabIndex = -1;
+		if (elem.querySelector(".removeFriendBtn"))
+			elem.querySelector(".removeFriendBtn").tabIndex = -1;
+
+		if (elem.querySelector(".blockFriendBtn"))
+			elem.querySelector(".blockFriendBtn").tabIndex = -1;
+
+		if (elem.querySelector(".acceptRequestBtn"))
+			elem.querySelector(".acceptRequestBtn").tabIndex = -1;
+
+		if (elem.querySelector(".rejectRequestBtn"))
+			elem.querySelector(".rejectRequestBtn").tabIndex = -1;
+
+		if (elem.querySelector(".unblockBtn"))
+			elem.querySelector(".unblockBtn").tabIndex = -1;
+	})
+}
+
+function setTabIndexes(slideIdx){
+	var slide = slides[slideIdx];
+	var tmpIdx = baseTabIdx;
+
+	slide.querySelectorAll(".friendsOptionContainer").forEach(function(elem){
+		elem.tabIndex = tmpIdx++;
+		if (elem.querySelector(".removeFriendBtn"))
+			elem.querySelector(".removeFriendBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".blockFriendBtn"))
+			elem.querySelector(".blockFriendBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".acceptRequestBtn"))
+			elem.querySelector(".acceptRequestBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".rejectRequestBtn"))
+			elem.querySelector(".rejectRequestBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".unblockBtn"))
+			elem.querySelector(".unblockBtn").tabIndex = tmpIdx++;
+	})
+}
+
 function createFriendContainer(user){
 	var friendContainer = document.createElement("div");
 	var friendsOptionContainer = document.createElement("div");
-	var removeFriendBtn = document.createElement("div");
-	var blockFriendBtn = document.createElement("div");
 
 	friendContainer = createUserContainer(user);
 
@@ -314,16 +359,6 @@ function createFriendContainer(user){
 	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaAll.friendsOptionContainer']}`);
-	friendsOptionContainer.tabIndex = friendTabIdx;
-	friendTabIdx += 1;
-
-	removeFriendBtn = friendsOptionContainer.getElementsByClassName("removeFriendBtn")[0];
-	removeFriendBtn.tabIndex = friendTabIdx;
-	friendTabIdx += 1;
-
-	blockFriendBtn = friendsOptionContainer.getElementsByClassName("blockFriendBtn")[0];
-	blockFriendBtn.tabIndex = friendTabIdx;
-	friendTabIdx += 1;
 
 	if (user.is_active == true || true){ //DEBUG
 		var clone = friendContainer.cloneNode(true);
@@ -342,12 +377,6 @@ function createFriendRequestContainer(user){
 	})
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaPending.friendsOptionContainer']}`);
-	friendsOptionContainer.tabIndex = pendingFriendTabIdx;
-	pendingFriendTabIdx += 1;
-	friendContainer.getElementsByClassName("acceptRequestBtn")[0].tabIndex = pendingFriendTabIdx;
-	pendingFriendTabIdx += 1;
-	friendContainer.getElementsByClassName("rejectRequestBtn")[0].tabIndex = pendingFriendTabIdx;
-	pendingFriendTabIdx += 1;
 	pendingFriendRequestListContainer.appendChild(friendContainer);
 }
 
@@ -361,11 +390,6 @@ function createBlockedUserContainer(user){
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaBlocked.friendsOptionContainer']}`);
-	friendsOptionContainer.tabIndex = blockedUserTabIdx;
-	blockedUserTabIdx += 1;
-
-	friendContainer.getElementsByClassName("unblockBtn")[0].tabIndex = blockedUserTabIdx;
-	blockedUserTabIdx += 1;
 
 	blockedListContainer.appendChild(friendContainer);
 }
@@ -441,9 +465,6 @@ function setListeners(){
 
 function checkUpdate(){
 	if (currentPage == "friends"){
-		friendTabIdx = 15;
-		pendingFriendTabIdx = 15;
-		blockedUserTabIdx = 15;
 
 		fetch('/api/user/current', {
 			method: 'GET',
@@ -477,6 +498,9 @@ function checkUpdate(){
 					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
 					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
 					setListeners();
+					for (var i=0; i<4;i++)
+						unsetTabIndexes(i)
+					setTabIndexes(friendSlideIdx);
 				});
 			}
 			else {
@@ -491,6 +515,7 @@ function checkUpdate(){
 function friendKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
 		var save = friendSlideIdx;
+		unsetTabIndexes(friendSlideIdx)
 		friendSlides[friendSlideIdx].className = "friendSlide";
 		slideSelector[friendSlideIdx].className = "slideSelector";
 		if (e.key == "ArrowLeft")
@@ -501,7 +526,6 @@ function friendKeyDownEvent(e) {
 			friendSlideIdx = 0;
 		if (friendSlideIdx < 0)
 			friendSlideIdx = friendSlides.length - 1;
-		/*friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`*/
 		slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		slideSelector[friendSlideIdx].focus();
 
@@ -529,6 +553,7 @@ function friendKeyDownEvent(e) {
 		}
 		tmp.animate(move, time);
 		tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
+		setTabIndexes(friendSlideIdx);
 	}
 }
 

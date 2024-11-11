@@ -255,10 +255,6 @@
 	position: relative;
 }
 
-.activeSlide{
-	display: block !important;
-}
-
 #friendInfo .slideSelector:hover, #friendInfo .slideSelector:focus{
 	outline: none;
 	scale: 1.1;
