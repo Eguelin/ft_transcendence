@@ -31,6 +31,7 @@ var template = `
 			<div id="blockedSelectorText">Blocked</div>
 			<div id="blockedSelectorCount" class="userSlideCount">(0)</div>
 		</div>
+		<div id="slideSelectorBg"></div>
 	</div>
 
 	<div id="friendSlides">
@@ -83,24 +84,37 @@ var template = `
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
 			key.addEventListener("click", (e) => {
+				var save = friendSlideIdx;
 				slideSelector[friendSlideIdx].classList.remove("activeSelector");
-				friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
+				friendSlideIdx = Array.from(slideSelector).indexOf(e.target.closest(".slideSelector"));
 				if (friendSlides[friendSlideIdx].childElementCount > 0){
 					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
 				}
 				slideSelector[friendSlideIdx].classList.add("activeSelector");
 				var tmp = document.querySelector("#friendSlides");
 				var left = tmp.getBoundingClientRect().left;
-				const move = [
+				var move = [
 					{ left: `${left}px`},
 					{ left: `-${friendSlideIdx}00vw`}
 				];
-				const time = {
+				var time = {
 					duration: 500,
 					iterations: 1,
 				}
 				tmp.animate(move, time);
 				tmp.style.setProperty("left", `-${friendSlideIdx}00vw`)
+
+				tmp = document.querySelector("#slideSelectorBg");
+				move = [
+					{ left: `${save * 25}%`},
+					{ left: `${friendSlideIdx * 25}%`}
+				];
+				time = {
+					duration: 500,
+					iterations: 1,
+				}
+				tmp.animate(move, time);
+				tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -476,6 +490,7 @@ function checkUpdate(){
 
 function friendKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		var save = friendSlideIdx;
 		friendSlides[friendSlideIdx].className = "friendSlide";
 		slideSelector[friendSlideIdx].className = "slideSelector";
 		if (e.key == "ArrowLeft")
@@ -492,16 +507,28 @@ function friendKeyDownEvent(e) {
 
 		var tmp = document.querySelector("#friendSlides");
 		var left = tmp.getBoundingClientRect().left;
-		const move = [
+		var move = [
 			{ left: `${left}px`},
 			{ left: `-${friendSlideIdx}00%`}
 		];
-		const time = {
+		var time = {
 			duration: 500,
 			iterations: 1,
 		}
 		tmp.animate(move, time);
 		tmp.style.setProperty("left", `-${friendSlideIdx}00%`)
+
+		tmp = document.querySelector("#slideSelectorBg");
+		move = [
+			{ left: `${save * 25}%`},
+			{ left: `${friendSlideIdx * 25}%`}
+		];
+		time = {
+			duration: 500,
+			iterations: 1,
+		}
+		tmp.animate(move, time);
+		tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
 	}
 }
 

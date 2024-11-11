@@ -7,7 +7,6 @@
 	min-width: -moz-available;
 	width: 100vw;
 	align-items: center;
-	overflow-x: hidden;
 }
 
 #friendInfo span{
@@ -19,7 +18,7 @@
 	flex-direction: row;
 	position: fixed;
 	width: 100vw;
-	top: 20vh;
+	top: 25vh;
 }
 
 #friendSlides > *{
@@ -205,8 +204,10 @@
 	margin-top: 2vmin;
 	width: fit-content;
 	min-width: 50vw;
+	height: 3rem;
+	position: absolute;
 }
-#friendSlideSelector div{
+#friendSlideSelector .slideSelector{
 	flex: 1;
 }
 #friendSlideSelector div div{
@@ -240,10 +241,12 @@
 
 .slideSelector{
 	font-size: 1em;
+	display: flex;
+	flex-direction: column;
 }
 
 .slideSelector div{
-	padding: .5rem;
+	flex: 1;
 	z-index: -1;
 	position: relative;
 }
@@ -252,13 +255,11 @@
 	display: block !important;
 }
 
-.activeSelector div{
-	background: var(--hover-text-rgb);
+.slideSelector:hover, .slideSelector:focus{
+	outline: none;
+	scale: 1.1;
 }
 
-.activeSelector{
-	border-bottom: 2px solid var(--main-text-rgb);
-}	
 
 .pfpContainer{
 	width: 4vw;
@@ -289,3 +290,9 @@
 	background: green;
 }
 
+#friendInfo #slideSelectorBg{
+	width: 25%;
+	height: inherit;
+	border-bottom: 2px solid var(--main-text-rgb) !important;
+	left: 0;
+}
