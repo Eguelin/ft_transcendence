@@ -1,4 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.contrib.auth.models import User
 from asgiref.sync import sync_to_async
 import game.models as models
 import json
@@ -210,7 +211,7 @@ class GameRemote(Game):
 
 	@sync_to_async
 	def save(self):
-		models.Match.objects.addMatch(self.playerLeft, self.playerRight, "remote")
+		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
@@ -278,15 +279,14 @@ class GameAI(Game):
 
 	async def init(self):
 		await self.playerLeft.init(self, 'left')
-		self.playerRight.init(self, 'right')
+		await self.playerRight.init(self, 'right')
 		self.ball.init()
 		asyncio.create_task(self.playerRight.run())
 		await self.send('game_init', self.getInfo(True))
 
 	@sync_to_async
 	def save(self):
-		pass
-		# models.Match.objects.addMatch(self.playerLeft, self.playerRight, "ai")
+		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
@@ -446,9 +446,13 @@ class PlayerAI(Player):
 	def __init__(self):
 		super().__init__()
 
+	@sync_to_async
 	def init(self, game, side):
 		super().init(game, side)
+		self.user = User.objects.get(username='AI')
+		self.profile = self.user.profile
 		self.Y = Game.demieHeight
+
 
 	async def run(self):
 		while self.game.running:
