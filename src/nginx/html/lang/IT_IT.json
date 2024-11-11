@@ -132,8 +132,8 @@
 		"aria#lastYearSelection" : "Visualizza le statistiche dell'ultimo anno"
 	},
 	"search": {
-		"#title" : "Cerca",
-		"#subtitle" : "",
+		"#title" : "",
+		"#subtitle" : "Cerca",
 		"aria.userResume": "reindirizzamento del profilo"
 	},
 	"game":{

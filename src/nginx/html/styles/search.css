@@ -1,0 +1,114 @@
+#userSearchContainer{
+	display: flex;
+	width: fit-content;
+	align-items: center;
+	position: relative;
+	left: 50%;
+	translate: -50%;
+
+	border: 0.2px solid transparent;
+	color: var(--main-text-rgb);
+	background-color: var(--input-bg-rgb);
+	border-radius: 1rem;
+	padding: 1rem;
+	gap: 1rem;
+}
+
+#userSearchContainer input{
+	background: none;
+	padding: 0;
+	width: unset;
+	height: 2rem;
+}
+
+#userSearchContainer input:focus{
+	border-color: transparent;
+}
+
+/* Mobile */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (                min-resolution: 192dpi) and (min-width: 320px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
+
+	#userSearchContainer input{
+		width: 15ch;
+	}
+
+	.userResumeContainer{
+		width: 15ch !important;
+	}
+	.userResumePfpContainer{
+		width: 15ch !important;
+		height: 15ch !important;
+	}
+}
+
+#searchBtn{
+	background: var(--main-text-rgb);
+	mask-size:contain;
+	mask-position:center;
+	mask-repeat:no-repeat;
+	height: 2em;
+	width: 2em;
+	mask-image: url(../icons/search.svg);
+}
+
+#searchBtn:focus, #searchBtn:hover{
+	background: var(--page-bg-rgb);
+}
+
+#resumeContainer{
+	margin-top: 1rem;
+}
+
+.userResume {
+	display: flex;
+	flex-direction: column;
+}
+
+.userResumeContainer {
+	width: 10ch;
+	background: var(--input-bg-rgb);
+	border: 1px solid var(--main-text-rgb);
+	margin: 1rem;
+	display: inline-block;
+	font-size: 1rem;
+}
+
+.userResumePfpContainer{
+	height: 10ch;
+	width: 10ch;
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: relative;
+}
+
+.userResumePfp {
+	width: 120%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.userResumeName{
+	padding: .5vmin .1vmin;
+	color: var(--main-text-rgb);
+	overflow-wrap: anywhere;
+}
+
+#userResumeCountContainer{
+	display: none;
+	color: var(--main-text-rgb);
+	margin-bottom: 1rem;
+}
+
+#userResumeSearch{
+	background: var(--input-bg-rgb);
+	border: 3px solid var(--input-bg-rgb);
+}

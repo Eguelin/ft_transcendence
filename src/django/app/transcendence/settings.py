@@ -29,7 +29,7 @@ DEBUG = os.getenv('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = [
 	'localhost',
-	os.getenv('DJANGO_HOST')
+	os.getenv('DJANGO_ALLOWED_HOST'),
 ]
 
 # Application definition
