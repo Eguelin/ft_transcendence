@@ -608,7 +608,12 @@ class TournamentMaking():
 			return
 		for match in self.matches[-1]:
 			await match.start()
+		await self.createTournament()
 		TournamentMaking._instance = None
+
+	@sync_to_async
+	def createTournament(self):
+		self.tournament = models.Tournament.objects.createTournament([player.user for player in self.players])
 
 	async def moveWinner(self, round, match, winner):
 		await winner.init(None, None)
@@ -657,26 +662,29 @@ class GameTournament(GameRemote):
 		self.playerRight.inGame = True
 		await super().start()
 
+	@sync_to_async
+	def save(self):
+		models.Tournament.objects.addMatchToTournament(self)
 
 	async def end(self):
-		self.winner = 'left' if self.playerLeft.score == maxScore or not self.playerRight.socket else 'right'
-		winner = self.playerLeft if 'left' == self.winner else self.playerRight
+		self.winner = self.playerLeft if self.playerLeft.score == maxScore or not self.playerRight.socket else self.playerRight
 		self.playerLeft.inGame = False
 		self.playerRight.inGame = False
 
-		if self.winner == 'left':
+		if self.winner.side == 'left':
 			self.playerLeft = self.playerLeft.copy()
 		else:
 			self.playerRight = self.playerRight.copy()
 
 		await self.send('game_match_end', {
-			'winner': self.winner
+			'winner': self.winner.side,
 		})
 
 		self.running = False
 
+		await self.save()
 		await asyncio.sleep(3)
-		await self.tournamentMaking.moveWinner(self.round - 1, self.match // 2, winner)
+		await self.tournamentMaking.moveWinner(self.round - 1, self.match // 2, self.winner)
 
 	def getMatch(self):
 		return {
