@@ -190,6 +190,7 @@ class Client{
 			s.onload = function(){
 				(async () => (loadCurrentLang()))();
 				unsetLoader()
+				checkResizeWindow();
 			}
 			s.setAttribute('id', 'script');
 			s.setAttribute('src', routes[search]);
@@ -265,6 +266,7 @@ function load(){
 		s.onload = function(){
 			(async () => (loadCurrentLang()))();
 			unsetLoader()
+			checkResizeWindow();
 		}
 		s.setAttribute('id', 'script');
 		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
@@ -728,10 +730,7 @@ async function updateUserAriaLabel(key, content){
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
 		query = inputSearchUser.value.trim();
-		if (query.length == 0)
-			popUpError("Can't search empty query");
-		else
-			myPushState(`https://${hostname.host}/search?query=${query}`);
+		myPushState(`https://${hostname.host}/search?query=${query}`);
 	}
 })
 
@@ -866,8 +865,8 @@ window.addEventListener("click", (e) => {
 			}, 550, notifCenterContainer)
 		}
 	}
-	if (e.target.classList.contains("notifReject")){
-		e.target.parentElement.parentElement.remove();
+	if (e.target.closest(".notifReject, .notifAccept")){
+		e.target.closest(".notifContainer").remove();
 	}
 })
 
@@ -888,13 +887,33 @@ function 	popUpError(error){
 	document.body.appendChild(popupContainer);
 }
 
-window.addEventListener("resize", (e) => {
+function checkResizeWindow(){
 	if(currentPage == "dashboard"){
 		var startDate = new Date();
 		startDate.setDate(startDate.getDate() - 7);
 		loadUserDashboard(startDate, today);
 	}
-})
+
+	var tmp = document.querySelector("#inputSearchUserContainer");
+	var fontSize = window.getComputedStyle(document.documentElement).fontSize.replace("px", "");
+	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
+	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
+	if (window.getComputedStyle(tmp).display != "none"){
+		var sectionWidth = 0;
+		document.querySelectorAll("#browseFlexContainer > *").forEach(function(elem){
+			sectionWidth += elem.getBoundingClientRect().width;
+		})
+		var availableWidth = document.querySelector("#browseFlexContainer").getBoundingClientRect().width - sectionWidth;
+		if (availableWidth < fontSize * 1.5){
+			document.querySelector("#mobileSearchBtn").style.setProperty("display", "block");
+		}
+		else {
+			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
+		}
+	}
+}
+
+window.addEventListener("resize", checkResizeWindow);
 
 function setLoader(){
 	document.getElementById("loaderBg").style.setProperty("display", "block");
@@ -973,16 +992,46 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	}
 })
 
-function sendNotif(message){
+function sendNotif(message, id, type){
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
 	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
+	<div style="display:none !important" id="notifId"></div>
 <div class="notifOptionContainer">
 <div class="notifAccept"></div>
 <div class="separator"></div>
 <div class="notifReject"></div>
 </div>`;
+
+	if (id != undefined && id){
+		notifContainer.querySelector("#notifId").classList.add(id);
+	}
+	if (type == "friend_request"){
+		notifContainer.querySelector(".notifAccept").addEventListener("click", function(e){
+			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
+			fetch('/api/user/accept_friend_request', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+		})
+		notifContainer.querySelector(".notifReject").addEventListener("click", function(e){
+			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
+			fetch('/api/user/reject_friend_request', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+		})
+	}
+
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))){
 		notifCenterContainer.classList.add("pendingNotification");
@@ -1030,7 +1079,7 @@ function friendUpdate()
 	socket.onmessage = function(event) {
 		const data = JSON.parse(event.data);
 		if (data.new_request) {
-			sendNotif(`${client.langJson.friends['ariaPending.friendsOptionContainer']}`);
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
 		}
 	};
 
@@ -1050,11 +1099,17 @@ function friendUpdate()
 		}).then(response => {
 			if (response.ok) {
 				response.json().then((user) => {
-					const message = JSON.stringify({
-						type: 'send_friend_request',
-						target_user_id: user.id
-					});
-					socket.send(message);
+					if (!user.blocked){
+						const message = JSON.stringify({
+							type: 'send_friend_request',
+							target_user_id: user.id,
+							sender_username: client.username
+						});
+						socket.send(message);
+					}
+					else{
+						popUpError(client.langJson['friends']['error sending request'])
+					}
 				});
 			}
 			else
@@ -1062,3 +1117,7 @@ function friendUpdate()
 		});
 	};
 }
+
+document.querySelector("#mobileSearchBtn").addEventListener("click", function() {
+	myPushState(`https://${hostname.host}/search`);
+})

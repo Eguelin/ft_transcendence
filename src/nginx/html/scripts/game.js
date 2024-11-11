@@ -105,17 +105,26 @@ var template = `
 		</div>
 	</div>
 	<div id="controler">
-		<button id="leftBtn" tabindex="12" aria-label="Switch tournament section"></button>
-		<button id="rightBtn" tabindex="13" aria-label="Switch tournament section"></button>
+		<div id="leftBtnContainer" tabindex="12" aria-label="Switch tournament section">
+			<button id="leftBtn"></button>
+		</div>
+		<div id="rightBtnContainer" tabindex="13" aria-label="Switch tournament section">
+			<button id="rightBtn"></button>
+		</div>
 	</div>
 </div>
 `
 
 function leftSlideBtn(){
+	console.log(singleRoundDisplayIdx);
 	var contest = document.querySelector(".singleRoundDisplay");
 	if (!contest)
 		return
 	var left = contest.getBoundingClientRect().left;
+
+
+	if (singleRoundDisplayIdx <= 0)
+		return;
 
 	if (contest.getBoundingClientRect().left + getWindowWidth() <= 0){
 		singleRoundDisplayIdx -= 1;
@@ -129,10 +138,10 @@ function leftSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#leftBtn").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#leftBtn").onkeydown = null;
-		document.querySelector("#rightBtn").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#rightBtn").onkeydown = null;
+		document.querySelector("#leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#leftBtnContainer").onkeydown = null;
+		document.querySelector("#rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -150,19 +159,23 @@ function leftSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
-			document.querySelector("#leftBtn").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
-			document.querySelector("#rightBtn").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
 
 function rightSlideBtn(){
+	console.log(singleRoundDisplayIdx);
 	var contest = document.querySelector(".singleRoundDisplay");
 	if (!contest)
 		return
 	var left = contest.getBoundingClientRect().left;
+
+	if (singleRoundDisplayIdx >= 2)
+		return;
 
 	if (contest.getBoundingClientRect().left > -(getWindowWidth() * 2)){
 		singleRoundDisplayIdx += 1;
@@ -176,10 +189,10 @@ function rightSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#leftBtn").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#leftBtn").onkeydown = null;
-		document.querySelector("#rightBtn").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#rightBtn").onkeydown = null;
+		document.querySelector("#leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#leftBtnContainer").onkeydown = null;
+		document.querySelector("#rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -198,10 +211,10 @@ function rightSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
-			document.querySelector("#leftBtn").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
-			document.querySelector("#rightBtn").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -336,10 +349,10 @@ var tournament;
 		}
 	}
 
-	document.querySelector("#leftBtn").addEventListener("click", leftSlideBtn);
-	document.querySelector("#leftBtn").onkeydown = leftBtnKeydownEvent;
-	document.querySelector("#rightBtn").addEventListener("click", rightSlideBtn);
-	document.querySelector("#rightBtn").onkeydown = rightBtnKeydownEvent;
+	document.querySelector("#leftBtnContainer").addEventListener("click", leftSlideBtn);
+	document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
+	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 	game();
 }
 
@@ -445,17 +458,17 @@ function displayTournament(){
 			}
 		})
 	})
-	document.getElementById("leftBtn").onmousedown = function() {};
-	document.getElementById("leftBtn").onmouseup = function() {};
-	document.getElementById("rightBtn").onmousedown = function() {};
-	document.getElementById("rightBtn").onmouseup = function() {};
+	document.getElementById("leftBtnContainer").onmousedown = function() {};
+	document.getElementById("leftBtnContainer").onmouseup = function() {};
+	document.getElementById("rightBtnContainer").onmousedown = function() {};
+	document.getElementById("rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue();
 	if (playersCount == 8/* || 1*/){
 
-		document.getElementById("leftBtn").onclick = leftSlideBtn;
-		document.getElementById("rightBtn").onclick = rightSlideBtn;
-		document.getElementById("leftBtn").onkeydown = leftBtnKeydownEvent;
-		document.getElementById("rightBtn").onkeydown = rightBtnKeydownEvent;
+		document.getElementById("leftBtnContainer").onclick = leftSlideBtn;
+		document.getElementById("rightBtnContainer").onclick = rightSlideBtn;
+		document.getElementById("leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+		document.getElementById("rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 
 		document.querySelector("#lobby").style.setProperty("display", "none");
 		document.querySelector("#tournament").style.setProperty("display", "flex");
@@ -663,32 +676,34 @@ function game() {
 			var leftBtnInterval;
 			var rightBtnInterval;
 
-			document.getElementById("leftBtn").onclick = function() {};
-			document.getElementById("rightBtn").onclick = function() {};
-			document.getElementById("leftBtn").onpointerdown = function() {
+			document.getElementById("leftBtnContainer").onclick = function() {};
+			document.getElementById("leftBtnContainer").onkeydown = function() {};
+			document.getElementById("rightBtnContainer").onclick = function() {};
+			document.getElementById("rightBtnContainer").onkeydown = function() {};
+			document.getElementById("leftBtnContainer").onpointerdown = function() {
 				keysDown['KeyA'] = true;
 				leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 			};
-			document.getElementById("leftBtn").onpointerup = function() {
+			document.getElementById("leftBtnContainer").onpointerup = function() {
 				keysDown['KeyA'] = false;
 				gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 			};
 
-			document.getElementById("rightBtn").onpointerdown = function() {
+			document.getElementById("rightBtnContainer").onpointerdown = function() {
 				keysDown['KeyD'] = true;
 				rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 			};
-			document.getElementById("rightBtn").onpointerup = function() {
+			document.getElementById("rightBtnContainer").onpointerup = function() {
 				keysDown['KeyD'] = false;
 				gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 			};
 
-			document.getElementById("leftBtn").oncontextmenu = function(event) {
+			document.getElementById("leftBtnContainer").oncontextmenu = function(event) {
 				event.preventDefault();
 				event.stopPropagation();
 				return false;
 			};
-			document.getElementById("rightBtn").oncontextmenu = function(event) {
+			document.getElementById("rightBtnContainer").oncontextmenu = function(event) {
 				event.preventDefault();
 				event.stopPropagation();
 				return false;
