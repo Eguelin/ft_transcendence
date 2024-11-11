@@ -7,7 +7,7 @@ import random
 import math
 import time
 
-maxScore = 5
+maxScore = 1
 
 class Matchmaking():
 	_instance = None
@@ -401,6 +401,7 @@ class PlayerRemote(Player):
 		self.user = socket.scope['user']
 		self.input = {}
 		self.profile = None
+		self.inGame = False
 
 	def hasAndIsInput(self, keyName):
 		return (self.input.get(keyName) and self.input[keyName])
@@ -507,7 +508,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def disconnect(self, close_code):
 		Matchmaking().remove_PlayerRemote(self.player)
-		await Tournament().removePlayers(self.player)
+		await TournamentMaking().removePlayers(self.player)
 		self.player.socket = None
 
 	async def receive(self, text_data):
@@ -527,8 +528,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 			elif data['type'] == 'tournament':
 				self.player = PlayerRemote(self)
-				await Tournament().addPlayers(self.player)
-				await Tournament().run()
+				await TournamentMaking().addPlayers(self.player)
+				await TournamentMaking().run()
 				return
 
 			elif data['type'] == 'ai':
@@ -557,15 +558,16 @@ class GameConsumer(AsyncWebsocketConsumer):
 			'message': message
 		}))
 
-class Tournament():
+class TournamentMaking():
 	_instance = None
 
 	def __new__(cls):
 		if cls._instance is None:
-			cls._instance = super(Tournament, cls).__new__(cls)
+			cls._instance = super(TournamentMaking, cls).__new__(cls)
 			cls._instance.matches = [[GameTournament(cls._instance, match, round) for match in range(2**round)] for round in range(3)]
 			cls._instance.running = False
-			cls._instance.sendPlayers = []
+			cls._instance.players = []
+			cls._instance.tournament = None
 		return cls._instance
 
 	async def addPlayers(self, player):
@@ -577,8 +579,8 @@ class Tournament():
 					self.matches[-1][i].playerLeft = player
 				else:
 					self.matches[-1][i].playerRight = player
-				self.sendPlayers.append(player)
-				if len(self.sendPlayers) == len(self.matches[-1]) * 2:
+				self.players.append(player)
+				if len(self.players) == len(self.matches[-1]) * 2:
 					self.running = True
 				await player.init(None, None)
 				await self.send('tournament', self.getinfo())
@@ -593,7 +595,7 @@ class Tournament():
 					self.matches[-1][i].playerLeft = None
 				else:
 					self.matches[-1][i].playerRight = None
-				self.sendPlayers.remove(player)
+				self.players.remove(player)
 				await self.send('tournament', self.getinfo())
 				break
 
@@ -602,7 +604,7 @@ class Tournament():
 			return
 		for match in self.matches[-1]:
 			await match.start()
-		Tournament._instance = None
+		TournamentMaking._instance = None
 
 	async def moveWinner(self, round, match, winner):
 		await winner.init(None, None)
@@ -626,8 +628,9 @@ class Tournament():
 			await self.matches[round][match].start()
 
 	async def send(self, type, message):
-		for player in self.sendPlayers:
-			await player.send(type, message)
+		for player in self.players:
+			if not player.inGame:
+				await player.send(type, message)
 
 	def getinfo(self):
 		info = {}
@@ -638,24 +641,24 @@ class Tournament():
 		return info
 
 class GameTournament(GameRemote):
-	def __init__(self, tournament, match, round):
+	def __init__(self, tournamentMaking, match, round):
 		super().__init__(None, None)
-		self.tournament = tournament
+		self.tournamentMaking = tournamentMaking
 		self.match = match
 		self.round = round
 		self.winner = None
 
 	async def start(self):
-		self.tournament.sendPlayers.remove(self.playerLeft)
-		self.tournament.sendPlayers.remove(self.playerRight)
+		self.playerLeft.inGame = True
+		self.playerRight.inGame = True
 		await super().start()
 
 
 	async def end(self):
 		self.winner = 'left' if self.playerLeft.score == maxScore or not self.playerRight.socket else 'right'
 		winner = self.playerLeft if 'left' == self.winner else self.playerRight
-		self.tournament.sendPlayers.append(self.playerLeft)
-		self.tournament.sendPlayers.append(self.playerRight)
+		self.playerLeft.inGame = False
+		self.playerRight.inGame = False
 
 		if self.winner == 'left':
 			self.playerLeft = self.playerLeft.copy()
@@ -669,19 +672,19 @@ class GameTournament(GameRemote):
 		self.running = False
 
 		await asyncio.sleep(3)
-		await self.tournament.moveWinner(self.round - 1, self.match // 2, winner)
+		await self.tournamentMaking.moveWinner(self.round - 1, self.match // 2, winner)
 
 	def getMatch(self):
 		return {
 			'playerLeft': {
 				'username': self.playerLeft.user.username if self.playerLeft else None,
-				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft else None,
+				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft and self.playerLeft.profile else None,
 				'winner': self.winner == "left" if self.winner else None,
 				'score': self.playerLeft.score if self.playerLeft and self.winner else None
 			},
 			'playerRight': {
 				'username': self.playerRight.user.username if self.playerRight else None,
-				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight else None,
+				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight and self.playerRight.profile else None,
 				'winner': self.winner == "right" if self.winner else None,
 				'score': self.playerRight.score if self.playerRight and self.winner  else None
 			}
