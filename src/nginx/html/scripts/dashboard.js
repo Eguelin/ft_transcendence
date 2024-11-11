@@ -161,6 +161,10 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         chartAbs.destroy();
 	if (chartStats)
 		chartStats.destroy();
+
+	if (document.querySelector("#notPlayedPeriod"))
+		document.querySelector("#notPlayedPeriod").remove();
+
     var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)); 
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
@@ -217,313 +221,322 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         startDate.setDate(startDate.getDate() + 1);
     }
 
-    const totalDuration = (500 / LastXDaysDisplayed);
-    const delayBetweenPoints = totalDuration / nbMatch;
-    const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
-    const animation = {
-      x: {
-        type: 'number',
-        easing: 'linear',
-        duration: delayBetweenPoints,
-        from: NaN, // the point is initially skipped
-        delay(ctx) {
-          if (ctx.type !== 'data' || ctx.xStarted) {
-            return 0;
-          }
-          ctx.xStarted = true;
-          return ctx.index * delayBetweenPoints;
-        }
-      },
-      y: {
-        type: 'number',
-        easing: 'linear',
-        duration: delayBetweenPoints,
-        from: previousY,
-        delay(ctx) {
-          if (ctx.type !== 'data' || ctx.yStarted) {
-            return 0;
-          }
-          ctx.yStarted = true;
-          return ctx.index * delayBetweenPoints;
-        }
-      }
-    }
+	if (totalMatch){
 
-	function drawStats(){
-		data = {
-			datasets: [{
-					data: [totalWin, totalMatch - totalWin],
-					backgroundColor: ['green', 'red'],
-					borderWidth: 0
+		const totalDuration = (500 / LastXDaysDisplayed);
+		const delayBetweenPoints = totalDuration / nbMatch;
+		const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
+		const animation = {
+		  x: {
+			type: 'number',
+			easing: 'linear',
+			duration: delayBetweenPoints,
+			from: NaN, // the point is initially skipped
+			delay(ctx) {
+			  if (ctx.type !== 'data' || ctx.xStarted) {
+				return 0;
+			  }
+			  ctx.xStarted = true;
+			  return ctx.index * delayBetweenPoints;
+			}
+		  },
+		  y: {
+			type: 'number',
+			easing: 'linear',
+			duration: delayBetweenPoints,
+			from: previousY,
+			delay(ctx) {
+			  if (ctx.type !== 'data' || ctx.yStarted) {
+				return 0;
+			  }
+			  ctx.yStarted = true;
+			  return ctx.index * delayBetweenPoints;
+			}
+		  }
+		}
+	
+		function drawStats(){
+			data = {
+				datasets: [{
+						data: [totalWin, totalMatch - totalWin],
+						backgroundColor: ['green', 'red'],
+						borderWidth: 0
+					}
+				],
+				labels: [
+					client.langJson["dashboard"]["CVwin"], client.langJson["dashboard"]["CVloss"]
+				]
+			}
+			chartStats = new Chart(document.getElementById("userStatGraph"), {
+				type: 'pie',
+				data: data,
+				options:{
+					plugins: {
+						title: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							text: client.langJson["dashboard"]["CVuserStatsGraph"],
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+							},
+							display: true,
+						},
+						legend: {
+							labels: {
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+								},
+							}
+						}
+					},
 				}
-			],
-			labels: [
-				client.langJson["dashboard"]["CVwin"], client.langJson["dashboard"]["CVloss"]
+			});
+		};
+	
+		function drawAverage(){
+			datasets = [
+				{
+					label: username,
+					data: mapAverage,
+					fill: false,
+					tension: 0,
+					borderColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
+					},
+					borderWidth: lineWidth,
+					pointBackgroundColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
+					},
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true,
+				}
 			]
-		}
-		chartStats = new Chart(document.getElementById("userStatGraph"), {
-			type: 'pie',
-			data: data,
-			options:{
-				plugins: {
-					title: {
-						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-						text: client.langJson["dashboard"]["CVuserStatsGraph"],
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-						},
-						display: true,
-					},
-					legend: {
-						labels: {
-							font: {
-								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-							},
-						}
-					}
-				},
+		
+			if (username != clientUsername){
+				datasets.push({
+					label: client.langJson["dashboard"]["CVwinLossGraphClient"],
+					data: clientMapAverage,
+					fill: false,
+					tension: 0,
+					borderColor: "grey",
+					borderWidth: lineWidth,
+					pointBackgroundColor: "grey",
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true
+				})
 			}
-		});
-	};
-
-	function drawAverage(){
-		datasets = [
-			{
-				label: username,
-				data: mapAverage,
-				fill: false,
-				tension: 0,
-				borderColor: function(context){
-					const chart = context.chart;
-					const {ctx, chartArea} = chart;
-	
-					if (!chartArea)
-						return ;
-					return (getGradient(ctx, chartArea));
+		
+			chartAverage = new Chart(document.getElementById("winLossGraph"), {
+				type: 'line',
+				data: {
+					datasets: datasets
 				},
-				borderWidth: lineWidth,
-				pointBackgroundColor: function(context){
-					const chart = context.chart;
-					const {ctx, chartArea} = chart;
-	
-					if (!chartArea)
-						return ;
-					return (getGradient(ctx, chartArea));
-				},
-				pointBorderWidth: 0,
-				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
-				pointStyle: 'circle',
-				borderJoinStyle: 'round',
-				spanGaps: true,
-			}
-		]
-	
-		if (username != clientUsername){
-			datasets.push({
-				label: client.langJson["dashboard"]["CVwinLossGraphClient"],
-				data: clientMapAverage,
-				fill: false,
-				tension: 0,
-				borderColor: "grey",
-				borderWidth: lineWidth,
-				pointBackgroundColor: "grey",
-				pointBorderWidth: 0,
-				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
-				pointStyle: 'circle',
-				borderJoinStyle: 'round',
-				spanGaps: true
-			})
-		}
-	
-		chartAverage = new Chart(document.getElementById("winLossGraph"), {
-			type: 'line',
-			data: {
-				datasets: datasets
-			},
-			options:{
-				animation,
-				parsing: {
-					xAxisKey: 'date',
-					yAxisKey: 'result'
-				},
-				plugins: {
-					title: {
-						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-						text: client.langJson["dashboard"]["CVwinLossGraph"],
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-						},
-						display: true,
+				options:{
+					animation,
+					parsing: {
+						xAxisKey: 'date',
+						yAxisKey: 'result'
 					},
-					legend: {
-						labels: {
+					plugins: {
+						title: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							text: client.langJson["dashboard"]["CVwinLossGraph"],
 							font: {
 								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
 							},
+							display: true,
+						},
+						legend: {
+							labels: {
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+								},
+							}
 						}
-					}
-				},
-				scales: {
-					y: {
-						ticks: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							font: {
-								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
-							},
-						},
-						grid: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth:graphLineWidth,
-							drawTicks: false,
-						},
-						min: 0,
-						max: 100,
 					},
-					x: {
-						ticks: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							font: {
-								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+					scales: {
+						y: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
 							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+								drawTicks: false,
+							},
+							min: 0,
+							max: 100,
 						},
-						grid: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth:graphLineWidth,
+						x: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
+							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+							}
 						}
 					}
 				}
-			}
-		});
-	
-	}
-
-	function drawAbs(){
-		datasets = [
-			{
-				label: username,
-				data: mapAbs,
-				fill: false,
-				tension: 0,
-				borderColor: function(context){
-					const chart = context.chart;
-					const {ctx, chartArea} = chart;
-	
-					if (!chartArea)
-						return ;
-					return (getGradient(ctx, chartArea));
-				},
-				borderWidth: lineWidth,
-				pointBackgroundColor: function(context){
-					const chart = context.chart;
-					const {ctx, chartArea} = chart;
-	
-					if (!chartArea)
-						return ;
-					return (getGradient(ctx, chartArea));
-				},
-				pointBorderWidth: 0,
-				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
-				pointStyle: 'circle',
-				borderJoinStyle: 'round',
-				spanGaps: true
-			}
-		]
-	
-		if (username != clientUsername){
-			datasets.push({
-				label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
-				data: clientMapAbs,
-				fill: false,
-				tension: 0,
-				borderColor: "grey",
-				borderWidth: lineWidth,
-				pointBackgroundColor: "grey",
-				pointBorderWidth: 0,
-				pointhitRadius: 4,
-				pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
-				pointStyle: 'circle',
-				borderJoinStyle: 'round',
-				spanGaps: true
-			})
+			});
+		
 		}
 	
-		chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
-			type: 'line',
-			data: {
-				datasets: datasets
-			},
-			options:{
-				animation,
-				parsing: {
-					xAxisKey: 'date',
-					yAxisKey: 'result'
-				},
-				plugins: {
-					title: {
-						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-						},
-						text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
-						display: true,
-	
+		function drawAbs(){
+			datasets = [
+				{
+					label: username,
+					data: mapAbs,
+					fill: false,
+					tension: 0,
+					borderColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
 					},
-					legend: {
-						labels: {
-							font: {
-								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-							},
-						}
-					}
+					borderWidth: lineWidth,
+					pointBackgroundColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
+					},
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true
+				}
+			]
+		
+			if (username != clientUsername){
+				datasets.push({
+					label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
+					data: clientMapAbs,
+					fill: false,
+					tension: 0,
+					borderColor: "grey",
+					borderWidth: lineWidth,
+					pointBackgroundColor: "grey",
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true
+				})
+			}
+		
+			chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
+				type: 'line',
+				data: {
+					datasets: datasets
 				},
-				scales: {
-					y: {
-						ticks: {
+				options:{
+					animation,
+					parsing: {
+						xAxisKey: 'date',
+						yAxisKey: 'result'
+					},
+					plugins: {
+						title: {
 							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 							font: {
 								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
 							},
+							text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
+							display: true,
+		
 						},
-						grid: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth:graphLineWidth,
-							drawTicks: false,
+						legend: {
+							labels: {
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+								},
+							}
 						}
 					},
-					x: {
-						ticks: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							font: {
-								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+					scales: {
+						y: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
 							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+								drawTicks: false,
+							}
 						},
-						grid: {
-							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-							lineWidth:graphLineWidth,
+						x: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
+							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+							}
 						}
 					}
 				}
-			}
-		});
+			});
+		
+		}
 	
+		drawStats();
+		drawAverage();
+		drawAbs();
 	}
-
-	drawStats();
-	drawAverage();
-	drawAbs();
+	else{
+		var tmp = document.createElement("a");
+		tmp.id = 'notPlayedPeriod';
+		tmp.innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("USER", username);
+		document.getElementById("pageContentContainer").appendChild(tmp);
+	}
 }
 
 function loadUserDashboard(startDate, endDate){
