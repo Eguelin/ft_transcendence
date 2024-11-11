@@ -93,8 +93,8 @@
 }
 
 .acceptRequestBtn, .rejectRequestBtn{
-	height:3.5vw;
-	width:3.5vw;
+	height:3.5rem;
+	width:3.5rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -303,6 +303,10 @@
 	left: 0;
 }
 
+.gradient{
+	display: none;
+}
+
 /* Mobile */
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
@@ -314,10 +318,77 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 	#friendSlideSelector{
 		width: 100vw;
+		z-index: 20;
 	}
 	.friendSlide{
-		width: 90vw;
-		left: 0;
-		translate: 0;
+		width: 50vw;
+		display: flex;
+		flex-direction: column;
+		gap: 2ch;
+		background: none;
+		border: none;
+	}
+
+	.gradient, .endGradient{
+		display: block;
+		position: absolute;
+		height: 2rem;
+		width: 100vw;
+		top: -.2rem;
+		background: linear-gradient(0deg, transparent 0%, var(--page-bg-rgb) 100%);
+		z-index: 10;
+	}
+
+	.endGradient {
+		top: unset;
+		background: linear-gradient(180deg, transparent 0%, var(--page-bg-rgb) 100%);
+		bottom: 0;
+	}
+
+	#friendSlides > *{
+		height: 75vh;
+		overflow-y: scroll;
+		margin: 0;
+	}
+
+	.friendContainer{
+		flex-direction: column;
+		gap: 1ch;
+		background: var(--hover-text-rgb);
+		border: 3px solid var(--main-text-rgb);
+		border-radius: 1rem;
+		overflow: hidden;
+	}
+
+	.friendContainer .pfpContainer{
+		width: 50vw;
+		height: 50vw;
+	}
+
+	.friendContainer a{
+		text-align: center;
+	}
+
+	.friendContainer .moreBtn{
+		display: none;
+	}
+
+	.friendContainer .friendsOptionContainer{
+		width: 100%;
+		margin: .5rem 0;
+	}
+
+	.friendContainer .friendsOption{
+		display: flex;
+		width: inherit;
+	}
+
+	.friendContainer .friendsOption div{
+		margin: 0;
+		flex: 1;
+	}
+
+	.friendSlide .friendContainer:first-child .pfpContainer, .friendSlide .friendContainer:last-child .pfpContainer, .friendSlide .friendContainer:only-child .pfpContainer{
+		border-radius: 0;
 	}
 }
