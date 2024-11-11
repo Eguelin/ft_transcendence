@@ -17,6 +17,8 @@ services:
     build: src/nginx/
     image: nginx
     container_name: nginx
+    env_file:
+      - .env
     volumes:
       - ./src/nginx/html:/usr/share/nginx/html
       - images:/images

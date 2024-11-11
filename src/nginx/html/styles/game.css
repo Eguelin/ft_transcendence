@@ -7,7 +7,13 @@ only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
 only screen and (                min-resolution: 192dpi) and (min-width: 320px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
 	#controler{
-		display: block !important;
+		display: flex !important;
+	}
+
+	#controler > div{
+		flex: 1;
+		height: 100%;
+		align-content: center;
 	}
 }
 
@@ -332,7 +338,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	right: 0;
 }
 
-#controler #leftBtn:focus, #controler #rightBtn:focus, #controler #leftBtn:hover, #controler #rightBtn:hover{
+#controler > div{
+	outline: none;
+}
+
+#controler #leftBtnContainer:focus #leftBtn, #controler #rightBtnContainer:focus #rightBtn, #controler #leftBtnContainer:hover #leftBtn, #controler #rightBtnContainer:hover #rightBtn{
 	background: var(--page-bg-rgb);
 }
 

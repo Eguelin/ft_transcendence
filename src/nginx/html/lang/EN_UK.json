@@ -97,7 +97,9 @@
 		"aria.unblockBtn" : "Unlock user",
 		"ariaAll.friendsOptionContainer" : "friend options",
 		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
-		"ariaBlocked.friendsOptionContainer" : "blocked user options"
+		"ariaBlocked.friendsOptionContainer" : "blocked user options",
+		"incoming pending request" : "Incoming friend request from USER",
+		"error sending request" : "Couldn't send friend request."
 
 	},
 	"user":{
@@ -134,8 +136,8 @@
 		"aria#lastYearSelection" : "Display stats from the last year"
 	},
 	"search": {
-		"#title" : "Search",
-		"#subtitle" : "",
+		"#title" : "",
+		"#subtitle" : "Search",
 		"aria.userResume" : "profile redirection"
 	},
 	"game":{

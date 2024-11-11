@@ -1,17 +1,11 @@
 var playBtn;
 
 var template = `
-<div id="pageContentContainer">
-	<div class="options">
+<div id="pageContentContainer" class="home">
+	<div id="homeButtonsContainer">
 		<button id="playBtn1v1" tabindex="12">Play</button>
-	</div>
-	<div class="options">
 		<button id="playBtnLocal" tabindex="12">Play</button>
-	</div>
-	<div class="options">
 		<button id="playBtnAI" tabindex="12">Play</button>
-	</div>
-	<div class="options">
 		<button id="playTournament" tabindex="13">Play</button>
 	</div>
     <div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
