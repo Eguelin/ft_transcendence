@@ -12,7 +12,7 @@ var slideSelector;
 var friendSlideIdx = 0;
 var slides;
 
-const baseTabIdx = 15;
+var baseTabIdx = 15;
 
 var template = `
 <div id="friendInfo">
@@ -476,6 +476,7 @@ function checkUpdate(){
 		.then(response => {
 			if (response.ok) {
 				(response.json()).then((text) => {
+					baseTabIdx = 15;
 					switchTheme(text.theme_name);
 					currentLang = text.lang;
 					allFriendListContainer.innerText = "";

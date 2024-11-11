@@ -257,7 +257,11 @@
 
 #friendInfo .slideSelector:hover, #friendInfo .slideSelector:focus{
 	outline: none;
-	scale: 1.1;
+	color: var(--hover-text-rgb);
+}
+
+.activeSelector{
+	color: var(--main-text-rgb) !important;
 }
 
 
