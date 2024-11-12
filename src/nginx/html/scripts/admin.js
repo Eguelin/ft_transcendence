@@ -1,5 +1,5 @@
 var template = `
-<div id="pageContentContainer">
+<div id="pageContentContainer" class="admin">
     <div style="display: flex; flex-direction: column; gap: 3ch;">
         <div style="display: flex;">
             <input id="createUserUsername" type="text" placeholder="name">
