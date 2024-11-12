@@ -113,6 +113,7 @@
 		".victory" : "VICTORY",
 		".loss" : "LOST",
 		".draw" : "DRAW",
+		".tournament" : "TOURNAMENT",
 		"ariaP1.matchDescContainer" : "match against",
 		"ariaP2.matchDescContainer" : "on the",
 		"aria.resultScoreName" : "profile redirection"
