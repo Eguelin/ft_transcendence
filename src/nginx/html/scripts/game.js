@@ -243,7 +243,7 @@ var tournament;
 	playerTwoScore = document.querySelector("#playerTwo > .playerScore");
 
 	tmp_contest = {
-		"round_1": {
+		"round_0": {
 			"match_0": {
 				"playerLeft": {
 					"username": "elise",
@@ -301,7 +301,7 @@ var tournament;
 				}
 			}
 		},
-		"round_2": {
+		"round_1": {
 			"match_0": {
 				"playerLeft": {
 					"username": "elise",
@@ -331,7 +331,7 @@ var tournament;
 				}
 			}
 		},
-		"round_3": {
+		"round_2": {
 			"match_0": {
 				"playerLeft": {
 					"username": "elise",
@@ -378,9 +378,9 @@ function getWindowHeight() {
 
 function setTournamentTreeValue(){
 	const positionMap = {
-		"round_1" : ".contestMatchResume.quarter",
-		"round_2" : ".contestMatchResume.semi",
-		"round_3" : ".contestMatchResume.final",
+		"round_0" : ".contestMatchResume.quarter",
+		"round_1" : ".contestMatchResume.semi",
+		"round_2" : ".contestMatchResume.final",
 
 		"match_0": ".match.one",
 		"match_1": ".match.two",
@@ -396,7 +396,7 @@ function setTournamentTreeValue(){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
 				if (tournament[round][matchNumber][player]['username']){
-					if (round == "round_1")
+					if (round == "round_0")
 						players += 1;
 					document.querySelector(`${selector} .username`).classList.remove("waiting");
 					document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
@@ -425,10 +425,10 @@ function switchTournamentDisplay(){
 }
 
 function checkTournementRound(){
-	if (tournament["round_3"]["match_0"]["playerLeft"]["username"] || tournament["round_3"]["match_0"]["playerRight"]["username"]){
+	if (tournament["round_2"]["match_0"]["playerLeft"]["username"] || tournament["round_2"]["match_0"]["playerRight"]["username"]){
 		singleRoundDisplayIdx = 2;
 	}
-	else if (tournament["round_2"]["match_0"]["playerLeft"]["username"] || tournament["round_2"]["match_0"]["playerRight"]["username"] || tournament["round_2"]["match_1"]["playerLeft"]["username"] || tournament["round_2"]["match_1"]["playerRight"]["username"]){
+	else if (tournament["round_1"]["match_0"]["playerLeft"]["username"] || tournament["round_1"]["match_0"]["playerRight"]["username"] || tournament["round_1"]["match_1"]["playerLeft"]["username"] || tournament["round_1"]["match_1"]["playerRight"]["username"]){
 		singleRoundDisplayIdx = 1;
 	}
 
@@ -451,9 +451,9 @@ function displayTournament(){
 		elem.classList.remove("winner");
 	})
 	var playersCount = 0;
-	Object.keys(tournament['round_1']).forEach(function(matchNumber){
-		Object.keys(tournament['round_1'][matchNumber]).forEach(function(player){
-			if (tournament['round_1'][matchNumber][player]['username']){
+	Object.keys(tournament['round_0']).forEach(function(matchNumber){
+		Object.keys(tournament['round_0'][matchNumber]).forEach(function(player){
+			if (tournament['round_0'][matchNumber][player]['username']){
 					playersCount += 1;
 			}
 		})
@@ -585,12 +585,12 @@ function displayTournament(){
 		document.querySelector("#tournament").style.setProperty("display", "none");
 		var idx = 0;
 		lobbyPlayerElem = document.querySelectorAll(".lobbyPlayer");
-		Object.keys(tournament["round_1"]).forEach(function(matchNumber){
-			Object.keys(tournament["round_1"][matchNumber]).forEach(function(player){
-				if (tournament["round_1"][matchNumber][player]['username']){
-					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_1"][matchNumber][player]['username'];
-					if (lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp").src != tournament["round_1"][matchNumber][player]['profile_picture'])
-						addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament["round_1"][matchNumber][player]['profile_picture']);
+		Object.keys(tournament["round_0"]).forEach(function(matchNumber){
+			Object.keys(tournament["round_0"][matchNumber]).forEach(function(player){
+				if (tournament["round_0"][matchNumber][player]['username']){
+					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_0"][matchNumber][player]['username'];
+					if (lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp").src != tournament["round_0"][matchNumber][player]['profile_picture'])
+						addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament["round_0"][matchNumber][player]['profile_picture']);
 				}
 				else{
 					lobbyPlayerElem[idx].querySelector(".username").innerText = "";
@@ -655,6 +655,7 @@ function game() {
 
 	socket.onmessage = function(event) {
 		let data = JSON.parse(event.data);
+		console.log(data);
 		if (data.type === "error"){
 			popUpError(data.message);
 			cleanup();
