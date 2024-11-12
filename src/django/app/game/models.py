@@ -72,40 +72,32 @@ class Match(models.Model):
 
 	objects = MatchManager()
 
-
-class TournamentManager(models.Manager):
-	def createTournament(self, players : list):
-		tournament = self.create()
-		tournament.date = datetime.datetime.now()
-		for player in players:
-			tournament.players.add(player)
-		tournament.save()
-		return tournament
-
-	def addMatchToTournament(self, game):
-		match = TournamentMatch()
-		match.player_one = game.playerLeft.user
-		match.player_two = game.playerRight.user
-		match.player_one_pts = game.playerLeft.score
-		match.player_two_pts = game.playerRight.score
-		match.date = datetime.datetime.now()
-		match.winner = game.winner.user
-		match.round = game.round
-		match.match = game.match
-		match.save()
-		game.tournamentMaking.tournament.matches.add(match)
-		game.tournamentMaking.tournament.save()
-
-	def save(self):
-		super().save()
-
-class Tournament(models.Model):
+class TournamentModel(models.Model):
 	date = models.DateField(auto_now=False, auto_now_add=True)
-	players = models.ManyToManyField(User, related_name="players")
 	matches = models.ManyToManyField(Match, related_name="matches")
 
-	objects = TournamentManager()
+	def __init__(self):
+		super().__init__()
+		self.date = datetime.datetime.now()
+		self.save()
+
+	def addMatchToTournament(self, game):
+		self.matches.add(TournamentMatch(game))
+		self.save()
+
 
 class TournamentMatch(Match):
 	round = models.IntegerField(default=0)
 	match = models.IntegerField(default=0)
+
+	def __init__(self, game):
+		super().__init__()
+		self.player_one = game.playerLeft.user
+		self.player_two = game.playerRight.user
+		self.player_one_pts = game.playerLeft.score
+		self.player_two_pts = game.playerRight.score
+		self.date = datetime.datetime.now()
+		self.winner = game.winner.user
+		self.round = game.round
+		self.match = game.match
+		self.save()
