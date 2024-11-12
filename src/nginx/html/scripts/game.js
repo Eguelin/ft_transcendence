@@ -889,6 +889,8 @@ function game() {
 		window.removeEventListener("click", clickExitEventListener);
 		if (document.querySelector("#countdownContainer"))
 			document.querySelector("#countdownContainer").remove();
+		if (document.querySelector("#winContainer"))
+			document.querySelector("#winContainer").remove();
 		clearInterval(displayInterval);
 		socket.close();
 	}
