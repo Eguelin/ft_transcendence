@@ -320,7 +320,7 @@ def profile_update(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-def get_all_user_match_json(matches):
+def get_all_user_match_json(matches, tournaments):
 	matches_json = {}
 	year_json = {}
 	month_json = {}
@@ -330,6 +330,30 @@ def get_all_user_match_json(matches):
 	month = ""
 	day = ""
 	i = 0
+
+	for tournament in tournaments:
+		if (dateObj != match.date):
+			if (year != ""):
+				if (year != match.date.year):
+					matches_json["{0}".format(year)] = year_json
+					year_json = {}
+				if (month != match.date.month):
+					year_json["{0}".format(month)] = month_json
+					month_json = {}
+				if (day != match.date.day):
+					month_json["{0}".format(day)] = date_json
+			dateObj = match.date
+			year = dateObj.year
+			month = dateObj.month
+			day = dateObj.day
+			date_json = {}
+			i = 0
+		matches_json[i] = {
+			'type' : 'tournament',
+			'id' : tournament.pk,
+			'date' : match.date,
+		}
+		i += 1
 	for match in matches:
 		if (dateObj != match.date):
 			if (year != ""):
@@ -356,6 +380,8 @@ def get_all_user_match_json(matches):
 			p2_name = match.player_two.username
 		except:
 			p2_name = "deleted"
+		while (i in date_json):
+			i += 1
 		date_json[i] = {
 			'player_one' : p1_name,
 			'player_two' : p2_name,
@@ -371,10 +397,17 @@ def get_all_user_match_json(matches):
 		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
-def get_user_match(matches):
+def get_user_match(matches, tournaments):
 	matches_json = {}
 	date = ""
 	i = 0
+	for tournament in tournaments:
+		matches_json[i] = {
+			'type' : 'tournament',
+			'id' : tournament.pk,
+			'date' : match.date,
+		}
+		i += 1
 	for match in matches:
 		try:
 			p1_name = match.player_one.username
@@ -386,6 +419,8 @@ def get_user_match(matches):
 		except:
 			p2_name = "deleted"
 		matches_json[i] = {
+			'type' : 'match',
+			'id' : match.pk,
 			'player_one' : p1_name,
 			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
@@ -398,7 +433,7 @@ def get_user_match(matches):
 
 
 def get_user_json(user, startDate, endDate):
-	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
+	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)), user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)))
 	return {'username' : user.username,
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
@@ -429,7 +464,7 @@ def current_user(request):
 		for e in blocked_list:
 			blocked_json[e.username] = get_user_preview_json(e)
 
-		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()))
+		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()), request.user.profile.tournaments.filter(date=datetime.date.today()))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'use_browser_theme': request.user.profile.use_browser_theme,
@@ -458,7 +493,7 @@ def get(request):
 		except User.DoesNotExist:
 			return JsonResponse({'message': "can't find user"}, status=404)
 		except Exception as error:
-			return JsonResponse({'message': "can't find user"}, status=500)
+			return JsonResponse({'message': error}, status=500)
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 

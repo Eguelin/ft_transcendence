@@ -19,8 +19,7 @@ class friend(AsyncWebsocketConsumer):
 
 	async def disconnect(self, close_code):
 		if self.user.is_authenticated:
-			await self.channel_layer.group_discard
-			(
+			await self.channel_layer.group_discard(
 				self.group_name,
 				self.channel_name
 			)
