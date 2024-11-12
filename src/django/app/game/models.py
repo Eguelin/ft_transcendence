@@ -78,7 +78,7 @@ class TournamentModel(models.Model):
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	matches = models.ManyToManyField(Match, related_name="matches")
 
-	def __init__(self):
+	def __init__(self, *args, **kwargs):
 		super().__init__()
 		self.date = datetime.datetime.now()
 		self.save()
