@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json, os, requests, base64, random, string, subprocess, datetime
 import login.models as customModels
+import game.models as gameModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 import json, os, requests, base64, random, datetime, zxcvbn, re, io
@@ -534,6 +535,137 @@ def get_user_id(request):
 
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'User not found'}, status=404)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+def get_tournament(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+	try:
+		data = json.loads(request.body)
+		tournament = gameModels.TournamentModel.objects.get(pk=data.get("id"))
+		tournamentJson = {
+			"round_0" : {
+				"match_0" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_1" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_2" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_3" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				}
+			},
+			"round_1" : {
+				"match_0" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_1" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				}
+			},
+			"round_2" : {
+				"match_0" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				}
+			}
+		}
+		for match in tournament.matches.all():
+			
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = match.player_one.username
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = match.player_one.profile.profile_picture
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winner.username == match.player_one.username else None
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["score"] = match.player_one_pts
+
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["username"] = match.player_two.username
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = match.player_two.profile.profile_picture
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winner.username == match.player_two.username else None
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["score"] = match.player_two_pts
+		return JsonResponse(tournamentJson, status=200)
+#	except gameModels.DoesNotExist:
+#		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)

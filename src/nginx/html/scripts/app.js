@@ -699,49 +699,61 @@ function createMatchResumeContainer(match, username) {
 
 	date = ft_create_element("a", {"class" : "matchDescContainerDate", "innerText" : match.date});
 
-	scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
-	scoreUser = ft_create_element("div", {"class" : "resultScore"});
-	scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
-
-	scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two});
-	scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
-
-	scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
-	scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
-
-	if (scoreUserName.innerText == "deleted")
-		scoreUserName.classList.add("deletedUser");
-	else
-		scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
-
-
-	if (scoreOpponentName.innerText == "deleted")
-		scoreOpponentName.classList.add("deletedUser");
-	else
-		scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
-
-	scoreUser.appendChild(scoreUserName);
-	scoreUser.innerHTML += " : ";
-	scoreUser.appendChild(scoreUserScore);
-
-	scoreOpponent.appendChild(scoreOpponentName);
-	scoreOpponent.innerHTML += " : ";
-	scoreOpponent.appendChild(scoreOpponentScore);
-	if (username == match.winner){
-		result.classList.add("victory");
-		result.innerHTML = client.langJson['user']['.victory'];
+	if (match.type == 'match'){
+		scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
+		scoreUser = ft_create_element("div", {"class" : "resultScore"});
+		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
+	
+		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
+	
+		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentName.innerText += ":"
+		scoreUserName.innerText += ":"
+	
+		if (scoreUserName.innerText == "deleted")
+			scoreUserName.classList.add("deletedUser");
+		else
+			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+	
+	
+		if (scoreOpponentName.innerText == "deleted")
+			scoreOpponentName.classList.add("deletedUser");
+		else
+			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
+	
+		scoreUser.appendChild(scoreUserName);
+		scoreUser.appendChild(scoreUserScore);
+	
+		scoreOpponent.appendChild(scoreOpponentName);
+		scoreOpponent.appendChild(scoreOpponentScore);
+		if (username == match.winner){
+			result.classList.add("victory");
+			result.innerHTML = client.langJson['user']['.victory'];
+		}
+		else {
+			result.classList.add("loss");
+			result.innerHTML = client.langJson['user']['.loss'];
+		}
+		//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
+	
+		scoreContainer.appendChild(scoreUser);
+		scoreContainer.appendChild(scoreOpponent);
+	
+		matchContainer.appendChild(result);
+		matchContainer.appendChild(scoreContainer);
 	}
-	else {
-		result.classList.add("loss");
-		result.innerHTML = client.langJson['user']['.loss'];
+	else if (match.type == "tournament"){
+		result.classList.add("tournament");
+		result.innerHTML = client.langJson['user']['.tournament'];
+
+		result.href = `tournament?id=${match.id}`;
+
+		matchContainer.appendChild(result);
 	}
-	//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
-
-	scoreContainer.appendChild(scoreUser);
-	scoreContainer.appendChild(scoreOpponent);
-
-	matchContainer.appendChild(result);
-	matchContainer.appendChild(scoreContainer);
+	else
+		return ;
 	matchContainer.appendChild(date);
 	return (matchContainer);
 }
@@ -750,15 +762,17 @@ async function updateUserAriaLabel(key, content){
 	if (key.startsWith("P1")){
 		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
 			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
-			if (status.classList.contains("victory"))
-				status = client.langJson['user']['.victory'];
-			else if (status.classList.contains("loss"))
-				status = client.langJson['user']['.loss'];
-			else
-				status = client.langJson['user']['.draw'];
-			var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
-			var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-			elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+			if (!status.classList.contains("tournament")){
+				if (status.classList.contains("victory"))
+					status = client.langJson['user']['.victory'];
+				else if (status.classList.contains("loss"))
+					status = client.langJson['user']['.loss'];
+				else
+					status = client.langJson['user']['.draw'];
+				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
+				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
+				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+			}
 		})
 	}
 	else{
@@ -910,6 +924,10 @@ window.addEventListener("click", (e) => {
 	}
 	if (e.target.closest(".notifReject, .notifAccept")){
 		e.target.closest(".notifContainer").remove();
+	}
+	if (e.target.classList.contains("tournament")){
+		e.preventDefault();
+		myPushState(`${e.target.href}`);
 	}
 })
 

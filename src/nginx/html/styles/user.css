@@ -55,11 +55,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	background: var(--input-bg-rgb);
 	min-height: min-content;
 	border: .5px solid var(--page-bg-rgb);
-	flex: auto;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	padding: 1vh 0;
 	color: var(--main-text-rgb);
+	justify-content: space-between;
 }
 
 .matchDescContainerScore{
@@ -83,6 +84,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 }
 
 .resultScoreName{
+	width: 16ch;
 	text-align: left;
 }
 
@@ -414,4 +416,9 @@ only screen and (max-width:920px){
     width: max-content;
 	max-width: -moz-available;
 	max-width: -webkit-fill-available;
+}
+
+.matchDescContainer .matchDescContainerResult.tournament{
+	width: fit-content;
+	align-self: center;
 }
