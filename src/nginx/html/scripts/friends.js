@@ -1,7 +1,6 @@
 var deleteRequestPopup;
 var blockFriendPopup;
 var popupBg;
-var sendFriendRequestBtn;
 var allFriendListContainer;
 var onlineFriendListContainer;
 var pendingFriendRequestListContainer;
@@ -36,41 +35,43 @@ var template = `
 		<div id="slideSelectorBg"></div>
 	</div>
 
-	<div id="friendSlides">
-		<div>
-			<div class="gradient"></div>
-			<div id="onlineFriendList" class="friendSlide"></div>
-			<div class="endGradient"></div>
+	<div id="friendSlidesContainer">
+		<div id="friendSlides" style="left: 0vw;">
+			<div>
+				<div class="gradient"></div>
+				<div id="onlineFriendList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
+			<div>
+				<div class="gradient"></div>
+				<div id="allFriendList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
+			<div>
+				<div class="gradient"></div>
+				<div id="pendingFriendRequestList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
+			<div>
+				<div class="gradient"></div>
+				<div id="blockedList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
 		</div>
-		<div>
-			<div class="gradient"></div>
-			<div id="allFriendList" class="friendSlide"></div>
-			<div class="endGradient"></div>
+		<div style="z-index: 21;">
+			<div id="popupBg" style="display: none;"></div>
+			<div id="deleteFriendPopup">
+				<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
+				<button id="confirmDelete" aria-label="Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+			</div>
+			<div id="blockFriendPopup">
+				<a id="confirmBlockQuestion">Are you sure you want to block this friend</a>
+				<button id="confirmBlock" aria-label="Are you sure you want to block this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+			</div>
 		</div>
-		<div>
-			<div class="gradient"></div>
-			<div id="pendingFriendRequestList" class="friendSlide"></div>
-			<div class="endGradient"></div>
-		</div>
-		<div>
-			<div class="gradient"></div>
-			<div id="blockedList" class="friendSlide"></div>
-			<div class="endGradient"></div>
-		</div>
-	<div>
-
-</div>
-<div style="z-index: 1;">
-	<div id="popupBg" style="display: none;"></div>
-	<div id="deleteFriendPopup">
-		<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
-		<button id="confirmDelete" aria-label="Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
-	</div>
-	<div id="blockFriendPopup">
-		<a id="confirmBlockQuestion">Are you sure you want to block this friend</a>
-		<button id="confirmBlock" aria-label="Are you sure you want to block this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
 	</div>
 </div>`
+
 
 {	
 	document.getElementById("container").innerHTML = template;
@@ -79,7 +80,6 @@ var template = `
 	deleteRequestPopup = document.getElementById("deleteRequestPopup");
 	blockFriendPopup = document.getElementById("blockFriendPopup");
 	popupBg = document.getElementById("popupBg");
-	sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 	allFriendListContainer = document.getElementById("allFriendList");
 	onlineFriendListContainer = document.getElementById("onlineFriendList");
 	pendingFriendRequestListContainer = document.getElementById("pendingFriendRequestList");

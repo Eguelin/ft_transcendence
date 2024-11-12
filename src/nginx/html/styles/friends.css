@@ -7,10 +7,7 @@
 	min-width: -moz-available;
 	width: 100vw;
 	align-items: center;
-}
-
-#friendInfo span{
-	color: var(--main-text-rgb);
+	gap: 1rem;
 }
 
 #friendSlides{
@@ -18,7 +15,6 @@
 	flex-direction: row;
 	position: fixed;
 	width: 100vw;
-	top: 25vh;
 }
 
 #friendSlides > *{
@@ -26,28 +22,11 @@
 	flex: none;
 }
 
-#sendFriendRequestBtn {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	padding: 1.5rem;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-	font-size: 1rem;
-	width: fit-content;
-	height: fit-content;
-	align-self: center;
+#friendSlidesContainer{
+	position: relative;
 }
 
-#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
-	color: var(--page-bg-rgb);
-	border-color: var(--page-bg-rgb);
-	outline: none;
-}
-
-#deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup{
+#deleteFriendPopup, #blockFriendPopup{
 	background: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	position: fixed;
@@ -69,6 +48,7 @@
 	width: 100vw;
 	height: 100vh;
 	top: 0;
+	left: 0;
 	background-color: black;
 	opacity: 0.5;
 	display: none;
@@ -153,10 +133,6 @@
 	flex: none;
 }
 
-#pendingFriendRequestList .friendContainer .friendsOptionContainer {
-    display: flex;
-}
-
 .activeListSelector .moreBtn{
 	display: none;
 }
@@ -187,12 +163,12 @@
 	text-align: center;
 	background-color: red;
 	color: var(--main-text-rgb);
-	font-weight: thin;
 	font-family: "pong";
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
+	font-size: 2rem;
 }
 
 #confirmDelete:hover, #confirmDelete:focus, #confirmBlock:hover, #confirmBlock:focus {
@@ -207,7 +183,7 @@
 	width: fit-content;
 	min-width: 50vw;
 	height: 3rem;
-	position: absolute;
+	position: relative;
 }
 #friendSlideSelector .slideSelector{
 	flex: 1;
@@ -309,12 +285,12 @@
 
 /* Mobile */
 @media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (                min-resolution: 192dpi) and (min-width: 320px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (max-width: 320px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (max-width: 320px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (max-width: 320px),
+only screen and (        min-device-pixel-ratio: 2)      and (max-width: 320px),
+only screen and (                min-resolution: 192dpi) and (max-width: 320px),
+only screen and (                min-resolution: 2dppx)  and (max-width: 320px) { 
 
 	#friendSlideSelector{
 		width: 100vw;
@@ -327,6 +303,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 		gap: 2ch;
 		background: none;
 		border: none;
+		margin: 2rem 0;
 	}
 
 	.gradient, .endGradient{
@@ -390,5 +367,19 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 	.friendSlide .friendContainer:first-child .pfpContainer, .friendSlide .friendContainer:last-child .pfpContainer, .friendSlide .friendContainer:only-child .pfpContainer{
 		border-radius: 0;
+	}
+
+	#confirmDelete, #confirmBlock{
+		width: 80vw;
+	}
+}
+
+
+@media screen and (orientation:portrait) {
+	.friendSlide{
+		width: 80vw;
+	}
+	#friendSlideSelector{
+		min-width: 80vw;
 	}
 }
