@@ -460,7 +460,7 @@ function displayTournament(){
 		const contestMatchPlacementMap = {
 			".quarter.three" : {full : ".quarter.right", semi : ".quarter.left"},
 			".quarter.four" : {full : ".quarter.right", semi : ".quarter.left"},
-		
+
 			".semi.two" : {full : ".semi.right", semi : ".semi.left"},
 		}
 
@@ -517,7 +517,7 @@ function displayTournament(){
 			document.querySelector(".final.match").style.setProperty("top", "0")
 		else
 			document.querySelector(".final.match").style.setProperty("top", "-4.2rem")
-		
+
 		if (document.getElementById("treeCanva"))
 			document.getElementById("treeCanva").remove();
 		treeCanva = document.createElement("canvas");
@@ -568,7 +568,7 @@ function displayTournament(){
 				if (tournament["round_1"][matchNumber][player]['username']){
 					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_1"][matchNumber][player]['username'];
 					if (lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp").src != tournament["round_1"][matchNumber][player]['profile_picture'])
-						addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament["round_1"][matchNumber][player]['profile_picture']);					
+						addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament["round_1"][matchNumber][player]['profile_picture']);
 				}
 				else{
 					lobbyPlayerElem[idx].querySelector(".username").innerText = "";
@@ -698,8 +698,8 @@ function game() {
 			else
 				displayWinner(player2.name, player2.profile_picture)
 		} else if (data.type === "tournament") {
-			//tournament = data.message;
-			tournament = tmp_contest;
+			tournament = data.message;
+			// tournament = tmp_contest;
 			checkTournementRound();
 			displayTournament();
 			gameContainer.style.setProperty("display", "none");
