@@ -626,13 +626,13 @@ class Tournament():
 	def setTournament(self):
 		self.model = models.TournamentModel()
 
-	async def moveWinner(self, round, match, winner):
+	async def moveWinner(self, round, match, side, winner):
 		await winner.init(None, None)
 		if round == 3:
 			await self.end(winner)
 			return
 
-		if not self.matches[round][match].playerLeft:
+		if side == 0:
 			self.matches[round][match].playerLeft = winner
 		else:
 			self.matches[round][match].playerRight = winner
@@ -708,7 +708,7 @@ class GameTournament(GameRemote):
 		self.running = False
 
 		await self.save()
-		await self.tournament.moveWinner(self.round + 1, self.match // 2, self.winner)
+		await self.tournament.moveWinner(self.round + 1, self.match // 2, self.match % 2, self.winner)
 
 
 	def getMatch(self):
