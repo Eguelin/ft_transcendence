@@ -43,6 +43,8 @@ class MatchManager(models.Manager):
 		match.player_one_pts = random.randint(0, 10)
 		match.player_two_pts = random.randint(0, 10)
 		match.save()
+		match.winner = player_one if match.player_one_pts > match.player_two_pts else player_two
+		match.save()
 		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds())))
 		match.save()
 		player_one.profile.matches.add(match)

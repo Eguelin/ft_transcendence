@@ -692,8 +692,7 @@ function ft_create_element(element_name, map){
 	return elem;
 }		
 
-function createMatchResumeContainer(match) {
-	console.log(match);
+function createMatchResumeContainer(match, username) {
 	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
@@ -704,34 +703,22 @@ function createMatchResumeContainer(match) {
 	scoreUser = ft_create_element("div", {"class" : "resultScore"});
 	scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
-	scoreUserName = document.createElement("a");
-	scoreUserScore = document.createElement("a");
+	scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two});
+	scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
 
-	scoreUserName.className = "resultScoreName";
-	scoreUserScore.className = "resultScoreScore";
+	scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
+	scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
 
-
-	scoreOpponentName = document.createElement("a");
-	scoreOpponentScore = document.createElement("a");
-
-	scoreOpponentName.className = "resultScoreName";
-	scoreOpponentScore.className = "resultScoreScore";
-
-	scoreUserName.innerHTML = `${match.player_one}`;
-	scoreOpponentName.innerHTML = `${match.player_two}`;
-
-	if (scoreUserName.innerHTML == "deleted")
+	if (scoreUserName.innerText == "deleted")
 		scoreUserName.classList.add("deletedUser");
 	else
 		scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
 
 
-	if (scoreOpponentName.innerHTML == "deleted")
+	if (scoreOpponentName.innerText == "deleted")
 		scoreOpponentName.classList.add("deletedUser");
 	else
 		scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	scoreUserScore.innerHTML = `${match.player_one_pts}`;
-	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
 
 	scoreUser.appendChild(scoreUserName);
 	scoreUser.innerHTML += " : ";
@@ -740,17 +727,13 @@ function createMatchResumeContainer(match) {
 	scoreOpponent.appendChild(scoreOpponentName);
 	scoreOpponent.innerHTML += " : ";
 	scoreOpponent.appendChild(scoreOpponentScore);
-	if (match.player_one_pts > match.player_two_pts){
+	if (username == match.winner){
 		result.classList.add("victory");
 		result.innerHTML = client.langJson['user']['.victory'];
 	}
-	else if (match.player_one_pts < match.player_two_pts){
+	else {
 		result.classList.add("loss");
 		result.innerHTML = client.langJson['user']['.loss'];
-	}
-	else{
-		result.classList.add("draw");
-		result.innerHTML = client.langJson['user']['.draw'];
 	}
 	//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
 
