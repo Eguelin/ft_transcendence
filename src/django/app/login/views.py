@@ -25,6 +25,7 @@ def getClientId(request):
 	return JsonResponse({'clientId': clientId})
 
 def fortytwo(request):
+	create_ai()
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 
@@ -104,6 +105,7 @@ def fortytwo(request):
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
 def create_user(request):
+	create_ai()
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	try:
@@ -158,6 +160,16 @@ def create_user(request):
 		return JsonResponse({'message': 'Database error'}, status=500)
 	except Exception as e:
 		return JsonResponse({'message': str(e)}, status=500)
+
+def create_ai():
+	if User.objects.filter(username="AI").exists():
+		return
+	username = "AI"
+	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+	user = User.objects.create_user(username=username, password=password)
+	user.profile.profile_picture = "/images/defaults/defaultAi.gif"
+	user.id42 = 0
+	user.save()
 
 def user_login(request):
 	if request.method != 'POST':
@@ -473,7 +485,7 @@ def search_by_username(request):
 def get_user_id(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request method'}, status=405)
-	
+
 	try:
 		data = json.loads(request.body)
 		username = data.get("user")

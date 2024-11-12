@@ -51,13 +51,12 @@ class MatchManager(models.Manager):
 		player_two.profile.matches.add(match)
 		return match
 
-	def addMatch(self, playerOne : Player, playerTwo : Player, matchType : str):
+	def addMatch(self, playerOne : Player, playerTwo : Player):
 		match = self.create(player_one=playerOne.user, player_two=playerTwo.user)
-		match.type = matchType
 		match.player_one_pts = playerOne.score if playerOne.socket else 0
-		match.player_two_pts = playerTwo.score if playerTwo.socket else 0
+		match.player_two_pts = playerTwo.score if playerTwo.user.username == "AI" or playerTwo.socket else 0
 		match.date = datetime.datetime.now()
-		match.winner = playerOne.user if playerOne.score > playerTwo.score or not playerTwo.socket else playerTwo.user
+		match.winner = playerOne.user if playerOne.score > playerTwo.score or (playerTwo.user.username != "AI" and not playerTwo.socket) else playerTwo.user
 		match.save()
 		playerOne.user.profile.matches.add(match)
 		playerTwo.user.profile.matches.add(match)
@@ -66,7 +65,6 @@ class MatchManager(models.Manager):
 		super().save()
 
 class Match(models.Model):
-	type = models.CharField(max_length=10, default="random")
 	player_one = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
 	player_two = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
 	date = models.DateField(auto_now=False, auto_now_add=True)
@@ -76,19 +74,32 @@ class Match(models.Model):
 
 	objects = MatchManager()
 
-# class Tournament(models.Model):
-# 	date = models.DateField(auto_now=False, auto_now_add=True)
-# 	players = models.ManyToManyField(User, related_name="players")
-# 	matches = models.ManyToManyField(Match, related_name="matches")
+class TournamentModel(models.Model):
+	date = models.DateField(auto_now=False, auto_now_add=True)
+	matches = models.ManyToManyField(Match, related_name="matches")
 
-	# def addTournament(self, players : list):
-	# 	tournament = Tournament.objects.create()
-	# 	tournament.date = datetime.datetime.now()
-	# 	tournament.save()
-	# 	for player in players:
-	# 		tournament.players.add(player.user)
-	# 	tournament.save()
+	def __init__(self):
+		super().__init__()
+		self.date = datetime.datetime.now()
+		self.save()
 
-	# def addMatchToTournament(self, tournament, match):
-	# 	tournament.matches.add(match)
-	# 	tournament.save()
+	def addMatchToTournament(self, game):
+		self.matches.add(TournamentMatch(game))
+		self.save()
+
+
+class TournamentMatch(Match):
+	round = models.IntegerField(default=0)
+	match = models.IntegerField(default=0)
+
+	def __init__(self, game):
+		super().__init__()
+		self.player_one = game.playerLeft.user
+		self.player_two = game.playerRight.user
+		self.player_one_pts = game.playerLeft.score
+		self.player_two_pts = game.playerRight.score
+		self.date = datetime.datetime.now()
+		self.winner = game.winner.user
+		self.round = game.round
+		self.match = game.match
+		self.save()
