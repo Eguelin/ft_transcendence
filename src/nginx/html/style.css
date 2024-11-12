@@ -203,7 +203,6 @@ input:focus{
 .saveBtn, .deleteBtn {
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;

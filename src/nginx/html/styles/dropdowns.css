@@ -21,8 +21,7 @@
 	text-align: left;
 	background-color: transparent;
 	color: var(--main-text-rgb);
-	font-style: italic;
-	font-weight: thin;	
+	font-style: italic;	
 	font-family: "pong";
 	font-size: 1rem;
 	padding: 1rem;
