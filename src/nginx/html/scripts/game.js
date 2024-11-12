@@ -595,7 +595,7 @@ function game() {
 	const ball = {};
 	const ballTrail = [];
 	let KeyPressInterval;
-	var tournamentDisplayInterval;
+	let displayInterval;
 	let oldKeysDown = {};
 	let countdown = "";
 
@@ -628,7 +628,7 @@ function game() {
 		if (mode == "game_remote"){
 			displayWaiting();
 		}
-		setInterval(() => gameRender(), 16);
+		displayInterval = setInterval(() => gameRender(), 16);
 	}
 
 	socket.onmessage = function(event) {
@@ -887,7 +887,9 @@ function game() {
 		document.removeEventListener("keyup", handleKeyUp);
 		window.removeEventListener("keydown", keydownExitEventListener);
 		window.removeEventListener("click", clickExitEventListener);
-
+		if (document.querySelector("#countdownContainer"))
+			document.querySelector("#countdownContainer").remove();
+		clearInterval(displayInterval);
 		socket.close();
 	}
 
