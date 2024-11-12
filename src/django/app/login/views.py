@@ -349,6 +349,7 @@ def get_all_user_match_json(matches):
 			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
+			'winner' : match.winner.username,
 			'date' : match.date,
 		}
 		i += 1
@@ -377,6 +378,7 @@ def get_user_match(matches):
 			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
+			'winner' : match.winner.username,
 			'date' : match.date,
 		}
 		i += 1

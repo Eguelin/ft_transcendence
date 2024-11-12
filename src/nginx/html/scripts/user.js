@@ -89,7 +89,7 @@ var template = `
                 try{
                     matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
-                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i]));
+                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], splitPath[4]));
                     };
                     document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                         elem.addEventListener("keydown", (e) => {
