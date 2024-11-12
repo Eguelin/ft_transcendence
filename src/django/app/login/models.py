@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from game.models import Match
+from game.models import Match, TournamentModel
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Profile(models.Model):
@@ -18,8 +18,9 @@ class Profile(models.Model):
 	blocked_users = models.ManyToManyField(User, related_name="block_user_list")
 	id42 = models.IntegerField(default=0)
 	matches = models.ManyToManyField(Match, related_name="matches_history")
+	tournaments = models.ManyToManyField(TournamentModel, related_name="tournaments")
 	font_amplifier = models.FloatField(default=1, validators=[MinValueValidator(0.1), MaxValueValidator(2.0)],)
-	do_not_disturb = models.BooleanField(default=False);
+	do_not_disturb = models.BooleanField(default=False)
 
 
 @receiver(post_save, sender=User)

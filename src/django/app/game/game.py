@@ -235,6 +235,16 @@ class GameRemote(Game):
 		await self.save()
 		self.running = False
 
+	async def countdown(self):
+		for i in range(3, 0, -1):
+			if not self.playerLeft.socket or not self.playerRight.socket:
+				self.end()
+				return
+			await self.send('game_countdown', i)
+			await asyncio.sleep(1)
+		await self.send('game_countdown', 'GO')
+		await asyncio.sleep(1)
+
 class Gamelocal(Game):
 
 	def __init__(self, player):
@@ -480,8 +490,8 @@ class PlayerAI(Player):
 
 		if init:
 			info['user'] = {
-				'username': 'AI',
-				'profile_picture': '/images/defaults/defaultAi.gif'
+				'username': self.user.username,
+				'profile_picture': self.profile.profile_picture
 			}
 
 		return info
@@ -512,7 +522,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def disconnect(self, close_code):
 		Matchmaking().remove_PlayerRemote(self.player)
-		await TournamentMaking().removePlayers(self.player)
+		await Tournament().removePlayers(self.player)
 		self.player.socket = None
 
 	async def receive(self, text_data):
@@ -532,8 +542,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 			elif data['type'] == 'tournament':
 				self.player = PlayerRemote(self)
-				await TournamentMaking().addPlayers(self.player)
-				await TournamentMaking().run()
+				await Tournament().addPlayers(self.player)
+				await Tournament().run()
 				return
 
 			elif data['type'] == 'ai':
@@ -562,16 +572,16 @@ class GameConsumer(AsyncWebsocketConsumer):
 			'message': message
 		}))
 
-class TournamentMaking():
+class Tournament():
 	_instance = None
 
 	def __new__(cls):
 		if cls._instance is None:
-			cls._instance = super(TournamentMaking, cls).__new__(cls)
+			cls._instance = super(Tournament, cls).__new__(cls)
 			cls._instance.matches = [[GameTournament(cls._instance, match, round) for match in range(2**round)] for round in range(3)]
 			cls._instance.running = False
 			cls._instance.players = []
-			cls._instance.tournament = None
+			cls._instance.model = None
 		return cls._instance
 
 	async def addPlayers(self, player):
@@ -606,23 +616,20 @@ class TournamentMaking():
 	async def run(self):
 		if not self.running:
 			return
+		await asyncio.sleep(5)
 		for match in self.matches[-1]:
 			await match.start()
-		await self.createTournament()
-		TournamentMaking._instance = None
+		await self.setTournament()
+		Tournament._instance = None
 
 	@sync_to_async
-	def createTournament(self):
-		self.tournament = models.Tournament.objects.createTournament([player.user for player in self.players])
+	def setTournament(self):
+		self.model = models.TournamentModel()
 
 	async def moveWinner(self, round, match, winner):
 		await winner.init(None, None)
 		if round == -1:
-			await self.send('tournament', self.getinfo())
-			await self.send('tournament_end', {
-				'winner': winner.user.username,
-				'profile_picture': winner.profile.profile_picture
-			})
+			await self.end(winner)
 			return
 
 		if not self.matches[round][match].playerLeft:
@@ -633,7 +640,7 @@ class TournamentMaking():
 		await self.send('tournament', self.getinfo())
 
 		if self.matches[round][match].playerLeft and self.matches[round][match].playerRight:
-			await asyncio.sleep(3)
+			await asyncio.sleep(5)
 			await self.matches[round][match].start()
 
 	async def send(self, type, message):
@@ -649,55 +656,73 @@ class TournamentMaking():
 				info['round_' + str(-round)]['match_' + str(match)] = self.matches[round][match].getMatch()
 		return info
 
+	async def end(self, winner):
+		await self.send('tournament', self.getinfo())
+		await self.send('tournament_end', {
+			'winner': winner.user.username,
+			'profile_picture': winner.profile.profile_picture
+		})
+		await self.save()
+
+	@sync_to_async
+	def save(self):
+		for player in self.players:
+			player.user.profile.tournaments.add(self.model)
+
 class GameTournament(GameRemote):
-	def __init__(self, tournamentMaking, match, round):
+	def __init__(self, tournament, match, round):
 		super().__init__(None, None)
-		self.tournamentMaking = tournamentMaking
+		self.tournament = tournament
 		self.match = match
 		self.round = round
 		self.winner = None
+		self.winnerSide = None
 
 	async def start(self):
 		self.playerLeft.inGame = True
 		self.playerRight.inGame = True
+		if not self.playerLeft.socket or not self.playerRight.socket:
+			self.end()
+			return
 		await super().start()
 
 	@sync_to_async
 	def save(self):
-		models.Tournament.objects.addMatchToTournament(self)
+		self.tournament.model.addMatchToTournament(self)
 
 	async def end(self):
 		self.winner = self.playerLeft if self.playerLeft.score == maxScore or not self.playerRight.socket else self.playerRight
 		self.playerLeft.inGame = False
 		self.playerRight.inGame = False
+		self.winnerSide = self.winner.side
 
-		if self.winner.side == 'left':
+		if self.winnerSide == 'left':
 			self.playerLeft = self.playerLeft.copy()
 		else:
 			self.playerRight = self.playerRight.copy()
 
 		await self.send('game_match_end', {
-			'winner': self.winner.side,
+			'winner': self.winnerSide,
 		})
 
 		self.running = False
 
 		await self.save()
-		await asyncio.sleep(3)
-		await self.tournamentMaking.moveWinner(self.round - 1, self.match // 2, self.winner)
+		await self.tournament.moveWinner(self.round - 1, self.match // 2, self.winner)
+
 
 	def getMatch(self):
 		return {
 			'playerLeft': {
 				'username': self.playerLeft.user.username if self.playerLeft else None,
 				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft and self.playerLeft.profile else None,
-				'winner': self.winner == "left" if self.winner else None,
+				'winner': self.winnerSide == "left" if self.winner else None,
 				'score': self.playerLeft.score if self.playerLeft and self.winner else None
 			},
 			'playerRight': {
 				'username': self.playerRight.user.username if self.playerRight else None,
 				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight and self.playerRight.profile else None,
-				'winner': self.winner == "right" if self.winner else None,
+				'winner': self.winnerSide == "right" if self.winner else None,
 				'score': self.playerRight.score if self.playerRight and self.winner  else None
 			}
 		}
