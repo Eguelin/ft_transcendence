@@ -621,7 +621,7 @@ function loadUserDashboard(startDate, endDate){
                         for (k = 0; k < Object.keys(monthObj).length; k++){
                             dayObj = monthObj[Object.keys(monthObj)[k]];
                             for (l = 0; l < Object.keys(dayObj).length; l++){
-                                historyContainer.appendChild(createMatchResumeContainer(dayObj[Object.keys(dayObj)[l]]));
+                                historyContainer.appendChild(createMatchResumeContainer(dayObj[Object.keys(dayObj)[l]], user.username));
                             }
                         }
                     }
