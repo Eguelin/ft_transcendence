@@ -380,3 +380,7 @@ a {
 		scale: 1.1;
 	}
 }
+
+.admin button{
+	font-size: 1rem;
+}
