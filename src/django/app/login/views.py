@@ -349,28 +349,42 @@ def get_all_user_match_json(matches, tournaments):
 			day = dateObj.day
 			date_json = {}
 			i = 0
-		matches_json[i] = {
+		date_json[i] = {
 			'type' : 'tournament',
 			'id' : tournament.pk,
 			'date' : tournament.date,
 		}
 		i += 1
+	i = 0
+
+	if (dateObj != ""):
+		month_json["{0}".format(day)] = date_json
+		year_json["{0}".format(month)] = month_json
+		matches_json["{0}".format(year)] = year_json
+	dateObj = ""
+	year = ""
+	month = ""
+	day = ""
+	date_json = {}
 	for match in matches:
 		if (dateObj != match.date):
 			if (year != ""):
 				if (year != match.date.year):
 					matches_json["{0}".format(year)] = year_json
-					year_json = {}
+					#year_json = {}
 				if (month != match.date.month):
 					year_json["{0}".format(month)] = month_json
-					month_json = {}
+					#month_json = {}
 				if (day != match.date.day):
 					month_json["{0}".format(day)] = date_json
 			dateObj = match.date
 			year = dateObj.year
 			month = dateObj.month
 			day = dateObj.day
-			date_json = {}
+			try :
+				date_json = matches_json["{0}".format(year)]["{0}".format(month)]["{0}".format(day)]
+			except:
+				date_json = {}
 			i = 0
 		try:
 			p1_name = match.player_one.username
