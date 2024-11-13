@@ -17,15 +17,50 @@
 	gap: 1px;
 }
 
+
+#sendFriendRequestBtn {
+	text-align: center;
+	background-color: var(--input-bg-rgb);
+	color: var(--main-text-rgb);
+	font-family: "pong";
+	padding: 1.5rem;
+	border: 0.2px solid var(--main-text-rgb);
+	border-radius: 1.5vw;
+	font-size: 1rem;
+	width: fit-content;
+	height: fit-content;
+	align-self: center;
+}
+
+#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
+	color: var(--page-bg-rgb);
+	border-color: var(--page-bg-rgb);
+	outline: none;
+}
+
+/* Mobile */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (                min-resolution: 192dpi) and (min-width: 320px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
+	#recentMatchHistory{
+		flex-direction: column;
+	}
+}
+
 .matchDescContainer{
 	background: var(--input-bg-rgb);
 	min-height: min-content;
 	border: .5px solid var(--page-bg-rgb);
-	flex: auto;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	padding: 1vh 0;
 	color: var(--main-text-rgb);
+	justify-content: space-between;
 }
 
 .matchDescContainerScore{
@@ -49,6 +84,7 @@
 }
 
 .resultScoreName{
+	width: 16ch;
 	text-align: left;
 }
 
@@ -204,6 +240,15 @@
 	left: 50%;
 	translate: -50%;
 	width: fit-content;
+	align-items: center;
+}
+
+
+#lineChartsContainer{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: fit-content;
 }
 
 .activeTimeline{
@@ -215,6 +260,7 @@
 	display: flex;
 	gap: 1ch;
 	width: fit-content;
+	flex-wrap: wrap;
 }
 
 #timelineSelectionText{
@@ -223,9 +269,15 @@
 
 #timelineSelectorContainer{
 	display: flex;
-	width: max-content;
 	border: none;
 	height: fit-content;
+	gap: 1ch;
+	flex-wrap: wrap;
+	width: fit-content;
+}
+
+#customPeriod{
+	display: flex;
 	gap: 1ch;
 }
 
@@ -249,12 +301,12 @@
 input[type="date"]{
 	width: fit-content;
 }
-
+/*
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
-}
+}*/
 
 .active#customPeriodSelectionContainer{
 	display: flex;
@@ -327,4 +379,46 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 } 
 .inactive#customPeriodSelectionContainer input, .inactive#customPeriodSelectionContainer button{
 	width: 7rem;
+}
+
+.dashboard button{
+	min-width: unset;
+
+}
+
+/* Mobile */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
+only screen and (                min-resolution: 192dpi) and (min-width: 320px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 320px),
+only screen and (max-width:920px){ 
+	#timelineSelectionContainer{
+		flex-direction: column;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		align-items: center;
+		margin: 1rem;
+	}
+	#profileGraphs{
+		flex-direction: column;
+	}
+}
+
+#notPlayedPeriod{
+	color: var(--main-text-rgb);
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: max-content;
+	max-width: -moz-available;
+	max-width: -webkit-fill-available;
+}
+
+.matchDescContainer .matchDescContainerResult.tournament{
+	width: fit-content;
+	align-self: center;
 }

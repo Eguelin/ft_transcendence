@@ -631,6 +631,7 @@ class Tournament():
 	@sync_to_async
 	def setTournament(self):
 		self.model = models.TournamentModel()
+		self.model.save()
 
 	async def moveWinner(self, round, match, side, winner):
 		await winner.init(None, None)

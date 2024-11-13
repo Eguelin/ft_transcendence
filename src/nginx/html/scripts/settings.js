@@ -238,9 +238,14 @@ confirmPfpBtn.addEventListener("click", (e) => {
 				document.getElementById("popupBg").style.setProperty("display", "none");
 				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
 				(async () => {
-					client = await new Client()
-					if (!client)
-						myReplaceState(`https://${hostname.host}/login`);
+					try {
+						client = await new Client()
+						if (!client)
+							myReplaceState(`https://${hostname.host}/login`);
+					}
+					catch{
+						unsetLoader();
+					}
 				})()
 			}
 		});
@@ -280,9 +285,14 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					usernameInput.before(success);
 
 					(async () => {
-						client = await new Client();
-						if (!client)
-							myReplaceState(`https://${hostname.host}/login`);
+						try {
+							client = await new Client()
+							if (!client)
+								myReplaceState(`https://${hostname.host}/login`);
+						}
+						catch{
+							unsetLoader();
+						}
 					})()
 				}
 				else {

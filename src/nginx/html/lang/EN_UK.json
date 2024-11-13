@@ -14,7 +14,8 @@
 		"aria#EN_UK" : "English",
 		"aria#FR_FR" : "Français",
 		"aria#DE_GE" : "Deutsch",
-		"aria#IT_IT" : "Italiano"
+		"aria#IT_IT" : "Italiano",
+		"error reaching server" : "Error reaching server"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -106,12 +107,13 @@
 		"#title" : "",
 		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Send friend request",
-		"#notPlayedToday" : "has not played any match today",
+		"#notPlayedToday" : "USER has not played any match today",
 		"#recentMatchHistoryText" : "Recent matches",
 		"#allMatchesHistoryBtn" : "All matches",
 		".victory" : "VICTORY",
 		".loss" : "LOST",
 		".draw" : "DRAW",
+		".tournament" : "TOURNAMENT",
 		"ariaP1.matchDescContainer" : "match against",
 		"ariaP2.matchDescContainer" : "on the",
 		"aria.resultScoreName" : "profile redirection"
@@ -123,14 +125,18 @@
 		"#nbMatchText" : "Number of games played",
 		"#nbWinText" : "Number of games winned",
 		"#nbLossText" : "Number of games lost",
-		"#timelineSelectionText" : "Display stats from the last",
-		"#lastWeekSelection" : "7 days",
-		"#lastMonthSelection" : "Month",
-		"#lastYearSelection" : "Year",
-		"CVwinLossGraph" : "Average by date",
-		"CVwinLossAbsGraph" : "Number of victory over number of defeat by date",
+		"#timelineSelectionText" : "Select a period to display",
+		"#lastWeekSelection" : "Past 7 days",
+		"#lastMonthSelection" : "Past month",
+		"#lastYearSelection" : "Past year",
+		"#notPlayedPeriod" : "USER has not played any match during this period",
+		"CVwinLossGraph" : "Percent of victories by date",
+		"CVwinLossAbsGraph" : "Number of victories over defeats by date",
+		"CVuserStatsGraph" : "Number of win and lost game",
 		"CVwinLossGraphClient" : "you",
 		"CVwinLossAbsGraphClient" : "you",
+		"CVwin" : "win",
+		"CVloss" : "loss",
 		"aria#lastWeekSelection" : "Display stats from the last 7 days",
 		"aria#lastMonthSelection" : "Display stats from the last month",
 		"aria#lastYearSelection" : "Display stats from the last year"
@@ -157,6 +163,10 @@
 		"semi" : "Semi",
 		"final" : "final",
 		"tournamentLobby" : "Lobby"
+	},
+	"tournament":{
+		"#title" : "",
+		"tournamentSubtitle" : "Tournament"
 	},
 	"404":{
 		"#title" : "ERROR 404",

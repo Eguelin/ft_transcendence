@@ -1,64 +1,100 @@
-var chartAverage, chartAbs;
+var chartAverage = null, chartAbs = null, chartStats = null;
 var width, height, gradient;
 var today = new Date();
 var customStartDayInput;
 var customEndDayInput;
-chartAverage = null;
-chartAbs = null;
 
 var lastWeekSelection;
 var lastMonthSelection;
 var lastYearSelection;
 
 var template = `
-<div id="pageContentContainer">
-    <div id="statsContainer">
-        <div id="ratioContainer">
-            <a id="ratioText">wins/loses ratio</a>
-            <a id="ratioValue"></a>
-        </div>
-
-        <div id="nbMatchContainer">
-            <a id="nbMatchText">Number of games played</a>
-            <a id="nbMatchValue"></a>
-        </div>
-
-        <div id="nbWinContainer">
-            <a id="nbWinText">Number of games winned</a>
-            <a id="nbWinValue"></a>
-        </div>
-
-        <div id="nbLossContainer">
-            <a id="nbLossText">Number of games lost</a>
-            <a id="nbLossValue"></a>
-        </div>
-    </div>
+<div id="pageContentContainer" class="dashboard">
     <div id="timelineSelectionContainer">
         <a id="timelineSelectionText">Display stats from the last </a>
         <div id="timelineSelectorContainer">
             <button tabindex="12" aria-label="Display stats from the last 7 days" class="activeTimeline" id="lastWeekSelection">7 days</button>
             <button tabindex="13" aria-label="Display stats from the last month" id="lastMonthSelection">Month</button>
             <button tabindex="14" aria-label="Display stats from the last year" id="lastYearSelection">Year</button>
-            <button tabindex="15" aria-label="Custom period selection" id="customPeriodSelection">+</button>
-            <div id="customPeriodSelectionContainer">
-                <input tabindex="16" aria-label="Custom start day" id="customStartDay" type="date">
-                <input tabindex="17" aria-label="Custom end day" id="customEndDay" type="date">
-                <button tabindex="18" aria-label="Search" id="search">Search</button>
-            </div>
+			<div id="customPeriod">
+				<button tabindex="15" aria-label="Custom period selection" id="customPeriodSelection">+</button>
+				<div id="customPeriodSelectionContainer">
+					<input tabindex="16" aria-label="Custom start day" id="customStartDay" type="date">
+					<input tabindex="17" aria-label="Custom end day" id="customEndDay" type="date">
+					<button tabindex="18" aria-label="Search" id="search">Search</button>
+				</div>
+			</div>
         </div>
     </div>
     <div id="profileGraphs">
-        <div id="winLossGraphContainer">
-            <canvas width="400" height="200" id="winLossGraph">
+        <div id="userStatPieGraphContainer">
+            <canvas width="400" height="200" id="userStatGraph">
             </canvas>
         </div>
-        <div id="winLossAbsGraphContainer">
-            <canvas width="400" height="200" id="winLossAbsGraph">
-            </canvas>
-        </div>
+		<div id="lineChartsContainer">
+			<div id="winLossGraphContainer">
+				<canvas width="400" height="200" id="winLossGraph">
+				</canvas>
+			</div>
+			<div id="winLossAbsGraphContainer">
+				<canvas width="400" height="200" id="winLossAbsGraph">
+				</canvas>
+			</div>
+		</div>
     </div>
     <div id="matchHistoryContainer"></div>
 </div>`
+
+class Dashboard{
+	startDate;
+	endDate;
+	startDateStr;
+	endDateStr;
+	username;
+	matches;
+	clientUsername;
+	clientMatches;
+
+	constructor (startDate, endDate, username, clientUsername){
+		return (async () =>{
+			try {
+				this.startDate = startDate;
+				this.endDate = endDate;
+				this.startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+				this.endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+				this.username = username;
+				this.clientUsername = clientUsername;
+				const matchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : username, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.matches = await matchesFetch.json();
+				this.matches = this.matches.matches;
+
+				const clientMatchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : this.clientUsername, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.clientMatches = await clientMatchesFetch.json();
+				this.clientMatches = this.clientMatches.matches;
+			}
+			catch{
+				var template = `
+				<div id="pageContentContainer">
+					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
+				</div>
+				`
+				document.getElementById("container").innerHTML = template;
+				throw new Error("Error while reaching server");
+			}
+			return (this);
+		})();
+	}
+}
 
 {
 	document.getElementById("container").innerHTML = template;
@@ -163,6 +199,8 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
+
+
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
     if (!(startDate instanceof Date && endDate instanceof Date)){
         return ;    
@@ -172,40 +210,63 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         chartAverage.destroy();
     if (chartAbs)
         chartAbs.destroy();
+	if (chartStats)
+		chartStats.destroy();
+
+	if (document.querySelector("#notPlayedPeriod"))
+		document.querySelector("#notPlayedPeriod").remove();
+
     var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)); 
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
-    while (startDate.valueOf() <= endDate.valueOf()){
+	var totalWin = 0, totalMatch = 0, graphLineWidth = .5, graphPointRadius = 2, lineWidth = 2;
+	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 1){
+		graphLineWidth = 3;
+		graphPointRadius = 0;
+		lineWidth = 4;
+	}
+
+
+	//console.log(matches, username, startDate, endDate, clientMatches, clientUsername);
+    while (startDate.getDate() <= endDate.getDate()){
         var countWin = 0, countMatch = 0;
         var clientCountWin = 0, clientCountMatch = 0;
         try{
             matchObj = matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
-            for (j = 0; j < Object.keys(matchObj).length; j++){
-                if (matchObj[j].player_one == username)
-                    countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                else
-                    countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                countMatch += 1;
-            }
-            startedPlaying = true;
+			if (matchObj){
+				for (j = 0; j < Object.keys(matchObj).length; j++){
+					if (matchObj[j].type == "match"){
+						if (matchObj[j].player_one == username)
+							countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+						else
+							countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+						countMatch += 1;
+						totalMatch += 1;
+					}
+				}
+				startedPlaying = true;
+			}
         }
         catch{
         }
         try{
             matchObj = clientMatches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
             for (j = 0; j < Object.keys(matchObj).length; j++){
-                if (matchObj[j].player_one == clientUsername)
-                    clientCountWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                else
-                    clientCountWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                clientCountMatch += 1;
+				if (matchObj[j].type == "match"){
+					if (matchObj[j].player_one == clientUsername)
+						clientCountWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+					else
+						clientCountWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+					clientCountMatch += 1;
+				}
             }
             startedPlaying = true;
         }
         catch{
         }
         if (startedPlaying){
+			totalWin += countWin;
             average = (countWin / countMatch) * 100;
             absResult = (countWin - (countMatch - countWin));
             mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : average});
@@ -218,346 +279,432 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         startDate.setDate(startDate.getDate() + 1);
     }
 
-    const totalDuration = (500 / LastXDaysDisplayed);
-    const delayBetweenPoints = totalDuration / nbMatch;
-    const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
-    const animation = {
-      x: {
-        type: 'number',
-        easing: 'linear',
-        duration: delayBetweenPoints,
-        from: NaN, // the point is initially skipped
-        delay(ctx) {
-          if (ctx.type !== 'data' || ctx.xStarted) {
-            return 0;
-          }
-          ctx.xStarted = true;
-          return ctx.index * delayBetweenPoints;
-        }
-      },
-      y: {
-        type: 'number',
-        easing: 'linear',
-        duration: delayBetweenPoints,
-        from: previousY,
-        delay(ctx) {
-          if (ctx.type !== 'data' || ctx.yStarted) {
-            return 0;
-          }
-          ctx.yStarted = true;
-          return ctx.index * delayBetweenPoints;
-        }
-      }
-    };
-    datasets = [
-        {
-            label: username,
-            data: mapAverage,
-            fill: false,
-            tension: 0,
-            borderColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
+	if (totalMatch){
 
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            borderWidth: 2,
-            pointBackgroundColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
+		const totalDuration = (500 / LastXDaysDisplayed);
+		const delayBetweenPoints = totalDuration / nbMatch;
+		const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
+		const animation = {
+		  x: {
+			type: 'number',
+			easing: 'linear',
+			duration: delayBetweenPoints,
+			from: NaN, // the point is initially skipped
+			delay(ctx) {
+			  if (ctx.type !== 'data' || ctx.xStarted) {
+				return 0;
+			  }
+			  ctx.xStarted = true;
+			  return ctx.index * delayBetweenPoints;
+			}
+		  },
+		  y: {
+			type: 'number',
+			easing: 'linear',
+			duration: delayBetweenPoints,
+			from: previousY,
+			delay(ctx) {
+			  if (ctx.type !== 'data' || ctx.yStarted) {
+				return 0;
+			  }
+			  ctx.yStarted = true;
+			  return ctx.index * delayBetweenPoints;
+			}
+		  }
+		}
+	
+		function drawStats(){
+			data = {
+				datasets: [{
+						data: [totalWin, totalMatch - totalWin],
+						backgroundColor: ['green', 'red'],
+						borderWidth: 0
+					}
+				],
+				labels: [
+					client.langJson["dashboard"]["CVwin"], client.langJson["dashboard"]["CVloss"]
+				]
+			}
+			chartStats = new Chart(document.getElementById("userStatGraph"), {
+				type: 'pie',
+				data: data,
+				options:{
+					plugins: {
+						title: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							text: client.langJson["dashboard"]["CVuserStatsGraph"],
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+							},
+							display: true,
+						},
+						legend: {
+							labels: {
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+								},
+							}
+						}
+					},
+				}
+			});
+		};
+	
+		function drawAverage(){
+			datasets = [
+				{
+					label: username,
+					data: mapAverage,
+					fill: false,
+					tension: 0,
+					borderColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
+					},
+					borderWidth: lineWidth,
+					pointBackgroundColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
+					},
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true,
+				}
+			]
+		
+			if (username != clientUsername){
+				datasets.push({
+					label: client.langJson["dashboard"]["CVwinLossGraphClient"],
+					data: clientMapAverage,
+					fill: false,
+					tension: 0,
+					borderColor: "grey",
+					borderWidth: lineWidth,
+					pointBackgroundColor: "grey",
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true
+				})
+			}
+		
+			chartAverage = new Chart(document.getElementById("winLossGraph"), {
+				type: 'line',
+				data: {
+					datasets: datasets
+				},
+				options:{
+					animation,
+					parsing: {
+						xAxisKey: 'date',
+						yAxisKey: 'result'
+					},
+					plugins: {
+						title: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							text: client.langJson["dashboard"]["CVwinLossGraph"],
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+							},
+							display: true,
+						},
+						legend: {
+							labels: {
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+								},
+							}
+						}
+					},
+					scales: {
+						y: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
+							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+								drawTicks: false,
+							},
+							min: 0,
+							max: 100,
+						},
+						x: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
+							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+							}
+						}
+					}
+				}
+			});
+		
+		}
+	
+		function drawAbs(){
+			datasets = [
+				{
+					label: username,
+					data: mapAbs,
+					fill: false,
+					tension: 0,
+					borderColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
+					},
+					borderWidth: lineWidth,
+					pointBackgroundColor: function(context){
+						const chart = context.chart;
+						const {ctx, chartArea} = chart;
+		
+						if (!chartArea)
+							return ;
+						return (getGradient(ctx, chartArea));
+					},
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true
+				}
+			]
+		
+			if (username != clientUsername){
+				datasets.push({
+					label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
+					data: clientMapAbs,
+					fill: false,
+					tension: 0,
+					borderColor: "grey",
+					borderWidth: lineWidth,
+					pointBackgroundColor: "grey",
+					pointBorderWidth: 0,
+					pointhitRadius: 4,
+					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
+					pointStyle: 'circle',
+					borderJoinStyle: 'round',
+					spanGaps: true
+				})
+			}
+		
+			chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
+				type: 'line',
+				data: {
+					datasets: datasets
+				},
+				options:{
+					animation,
+					parsing: {
+						xAxisKey: 'date',
+						yAxisKey: 'result'
+					},
+					plugins: {
+						title: {
+							color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+							},
+							text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
+							display: true,
+		
+						},
+						legend: {
+							labels: {
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+								},
+							}
+						}
+					},
+					scales: {
+						y: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
+							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+								drawTicks: false,
+							}
+						},
+						x: {
+							ticks: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								font: {
+									family : "pong",
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+								},
+							},
+							grid: {
+								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+								lineWidth:graphLineWidth,
+							}
+						}
+					}
+				}
+			});
+		
+		}
+	
+		drawStats();
+		drawAverage();
+		drawAbs();
+	}
+	else{
+		var tmp = document.createElement("a");
+		tmp.id = 'notPlayedPeriod';
+		tmp.innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("USER", username);
+		document.getElementById("pageContentContainer").appendChild(tmp);
+	}
+}
 
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        }
-    ]
-
-    if (username != clientUsername){
-        datasets.push({
-            label: client.langJson["dashboard"]["CVwinLossGraphClient"],
-            data: clientMapAverage,
-            fill: false,
-            tension: 0,
-            borderColor: "grey",
-            borderWidth: 2,
-            pointBackgroundColor: "grey",
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        })
-    }
-
-    chartAverage = new Chart(document.getElementById("winLossGraph"), {
-        type: 'line',
-        data: {
-            datasets: datasets
-        },
-        options:{
-            animation,
-            parsing: {
-                xAxisKey: 'date',
-                yAxisKey: 'result'
-            },
-            plugins: {
-                title: {
-                    color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: client.langJson["dashboard"]["CVwinLossGraph"],
-                    display: true,
-
-                }
-            },
-            scales: {
-                y: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                        drawTicks: false,
-                    },
-                    min: 0,
-                    max: 100,
-                },
-                x: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                    }
-                }
-            }
-        }
-    });
+var dashboard = null;
 
 
-    datasets = [
-        {
-            label: username,
-            data: mapAbs,
-            fill: false,
-            tension: 0,
-            borderColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
 
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            borderWidth: 2,
-            pointBackgroundColor: function(context){
-                const chart = context.chart;
-                const {ctx, chartArea} = chart;
+function displayCharts(){
+	if (dashboard && dashboard instanceof Dashboard)
+	{
+		if (document.getElementById("winLossGraph"))
+			document.getElementById("winLossGraph").remove();
+		if (document.getElementById("winLossAbsGraph"))
+			document.getElementById("winLossAbsGraph").remove();
+		if (document.getElementById("userStatGraph"))
+			document.getElementById("userStatGraph").remove();
 
-                if (!chartArea)
-                    return ;
-                return (getGradient(ctx, chartArea));
-            },
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        }
-    ]
+		wLGraph = document.createElement("canvas");
+		wLGraph.id = "winLossGraph";
+		wLAbsGraph = document.createElement("canvas");
+		wLAbsGraph.id = "winLossAbsGraph";
+		userStatGraph = document.createElement("canvas");
+		userStatGraph.id = "userStatGraph";
 
-    if (username != clientUsername){
-        datasets.push({
-            label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
-            data: clientMapAbs,
-            fill: false,
-            tension: 0,
-            borderColor: "grey",
-            borderWidth: 2,
-            pointBackgroundColor: "grey",
-            pointBorderWidth: 0,
-            pointhitRadius: 4,
-            pointRadius: LastXDaysDisplayed < 100 ? 2 : 0,
-            pointStyle: 'circle',
-            borderJoinStyle: 'round',
-            spanGaps: true
-        })
-    }
+		var w = window,
+		d = document,
+		e = d.documentElement,
+		g = d.getElementsByTagName('body')[0],
+		x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
+		y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
 
-    chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
-        type: 'line',
-        data: {
-            datasets: datasets
-        },
-        options:{
-            animation,
-            parsing: {
-                xAxisKey: 'date',
-                yAxisKey: 'result'
-            },
-            plugins: {
-                title: {
-                    color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                    text: client.langJson["dashboard"]["CVwinLossAbsGraph"],
-                    display: true,
+		if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 0){
+			wLGraph.width = x * 30;
+			wLAbsGraph.width = x * 30;
+			userStatGraph.width = x * 30;
+			wLGraph.height = y * 21;
+			wLAbsGraph.height = y * 21;
+			userStatGraph.height = y * 21;
+		}
+		else{
+			wLGraph.width = x * 70;
+			wLAbsGraph.width = x * 70;
+			userStatGraph.width = x * 70;
+			wLGraph.height = y * 21;
+			wLAbsGraph.height = y * 21;
+			userStatGraph.height = y * 21;
+		}
 
-                }
-            },
-            scales: {
-                y: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                        drawTicks: false,
-                    }
-                },
-                x: {
-                    ticks: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb")
-                    },
-                    grid: {
-                        color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-                        lineWidth: .5,
-                    }
-                }
-            }
-        }
-    });
-
+		document.getElementById("userStatPieGraphContainer").appendChild(userStatGraph);
+		document.getElementById("winLossGraphContainer").appendChild(wLGraph);
+		document.getElementById("winLossAbsGraphContainer").appendChild(wLAbsGraph);
+		drawWinLossGraph(dashboard.matches, dashboard.username, new Date(dashboard.startDate), dashboard.endDate, dashboard.clientMatches, dashboard.clientUsername);
+	}
 }
 
 function loadUserDashboard(startDate, endDate){
 
-    wLGraph = document.getElementById("winLossGraph").remove();
-    wLAbsGraph = document.getElementById("winLossAbsGraph").remove();
-
-    wLGraph = document.createElement("canvas");
-    wLGraph.id = "winLossGraph";
-    wLAbsGraph = document.createElement("canvas");
-    wLAbsGraph.id = "winLossAbsGraph";
-
-    var w = window,
-    d = document,
-    e = d.documentElement,
-    g = d.getElementsByTagName('body')[0],
-    x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
-    y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
-
-    wLGraph.width = x * 42;
-    wLAbsGraph.width = x * 42;
-    wLGraph.height = y * 21;
-    wLAbsGraph.height = y * 21;
-
-    document.getElementById("winLossGraphContainer").appendChild(wLGraph);
-    document.getElementById("winLossAbsGraphContainer").appendChild(wLAbsGraph);
-
 
     var splitPath = window.location.href.split('/');
-    var startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
-    var endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
-    fetch('/api/user/get', {
-        method: 'POST', //GET forbid the use of body :(
-        headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDateStr, "endDate" : endDateStr}),
-        credentials: 'include'
-    }).then(user => {
-        if (user.ok){
-            user.json().then((user) => {
-                fetch('/api/user/get', {
-                    method: 'POST', //GET forbid the use of body :(
-                    headers: {'Content-Type': 'application/json',},
-                    body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDateStr, "endDate" : endDateStr}),
-                    credentials: 'include'
-                }).then(client => {
-                    if (client.ok){
-                        client.json().then((client) => {
-                            unsetLoader()
-                            drawWinLossGraph(user.matches, user.username, startDate, endDate, client.matches, client.username);
-                        })
-                    }
-                    else
-                        unsetLoader()
-                })
-                var countWin = 0, countLost = 0, countMatch = 0;
-                matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
+	(async () => {
+		dashboard = await new Dashboard(startDate, endDate, splitPath[4], client.username);
+		unsetLoader();
+		displayCharts();
 
-                var historyContainer = document.getElementById("matchHistoryContainer");
-                historyContainer.innerHTML = "";
-                for (var i=0; i<Object.keys(user.matches).length;i++){
-                    yearObj = user.matches[Object.keys(user.matches)[i]];
-                    for (j = 0; j < Object.keys(yearObj).length; j++){
-                        monthObj = yearObj[Object.keys(yearObj)[j]];
-                        for (k = 0; k < Object.keys(monthObj).length; k++){
-                            dayObj = monthObj[Object.keys(monthObj)[k]];
-                            for (l = 0; l < Object.keys(dayObj).length; l++){
-                                matchObj = dayObj[Object.keys(dayObj)[l]];
-                                if (matchObj.player_one == user.username)
-                                    countWin += matchObj.player_one_pts > matchObj.player_two_pts;
-                                else
-                                    countWin += matchObj.player_one_pts < matchObj.player_two_pts;
-                                countMatch += 1;
-                                historyContainer.appendChild(createMatchResumeContainer(matchObj));
-                            }
-                        }
-                    }
-                }
+		matchObj = dashboard.matches[Object.keys(dashboard.matches)[Object.keys(dashboard.matches).length - 1]] // get matches object of highest date
 
-                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-                    elem.addEventListener("keydown", (e) => {
-                        if (e.key == "Enter"){
-                            var idx = elem.tabIndex + 1
-                            elem.querySelectorAll(".resultScoreName").forEach(function (names){
-                                names.tabIndex = idx;
-                                idx++;
-                            })
-                        }
-                    })
-                });
-                var tabIdx = 19;
-                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-                    elem.tabIndex = tabIdx;
-                    tabIdx += 3;
-                });
-                
-                document.querySelectorAll(".resultScoreName").forEach(function (elem){
-                    if (!elem.classList.contains("deletedUser")){
-                        elem.addEventListener("click", (e) => {
-                            myPushState(`https://${hostname.host}/user/${elem.innerHTML}`);	
-                        })
-                        elem.addEventListener("keydown", (e) => {
-                            if (e.key == "Enter")
-                                elem.click();
-                        })
-                    }
-                    else{
-                        elem.innerText = client.langJson["index"][".deletedUser"];
-                    }
-                })
+		var historyContainer = document.getElementById("matchHistoryContainer");
+		historyContainer.innerHTML = "";
+		for (var i=0; i<Object.keys(dashboard.matches).length;i++){
+			yearObj = dashboard.matches[Object.keys(dashboard.matches)[i]];
+			for (j = 0; j < Object.keys(yearObj).length; j++){
+				monthObj = yearObj[Object.keys(yearObj)[j]];
+				for (k = 0; k < Object.keys(monthObj).length; k++){
+					dayObj = monthObj[Object.keys(monthObj)[k]];
+					for (l = 0; l < Object.keys(dayObj).length; l++){
+						historyContainer.appendChild(createMatchResumeContainer(dayObj[Object.keys(dayObj)[l]], dashboard.username));
+					}
+				}
+			}
+		}
 
-                if (countMatch == 0)
-                    document.getElementById("ratioValue").innerHTML = `100%`;
-                else
-                    document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`;
-                document.getElementById("nbWinValue").innerHTML = `${countWin}`;
-                document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`;
-                document.getElementById("nbMatchValue").innerHTML = `${countMatch}`;
-            })
-        }
-        else
-		    myPushState(`https://${hostname.host}/home`);
-    })
+		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+			elem.addEventListener("keydown", (e) => {
+				if (e.key == "Enter"){
+					var idx = elem.tabIndex + 1
+					elem.querySelectorAll(".resultScoreName").forEach(function (names){
+						names.tabIndex = idx;
+						idx++;
+					})
+				}
+			})
+		});
+		var tabIdx = 19;
+		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+			elem.tabIndex = tabIdx;
+			tabIdx += 3;
+		});
+		
+		document.querySelectorAll(".resultScoreName").forEach(function (elem){
+			if (!elem.classList.contains("deletedUser")){
+				elem.addEventListener("click", (e) => {
+					myPushState(`https://${hostname.host}/user/${elem.innerHTML}`);	
+				})
+				elem.addEventListener("keydown", (e) => {
+					if (e.key == "Enter")
+						elem.click();
+				})
+			}
+			else{
+				elem.innerText = client.langJson["index"][".deletedUser"];
+			}
+		})
+	})()
 }

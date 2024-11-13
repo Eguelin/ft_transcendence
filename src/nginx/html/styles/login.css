@@ -69,7 +69,7 @@
 }
 
 
-.loginSlide{
+.loginSlideContainer, .loginSlide{
 	width: fit-content;
 	min-width: 40vw;
 	flex-direction: column;
@@ -77,16 +77,28 @@
 	margin-top: 3rem;
 }
 
-.loginSlide *{
+.loginSlideContainer *{
 	align-self: center;
 }
 
-.loginSlide button{
-	font-size: 1rem;
-	border-radius: 1rem;;
+.loginSlide{
+	display: flex;
+	margin: 0;
+	min-width: unset;
 }
 
-.loginSlide input{
+.loginSlide *{
+	width: 100%;
+}
+
+.loginSlideContainer button{
+	font-size: 1rem;
+	border-radius: 1rem;
+	min-width: unset;
+	padding: 1rem;
+}
+
+.loginSlideContainer input{
 	width: unset;
 }
 
@@ -100,8 +112,12 @@ only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
 only screen and (                min-resolution: 192dpi) and (min-width: 320px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
 
-	.loginSlide button{
+	.loginSlideContainer button{
 		font-size: 1rem;
 		border-radius: 1rem;;
 	}
+}
+
+#loginSlideSelector .slideSelector{
+	padding: .5rem;
 }

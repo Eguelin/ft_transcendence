@@ -5,38 +5,28 @@
 	flex-flow: column;
 	min-width: -webkit-fill-available;
 	min-width: -moz-available;
-	width: fit-content;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
+	width: 100vw;
+	align-items: center;
+	gap: 1rem;
 }
 
-#friendInfo span{
-	color: var(--main-text-rgb);
+#friendSlides{
+	display: flex;
+	flex-direction: row;
+	position: fixed;
+	width: 100vw;
 }
 
-#sendFriendRequestBtn {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-weight: thin;
-	font-family: "pong";
-	padding: 1.5rem;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
-	font-size: 1rem;
-	width: fit-content;
-	height: fit-content;
-	align-self: center;
+#friendSlides > *{
+	width: 100vw;
+	flex: none;
 }
 
-#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
-	color: var(--page-bg-rgb);
-	border-color: var(--page-bg-rgb);
-	outline: none;
+#friendSlidesContainer{
+	position: relative;
 }
 
-#deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup{
+#deleteFriendPopup, #blockFriendPopup{
 	background: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	position: fixed;
@@ -58,6 +48,7 @@
 	width: 100vw;
 	height: 100vh;
 	top: 0;
+	left: 0;
 	background-color: black;
 	opacity: 0.5;
 	display: none;
@@ -82,8 +73,8 @@
 }
 
 .acceptRequestBtn, .rejectRequestBtn{
-	height:3.5vw;
-	width:3.5vw;
+	height:3.5rem;
+	width:3.5rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -107,8 +98,8 @@
 
 .moreBtn, .removeFriendBtn, .blockFriendBtn, .unblockBtn{
 	background:var(--main-text-rgb);
-	height:3.5vw;
-	width:3.5vw;
+	height:3.5rem;
+	width:3.5rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
@@ -116,6 +107,8 @@
 
 .moreBtn{
 	mask-position: 0;
+	height:4rem;
+	width:4rem;
 	mask-image: url("../icons/more-vertical.svg");
 }
 
@@ -138,10 +131,6 @@
 
 .friendsOptionContainer{
 	flex: none;
-}
-
-#pendingFriendRequestList .friendContainer .friendsOptionContainer {
-    display: flex;
 }
 
 .activeListSelector .moreBtn{
@@ -174,12 +163,12 @@
 	text-align: center;
 	background-color: red;
 	color: var(--main-text-rgb);
-	font-weight: thin;
 	font-family: "pong";
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
+	font-size: 2rem;
 }
 
 #confirmDelete:hover, #confirmDelete:focus, #confirmBlock:hover, #confirmBlock:focus {
@@ -191,8 +180,12 @@
 	color: var(--main-text-rgb);
 	display: flex;
 	margin-top: 2vmin;
+	width: fit-content;
+	min-width: 50vw;
+	height: 3rem;
+	position: relative;
 }
-#friendSlideSelector div{
+#friendSlideSelector .slideSelector{
 	flex: 1;
 }
 #friendSlideSelector div div{
@@ -200,12 +193,16 @@
 }
 
 .friendSlide{
-	display: none;
+	display: block;
 	background: var(--hover-text-rgb);
 	border: 1px solid var(--main-text-rgb);
 	border-radius: 2vw;
 	margin-top: 2vmin;
 	min-height: 1vh;
+	width: 50vw;
+	position: relative;
+	left: 50%;
+	translate: -50%;
 }
 
 .friendSlide .friendContainer:first-child .pfpContainer{
@@ -224,27 +221,31 @@
 	font-size: 1em;
 }
 
+#friendInfo .slideSelector{
+	display: flex;
+	flex-direction: column;
+	padding-top: .25rem;
+}
+
 .slideSelector div{
-	padding: .5rem;
+	flex: 1;
 	z-index: -1;
 	position: relative;
 }
 
-.activeSlide{
-	display: block !important;
-}
-
-.activeSelector div{
-	background: var(--hover-text-rgb);
+#friendInfo .slideSelector:hover, #friendInfo .slideSelector:focus{
+	outline: none;
+	color: var(--hover-text-rgb);
 }
 
 .activeSelector{
-	border-bottom: 2px solid var(--main-text-rgb);
-}	
+	color: var(--main-text-rgb) !important;
+}
+
 
 .pfpContainer{
-	width: 4vw;
-	height: 4vw;
+	width: 4rem;
+	height: 4rem;
 	display: flex;
 	position: relative;
 	overflow: hidden;
@@ -271,3 +272,114 @@
 	background: green;
 }
 
+#friendInfo #slideSelectorBg{
+	width: 25%;
+	height: inherit;
+	border-bottom: 2px solid var(--main-text-rgb) !important;
+	left: 0;
+}
+
+.gradient{
+	display: none;
+}
+
+/* Mobile */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (max-width: 320px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (max-width: 320px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (max-width: 320px),
+only screen and (        min-device-pixel-ratio: 2)      and (max-width: 320px),
+only screen and (                min-resolution: 192dpi) and (max-width: 320px),
+only screen and (                min-resolution: 2dppx)  and (max-width: 320px) { 
+
+	#friendSlideSelector{
+		width: 100vw;
+		z-index: 20;
+	}
+	.friendSlide{
+		width: 50vw;
+		display: flex;
+		flex-direction: column;
+		gap: 2ch;
+		background: none;
+		border: none;
+		margin: 2rem 0;
+	}
+
+	.gradient, .endGradient{
+		display: block;
+		position: absolute;
+		height: 2rem;
+		width: 100vw;
+		top: -.2rem;
+		background: linear-gradient(0deg, transparent 0%, var(--page-bg-rgb) 100%);
+		z-index: 10;
+	}
+
+	.endGradient {
+		top: unset;
+		background: linear-gradient(180deg, transparent 0%, var(--page-bg-rgb) 100%);
+		bottom: 0;
+	}
+
+	#friendSlides > *{
+		height: 75vh;
+		overflow-y: scroll;
+		margin: 0;
+	}
+
+	.friendContainer{
+		flex-direction: column;
+		gap: 1ch;
+		background: var(--hover-text-rgb);
+		border: 3px solid var(--main-text-rgb);
+		border-radius: 1rem;
+		overflow: hidden;
+	}
+
+	.friendContainer .pfpContainer{
+		width: 50vw;
+		height: 50vw;
+	}
+
+	.friendContainer a{
+		text-align: center;
+	}
+
+	.friendContainer .moreBtn{
+		display: none;
+	}
+
+	.friendContainer .friendsOptionContainer{
+		width: 100%;
+		margin: .5rem 0;
+	}
+
+	.friendContainer .friendsOption{
+		display: flex;
+		width: inherit;
+	}
+
+	.friendContainer .friendsOption div{
+		margin: 0;
+		flex: 1;
+	}
+
+	.friendSlide .friendContainer:first-child .pfpContainer, .friendSlide .friendContainer:last-child .pfpContainer, .friendSlide .friendContainer:only-child .pfpContainer{
+		border-radius: 0;
+	}
+
+	#confirmDelete, #confirmBlock{
+		width: 80vw;
+	}
+}
+
+
+@media screen and (orientation:portrait) {
+	.friendSlide{
+		width: 80vw;
+	}
+	#friendSlideSelector{
+		min-width: 80vw;
+	}
+}

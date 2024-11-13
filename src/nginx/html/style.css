@@ -14,6 +14,7 @@
 	--is-dark-theme : 1;
 
 	--font-size-amplifier: 1;
+	--is-mobile: 0;
 }
 
 body{
@@ -45,6 +46,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	}
 	body{
 		font-size: calc(32px * var(--font-size-amplifier));
+	}
+	:root {
+		--is-mobile: 1;
 	}
 }
 
@@ -199,7 +203,6 @@ input:focus{
 .saveBtn, .deleteBtn {
 	text-align: center;
 	color: var(--main-text-rgb);
-	font-weight: thin;
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -376,4 +379,8 @@ a {
 	100%{
 		scale: 1.1;
 	}
+}
+
+.admin button{
+	font-size: 1rem;
 }
