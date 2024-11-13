@@ -426,13 +426,8 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	if (currentPage != "register")
-	{
-		myPushState(`https://${hostname.host}/home`);
-		friendUpdate();
-	}
-	else
-		myPushState(`https://${hostname.host}/login`);
+	myPushState(`https://${hostname.host}/home`);
+	friendUpdate();
 })
 
 myProfileBtn.addEventListener("click", (e) => {
@@ -451,11 +446,6 @@ homeBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter")
 		homeBtn.click();
 })
-
-logOutBtn.addEventListener("click", (e) => {
-	myReplaceState(`https://${hostname.host}/login`);
-	disconnectSocket();
-});
 
 const themeMap = {
 	"dark" : {
@@ -708,20 +698,28 @@ function createMatchResumeContainer(match, username) {
 	
 		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
 		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
+	
+		if (scoreUserName.innerText == "deleted"){
+			scoreUserName.classList.add("deletedUser");
+			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
+		}
+		else{
+			scoreUserName.href = `https://${hostname.host}/user/${scoreUserName.innerText}`
+			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+		}
+	
+	
+		if (scoreOpponentName.innerText == "deleted"){
+			scoreOpponentName.classList.add("deletedUser");
+			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
+		}
+		else{
+			scoreOpponentName.href = `https://${hostname.host}/user/${scoreOpponentName.innerText}`
+			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
+		}
+	
 		scoreOpponentName.innerText += ":"
 		scoreUserName.innerText += ":"
-	
-		if (scoreUserName.innerText == "deleted")
-			scoreUserName.classList.add("deletedUser");
-		else
-			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	
-	
-		if (scoreOpponentName.innerText == "deleted")
-			scoreOpponentName.classList.add("deletedUser");
-		else
-			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	
 		scoreUser.appendChild(scoreUserName);
 		scoreUser.appendChild(scoreUserScore);
 	
@@ -924,10 +922,15 @@ window.addEventListener("click", (e) => {
 	if (e.target.closest(".notifReject, .notifAccept")){
 		e.target.closest(".notifContainer").remove();
 	}
-	if (e.target.classList.contains("tournament")){
+	if (e.target.id == "logOutBtn")
+		disconnectSocket();
+
+	if (e.target.href != "" && e.target.href != undefined){
 		e.preventDefault();
 		myPushState(`${e.target.href}`);
+
 	}
+	
 })
 
 function popUpError(error){

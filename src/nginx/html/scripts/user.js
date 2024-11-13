@@ -94,11 +94,16 @@ var template = `
                     document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                         elem.addEventListener("keydown", (e) => {
                             if (e.key == "Enter"){
-                                var idx = elem.tabIndex + 1
-                                elem.querySelectorAll(".resultScoreName").forEach(function (names){
-                                    names.tabIndex = idx;
-                                    idx++;
-                                })
+								if (elem.querySelector(".tournament")){
+									elem.querySelector(".tournament").click();
+								}
+								else{
+									var idx = elem.tabIndex + 1
+									elem.querySelectorAll(".resultScoreName").forEach(function (names){
+										names.tabIndex = idx;
+										idx++;
+									})
+								}
                             }
                         })
                     });
@@ -112,21 +117,6 @@ var template = `
                             });
                         }
                     });
-                    matchUsersName = document.querySelectorAll(".resultScoreName")
-                    Object.keys(matchUsersName).forEach(function(key){
-                        if (!matchUsersName[key].classList.contains("deletedUser")){
-                            matchUsersName[key].addEventListener("click", (e) => {
-                                myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
-                            })
-                            matchUsersName[key].addEventListener("keydown", (e) => {
-                                if (e.key == "Enter")
-                                    matchUsersName[key].click();
-                            })
-                        }
-                        else{
-                            matchUsersName[key].innerText = client.langJson["index"][".deletedUser"];
-                        }
-                    })
                 }
                 catch{
                     var messageContainer = document.createElement("div");
