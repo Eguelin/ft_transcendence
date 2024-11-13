@@ -116,7 +116,7 @@ var template = `
 `
 
 function leftSlideBtn(){
-	var contest = document.querySelector(".singleRoundDisplay");
+	var contest = document.querySelector(".singleRoundDisplay#tournamentContainer");
 	if (!contest)
 		return
 	var left = contest.getBoundingClientRect().left;
@@ -167,7 +167,7 @@ function leftSlideBtn(){
 }
 
 function rightSlideBtn(){
-	var contest = document.querySelector(".singleRoundDisplay");
+	var contest = document.querySelector(".singleRoundDisplay#tournamentContainer");
 	if (!contest)
 		return
 	var left = contest.getBoundingClientRect().left;
@@ -194,7 +194,6 @@ function rightSlideBtn(){
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
-		/*document.querySelector("#treeCanva").style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)*/
 
 		setTimeout(()=>{
 
@@ -504,10 +503,12 @@ function displayTournament(){
 		})
 
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-			tournamentContainer.classList.add("singleRoundDisplay")
+			document.querySelector("#controler").classList.add("singleRoundDisplay");
+			tournamentContainer.classList.add("singleRoundDisplay");
 		}
 		else {
-			tournamentContainer.classList.remove("singleRoundDisplay")
+			tournamentContainer.classList.remove("singleRoundDisplay");
+			document.querySelector("#controler").classList.remove("singleRoundDisplay");
 			tournamentContainer.style.setProperty("left", `0px`)
 			if (document.getElementById("treeCanva"))
 				document.querySelector("#treeCanva").style.setProperty("left", `0px`)
@@ -556,6 +557,7 @@ function displayTournament(){
 	else{
 		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentLobby']} ${playersCount}/8`
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
+		document.querySelector("#controler").classList.remove("singleRoundDisplay")
 		document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
 		if (document.getElementById("treeCanva"))
 			document.getElementById("treeCanva").remove();
@@ -1026,8 +1028,10 @@ function game() {
 			}
 			gameContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
+			(async () => (loadCurrentLang()))();
 			displayTournament();
 			window.addEventListener("resize", displayTournament);
+
 		})()
 	}
 }
