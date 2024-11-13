@@ -18,8 +18,9 @@ var template = `
 		<div id="slideSelectorBg"></div>
 	</div>
 
-	<div class="loginSlide">
+	<div class="loginSlideContainer">
 		<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
+		<div class="loginSlide">
 			<div>
 				<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
 			</div>
@@ -29,13 +30,15 @@ var template = `
 			<div>
 				<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
 			</div>
+		</div>
 		<div class="loginOpt" id="externalLoginOpt">Other login options</div>
 		<div id="externalLogin">
 			<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
 		</div>
 	</div>
-	<div class="loginSlide">
+	<div class="loginSlideContainer">
 		<div class="loginOpt" id="createAcc">Create your account</div>
+		<div class=loginSlide>
 			<div>
 				<input tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
 			</div>
@@ -48,6 +51,7 @@ var template = `
 			<div>
 				<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
 			</div>
+		</div>
 	</div>
 </div>
 `
@@ -81,7 +85,7 @@ var template = `
 	swichTheme = document.getElementById("themeButton")
 	fortyTwoLogin = document.getElementById("fortyTwoLogin")
 	loginSlideSelector = document.querySelectorAll(".slideSelector")
-	slides = document.querySelectorAll(".loginSlide")
+	slides = document.querySelectorAll(".loginSlideContainer")
 
 	usernameLogin = document.getElementById('inputUsername');
 	pwLogin = document.getElementById('inputPassword');
@@ -241,17 +245,22 @@ var template = `
 						}
 						else{
 							(async () => {
-								client = await new Client()
-								if (client == null){
-									slideIdx = 0;
-									window.onkeydown = null
-									myReplaceState(`https://${hostname.host}/login`);
+								try {
+									client = await new Client()
+									if (client == null){
+										slideIdx = 0;
+										window.onkeydown = null
+										myReplaceState(`https://${hostname.host}/login`);
+									}
+									else{
+										slideIdx = 0;
+										window.onkeydown = null
+										myReplaceState(`https://${hostname.host}/home`);
+										friendUpdate();
+									}
 								}
-								else{
-									slideIdx = 0;
-									window.onkeydown = null
-									myReplaceState(`https://${hostname.host}/home`);
-									friendUpdate();
+								catch{
+									unsetLoader();
 								}
 							})();
 						}
@@ -338,18 +347,22 @@ var template = `
 						credentials: 'include'
 					}).then(response => {
 						(async () => {
-							client = await new Client()
-							
-							if (client == null){
-								slideIdx = 1;
-								window.onkeydown = null
-								myReplaceState(`https://${hostname.host}/login`);
+							try {
+								client = await new Client()
+								if (client == null){
+									slideIdx = 1;
+									window.onkeydown = null
+									myReplaceState(`https://${hostname.host}/login`);
+								}
+								else{
+									slideIdx = 0;
+									window.onkeydown = null
+									myReplaceState(`https://${hostname.host}/home`);
+									friendUpdate();
+								}
 							}
-							else{
-								slideIdx = 0;
-								window.onkeydown = null
-								myReplaceState(`https://${hostname.host}/home`);
-								friendUpdate();
+							catch{
+								unsetLoader();
 							}
 						})();
 					});

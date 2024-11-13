@@ -1,7 +1,6 @@
 var deleteRequestPopup;
 var blockFriendPopup;
 var popupBg;
-var sendFriendRequestBtn;
 var allFriendListContainer;
 var onlineFriendListContainer;
 var pendingFriendRequestListContainer;
@@ -10,6 +9,9 @@ var friendInfo;
 var friendSlides;
 var slideSelector;
 var friendSlideIdx = 0;
+var slides;
+
+var baseTabIdx = 15;
 
 var template = `
 <div id="friendInfo">
@@ -30,33 +32,54 @@ var template = `
 			<div id="blockedSelectorText">Blocked</div>
 			<div id="blockedSelectorCount" class="userSlideCount">(0)</div>
 		</div>
+		<div id="slideSelectorBg"></div>
 	</div>
 
-	<div id="onlineFriendList" class="friendSlide activeSlide"></div>
-	<div id="allFriendList" class="friendSlide"></div>
-	<div id="pendingFriendRequestList" class="friendSlide"></div>
-	<div id="blockedList" class="friendSlide"></div>
-
-</div>
-<div style="z-index: 1;">
-	<div id="popupBg" style="display: none;"></div>
-	<div id="deleteFriendPopup">
-		<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
-		<button id="confirmDelete" aria-label="Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
-	</div>
-	<div id="blockFriendPopup">
-		<a id="confirmBlockQuestion">Are you sure you want to block this friend</a>
-		<button id="confirmBlock" aria-label="Are you sure you want to block this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+	<div id="friendSlidesContainer">
+		<div id="friendSlides" style="left: 0vw;">
+			<div>
+				<div class="gradient"></div>
+				<div id="onlineFriendList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
+			<div>
+				<div class="gradient"></div>
+				<div id="allFriendList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
+			<div>
+				<div class="gradient"></div>
+				<div id="pendingFriendRequestList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
+			<div>
+				<div class="gradient"></div>
+				<div id="blockedList" class="friendSlide"></div>
+				<div class="endGradient"></div>
+			</div>
+		</div>
+		<div style="z-index: 21;">
+			<div id="popupBg" style="display: none;"></div>
+			<div id="deleteFriendPopup">
+				<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
+				<button id="confirmDelete" aria-label="Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+			</div>
+			<div id="blockFriendPopup">
+				<a id="confirmBlockQuestion">Are you sure you want to block this friend</a>
+				<button id="confirmBlock" aria-label="Are you sure you want to block this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+			</div>
+		</div>
 	</div>
 </div>`
+
 
 {	
 	document.getElementById("container").innerHTML = template;
 
+	slides = document.querySelectorAll(".friendSlide");
 	deleteRequestPopup = document.getElementById("deleteRequestPopup");
 	blockFriendPopup = document.getElementById("blockFriendPopup");
 	popupBg = document.getElementById("popupBg");
-	sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
 	allFriendListContainer = document.getElementById("allFriendList");
 	onlineFriendListContainer = document.getElementById("onlineFriendList");
 	pendingFriendRequestListContainer = document.getElementById("pendingFriendRequestList");
@@ -65,20 +88,44 @@ var template = `
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
 
-	friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 	
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
 			key.addEventListener("click", (e) => {
-				friendSlides[friendSlideIdx].classList.remove("activeSlide");
+				unsetTabIndexes(friendSlideIdx);
+				var save = friendSlideIdx;
 				slideSelector[friendSlideIdx].classList.remove("activeSelector");
-				friendSlideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
-				friendSlides[friendSlideIdx].classList.add('activeSlide');
+				friendSlideIdx = Array.from(slideSelector).indexOf(e.target.closest(".slideSelector"));
 				if (friendSlides[friendSlideIdx].childElementCount > 0){
 					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
 				}
 				slideSelector[friendSlideIdx].classList.add("activeSelector");
+				var tmp = document.querySelector("#friendSlides");
+				var left = tmp.getBoundingClientRect().left;
+				var move = [
+					{ left: `${left}px`},
+					{ left: `-${friendSlideIdx}00vw`}
+				];
+				var time = {
+					duration: 500,
+					iterations: 1,
+				}
+				tmp.animate(move, time);
+				tmp.style.setProperty("left", `-${friendSlideIdx}00vw`)
+
+				tmp = document.querySelector("#slideSelectorBg");
+				move = [
+					{ left: `${save * 25}%`},
+					{ left: `${friendSlideIdx * 25}%`}
+				];
+				time = {
+					duration: 500,
+					iterations: 1,
+				}
+				tmp.animate(move, time);
+				tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
+				setTabIndexes(friendSlideIdx);
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -181,6 +228,20 @@ document.addEventListener("click", (e) => {
 			})
 			e.target.closest(".friendContainer").remove();
 		}
+		if (e.target.className == "removeFriendBtn"){
+			document.getElementById("popupBg").style.display = "block";
+			deleteFriendPopup.style.setProperty("display", "flex");
+			deleteFriendPopup.className = e.target.parentElement.id;
+		}
+		if (e.target.className == "blockFriendBtn"){
+			document.getElementById("popupBg").style.display = "block"
+			blockFriendPopup.style.setProperty("display", "flex");
+			blockFriendPopup.className = e.target.parentElement.id;
+		}
+		if (e.target.closest(".friendsOptionContainer")){
+			e.target.closest(".friendsOptionContainer").classList.add("activeListSelector");
+		}
+
 	}
 })
 
@@ -197,7 +258,6 @@ document.addEventListener("keydown", (e) => {
 	}
 })
 
-var friendTabIdx, pendingFriendTabIdx, blockedUserTabIdx;
 
 function createUserContainer(user){
 	var friendContainer = document.createElement("div");
@@ -209,7 +269,6 @@ function createUserContainer(user){
 	var rejectBtn = document.createElement("div");
 	var removeFriendBtn = document.createElement("div");
 	var blockFriendBtn = document.createElement("div");
-	var friendsOption = document.createElement("div");
 	var moreBtn = document.createElement("div");
 
 	var userOptionContainer = document.createElement("div");
@@ -229,7 +288,6 @@ function createUserContainer(user){
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
-	friendsOption.className = "friendsOption"
 	moreBtn.className = "moreBtn";
 
 	removeFriendBtn.className = "removeFriendBtn";
@@ -261,14 +319,90 @@ function createUserContainer(user){
 	userOptionContainer.appendChild(userOption);
 
 	friendContainer.appendChild(userOptionContainer);
+
+	userOptionContainer.querySelectorAll(".friendsOption div").forEach(function (elem) {
+		elem.onfocus = function() {window.onkeydown = null;}
+		elem.onblur = function() {window.onkeydown = friendKeyDownEvent;}
+		elem.onkeydown = function(e) {if (e.key == "Enter") {elem.click()}}
+		elem.onkeyup = function(e){
+			if (elem.className == "removeFriendBtn"){
+				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmDelete").focus();
+			}
+			else if (elem.className == "blockFriendBtn"){
+				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmBlock").focus();
+			}
+		}
+	});
+
+	userOptionContainer.onfocus = function () {
+		window.onkeydown = null;
+		document.querySelectorAll(".activeListSelector").forEach(function (active){
+			active.classList.remove("activeListSelector");
+		})
+	};
+	userOptionContainer.onblur = function () {window.onkeydown = friendKeyDownEvent};
+	userOptionContainer.onkeydown = function (e) {
+		if (e.key == "Enter"){
+			if (e.target.classList.contains("friendsOptionContainer")){	// to prevent this event to apply to children of .friendsOptionContainer
+				userOptionContainer.classList.add("activeListSelector");
+				userOptionContainer.lastChild.firstChild.focus();
+			}
+		}
+	}
+
 	return (friendContainer);
+}
+
+function unsetTabIndexes(slideIdx){
+	var slide = slides[slideIdx];
+
+	slide.querySelectorAll(".friendsOptionContainer").forEach(function(elem){
+		elem.tabIndex = -1;
+		if (elem.querySelector(".removeFriendBtn"))
+			elem.querySelector(".removeFriendBtn").tabIndex = -1;
+
+		if (elem.querySelector(".blockFriendBtn"))
+			elem.querySelector(".blockFriendBtn").tabIndex = -1;
+
+		if (elem.querySelector(".acceptRequestBtn"))
+			elem.querySelector(".acceptRequestBtn").tabIndex = -1;
+
+		if (elem.querySelector(".rejectRequestBtn"))
+			elem.querySelector(".rejectRequestBtn").tabIndex = -1;
+
+		if (elem.querySelector(".unblockBtn"))
+			elem.querySelector(".unblockBtn").tabIndex = -1;
+	})
+}
+
+function setTabIndexes(slideIdx){
+	var slide = slides[slideIdx];
+	var tmpIdx = baseTabIdx;
+
+	slide.querySelectorAll(".friendsOptionContainer").forEach(function(elem){
+		elem.tabIndex = tmpIdx++;
+		if (elem.querySelector(".removeFriendBtn"))
+			elem.querySelector(".removeFriendBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".blockFriendBtn"))
+			elem.querySelector(".blockFriendBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".acceptRequestBtn"))
+			elem.querySelector(".acceptRequestBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".rejectRequestBtn"))
+			elem.querySelector(".rejectRequestBtn").tabIndex = tmpIdx++;
+
+		if (elem.querySelector(".unblockBtn"))
+			elem.querySelector(".unblockBtn").tabIndex = tmpIdx++;
+	})
 }
 
 function createFriendContainer(user){
 	var friendContainer = document.createElement("div");
 	var friendsOptionContainer = document.createElement("div");
-	var removeFriendBtn = document.createElement("div");
-	var blockFriendBtn = document.createElement("div");
 
 	friendContainer = createUserContainer(user);
 
@@ -278,22 +412,50 @@ function createFriendContainer(user){
 	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaAll.friendsOptionContainer']}`);
-	friendsOptionContainer.tabIndex = friendTabIdx;
-	friendTabIdx += 1;
-
-	removeFriendBtn = friendsOptionContainer.getElementsByClassName("removeFriendBtn")[0];
-	removeFriendBtn.tabIndex = friendTabIdx;
-	friendTabIdx += 1;
-
-	blockFriendBtn = friendsOptionContainer.getElementsByClassName("blockFriendBtn")[0];
-	blockFriendBtn.tabIndex = friendTabIdx;
-	friendTabIdx += 1;
 
 	if (user.is_active == true){
-		onlineFriendListContainer.appendChild(friendContainer.cloneNode(true));
+		var clone = friendContainer.cloneNode(true);
+		var img = clone.querySelector(".profilePicture");
+		addPfpUrlToImgSrc(img, `${img.src}`);
+		clone.querySelectorAll(".friendsOption div").forEach(function (elem) {
+			elem.onfocus = function() {window.onkeydown = null;}
+			elem.onblur = function() {window.onkeydown = friendKeyDownEvent;}
+			elem.onkeydown = function(e) {if (e.key == "Enter") {elem.click()}}
+			elem.onkeyup = function(e){
+				if (elem.className == "removeFriendBtn"){
+					document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
+					document.getElementById("confirmDelete").focus();
+				}
+				else if (elem.className == "blockFriendBtn"){
+					document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
+					document.getElementById("confirmBlock").focus();
+				}
+			}
+		});
+		clone.querySelectorAll(".friendsOptionContainer").forEach(function (elem){
+			elem.onfocus = function () {
+				window.onkeydown = null;
+				document.querySelectorAll(".activeListSelector").forEach(function (active){
+					active.classList.remove("activeListSelector");
+				})
+			};
+			elem.onblur = function () {window.onkeydown = friendKeyDownEvent};
+			elem.onkeydown = function (e) {
+				if (e.key == "Enter"){
+					if (e.target.classList.contains("friendsOptionContainer")){	// to prevent this event to apply to children of .friendsOptionContainer
+						elem.classList.add("activeListSelector");
+						elem.lastChild.firstChild.focus();
+					}
+				}
+			}
+		
+		
+		})
+		onlineFriendListContainer.appendChild(clone);
 	}
 	allFriendListContainer.appendChild(friendContainer);
 }
+
 
 function createFriendRequestContainer(user){
 	var friendContainer = createUserContainer(user);
@@ -303,12 +465,6 @@ function createFriendRequestContainer(user){
 	})
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaPending.friendsOptionContainer']}`);
-	friendsOptionContainer.tabIndex = pendingFriendTabIdx;
-	pendingFriendTabIdx += 1;
-	friendContainer.getElementsByClassName("acceptRequestBtn")[0].tabIndex = pendingFriendTabIdx;
-	pendingFriendTabIdx += 1;
-	friendContainer.getElementsByClassName("rejectRequestBtn")[0].tabIndex = pendingFriendTabIdx;
-	pendingFriendTabIdx += 1;
 	pendingFriendRequestListContainer.appendChild(friendContainer);
 }
 
@@ -322,89 +478,12 @@ function createBlockedUserContainer(user){
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaBlocked.friendsOptionContainer']}`);
-	friendsOptionContainer.tabIndex = blockedUserTabIdx;
-	blockedUserTabIdx += 1;
-
-	friendContainer.getElementsByClassName("unblockBtn")[0].tabIndex = blockedUserTabIdx;
-	blockedUserTabIdx += 1;
 
 	blockedListContainer.appendChild(friendContainer);
 }
 
-function setListeners(){
-	document.querySelectorAll(".friendsOptionContainer").forEach(function (elem) {
-		elem.addEventListener("focus", (e)=>{
-			window.onkeydown = null;
-			document.querySelectorAll(".activeListSelector").forEach(function (active){
-				active.classList.remove("activeListSelector");
-			})
-		});
-
-		elem.addEventListener("focusout", (e)=>{
-			window.onkeydown = friendKeyDownEvent;
-		});
-		elem.addEventListener("keydown", (e) => {
-			if (e.key == "Enter"){
-				if (e.target.classList.contains("friendsOptionContainer")){	// to prevent this event to apply to children of .friendsOptionContainer
-					elem.classList.add("activeListSelector");
-					elem.lastChild.firstChild.focus();
-				}
-			}
-		});
-		elem.addEventListener("click", (e) => {
-			elem.classList.add("activeListSelector");
-		})
-	})
-
-	document.querySelectorAll(".friendsOption div, .acceptRequestBtn, .rejectRequestBtn, .unblockBtn").forEach(function (elem) {
-		elem.addEventListener("focus", (e)=>{
-			window.onkeydown = null;
-		});
-		elem.addEventListener("focusout", (e)=>{
-			window.onkeydown = friendKeyDownEvent;
-		});
-		elem.addEventListener("keydown", (e) => {
-			if (e.key == "Enter"){
-				elem.click();
-			}
-		});
-	});
-	document.querySelectorAll(".friendsOption div").forEach(function (elem) {
-		elem.addEventListener("keyup", (e) => {
-			if (elem.className == "removeFriendBtn"){
-				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmDelete").focus();
-			}
-			else if (elem.className == "blockFriendBtn"){
-				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmBlock").focus();
-			}
-		})
-		elem.addEventListener("click", (e) => {
-			if (document.getElementById("popupBg").style.getPropertyValue("display") == "block"){
-				document.getElementById("popupBg").style.display = "none";
-				blockFriendPopup.style.setProperty("display", "none");
-				deleteFriendPopup.style.setProperty("display", "none");
-			}
-			if (elem.className == "removeFriendBtn"){
-				document.getElementById("popupBg").style.display = "block";
-				deleteFriendPopup.style.setProperty("display", "flex");
-				deleteFriendPopup.className = e.target.parentElement.id;
-			}
-			else if (elem.className == "blockFriendBtn"){
-				document.getElementById("popupBg").style.display = "block"
-				blockFriendPopup.style.setProperty("display", "flex");
-				blockFriendPopup.className = e.target.parentElement.id;
-			}
-		})
-	})
-}
-
 function checkUpdate(){
 	if (currentPage == "friends"){
-		friendTabIdx = 15;
-		pendingFriendTabIdx = 15;
-		blockedUserTabIdx = 15;
 
 		fetch('/api/user/current', {
 			method: 'GET',
@@ -416,6 +495,7 @@ function checkUpdate(){
 		.then(response => {
 			if (response.ok) {
 				(response.json()).then((text) => {
+					baseTabIdx = 15;
 					switchTheme(text.theme_name);
 					currentLang = text.lang;
 					allFriendListContainer.innerText = "";
@@ -437,7 +517,9 @@ function checkUpdate(){
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
 					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
-					setListeners();
+					for (var i=0; i<4;i++)
+						unsetTabIndexes(i)
+					setTabIndexes(friendSlideIdx);
 				});
 			}
 			else {
@@ -451,6 +533,8 @@ function checkUpdate(){
 
 function friendKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		var save = friendSlideIdx;
+		unsetTabIndexes(friendSlideIdx)
 		friendSlides[friendSlideIdx].className = "friendSlide";
 		slideSelector[friendSlideIdx].className = "slideSelector";
 		if (e.key == "ArrowLeft")
@@ -461,9 +545,34 @@ function friendKeyDownEvent(e) {
 			friendSlideIdx = 0;
 		if (friendSlideIdx < 0)
 			friendSlideIdx = friendSlides.length - 1;
-		friendSlides[friendSlideIdx].className = `${friendSlides[friendSlideIdx].className} activeSlide`
 		slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		slideSelector[friendSlideIdx].focus();
+
+		var tmp = document.querySelector("#friendSlides");
+		var left = tmp.getBoundingClientRect().left;
+		var move = [
+			{ left: `${left}px`},
+			{ left: `-${friendSlideIdx}00%`}
+		];
+		var time = {
+			duration: 500,
+			iterations: 1,
+		}
+		tmp.animate(move, time);
+		tmp.style.setProperty("left", `-${friendSlideIdx}00%`)
+
+		tmp = document.querySelector("#slideSelectorBg");
+		move = [
+			{ left: `${save * 25}%`},
+			{ left: `${friendSlideIdx * 25}%`}
+		];
+		time = {
+			duration: 500,
+			iterations: 1,
+		}
+		tmp.animate(move, time);
+		tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
+		setTabIndexes(friendSlideIdx);
 	}
 }
 

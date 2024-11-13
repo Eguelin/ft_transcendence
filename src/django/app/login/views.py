@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json, os, requests, base64, random, string, subprocess, datetime
 import login.models as customModels
+import game.models as gameModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 import json, os, requests, base64, random, datetime, zxcvbn, re, io
@@ -320,7 +321,7 @@ def profile_update(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-def get_all_user_match_json(matches):
+def get_all_user_match_json(matches, tournaments, username):
 	matches_json = {}
 	year_json = {}
 	month_json = {}
@@ -330,50 +331,120 @@ def get_all_user_match_json(matches):
 	month = ""
 	day = ""
 	i = 0
-	for match in matches:
-		if (dateObj != match.date):
+
+	for tournament in tournaments:
+		if (dateObj != tournament.date):
 			if (year != ""):
-				if (year != match.date.year):
+				if (year != tournament.date.year):
 					matches_json["{0}".format(year)] = year_json
 					year_json = {}
-				if (month != match.date.month):
+				if (month != tournament.date.month):
 					year_json["{0}".format(month)] = month_json
 					month_json = {}
-				if (day != match.date.day):
+				if (day != tournament.date.day):
 					month_json["{0}".format(day)] = date_json
-			dateObj = match.date
+			dateObj = tournament.date
 			year = dateObj.year
 			month = dateObj.month
 			day = dateObj.day
 			date_json = {}
 			i = 0
-		try:
-			p1_name = match.player_one.username
-		except:
-			p1_name = "deleted"
-
-		try:
-			p2_name = match.player_two.username
-		except:
-			p2_name = "deleted"
 		date_json[i] = {
-			'player_one' : p1_name,
-			'player_two' : p2_name,
-			'player_one_pts' : match.player_one_pts,
-			'player_two_pts' : match.player_two_pts,
-			'date' : match.date,
+			'type' : 'tournament',
+			'id' : tournament.pk,
+			'date' : tournament.date,
 		}
 		i += 1
+		for match in tournament.matches.all():
+			if match.player_one.username == username or match.player_two.username == username:
+				try:
+					p1_name = match.player_one.username
+				except:
+					p1_name = "deleted"
+		
+				try:
+					p2_name = match.player_two.username
+				except:
+					p2_name = "deleted"
+				date_json[i] = {
+					'type' : 'match',
+					'player_one' : p1_name,
+					'player_two' : p2_name,
+					'player_one_pts' : match.player_one_pts,
+					'player_two_pts' : match.player_two_pts,
+					'winner' : match.winner.username,
+					'date' : match.date,
+				}
+				i += 1
+	i = 0
+
 	if (dateObj != ""):
 		month_json["{0}".format(day)] = date_json
 		year_json["{0}".format(month)] = month_json
 		matches_json["{0}".format(year)] = year_json
+	dateObj = ""
+	year = ""
+	month = ""
+	day = ""
+	date_json = {}
+#	for match in matches:
+#		if (dateObj != match.date):
+#			if (year != ""):
+#				if (year != match.date.year):
+#					matches_json["{0}".format(year)] = year_json
+#					#year_json = {}
+#				if (month != match.date.month):
+#					year_json["{0}".format(month)] = month_json
+#					#month_json = {}
+#				if (day != match.date.day):
+#					month_json["{0}".format(day)] = date_json
+#			dateObj = match.date
+#			year = dateObj.year
+#			month = dateObj.month
+#			day = dateObj.day
+#			try :
+#				date_json = matches_json["{0}".format(year)]["{0}".format(month)]["{0}".format(day)]
+#			except:
+#				date_json = {}
+#			i = 0
+#		try:
+#			p1_name = match.player_one.username
+#		except:
+#			p1_name = "deleted"
+#
+#		try:
+#			p2_name = match.player_two.username
+#		except:
+#			p2_name = "deleted"
+#		while (i in date_json):
+#			i += 1
+#		date_json[i] = {
+#			'type' : 'match',
+#			'player_one' : p1_name,
+#			'player_two' : p2_name,
+#			'player_one_pts' : match.player_one_pts,
+#			'player_two_pts' : match.player_two_pts,
+#			'winner' : match.winner.username,
+#			'date' : match.date,
+#		}
+#		i += 1
+#	if (dateObj != ""):
+#		month_json["{0}".format(day)] = date_json
+#		year_json["{0}".format(month)] = month_json
+#		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
-def get_user_match(matches):
+def get_user_match(matches, tournaments):
 	matches_json = {}
 	date = ""
 	i = 0
+	for tournament in tournaments:
+		matches_json[i] = {
+			'type' : 'tournament',
+			'id' : tournament.pk,
+			'date' : tournament.date,
+		}
+		i += 1
 	for match in matches:
 		try:
 			p1_name = match.player_one.username
@@ -385,10 +456,13 @@ def get_user_match(matches):
 		except:
 			p2_name = "deleted"
 		matches_json[i] = {
+			'type' : 'match',
+			'id' : match.pk,
 			'player_one' : p1_name,
 			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
+			'winner' : match.winner.username,
 			'date' : match.date,
 		}
 		i += 1
@@ -396,7 +470,7 @@ def get_user_match(matches):
 
 
 def get_user_json(user, startDate, endDate):
-	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
+	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)), user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)), user.username)
 	return {'username' : user.username,
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
@@ -426,8 +500,7 @@ def current_user(request):
 			friend_request_json[e.username] = get_user_preview_json(e)
 		for e in blocked_list:
 			blocked_json[e.username] = get_user_preview_json(e)
-
-		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()))
+		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()), request.user.profile.tournaments.filter(date=datetime.date.today()))
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'use_browser_theme': request.user.profile.use_browser_theme,
@@ -456,7 +529,7 @@ def get(request):
 		except User.DoesNotExist:
 			return JsonResponse({'message': "can't find user"}, status=404)
 		except Exception as error:
-			return JsonResponse({'message': "can't find user"}, status=500)
+			return JsonResponse({'message': error}, status=500)
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
@@ -498,6 +571,137 @@ def get_user_id(request):
 
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'User not found'}, status=404)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+def get_tournament(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+	try:
+		data = json.loads(request.body)
+		tournament = gameModels.TournamentModel.objects.get(pk=data.get("id"))
+		tournamentJson = {
+			"round_0" : {
+				"match_0" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_1" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_2" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_3" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				}
+			},
+			"round_1" : {
+				"match_0" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				},
+				"match_1" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				}
+			},
+			"round_2" : {
+				"match_0" : {
+					"playerLeft":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					},
+					"playerRight":{
+						"username": None,
+						"profile_picture": None,
+						"winner": None,
+						"score": 0,
+					}
+				}
+			}
+		}
+		for match in tournament.matches.all():
+			
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = match.player_one.username
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = match.player_one.profile.profile_picture
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winner.username == match.player_one.username else None
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["score"] = match.player_one_pts
+
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["username"] = match.player_two.username
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = match.player_two.profile.profile_picture
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winner.username == match.player_two.username else None
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["score"] = match.player_two_pts
+		return JsonResponse(tournamentJson, status=200)
+#	except gameModels.DoesNotExist:
+#		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)

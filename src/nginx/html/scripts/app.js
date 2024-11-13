@@ -87,53 +87,64 @@ class Client{
 
 	constructor (){
 		return (async () =>{
-			const fetchResult = await fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			})
-			const result = await fetchResult.json();
-			if (fetchResult.ok){
-				this.username = result.username;
-				this.currentLang = result.lang;
-				this.pfpUrl = result.pfp;
-				this.use_dark_theme = result.is_dark_theme;
-				this.theme_name = result.theme_name;
-				this.friends = result.friends;
-				this.friend_requests = result.friend_requests;
-				this.blocked_user = result.blocked_user;
-				this.recentMatches = result.matches;
-				this.#is_admin = result.is_admin;
-				this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-				this.fontAmplifier = result.font_amplifier;
-				this.use_browser_theme = result.use_browser_theme;
-				this.doNotDisturb = result.do_not_disturb;
-				use_browser_theme = result.use_browser_theme;
-				if (use_browser_theme == false)
-					switchTheme(this.theme_name);
-				if (this.doNotDisturb == true)
-					notifCenterContainer.classList.add("dnd");
-				document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
-
-				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
-
-				usernameBtn.innerHTML = result.username;
-
-				addPfpUrlToImgSrc(userPfp, result.pfp)
-
-				fetch('/api/user/update', {
-					method: 'POST',
+			try{
+				const fetchResult = await fetch('/api/user/current', {
+					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({ "is_active": true }),
 					credentials: 'include'
 				})
+				const result = await fetchResult.json();
+				if (fetchResult.ok){
+					this.username = result.username;
+					this.currentLang = result.lang;
+					this.pfpUrl = result.pfp;
+					this.use_dark_theme = result.is_dark_theme;
+					this.theme_name = result.theme_name;
+					this.friends = result.friends;
+					this.friend_requests = result.friend_requests;
+					this.blocked_user = result.blocked_user;
+					this.recentMatches = result.matches;
+					this.#is_admin = result.is_admin;
+					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+					this.fontAmplifier = result.font_amplifier;
+					this.use_browser_theme = result.use_browser_theme;
+					this.doNotDisturb = result.do_not_disturb;
+					use_browser_theme = result.use_browser_theme;
+					if (use_browser_theme == false)
+						switchTheme(this.theme_name);
+					if (this.doNotDisturb == true)
+						notifCenterContainer.classList.add("dnd");
+					document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
+
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
+
+					usernameBtn.innerHTML = result.username;
+
+					addPfpUrlToImgSrc(userPfp, result.pfp)
+
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ "is_active": true }),
+						credentials: 'include'
+					})
+				}
+				else if (fetchResult.status == 401)
+					return null
 			}
-			else
-				return null
+			catch{
+				var template = `
+				<div id="pageContentContainer">
+					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
+				</div>
+				`
+				document.getElementById("container").innerHTML = template;
+				throw new Error("Error while reaching server");
+			}
 			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
 			if (fetchLangResult.ok)
 				this.langJson = await fetchLangResult.json()
@@ -146,55 +157,61 @@ class Client{
 	loadPage(page){
 		(async() => {
 			setLoader()
-			const fetchResult = await fetch('/api/user/current', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include'
-			})
-			const result = await fetchResult.json();
-			var search = 404;
-			if (fetchResult.ok){
-				this.#is_admin = result.is_admin;
+			try{
+				const fetchResult = await fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
+				const result = await fetchResult.json();
+				var search = 404;
+				if (fetchResult.ok){
+					this.#is_admin = result.is_admin;
 
-				var sep = page.indexOf("/", 1)
-				if (sep > 0)
-					pageName = page.substring(0, sep)
-				else
-					pageName = page;
-				search = pageName;
-				if (routes[pageName]){
-					if (!this.#is_admin && pageName == "/admin"){
-						currentPage = 403;
-						search = 403;
+					var sep = page.indexOf("/", 1)
+					if (sep > 0)
+						pageName = page.substring(0, sep)
+					else
+						pageName = page;
+					search = pageName;
+					if (routes[pageName]){
+						if (!this.#is_admin && pageName == "/admin"){
+							currentPage = 403;
+							search = 403;
+						}
+						else{
+							currentPage = pageName.substring(1);
+						}
 					}
 					else{
-						currentPage = pageName.substring(1);
+						currentPage = 404;
+						search = 404;
 					}
 				}
 				else{
-					currentPage = 404;
-					search = 404;
-				}
-			}
-			else{
-				dropDownUserContainer.style.setProperty("display", "none");
-				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+					dropDownUserContainer.style.setProperty("display", "none");
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
-				currentPage = 'login';
-				search = "/login"
+					currentPage = 'login';
+					search = "/login"
+				}
+				document.getElementById("script").remove();
+				var s = document.createElement("script");
+				s.onload = function(){
+					(async () => (loadCurrentLang()))();
+					unsetLoader()
+					checkResizeWindow();
+				}
+				s.setAttribute('id', 'script');
+				s.setAttribute('src', routes[search]);
+				document.body.appendChild(s);
 			}
-			document.getElementById("script").remove();
-			var s = document.createElement("script");
-			s.onload = function(){
-				(async () => (loadCurrentLang()))();
-				unsetLoader()
-				checkResizeWindow();
+			catch{
+				popUpError(client.langJson['index']['error reaching server']);
+				unsetLoader();
 			}
-			s.setAttribute('id', 'script');
-			s.setAttribute('src', routes[search]);
-			document.body.appendChild(s);
 		})();
 	}
 }
@@ -292,19 +309,24 @@ function handleToken() {
 		.then(response => {
 			if (response.ok){
 				(async () => {
-					client = await new Client()
-					if (use_browser_theme){
-						if (window.matchMedia) {
-							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+					try {
+						client = await new Client()
+						if (use_browser_theme){
+							if (window.matchMedia) {
+								switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+							}
+							preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 						}
-						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+						if (!client)
+							myReplaceState(`https://${hostname.host}/login`);
+						else
+						{
+							friendUpdate();
+							myReplaceState(`https://${hostname.host}/home`);
+						}
 					}
-					if (!client)
-						myReplaceState(`https://${hostname.host}/login`);
-					else
-					{
-						friendUpdate();
-						myReplaceState(`https://${hostname.host}/home`);
+					catch{
+						unsetLoader();
 					}
 				})()
 			}
@@ -321,31 +343,64 @@ function handleToken() {
 	else {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
-			unsetLoader();
+			setLoader();
 			(async () => {
-				client = await new Client();
-				if (!client)
-					myReplaceState(`https://${hostname.host}/login`);
-				else if (url.pathname == "" || url.pathname == "/"){
-					friendUpdate();
-					myReplaceState(`https://${hostname.host}/home`);
-				}
-				else{
-					load();
-					friendUpdate();
-				}
-				if (use_browser_theme){
-					if (window.matchMedia) {
-						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+				try{
+					client = await new Client();
+					if (!client)
+						myReplaceState(`https://${hostname.host}/login`);
+					else if (url.pathname == "" || url.pathname == "/"){
+						friendUpdate();
+						myReplaceState(`https://${hostname.host}/home`);
 					}
-					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+					else{
+						load();
+						friendUpdate();
+					}
+					if (use_browser_theme){
+						if (window.matchMedia) {
+							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+						}
+						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+					}
+				}
+				catch{
+					unsetLoader();
 				}
 			})()
 	}
 }
 
+function isMobile(){
+	let hasTouchScreen = false;
+	if ("maxTouchPoints" in navigator) {
+		hasTouchScreen = navigator.maxTouchPoints > 0;
+	}
+	else if ("msMaxTouchPoints" in navigator) {
+		hasTouchScreen = navigator.msMaxTouchPoints > 0;
+	}
+	else {
+		const mQ = matchMedia?.("(pointer:coarse)");
+		if (mQ?.media === "(pointer:coarse)") {
+			hasTouchScreen = !!mQ.matches;
+		}
+		else if ("orientation" in window) {
+			hasTouchScreen = true; // deprecated, but good fallback
+		}
+		else {
+			// Only as a last resort, fall back to user agent sniffing
+			const UA = navigator.userAgent;
+			hasTouchScreen =
+			/\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
+			/\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA);
+		}
+	}
+	return(hasTouchScreen);
+}
+
 window.addEventListener('load', (e) => {
 	handleToken();
+	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
 });
 
 
@@ -472,6 +527,10 @@ function switchTheme(theme) {
 		chartAbs.options.scales.y._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
 		chartAbs._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
 		chartAbs.update();
+
+
+		chartStats._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
+		chartStats.update();
 	}
 	if (currentPage == "game"){
 		displayTournament();
@@ -633,72 +692,67 @@ function ft_create_element(element_name, map){
 	return elem;
 }		
 
-function createMatchResumeContainer(match) {
+function createMatchResumeContainer(match, username) {
 	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
 
 	date = ft_create_element("a", {"class" : "matchDescContainerDate", "innerText" : match.date});
+	if (match.type == 'match'){
+		scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
+		scoreUser = ft_create_element("div", {"class" : "resultScore"});
+		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
+	
+		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
+	
+		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentName.innerText += ":"
+		scoreUserName.innerText += ":"
+	
+		if (scoreUserName.innerText == "deleted")
+			scoreUserName.classList.add("deletedUser");
+		else
+			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+	
+	
+		if (scoreOpponentName.innerText == "deleted")
+			scoreOpponentName.classList.add("deletedUser");
+		else
+			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
+	
+		scoreUser.appendChild(scoreUserName);
+		scoreUser.appendChild(scoreUserScore);
+	
+		scoreOpponent.appendChild(scoreOpponentName);
+		scoreOpponent.appendChild(scoreOpponentScore);
+		if (username == match.winner){
+			result.classList.add("victory");
+			result.innerHTML = client.langJson['user']['.victory'];
+		}
+		else {
+			result.classList.add("loss");
+			result.innerHTML = client.langJson['user']['.loss'];
+		}
+		//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
+	
+		scoreContainer.appendChild(scoreUser);
+		scoreContainer.appendChild(scoreOpponent);
+	
+		matchContainer.appendChild(result);
+		matchContainer.appendChild(scoreContainer);
+	}
+	else if (match.type == "tournament"){
+		result.classList.add("tournament");
+		result.innerHTML = client.langJson['user']['.tournament'];
 
-	scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
-	scoreUser = ft_create_element("div", {"class" : "resultScore"});
-	scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
+		result.href = `https://${hostname.host}/tournament?id=${match.id}`;
 
-	scoreUserName = document.createElement("a");
-	scoreUserScore = document.createElement("a");
-
-	scoreUserName.className = "resultScoreName";
-	scoreUserScore.className = "resultScoreScore";
-
-
-	scoreOpponentName = document.createElement("a");
-	scoreOpponentScore = document.createElement("a");
-
-	scoreOpponentName.className = "resultScoreName";
-	scoreOpponentScore.className = "resultScoreScore";
-
-	scoreUserName.innerHTML = `${match.player_one}`;
-	scoreOpponentName.innerHTML = `${match.player_two}`;
-
-	if (scoreUserName.innerHTML == "deleted")
-		scoreUserName.classList.add("deletedUser");
+		matchContainer.appendChild(result);
+	}
 	else
-		scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
-
-
-	if (scoreOpponentName.innerHTML == "deleted")
-		scoreOpponentName.classList.add("deletedUser");
-	else
-		scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	scoreUserScore.innerHTML = `${match.player_one_pts}`;
-	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
-
-	scoreUser.appendChild(scoreUserName);
-	scoreUser.innerHTML += " : ";
-	scoreUser.appendChild(scoreUserScore);
-
-	scoreOpponent.appendChild(scoreOpponentName);
-	scoreOpponent.innerHTML += " : ";
-	scoreOpponent.appendChild(scoreOpponentScore);
-	if (match.player_one_pts > match.player_two_pts){
-		result.classList.add("victory");
-		result.innerHTML = client.langJson['user']['.victory'];
-	}
-	else if (match.player_one_pts < match.player_two_pts){
-		result.classList.add("loss");
-		result.innerHTML = client.langJson['user']['.loss'];
-	}
-	else{
-		result.classList.add("draw");
-		result.innerHTML = client.langJson['user']['.draw'];
-	}
-	//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
-
-	scoreContainer.appendChild(scoreUser);
-	scoreContainer.appendChild(scoreOpponent);
-
-	matchContainer.appendChild(result);
-	matchContainer.appendChild(scoreContainer);
+		return ;
 	matchContainer.appendChild(date);
 	return (matchContainer);
 }
@@ -707,15 +761,17 @@ async function updateUserAriaLabel(key, content){
 	if (key.startsWith("P1")){
 		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
 			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
-			if (status.classList.contains("victory"))
-				status = client.langJson['user']['.victory'];
-			else if (status.classList.contains("loss"))
-				status = client.langJson['user']['.loss'];
-			else
-				status = client.langJson['user']['.draw'];
-			var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
-			var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-			elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+			if (!status.classList.contains("tournament")){
+				if (status.classList.contains("victory"))
+					status = client.langJson['user']['.victory'];
+				else if (status.classList.contains("loss"))
+					status = client.langJson['user']['.loss'];
+				else
+					status = client.langJson['user']['.draw'];
+				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
+				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
+				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+			}
 		})
 	}
 	else{
@@ -868,9 +924,13 @@ window.addEventListener("click", (e) => {
 	if (e.target.closest(".notifReject, .notifAccept")){
 		e.target.closest(".notifContainer").remove();
 	}
+	if (e.target.classList.contains("tournament")){
+		e.preventDefault();
+		myPushState(`${e.target.href}`);
+	}
 })
 
-function 	popUpError(error){
+function popUpError(error){
 	if (document.getElementById("popupErrorContainer"))
 		document.getElementById("popupErrorContainer").remove();
 	var popupContainer = document.createElement("div");
@@ -889,9 +949,7 @@ function 	popUpError(error){
 
 function checkResizeWindow(){
 	if(currentPage == "dashboard"){
-		var startDate = new Date();
-		startDate.setDate(startDate.getDate() - 7);
-		loadUserDashboard(startDate, today);
+		displayCharts();
 	}
 
 	var tmp = document.querySelector("#inputSearchUserContainer");
@@ -1121,3 +1179,23 @@ function friendUpdate()
 document.querySelector("#mobileSearchBtn").addEventListener("click", function() {
 	myPushState(`https://${hostname.host}/search`);
 })
+
+function getWindowWidth() {
+	return Math.max(
+	  document.body.scrollWidth,
+	  document.documentElement.scrollWidth,
+	  document.body.offsetWidth,
+	  document.documentElement.offsetWidth,
+	  document.documentElement.clientWidth
+	);
+}
+  
+function getWindowHeight() {
+	return Math.max(
+	  document.body.scrollHeight,
+	  document.documentElement.scrollHeight,
+	  document.body.offsetHeight,
+	  document.documentElement.offsetHeight,
+	  document.documentElement.clientHeight
+	);
+}
