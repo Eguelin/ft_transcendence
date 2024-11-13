@@ -369,6 +369,33 @@ function handleToken() {
 	}
 }
 
+function isMobile(){
+	let hasTouchScreen = false;
+	if ("maxTouchPoints" in navigator) {
+		hasTouchScreen = navigator.maxTouchPoints > 0;
+	}
+	else if ("msMaxTouchPoints" in navigator) {
+		hasTouchScreen = navigator.msMaxTouchPoints > 0;
+	}
+	else {
+		const mQ = matchMedia?.("(pointer:coarse)");
+		if (mQ?.media === "(pointer:coarse)") {
+			hasTouchScreen = !!mQ.matches;
+		}
+		else if ("orientation" in window) {
+			hasTouchScreen = true; // deprecated, but good fallback
+		}
+		else {
+			// Only as a last resort, fall back to user agent sniffing
+			const UA = navigator.userAgent;
+			hasTouchScreen =
+			/\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
+			/\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA);
+		}
+	}
+	return(hasTouchScreen);
+}
+
 window.addEventListener('load', (e) => {
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
@@ -662,72 +689,68 @@ function ft_create_element(element_name, map) {
 	return elem;
 }
 
-function createMatchResumeContainer(match) {
-	matchContainer = ft_create_element("div", { "class": "matchDescContainer" });
+function createMatchResumeContainer(match, username) {
+	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
 
 	result = ft_create_element("a", { "class": "matchDescContainerResult" });
 
-	date = ft_create_element("a", { "class": "matchDescContainerDate", "innerText": match.date });
+	date = ft_create_element("a", {"class" : "matchDescContainerDate", "innerText" : match.date});
+//	console.log(match, username)
+	if (match.type == 'match'){
+		scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
+		scoreUser = ft_create_element("div", {"class" : "resultScore"});
+		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
-	scoreContainer = ft_create_element("div", { "class": "matchDescContainerScore" });
-	scoreUser = ft_create_element("div", { "class": "resultScore" });
-	scoreOpponent = ft_create_element("div", { "class": "resultScore" });
+		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
 
-	scoreUserName = document.createElement("a");
-	scoreUserScore = document.createElement("a");
+		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentName.innerText += ":"
+		scoreUserName.innerText += ":"
 
-	scoreUserName.className = "resultScoreName";
-	scoreUserScore.className = "resultScoreScore";
+		if (scoreUserName.innerText == "deleted")
+			scoreUserName.classList.add("deletedUser");
+		else
+			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
 
 
-	scoreOpponentName = document.createElement("a");
-	scoreOpponentScore = document.createElement("a");
+		if (scoreOpponentName.innerText == "deleted")
+			scoreOpponentName.classList.add("deletedUser");
+		else
+			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
 
-	scoreOpponentName.className = "resultScoreName";
-	scoreOpponentScore.className = "resultScoreScore";
+		scoreUser.appendChild(scoreUserName);
+		scoreUser.appendChild(scoreUserScore);
 
-	scoreUserName.innerHTML = `${match.player_one}`;
-	scoreOpponentName.innerHTML = `${match.player_two}`;
+		scoreOpponent.appendChild(scoreOpponentName);
+		scoreOpponent.appendChild(scoreOpponentScore);
+		if (username == match.winner){
+			result.classList.add("victory");
+			result.innerHTML = client.langJson['user']['.victory'];
+		}
+		else {
+			result.classList.add("loss");
+			result.innerHTML = client.langJson['user']['.loss'];
+		}
+		//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
 
-	if (scoreUserName.innerHTML == "deleted")
-		scoreUserName.classList.add("deletedUser");
+		scoreContainer.appendChild(scoreUser);
+		scoreContainer.appendChild(scoreOpponent);
+
+		matchContainer.appendChild(result);
+		matchContainer.appendChild(scoreContainer);
+	}
+	else if (match.type == "tournament"){
+		result.classList.add("tournament");
+		result.innerHTML = client.langJson['user']['.tournament'];
+
+		result.href = `https://${hostname.host}/tournament?id=${match.id}`;
+
+		matchContainer.appendChild(result);
+	}
 	else
-		scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
-
-
-	if (scoreOpponentName.innerHTML == "deleted")
-		scoreOpponentName.classList.add("deletedUser");
-	else
-		scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	scoreUserScore.innerHTML = `${match.player_one_pts}`;
-	scoreOpponentScore.innerHTML = `${match.player_two_pts}`;
-
-	scoreUser.appendChild(scoreUserName);
-	scoreUser.innerHTML += " : ";
-	scoreUser.appendChild(scoreUserScore);
-
-	scoreOpponent.appendChild(scoreOpponentName);
-	scoreOpponent.innerHTML += " : ";
-	scoreOpponent.appendChild(scoreOpponentScore);
-	if (match.player_one_pts > match.player_two_pts) {
-		result.classList.add("victory");
-		result.innerHTML = client.langJson['user']['.victory'];
-	}
-	else if (match.player_one_pts < match.player_two_pts) {
-		result.classList.add("loss");
-		result.innerHTML = client.langJson['user']['.loss'];
-	}
-	else {
-		result.classList.add("draw");
-		result.innerHTML = client.langJson['user']['.draw'];
-	}
-	//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
-
-	scoreContainer.appendChild(scoreUser);
-	scoreContainer.appendChild(scoreOpponent);
-
-	matchContainer.appendChild(result);
-	matchContainer.appendChild(scoreContainer);
+		return ;
 	matchContainer.appendChild(date);
 	return (matchContainer);
 }
@@ -736,15 +759,17 @@ async function updateUserAriaLabel(key, content) {
 	if (key.startsWith("P1")) {
 		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
 			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
-			if (status.classList.contains("victory"))
-				status = client.langJson['user']['.victory'];
-			else if (status.classList.contains("loss"))
-				status = client.langJson['user']['.loss'];
-			else
-				status = client.langJson['user']['.draw'];
-			var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
-			var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-			elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+			if (!status.classList.contains("tournament")){
+				if (status.classList.contains("victory"))
+					status = client.langJson['user']['.victory'];
+				else if (status.classList.contains("loss"))
+					status = client.langJson['user']['.loss'];
+				else
+					status = client.langJson['user']['.draw'];
+				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
+				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
+				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+			}
 		})
 	}
 	else {
@@ -897,9 +922,13 @@ window.addEventListener("click", (e) => {
 	if (e.target.closest(".notifReject, .notifAccept")) {
 		e.target.closest(".notifContainer").remove();
 	}
+	if (e.target.classList.contains("tournament")){
+		e.preventDefault();
+		myPushState(`${e.target.href}`);
+	}
 })
 
-function popUpError(error) {
+function popUpError(error){
 	if (document.getElementById("popupErrorContainer"))
 		document.getElementById("popupErrorContainer").remove();
 	var popupContainer = document.createElement("div");
@@ -916,11 +945,9 @@ function popUpError(error) {
 	document.body.appendChild(popupContainer);
 }
 
-function checkResizeWindow() {
-	if (currentPage == "dashboard") {
-		var startDate = new Date();
-		startDate.setDate(startDate.getDate() - 7);
-		loadUserDashboard(startDate, today);
+function checkResizeWindow(){
+	if(currentPage == "dashboard"){
+		displayCharts();
 	}
 
 	var tmp = document.querySelector("#inputSearchUserContainer");
@@ -1094,6 +1121,11 @@ function friendUpdate()
 		socket.close();
 	});
 
+	window.disconnectSocket = function () {
+		if (socket)
+			socket.close();
+	};
+
 	socket.onmessage = function (event)
 	{
 		const data = JSON.parse(event.data);
@@ -1112,7 +1144,6 @@ function friendUpdate()
 				.then(response => {
 					if (response.ok)
 					{
-						console.log();
 						(response.json()).then((text) => {
 						friendRequest = Object.values(text.friend_requests).find(request => request.username === data.sender_name);
 						if (friendRequest)
@@ -1127,14 +1158,39 @@ function friendUpdate()
 		}
 		else if (data.status && data.username && currentPage == "friends")
 		{
-				//gerer les mises a jour etc
+			if (data.status === "online")
+			{
+				fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
+				.then(response => {
+					if (response.ok)
+					{
+						(response.json()).then((text) => {
+						friendRequest = Object.values(text.friends).find(request => request.username === data.username);
+						if (friendRequest  && !document.querySelector(`#onlineFriendList #${data.username}`))
+						{
+							createFriendOnlineContainer(friendRequest);
+							document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+						}
+						});
+					}
+				});
+			}
+			else if (data.status === "offline")
+			{
+				if (document.getElementById(data.username))
+				{
+					document.getElementById(data.username).remove();
+					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+				}
+			}
 		}
 	}
-
-	window.disconnectSocket = function () {
-		if (socket)
-			socket.close();
-	};
 
 	window.sendFriendRequest = function (user) {
 		fetch('/api/user/get_user_id', {
