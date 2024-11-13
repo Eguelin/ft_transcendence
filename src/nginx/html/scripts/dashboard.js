@@ -183,11 +183,14 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         try{
             matchObj = matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
             for (j = 0; j < Object.keys(matchObj).length; j++){
-                if (matchObj[j].player_one == username)
-                    countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                else
-                    countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                countMatch += 1;
+				console.log(matchObj[j]);
+				if (matchObj[j].type == "match"){
+					if (matchObj[j].player_one == username)
+						countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+					else
+						countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+					countMatch += 1;
+				}
             }
             startedPlaying = true;
         }
@@ -196,11 +199,13 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         try{
             matchObj = clientMatches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
             for (j = 0; j < Object.keys(matchObj).length; j++){
-                if (matchObj[j].player_one == clientUsername)
-                    clientCountWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-                else
-                    clientCountWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-                clientCountMatch += 1;
+				if (matchObj[j].type == "match"){
+					if (matchObj[j].player_one == clientUsername)
+						clientCountWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+					else
+						clientCountWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+					clientCountMatch += 1;
+				}
             }
             startedPlaying = true;
         }
@@ -221,7 +226,8 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         startDate.setDate(startDate.getDate() + 1);
     }
 
-	if (totalMatch){
+	console.log(countMatch);
+	if (countMatch){
 
 		const totalDuration = (500 / LastXDaysDisplayed);
 		const delayBetweenPoints = totalDuration / nbMatch;
@@ -658,14 +664,6 @@ function loadUserDashboard(startDate, endDate){
                         elem.innerText = client.langJson["index"][".deletedUser"];
                     }
                 })
-/*
-                if (countMatch == 0)
-                    document.getElementById("ratioValue").innerHTML = `100%`;
-                else
-                    document.getElementById("ratioValue").innerHTML = `${Math.floor((countWin / countMatch) * 1000) / 10}%`;
-                document.getElementById("nbWinValue").innerHTML = `${countWin}`;
-                document.getElementById("nbLossValue").innerHTML = `${countMatch - countWin}`;
-                document.getElementById("nbMatchValue").innerHTML = `${countMatch}`;*/
             })
         }
         else

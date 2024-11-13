@@ -748,7 +748,7 @@ function createMatchResumeContainer(match, username) {
 		result.classList.add("tournament");
 		result.innerHTML = client.langJson['user']['.tournament'];
 
-		result.href = `tournament?id=${match.id}`;
+		result.href = `https://${hostname.host}/tournament?id=${match.id}`;
 
 		matchContainer.appendChild(result);
 	}
