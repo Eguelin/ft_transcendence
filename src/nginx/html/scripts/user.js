@@ -89,7 +89,7 @@ var template = `
                 try{
                     matchObj = user.matches[endDate.getFullYear()][endDate.getMonth() + 1][endDate.getDate()]; // get matches object of today
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
-                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i]));
+                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], splitPath[4]));
                     };
                     document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                         elem.addEventListener("keydown", (e) => {
@@ -130,15 +130,12 @@ var template = `
                 }
                 catch{
                     var messageContainer = document.createElement("div");
-                    var messageUsername = document.createElement("a");
                     var message = document.createElement("a");
                     recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
                     recentMatchHistoryContainer.style.setProperty("align-items", "center");
                     messageContainer.id = "notPlayedTodayContainer";
-                    messageUsername.innerText = splitPath[4]
                     message.id="notPlayedToday";
-			        message.innerText = client.langJson['user']['#notPlayedToday'];
-                    messageContainer.appendChild(messageUsername);
+			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("USER", splitPath[4]);
                     messageContainer.appendChild(message);
                     recentMatchHistoryContainer.appendChild(messageContainer);
                 }
