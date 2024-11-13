@@ -333,17 +333,17 @@ def get_all_user_match_json(matches, tournaments):
 	i = 0
 
 	for tournament in tournaments:
-		if (dateObj != match.date):
+		if (dateObj != tournament.date):
 			if (year != ""):
-				if (year != match.date.year):
+				if (year != tournament.date.year):
 					matches_json["{0}".format(year)] = year_json
 					year_json = {}
-				if (month != match.date.month):
+				if (month != tournament.date.month):
 					year_json["{0}".format(month)] = month_json
 					month_json = {}
-				if (day != match.date.day):
+				if (day != tournament.date.day):
 					month_json["{0}".format(day)] = date_json
-			dateObj = match.date
+			dateObj = tournament.date
 			year = dateObj.year
 			month = dateObj.month
 			day = dateObj.day
@@ -352,7 +352,7 @@ def get_all_user_match_json(matches, tournaments):
 		matches_json[i] = {
 			'type' : 'tournament',
 			'id' : tournament.pk,
-			'date' : match.date,
+			'date' : tournament.date,
 		}
 		i += 1
 	for match in matches:
@@ -384,6 +384,7 @@ def get_all_user_match_json(matches, tournaments):
 		while (i in date_json):
 			i += 1
 		date_json[i] = {
+			'type' : 'match',
 			'player_one' : p1_name,
 			'player_two' : p2_name,
 			'player_one_pts' : match.player_one_pts,

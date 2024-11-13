@@ -92,6 +92,11 @@ class TournamentMatch(Match):
 #		self.match = game.match
 #		self.save()
 
+	def createMatchFromGame(self, game):
+		match = self.objects.create(player_one=game.playerLeft.user, player_two=game.playerRight.user, player_one_pts=game.playerLeft.score, player_two_pts=game.playerRight.score, date=datetime.datetime.now(), winner=game.winner.user, round=game.round, match=game.match)
+		match.save()
+		return match
+
 class TournamentModel(models.Model):
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	matches = models.ManyToManyField(TournamentMatch, related_name="matches")
@@ -104,15 +109,6 @@ class TournamentModel(models.Model):
 #		self.save()
 
 	def addMatchToTournament(self, game):
-		self.matches.add(TournamentMatch(
-			player_one=game.playerLeft.user,
-			player_two=game.playerRight.user,
-			player_one_pts=game.playerLeft.score,
-			player_two_pts=game.playerRight.score,
-			date=datetime.datetime.now(),
-			winner=game.winner.user,
-			round=game.round,
-			match=game.match
-			))
+		self.matches.add(TournamentMatch.createMatchFromGame(TournamentMatch, game))
 		self.save()
 
