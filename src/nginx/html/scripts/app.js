@@ -1068,18 +1068,14 @@ function sendNotif(message, id, type) {
 	}
 }
 
-function friendUpdate() {
+function friendUpdate()
+{
 	if (!client)
 		return;
 	var socket = new WebSocket("/ws/friend/");
 
 	socket.onopen = function () {
 		console.log("Connection established");
-	}
-
-	socket.onmessage = function (event) {
-		var data = JSON.parse(event.data);
-		console.log(data);
 	}
 
 	socket.onclose = function () {
@@ -1102,19 +1098,38 @@ function friendUpdate() {
 	{
 		const data = JSON.parse(event.data);
 		if (data.new_request)
-			{
+		{
 			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
-			if (currentPage === "friends")
+			if (currentPage === "friends" && !document.getElementById(data.sender_name))
 			{
-				//gerer les mises a jour etc
+				fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
+				.then(response => {
+					if (response.ok)
+					{
+						console.log();
+						(response.json()).then((text) => {
+						friendRequest = Object.values(text.friend_requests).find(request => request.username === data.sender_name);
+						if (friendRequest)
+						{
+							createFriendRequestContainer(friendRequest);
+							document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+						}
+						});
+					}
+				});
 			}
 		}
 		else if (data.status && data.username && currentPage == "friends")
 		{
-			//gerer les mises a jour etc
+				//gerer les mises a jour etc
 		}
-
-	};
+	}
 
 	window.disconnectSocket = function () {
 		if (socket)
