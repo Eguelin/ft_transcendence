@@ -698,7 +698,7 @@ function createMatchResumeContainer(match, username) {
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
 
 	date = ft_create_element("a", {"class" : "matchDescContainerDate", "innerText" : match.date});
-
+//	console.log(match, username)
 	if (match.type == 'match'){
 		scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
 		scoreUser = ft_create_element("div", {"class" : "resultScore"});
@@ -950,9 +950,7 @@ function popUpError(error){
 
 function checkResizeWindow(){
 	if(currentPage == "dashboard"){
-		var startDate = new Date();
-		startDate.setDate(startDate.getDate() - 7);
-		loadUserDashboard(startDate, today);
+		displayCharts();
 	}
 
 	var tmp = document.querySelector("#inputSearchUserContainer");
