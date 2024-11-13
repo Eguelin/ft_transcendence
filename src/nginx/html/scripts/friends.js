@@ -228,6 +228,20 @@ document.addEventListener("click", (e) => {
 			})
 			e.target.closest(".friendContainer").remove();
 		}
+		if (e.target.className == "removeFriendBtn"){
+			document.getElementById("popupBg").style.display = "block";
+			deleteFriendPopup.style.setProperty("display", "flex");
+			deleteFriendPopup.className = e.target.parentElement.id;
+		}
+		if (e.target.className == "blockFriendBtn"){
+			document.getElementById("popupBg").style.display = "block"
+			blockFriendPopup.style.setProperty("display", "flex");
+			blockFriendPopup.className = e.target.parentElement.id;
+		}
+		if (e.target.closest(".friendsOptionContainer")){
+			e.target.closest(".friendsOptionContainer").classList.add("activeListSelector");
+		}
+
 	}
 })
 
@@ -255,7 +269,6 @@ function createUserContainer(user){
 	var rejectBtn = document.createElement("div");
 	var removeFriendBtn = document.createElement("div");
 	var blockFriendBtn = document.createElement("div");
-	var friendsOption = document.createElement("div");
 	var moreBtn = document.createElement("div");
 
 	var userOptionContainer = document.createElement("div");
@@ -275,7 +288,6 @@ function createUserContainer(user){
 	friendContainer.appendChild(pfpContainer);
 	friendContainer.appendChild(friendName);
 
-	friendsOption.className = "friendsOption"
 	moreBtn.className = "moreBtn";
 
 	removeFriendBtn.className = "removeFriendBtn";
@@ -307,6 +319,39 @@ function createUserContainer(user){
 	userOptionContainer.appendChild(userOption);
 
 	friendContainer.appendChild(userOptionContainer);
+
+	userOptionContainer.querySelectorAll(".friendsOption div").forEach(function (elem) {
+		elem.onfocus = function() {window.onkeydown = null;}
+		elem.onblur = function() {window.onkeydown = friendKeyDownEvent;}
+		elem.onkeydown = function(e) {if (e.key == "Enter") {elem.click()}}
+		elem.onkeyup = function(e){
+			if (elem.className == "removeFriendBtn"){
+				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmDelete").focus();
+			}
+			else if (elem.className == "blockFriendBtn"){
+				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmBlock").focus();
+			}
+		}
+	});
+
+	userOptionContainer.onfocus = function () {
+		window.onkeydown = null;
+		document.querySelectorAll(".activeListSelector").forEach(function (active){
+			active.classList.remove("activeListSelector");
+		})
+	};
+	userOptionContainer.onblur = function () {window.onkeydown = friendKeyDownEvent};
+	userOptionContainer.onkeydown = function (e) {
+		if (e.key == "Enter"){
+			if (e.target.classList.contains("friendsOptionContainer")){	// to prevent this event to apply to children of .friendsOptionContainer
+				userOptionContainer.classList.add("activeListSelector");
+				userOptionContainer.lastChild.firstChild.focus();
+			}
+		}
+	}
+
 	return (friendContainer);
 }
 
@@ -372,6 +417,40 @@ function createFriendContainer(user){
 		var clone = friendContainer.cloneNode(true);
 		var img = clone.querySelector(".profilePicture");
 		addPfpUrlToImgSrc(img, `${img.src}`);
+		clone.querySelectorAll(".friendsOption div").forEach(function (elem) {
+			elem.onfocus = function() {window.onkeydown = null;}
+			elem.onblur = function() {window.onkeydown = friendKeyDownEvent;}
+			elem.onkeydown = function(e) {if (e.key == "Enter") {elem.click()}}
+			elem.onkeyup = function(e){
+				if (elem.className == "removeFriendBtn"){
+					document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
+					document.getElementById("confirmDelete").focus();
+				}
+				else if (elem.className == "blockFriendBtn"){
+					document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
+					document.getElementById("confirmBlock").focus();
+				}
+			}
+		});
+		clone.querySelectorAll(".friendsOptionContainer").forEach(function (elem){
+			elem.onfocus = function () {
+				window.onkeydown = null;
+				document.querySelectorAll(".activeListSelector").forEach(function (active){
+					active.classList.remove("activeListSelector");
+				})
+			};
+			elem.onblur = function () {window.onkeydown = friendKeyDownEvent};
+			elem.onkeydown = function (e) {
+				if (e.key == "Enter"){
+					if (e.target.classList.contains("friendsOptionContainer")){	// to prevent this event to apply to children of .friendsOptionContainer
+						elem.classList.add("activeListSelector");
+						elem.lastChild.firstChild.focus();
+					}
+				}
+			}
+		
+		
+		})
 		onlineFriendListContainer.appendChild(clone);
 	}
 	allFriendListContainer.appendChild(friendContainer);
@@ -400,75 +479,6 @@ function createBlockedUserContainer(user){
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaBlocked.friendsOptionContainer']}`);
 
 	blockedListContainer.appendChild(friendContainer);
-}
-
-function setListeners(){
-	document.querySelectorAll(".friendsOptionContainer").forEach(function (elem) {
-		elem.addEventListener("focus", (e)=>{
-			window.onkeydown = null;
-			document.querySelectorAll(".activeListSelector").forEach(function (active){
-				active.classList.remove("activeListSelector");
-			})
-		});
-
-		elem.addEventListener("focusout", (e)=>{
-			window.onkeydown = friendKeyDownEvent;
-		});
-		elem.addEventListener("keydown", (e) => {
-			if (e.key == "Enter"){
-				if (e.target.classList.contains("friendsOptionContainer")){	// to prevent this event to apply to children of .friendsOptionContainer
-					elem.classList.add("activeListSelector");
-					elem.lastChild.firstChild.focus();
-				}
-			}
-		});
-		elem.addEventListener("click", (e) => {
-			elem.classList.add("activeListSelector");
-		})
-	})
-
-	document.querySelectorAll(".friendsOption div, .acceptRequestBtn, .rejectRequestBtn, .unblockBtn").forEach(function (elem) {
-		elem.addEventListener("focus", (e)=>{
-			window.onkeydown = null;
-		});
-		elem.addEventListener("focusout", (e)=>{
-			window.onkeydown = friendKeyDownEvent;
-		});
-		elem.addEventListener("keydown", (e) => {
-			if (e.key == "Enter"){
-				elem.click();
-			}
-		});
-	});
-	document.querySelectorAll(".friendsOption div").forEach(function (elem) {
-		elem.addEventListener("keyup", (e) => {
-			if (elem.className == "removeFriendBtn"){
-				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmDelete").focus();
-			}
-			else if (elem.className == "blockFriendBtn"){
-				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmBlock").focus();
-			}
-		})
-		elem.addEventListener("click", (e) => {
-			if (document.getElementById("popupBg").style.getPropertyValue("display") == "block"){
-				document.getElementById("popupBg").style.display = "none";
-				blockFriendPopup.style.setProperty("display", "none");
-				deleteFriendPopup.style.setProperty("display", "none");
-			}
-			if (elem.className == "removeFriendBtn"){
-				document.getElementById("popupBg").style.display = "block";
-				deleteFriendPopup.style.setProperty("display", "flex");
-				deleteFriendPopup.className = e.target.parentElement.id;
-			}
-			else if (elem.className == "blockFriendBtn"){
-				document.getElementById("popupBg").style.display = "block"
-				blockFriendPopup.style.setProperty("display", "flex");
-				blockFriendPopup.className = e.target.parentElement.id;
-			}
-		})
-	})
 }
 
 function checkUpdate(){
@@ -506,7 +516,6 @@ function checkUpdate(){
 					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`;
 					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
-					setListeners();
 					for (var i=0; i<4;i++)
 						unsetTabIndexes(i)
 					setTabIndexes(friendSlideIdx);
