@@ -45,6 +45,57 @@ var template = `
     <div id="matchHistoryContainer"></div>
 </div>`
 
+class Dashboard{
+	startDate;
+	endDate;
+	startDateStr;
+	endDateStr;
+	username;
+	matches;
+	clientUsername;
+	clientMatches;
+
+	constructor (startDate, endDate, username, clientUsername){
+		return (async () =>{
+			try {
+				this.startDate = startDate;
+				this.endDate = endDate;
+				this.startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+				this.endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+				this.username = username;
+				this.clientUsername = clientUsername;
+				const matchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : username, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.matches = await matchesFetch.json();
+				this.matches = this.matches.matches;
+
+				const clientMatchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : this.clientUsername, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.clientMatches = await clientMatchesFetch.json();
+				this.clientMatches = this.clientMatches.matches;
+			}
+			catch{
+				var template = `
+				<div id="pageContentContainer">
+					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
+				</div>
+				`
+				document.getElementById("container").innerHTML = template;
+				throw new Error("Error while reaching server");
+			}
+			return (this);
+		})();
+	}
+}
+
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -177,22 +228,25 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 	}
 
 
-    while (startDate.valueOf() <= endDate.valueOf()){
+	//console.log(matches, username, startDate, endDate, clientMatches, clientUsername);
+    while (startDate.getDate() <= endDate.getDate()){
         var countWin = 0, countMatch = 0;
         var clientCountWin = 0, clientCountMatch = 0;
         try{
             matchObj = matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
-            for (j = 0; j < Object.keys(matchObj).length; j++){
-				console.log(matchObj[j]);
-				if (matchObj[j].type == "match"){
-					if (matchObj[j].player_one == username)
-						countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
-					else
-						countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
-					countMatch += 1;
+			if (matchObj){
+				for (j = 0; j < Object.keys(matchObj).length; j++){
+					if (matchObj[j].type == "match"){
+						if (matchObj[j].player_one == username)
+							countWin += matchObj[j].player_one_pts > matchObj[j].player_two_pts;
+						else
+							countWin += matchObj[j].player_one_pts < matchObj[j].player_two_pts;
+						countMatch += 1;
+						totalMatch += 1;
+					}
 				}
-            }
-            startedPlaying = true;
+				startedPlaying = true;
+			}
         }
         catch{
         }
@@ -212,7 +266,6 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         catch{
         }
         if (startedPlaying){
-			totalMatch += countMatch;
 			totalWin += countWin;
             average = (countWin / countMatch) * 100;
             absResult = (countWin - (countMatch - countWin));
@@ -226,8 +279,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         startDate.setDate(startDate.getDate() + 1);
     }
 
-	console.log(countMatch);
-	if (countMatch){
+	if (totalMatch){
 
 		const totalDuration = (500 / LastXDaysDisplayed);
 		const delayBetweenPoints = totalDuration / nbMatch;
@@ -545,128 +597,114 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 	}
 }
 
+var dashboard = null;
+
+
+
+function displayCharts(){
+	if (dashboard && dashboard instanceof Dashboard)
+	{
+		if (document.getElementById("winLossGraph"))
+			document.getElementById("winLossGraph").remove();
+		if (document.getElementById("winLossAbsGraph"))
+			document.getElementById("winLossAbsGraph").remove();
+		if (document.getElementById("userStatGraph"))
+			document.getElementById("userStatGraph").remove();
+
+		wLGraph = document.createElement("canvas");
+		wLGraph.id = "winLossGraph";
+		wLAbsGraph = document.createElement("canvas");
+		wLAbsGraph.id = "winLossAbsGraph";
+		userStatGraph = document.createElement("canvas");
+		userStatGraph.id = "userStatGraph";
+
+		var w = window,
+		d = document,
+		e = d.documentElement,
+		g = d.getElementsByTagName('body')[0],
+		x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
+		y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
+
+		if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 0){
+			wLGraph.width = x * 30;
+			wLAbsGraph.width = x * 30;
+			userStatGraph.width = x * 30;
+			wLGraph.height = y * 21;
+			wLAbsGraph.height = y * 21;
+			userStatGraph.height = y * 21;
+		}
+		else{
+			wLGraph.width = x * 70;
+			wLAbsGraph.width = x * 70;
+			userStatGraph.width = x * 70;
+			wLGraph.height = y * 21;
+			wLAbsGraph.height = y * 21;
+			userStatGraph.height = y * 21;
+		}
+
+		document.getElementById("userStatPieGraphContainer").appendChild(userStatGraph);
+		document.getElementById("winLossGraphContainer").appendChild(wLGraph);
+		document.getElementById("winLossAbsGraphContainer").appendChild(wLAbsGraph);
+		drawWinLossGraph(dashboard.matches, dashboard.username, new Date(dashboard.startDate), dashboard.endDate, dashboard.clientMatches, dashboard.clientUsername);
+	}
+}
+
 function loadUserDashboard(startDate, endDate){
-	if (document.getElementById("winLossGraph"))
-    	document.getElementById("winLossGraph").remove();
-    if (document.getElementById("winLossAbsGraph"))
-		document.getElementById("winLossAbsGraph").remove();
-    if (document.getElementById("userStatGraph"))
-		document.getElementById("userStatGraph").remove();
-
-    wLGraph = document.createElement("canvas");
-    wLGraph.id = "winLossGraph";
-    wLAbsGraph = document.createElement("canvas");
-    wLAbsGraph.id = "winLossAbsGraph";
-	userStatGraph = document.createElement("canvas");
-	userStatGraph.id = "userStatGraph";
-
-    var w = window,
-    d = document,
-    e = d.documentElement,
-    g = d.getElementsByTagName('body')[0],
-    x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
-    y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
-
-	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 0){
-		wLGraph.width = x * 30;
-		wLAbsGraph.width = x * 30;
-		userStatGraph.width = x * 30;
-		wLGraph.height = y * 21;
-		wLAbsGraph.height = y * 21;
-		userStatGraph.height = y * 21;
-	}
-	else{
-		wLGraph.width = x * 70;
-		wLAbsGraph.width = x * 70;
-		userStatGraph.width = x * 70;
-		wLGraph.height = y * 21;
-		wLAbsGraph.height = y * 21;
-		userStatGraph.height = y * 21;
-	}
-
-    document.getElementById("userStatPieGraphContainer").appendChild(userStatGraph);
-    document.getElementById("winLossGraphContainer").appendChild(wLGraph);
-    document.getElementById("winLossAbsGraphContainer").appendChild(wLAbsGraph);
 
 
     var splitPath = window.location.href.split('/');
-    var startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
-    var endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
-    fetch('/api/user/get', {
-        method: 'POST', //GET forbid the use of body :(
-        headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDateStr, "endDate" : endDateStr}),
-        credentials: 'include'
-    }).then(user => {
-        if (user.ok){
-            user.json().then((user) => {
-                fetch('/api/user/get', {
-                    method: 'POST', //GET forbid the use of body :(
-                    headers: {'Content-Type': 'application/json',},
-                    body: JSON.stringify({"name" : document.getElementById("usernameBtn").innerText, "startDate" : startDateStr, "endDate" : endDateStr}),
-                    credentials: 'include'
-                }).then(client => {
-                    if (client.ok){
-                        client.json().then((client) => {
-                            unsetLoader()
-                            drawWinLossGraph(user.matches, user.username, startDate, endDate, client.matches, client.username);
-                        })
-                    }
-                    else
-                        unsetLoader()
-                })
-                var countWin = 0, countLost = 0, countMatch = 0;
-                matchObj = user.matches[Object.keys(user.matches)[Object.keys(user.matches).length - 1]] // get matches object of highest date
+	(async () => {
+		dashboard = await new Dashboard(startDate, endDate, splitPath[4], client.username);
+		unsetLoader();
+		displayCharts();
 
-                var historyContainer = document.getElementById("matchHistoryContainer");
-                historyContainer.innerHTML = "";
-                for (var i=0; i<Object.keys(user.matches).length;i++){
-                    yearObj = user.matches[Object.keys(user.matches)[i]];
-                    for (j = 0; j < Object.keys(yearObj).length; j++){
-                        monthObj = yearObj[Object.keys(yearObj)[j]];
-                        for (k = 0; k < Object.keys(monthObj).length; k++){
-                            dayObj = monthObj[Object.keys(monthObj)[k]];
-                            for (l = 0; l < Object.keys(dayObj).length; l++){
-                                historyContainer.appendChild(createMatchResumeContainer(dayObj[Object.keys(dayObj)[l]], user.username));
-                            }
-                        }
-                    }
-                }
+		matchObj = dashboard.matches[Object.keys(dashboard.matches)[Object.keys(dashboard.matches).length - 1]] // get matches object of highest date
 
-                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-                    elem.addEventListener("keydown", (e) => {
-                        if (e.key == "Enter"){
-                            var idx = elem.tabIndex + 1
-                            elem.querySelectorAll(".resultScoreName").forEach(function (names){
-                                names.tabIndex = idx;
-                                idx++;
-                            })
-                        }
-                    })
-                });
-                var tabIdx = 19;
-                document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-                    elem.tabIndex = tabIdx;
-                    tabIdx += 3;
-                });
-                
-                document.querySelectorAll(".resultScoreName").forEach(function (elem){
-                    if (!elem.classList.contains("deletedUser")){
-                        elem.addEventListener("click", (e) => {
-                            myPushState(`https://${hostname.host}/user/${elem.innerHTML}`);	
-                        })
-                        elem.addEventListener("keydown", (e) => {
-                            if (e.key == "Enter")
-                                elem.click();
-                        })
-                    }
-                    else{
-                        elem.innerText = client.langJson["index"][".deletedUser"];
-                    }
-                })
-            })
-        }
-        else
-		    myPushState(`https://${hostname.host}/home`);
-    })
+		var historyContainer = document.getElementById("matchHistoryContainer");
+		historyContainer.innerHTML = "";
+		for (var i=0; i<Object.keys(dashboard.matches).length;i++){
+			yearObj = dashboard.matches[Object.keys(dashboard.matches)[i]];
+			for (j = 0; j < Object.keys(yearObj).length; j++){
+				monthObj = yearObj[Object.keys(yearObj)[j]];
+				for (k = 0; k < Object.keys(monthObj).length; k++){
+					dayObj = monthObj[Object.keys(monthObj)[k]];
+					for (l = 0; l < Object.keys(dayObj).length; l++){
+						historyContainer.appendChild(createMatchResumeContainer(dayObj[Object.keys(dayObj)[l]], dashboard.username));
+					}
+				}
+			}
+		}
+
+		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+			elem.addEventListener("keydown", (e) => {
+				if (e.key == "Enter"){
+					var idx = elem.tabIndex + 1
+					elem.querySelectorAll(".resultScoreName").forEach(function (names){
+						names.tabIndex = idx;
+						idx++;
+					})
+				}
+			})
+		});
+		var tabIdx = 19;
+		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+			elem.tabIndex = tabIdx;
+			tabIdx += 3;
+		});
+		
+		document.querySelectorAll(".resultScoreName").forEach(function (elem){
+			if (!elem.classList.contains("deletedUser")){
+				elem.addEventListener("click", (e) => {
+					myPushState(`https://${hostname.host}/user/${elem.innerHTML}`);	
+				})
+				elem.addEventListener("keydown", (e) => {
+					if (e.key == "Enter")
+						elem.click();
+				})
+			}
+			else{
+				elem.innerText = client.langJson["index"][".deletedUser"];
+			}
+		})
+	})()
 }
