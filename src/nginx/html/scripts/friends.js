@@ -413,7 +413,7 @@ function createFriendContainer(user){
 
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaAll.friendsOptionContainer']}`);
 
-	if (user.is_active == true || true){ //DEBUG
+	if (user.is_active == true){
 		var clone = friendContainer.cloneNode(true);
 		var img = clone.querySelector(".profilePicture");
 		addPfpUrlToImgSrc(img, `${img.src}`);
@@ -455,6 +455,7 @@ function createFriendContainer(user){
 	}
 	allFriendListContainer.appendChild(friendContainer);
 }
+
 
 function createFriendRequestContainer(user){
 	var friendContainer = createUserContainer(user);
