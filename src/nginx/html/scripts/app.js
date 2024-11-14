@@ -132,6 +132,7 @@ class Client{
 						body: JSON.stringify({ "is_active": true }),
 						credentials: 'include'
 					})
+					document.querySelector("#myProfileBtn").href = `https://${hostname.host}/user/${this.username}`;
 				}
 				else if (fetchResult.status == 401)
 					return null
@@ -428,18 +429,6 @@ window.addEventListener("beforeunload", (e) => {
 homeBtn.addEventListener("click", (e) => {
 	myPushState(`https://${hostname.host}/home`);
 	friendUpdate();
-})
-
-myProfileBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/user/${client.username}`);
-})
-
-friendsBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/friends`);
-})
-
-settingsBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/settings`);
 })
 
 homeBtn.addEventListener("keydown", (e) => {
