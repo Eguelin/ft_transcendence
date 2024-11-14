@@ -350,6 +350,7 @@ var tournament;
 	document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
 	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
 	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	setNotifTabIndexes(14);
 	game();
 }
 

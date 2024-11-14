@@ -88,6 +88,8 @@ var template = `
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
 
+	setNotifTabIndexes(16);
+
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 	
 	slideSelector.forEach(function(key) {
@@ -398,6 +400,7 @@ function setTabIndexes(slideIdx){
 		if (elem.querySelector(".unblockBtn"))
 			elem.querySelector(".unblockBtn").tabIndex = tmpIdx++;
 	})
+	setNotifTabIndexes(tmpIdx);
 }
 
 function createFriendContainer(user){

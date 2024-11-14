@@ -880,13 +880,14 @@ function sendNotif(message, id, type){
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
-	notifContainer.innerHTML = `<a class="notifMessage ${type}">${message}</a>
+	notifContainer.innerHTML = `
+	<a class="notifMessage ${type}">${message}</a>
 	<div style="display:none !important" id="notifId"></div>
-<div class="notifOptionContainer">
-<div class="notifAccept"></div>
-<div class="separator"></div>
-<div class="notifReject"></div>
-</div>`;
+	<div class="notifOptionContainer">
+		<div class="notifAccept"></div>
+		<div class="separator"></div>
+		<div class="notifReject"></div>
+	</div>`;
 
 	if (id != undefined && id){
 		notifContainer.querySelector("#notifId").classList.add(id);
@@ -903,6 +904,7 @@ function sendNotif(message, id, type){
 				credentials: 'include'
 			})
 		})
+		
 		notifContainer.querySelector(".notifReject").addEventListener("click", function(e){
 			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
 			fetch('/api/user/reject_friend_request', {
@@ -915,6 +917,8 @@ function sendNotif(message, id, type){
 			})
 		})
 	}
+	notifContainer.querySelector(".notifAccept").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
+	notifContainer.querySelector(".notifReject").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
 
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))){
@@ -1129,7 +1133,18 @@ async function loadCurrentLang(){
 
 function setNotifTabIndexes(tabIdx){
 	console.log(`set notif call, start : ${tabIdx}`);
-	notifBtn.tabIndex = tabIdx;
+	notifBtn.tabIndex = tabIdx++;
+	document.querySelectorAll(".notifContainer").forEach(function(elem){
+		elem.tabIndex = tabIdx;
+		tabIdx += 3;
+		elem.onkeydown = function(e) {
+			if (e.key == "Enter" && e.target.classList.contains("notifContainer")){
+				console.log(e.target);
+				e.target.querySelector(".notifAccept").tabIndex = e.target.tabIndex + 1;
+				e.target.querySelector(".notifReject").tabIndex = e.target.tabIndex + 2;
+			}
+		}
+	})
 }
 
 function createMatchResumeContainer(match, username) {
