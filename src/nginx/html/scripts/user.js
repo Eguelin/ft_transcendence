@@ -123,7 +123,8 @@ function updateUserLang(){
 									tabIdx += 3;
 								}
                             });
-                        }
+							setNotifTabIndexes(tabIdx);
+						}
                     });
                 }
                 catch{

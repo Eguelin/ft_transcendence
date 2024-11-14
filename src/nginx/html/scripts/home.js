@@ -57,7 +57,6 @@ var template = `
 								names.tabIndex = idx;
 								idx++;
 							})
-							setNotifTabIndexes(idx);
 						}
 					}
 				})
