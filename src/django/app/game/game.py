@@ -570,8 +570,17 @@ class GameConsumer(AsyncWebsocketConsumer):
 				game = Gamelocal(self.player)
 				await game.start()
 				return
+
+			elif self.player:
+				if data['type'] == 'game_keydown':
+					self.player.input = data['message']
+				elif data['type'] == 'game_ready':
+					self.player.isReady = True
+
 			else:
 				await self.send('error', 'Game mode unavailable')
+		else:
+			await self.send('error', 'Invalid data')
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
