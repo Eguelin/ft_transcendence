@@ -592,9 +592,35 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 	else{
 		var tmp = document.createElement("a");
 		tmp.id = 'notPlayedPeriod';
-		tmp.innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("USER", username);
+		tmp.innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("${USERNAME}", username);
 		document.getElementById("pageContentContainer").appendChild(tmp);
 	}
+}
+
+function updateDashboardLang(){
+    var splitPath = window.location.href.split('/');
+	if (document.querySelector("#notPlayedPeriod")){
+		document.querySelector("#notPlayedPeriod").innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("${USERNAME}", splitPath[4]);
+	}
+	
+	if (chartAverage){
+		chartAverage.titleBlock.options.text = content["CVwinLossGraph"];
+		if (chartAverage.config._config.data.datasets.length > 1)
+			chartAverage.config._config.data.datasets[1].label = content["CVwinLossGraphClient"];
+		chartAverage.update();
+	}
+	if (chartAbs){
+		chartAbs.titleBlock.options.text = content["CVwinLossAbsGraph"];
+		if (chartAverage.config._config.data.datasets.length > 1)
+			chartAbs.config._config.data.datasets[1].label = content["CVwinLossAbsGraphClient"];
+		chartAbs.update();
+	}
+	if (chartStats){
+		chartStats.titleBlock.options.text = content["CVuserStatsGraph"];
+		chartStats.config._config.data.labels[0] = content["CVwin"];
+		chartStats.config._config.data.labels[1] = content["CVloss"];
+		chartStats.update();
+	}	
 }
 
 var dashboard = null;

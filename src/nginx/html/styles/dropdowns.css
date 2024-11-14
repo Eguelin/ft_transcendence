@@ -276,7 +276,7 @@
 	scale: 0;
 }
 
-.dropDownUserContent button{
+.dropDownUserContent a{
 	text-align: center;
 	color: var(--option-text-rgb);
 	text-decoration: inherit;
@@ -292,7 +292,7 @@
 	font-family: "pong";
 }
 
-.dropDownUserContent button:focus, .dropDownUserContent button:hover{
+.dropDownUserContent a:focus, .dropDownUserContent a:hover{
 	color: var(--option-hover-text-rgb);
 	outline: none;
 }

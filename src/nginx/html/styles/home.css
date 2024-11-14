@@ -1,10 +1,10 @@
 
-.home button:hover, .home button:focus{
+.home #homeButtonsContainer a:hover, .home #homeButtonsContainer a:focus{
 	color: var(--hover-text-rgb);
 	outline: none;
 }
 
-.home button{
+.home #homeButtonsContainer a{
 	text-align: center;
 	color: var(--main-text-rgb);
 	font-size: 3rem;
@@ -34,7 +34,7 @@ only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
 only screen and (                min-resolution: 192dpi) and (min-width: 320px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
 
-	.home button{
+	.home #homeButtonsContainer a{
 		font-size: 2rem;
 	}
 

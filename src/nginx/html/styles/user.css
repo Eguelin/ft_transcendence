@@ -422,3 +422,7 @@ only screen and (max-width:920px){
 	width: fit-content;
 	align-self: center;
 }
+
+.matchDescContainer .matchDescContainerResult.tournament:hover, .matchDescContainer .matchDescContainerResult.tournament:focus{
+	text-decoration: underline;
+}

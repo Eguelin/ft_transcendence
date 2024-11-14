@@ -132,6 +132,7 @@ class Client{
 						body: JSON.stringify({ "is_active": true }),
 						credentials: 'include'
 					})
+					document.querySelector("#myProfileBtn").href = `https://${hostname.host}/user/${this.username}`;
 				}
 				else if (fetchResult.status == 401)
 					return null
@@ -426,36 +427,14 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	if (currentPage != "register")
-	{
-		myPushState(`https://${hostname.host}/home`);
-		friendUpdate();
-	}
-	else
-		myPushState(`https://${hostname.host}/login`);
-})
-
-myProfileBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/user/${client.username}`);
-})
-
-friendsBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/friends`);
-})
-
-settingsBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/settings`);
+	myPushState(`https://${hostname.host}/home`);
+	friendUpdate();
 })
 
 homeBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter")
 		homeBtn.click();
 })
-
-logOutBtn.addEventListener("click", (e) => {
-	myReplaceState(`https://${hostname.host}/login`);
-	disconnectSocket();
-});
 
 const themeMap = {
 	"dark" : {
@@ -597,18 +576,6 @@ async function loadCurrentLang(){
 					for (var i=0; i< Object.keys(instances).length; i++)
 						instances[i].placeholder = content[key];
 				}
-				else if (key.startsWith("CV") && chartAverage && chartAbs){
-					if (key == "CVwinLossGraph")
-						chartAverage.titleBlock.options.text = content[key];
-					else if (key == "CVwinLossGraphClient" && chartAverage.config._config.data.datasets.length > 1)
-						chartAverage.config._config.data.datasets[1].label = content[key];
-					else if (key == "CVwinLossAbsGraph")
-						chartAbs.titleBlock.options.text = content[key];
-					else if (key == "CVwinLossAbsGraphClient" && chartAverage.config._config.data.datasets.length > 1)
-						chartAbs.config._config.data.datasets[1].label = content[key];
-					chartAverage.update();
-					chartAbs.update();
-				}
 				else if (key.startsWith("aria")){
 					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
 						elem.setAttribute("aria-label", content[key]);
@@ -626,9 +593,17 @@ async function loadCurrentLang(){
 					})
 				}
 			});
+			if (currentPage == 'user') {updateUserLang();}
+			if (currentPage == 'dashboard') {updateDashboardLang();}
 		}
 		content = contentJson['index'];
 		if (content != null || content != undefined) {
+			var searchBar = document.querySelector("#inputSearchUser");
+			if (content["#inputSearchUser"].length > 15){
+				searchBar.style.setProperty("width", `${content["#inputSearchUser"].length}ch`)
+			}
+			else
+				searchBar.style.setProperty("width", `15ch`)
 			Object.keys(content).forEach(function (key) {
 				instances = document.querySelectorAll(key);
 				if (key.startsWith('#input')){
@@ -638,6 +613,11 @@ async function loadCurrentLang(){
 				else if (key.startsWith("aria")){
 					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
 						elem.setAttribute("aria-label", content[key]);
+					})
+				}
+				else if (key == ".notifMessage.friend_request"){
+					instances.forEach(function(elem){
+						elem.innerText = content[key].replace("${USERNAME}", elem.parentElement.querySelector("#notifId").className);
 					})
 				}
 				else{
@@ -708,20 +688,28 @@ function createMatchResumeContainer(match, username) {
 	
 		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
 		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
+	
+		if (scoreUserName.innerText == "deleted"){
+			scoreUserName.classList.add("deletedUser");
+			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
+		}
+		else{
+			scoreUserName.href = `https://${hostname.host}/user/${scoreUserName.innerText}`
+			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+		}
+	
+	
+		if (scoreOpponentName.innerText == "deleted"){
+			scoreOpponentName.classList.add("deletedUser");
+			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
+		}
+		else{
+			scoreOpponentName.href = `https://${hostname.host}/user/${scoreOpponentName.innerText}`
+			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
+		}
+	
 		scoreOpponentName.innerText += ":"
 		scoreUserName.innerText += ":"
-	
-		if (scoreUserName.innerText == "deleted")
-			scoreUserName.classList.add("deletedUser");
-		else
-			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	
-	
-		if (scoreOpponentName.innerText == "deleted")
-			scoreOpponentName.classList.add("deletedUser");
-		else
-			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
-	
 		scoreUser.appendChild(scoreUserName);
 		scoreUser.appendChild(scoreUserScore);
 	
@@ -924,10 +912,15 @@ window.addEventListener("click", (e) => {
 	if (e.target.closest(".notifReject, .notifAccept")){
 		e.target.closest(".notifContainer").remove();
 	}
-	if (e.target.classList.contains("tournament")){
+	if (e.target.id == "logOutBtn")
+		disconnectSocket();
+
+	if (e.target.href != "" && e.target.href != undefined){
 		e.preventDefault();
 		myPushState(`${e.target.href}`);
+
 	}
+	
 })
 
 function popUpError(error){
@@ -1054,7 +1047,7 @@ function sendNotif(message, id, type){
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
-	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
+	notifContainer.innerHTML = `<a class="notifMessage ${type}">${message}</a>
 	<div style="display:none !important" id="notifId"></div>
 <div class="notifOptionContainer">
 <div class="notifAccept"></div>
@@ -1137,7 +1130,7 @@ function friendUpdate()
 	socket.onmessage = function(event) {
 		const data = JSON.parse(event.data);
 		if (data.new_request) {
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
 		}
 	};
 

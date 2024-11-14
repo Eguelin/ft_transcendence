@@ -28,6 +28,12 @@ var template = `
 </div>
 `
 
+function updateUserLang(){
+    var splitPath = window.location.href.split('/');
+    if (document.querySelector('#notPlayedToday'))
+        document.querySelector('#notPlayedToday').innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
+}
+
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -94,11 +100,16 @@ var template = `
                     document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                         elem.addEventListener("keydown", (e) => {
                             if (e.key == "Enter"){
-                                var idx = elem.tabIndex + 1
-                                elem.querySelectorAll(".resultScoreName").forEach(function (names){
-                                    names.tabIndex = idx;
-                                    idx++;
-                                })
+								if (elem.querySelector(".tournament")){
+									elem.querySelector(".tournament").click();
+								}
+								else{
+									var idx = elem.tabIndex + 1
+									elem.querySelectorAll(".resultScoreName").forEach(function (names){
+										names.tabIndex = idx;
+										idx++;
+									})
+								}
                             }
                         })
                     });
@@ -112,21 +123,6 @@ var template = `
                             });
                         }
                     });
-                    matchUsersName = document.querySelectorAll(".resultScoreName")
-                    Object.keys(matchUsersName).forEach(function(key){
-                        if (!matchUsersName[key].classList.contains("deletedUser")){
-                            matchUsersName[key].addEventListener("click", (e) => {
-                                myPushState(`https://${hostname.host}/user/${matchUsersName[key].innerHTML}`);
-                            })
-                            matchUsersName[key].addEventListener("keydown", (e) => {
-                                if (e.key == "Enter")
-                                    matchUsersName[key].click();
-                            })
-                        }
-                        else{
-                            matchUsersName[key].innerText = client.langJson["index"][".deletedUser"];
-                        }
-                    })
                 }
                 catch{
                     var messageContainer = document.createElement("div");
@@ -135,7 +131,7 @@ var template = `
                     recentMatchHistoryContainer.style.setProperty("align-items", "center");
                     messageContainer.id = "notPlayedTodayContainer";
                     message.id="notPlayedToday";
-			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("USER", splitPath[4]);
+			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
                     messageContainer.appendChild(message);
                     recentMatchHistoryContainer.appendChild(messageContainer);
                 }
