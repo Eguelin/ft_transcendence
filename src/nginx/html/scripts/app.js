@@ -608,6 +608,12 @@ async function loadCurrentLang(){
 		}
 		content = contentJson['index'];
 		if (content != null || content != undefined) {
+			var searchBar = document.querySelector("#inputSearchUser");
+			if (content["#inputSearchUser"].length > 15){
+				searchBar.style.setProperty("width", `${content["#inputSearchUser"].length}ch`)
+			}
+			else
+				searchBar.style.setProperty("width", `15ch`)
 			Object.keys(content).forEach(function (key) {
 				instances = document.querySelectorAll(key);
 				if (key.startsWith('#input')){
