@@ -576,18 +576,6 @@ async function loadCurrentLang(){
 					for (var i=0; i< Object.keys(instances).length; i++)
 						instances[i].placeholder = content[key];
 				}
-				else if (key.startsWith("CV") && chartAverage && chartAbs){
-					if (key == "CVwinLossGraph")
-						chartAverage.titleBlock.options.text = content[key];
-					else if (key == "CVwinLossGraphClient" && chartAverage.config._config.data.datasets.length > 1)
-						chartAverage.config._config.data.datasets[1].label = content[key];
-					else if (key == "CVwinLossAbsGraph")
-						chartAbs.titleBlock.options.text = content[key];
-					else if (key == "CVwinLossAbsGraphClient" && chartAverage.config._config.data.datasets.length > 1)
-						chartAbs.config._config.data.datasets[1].label = content[key];
-					chartAverage.update();
-					chartAbs.update();
-				}
 				else if (key.startsWith("aria")){
 					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
 						elem.setAttribute("aria-label", content[key]);
@@ -605,6 +593,8 @@ async function loadCurrentLang(){
 					})
 				}
 			});
+			if (currentPage == 'user') {updateUserLang();}
+			if (currentPage == 'dashboard') {updateDashboardLang();}
 		}
 		content = contentJson['index'];
 		if (content != null || content != undefined) {
@@ -1135,7 +1125,7 @@ function friendUpdate()
 	socket.onmessage = function(event) {
 		const data = JSON.parse(event.data);
 		if (data.new_request) {
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
 		}
 	};
 
