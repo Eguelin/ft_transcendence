@@ -18,7 +18,8 @@
 #homeButtonsContainer{
 	display: flex;
 	flex-direction: column;
-	width: 100vw;
+	width: -webkit-fill-available;
+	width: -moz-available;
 	height: fit-content;
 	align-items: center;
 	gap: 3rem;
