@@ -28,6 +28,12 @@ var template = `
 </div>
 `
 
+function updateUserLang(){
+    var splitPath = window.location.href.split('/');
+    if (document.querySelector('#notPlayedToday'))
+        document.querySelector('#notPlayedToday').innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
+}
+
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -125,7 +131,7 @@ var template = `
                     recentMatchHistoryContainer.style.setProperty("align-items", "center");
                     messageContainer.id = "notPlayedTodayContainer";
                     message.id="notPlayedToday";
-			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("USER", splitPath[4]);
+			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
                     messageContainer.appendChild(message);
                     recentMatchHistoryContainer.appendChild(messageContainer);
                 }
