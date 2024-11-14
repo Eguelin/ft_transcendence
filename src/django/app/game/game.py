@@ -28,8 +28,17 @@ class Matchmaking():
 
 	def match_players(self):
 		if len(self.waiting_players) >= 2:
-			player1 = self.waiting_players.pop(0)
-			player2 = self.waiting_players.pop(0)
+			player1 = self.waiting_players[0]
+			player2 = None
+			for player in self.waiting_players[1:]:
+				if player.user.id != player1.user.id:
+					player2 = player
+					break
+			if player2:
+				self.waiting_players.remove(player1)
+				self.waiting_players.remove(player2)
+			else:
+				player1 = None
 			return player1, player2
 		return None, None
 
@@ -535,13 +544,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data):
 		data = json.loads(text_data)
 		if ("type" in data):
-			if self.player:
-				if data['type'] == 'game_keydown':
-					self.player.input = data['message']
-				elif data['type'] == 'game_ready':
-					self.player.isReady = True
-
-			elif data['type'] == 'remote':
+			if data['type'] == 'remote':
 				self.player = PlayerRemote(self)
 				Matchmaking().add_PlayerRemote(self.player)
 				await Matchmaking().run()
