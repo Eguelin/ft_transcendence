@@ -925,6 +925,7 @@ function sendNotif(message, id, type){
 		notifCenterContainer.classList.add("pendingNotification");
 		incomingPushNotif(message);
 	}
+	setNotifTabIndexes(notifBtn.tabIndex);
 }
 
 function friendUpdate()
@@ -1132,14 +1133,15 @@ async function loadCurrentLang(){
 }
 
 function setNotifTabIndexes(tabIdx){
-	console.log(`set notif call, start : ${tabIdx}`);
 	notifBtn.tabIndex = tabIdx++;
 	document.querySelectorAll(".notifContainer").forEach(function(elem){
 		elem.tabIndex = tabIdx;
 		tabIdx += 3;
+
+		elem.querySelector(".notifAccept").tabIndex = -1;
+		elem.querySelector(".notifReject").tabIndex = -1;
 		elem.onkeydown = function(e) {
 			if (e.key == "Enter" && e.target.classList.contains("notifContainer")){
-				console.log(e.target);
 				e.target.querySelector(".notifAccept").tabIndex = e.target.tabIndex + 1;
 				e.target.querySelector(".notifReject").tabIndex = e.target.tabIndex + 2;
 			}
