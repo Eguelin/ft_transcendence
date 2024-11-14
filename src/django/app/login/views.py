@@ -8,6 +8,7 @@ import game.models as gameModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 import json, os, requests, base64, random, datetime, zxcvbn, re, io
+from transcendence.settings import DEBUG
 from PIL import Image
 
 
@@ -136,7 +137,7 @@ def create_user(request):
 	if len(password) == 0:
 		return JsonResponse({'message': 'Password too short'}, status=400)
 	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and os.getenv('DEBUG') == 'False':
+	if result['score'] < 4 and not DEBUG:
 		return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	if User.objects.filter(username=username).exists():
@@ -361,7 +362,7 @@ def get_all_user_match_json(matches, tournaments, username):
 					p1_name = match.player_one.username
 				except:
 					p1_name = "deleted"
-		
+
 				try:
 					p2_name = match.player_two.username
 				except:
@@ -689,7 +690,7 @@ def get_tournament(request):
 			}
 		}
 		for match in tournament.matches.all():
-			
+
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = match.player_one.username
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = match.player_one.profile.profile_picture
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winner.username == match.player_one.username else None
