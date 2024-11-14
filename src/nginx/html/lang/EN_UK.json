@@ -15,7 +15,8 @@
 		"aria#FR_FR" : "Français",
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italiano",
-		"error reaching server" : "Error reaching server"
+		"error reaching server" : "Error reaching server",
+		".notifMessage.friend_request" : "Incoming friend request from ${USERNAME}"
 	},
 	"home" : {
 		"#title" : "PONG",

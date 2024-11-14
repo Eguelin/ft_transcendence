@@ -615,6 +615,11 @@ async function loadCurrentLang(){
 						elem.setAttribute("aria-label", content[key]);
 					})
 				}
+				else if (key == ".notifMessage.friend_request"){
+					instances.forEach(function(elem){
+						elem.innerText = content[key].replace("${USERNAME}", elem.parentElement.querySelector("#notifId").className);
+					})
+				}
 				else{
 					for (var i=0; i< Object.keys(instances).length; i++)
 						instances[i].innerHTML = content[key];
@@ -1042,7 +1047,7 @@ function sendNotif(message, id, type){
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
-	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
+	notifContainer.innerHTML = `<a class="notifMessage ${type}">${message}</a>
 	<div style="display:none !important" id="notifId"></div>
 <div class="notifOptionContainer">
 <div class="notifAccept"></div>
