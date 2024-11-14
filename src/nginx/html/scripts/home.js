@@ -25,7 +25,7 @@ var template = `
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
 	notifCenterContainer.style.setProperty("display", "flex");
-	tabIdx = 13;
+	tabIdx = 14;
 
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
@@ -53,24 +53,32 @@ var template = `
 						else{
 							var idx = elem.tabIndex + 1
 							elem.querySelectorAll(".resultScoreName").forEach(function (names){
+								console.log(`set name idx : ${idx}`);
 								names.tabIndex = idx;
 								idx++;
 							})
+							setNotifTabIndexes(idx);
 						}
 					}
 				})
 			});
 
 			document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
-				var tabIdx = 14;
 				if (e.key == "Enter"){
 					document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-						elem.tabIndex = tabIdx;
-						tabIdx += 3;
+						if (elem.tabIndex == -1){
+							elem.tabIndex = tabIdx;
+							tabIdx += 3;
+						}
 					});
+					setNotifTabIndexes(tabIdx);
 				}
 			})
 		}
+
+		for (let i=0; i<5;i++) {sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", `test${i}`)}`, `test${i}`, "friend_request");}	//TODO REMOVE
+
+		setNotifTabIndexes(tabIdx);
 	}
 	else
 		myReplaceState(`https://${hostname.host}/login`);
