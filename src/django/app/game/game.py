@@ -616,7 +616,7 @@ class Tournament():
 		self.model = None
 
 	async def addPlayers(self, player):
-		if len(self.players) >= 2**2:
+		if len(self.players) >= 2**3:
 			return False
 		if not DEBUG:
 			for tournamentPlayer in self.players:
@@ -651,7 +651,7 @@ class Tournament():
 		return False
 
 	async def run(self):
-		if len(self.players) < 2**2:
+		if len(self.players) < 2**3:
 			return False
 		await self.setTournament()
 		for match in self.matches[0]:
