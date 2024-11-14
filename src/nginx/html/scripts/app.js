@@ -274,6 +274,7 @@ function load(){
 		client.loadPage(url.pathname)
 	else {
 		setLoader();
+		currentPage = "login";
 		dropDownUserContainer.style.setProperty("display", "none");
 		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 		history.replaceState("","",`https://${hostname.host}/login`);
