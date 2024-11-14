@@ -76,6 +76,7 @@ function updateUserLang(){
     var startDate = new Date();
     startDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
     endDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+	var tabIdx = 14;
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
@@ -115,11 +116,12 @@ function updateUserLang(){
                     });
 
                     document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
-                        var tabIdx = 14;
                         if (e.key == "Enter"){
                             document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-                                elem.tabIndex = tabIdx;
-                                tabIdx += 3;
+								if (elem.tabIndex == -1){
+									elem.tabIndex = tabIdx;
+									tabIdx += 3;
+								}
                             });
                         }
                     });
@@ -135,6 +137,7 @@ function updateUserLang(){
                     messageContainer.appendChild(message);
                     recentMatchHistoryContainer.appendChild(messageContainer);
                 }
+				setNotifTabIndexes(tabIdx);
             })
         }
         else{
