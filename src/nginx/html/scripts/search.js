@@ -23,7 +23,7 @@ var template = `
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
 	inputSearch.focus();
-
+	setNotifTabIndexes(15);
 	url = new URL(window.location.href);
 	if (url.searchParams.get("query")) {
 		fetch('/api/user/search_by_username', {
@@ -118,7 +118,7 @@ function createUserResumeContainer(user) {
 	imgContainer.appendChild(img);
 	userResume.appendChild(imgContainer);
 	userResume.appendChild(userResumeName);
-	userResume.setAttribute("tabindex", 13);
+	userResume.setAttribute("tabindex", 14);
 	userResumeContainer.appendChild(userResume)
 	document.getElementById("resumeContainer").appendChild(userResumeContainer);
 }

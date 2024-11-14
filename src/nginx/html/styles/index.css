@@ -187,7 +187,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	overflow: hidden;
 }
 
-.openCenter #pushNotif, .closeCenter #pushNotif, #pushNotif:hover, #pushNotif:focus{
+.openCenter #pushNotif, .quickOpenCenter #pushNotif, .closeCenter #pushNotif, #pushNotif:hover, #pushNotif:focus{
 	border: .1rem solid var(--main-text-rgb);
 	outline: none;
 }
@@ -498,6 +498,14 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	height: 2em;
 	width: 2em;
 	flex: auto;
+}
+
+.notifAccept:focus, .notifAccept:hover{
+	background: green;
+}
+
+.notifReject:focus, .notifReject:hover{
+	background: red;
 }
 
 .separator{

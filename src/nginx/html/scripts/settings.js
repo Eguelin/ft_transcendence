@@ -156,6 +156,7 @@ var template = `
 	document.getElementById("fontSizeRange").value = client.fontAmplifier;
 	notifCenterContainer.style.setProperty("display", "flex");
 	window.onkeydown = settingsKeyDownEvent
+	setNotifTabIndexes(26);
 }
 
 
