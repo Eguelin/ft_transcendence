@@ -74,9 +74,6 @@ var template = `
 				}
 			})
 		}
-
-		for (let i=0; i<5;i++) {sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", `test${i}`)}`, `test${i}`, "friend_request");}	//TODO REMOVE
-
 		setNotifTabIndexes(tabIdx);
 	}
 	else
