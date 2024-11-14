@@ -75,38 +75,26 @@ class Match(models.Model):
 	objects = MatchManager()
 
 
-
 class TournamentMatch(Match):
 	round = models.IntegerField(default=0)
 	match = models.IntegerField(default=0)
 
-#	def __init__(self, game):
-#		super().__init__()
-#		self.player_one = game.playerLeft.user
-#		self.player_two = game.playerRight.user
-#		self.player_one_pts = game.playerLeft.score
-#		self.player_two_pts = game.playerRight.score
-#		self.date = datetime.datetime.now()
-#		self.winner = game.winner.user
-#		self.round = game.round
-#		self.match = game.match
-#		self.save()
-
 	def createMatchFromGame(self, game):
-		match = self.objects.create(player_one=game.playerLeft.user, player_two=game.playerRight.user, player_one_pts=game.playerLeft.score, player_two_pts=game.playerRight.score, date=datetime.datetime.now(), winner=game.winner.user, round=game.round, match=game.match)
+		match = self.objects.create(
+			player_one=game.playerLeft.user,
+			player_two=game.playerRight.user,
+			player_one_pts=game.playerLeft.score,
+			player_two_pts=game.playerRight.score,
+			date=datetime.datetime.now(),
+			winner=game.winner.user,
+			round=game.round,
+			match=game.match)
 		match.save()
 		return match
 
 class TournamentModel(models.Model):
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	matches = models.ManyToManyField(TournamentMatch, related_name="matches")
-
-
-### RECREATE AND SAVE A NEW ITERATION A EACH QUERY !!!
-#	def __init__(self, *args, **kwargs):
-#		super().__init__()
-#		self.date = datetime.datetime.now()
-#		self.save()
 
 	def addMatchToTournament(self, game):
 		self.matches.add(TournamentMatch.createMatchFromGame(TournamentMatch, game))
