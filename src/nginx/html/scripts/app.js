@@ -24,41 +24,30 @@ var use_browser_theme = true;
 const routes = {
 	"/home": `https://${hostname.host}/scripts/home.js`,
 	"/": `https://${hostname.host}/scripts/home.js`,
-	"/game" : `https://${hostname.host}/scripts/game.js`,
-	"/tournament" : `https://${hostname.host}/scripts/game.js`,
-	"/settings" : `https://${hostname.host}/scripts/settings.js`,
-	"/user" : `https://${hostname.host}/scripts/user.js`,
-	"/dashboard" : `https://${hostname.host}/scripts/dashboard.js`,
-	"/search" : `https://${hostname.host}/scripts/search.js`,
-	"/friends" : `https://${hostname.host}/scripts/friends.js`,
-	"/login" : `https://${hostname.host}/scripts/login.js`,
-	404 : `https://${hostname.host}/scripts/404.js`,
-	403 : `https://${hostname.host}/scripts/403.js`,
+	"/game": `https://${hostname.host}/scripts/game.js`,
+	"/tournament": `https://${hostname.host}/scripts/game.js`,
+	"/settings": `https://${hostname.host}/scripts/settings.js`,
+	"/user": `https://${hostname.host}/scripts/user.js`,
+	"/dashboard": `https://${hostname.host}/scripts/dashboard.js`,
+	"/search": `https://${hostname.host}/scripts/search.js`,
+	"/friends": `https://${hostname.host}/scripts/friends.js`,
+	"/login": `https://${hostname.host}/scripts/login.js`,
+	404: `https://${hostname.host}/scripts/404.js`,
+	403: `https://${hostname.host}/scripts/403.js`,
 	"/admin": `https://${hostname.host}/scripts/admin.js`
 }
 
-const langMap = {
-	'EN_UK' : 'en-UK',
-	'FR_FR' : 'fr',
-	'DE_GE' : 'de',
-	'IT_IT' : 'it',
-	'lang/EN_UK.json' : 'en-UK',
-	'lang/FR_FR.json' : 'fr',
-	'lang/DE_GE.json' : 'de',
-	'lang/IT_IT.json' : 'it',
-}
-
-function addPfpUrlToImgSrc(img, path){
+function addPfpUrlToImgSrc(img, path) {
 	if (path != "") {
 		var testImg = new Image();
 
-		testImg.onload = function(){
+		testImg.onload = function () {
 			if (testImg.width > testImg.height) {
 				img.style.setProperty("height", "100%");
 				img.style.setProperty("width", "unset");
 			}
 		}
-		if (path.startsWith("http")){
+		if (path.startsWith("http")) {
 			testImg.src = path;
 			img.src = path;
 		} else {
@@ -71,7 +60,7 @@ function addPfpUrlToImgSrc(img, path){
 		img.style.setProperty("display", "none");
 }
 
-class Client{
+class Client {
 	username;
 	currentPage;
 	currentLang;
@@ -89,9 +78,9 @@ class Client{
 	fontAmplifier;
 	doNotDisturb;
 
-	constructor (){
-		return (async () =>{
-			try{
+	constructor() {
+		return (async () => {
+			try {
 				const fetchResult = await fetch('/api/user/current', {
 					method: 'GET',
 					headers: {
@@ -100,7 +89,7 @@ class Client{
 					credentials: 'include'
 				})
 				const result = await fetchResult.json();
-				if (fetchResult.ok){
+				if (fetchResult.ok) {
 					this.username = result.username;
 					this.currentLang = result.lang;
 					this.pfpUrl = result.pfp;
@@ -125,7 +114,6 @@ class Client{
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 					usernameBtn.innerHTML = result.username;
-					currentLang = this.currentLang;
 
 					addPfpUrlToImgSrc(userPfp, result.pfp)
 
@@ -142,7 +130,7 @@ class Client{
 				else if (fetchResult.status == 401)
 					return null
 			}
-			catch{
+			catch {
 				var template = `
 				<div id="pageContentContainer">
 					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
@@ -152,19 +140,18 @@ class Client{
 				throw new Error("Error while reaching server");
 			}
 			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
-			if (fetchLangResult.ok){
+			if (fetchLangResult.ok)
 				this.langJson = await fetchLangResult.json()
-			}
 			else
 				this.langJson = null;
 			return (this);
 		})();
 	}
 
-	loadPage(page){
-		(async() => {
+	loadPage(page) {
+		(async () => {
 			setLoader()
-			try{
+			try {
 				const fetchResult = await fetch('/api/user/current', {
 					method: 'GET',
 					headers: {
@@ -174,7 +161,7 @@ class Client{
 				})
 				const result = await fetchResult.json();
 				var search = 404;
-				if (fetchResult.ok){
+				if (fetchResult.ok) {
 					this.#is_admin = result.is_admin;
 
 					var sep = page.indexOf("/", 1)
@@ -183,21 +170,21 @@ class Client{
 					else
 						pageName = page;
 					search = pageName;
-					if (routes[pageName]){
-						if (!this.#is_admin && pageName == "/admin"){
+					if (routes[pageName]) {
+						if (!this.#is_admin && pageName == "/admin") {
 							currentPage = 403;
 							search = 403;
 						}
-						else{
+						else {
 							currentPage = pageName.substring(1);
 						}
 					}
-					else{
+					else {
 						currentPage = 404;
 						search = 404;
 					}
 				}
-				else{
+				else {
 					dropDownUserContainer.style.setProperty("display", "none");
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 
@@ -206,7 +193,7 @@ class Client{
 				}
 				document.getElementById("script").remove();
 				var s = document.createElement("script");
-				s.onload = function(){
+				s.onload = function () {
 					(async () => (loadCurrentLang()))();
 					unsetLoader()
 					checkResizeWindow();
@@ -215,7 +202,7 @@ class Client{
 				s.setAttribute('src', routes[search]);
 				document.body.appendChild(s);
 			}
-			catch{
+			catch {
 				popUpError(client.langJson['index']['error reaching server']);
 				unsetLoader();
 			}
@@ -223,17 +210,17 @@ class Client{
 	}
 }
 
-XMLHttpRequest.prototype.send = function() {
+XMLHttpRequest.prototype.send = function () {
 	return false;
 }
 
-window.addEventListener("popstate", (e) =>{
+window.addEventListener("popstate", (e) => {
 	load();
 })
 
-function load(){
-	const url =  new URL( window.location.href);
-	if (dropDownLang.classList.contains("activeDropDown")){
+function load() {
+	const url = new URL(window.location.href);
+	if (dropDownLang.classList.contains("activeDropDown")) {
 		dropDownLang.classList.remove("activeDropDown");
 		void dropDownLang.offsetWidth;
 		dropDownLang.classList.add("inactiveDropDown");
@@ -242,7 +229,7 @@ function load(){
 			dropDownLang.classList.remove("inactiveDropDown");
 		}, 300, dropDownLang)
 	}
-	if (dropDownUser.classList.contains("activeDropDown")){
+	if (dropDownUser.classList.contains("activeDropDown")) {
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("inactiveDropDown");
@@ -251,7 +238,7 @@ function load(){
 		}, 300, dropDownUser)
 	}
 
-	if (client && !(client instanceof Client)){
+	if (client && !(client instanceof Client)) {
 		disconnectSocket();
 		client = null;
 		fetch('/api/user/logout', {
@@ -261,18 +248,18 @@ function load(){
 			},
 			credentials: 'include'
 		})
-		history.replaceState("","", `https://${hostname.host}/login`)
+		history.replaceState("", "", `https://${hostname.host}/login`)
 	}
-	if (currentPage == "settings"){
+	if (currentPage == "settings") {
 		window.onkeydown = null
 	}
-	if (currentPage == "login"){
+	if (currentPage == "login") {
 		window.onkeydown = null
 	}
-	if (currentPage == "friends"){
+	if (currentPage == "friends") {
 		window.onkeydown = null
 	}
-	if (currentPage == "game"){
+	if (currentPage == "game") {
 		window.removeEventListener("resize", displayTournament)
 	}
 
@@ -283,12 +270,12 @@ function load(){
 		currentPage = "login";
 		dropDownUserContainer.style.setProperty("display", "none");
 		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
-		history.replaceState("","",`https://${hostname.host}/login`);
+		history.replaceState("", "", `https://${hostname.host}/login`);
 
 
 		document.getElementById("script").remove();
 		var s = document.createElement("script");
-		s.onload = function(){
+		s.onload = function () {
 			(async () => (loadCurrentLang()))();
 			unsetLoader()
 			checkResizeWindow();
@@ -314,72 +301,66 @@ function handleToken() {
 			body: JSON.stringify({ code: code, hostname: hostname.host }),
 			credentials: 'include'
 		})
-		.then(response => {
-			if (response.ok){
-				(async () => {
-					try {
-						client = await new Client()
-						if (use_browser_theme){
-							if (window.matchMedia) {
-								switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+			.then(response => {
+				if (response.ok) {
+					(async () => {
+						try {
+							client = await new Client()
+							if (use_browser_theme) {
+								if (window.matchMedia) {
+									switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+								}
+								preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 							}
-							preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+							if (!client)
+								myReplaceState(`https://${hostname.host}/login`);
+							else {
+								friendUpdate();
+								myReplaceState(`https://${hostname.host}/home`);
+							}
 						}
-						if (!client)
-							myReplaceState(`https://${hostname.host}/login`);
-						else
-						{
-							(async () => (loadCurrentLang()))();
-							friendUpdate();
-							myReplaceState(`https://${hostname.host}/home`);
+						catch {
+							unsetLoader();
 						}
-					}
-					catch{
-						unsetLoader();
-					}
-				})()
-			}
-			else
-			{
-				response.json().then(data => {
-					unsetLoader()
-					popUpError(data.message || "Error API 42 Invalid key or API down");
-					myReplaceState(`https://${hostname.host}/login`);
-				})
-			}
-		}).catch(error => console.error('Error:', error));
+					})()
+				}
+				else {
+					response.json().then(data => {
+						unsetLoader()
+						popUpError(data.message || "Error API 42 Invalid key or API down");
+						myReplaceState(`https://${hostname.host}/login`);
+					})
+				}
+			}).catch(error => console.error('Error:', error));
 	}
 	else {
 		const url = new URL(window.location.href);
 		if (document.getElementById("loaderBg"))
 			setLoader();
-			(async () => {
-				try{
-					client = await new Client();
-					if (!client)
-						myReplaceState(`https://${hostname.host}/login`);
-					else {
-						(async () => (loadCurrentLang()))();
-						if (url.pathname == "" || url.pathname == "/"){
-							friendUpdate();
-							myReplaceState(`https://${hostname.host}/home`);
-						}
-						else{
-							load();
-							friendUpdate();
-						}
-					}
-					if (use_browser_theme){
-						if (window.matchMedia) {
-							switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
-						}
-						preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
-					}
+		(async () => {
+			try {
+				client = await new Client();
+				if (!client)
+					myReplaceState(`https://${hostname.host}/login`);
+				else if (url.pathname == "" || url.pathname == "/") {
+					friendUpdate();
+					myReplaceState(`https://${hostname.host}/home`);
 				}
-				catch{
-					unsetLoader();
+				else {
+					load();
+					friendUpdate();
 				}
-			})()
+				if (use_browser_theme) {
+					if (window.matchMedia) {
+						switchTheme(window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light');
+					}
+					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
+				}
+			}
+			catch {
+				unsetLoader();
+			}
+		})()
 	}
 }
 
@@ -416,12 +397,12 @@ window.addEventListener('load', (e) => {
 });
 
 
-function myReplaceState(url){
+function myReplaceState(url) {
 	history.replaceState("", "", url);
 	load();
 }
 
-function myPushState(url){
+function myPushState(url) {
 	history.pushState("", "", url);
 	load();
 }
@@ -448,53 +429,53 @@ homeBtn.addEventListener("keydown", (e) => {
 })
 
 const themeMap = {
-	"dark" : {
-		"--page-bg-rgb" : "#110026",
-		"--main-text-rgb" : "#FDFDFB",
-		"--hover-text-rgb" : "#3A3053",
-		"--option-hover-text-rgb" : "#110026",
-		"--option-text-rgb" : "#FDFDFB",
-		"--input-bg-rgb" : "#3A3053",
-		"is-dark" : 1,
-		"svg-path" : "/icons/moon.svg"
+	"dark": {
+		"--page-bg-rgb": "#110026",
+		"--main-text-rgb": "#FDFDFB",
+		"--hover-text-rgb": "#3A3053",
+		"--option-hover-text-rgb": "#110026",
+		"--option-text-rgb": "#FDFDFB",
+		"--input-bg-rgb": "#3A3053",
+		"is-dark": 1,
+		"svg-path": "/icons/moon.svg"
 	},
-	"high_dark" : {
-		"--page-bg-rgb" : "#222831",
-		"--main-text-rgb" : "#00FFF5",
-		"--hover-text-rgb" : "#00ADB5",
-		"--option-hover-text-rgb" : "#222831",
-		"--option-text-rgb" : "#00FFF5",
-		"--input-bg-rgb" : "#393E46",
-		"is-dark" : 1,
-		"svg-path" : "/icons/moon.svg"
+	"high_dark": {
+		"--page-bg-rgb": "#222831",
+		"--main-text-rgb": "#00FFF5",
+		"--hover-text-rgb": "#00ADB5",
+		"--option-hover-text-rgb": "#222831",
+		"--option-text-rgb": "#00FFF5",
+		"--input-bg-rgb": "#393E46",
+		"is-dark": 1,
+		"svg-path": "/icons/moon.svg"
 	},
-	"light" : {
-		"--page-bg-rgb" : "#F5EDED",
-		"--main-text-rgb" : "#110026",
-		"--hover-text-rgb" : "#FFC6C6",
-		"--option-hover-text-rgb" : "#F5EDED",
-		"--option-text-rgb" : "#110026",
-		"--input-bg-rgb" : "#FFC6C6",
-		"is-dark" : 0,
-		"svg-path" : "/icons/sun.svg"
+	"light": {
+		"--page-bg-rgb": "#F5EDED",
+		"--main-text-rgb": "#110026",
+		"--hover-text-rgb": "#FFC6C6",
+		"--option-hover-text-rgb": "#F5EDED",
+		"--option-text-rgb": "#110026",
+		"--input-bg-rgb": "#FFC6C6",
+		"is-dark": 0,
+		"svg-path": "/icons/sun.svg"
 	},
-	"high_light" : {
-		"--page-bg-rgb" : "#FFFBF5",
-		"--main-text-rgb" : "#7743DB",
-		"--hover-text-rgb" : "#C3ACD0",
-		"--option-hover-text-rgb" : "#FFFBF5",
-		"--option-text-rgb" : "#7743DB",
-		"--input-bg-rgb" : "#F7EFE5",
-		"is-dark" : 0,
-		"svg-path" : "/icons/sun.svg"
+	"high_light": {
+		"--page-bg-rgb": "#FFFBF5",
+		"--main-text-rgb": "#7743DB",
+		"--hover-text-rgb": "#C3ACD0",
+		"--option-hover-text-rgb": "#FFFBF5",
+		"--option-text-rgb": "#7743DB",
+		"--input-bg-rgb": "#F7EFE5",
+		"is-dark": 0,
+		"svg-path": "/icons/sun.svg"
 	}
 }
 
 function switchTheme(theme) {
-	Object.keys(themeMap[theme]).forEach(function (key){
+	Object.keys(themeMap[theme]).forEach(function (key) {
 		document.documentElement.style.setProperty(key, themeMap[theme][key])
 	})
-	if (client){
+	if (client) {
 		client.mainTextRgb = themeMap[theme]["--main-text-rgb"];
 		client.use_dark_theme = themeMap[theme]["is-dark"];
 	}
@@ -503,7 +484,7 @@ function switchTheme(theme) {
 	if (document.getElementById("themeButton"))
 		document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}${themeMap[theme]["svg-path"]})`;
 
-	if (currentPage == "dashboard"){
+	if (currentPage == "dashboard") {
 		chartAverage.options.scales.x._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
 		chartAverage.options.scales.y._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
 		chartAverage.options.scales.x._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
@@ -522,7 +503,7 @@ function switchTheme(theme) {
 		chartStats._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
 		chartStats.update();
 	}
-	if (currentPage == "game"){
+	if (currentPage == "game") {
 		displayTournament();
 	}
 }
@@ -530,13 +511,13 @@ function switchTheme(theme) {
 swichTheme.addEventListener("click", () => {
 	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
 	var theme_name = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? 'light' : 'dark';
-	if (client){
+	if (client) {
 		fetch('/api/user/update', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false, theme_name : theme_name}),
+			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false, theme_name: theme_name }),
 			credentials: 'include'
 		})
 		client.use_browser_theme = false;
@@ -547,7 +528,7 @@ swichTheme.addEventListener("click", () => {
 	swichTheme.blur();
 })
 
-function browserThemeEvent(event){
+function browserThemeEvent(event) {
 	switchTheme(event.matches == 1 ? 'dark' : 'light');
 }
 
@@ -558,17 +539,17 @@ swichTheme.addEventListener("keydown", (e) => {
 	}
 })
 
-function ft_create_element(element_name, map){
+function ft_create_element(element_name, map) {
 	var elem = document.createElement(element_name);
 
-	Object.keys(map).forEach(function (key){
+	Object.keys(map).forEach(function (key) {
 		if (key == "innerText")
 			elem.innerText = map[key]
 		else
 			elem.setAttribute(key, map[key]);
 	})
 	return elem;
-}		
+}
 
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
@@ -578,7 +559,7 @@ inputSearchUser.addEventListener("keydown", (e) => {
 })
 
 dropDownLangBtn.addEventListener("click", (e) => {
-	if (dropDownUser.classList.contains("activeDropDown")){
+	if (dropDownUser.classList.contains("activeDropDown")) {
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("inactiveDropDown");
@@ -586,7 +567,7 @@ dropDownLangBtn.addEventListener("click", (e) => {
 			dropDownUser.classList.remove("inactiveDropDown");
 		}, 300, dropDownUser)
 	}
-	if (dropDownLang.classList.contains("activeDropDown")){
+	if (dropDownLang.classList.contains("activeDropDown")) {
 		dropDownLang.classList.remove("activeDropDown");
 		void dropDownLang.offsetWidth;
 		dropDownLang.classList.add("inactiveDropDown");
@@ -595,7 +576,7 @@ dropDownLangBtn.addEventListener("click", (e) => {
 			dropDownLang.classList.remove("inactiveDropDown");
 		}, 300, dropDownLang)
 	}
-	else{
+	else {
 		dropDownLang.classList.remove("inactiveDropDown");
 		void dropDownLang.offsetWidth;
 		dropDownLang.classList.add("activeDropDown");
@@ -603,7 +584,7 @@ dropDownLangBtn.addEventListener("click", (e) => {
 })
 
 usernameBtn.addEventListener("click", (e) => {
-	if (dropDownLang.classList.contains("activeDropDown")){
+	if (dropDownLang.classList.contains("activeDropDown")) {
 		dropDownLang.classList.remove("activeDropDown");
 		void dropDownLang.offsetWidth;
 		dropDownLang.classList.add("inactiveDropDown");
@@ -612,7 +593,7 @@ usernameBtn.addEventListener("click", (e) => {
 			dropDownLang.classList.remove("inactiveDropDown");
 		}, 300, dropDownLang)
 	}
-	if (dropDownUser.classList.contains("activeDropDown")){
+	if (dropDownUser.classList.contains("activeDropDown")) {
 		dropDownUser.classList.remove("activeDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("inactiveDropDown");
@@ -620,7 +601,7 @@ usernameBtn.addEventListener("click", (e) => {
 			dropDownUser.classList.remove("inactiveDropDown");
 		}, 300, dropDownUser)
 	}
-	else if (dropDownUser.classList.contains("inactiveDropDown")){
+	else if (dropDownUser.classList.contains("inactiveDropDown")) {
 		dropDownUser.classList.remove("inactiveDropDown");
 		void dropDownUser.offsetWidth;
 		dropDownUser.classList.add("activeDropDown");
@@ -644,17 +625,17 @@ usernameBtn.addEventListener("keydown", (e) => {
 
 dropDownLangOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
-		(async() => {
+		(async () => {
 			currentLang = `lang/${button.id}.json`;
-			try{
-				if (client){
+			try {
+				if (client) {
 					client.currentLang = `lang/${button.id}.json`;
 					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 					content = await fetchResult.json();
 					client.langJson = content;
 				}
 				loadCurrentLang();
-				if (client){
+				if (client) {
 					fetch('/api/user/update', {
 						method: 'POST',
 						headers: {
@@ -666,7 +647,7 @@ dropDownLangOption.forEach(function (button) {
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
 				}
 			}
-			catch{
+			catch {
 				popUpError(`Could not load ${button.id} language pack`);
 			}
 		})();
@@ -679,7 +660,7 @@ dropDownLangOption.forEach(function (button) {
 
 window.addEventListener("click", (e) => {
 	if (!e.target.closest(".activeDropDown")) {
-		if (dropDownLang.classList.contains("activeDropDown")){
+		if (dropDownLang.classList.contains("activeDropDown")) {
 			dropDownLang.classList.remove("activeDropDown");
 			void dropDownLang.offsetWidth;
 			dropDownLang.classList.add("inactiveDropDown");
@@ -688,7 +669,7 @@ window.addEventListener("click", (e) => {
 				dropDownLang.classList.remove("inactiveDropDown");
 			}, 300, dropDownLang)
 		}
-		if (dropDownUser.classList.contains("activeDropDown")){
+		if (dropDownUser.classList.contains("activeDropDown")) {
 			dropDownUser.classList.remove("activeDropDown");
 			void dropDownUser.offsetWidth;
 			dropDownUser.classList.add("inactiveDropDown");
@@ -697,8 +678,8 @@ window.addEventListener("click", (e) => {
 			}, 300, dropDownUser)
 		}
 	}
-	if (!e.target.closest("#notifCenterContainer")){
-		if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
+	if (!e.target.closest("#notifCenterContainer")) {
+		if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")) {
 			notifCenterContainer.classList.remove("openCenter")
 			notifCenterContainer.classList.remove("quickOpenCenter")
 			notifCenterContainer.offsetWidth;
@@ -708,7 +689,7 @@ window.addEventListener("click", (e) => {
 			}, 550, notifCenterContainer)
 		}
 	}
-	if (e.target.closest(".notifReject, .notifAccept")){
+	if (e.target.closest(".notifReject, .notifAccept")) {
 		e.target.closest(".notifContainer").remove();
 	}
 	if (e.target.id == "logOutBtn")
@@ -719,7 +700,7 @@ window.addEventListener("click", (e) => {
 		myPushState(`${e.target.href}`);
 
 	}
-	
+
 })
 
 function popUpError(error){
@@ -732,7 +713,7 @@ function popUpError(error){
 	popupContainer.appendChild(popupText);
 	popupContainer.addEventListener("mouseleave", (e) => {
 		popupContainer.id = "popupErrorContainerClose"
-		setTimeout(()=>{
+		setTimeout(() => {
 			popupContainer.remove();
 		}, 500)
 	})
@@ -748,13 +729,13 @@ function checkResizeWindow(){
 	var fontSize = window.getComputedStyle(document.documentElement).fontSize.replace("px", "");
 	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
 	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
-	if (window.getComputedStyle(tmp).display != "none"){
+	if (window.getComputedStyle(tmp).display != "none") {
 		var sectionWidth = 0;
-		document.querySelectorAll("#browseFlexContainer > *").forEach(function(elem){
+		document.querySelectorAll("#browseFlexContainer > *").forEach(function (elem) {
 			sectionWidth += elem.getBoundingClientRect().width;
 		})
 		var availableWidth = document.querySelector("#browseFlexContainer").getBoundingClientRect().width - sectionWidth;
-		if (availableWidth < fontSize * 1.5){
+		if (availableWidth < fontSize * 1.5) {
 			document.querySelector("#mobileSearchBtn").style.setProperty("display", "block");
 		}
 		else {
@@ -765,14 +746,14 @@ function checkResizeWindow(){
 
 window.addEventListener("resize", checkResizeWindow);
 
-function setLoader(){
+function setLoader() {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
 
-	window.onscroll=function(){window.scrollTo(0, 0);};
+	window.onscroll = function () { window.scrollTo(0, 0); };
 }
-function unsetLoader(){
+function unsetLoader() {
 	document.getElementById("loaderBg").style.setProperty("display", "none");
-	window.onscroll=function(){};
+	window.onscroll = function () { };
 }
 
 document.querySelector("#mobileSearchBtn").addEventListener("click", function() {
@@ -788,7 +769,7 @@ function getWindowWidth() {
 	  document.documentElement.clientWidth
 	);
 }
-  
+
 function getWindowHeight() {
 	return Math.max(
 	  document.body.scrollHeight,
@@ -802,28 +783,28 @@ function getWindowHeight() {
 
 
 /*
-		_   _  _____  _____  _____ ______  _____  _____   ___   _____  _____  _____  _   _  _____ 
+		_   _  _____  _____  _____ ______  _____  _____   ___   _____  _____  _____  _   _  _____
 		| \ | ||  _  ||_   _||_   _||  ___||_   _|/  __ \ / _ \ |_   _||_   _||  _  || \ | |/  ___|
-		|  \| || | | |  | |    | |  | |_     | |  | /  \// /_\ \  | |    | |  | | | ||  \| |\ `--. 
+		|  \| || | | |  | |    | |  | |_     | |  | /  \// /_\ \  | |    | |  | | | ||  \| |\ `--.
 		| . ` || | | |  | |    | |  |  _|    | |  | |    |  _  |  | |    | |  | | | || . ` | `--. \
 		| |\  |\ \_/ /  | |   _| |_ | |     _| |_ | \__/\| | | |  | |   _| |_ \ \_/ /| |\  |/\__/ /
-		\_| \_/ \___/   \_/   \___/ \_|     \___/  \____/\_| |_/  \_/   \___/  \___/ \_| \_/\____/ 
+		\_| \_/ \___/   \_/   \___/ \_|     \___/  \____/\_| |_/  \_/   \___/  \___/ \_| \_/\____/
 */
 
 function incomingPushNotif(message){
 	btn = document.getElementById("pushNotif");
 	btnText = document.getElementById("pushNotifMessage");
 	if (notifCenterContainer.classList.contains("dnd") || btnText.innerText != "")
-		return ;
+		return;
 	if (message == undefined || message == "" || (typeof message !== 'string' && !(message instanceof String)))
 		message = "PUSH NOTIFICATION";
-	else if (message.length > 20){
+	else if (message.length > 20) {
 		message = `${message.substring(0, 20)}...`;
 	}
 	btnText.innerText = message;
 	btn.classList.add("incoming");
 	setTimeout((btn, btnText) => {
-		if (btn.classList.contains("incoming")){
+		if (btn.classList.contains("incoming")) {
 			btn.classList.remove("incoming");
 			btn.offsetWidth;
 			btn.classList.add("leaving");
@@ -837,8 +818,8 @@ function incomingPushNotif(message){
 
 var notifBtn = document.getElementById("pushNotif");
 notifBtn.addEventListener("click", (e) => {
-	if (!notifCenterContainer.classList.contains("closeCenter")){
-		if (document.getElementById("pushNotif").classList.contains("incoming")){
+	if (!notifCenterContainer.classList.contains("closeCenter")) {
+		if (document.getElementById("pushNotif").classList.contains("incoming")) {
 			document.getElementById("pushNotif").classList.remove("incoming");
 			document.getElementById("pushNotifMessage").innerText = "";
 			notifCenterContainer.classList.add("quickOpenCenter");
@@ -867,8 +848,8 @@ notifBtn.onkeydown = function (e) {
 };
 
 document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
-	if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
-		if (notifCenterContainer.classList.contains("dnd")){
+	if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")) {
+		if (notifCenterContainer.classList.contains("dnd")) {
 			fetch('/api/user/update', {
 				method: 'POST',
 				headers: {
@@ -879,7 +860,7 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 			})
 			notifCenterContainer.classList.remove("dnd");
 		}
-		else{
+		else {
 			fetch('/api/user/update', {
 				method: 'POST',
 				headers: {
@@ -893,7 +874,7 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	}
 })
 
-function sendNotif(message, id, type){
+function sendNotif(message, id, type) {
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
@@ -906,12 +887,12 @@ function sendNotif(message, id, type){
 		<div class="notifReject"></div>
 	</div>`;
 
-	if (id != undefined && id){
+	if (id != undefined && id) {
 		notifContainer.querySelector("#notifId").classList.add(id);
 	}
-	if (type == "friend_request"){
-		notifContainer.querySelector(".notifAccept").addEventListener("click", function(e){
-			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
+	if (type == "friend_request") {
+		notifContainer.querySelector(".notifAccept").addEventListener("click", function (e) {
+			const data = { username: e.target.closest(".notifContainer").querySelector("#notifId").className };
 			fetch('/api/user/accept_friend_request', {
 				method: 'POST',
 				headers: {
@@ -921,7 +902,7 @@ function sendNotif(message, id, type){
 				credentials: 'include'
 			})
 		})
-		
+
 		notifContainer.querySelector(".notifReject").addEventListener("click", function(e){
 			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
 			fetch('/api/user/reject_friend_request', {
@@ -938,7 +919,7 @@ function sendNotif(message, id, type){
 	notifContainer.querySelector(".notifReject").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
 
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
-	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))){
+	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))) {
 		notifCenterContainer.classList.add("pendingNotification");
 		incomingPushNotif(message);
 	}
@@ -951,43 +932,25 @@ function friendUpdate()
 		return;
 	var socket = new WebSocket("/ws/friend/");
 
-	socket.onopen = function()
-	{
+	socket.onopen = function () {
 		console.log("Connection established");
 	}
 
-	socket.onmessage = function(event)
-	{
-		var data = JSON.parse(event.data);
-		console.log(data);
-	}
-
-	socket.onclose = function()
-	{
+	socket.onclose = function () {
 		console.log("Connection closed");
 	}
 
-	window.addEventListener('beforeunload', function()
-	{
+	window.addEventListener('beforeunload', function () {
 		socket.close();
 	});
 
-	document.getElementById('goHomeButton').addEventListener('click', function()
-	{
+	document.getElementById('goHomeButton').addEventListener('click', function () {
 		socket.close();
 	});
 
-	window.addEventListener('popstate', function()
-	{
+	window.addEventListener('popstate', function () {
 		socket.close();
 	});
-
-	socket.onmessage = function(event) {
-		const data = JSON.parse(event.data);
-		if (data.new_request) {
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
-		}
-	};
 
 	window.disconnectSocket = function()
 	{
@@ -995,17 +958,109 @@ function friendUpdate()
 			socket.close();
 	};
 
-	window.sendFriendRequest = function(user)
+	socket.onmessage = function (event)
 	{
+		const data = JSON.parse(event.data);
+		if (data.new_request)
+		{
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
+			if (currentPage === "friends" && !document.getElementById(data.sender_name))
+			{
+				fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
+				.then(response => {
+					if (response.ok)
+					{
+						(response.json()).then((text) => {
+						friendRequest = Object.values(text.friend_requests).find(request => request.username === data.sender_name);
+						if (friendRequest)
+						{
+							createFriendRequestContainer(friendRequest);
+							document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+						}
+						});
+					}
+				});
+			}
+		}
+		else if (data.status && data.username && currentPage == "friends")
+		{
+			if (data.status === "online")
+			{
+				fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
+				})
+				.then(response => {
+					if (response.ok)
+					{
+						(response.json()).then((text) => {
+						friendRequest = Object.values(text.friends).find(request => request.username === data.username);
+						if (friendRequest  && !document.querySelector(`#onlineFriendList #${data.username}`))
+						{
+							if (document.querySelector(`#allFriendList #${data.username}`))
+								createFriendOnlineContainer(friendRequest);
+							else
+							{
+								createFriendContainer(friendRequest);
+								document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+							}
+								document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+							if (document.querySelector(`#pendingFriendRequestList #${data.username}`))
+							{
+								document.querySelector(`#pendingFriendRequestList #${data.username}`).remove();
+								document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+							}
+						}
+						});
+					}
+				});
+			}
+			else if (data.status === "offline")
+			{
+				if (document.getElementById(data.username))
+				{
+					document.getElementById(data.username).remove();
+					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+				}
+			}
+			else if (data.status === "remove")
+			{
+				if (document.getElementById(data.username))
+				{
+					if (document.querySelector(`#allFriendList #${data.username}`))
+					{
+						document.querySelector(`#allFriendList #${data.username}`).remove();
+						document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+					}
+					if (document.querySelector(`#onlineFriendList #${data.username}`))
+					{
+						document.querySelector(`#onlineFriendList #${data.username}`).remove();
+						document.getElementById("onlineFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+					}
+				}
+			}
+		}
+	}
+
+	window.sendFriendRequest = function (user) {
 		fetch('/api/user/get_user_id', {
 			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify({"user" : user,}),
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ "user": user, }),
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok) {
 				response.json().then((user) => {
-					if (!user.blocked){
+					if (!user.blocked) {
 						const message = JSON.stringify({
 							type: 'send_friend_request',
 							target_user_id: user.id,
@@ -1013,7 +1068,7 @@ function friendUpdate()
 						});
 						socket.send(message);
 					}
-					else{
+					else {
 						popUpError(client.langJson['friends']['error sending request'])
 					}
 				});
@@ -1027,12 +1082,12 @@ function friendUpdate()
 
 
 /*
-		______ __   __ _   _   ___  ___  ___ _____  _____      ______  _   _  _   _  _____  _____  _____  _____  _   _  _____ 
+		______ __   __ _   _   ___  ___  ___ _____  _____      ______  _   _  _   _  _____  _____  _____  _____  _   _  _____
 		|  _  \\ \ / /| \ | | / _ \ |  \/  ||_   _|/  __ \     |  ___|| | | || \ | |/  __ \|_   _||_   _||  _  || \ | |/  ___|
-		| | | | \ V / |  \| |/ /_\ \| .  . |  | |  | /  \/     | |_   | | | ||  \| || /  \/  | |    | |  | | | ||  \| |\ `--. 
+		| | | | \ V / |  \| |/ /_\ \| .  . |  | |  | /  \/     | |_   | | | ||  \| || /  \/  | |    | |  | | | ||  \| |\ `--.
 		| | | |  \ /  | . ` ||  _  || |\/| |  | |  | |         |  _|  | | | || . ` || |      | |    | |  | | | || . ` | `--. \
 		| |/ /   | |  | |\  || | | || |  | | _| |_ | \__/\     | |    | |_| || |\  || \__/\  | |   _| |_ \ \_/ /| |\  |/\__/ /
-		|___/    \_/  \_| \_/\_| |_/\_|  |_/ \___/  \____/     \_|     \___/ \_| \_/ \____/  \_/   \___/  \___/ \_| \_/\____/                                                                                                                    
+		|___/    \_/  \_| \_/\_| |_/\_|  |_/ \___/  \____/     \_|     \___/ \_| \_/ \____/  \_/   \___/  \___/ \_| \_/\____/
 */
 
 
@@ -1089,7 +1144,6 @@ async function loadCurrentLang(){
 	}
 	if (contentJson != null && contentJson != undefined){
 		content = contentJson[currentPage];
-		document.documentElement.setAttribute("lang", langMap[currentLang]);
 		if (content != null && content != undefined) {
 			Object.keys(content).forEach(function (key) {
 				instances = document.querySelectorAll(key);
@@ -1116,7 +1170,6 @@ async function loadCurrentLang(){
 			});
 			if (currentPage == 'user') {updateUserLang();}
 			if (currentPage == 'dashboard') {updateDashboardLang();}
-			if (currentPage == "tournament") {setTournamentAriaLabeL();}
 		}
 		content = contentJson['index'];
 		if (content != null || content != undefined) {
@@ -1178,13 +1231,13 @@ function createMatchResumeContainer(match, username) {
 		scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
 		scoreUser = ft_create_element("div", {"class" : "resultScore"});
 		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
-	
+
 		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two, "tabIndex" : "-1"});
 		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
-	
+
 		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one, "tabIndex" : "-1"});
 		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
-	
+
 		if (scoreUserName.innerText == "deleted"){
 			scoreUserName.classList.add("deletedUser");
 			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
@@ -1193,8 +1246,8 @@ function createMatchResumeContainer(match, username) {
 			scoreUserName.href = `https://${hostname.host}/user/${scoreUserName.innerText}`
 			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
 		}
-	
-	
+
+
 		if (scoreOpponentName.innerText == "deleted"){
 			scoreOpponentName.classList.add("deletedUser");
 			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
@@ -1203,12 +1256,12 @@ function createMatchResumeContainer(match, username) {
 			scoreOpponentName.href = `https://${hostname.host}/user/${scoreOpponentName.innerText}`
 			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
 		}
-	
+
 		scoreOpponentName.innerText += ":"
 		scoreUserName.innerText += ":"
 		scoreUser.appendChild(scoreUserName);
 		scoreUser.appendChild(scoreUserScore);
-	
+
 		scoreOpponent.appendChild(scoreOpponentName);
 		scoreOpponent.appendChild(scoreOpponentScore);
 		if (username == match.winner){
@@ -1220,10 +1273,10 @@ function createMatchResumeContainer(match, username) {
 			result.innerHTML = client.langJson['user']['.loss'];
 		}
 		//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
-	
+
 		scoreContainer.appendChild(scoreUser);
 		scoreContainer.appendChild(scoreOpponent);
-	
+
 		matchContainer.appendChild(result);
 		matchContainer.appendChild(scoreContainer);
 	}
@@ -1242,9 +1295,9 @@ function createMatchResumeContainer(match, username) {
 }
 
 async function updateUserAriaLabel(key, content){
-	if (key.startsWith("ResumeMatch")){
-		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-			var status = elem.querySelector(".matchDescContainerResult");
+	if (key.startsWith("P1")){
+		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
+			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
 			if (!status.classList.contains("tournament")){
 				if (status.classList.contains("victory"))
 					status = client.langJson['user']['.victory'];
@@ -1254,15 +1307,7 @@ async function updateUserAriaLabel(key, content){
 					status = client.langJson['user']['.draw'];
 				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
 				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-				elem.setAttribute("aria-label", `${status} ${content.replace("${USERNAME}", opponentName.replace(":","")).replace("${DATE}", date)}`);
-			}
-		})
-	}
-	else if (key.startsWith("ResumeTournament")){
-		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-			if (elem.querySelector(".matchDescContainerResult").classList.contains("tournament")){
-				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-				elem.setAttribute("aria-label", `${content.replace("${DATE}", date)}`);
+				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
 			}
 		})
 	}
