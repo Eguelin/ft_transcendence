@@ -360,7 +360,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	display: flex;
 	flex-direction: column;
 	gap: 1ch;
-	width: 10rem;
+	width: 15ch;
 	padding: 1ch;
 	position: relative;
 	left: 50%;
@@ -369,8 +369,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 }
 
 .lobbyPlayerPfpContainer{
-	width: 10rem;
-	height: 10rem;
+	width: 15ch;
+	height: 15ch;
 	align-self: center;
 	background-position: center center;
 	background-repeat: no-repeat;
