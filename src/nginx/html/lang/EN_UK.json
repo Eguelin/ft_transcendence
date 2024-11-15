@@ -15,7 +15,8 @@
 		"aria#FR_FR" : "Français",
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italiano",
-		"error reaching server" : "Error reaching server"
+		"error reaching server" : "Error reaching server",
+		".notifMessage.friend_request" : "Incoming friend request from ${USERNAME}"
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -99,7 +100,7 @@
 		"ariaAll.friendsOptionContainer" : "friend options",
 		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
 		"ariaBlocked.friendsOptionContainer" : "blocked user options",
-		"incoming pending request" : "Incoming friend request from USER",
+		"incoming pending request" : "Incoming friend request from ${USERNAME}",
 		"error sending request" : "Couldn't send friend request."
 
 	},
@@ -107,7 +108,7 @@
 		"#title" : "",
 		"#subtitle" : "",
 		"#sendFriendRequestBtn" : "Send friend request",
-		"#notPlayedToday" : "USER has not played any match today",
+		"#notPlayedToday" : "${USERNAME} has not played any match today",
 		"#recentMatchHistoryText" : "Recent matches",
 		"#allMatchesHistoryBtn" : "All matches",
 		".victory" : "VICTORY",
@@ -129,7 +130,7 @@
 		"#lastWeekSelection" : "Past 7 days",
 		"#lastMonthSelection" : "Past month",
 		"#lastYearSelection" : "Past year",
-		"#notPlayedPeriod" : "USER has not played any match during this period",
+		"#notPlayedPeriod" : "${USERNAME} has not played any match during this period",
 		"CVwinLossGraph" : "Percent of victories by date",
 		"CVwinLossAbsGraph" : "Number of victories over defeats by date",
 		"CVuserStatsGraph" : "Number of win and lost game",
@@ -163,6 +164,10 @@
 		"semi" : "Semi",
 		"final" : "final",
 		"tournamentLobby" : "Lobby"
+	},
+	"tournament":{
+		"#title" : "",
+		"tournamentSubtitle" : "Tournament"
 	},
 	"404":{
 		"#title" : "ERROR 404",

@@ -1,4 +1,3 @@
-container = document.getElementById("container");
 homeBtn = document.getElementById("goHomeButton");
 swichTheme = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
@@ -7,21 +6,15 @@ usernameBtn = document.getElementById("usernameBtn");
 userPfp = document.getElementById("pfp");
 dropDownUserContainer = document.getElementById("dropDownUserContainer");
 dropDownUser = document.getElementById("dropDownUser");
-pageContentContainer = document.getElementById("pageContentContainer");
 dropDownLang = document.getElementById("dropDownLang");
 dropDownLangBtn = document.getElementById("dropDownLangBtn");
 dropDownLangOption = document.querySelectorAll(".dropDownLangOptions");
-myProfileBtn = document.getElementById("myProfileBtn");
-friendsBtn = document.getElementById("friendsBtn");
-settingsBtn = document.getElementById("settingsBtn");
-logOutBtn = document.getElementById('logOutBtn');
 notifCenterContainer = document.getElementById("notifCenterContainer")
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
 var username = "";
 const hostname = new URL(window.location.href);
-const defaultLastXDaysDisplayed = 7;
 const preferedColorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
 var client = null;
@@ -132,6 +125,7 @@ class Client {
 						body: JSON.stringify({ "is_active": true }),
 						credentials: 'include'
 					})
+					document.querySelector("#myProfileBtn").href = `https://${hostname.host}/user/${this.username}`;
 				}
 				else if (fetchResult.status == 401)
 					return null
@@ -273,6 +267,7 @@ function load() {
 		client.loadPage(url.pathname)
 	else {
 		setLoader();
+		currentPage = "login";
 		dropDownUserContainer.style.setProperty("display", "none");
 		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
 		history.replaceState("", "", `https://${hostname.host}/login`);
@@ -424,35 +419,14 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	if (currentPage != "register") {
-		myPushState(`https://${hostname.host}/home`);
-		friendUpdate();
-	}
-	else
-		myPushState(`https://${hostname.host}/login`);
-})
-
-myProfileBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/user/${client.username}`);
-})
-
-friendsBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/friends`);
-})
-
-settingsBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/settings`);
+	myPushState(`https://${hostname.host}/home`);
+	friendUpdate();
 })
 
 homeBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter")
 		homeBtn.click();
 })
-
-logOutBtn.addEventListener("click", (e) => {
-	myReplaceState(`https://${hostname.host}/login`);
-	disconnectSocket();
-});
 
 const themeMap = {
 	"dark": {
@@ -534,118 +508,6 @@ function switchTheme(theme) {
 	}
 }
 
-async function loadCurrentLang() {
-	contentJson = null;
-	if (client && client.langJson) {
-		contentJson = client.langJson;
-	}
-	else if (currentLang != undefined) {
-		const fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
-		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
-		if (fetchResult.ok) {
-			try {
-				contentJson = await fetchResult.json()
-				dropDownLangBtn.style.setProperty("background-image", `url(${svgPath})`);
-			}
-			catch {
-				popUpError(`Could not load ${currentLang} language pack`);
-			}
-		}
-		else {
-			popUpError(`Could not load ${currentLang} language pack`);
-			currentLang = "lang/EN_UK.json";
-			const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
-			if (fetchResult.ok) {
-				try {
-					contentJson = await fetchResult.json();
-				}
-				catch {
-					popUpError(`Could not load ${currentLang} language pack`);
-				}
-			}
-			if (client)
-				client.langJson = contentJson;
-		}
-	}
-	if (contentJson == null) {
-		currentLang = "lang/EN_UK.json";
-		const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
-		if (fetchResult.ok) {
-			try {
-				contentJson = await fetchResult.json();
-				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
-			}
-			catch {
-				popUpError(`Could not load ${currentLang} language pack`);
-			}
-			if (client)
-				client.langJson = contentJson;
-		}
-		else {
-			popUpError("Could not load language pack");
-		}
-	}
-	if (contentJson != null && contentJson != undefined) {
-		content = contentJson[currentPage];
-		if (content != null && content != undefined) {
-			Object.keys(content).forEach(function (key) {
-				instances = document.querySelectorAll(key);
-				if (key.startsWith('#input')) {
-					for (var i = 0; i < Object.keys(instances).length; i++)
-						instances[i].placeholder = content[key];
-				}
-				else if (key.startsWith("CV") && chartAverage && chartAbs) {
-					if (key == "CVwinLossGraph")
-						chartAverage.titleBlock.options.text = content[key];
-					else if (key == "CVwinLossGraphClient" && chartAverage.config._config.data.datasets.length > 1)
-						chartAverage.config._config.data.datasets[1].label = content[key];
-					else if (key == "CVwinLossAbsGraph")
-						chartAbs.titleBlock.options.text = content[key];
-					else if (key == "CVwinLossAbsGraphClient" && chartAverage.config._config.data.datasets.length > 1)
-						chartAbs.config._config.data.datasets[1].label = content[key];
-					chartAverage.update();
-					chartAbs.update();
-				}
-				else if (key.startsWith("aria")) {
-					document.querySelectorAll(key.substring(4)).forEach(function (elem) {
-						elem.setAttribute("aria-label", content[key]);
-					})
-					if (currentPage == 'friends')
-						updateFriendsAriaLabel(key.substring(4), content[key]);
-					if (currentPage == 'search')
-						updateSearchAriaLabel(key.substring(4), content[key]);
-					if (currentPage == "user" || currentPage == "home")
-						updateUserAriaLabel(key.substring(4), content[key]);
-				}
-				else {
-					document.querySelectorAll(key).forEach(function (elem) {
-						elem.innerHTML = content[key];
-					})
-				}
-			});
-		}
-		content = contentJson['index'];
-		if (content != null || content != undefined) {
-			Object.keys(content).forEach(function (key) {
-				instances = document.querySelectorAll(key);
-				if (key.startsWith('#input')) {
-					for (var i = 0; i < Object.keys(instances).length; i++)
-						instances[i].placeholder = content[key];
-				}
-				else if (key.startsWith("aria")) {
-					document.querySelectorAll(key.substring(4)).forEach(function (elem) {
-						elem.setAttribute("aria-label", content[key]);
-					})
-				}
-				else {
-					for (var i = 0; i < Object.keys(instances).length; i++)
-						instances[i].innerHTML = content[key];
-				}
-			});
-		}
-	}
-}
-
 swichTheme.addEventListener("click", () => {
 	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
 	var theme_name = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? 'light' : 'dark';
@@ -687,98 +549,6 @@ function ft_create_element(element_name, map) {
 			elem.setAttribute(key, map[key]);
 	})
 	return elem;
-}
-
-function createMatchResumeContainer(match, username) {
-	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
-
-	result = ft_create_element("a", { "class": "matchDescContainerResult" });
-
-	date = ft_create_element("a", {"class" : "matchDescContainerDate", "innerText" : match.date});
-//	console.log(match, username)
-	if (match.type == 'match'){
-		scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
-		scoreUser = ft_create_element("div", {"class" : "resultScore"});
-		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
-
-		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two});
-		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
-
-		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one});
-		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
-		scoreOpponentName.innerText += ":"
-		scoreUserName.innerText += ":"
-
-		if (scoreUserName.innerText == "deleted")
-			scoreUserName.classList.add("deletedUser");
-		else
-			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
-
-
-		if (scoreOpponentName.innerText == "deleted")
-			scoreOpponentName.classList.add("deletedUser");
-		else
-			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
-
-		scoreUser.appendChild(scoreUserName);
-		scoreUser.appendChild(scoreUserScore);
-
-		scoreOpponent.appendChild(scoreOpponentName);
-		scoreOpponent.appendChild(scoreOpponentScore);
-		if (username == match.winner){
-			result.classList.add("victory");
-			result.innerHTML = client.langJson['user']['.victory'];
-		}
-		else {
-			result.classList.add("loss");
-			result.innerHTML = client.langJson['user']['.loss'];
-		}
-		//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
-
-		scoreContainer.appendChild(scoreUser);
-		scoreContainer.appendChild(scoreOpponent);
-
-		matchContainer.appendChild(result);
-		matchContainer.appendChild(scoreContainer);
-	}
-	else if (match.type == "tournament"){
-		result.classList.add("tournament");
-		result.innerHTML = client.langJson['user']['.tournament'];
-
-		result.href = `https://${hostname.host}/tournament?id=${match.id}`;
-
-		matchContainer.appendChild(result);
-	}
-	else
-		return ;
-	matchContainer.appendChild(date);
-	return (matchContainer);
-}
-
-async function updateUserAriaLabel(key, content) {
-	if (key.startsWith("P1")) {
-		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
-			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
-			if (!status.classList.contains("tournament")){
-				if (status.classList.contains("victory"))
-					status = client.langJson['user']['.victory'];
-				else if (status.classList.contains("loss"))
-					status = client.langJson['user']['.loss'];
-				else
-					status = client.langJson['user']['.draw'];
-				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
-				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
-			}
-		})
-	}
-	else {
-		document.querySelectorAll(key).forEach(function (elem) {
-			if (elem.classList.contains("resultScoreName")) {
-				elem.setAttribute("aria-label", `${elem.innerText} ${content}`);
-			}
-		})
-	}
 }
 
 inputSearchUser.addEventListener("keydown", (e) => {
@@ -922,10 +692,15 @@ window.addEventListener("click", (e) => {
 	if (e.target.closest(".notifReject, .notifAccept")) {
 		e.target.closest(".notifContainer").remove();
 	}
-	if (e.target.classList.contains("tournament")){
+	if (e.target.id == "logOutBtn")
+		disconnectSocket();
+
+	if (e.target.href != "" && e.target.href != undefined){
 		e.preventDefault();
 		myPushState(`${e.target.href}`);
+
 	}
+
 })
 
 function popUpError(error){
@@ -981,7 +756,42 @@ function unsetLoader() {
 	window.onscroll = function () { };
 }
 
-function incomingPushNotif(message) {
+document.querySelector("#mobileSearchBtn").addEventListener("click", function() {
+	myPushState(`https://${hostname.host}/search`);
+})
+
+function getWindowWidth() {
+	return Math.max(
+	  document.body.scrollWidth,
+	  document.documentElement.scrollWidth,
+	  document.body.offsetWidth,
+	  document.documentElement.offsetWidth,
+	  document.documentElement.clientWidth
+	);
+}
+
+function getWindowHeight() {
+	return Math.max(
+	  document.body.scrollHeight,
+	  document.documentElement.scrollHeight,
+	  document.body.offsetHeight,
+	  document.documentElement.offsetHeight,
+	  document.documentElement.clientHeight
+	);
+}
+
+
+
+/*
+		_   _  _____  _____  _____ ______  _____  _____   ___   _____  _____  _____  _   _  _____
+		| \ | ||  _  ||_   _||_   _||  ___||_   _|/  __ \ / _ \ |_   _||_   _||  _  || \ | |/  ___|
+		|  \| || | | |  | |    | |  | |_     | |  | /  \// /_\ \  | |    | |  | | | ||  \| |\ `--.
+		| . ` || | | |  | |    | |  |  _|    | |  | |    |  _  |  | |    | |  | | | || . ` | `--. \
+		| |\  |\ \_/ /  | |   _| |_ | |     _| |_ | \__/\| | | |  | |   _| |_ \ \_/ /| |\  |/\__/ /
+		\_| \_/ \___/   \_/   \___/ \_|     \___/  \____/\_| |_/  \_/   \___/  \___/ \_| \_/\____/
+*/
+
+function incomingPushNotif(message){
 	btn = document.getElementById("pushNotif");
 	btnText = document.getElementById("pushNotifMessage");
 	if (notifCenterContainer.classList.contains("dnd") || btnText.innerText != "")
@@ -1021,6 +831,22 @@ notifBtn.addEventListener("click", (e) => {
 	}
 })
 
+notifBtn.onkeydown = function (e) {
+	if (e.key == "Enter") {
+		if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
+			notifCenterContainer.classList.remove("openCenter")
+			notifCenterContainer.classList.remove("quickOpenCenter")
+			notifCenterContainer.offsetWidth;
+			notifCenterContainer.classList.add("closeCenter")
+			setTimeout((container) => {
+				container.classList.remove("closeCenter");
+			}, 550, notifCenterContainer)
+		}
+		else
+			notifBtn.click()
+	};
+};
+
 document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")) {
 		if (notifCenterContainer.classList.contains("dnd")) {
@@ -1052,13 +878,14 @@ function sendNotif(message, id, type) {
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
-	notifContainer.innerHTML = `<a class="notifMessage">${message}</a>
+	notifContainer.innerHTML = `
+	<a class="notifMessage ${type}">${message}</a>
 	<div style="display:none !important" id="notifId"></div>
-<div class="notifOptionContainer">
-<div class="notifAccept"></div>
-<div class="separator"></div>
-<div class="notifReject"></div>
-</div>`;
+	<div class="notifOptionContainer">
+		<div class="notifAccept"></div>
+		<div class="separator"></div>
+		<div class="notifReject"></div>
+	</div>`;
 
 	if (id != undefined && id) {
 		notifContainer.querySelector("#notifId").classList.add(id);
@@ -1075,8 +902,9 @@ function sendNotif(message, id, type) {
 				credentials: 'include'
 			})
 		})
-		notifContainer.querySelector(".notifReject").addEventListener("click", function (e) {
-			const data = { username: e.target.closest(".notifContainer").querySelector("#notifId").className };
+
+		notifContainer.querySelector(".notifReject").addEventListener("click", function(e){
+			const data = {username: e.target.closest(".notifContainer").querySelector("#notifId").className};
 			fetch('/api/user/reject_friend_request', {
 				method: 'POST',
 				headers: {
@@ -1087,12 +915,15 @@ function sendNotif(message, id, type) {
 			})
 		})
 	}
+	notifContainer.querySelector(".notifAccept").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
+	notifContainer.querySelector(".notifReject").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
 
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))) {
 		notifCenterContainer.classList.add("pendingNotification");
 		incomingPushNotif(message);
 	}
+	setNotifTabIndexes(notifBtn.tabIndex);
 }
 
 function friendUpdate()
@@ -1121,7 +952,15 @@ function friendUpdate()
 		socket.close();
 	});
 
-	window.disconnectSocket = function () {
+	socket.onmessage = function(event) {
+		const data = JSON.parse(event.data);
+		if (data.new_request) {
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
+		}
+	};
+
+	window.disconnectSocket = function()
+	{
 		if (socket)
 			socket.close();
 	};
@@ -1220,26 +1059,243 @@ function friendUpdate()
 	};
 }
 
-document.querySelector("#mobileSearchBtn").addEventListener("click", function () {
-	myPushState(`https://${hostname.host}/search`);
-})
 
-function getWindowWidth() {
-	return Math.max(
-		document.body.scrollWidth,
-		document.documentElement.scrollWidth,
-		document.body.offsetWidth,
-		document.documentElement.offsetWidth,
-		document.documentElement.clientWidth
-	);
+
+/*
+		______ __   __ _   _   ___  ___  ___ _____  _____      ______  _   _  _   _  _____  _____  _____  _____  _   _  _____
+		|  _  \\ \ / /| \ | | / _ \ |  \/  ||_   _|/  __ \     |  ___|| | | || \ | |/  __ \|_   _||_   _||  _  || \ | |/  ___|
+		| | | | \ V / |  \| |/ /_\ \| .  . |  | |  | /  \/     | |_   | | | ||  \| || /  \/  | |    | |  | | | ||  \| |\ `--.
+		| | | |  \ /  | . ` ||  _  || |\/| |  | |  | |         |  _|  | | | || . ` || |      | |    | |  | | | || . ` | `--. \
+		| |/ /   | |  | |\  || | | || |  | | _| |_ | \__/\     | |    | |_| || |\  || \__/\  | |   _| |_ \ \_/ /| |\  |/\__/ /
+		|___/    \_/  \_| \_/\_| |_/\_|  |_/ \___/  \____/     \_|     \___/ \_| \_/ \____/  \_/   \___/  \___/ \_| \_/\____/
+*/
+
+
+async function loadCurrentLang(){
+	contentJson = null;
+	if (client && client.langJson){
+		contentJson = client.langJson;
+	}
+	else if (currentLang != undefined){
+		const fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
+		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
+		if (fetchResult.ok){
+			try{
+				contentJson = await fetchResult.json()
+				dropDownLangBtn.style.setProperty("background-image", `url(${svgPath})`);
+			}
+			catch{
+				popUpError(`Could not load ${currentLang} language pack`);
+			}
+		}
+		else {
+			popUpError(`Could not load ${currentLang} language pack`);
+			currentLang = "lang/EN_UK.json";
+			const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
+			if (fetchResult.ok){
+				try {
+					contentJson = await fetchResult.json();
+				}
+				catch {
+					popUpError(`Could not load ${currentLang} language pack`);
+				}
+			}
+			if (client)
+				client.langJson = contentJson;
+		}
+	}
+	if (contentJson == null) {
+		currentLang = "lang/EN_UK.json";
+		const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
+		if (fetchResult.ok){
+			try {
+				contentJson = await fetchResult.json();
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
+			}
+			catch {
+				popUpError(`Could not load ${currentLang} language pack`);
+			}
+			if (client)
+				client.langJson = contentJson;
+		}
+		else{
+			popUpError("Could not load language pack");
+		}
+	}
+	if (contentJson != null && contentJson != undefined){
+		content = contentJson[currentPage];
+		if (content != null && content != undefined) {
+			Object.keys(content).forEach(function (key) {
+				instances = document.querySelectorAll(key);
+				if (key.startsWith('#input')){
+					for (var i=0; i< Object.keys(instances).length; i++)
+						instances[i].placeholder = content[key];
+				}
+				else if (key.startsWith("aria")){
+					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+						elem.setAttribute("aria-label", content[key]);
+					})
+					if (currentPage == 'friends')
+						updateFriendsAriaLabel(key.substring(4), content[key]);
+					if (currentPage == 'search')
+						updateSearchAriaLabel(key.substring(4), content[key]);
+					if (currentPage == "user" || currentPage == "home")
+						updateUserAriaLabel(key.substring(4), content[key]);
+				}
+				else{
+					document.querySelectorAll(key).forEach( function (elem) {
+						elem.innerHTML = content[key];
+					})
+				}
+			});
+			if (currentPage == 'user') {updateUserLang();}
+			if (currentPage == 'dashboard') {updateDashboardLang();}
+		}
+		content = contentJson['index'];
+		if (content != null || content != undefined) {
+			var searchBar = document.querySelector("#inputSearchUser");
+			if (content["#inputSearchUser"].length > 15){
+				searchBar.style.setProperty("width", `${content["#inputSearchUser"].length}ch`)
+			}
+			else
+				searchBar.style.setProperty("width", `15ch`)
+			Object.keys(content).forEach(function (key) {
+				instances = document.querySelectorAll(key);
+				if (key.startsWith('#input')){
+					for (var i=0; i< Object.keys(instances).length; i++)
+						instances[i].placeholder = content[key];
+				}
+				else if (key.startsWith("aria")){
+					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+						elem.setAttribute("aria-label", content[key]);
+					})
+				}
+				else if (key == ".notifMessage.friend_request"){
+					instances.forEach(function(elem){
+						elem.innerText = content[key].replace("${USERNAME}", elem.parentElement.querySelector("#notifId").className);
+					})
+				}
+				else{
+					for (var i=0; i< Object.keys(instances).length; i++)
+						instances[i].innerHTML = content[key];
+				}
+			});
+		}
+	}
 }
 
-function getWindowHeight() {
-	return Math.max(
-		document.body.scrollHeight,
-		document.documentElement.scrollHeight,
-		document.body.offsetHeight,
-		document.documentElement.offsetHeight,
-		document.documentElement.clientHeight
-	);
+function setNotifTabIndexes(tabIdx){
+	notifBtn.tabIndex = tabIdx++;
+	document.querySelectorAll(".notifContainer").forEach(function(elem){
+		elem.tabIndex = tabIdx;
+		tabIdx += 3;
+
+		elem.querySelector(".notifAccept").tabIndex = -1;
+		elem.querySelector(".notifReject").tabIndex = -1;
+		elem.onkeydown = function(e) {
+			if (e.key == "Enter" && e.target.classList.contains("notifContainer")){
+				e.target.querySelector(".notifAccept").tabIndex = e.target.tabIndex + 1;
+				e.target.querySelector(".notifReject").tabIndex = e.target.tabIndex + 2;
+			}
+		}
+	})
+}
+
+function createMatchResumeContainer(match, username) {
+	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
+
+	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
+
+	date = ft_create_element("a", {"class" : "matchDescContainerDate", "innerText" : match.date});
+	if (match.type == 'match'){
+		scoreContainer = ft_create_element("div", {"class" : "matchDescContainerScore"});
+		scoreUser = ft_create_element("div", {"class" : "resultScore"});
+		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
+
+		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two, "tabIndex" : "-1"});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
+
+		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one, "tabIndex" : "-1"});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
+
+		if (scoreUserName.innerText == "deleted"){
+			scoreUserName.classList.add("deletedUser");
+			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
+		}
+		else{
+			scoreUserName.href = `https://${hostname.host}/user/${scoreUserName.innerText}`
+			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+		}
+
+
+		if (scoreOpponentName.innerText == "deleted"){
+			scoreOpponentName.classList.add("deletedUser");
+			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
+		}
+		else{
+			scoreOpponentName.href = `https://${hostname.host}/user/${scoreOpponentName.innerText}`
+			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
+		}
+
+		scoreOpponentName.innerText += ":"
+		scoreUserName.innerText += ":"
+		scoreUser.appendChild(scoreUserName);
+		scoreUser.appendChild(scoreUserScore);
+
+		scoreOpponent.appendChild(scoreOpponentName);
+		scoreOpponent.appendChild(scoreOpponentScore);
+		if (username == match.winner){
+			result.classList.add("victory");
+			result.innerHTML = client.langJson['user']['.victory'];
+		}
+		else {
+			result.classList.add("loss");
+			result.innerHTML = client.langJson['user']['.loss'];
+		}
+		//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
+
+		scoreContainer.appendChild(scoreUser);
+		scoreContainer.appendChild(scoreOpponent);
+
+		matchContainer.appendChild(result);
+		matchContainer.appendChild(scoreContainer);
+	}
+	else if (match.type == "tournament"){
+		result.classList.add("tournament");
+		result.innerHTML = client.langJson['user']['.tournament'];
+
+		result.href = `https://${hostname.host}/tournament?id=${match.id}`;
+
+		matchContainer.appendChild(result);
+	}
+	else
+		return ;
+	matchContainer.appendChild(date);
+	return (matchContainer);
+}
+
+async function updateUserAriaLabel(key, content){
+	if (key.startsWith("P1")){
+		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
+			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
+			if (!status.classList.contains("tournament")){
+				if (status.classList.contains("victory"))
+					status = client.langJson['user']['.victory'];
+				else if (status.classList.contains("loss"))
+					status = client.langJson['user']['.loss'];
+				else
+					status = client.langJson['user']['.draw'];
+				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
+				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
+				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+			}
+		})
+	}
+	else{
+		document.querySelectorAll(key).forEach(function (elem){
+			if (elem.classList.contains("resultScoreName")){
+				elem.setAttribute("aria-label", `${elem.innerText} ${content}`);
+			}
+		})
+	}
 }

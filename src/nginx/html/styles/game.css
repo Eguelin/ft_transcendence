@@ -316,7 +316,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	justify-content: space-around;
 }
 
-.singleRoundDisplay #controler{
+.singleRoundDisplay#controler{
 	display: flex;
 }
 
@@ -392,4 +392,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 #winContainer button{
 	font-size: 3rem !important;
+}
+
+#tournamentContainer.selectable a:focus, #tournamentContainer.selectable a:hover{
+	opacity: 1;
+	text-decoration: underline;
 }
