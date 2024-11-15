@@ -752,24 +752,29 @@ function checkMatchResumeSize(){
 	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
 	console.log(matches);
 	var baseWidth = 16
+	var i = 0;
 	ch = 1
 	if (matches.length > 0){
+		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
+			i++;
+		if (i == matches.length)
+			return;
 		while (1 && ch <= baseWidth){
-			var width = matches[0].getBoundingClientRect().width;
+			var width = matches[i].getBoundingClientRect().width;
 			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
 			
 			if (width * 5 <= getWindowWidth() && ch < baseWidth){
 				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
 					elem.style.setProperty("width", `${ch + 1}ch`);
 				})
-				var width = matches[0].getBoundingClientRect().width;
+				var width = matches[i].getBoundingClientRect().width;
 			}
 			else
 				break;
 
 		}
 		while (1 && baseWidth > 1){
-			width = matches[0].getBoundingClientRect().width;
+			width = matches[i].getBoundingClientRect().width;
 			console.log(width * 5, getWindowWidth());
 			if (width * 5 > getWindowWidth()){
 				baseWidth--;
