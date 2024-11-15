@@ -1077,4 +1077,7 @@ function setTournamentAriaLabeL(){
 			popUpError("Error setting aria labels");
 		}
 	})
+	document.querySelectorAll(".contestMatchResume .username").forEach(function (elem){
+		elem.setAttribute("aria-label", content["profile redirection"].replace("${USERNAME}", elem.innerText));
+	})
 }

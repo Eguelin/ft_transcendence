@@ -174,7 +174,8 @@
 		"four" : "Fourth",
 		"quarter" : "Quarter finals",
 		"semi" : "Semi finals",
-		"final" : "finals"
+		"final" : "finals",
+		"profile redirection" : "${USERNAME} profile redirection"
 	},
 	"404":{
 		"#title" : "ERROR 404",
