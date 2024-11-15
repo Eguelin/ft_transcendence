@@ -30,8 +30,7 @@
 		".loss" : "LOST",
 		".draw" : "DRAW",
 		"aria#recentMatchHistoryContainer" : "User today's matches",
-		"ariaP1.matchDescContainer" : "match against",
-		"ariaP2.matchDescContainer" : "on the",
+		"ariaResume.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
 		"aria.resultScoreName" : "profile redirection"
 	},
 	"login" : {
@@ -115,8 +114,7 @@
 		".loss" : "LOST",
 		".draw" : "DRAW",
 		".tournament" : "TOURNAMENT",
-		"ariaP1.matchDescContainer" : "match against",
-		"ariaP2.matchDescContainer" : "on the",
+		"ariaResume.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
 		"aria.resultScoreName" : "profile redirection"
 	},
 	"dashboard":{
