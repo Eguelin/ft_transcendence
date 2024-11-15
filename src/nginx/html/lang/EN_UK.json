@@ -30,7 +30,8 @@
 		".loss" : "LOST",
 		".draw" : "DRAW",
 		"aria#recentMatchHistoryContainer" : "User today's matches",
-		"ariaResume.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
+		"ariaResumeMatch.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
+		"ariaResumeTournament.matchDescContainer" : "Tournament on the ${DATE}",
 		"aria.resultScoreName" : "profile redirection"
 	},
 	"login" : {
