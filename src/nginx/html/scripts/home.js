@@ -53,7 +53,6 @@ var template = `
 						else{
 							var idx = elem.tabIndex + 1
 							elem.querySelectorAll(".resultScoreName").forEach(function (names){
-								console.log(`set name idx : ${idx}`);
 								names.tabIndex = idx;
 								idx++;
 							})
