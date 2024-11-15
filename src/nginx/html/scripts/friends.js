@@ -236,7 +236,7 @@ document.addEventListener("click", (e) => {
 			document.getElementById("popupBg").style.display = "block";
 			deleteFriendPopup.style.setProperty("display", "flex");
 			deleteFriendPopup.className = e.target.parentElement.id;
-		}.
+		}
 		if (e.target.className == "blockFriendBtn"){
 			document.getElementById("popupBg").style.display = "block"
 			blockFriendPopup.style.setProperty("display", "flex");
