@@ -24,7 +24,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	translate: -50%;
 	position: relative;
 	width: 100%;
-	justify-content: space-around;
+	gap: 1rem;
+	overflow: hidden;
 }
 
 .game{
@@ -39,13 +40,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	gap: 5rem;
 	width: fit-content;
 	color: var(--main-text-rgb);
+	flex: 1;
+	align-items: center;
 }
 
 .playerPfp, #winPfpContainer{
 	flex: none;
 	position: relative;
-	left: 50%;
-	translate: -50%;
 	height: 7vw;
 	width: 7vw;
 	overflow: hidden;
@@ -94,6 +95,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	margin: 0;
 	display: block;
 	text-align: center;
+	width: 15ch;
 }
 
 #winContainer, #waitContainer, #countdownContainer{
