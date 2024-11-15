@@ -1,15 +1,12 @@
+import json, os, requests, base64, random, string, datetime,zxcvbn, re, io
+import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random, string, subprocess, datetime
-import login.models as customModels
-import game.models as gameModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
-import json, os, requests, base64, random, datetime, zxcvbn, re, io
 from PIL import Image
-
 
 def generate_unique_username(base_username):
 	username = base_username
@@ -361,7 +358,7 @@ def get_all_user_match_json(matches, tournaments, username):
 					p1_name = match.player_one.username
 				except:
 					p1_name = "deleted"
-		
+
 				try:
 					p2_name = match.player_two.username
 				except:
@@ -689,7 +686,7 @@ def get_tournament(request):
 			}
 		}
 		for match in tournament.matches.all():
-			
+
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = match.player_one.username
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = match.player_one.profile.profile_picture
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winner.username == match.player_one.username else None
