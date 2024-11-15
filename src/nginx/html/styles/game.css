@@ -237,6 +237,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 .contestMatchResume{
 	width: fit-content;
 	padding: 1ch;
+	position: relative;
+	border: .5px solid var(--page-bg-rgb);
 }
 
 .contestUserContainer{
@@ -257,10 +259,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 .username.waiting{
 	font-style: italic;	
-}
-
-.contestMatchResume {
-	position: relative;
 }
 
 .exit.anchor, .entry.anchor{
