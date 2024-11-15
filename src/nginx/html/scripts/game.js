@@ -1032,23 +1032,27 @@ function game() {
 			gameContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
 			tournamentContainer.classList.add("selectable");
-			document.querySelector(".contestMatchResume.quarter.match.one .left .username").tabIndex = 12;
-			document.querySelector(".contestMatchResume.quarter.match.one .right .username").tabIndex = 13;
-			document.querySelector(".contestMatchResume.quarter.match.two .left .username").tabIndex = 14;
-			document.querySelector(".contestMatchResume.quarter.match.two .right .username").tabIndex = 15;
-			document.querySelector(".contestMatchResume.quarter.match.three .left .username").tabIndex = 16;
-			document.querySelector(".contestMatchResume.quarter.match.three .right .username").tabIndex = 17;
-			document.querySelector(".contestMatchResume.quarter.match.four .left .username").tabIndex = 18;
-			document.querySelector(".contestMatchResume.quarter.match.four .right .username").tabIndex = 19;
+			document.querySelector(".contestMatchResume.quarter.match.one").tabIndex = 12;
+			document.querySelector(".contestMatchResume.quarter.match.two").tabIndex = 15;
+			document.querySelector(".contestMatchResume.quarter.match.three").tabIndex = 18;
+			document.querySelector(".contestMatchResume.quarter.match.four").tabIndex = 21;
+			document.querySelector(".contestMatchResume.semi.match.one").tabIndex = 24;
+			document.querySelector(".contestMatchResume.semi.match.two").tabIndex = 27;
+			document.querySelector(".contestMatchResume.final.match.one").tabIndex = 30;
 
-			document.querySelector(".contestMatchResume.semi.match.one .left .username").tabIndex = 20;
-			document.querySelector(".contestMatchResume.semi.match.one .right .username").tabIndex = 21;
-			document.querySelector(".contestMatchResume.semi.match.two .left .username").tabIndex = 22;
-			document.querySelector(".contestMatchResume.semi.match.two .right .username").tabIndex = 23;
-
-			document.querySelector(".contestMatchResume.final.match.one .left .username").tabIndex = 24;
-			document.querySelector(".contestMatchResume.final.match.one .right .username").tabIndex = 25;
-			setNotifTabIndexes(26);
+			document.querySelectorAll(".contestMatchResume").forEach(function (elem){
+				elem.onkeydown = function (e){
+					if (e.target.classList.contains("contestMatchResume") && e.key == "Enter"){
+						try{
+							elem.querySelector(".winner .username").tabIndex = elem.tabIndex + 1;
+							elem.querySelector(".loser .username").tabIndex = elem.tabIndex + 2;
+						}catch {
+							popUpError("Error tab indexes on user redirection");
+						}
+					}
+				}
+			})
+			setNotifTabIndexes(33);
 			(async () => (loadCurrentLang()))();
 			displayTournament(true);
 			setTournamentAriaLabeL();
