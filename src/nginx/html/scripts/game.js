@@ -10,14 +10,14 @@ var treeCanva;
 
 var userContainerAnchor = `
 <div class="anchor"></div>
-<div class="username"> </div>
+<a tabindex="-1" class="username"></a>
 <div class="score"></div>
 `
 
 var lobbyPlayerContainer= `
 <div class="lobbyPlayerContainer">
 	<div class="lobbyPlayer">
-		<div class="username"></div>
+		<a class="username"></a>
 		<div class="lobbyPlayerPfpContainer">
 			<img class="lobbyPlayerPfp">
 		</div>
@@ -116,7 +116,7 @@ var template = `
 `
 
 function leftSlideBtn(){
-	var contest = document.querySelector(".singleRoundDisplay");
+	var contest = document.querySelector(".singleRoundDisplay#tournamentContainer");
 	if (!contest)
 		return
 	var left = contest.getBoundingClientRect().left;
@@ -167,7 +167,7 @@ function leftSlideBtn(){
 }
 
 function rightSlideBtn(){
-	var contest = document.querySelector(".singleRoundDisplay");
+	var contest = document.querySelector(".singleRoundDisplay#tournamentContainer");
 	if (!contest)
 		return
 	var left = contest.getBoundingClientRect().left;
@@ -194,7 +194,6 @@ function rightSlideBtn(){
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
-		/*document.querySelector("#treeCanva").style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)*/
 
 		setTimeout(()=>{
 
@@ -351,10 +350,11 @@ var tournament;
 	document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
 	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
 	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	setNotifTabIndexes(14);
 	game();
 }
 
-function setTournamentTreeValue(){
+function setTournamentTreeValue(is_finished){
 	const positionMap = {
 		"round_0" : ".contestMatchResume.quarter",
 		"round_1" : ".contestMatchResume.semi",
@@ -378,6 +378,8 @@ function setTournamentTreeValue(){
 						players += 1;
 					document.querySelector(`${selector} .username`).classList.remove("waiting");
 					document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+					if (is_finished)
+						document.querySelector(`${selector} .username`).href = `https://${hostname.host}/user/${tournament[round][matchNumber][player]['username']}`;
 					if (tournament[round][matchNumber][player]['score'] != null){
 						document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
 						document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
@@ -423,7 +425,7 @@ function checkTournementRound(){
 	}
 }
 
-function displayTournament(){
+function displayTournament(is_finished = false){
 	document.querySelectorAll(".loser, .winner").forEach(function(elem){
 		elem.classList.remove("loser");
 		elem.classList.remove("winner");
@@ -440,7 +442,7 @@ function displayTournament(){
 	document.getElementById("leftBtnContainer").onmouseup = function() {};
 	document.getElementById("rightBtnContainer").onmousedown = function() {};
 	document.getElementById("rightBtnContainer").onmouseup = function() {};
-	setTournamentTreeValue();
+	setTournamentTreeValue(is_finished);
 	if (playersCount == 8/* || 1*/){
 
 		document.getElementById("leftBtnContainer").onclick = leftSlideBtn;
@@ -504,10 +506,12 @@ function displayTournament(){
 		})
 
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-			tournamentContainer.classList.add("singleRoundDisplay")
+			document.querySelector("#controler").classList.add("singleRoundDisplay");
+			tournamentContainer.classList.add("singleRoundDisplay");
 		}
 		else {
-			tournamentContainer.classList.remove("singleRoundDisplay")
+			tournamentContainer.classList.remove("singleRoundDisplay");
+			document.querySelector("#controler").classList.remove("singleRoundDisplay");
 			tournamentContainer.style.setProperty("left", `0px`)
 			if (document.getElementById("treeCanva"))
 				document.querySelector("#treeCanva").style.setProperty("left", `0px`)
@@ -556,6 +560,7 @@ function displayTournament(){
 	else{
 		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentLobby']} ${playersCount}/8`
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
+		document.querySelector("#controler").classList.remove("singleRoundDisplay")
 		document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
 		if (document.getElementById("treeCanva"))
 			document.getElementById("treeCanva").remove();
@@ -983,7 +988,7 @@ function game() {
 			container.querySelector("#replayButton").addEventListener("click", (e) => {
 				window.removeEventListener("keydown", keydownExitEventListener);
 				window.removeEventListener("click", clickExitEventListener);
-				gamesend(url.searchParams.get("mode"), url.searchParams.get("room"))
+				gamesend(mode, url.searchParams.get("room"))
 				document.getElementById("winContainer").remove();
 				if (mode == "game_remote"){
 					displayWaiting();
@@ -1026,8 +1031,28 @@ function game() {
 			}
 			gameContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
-			displayTournament();
+			tournamentContainer.classList.add("selectable");
+			document.querySelector(".contestMatchResume.quarter.match.one .left .username").tabIndex = 12;
+			document.querySelector(".contestMatchResume.quarter.match.one .right .username").tabIndex = 13;
+			document.querySelector(".contestMatchResume.quarter.match.two .left .username").tabIndex = 14;
+			document.querySelector(".contestMatchResume.quarter.match.two .right .username").tabIndex = 15;
+			document.querySelector(".contestMatchResume.quarter.match.three .left .username").tabIndex = 16;
+			document.querySelector(".contestMatchResume.quarter.match.three .right .username").tabIndex = 17;
+			document.querySelector(".contestMatchResume.quarter.match.four .left .username").tabIndex = 18;
+			document.querySelector(".contestMatchResume.quarter.match.four .right .username").tabIndex = 19;
+
+			document.querySelector(".contestMatchResume.semi.match.one .left .username").tabIndex = 20;
+			document.querySelector(".contestMatchResume.semi.match.one .right .username").tabIndex = 21;
+			document.querySelector(".contestMatchResume.semi.match.two .left .username").tabIndex = 22;
+			document.querySelector(".contestMatchResume.semi.match.two .right .username").tabIndex = 23;
+
+			document.querySelector(".contestMatchResume.final.match.one .left .username").tabIndex = 24;
+			document.querySelector(".contestMatchResume.final.match.one .right .username").tabIndex = 25;
+			setNotifTabIndexes(26);
+			(async () => (loadCurrentLang()))();
+			displayTournament(true);
 			window.addEventListener("resize", displayTournament);
+
 		})()
 	}
 }

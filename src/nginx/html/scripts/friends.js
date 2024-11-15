@@ -88,6 +88,8 @@ var template = `
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
 
+	setNotifTabIndexes(16);
+
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 
 	slideSelector.forEach(function(key) {
@@ -398,6 +400,7 @@ function setTabIndexes(slideIdx){
 		if (elem.querySelector(".unblockBtn"))
 			elem.querySelector(".unblockBtn").tabIndex = tmpIdx++;
 	})
+	setNotifTabIndexes(tmpIdx);
 }
 
 function createFriendContainer(user){
@@ -413,8 +416,7 @@ function createFriendContainer(user){
 
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaAll.friendsOptionContainer']}`);
 
-	if (user.is_active == true)
-	{
+	if (user.is_active == true){
 		var clone = friendContainer.cloneNode(true);
 		var img = clone.querySelector(".profilePicture");
 		addPfpUrlToImgSrc(img, `${img.src}`);
@@ -457,54 +459,6 @@ function createFriendContainer(user){
 	allFriendListContainer.appendChild(friendContainer);
 }
 
-function createFriendOnlineContainer(user)
-{
-	friendContainer = createUserContainer(user);
-	var clone = friendContainer.cloneNode(true);
-	var img = clone.querySelector(".profilePicture");
-	addPfpUrlToImgSrc(img, `${img.src}`);
-	clone.querySelectorAll(".friendsOption div").forEach(function (elem)
-	{
-		elem.onfocus = function() {window.onkeydown = null;}
-		elem.onblur = function() {window.onkeydown = friendKeyDownEvent;}
-		elem.onkeydown = function(e) {if (e.key == "Enter") {elem.click()}}
-		elem.onkeyup = function(e)
-		{
-			if (elem.className == "removeFriendBtn"){
-				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmDelete").focus();
-			}
-			else if (elem.className == "blockFriendBtn")
-			{
-				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmBlock").focus();
-			}
-		}
-	});
-	clone.querySelectorAll(".friendsOptionContainer").forEach(function (elem)
-	{
-		elem.onfocus = function ()
-		{
-			window.onkeydown = null;
-			document.querySelectorAll(".activeListSelector").forEach(function (active){
-				active.classList.remove("activeListSelector");
-			})
-		};
-		elem.onblur = function () {window.onkeydown = friendKeyDownEvent};
-		elem.onkeydown = function (e)
-		{
-			if (e.key == "Enter")
-			{
-				if (e.target.classList.contains("friendsOptionContainer"))
-				{
-					elem.classList.add("activeListSelector");
-					elem.lastChild.firstChild.focus();
-				}
-			}
-		}
-	})
-		onlineFriendListContainer.appendChild(clone);
-}
 
 function createFriendRequestContainer(user){
 	var friendContainer = createUserContainer(user);
