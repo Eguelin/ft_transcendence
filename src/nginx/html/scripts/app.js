@@ -952,13 +952,6 @@ function friendUpdate()
 		socket.close();
 	});
 
-	socket.onmessage = function(event) {
-		const data = JSON.parse(event.data);
-		if (data.new_request) {
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
-		}
-	};
-
 	window.disconnectSocket = function()
 	{
 		if (socket)
@@ -1013,8 +1006,19 @@ function friendUpdate()
 						friendRequest = Object.values(text.friends).find(request => request.username === data.username);
 						if (friendRequest  && !document.querySelector(`#onlineFriendList #${data.username}`))
 						{
-							createFriendOnlineContainer(friendRequest);
-							document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+							if (document.querySelector(`#allFriendList #${data.username}`))
+								createFriendOnlineContainer(friendRequest);
+							else
+							{
+								createFriendContainer(friendRequest);
+								document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+							}
+								document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+							if (document.querySelector(`#pendingFriendRequestList #${data.username}`))
+							{
+								document.querySelector(`#pendingFriendRequestList #${data.username}`).remove();
+								document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+							}
 						}
 						});
 					}
@@ -1026,6 +1030,22 @@ function friendUpdate()
 				{
 					document.getElementById(data.username).remove();
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+				}
+			}
+			else if (data.status === "remove")
+			{
+				if (document.getElementById(data.username))
+				{
+					if (document.querySelector(`#allFriendList #${data.username}`))
+					{
+						document.querySelector(`#allFriendList #${data.username}`).remove();
+						document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+					}
+					if (document.querySelector(`#onlineFriendList #${data.username}`))
+					{
+						document.querySelector(`#onlineFriendList #${data.username}`).remove();
+						document.getElementById("onlineFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+					}
 				}
 			}
 		}
