@@ -73,7 +73,7 @@ var template = `
 </div>`
 
 
-{	
+{
 	document.getElementById("container").innerHTML = template;
 
 	slides = document.querySelectorAll(".friendSlide");
@@ -91,7 +91,7 @@ var template = `
 	setNotifTabIndexes(16);
 
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
-	
+
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
 			key.addEventListener("click", (e) => {
@@ -217,6 +217,7 @@ document.addEventListener("click", (e) => {
 				credentials: 'include'
 			})
 			e.target.closest(".friendContainer").remove();
+			document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
 		}
 		if (e.target.className == "rejectRequestBtn"){
 			const data = {username: e.target.parentElement.id};
@@ -229,6 +230,7 @@ document.addEventListener("click", (e) => {
 				credentials: 'include'
 			})
 			e.target.closest(".friendContainer").remove();
+			document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
 		}
 		if (e.target.className == "removeFriendBtn"){
 			document.getElementById("popupBg").style.display = "block";
@@ -451,8 +453,8 @@ function createFriendContainer(user){
 					}
 				}
 			}
-		
-		
+
+
 		})
 		onlineFriendListContainer.appendChild(clone);
 	}
@@ -483,6 +485,55 @@ function createBlockedUserContainer(user){
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaBlocked.friendsOptionContainer']}`);
 
 	blockedListContainer.appendChild(friendContainer);
+}
+
+function createFriendOnlineContainer(user)
+{
+	friendContainer = createUserContainer(user);
+	var clone = friendContainer.cloneNode(true);
+	var img = clone.querySelector(".profilePicture");
+	addPfpUrlToImgSrc(img, `${img.src}`);
+	clone.querySelectorAll(".friendsOption div").forEach(function (elem)
+	{
+		elem.onfocus = function() {window.onkeydown = null;}
+		elem.onblur = function() {window.onkeydown = friendKeyDownEvent;}
+		elem.onkeydown = function(e) {if (e.key == "Enter") {elem.click()}}
+		elem.onkeyup = function(e)
+		{
+			if (elem.className == "removeFriendBtn"){
+				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmDelete").focus();
+			}
+			else if (elem.className == "blockFriendBtn")
+			{
+				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
+				document.getElementById("confirmBlock").focus();
+			}
+		}
+	});
+	clone.querySelectorAll(".friendsOptionContainer").forEach(function (elem)
+	{
+		elem.onfocus = function ()
+		{
+			window.onkeydown = null;
+			document.querySelectorAll(".activeListSelector").forEach(function (active){
+				active.classList.remove("activeListSelector");
+			})
+		};
+		elem.onblur = function () {window.onkeydown = friendKeyDownEvent};
+		elem.onkeydown = function (e)
+		{
+			if (e.key == "Enter")
+			{
+				if (e.target.classList.contains("friendsOptionContainer"))
+				{
+					elem.classList.add("activeListSelector");
+					elem.lastChild.firstChild.focus();
+				}
+			}
+		}
+	})
+		onlineFriendListContainer.appendChild(clone);
 }
 
 function checkUpdate(){
