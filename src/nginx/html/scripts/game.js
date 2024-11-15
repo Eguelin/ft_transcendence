@@ -136,7 +136,7 @@ function leftSlideBtn(){
 			iterations: 1,
 		}
 		contest.animate(move, time);
-		
+
 		document.querySelector("#leftBtnContainer").removeEventListener("click", leftSlideBtn);
 		document.querySelector("#leftBtnContainer").onkeydown = null;
 		document.querySelector("#rightBtnContainer").removeEventListener("click", rightSlideBtn);
@@ -607,7 +607,7 @@ function game() {
 		let displayInterval;
 		let oldKeysDown = {};
 		let countdown = "";
-	
+
 		if (mode == "local"){
 			document.querySelectorAll(".playerPfp").forEach(function (elem){
 				elem.style.setProperty("display", "none");
@@ -621,13 +621,13 @@ function game() {
 				elem.style.setProperty("display", "block");
 			})
 		}
-	
+
 		window.addEventListener('beforeunload', handleBeforeUnload);
 		document.getElementById('goHomeButton').addEventListener('click', handleGoHomeButton);
 		window.addEventListener('popstate', handlePopState);
 		document.addEventListener("keydown", handleKeyDown);
 		document.addEventListener("keyup", handleKeyUp);
-	
+
 		socket.onopen = function() {
 			console.log("Connection established");
 			gamesend(mode, url.searchParams.get("room"));
@@ -636,7 +636,7 @@ function game() {
 			}
 			displayInterval = setInterval(() => gameRender(), 16);
 		}
-	
+
 		socket.onmessage = function(event) {
 			let data = JSON.parse(event.data);
 			if (data.type === "error"){
@@ -659,7 +659,7 @@ function game() {
 			} else if (data.type === "game_start") {
 				var leftBtnInterval;
 				var rightBtnInterval;
-	
+
 				document.getElementById("leftBtnContainer").onclick = function() {};
 				document.getElementById("leftBtnContainer").onkeydown = function() {};
 				document.getElementById("rightBtnContainer").onclick = function() {};
@@ -672,7 +672,7 @@ function game() {
 					keysDown['KeyA'] = false;
 					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 				};
-	
+
 				document.getElementById("rightBtnContainer").onpointerdown = function() {
 					keysDown['KeyD'] = true;
 					rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
@@ -681,7 +681,7 @@ function game() {
 					keysDown['KeyD'] = false;
 					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 				};
-	
+
 				document.getElementById("leftBtnContainer").oncontextmenu = function(event) {
 					event.preventDefault();
 					event.stopPropagation();
@@ -692,7 +692,7 @@ function game() {
 					event.stopPropagation();
 					return false;
 				};
-	
+
 				KeyPressInterval = setInterval(() => KeyPress(), 16);
 				if(document.getElementById("countdownContainer"))
 					document.getElementById("countdownContainer").remove();
@@ -719,15 +719,15 @@ function game() {
 				window.addEventListener("resize", displayTournament);
 			}
 		}
-	
+
 		socket.onclose = function() {
 			console.log("Connection closed");
 		}
-	
+
 		socket.onerror = function(error) {
 			console.log("Error: " + error.message);
 		}
-	
+
 		function gamesend(type, message) {
 			if (socket.readyState === WebSocket.OPEN)
 				socket.send(JSON.stringify({
@@ -735,38 +735,38 @@ function game() {
 					message: message
 				}));
 		}
-	
+
 		function gameInit(message) {
 			canvas.width = message.canvas.width;
 			canvas.height = message.canvas.height;
-	
+
 			paddle.height = message.paddle.height;
 			paddle.width = message.paddle.width;
-	
+
 			player1.x = message.player1.x;
 			player1.y = message.player1.y;
 			player1.score = message.player1.score;
 			player1.name = message.player1.user.username;
 			player1.profile_picture = message.player1.user.profile_picture;
-	
+
 			player2.x = message.player2.x;
 			player2.y = message.player2.y;
 			player2.score = message.player2.score;
 			player2.name = message.player2.user.username;
 			player2.profile_picture = message.player2.user.profile_picture;
-	
+
 			ball.size = message.ball.size;
 			ball.x = message.ball.x;
 			ball.y = message.ball.y;
-	
+
 			ctx.lineWidth = paddle.width / 4;
-	
+
 			if (mode == "local"){
 				player1.profile_picture = "";
 				player2.profile_picture = "";
 				player1.name = client.langJson['game']['playerOne'];
 				player2.name = client.langJson['game']['playerTwo'];
-	
+
 			}
 			if (mode == "game_remote"){
 				if (document.getElementById("waitContainer"))
@@ -775,24 +775,24 @@ function game() {
 			window.removeEventListener("keydown", keydownExitEventListener);
 			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
 			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
-	
+
 			document.querySelector("#playerOne > .playerName").innerText = player1.name;
 			document.querySelector("#playerTwo > .playerName").innerText = player2.name;
-	
+
 			if (mode == "full_ai")
 				document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
-	
+
 			document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
-	
+
 			var countdownBg = document.createElement("div");
 			countdownBg.id = "countdownContainer";
 			countdownBg.innerHTML = `<div id=countdownBlur></div><h1 id="countdownText"></h1>`
 			document.body.appendChild(countdownBg);
 			gamesend("game_ready");
 		}
-	
+
 		function updateGame(message) {
-	
+
 			if (url.searchParams.get("mode") != "full_ai"){
 				playerOneScore.innerText = `${message.player1.score}/${maxScore}`;
 				playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
@@ -804,26 +804,26 @@ function game() {
 			player1.x = message.player1.x;
 			player1.y = message.player1.y;
 			player1.score = message.player1.score;
-	
+
 			player2.x = message.player2.x;
 			player2.y = message.player2.y;
 			player2.score = message.player2.score;
-	
+
 			ball.x = message.ball.x;
 			ball.y = message.ball.y;
-	
+
 			ballTrail.push({ x: ball.x, y: ball.y });
-	
+
 			if (ballTrail.length > 5) {
 				ballTrail.shift();
 			}
 		}
-	
+
 		function gameRender() {
 			ctx.fillStyle = client.mainTextRgb;
 			ctx.strokeStyle = client.mainTextRgb;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-	
+
 			if (countdown !== "" && document.getElementById("countdownText"))
 				document.getElementById("countdownText").innerText = countdown;
 			drawMiddleLine();
@@ -831,7 +831,7 @@ function game() {
 			drawBall();
 			drawPaddles();
 		}
-	
+
 		function drawMiddleLine() {
 			ctx.beginPath();
 			ctx.setLineDash([ball.size, ball.size]);
@@ -840,25 +840,25 @@ function game() {
 			ctx.stroke();
 			ctx.closePath();
 		}
-	
+
 		function drawBall() {
 			ctx.beginPath();
 			ctx.rect(ball.x, ball.y, ball.size, ball.size);
 			ctx.fill();
 			ctx.closePath();
 		}
-	
+
 		function hexToRgb(hex) {
 			hex = hex.replace(/^#/, '');
-	
+
 			let bigint = parseInt(hex, 16);
 			let r = (bigint >> 16) & 255;
 			let g = (bigint >> 8) & 255;
 			let b = bigint & 255;
-	
+
 			return [r, g, b];
 		}
-	
+
 		function drawBallTrail() {
 			const rgb = hexToRgb(client.mainTextRgb);
 			for (let i = 0; i < ballTrail.length; i++) {
@@ -872,19 +872,19 @@ function game() {
 			}
 			ctx.fillStyle = client.mainTextRgb;
 		}
-	
+
 		function drawPaddles() {
 			ctx.beginPath();
 			ctx.rect(player1.x, player1.y, paddle.width, paddle.height);
 			ctx.fill();
 			ctx.closePath();
-	
+
 			ctx.beginPath();
 			ctx.rect(player2.x, player2.y, paddle.width, paddle.height);
 			ctx.fill();
 			ctx.closePath();
 		}
-	
+
 		function cleanup() {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 			document.getElementById('goHomeButton').removeEventListener('click', handleGoHomeButton);
@@ -900,37 +900,37 @@ function game() {
 			clearInterval(displayInterval);
 			socket.close();
 		}
-	
+
 		function handleBeforeUnload() {
 			cleanup();
 		}
-	
+
 		function handleGoHomeButton() {
 			cleanup();
 		}
-	
+
 		function handlePopState() {
 			cleanup();
 		}
-	
+
 		function handleKeyDown(event) {
 			if (mapAvailableKeyCode[event.code])
 				keysDown[event.code] = true;
 		}
-	
+
 		function handleKeyUp(event) {
 			if (mapAvailableKeyCode[event.code])
 				keysDown[event.code] = false;
 		}
-	
+
 		function KeyPress() {
 			if (JSON.stringify(keysDown) !== JSON.stringify(oldKeysDown)) {
 				gamesend("game_keydown", keysDown);
 				oldKeysDown = JSON.parse(JSON.stringify(keysDown));
 			}
 		}
-	
-	
+
+
 		function keydownExitEventListener(event){
 			if (event.key == "Escape"){
 				cleanup();
@@ -940,7 +940,7 @@ function game() {
 				})
 			}
 		}
-	
+
 		function clickExitEventListener(event){
 			if (event.target.id == "winBlur"){
 				cleanup();
@@ -950,7 +950,7 @@ function game() {
 				})
 			}
 		}
-	
+
 		function displayWaiting(){
 			var container = document.createElement("div");
 			container.id = "waitContainer";
@@ -961,12 +961,12 @@ function game() {
 			window.addEventListener("keydown", keydownExitEventListener);
 			document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
 			document.querySelectorAll(".playerName").forEach(function (e){e.innerText = "";});
-	
+
 			document.querySelector("#playerOne > .playerName").innerText = client.username;
 			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
 			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
 		}
-	
+
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
 			container.id = "winContainer";
@@ -994,7 +994,7 @@ function game() {
 					displayWaiting();
 				}
 			})
-	
+
 			confetti({
 				particleCount: 500,
 				spread: 40,
@@ -1002,7 +1002,7 @@ function game() {
 				startVelocity : 100,
 				angle: 45
 			})
-	
+
 			confetti({
 				particleCount: 500,
 				spread: 40,
