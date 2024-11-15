@@ -387,51 +387,51 @@ def get_all_user_match_json(matches, tournaments, username):
 	month = ""
 	day = ""
 	date_json = {}
-#	for match in matches:
-#		if (dateObj != match.date):
-#			if (year != ""):
-#				if (year != match.date.year):
-#					matches_json["{0}".format(year)] = year_json
-#					#year_json = {}
-#				if (month != match.date.month):
-#					year_json["{0}".format(month)] = month_json
-#					#month_json = {}
-#				if (day != match.date.day):
-#					month_json["{0}".format(day)] = date_json
-#			dateObj = match.date
-#			year = dateObj.year
-#			month = dateObj.month
-#			day = dateObj.day
-#			try :
-#				date_json = matches_json["{0}".format(year)]["{0}".format(month)]["{0}".format(day)]
-#			except:
-#				date_json = {}
-#			i = 0
-#		try:
-#			p1_name = match.player_one.username
-#		except:
-#			p1_name = "deleted"
-#
-#		try:
-#			p2_name = match.player_two.username
-#		except:
-#			p2_name = "deleted"
-#		while (i in date_json):
-#			i += 1
-#		date_json[i] = {
-#			'type' : 'match',
-#			'player_one' : p1_name,
-#			'player_two' : p2_name,
-#			'player_one_pts' : match.player_one_pts,
-#			'player_two_pts' : match.player_two_pts,
-#			'winner' : match.winner.username,
-#			'date' : match.date,
-#		}
-#		i += 1
-#	if (dateObj != ""):
-#		month_json["{0}".format(day)] = date_json
-#		year_json["{0}".format(month)] = month_json
-#		matches_json["{0}".format(year)] = year_json
+	for match in matches:
+		if (dateObj != match.date):
+			if (year != ""):
+				if (year != match.date.year):
+					matches_json["{0}".format(year)] = year_json
+					#year_json = {}
+				if (month != match.date.month):
+					year_json["{0}".format(month)] = month_json
+					#month_json = {}
+				if (day != match.date.day):
+					month_json["{0}".format(day)] = date_json
+			dateObj = match.date
+			year = dateObj.year
+			month = dateObj.month
+			day = dateObj.day
+			try :
+				date_json = matches_json["{0}".format(year)]["{0}".format(month)]["{0}".format(day)]
+			except:
+				date_json = {}
+			i = 0
+		try:
+			p1_name = match.player_one.username
+		except:
+			p1_name = "deleted"
+
+		try:
+			p2_name = match.player_two.username
+		except:
+			p2_name = "deleted"
+		while (i in date_json):
+			i += 1
+		date_json[i] = {
+			'type' : 'match',
+			'player_one' : p1_name,
+			'player_two' : p2_name,
+			'player_one_pts' : match.player_one_pts,
+			'player_two_pts' : match.player_two_pts,
+			'winner' : match.winner.username,
+			'date' : match.date,
+		}
+		i += 1
+	if (dateObj != ""):
+		month_json["{0}".format(day)] = date_json
+		year_json["{0}".format(month)] = month_json
+		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
 def get_user_match(matches, tournaments):
