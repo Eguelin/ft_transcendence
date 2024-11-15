@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from login.views import create_nobody
 import game.game as Player
 import datetime
 import random
@@ -52,7 +53,11 @@ class MatchManager(models.Manager):
 		return match
 
 	def addMatch(self, playerOne : Player, playerTwo : Player):
-		match = self.create(player_one=playerOne.user, player_two=playerTwo.user)
+		match = self.create(
+			player_one=playerOne.user,
+			player_two=playerTwo.user,
+			winner=playerOne.user
+		)
 		match.player_one_pts = playerOne.score if playerOne.socket else 0
 		match.player_two_pts = playerTwo.score if playerTwo.user.username == "AI" or playerTwo.socket else 0
 		match.date = datetime.datetime.now()
@@ -65,12 +70,24 @@ class MatchManager(models.Manager):
 		super().save()
 
 class Match(models.Model):
-	player_one = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
-	player_two = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
+	player_one = models.ForeignKey(
+		User,
+		on_delete=models.SET(create_nobody),
+		related_name="first_player"
+	)
+	player_two = models.ForeignKey(
+		User,
+		on_delete=models.SET(create_nobody),
+		related_name="second_player"
+	)
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	player_one_pts = models.IntegerField(default=0)
 	player_two_pts = models.IntegerField(default=0)
-	winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="winner")
+	winner = models.ForeignKey(
+		User,
+		on_delete=models.SET(create_nobody),
+		related_name="winner"
+	)
 
 	objects = MatchManager()
 

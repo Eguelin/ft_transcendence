@@ -28,6 +28,7 @@ def getClientId(request):
 
 def fortytwo(request):
 	create_ai()
+	create_nobody()
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 
@@ -108,6 +109,7 @@ def fortytwo(request):
 
 def create_user(request):
 	create_ai()
+	create_nobody()
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	try:
@@ -172,6 +174,17 @@ def create_ai():
 	user.profile.profile_picture = "/images/defaults/defaultAi.gif"
 	user.id42 = 0
 	user.save()
+
+def create_nobody():
+	if User.objects.filter(username="Nobody").exists():
+		return User.objects.get(username="Nobody")
+	username = "Nobody"
+	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+	user = User.objects.create_user(username=username, password=password)
+	user.profile.profile_picture = "/images/defaults/thisman.jpg"
+	user.id42 = 0
+	user.save()
+	return user
 
 def user_login(request):
 	if request.method != 'POST':
