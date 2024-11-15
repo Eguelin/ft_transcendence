@@ -1116,6 +1116,7 @@ async function loadCurrentLang(){
 			});
 			if (currentPage == 'user') {updateUserLang();}
 			if (currentPage == 'dashboard') {updateDashboardLang();}
+			if (currentPage == "tournament") {setTournamentAriaLabeL();}
 		}
 		content = contentJson['index'];
 		if (content != null || content != undefined) {
