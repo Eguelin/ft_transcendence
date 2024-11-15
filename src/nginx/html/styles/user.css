@@ -197,9 +197,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 			background: var(--input-bg-rgb);
 		}
 	}
-	.matchDescContainer:hover, .matchDescContainer:focus-within{
+	.matchDescContainer:focus-within, .contestMatchResume:focus-within{
 		outline: none;
-		animation: matchDescContainerFlash 3s ease-in infinite;
+		animation: matchDescContainerFlash 2s ease-in infinite;
 		border-color: var(--input-bg-rgb);
 	}
 }
