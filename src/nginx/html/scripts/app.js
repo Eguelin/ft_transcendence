@@ -1241,7 +1241,7 @@ function createMatchResumeContainer(match, username) {
 }
 
 async function updateUserAriaLabel(key, content){
-	if (key.startsWith("Resume")){
+	if (key.startsWith("ResumeMatch")){
 		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
 			var status = elem.querySelector(".matchDescContainerResult");
 			if (!status.classList.contains("tournament")){
@@ -1253,7 +1253,15 @@ async function updateUserAriaLabel(key, content){
 					status = client.langJson['user']['.draw'];
 				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
 				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-				elem.setAttribute("aria-label", `${status} ${content.replace("${USERNAME}", opponentName).replace("${DATE}", date)}`);
+				elem.setAttribute("aria-label", `${status} ${content.replace("${USERNAME}", opponentName.replace(":","")).replace("${DATE}", date)}`);
+			}
+		})
+	}
+	else if (key.startsWith("ResumeTournament")){
+		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+			if (elem.querySelector(".matchDescContainerResult").classList.contains("tournament")){
+				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
+				elem.setAttribute("aria-label", `${content.replace("${DATE}", date)}`);
 			}
 		})
 	}
