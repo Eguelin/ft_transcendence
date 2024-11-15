@@ -396,3 +396,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	opacity: 1;
 	text-decoration: underline;
 }
+
+#replayButton:hover,#replayButton:focus{
+	color: var(--page-bg-rgb);
+	border-color: transparent;
+}
