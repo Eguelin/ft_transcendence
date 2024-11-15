@@ -742,6 +742,45 @@ function checkResizeWindow(){
 			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
 		}
 	}
+	if (currentPage == "home" || currentPage == "user"){
+		setTimeout(checkMatchResumeSize, 1)
+	}
+}
+
+function checkMatchResumeSize(){
+	recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
+	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
+	console.log(matches);
+	var baseWidth = 16
+	ch = 1
+	if (matches.length > 0){
+		while (1 && ch <= baseWidth){
+			var width = matches[0].getBoundingClientRect().width;
+			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
+			
+			if (width * 5 <= getWindowWidth() && ch < baseWidth){
+				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					elem.style.setProperty("width", `${ch + 1}ch`);
+				})
+				var width = matches[0].getBoundingClientRect().width;
+			}
+			else
+				break;
+
+		}
+		while (1 && baseWidth > 1){
+			width = matches[0].getBoundingClientRect().width;
+			console.log(width * 5, getWindowWidth());
+			if (width * 5 > getWindowWidth()){
+				baseWidth--;
+				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					elem.style.setProperty("width", `${baseWidth}ch`);
+				})
+			}
+			else
+				break
+		}					
+	}
 }
 
 window.addEventListener("resize", checkResizeWindow);
