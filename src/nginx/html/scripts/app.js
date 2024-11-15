@@ -37,6 +37,17 @@ const routes = {
 	"/admin": `https://${hostname.host}/scripts/admin.js`
 }
 
+const langMap = {
+	'EN_UK' : 'en-UK',
+	'FR_FR' : 'fr',
+	'DE_GE' : 'de',
+	'IT_IT' : 'it',
+	'lang/EN_UK.json' : 'en-UK',
+	'lang/FR_FR.json' : 'fr',
+	'lang/DE_GE.json' : 'de',
+	'lang/IT_IT.json' : 'it',
+}
+
 function addPfpUrlToImgSrc(img, path){
 	if (path != "") {
 		var testImg = new Image();
@@ -114,6 +125,7 @@ class Client{
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 					usernameBtn.innerHTML = result.username;
+					currentLang = this.currentLang;
 
 					addPfpUrlToImgSrc(userPfp, result.pfp)
 
@@ -140,8 +152,11 @@ class Client{
 				throw new Error("Error while reaching server");
 			}
 			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
-			if (fetchLangResult.ok)
+			if (fetchLangResult.ok){
 				this.langJson = await fetchLangResult.json()
+				console.log(currentLang);
+				(async () => (loadCurrentLang()))();
+			}
 			else
 				this.langJson = null;
 			return (this);
@@ -152,6 +167,7 @@ class Client{
 		(async() => {
 			setLoader()
 			try{
+				console.log(page);
 				const fetchResult = await fetch('/api/user/current', {
 					method: 'GET',
 					headers: {
@@ -1072,6 +1088,7 @@ async function loadCurrentLang(){
 	}
 	if (contentJson != null && contentJson != undefined){
 		content = contentJson[currentPage];
+		document.documentElement.setAttribute("lang", langMap[currentLang]);
 		if (content != null && content != undefined) {
 			Object.keys(content).forEach(function (key) {
 				instances = document.querySelectorAll(key);
