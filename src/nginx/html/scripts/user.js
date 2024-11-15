@@ -98,7 +98,8 @@ function updateUserLang(){
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
                         recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], splitPath[4]));
                     };
-                    document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+					(async () => (loadCurrentLang()))();
+					document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                         elem.addEventListener("keydown", (e) => {
                             if (e.key == "Enter"){
 								if (elem.querySelector(".tournament")){
