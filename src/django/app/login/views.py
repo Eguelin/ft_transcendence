@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
+from transcendence.settings import DEBUG
 from PIL import Image
 
 def generate_unique_username(base_username):
@@ -133,7 +134,7 @@ def create_user(request):
 	if len(password) == 0:
 		return JsonResponse({'message': 'Password too short'}, status=400)
 	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and os.getenv('DEBUG') == 'False':
+	if result['score'] < 4 and not DEBUG:
 		return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	if User.objects.filter(username=username).exists():
