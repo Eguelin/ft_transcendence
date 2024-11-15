@@ -154,8 +154,6 @@ class Client{
 			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
 			if (fetchLangResult.ok){
 				this.langJson = await fetchLangResult.json()
-				console.log(currentLang);
-				(async () => (loadCurrentLang()))();
 			}
 			else
 				this.langJson = null;
@@ -167,7 +165,6 @@ class Client{
 		(async() => {
 			setLoader()
 			try{
-				console.log(page);
 				const fetchResult = await fetch('/api/user/current', {
 					method: 'GET',
 					headers: {
@@ -332,6 +329,7 @@ function handleToken() {
 							myReplaceState(`https://${hostname.host}/login`);
 						else
 						{
+							(async () => (loadCurrentLang()))();
 							friendUpdate();
 							myReplaceState(`https://${hostname.host}/home`);
 						}
@@ -360,13 +358,16 @@ function handleToken() {
 					client = await new Client();
 					if (!client)
 						myReplaceState(`https://${hostname.host}/login`);
-					else if (url.pathname == "" || url.pathname == "/"){
-						friendUpdate();
-						myReplaceState(`https://${hostname.host}/home`);
-					}
-					else{
-						load();
-						friendUpdate();
+					else {
+						(async () => (loadCurrentLang()))();
+						if (url.pathname == "" || url.pathname == "/"){
+							friendUpdate();
+							myReplaceState(`https://${hostname.host}/home`);
+						}
+						else{
+							load();
+							friendUpdate();
+						}
 					}
 					if (use_browser_theme){
 						if (window.matchMedia) {
@@ -1240,9 +1241,9 @@ function createMatchResumeContainer(match, username) {
 }
 
 async function updateUserAriaLabel(key, content){
-	if (key.startsWith("P1")){
-		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
-			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
+	if (key.startsWith("Resume")){
+		document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+			var status = elem.querySelector(".matchDescContainerResult");
 			if (!status.classList.contains("tournament")){
 				if (status.classList.contains("victory"))
 					status = client.langJson['user']['.victory'];
@@ -1252,7 +1253,7 @@ async function updateUserAriaLabel(key, content){
 					status = client.langJson['user']['.draw'];
 				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
 				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
+				elem.setAttribute("aria-label", `${status} ${content.replace("${USERNAME}", opponentName).replace("${DATE}", date)}`);
 			}
 		})
 	}
