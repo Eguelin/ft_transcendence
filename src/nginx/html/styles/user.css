@@ -16,6 +16,7 @@
 	height: 20vh;
 	gap: 1px;
 	overflow-y: hidden;
+	overflow-x: hidden;
 }
 
 
@@ -87,6 +88,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 .resultScoreName{
 	width: 16ch;
 	text-align: left;
+	overflow: hidden;
 }
 
 .resultScoreName:hover, .resultScoreName:focus{
