@@ -461,7 +461,7 @@ class PlayerRemote(Player):
 		super().init(game, side)
 		self.input = {}
 		if not self.user:
-			self.user = User.objects.get(username='AI')
+			self.user = User.objects.get(username='Nobody')
 		self.profile = self.user.profile
 
 	async def send(self, type, message):
