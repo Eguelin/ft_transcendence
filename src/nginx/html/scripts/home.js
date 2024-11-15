@@ -72,6 +72,7 @@ var template = `
 					setNotifTabIndexes(tabIdx);
 				}
 			})
+
 		}
 		setNotifTabIndexes(tabIdx);
 	}
