@@ -648,6 +648,7 @@ function game() {
 				window.removeEventListener("resize", displayTournament);
 				gameContainer.style.setProperty("display", "flex");
 				tournamentContainer.style.setProperty("display", "none");
+				checkMatchSize();
 				if (mode == "tournament")
 					checkTournementRound();
 				gameInit(data.message);
