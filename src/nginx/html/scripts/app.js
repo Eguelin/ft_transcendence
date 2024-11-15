@@ -720,76 +720,6 @@ function popUpError(error){
 	document.body.appendChild(popupContainer);
 }
 
-function checkResizeWindow(){
-	if(currentPage == "dashboard"){
-		displayCharts();
-	}
-
-	var tmp = document.querySelector("#inputSearchUserContainer");
-	var fontSize = window.getComputedStyle(document.documentElement).fontSize.replace("px", "");
-	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
-	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
-	if (window.getComputedStyle(tmp).display != "none") {
-		var sectionWidth = 0;
-		document.querySelectorAll("#browseFlexContainer > *").forEach(function (elem) {
-			sectionWidth += elem.getBoundingClientRect().width;
-		})
-		var availableWidth = document.querySelector("#browseFlexContainer").getBoundingClientRect().width - sectionWidth;
-		if (availableWidth < fontSize * 1.5) {
-			document.querySelector("#mobileSearchBtn").style.setProperty("display", "block");
-		}
-		else {
-			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
-		}
-	}
-	if (currentPage == "home" || currentPage == "user"){
-		setTimeout(checkMatchResumeSize, 1)
-	}
-}
-
-function checkMatchResumeSize(){
-	recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
-	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
-	console.log(matches);
-	var baseWidth = 16
-	var i = 0;
-	ch = 1
-	if (matches.length > 0){
-		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
-			i++;
-		if (i == matches.length)
-			return;
-		while (1 && ch <= baseWidth){
-			var width = matches[i].getBoundingClientRect().width;
-			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
-			
-			if (width * 5 <= getWindowWidth() && ch < baseWidth){
-				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
-					elem.style.setProperty("width", `${ch + 1}ch`);
-				})
-				var width = matches[i].getBoundingClientRect().width;
-			}
-			else
-				break;
-
-		}
-		while (1 && baseWidth > 1){
-			width = matches[i].getBoundingClientRect().width;
-			console.log(width * 5, getWindowWidth());
-			if (width * 5 > getWindowWidth()){
-				baseWidth--;
-				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
-					elem.style.setProperty("width", `${baseWidth}ch`);
-				})
-			}
-			else
-				break
-		}					
-	}
-}
-
-window.addEventListener("resize", checkResizeWindow);
-
 function setLoader() {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
 
@@ -1363,3 +1293,107 @@ async function updateUserAriaLabel(key, content){
 		})
 	}
 }
+
+/*	______  _____  _____  _____  ______ _____ 
+	| ___ \|  ___|/  ___||_   _||___  /|  ___|
+	| |_/ /| |__  \ `--.   | |     / / | |__  
+	|    / |  __|  `--. \  | |    / /  |  __| 
+	| |\ \ | |___ /\__/ / _| |_ ./ /___| |___ 
+	\_| \_|\____/ \____/  \___/ \_____/\____/ 
+ */
+
+
+function checkResizeWindow(){
+	if(currentPage == "dashboard"){
+		displayCharts();
+	}
+
+	var tmp = document.querySelector("#inputSearchUserContainer");
+	var fontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
+	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
+	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
+	if (window.getComputedStyle(tmp).display != "none") {
+		var sectionWidth = 0;
+		document.querySelectorAll("#browseFlexContainer > *").forEach(function (elem) {
+			sectionWidth += elem.getBoundingClientRect().width;
+		})
+		var availableWidth = document.querySelector("#browseFlexContainer").getBoundingClientRect().width - sectionWidth;
+		if (availableWidth < fontSize * 1.5) {
+			document.querySelector("#mobileSearchBtn").style.setProperty("display", "block");
+		}
+		else {
+			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
+		}
+	}
+	if (currentPage == "home" || currentPage == "user"){
+		setTimeout(checkMatchResumeSize, 1)
+	}
+	if (currentPage == "game")
+		checkMatchSize();
+}
+
+function checkMatchResumeSize(){
+	recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
+	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
+	var baseWidth = 16
+	var i = 0;
+	ch = 1
+	if (matches.length > 0){
+		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
+			i++;
+		if (i == matches.length)
+			return;
+		while (1 && ch <= baseWidth){
+			var width = matches[i].getBoundingClientRect().width;
+			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
+			
+			if (width * 5 <= getWindowWidth() && ch < baseWidth){
+				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					elem.style.setProperty("width", `${ch + 1}ch`);
+				})
+				var width = matches[i].getBoundingClientRect().width;
+			}
+			else
+				break;
+
+		}
+		while (1 && baseWidth > 1){
+			width = matches[i].getBoundingClientRect().width;
+			if (width * 5 > getWindowWidth()){
+				baseWidth--;
+				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					elem.style.setProperty("width", `${baseWidth}ch`);
+				})
+			}
+			else
+				break
+		}					
+	}
+}
+
+function checkMatchSize(){
+	var container = document.querySelector("#gameContainer")
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
+	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
+	function getContainerWidth(){
+		return(Math.max(
+			container.scrollWidth,
+			container.offsetWidth,
+			container.clientWidth
+		));
+	}
+	while (getContainerWidth() == anchor.right && currentFontSize < baseFontSize){
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
+			currentFontSize += 1;
+		})
+	}
+	while (getContainerWidth() > anchor.right){
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) - 1}px`)
+		})
+	}
+}
+
+window.addEventListener("resize", checkResizeWindow);
