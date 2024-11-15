@@ -960,7 +960,6 @@ function friendUpdate()
 
 	socket.onmessage = function (event)
 	{
-		console.log("Message received: ", event.data);
 		const data = JSON.parse(event.data);
 		if (data.new_request)
 		{
