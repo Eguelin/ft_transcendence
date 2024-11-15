@@ -166,7 +166,15 @@
 	},
 	"tournament":{
 		"#title" : "",
-		"tournamentSubtitle" : "Tournament"
+		"tournamentSubtitle" : "Tournament",
+		"matchResume" : "${MATCH_NUMBER} of ${ROUND}, winner is ${WINNER_USERNAME} and loser is ${LOSER_USERNAME}",
+		"one" : "First",
+		"two" : "Second",
+		"three" : "Third",
+		"four" : "Fourth",
+		"quarter" : "Quarter finals",
+		"semi" : "Semi finals",
+		"final" : "finals"
 	},
 	"404":{
 		"#title" : "ERROR 404",

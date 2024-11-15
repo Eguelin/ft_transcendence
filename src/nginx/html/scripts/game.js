@@ -1051,8 +1051,26 @@ function game() {
 			setNotifTabIndexes(26);
 			(async () => (loadCurrentLang()))();
 			displayTournament(true);
+			setTournamentAriaLabeL();
 			window.addEventListener("resize", displayTournament);
 
 		})()
 	}
+}
+
+
+function setTournamentAriaLabeL(){
+	content = client.langJson['tournament'];
+	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
+		try {
+			elem.setAttribute("aria-label", 
+				content["matchResume"]
+				.replace("${MATCH_NUMBER}", content[elem.classList[3]])
+				.replace("${ROUND}", content[elem.classList[1]])
+				.replace("${WINNER_USERNAME}", elem.querySelector(".winner .username").innerText)
+				.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))	
+		} catch {
+			popUpError("Error setting aria labels");
+		}
+	})
 }
