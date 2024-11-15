@@ -631,7 +631,7 @@ function game() {
 		socket.onopen = function() {
 			console.log("Connection established");
 			gamesend(mode, url.searchParams.get("room"));
-			if (mode == "game_remote"){
+			if (mode == "remote"){
 				displayWaiting();
 			}
 			displayInterval = setInterval(() => gameRender(), 16);
@@ -768,7 +768,7 @@ function game() {
 				player2.name = client.langJson['game']['playerTwo'];
 
 			}
-			if (mode == "game_remote"){
+			if (mode == "remote"){
 				if (document.getElementById("waitContainer"))
 					document.getElementById("waitContainer").remove();
 			}
@@ -985,12 +985,19 @@ function game() {
 			else
 				addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
 			document.body.appendChild(container);
+			document.querySelector("#replayButton").focus();
+			document.querySelector("#replayButton").onkeydown = function(e){
+				if (e.key == "Tab")
+					e.preventDefault();
+			}
 			container.querySelector("#replayButton").addEventListener("click", (e) => {
 				window.removeEventListener("keydown", keydownExitEventListener);
 				window.removeEventListener("click", clickExitEventListener);
 				gamesend(mode, url.searchParams.get("room"))
 				document.getElementById("winContainer").remove();
-				if (mode == "game_remote"){
+				if (mode == "remote"){
+					addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), "");
+					addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
 					displayWaiting();
 				}
 			})
