@@ -26,6 +26,7 @@ const routes = {
 	"/": `https://${hostname.host}/scripts/home.js`,
 	"/game": `https://${hostname.host}/scripts/game.js`,
 	"/tournament": `https://${hostname.host}/scripts/game.js`,
+	"/match": `https://${hostname.host}/scripts/game.js`,
 	"/settings": `https://${hostname.host}/scripts/settings.js`,
 	"/user": `https://${hostname.host}/scripts/user.js`,
 	"/dashboard": `https://${hostname.host}/scripts/dashboard.js`,
@@ -1197,7 +1198,6 @@ async function loadCurrentLang(){
 }
 
 function setNotifTabIndexes(tabIdx){
-	console.log(tabIdx);
 	notifBtn.tabIndex = tabIdx++;
 	document.querySelectorAll(".notifContainer").forEach(function(elem){
 		elem.tabIndex = tabIdx;
