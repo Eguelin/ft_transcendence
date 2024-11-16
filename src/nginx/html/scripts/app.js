@@ -1382,9 +1382,11 @@ function checkResizeWindow(){
 		checkMatchResumeSize()
 	}
 	if (currentPage == "game")
-		checkMatchSize();
+		checkGameSize();
 	if (currentPage == "game" || currentPage == "tournament")
-		setTimeout(checkWinnerDisplaySize, 1)
+		setTimeout(checkWinnerDisplaySize, 1)/*
+	if (currentPage == "match")
+		checkMatchSize();*/
 
 }
 
@@ -1427,7 +1429,7 @@ function checkMatchResumeSize(){
 	}
 }
 
-function checkMatchSize(){
+function checkGameSize(){
 	var container = document.querySelector("#gameContainer")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
@@ -1435,8 +1437,8 @@ function checkMatchSize(){
 	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
-			currentFontSize += 1;
 		})
+		currentFontSize += 1;
 	}
 	while (getElemWidth(container) > anchor.right){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
@@ -1444,6 +1446,27 @@ function checkMatchSize(){
 		})
 	}
 }
+/*
+function checkMatchSize(){
+	var container = document.querySelector("#matchContainer")
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
+	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
+	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
+		})
+		currentFontSize += 1;
+	}
+	while (getElemWidth(container) > anchor.right && currentFontSize > 1){
+		console.log(currentFontSize);
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${currentFontSize}px`)
+		})
+		currentFontSize -= 1;
+	}
+
+}*/
 
 function checkWinnerDisplaySize(){
 	var container = document.querySelector("#winBg")

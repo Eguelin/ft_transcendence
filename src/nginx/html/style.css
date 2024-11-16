@@ -24,6 +24,7 @@ body{
 	height: 100vh;
 	margin: 0;
 	user-select: none;
+	color : var(--main-text-rgb);
 }
 
 html{
