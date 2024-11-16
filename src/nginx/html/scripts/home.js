@@ -25,7 +25,6 @@ var template = `
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
 	notifCenterContainer.style.setProperty("display", "flex");
-	tabIdx = 17;
 
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
@@ -56,29 +55,15 @@ var template = `
 						for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
 							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.username));
 						}
-						document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-							elem.addEventListener("keydown", (e) => {
-								if (e.key == "Enter"){
-									if (elem.querySelector(".tournament")){
-										elem.querySelector(".tournament").click()
-									}
-									else{
-										var idx = elem.tabIndex + 1
-										elem.querySelectorAll(".resultScoreName").forEach(function (names){
-											names.tabIndex = idx;
-											idx++;
-										})
-									}
-								}
-							})
-						});
-			
-						document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
+						var tabIdx = 17;
+						var container = document.getElementById("recentMatchHistoryContainer");
+						container.addEventListener("keydown", (e) => {
 							if (e.key == "Enter"){
 								document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-									if (elem.tabIndex == -1){
+									console.log(elem.tabIndex)
+									if (elem.tabIndex <= container.tabIndex){
 										elem.tabIndex = tabIdx;
-										tabIdx += 3;
+										tabIdx += 1;
 									}
 								});
 								setNotifTabIndexes(tabIdx);

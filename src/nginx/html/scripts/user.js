@@ -114,33 +114,19 @@ function updateUserLang(){
                         recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], splitPath[4]));
                     };
 					(async () => (loadCurrentLang()))();
-					document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-                        elem.addEventListener("keydown", (e) => {
-                            if (e.key == "Enter"){
-								if (elem.querySelector(".tournament")){
-									elem.querySelector(".tournament").click();
-								}
-								else{
-									var idx = elem.tabIndex + 1
-									elem.querySelectorAll(".resultScoreName").forEach(function (names){
-										names.tabIndex = idx;
-										idx++;
-									})
-								}
-                            }
-                        })
-                    });
 
-                    document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
+                    var container = document.getElementById("recentMatchHistoryContainer");
+                    container.addEventListener("keydown", (e) => {
                         if (e.key == "Enter"){
                             document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-								if (elem.tabIndex == -1){
-									elem.tabIndex = tabIdx;
-									tabIdx += 3;
-								}
+                                console.log(elem.tabIndex)
+                                if (elem.tabIndex <= container.tabIndex){
+                                    elem.tabIndex = tabIdx;
+                                    tabIdx += 1;
+                                }
                             });
-							setNotifTabIndexes(tabIdx);
-						}
+                            setNotifTabIndexes(tabIdx);
+                        }
                     });
                 }
                 catch{
