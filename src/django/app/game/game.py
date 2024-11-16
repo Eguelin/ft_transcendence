@@ -324,28 +324,17 @@ class Gamelocal(Game):
 			})
 		self.running = False
 
-class GameAI(Game):
+class GameAI(GameRemote):
 
 	def __init__(self, player1):
 		super().__init__(player1, PlayerAI())
-		self.winner = None
-
-	async def init(self):
-		await self.playerLeft.init(self, 'left')
-		await self.playerRight.init(self, 'right')
-		self.ball.init()
-		asyncio.create_task(self.playerRight.run())
-		await self.send('game_init', self.getInfo(True))
-
-	@sync_to_async
-	def save(self):
-		models.Match.objects.addMatch(self)
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
 
 	async def run(self):
 		await self.init()
+		asyncio.create_task(self.playerRight.run())
 		while not self.playerLeft.isReady or not self.playerLeft.socket:
 			await asyncio.sleep(0.1)
 		await self.countdown()
@@ -353,11 +342,6 @@ class GameAI(Game):
 		while self.playerLeft.score != Game.maxScore and self.playerRight.score != Game.maxScore and self.playerLeft.socket:
 			await self.loop()
 		await self.end()
-
-	@sync_to_async
-	def checkUser(self, player):
-		if not User.objects.filter(username=player.user.username).exists():
-			player.user = User.objects.get(username="Nobody")
 
 	async def end(self):
 		await self.checkUser(self.playerLeft)
@@ -370,6 +354,15 @@ class GameAI(Game):
 			})
 		await self.save()
 		self.running = False
+
+	async def countdown(self):
+		for i in range(3, 0, -1):
+			if not self.playerLeft.socket:
+				return
+			await self.send('game_countdown', i)
+			await asyncio.sleep(1)
+		await self.send('game_countdown', 'GO')
+		await asyncio.sleep(1)
 
 class GameFullAI(Game):
 
