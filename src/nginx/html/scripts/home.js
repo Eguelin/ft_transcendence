@@ -28,7 +28,6 @@ var template = `
 
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
-		recentMatchHistoryContainer.innerHTML = "";
 		( async() => {
 			try {
 				const fetchResult = await fetch('/api/user/current', {
@@ -40,7 +39,9 @@ var template = `
 				})
 				const result = await fetchResult.json();
 				if (fetchResult.ok) {
-					client.recentMatches = result.matches;
+				
+					var startDate = new Date();
+					client.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
 					if (Object.keys(client.recentMatches).length == 0){
 						var message = document.createElement("a");
 						recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
@@ -52,15 +53,16 @@ var template = `
 						recentMatchHistory.appendChild(message);
 					}
 					else{
+						recentMatchHistoryContainer.innerHTML = "";
 						for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
 							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.username));
 						}
+						checkMatchResumeSize();
 						var tabIdx = 17;
 						var container = document.getElementById("recentMatchHistoryContainer");
 						container.addEventListener("keydown", (e) => {
 							if (e.key == "Enter"){
 								document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-									console.log(elem.tabIndex)
 									if (elem.tabIndex <= container.tabIndex){
 										elem.tabIndex = tabIdx;
 										tabIdx += 1;
@@ -74,7 +76,8 @@ var template = `
 					setNotifTabIndexes(tabIdx);
 				}
 			}
-			catch {
+			catch (error){
+				console.error(error)
 				var template = `
 				<div id="pageContentContainer">
 					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
