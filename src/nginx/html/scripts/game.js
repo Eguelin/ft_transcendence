@@ -51,19 +51,27 @@ var template = `
 	</div>
 
 	<div id="matchContainer">
-		<div class="playerInfoContainer" id="playerOne">
-			<div class="playerPfp">
-				<img id="playerOnePfp">
+		<div id="matchInfo"> 
+			<div id="exchangeContainer">
+				<a id="exchange"></a>
 			</div>
-			<h2 class="playerName"></h2>
-			<h2 class="playerScore">-</h2>
-		</div>\
-		<div class="playerInfoContainer" id="playerTwo">
-			<div class="playerPfp">
-				<img id="playerTwoPfp">
+			<canvas id="matchInfoGraph"></canvas>
+		</div>
+		<div id="matchPlayersInfo">
+			<div class="playerInfoContainer" id="playerOne">
+				<div class="playerPfp">
+					<img id="playerOnePfp">
+				</div>
+				<h2 class="playerName"></h2>
+				<h2 class="playerScore">-</h2>
 			</div>
-			<h2 class="playerName"></h2>
-			<h2 class="playerScore">-</h2>
+			<div class="playerInfoContainer" id="playerTwo">
+				<div class="playerPfp">
+					<img id="playerTwoPfp">
+				</div>
+				<h2 class="playerName"></h2>
+				<h2 class="playerScore">-</h2>
+			</div>
 		</div>
 	</div>
 	<div id="tournamentContainer">
@@ -669,7 +677,7 @@ function game() {
 				gameContainer.style.setProperty("display", "flex");
 				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "none");
-				checkMatchSize();
+				checkGameSize();
 				if (mode == "tournament")
 					checkTournementRound();
 				gameInit(data.message);
@@ -1124,10 +1132,12 @@ function game() {
 				
 				document.querySelector("#matchContainer #playerOne > .playerScore").innerText = match.player_one_pts;
 				document.querySelector("#matchContainer #playerTwo > .playerScore").innerText = match.player_two_pts;
+				document.querySelector("#matchContainer #exchange").innerText = client.langJson['match']['exchange stats'].replace("${NUMBER_OF_EXCHANGE}", match.exchanges).replace("${AVERAGE_EXCHANGE}", (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2)).replace("${LONGEST}", match.exchangesMax)
+				//"During this match, there was a total of ${NUMBER_OF_EXCHANGE}, with an average of ${AVERAGE_EXCHANGE}, and the longest exchange being of ${LONGEST}"
 			}
 			
 			gameContainer.style.setProperty("display", "none");
-			matchContainer.style.setProperty("display", "flex");
+			matchContainer.style.setProperty("display", "block");
 			tournamentContainer.style.setProperty("display", "none");
 			setNotifTabIndexes(12);
 			(async () => (loadCurrentLang()))();
