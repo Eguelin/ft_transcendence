@@ -58,7 +58,15 @@ class MatchManager(models.Manager):
 			player_one_pts=game.playerLeft.score,
 			player_two_pts=game.playerRight.score,
 			date=datetime.datetime.now(),
-			winner=game.winner.user
+			winner=game.winner.user,
+			exchanges=game.exchanges,
+			exchangesMax=game.exchangesMax,
+			player_one_goals_up=game.playerLeft.goalsUp,
+			player_two_goals_up=game.playerRight.goalsUp,
+			player_one_goals_mid=game.playerLeft.goalsMid,
+			player_two_goals_mid=game.playerRight.goalsMid,
+			player_one_goals_down=game.playerLeft.goalsDown,
+			player_two_goals_down=game.playerRight.goalsDown
 		)
 
 		if game.playerLeft.user.username != "Nobody":
@@ -88,6 +96,14 @@ class Match(models.Model):
 		on_delete=models.SET(create_nobody),
 		related_name="winner"
 	)
+	exchanges = models.IntegerField(default=0)
+	exchangesMax = models.IntegerField(default=0)
+	player_one_goals_up = models.IntegerField(default=0)
+	player_two_goals_up = models.IntegerField(default=0)
+	player_one_goals_mid = models.IntegerField(default=0)
+	player_two_goals_mid = models.IntegerField(default=0)
+	player_one_goals_down = models.IntegerField(default=0)
+	player_two_goals_down = models.IntegerField(default=0)
 
 	objects = MatchManager()
 
@@ -104,6 +120,14 @@ class TournamentMatch(Match):
 			player_two_pts=game.playerRight.score,
 			date=datetime.datetime.now(),
 			winner=game.winner.user,
+			exchanges=game.exchanges,
+			exchangesMax=game.exchangesMax,
+			player_one_goals_up=game.playerLeft.goalsUp,
+			player_two_goals_up=game.playerRight.goalsUp,
+			player_one_goals_mid=game.playerLeft.goalsMid,
+			player_two_goals_mid=game.playerRight.goalsMid,
+			player_one_goals_down=game.playerLeft.goalsDown,
+			player_two_goals_down=game.playerRight.goalsDown,
 			round=game.round,
 			match=game.match
 		)

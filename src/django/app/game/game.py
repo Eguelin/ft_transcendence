@@ -94,7 +94,7 @@ class Ball():
 
 	def paddleCollision(self, pad):
 		if self.y < pad.y - Paddle.demieHeight - Ball.demieSize or self.y > pad.y + Paddle.demieHeight + Ball.demieSize:
-			return
+			return False
 
 		if self.speed < 12:
 			self.speed += 1
@@ -110,6 +110,7 @@ class Ball():
 			self.x = pad.x + Ball.demieSize
 			self.dx = math.cos(self.angle) * self.speed
 		self.dy = math.sin(self.angle) * self.speed
+		return True
 
 
 	def getInfo(self):
@@ -151,6 +152,10 @@ class Game():
 		self.ball: Ball = Ball()
 		self.timeLastPoint: float = 0
 		self.running: bool = False
+		self.exchanges = 0
+		self.exchangesMax = 0
+		self.exchangesActive = 0
+		self.lastGoal = "Left"
 
 	async def init(self):
 		pass
@@ -181,25 +186,50 @@ class Game():
 		await self.send('game_countdown', 'GO')
 		await asyncio.sleep(1)
 
+	def setExchanges(self):
+		self.exchanges += self.exchangesActive
+		if self.exchangesActive > self.exchangesMax:
+			self.exchangesMax = self.exchangesActive
+		self.exchangesActive = 0
+
+	def setGoalZone(self, player):
+		if player.y < Game.height / 3:
+			player.goalsUp += 1
+		elif player.y < 2 * Game.height / 3:
+			player.goalsMid += 1
+		else:
+			player.goalsDown += 1
+
+
 	def checkCollision(self):
 		if self.ball.x <= -Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
+			self.setGoalZone(self.playerRight)
+			self.lastGoal = "Right"
+			self.setExchanges()
 			if self.playerRight.score != Game.maxScore:
 				self.ball.init()
 
 		elif self.ball.x >= Game.width + Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerLeft.score += 1
+			self.setGoalZone(self.playerLeft)
+			self.lastGoal = "Left"
+			self.setExchanges()
 			if self.playerLeft.score != Game.maxScore:
 				self.ball.init()
 			self.ball.dx = -self.ball.dx
 
 		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - self.ball.speed:
-			self.ball.paddleCollision(self.playerLeft)
+			collision = self.ball.paddleCollision(self.playerLeft)
+			if collision and self.lastGoal == "Right":
+				self.exchangesActive += 1
 
 		elif self.ball.x >= self.playerRight.x and self.ball.x <= self.playerRight.x + self.ball.speed:
-			self.ball.paddleCollision(self.playerRight)
+			collision = self.ball.paddleCollision(self.playerRight)
+			if collision and self.lastGoal == "Left":
+				self.exchangesActive += 1
 
 		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= Game.height:
 			self.ball.dy = -self.ball.dy
@@ -423,6 +453,9 @@ class Player():
 		self.game = None
 		self.side = None
 		self.isReady = False
+		self.goalsUp = 0
+		self.goalsMid = 0
+		self.goalsDown = 0
 
 	def init(self, game, side):
 		self.game = game
@@ -730,7 +763,6 @@ class GameTournament(GameRemote):
 		self.tournament = tournament
 		self.match = match
 		self.round = round
-		self.winner = None
 		self.winnerSide = None
 
 	async def start(self):
