@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from login.models import Profile
 
@@ -41,14 +41,14 @@ class friend(AsyncWebsocketConsumer):
 			f"user_{user_id}",
 			{
 				'type': 'send_friend_request',
-				'new_request': True,
+				'new_requestt': True,
 				'sender_name' : sender_name
 			}
 		)
 
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
-			'new_request': event['new_request'],
+			'new_request': event['new_requestt'],
 			'sender_name' : event['sender_name']
 
 		}))
@@ -58,6 +58,31 @@ class friend(AsyncWebsocketConsumer):
 			'username': event['message']['username'],
 			'status': event['message']['status']
 		}))
+
+	async def friend_removed(self, event):
+		await self.send(text_data=json.dumps({
+		'type': 'friend_removed',
+		'username': event['message']['username'],
+	}))
+
+
+@receiver(m2m_changed, sender=Profile.friends.through)
+def notify_friend_removed(sender, instance, action, pk_set, **kwargs):
+	if action == "post_remove":
+		channel_layer = get_channel_layer()
+		user = instance.user
+		removed_friends = Profile.objects.filter(user__id__in=pk_set)
+
+		for removed_friend in removed_friends:
+			async_to_sync(channel_layer.group_send)(
+				f"user_{removed_friend.user.id}",
+				{
+					"type": "friend_removed",
+					"message": {
+						"username": user.username,
+					},
+				}
+			)
 
 @receiver(post_save, sender=Profile)
 def notify_friend_status(sender, instance, **kwargs):
