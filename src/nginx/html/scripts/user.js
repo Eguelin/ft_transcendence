@@ -22,7 +22,7 @@ var template = `
             <div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
         </div>
         <div id="recentMatchHistory">
-            
+
         </div>
     </div>
 </div>
@@ -39,6 +39,7 @@ function updateUserLang(){
 
     sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
     allMatchesButton = document.getElementById("allMatchesHistoryBtn");
+    removeFriendBtn = document.getElementById("deleteFriendBtn");
 
     if (sendFriendRequestBtn){
         var splitPath = window.location.href.split('/');
@@ -58,6 +59,20 @@ function updateUserLang(){
         })
     }
 
+    if (removeFriendBtn){
+        var splitPath = window.location.href.split('/');
+        removeFriendBtn.addEventListener("click", (e) => {
+            fetch('/api/user/remove_friend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'username': splitPath[4]}),
+                credentials: 'include'
+            })
+        })
+    }
+
 	inputSearchUserContainer.style.setProperty("display", "block");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
@@ -67,10 +82,10 @@ function updateUserLang(){
     var splitPath = window.location.href.split('/');
 
     if (splitPath[4] == client.username || client.friends[splitPath[4]] != null) {
-        document.getElementById("sendFriendRequestBtn").remove();
+        document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
     }
     if (splitPath[4] == client.username || client.friends[splitPath[4]] == null)
-        document.getElementById("deleteFriendBtn").remove();
+        document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
 
     var endDate = new Date();
     var startDate = new Date();
