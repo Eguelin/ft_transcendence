@@ -100,8 +100,14 @@ class Client {
 					this.friend_requests = result.friend_requests;
 					this.blocked_user = result.blocked_user;
 					
+					
 					var startDate = new Date();
-					this.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+					try{
+						this.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+					}
+					catch{
+						this.recentMatches = {};
+					}
 					
 					this.#is_admin = result.is_admin;
 					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
@@ -134,7 +140,8 @@ class Client {
 				else if (fetchResult.status == 401)
 					return null
 			}
-			catch {
+			catch (error){
+				console.error(error);
 				var template = `
 				<div id="pageContentContainer">
 					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
