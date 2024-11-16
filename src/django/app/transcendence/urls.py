@@ -41,5 +41,6 @@ urlpatterns = [
     path('user/delete_user', login.views.delete_user),
     path('user/get_user_id', login.views.get_user_id),
 	path('user/get_tournament', login.views.get_tournament),
+	path('user/get_match', login.views.get_match),
     path('admin/remove_user', admin.views.remove_user),
 ]
