@@ -23,14 +23,14 @@ class Matchmaking():
 
 	async def addPlayerRemote(self, player):
 		if len(self.waiting_players) > 0:
-			player2 = None
+			player1 = None
 			for waiting_player in self.waiting_players:
 				if DEBUG or player.user != waiting_player.user:
-					player2 = waiting_player
+					player1 = waiting_player
 					break
-			if player2:
-				self.waiting_players.remove(player2)
-				game = GameRemote(player, player2)
+			if player1:
+				self.waiting_players.remove(player1)
+				game = GameRemote(player1, player)
 				await game.start()
 				return
 		self.waiting_players.append(player)
