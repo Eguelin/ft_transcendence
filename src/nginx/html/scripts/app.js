@@ -1332,21 +1332,25 @@ function checkResizeWindow(){
 		}
 	}
 
-	tmp = document.querySelector("#quickSettingContainer");
-	var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
-	for (let i=0; i<tmp.childElementCount;i++){
-		if (tmp.children[i].style.getPropertyValue("display") == "none")
-			continue ;
-		if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
-			break
+	if (client){
+		tmp = document.querySelector("#quickSettingContainer");
+		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
+		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
 		
-		while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left){
-			document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
-			currentFontSize += 1;
-		}
-		while (tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left){
-			document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
-			currentFontSize -= 1;
+		for (let i=0; i<tmp.childElementCount - 1;i++){
+			if (tmp.children[i].style.getPropertyValue("display") == "none")
+				continue ;
+			if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
+				break
+			
+			while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left && currentFontSize < baseFontSize){
+				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize += 1;
+			}
+			while (tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left && currentFontSize > 1){
+				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize -= 1;
+			}
 		}
 	}
 
