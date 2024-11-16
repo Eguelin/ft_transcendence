@@ -6,7 +6,11 @@ maxScore = 5;
 
 var gameContainer;
 var tournamentContainer;
+var matchContainer;
 var treeCanva;
+
+var tournament = null;
+var match = null;
 
 var userContainerAnchor = `
 <div class="anchor"></div>
@@ -46,7 +50,22 @@ var template = `
 		</div>
 	</div>
 
-
+	<div id="matchContainer">
+		<div class="playerInfoContainer" id="playerOne">
+			<div class="playerPfp">
+				<img id="playerOnePfp">
+			</div>
+			<h2 class="playerName"></h2>
+			<h2 class="playerScore">-</h2>
+		</div>\
+		<div class="playerInfoContainer" id="playerTwo">
+			<div class="playerPfp">
+				<img id="playerTwoPfp">
+			</div>
+			<h2 class="playerName"></h2>
+			<h2 class="playerScore">-</h2>
+		</div>
+	</div>
 	<div id="tournamentContainer">
 		<div id="lobby">
 			${lobbyPlayerContainer}
@@ -225,8 +244,6 @@ function rightBtnKeydownEvent(e){
 	if (e.key == "Enter")
 		rightSlideBtn();
 }
-
-var tournament;
 
 {
 	document.getElementById("container").innerHTML = template;
@@ -457,6 +474,7 @@ function displayTournament(is_finished = false){
 		tournamentContainer = document.getElementById("tournamentContainer");
 
 		gameContainer.style.setProperty("display", "none");
+		matchContainer.style.setProperty("display", "none");
 		tournamentContainer.style.setProperty("display", "flex");
 
 		const contestMatchPlacementMap = {
@@ -589,6 +607,7 @@ function game() {
 	const url =  new URL(window.location.href);
 
 	var tournamentContainer = document.getElementById("tournamentContainer");
+	var matchContainer = document.getElementById("matchContainer");
 	var gameContainer = document.getElementById("gameContainer");
 	if (url.pathname.startsWith("/game")){
 		document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
@@ -609,15 +628,15 @@ function game() {
 		let countdown = "";
 
 		if (mode == "local"){
-			document.querySelectorAll(".playerPfp").forEach(function (elem){
+			document.querySelectorAll("#gameContainer .playerPfp").forEach(function (elem){
 				elem.style.setProperty("display", "none");
 			})
-			document.querySelectorAll(".playerInfoContainer").forEach(function (elem) {
+			document.querySelectorAll("#gameContainer .playerInfoContainer").forEach(function (elem) {
 				elem.style.setProperty("justify-content", "center");
 			});
 		}
 		else{
-			document.querySelectorAll(".playerPfp").forEach(function (elem){
+			document.querySelectorAll("#gameContainer .playerPfp").forEach(function (elem){
 				elem.style.setProperty("display", "block");
 			})
 		}
@@ -647,6 +666,7 @@ function game() {
 			if (data.type === "game_init") {
 				window.removeEventListener("resize", displayTournament);
 				gameContainer.style.setProperty("display", "flex");
+				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "none");
 				checkMatchSize();
 				if (mode == "tournament")
@@ -710,10 +730,12 @@ function game() {
 				checkTournementRound();
 				displayTournament();
 				gameContainer.style.setProperty("display", "none");
+				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
 				window.addEventListener("resize", displayTournament);
 			} else if (data.type === "tournament_end") {
 				gameContainer.style.setProperty("display", "none");
+				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
 				checkTournementRound();
 				displayWinner(data.message.winner, data.message.profile_picture)
@@ -774,16 +796,16 @@ function game() {
 					document.getElementById("waitContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
-			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
-			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
 
-			document.querySelector("#playerOne > .playerName").innerText = player1.name;
-			document.querySelector("#playerTwo > .playerName").innerText = player2.name;
+			document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
+			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
 
 			if (mode == "full_ai")
-				document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
+				document.querySelector("#gameContainer #playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 
-			document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
+			document.querySelectorAll("#gameContainer .playerScore").forEach(function (e){e.innerText = "-";});
 
 			var countdownBg = document.createElement("div");
 			countdownBg.id = "countdownContainer";
@@ -960,12 +982,12 @@ function game() {
 			`
 			document.body.appendChild(container);
 			window.addEventListener("keydown", keydownExitEventListener);
-			document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
-			document.querySelectorAll(".playerName").forEach(function (e){e.innerText = "";});
+			document.querySelectorAll("#gameContainer .playerScore").forEach(function (e){e.innerText = "-";});
+			document.querySelectorAll("#gameContainer .playerName").forEach(function (e){e. innerText = "";});
 
-			document.querySelector("#playerOne > .playerName").innerText = client.username;
-			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
-			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
+			document.querySelector("#gameContainer #playerOne > .playerName").innerText = client.username;
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), client.pfpUrl);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), "");
 		}
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
@@ -997,8 +1019,8 @@ function game() {
 				gamesend(mode, url.searchParams.get("room"))
 				document.getElementById("winContainer").remove();
 				if (mode == "remote"){
-					addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), "");
-					addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
+					addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), "");
+					addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), "");
 					displayWaiting();
 				}
 			})
@@ -1038,6 +1060,7 @@ function game() {
 				tournament = result;
 			}
 			gameContainer.style.setProperty("display", "none");
+			matchContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
 			tournamentContainer.classList.add("selectable");
 			document.querySelector(".contestMatchResume.quarter.match.one").tabIndex = 12;
@@ -1066,6 +1089,37 @@ function game() {
 			setTournamentAriaLabeL();
 			window.addEventListener("resize", displayTournament);
 
+		})()
+	}
+	else if (url.pathname.startsWith("/match")){
+		document.querySelector("#subtitle").innerText = client.langJson['game']['matchSubtitle'];
+		(async () => {
+			const fetchResult = await fetch('/api/user/get_match', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ "id": url.searchParams.get("id")}),
+				credentials: 'include'
+			})
+			const result = await fetchResult.json();
+			if (fetchResult.ok){
+				match = result;
+				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerOnePfp"), match.player_one_profile_picture);
+				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerTwoPfp"), match.player_two_profile_picture);
+	
+				document.querySelector("#matchContainer #playerOne > .playerName").innerText = match.player_one;
+				document.querySelector("#matchContainer #playerTwo > .playerName").innerText = match.player_two;
+				
+				document.querySelector("#matchContainer #playerOne > .playerScore").innerText = match.player_one_pts;
+				document.querySelector("#matchContainer #playerTwo > .playerScore").innerText = match.player_two_pts;
+			}
+			
+			gameContainer.style.setProperty("display", "none");
+			matchContainer.style.setProperty("display", "flex");
+			tournamentContainer.style.setProperty("display", "none");
+			setNotifTabIndexes(12);
+			(async () => (loadCurrentLang()))();
 		})()
 	}
 }

@@ -162,7 +162,8 @@
 		"quarter" : "Quarter",
 		"semi" : "Semi",
 		"final" : "final",
-		"tournamentLobby" : "Lobby"
+		"tournamentLobby" : "Lobby",
+		"matchSubtitle" : "Match"
 	},
 	"tournament":{
 		"#title" : "",

@@ -703,3 +703,42 @@ def get_tournament(request):
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+def get_match(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+	try:
+		data = json.loads(request.body)
+		match = gameModels.Match.objects.get(pk=data.get("id"))
+		try:
+			p1_name = match.player_one.username
+			p1_pfp = match.player_one.profile.profile_picture
+		except:
+			p1_name = "deleted"
+			p1_pfp = ""
+
+		try:
+			p2_name = match.player_two.username
+			p2_pfp = match.player_two.profile.profile_picture
+		except:
+			p2_name = "deleted"
+			p2_pfp = ""
+		match_json = {
+			'player_one' : p1_name,
+			'player_one_profile_picture' : p1_pfp,
+			'player_two' : p2_name,
+			'player_two_profile_picture' : p2_pfp,
+			'player_one_pts' : match.player_one_pts,
+			'player_two_pts' : match.player_two_pts,
+			'winner' : match.winner.username,
+			'date' : match.date,
+		}
+		
+		return JsonResponse(match_json, status=200)
+#	except gameModels.DoesNotExist:
+#		return JsonResponse({'message': 'Tournament not found'}, status=404)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
