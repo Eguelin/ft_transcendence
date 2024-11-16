@@ -1331,6 +1331,25 @@ function checkResizeWindow(){
 			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
 		}
 	}
+
+	tmp = document.querySelector("#quickSettingContainer");
+	var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
+	for (let i=0; i<tmp.childElementCount;i++){
+		if (tmp.children[i].style.getPropertyValue("display") == "none")
+			continue ;
+		if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
+			break
+		
+		while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left){
+			document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize += 1;
+		}
+		while (tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left){
+			document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize -= 1;
+		}
+	}
+
 	if (currentPage == "home" || currentPage == "user"){
 		setTimeout(checkMatchResumeSize, 1)
 	}
