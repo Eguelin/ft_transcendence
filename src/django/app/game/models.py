@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-import game.game as Player
+from login.views import create_nobody
 import datetime
 import random
 
@@ -51,26 +51,59 @@ class MatchManager(models.Manager):
 		player_two.profile.matches.add(match)
 		return match
 
-	def addMatch(self, playerOne : Player, playerTwo : Player):
-		match = self.create(player_one=playerOne.user, player_two=playerTwo.user)
-		match.player_one_pts = playerOne.score if playerOne.socket else 0
-		match.player_two_pts = playerTwo.score if playerTwo.user.username == "AI" or playerTwo.socket else 0
-		match.date = datetime.datetime.now()
-		match.winner = playerOne.user if playerOne.score > playerTwo.score or (playerTwo.user.username != "AI" and not playerTwo.socket) else playerTwo.user
-		match.save()
-		playerOne.user.profile.matches.add(match)
-		playerTwo.user.profile.matches.add(match)
+	def addMatch(self, game):
+		match = self.create(
+			player_one=game.playerLeft.user,
+			player_two=game.playerRight.user,
+			player_one_pts=game.playerLeft.score,
+			player_two_pts=game.playerRight.score,
+			date=datetime.datetime.now(),
+			winner=game.winner.user,
+			exchanges=game.exchanges,
+			exchangesMax=game.exchangesMax,
+			player_one_goals_up=game.playerLeft.goalsUp,
+			player_two_goals_up=game.playerRight.goalsUp,
+			player_one_goals_mid=game.playerLeft.goalsMid,
+			player_two_goals_mid=game.playerRight.goalsMid,
+			player_one_goals_down=game.playerLeft.goalsDown,
+			player_two_goals_down=game.playerRight.goalsDown
+		)
+
+		if game.playerLeft.user.username != "Nobody":
+			game.playerLeft.user.profile.matches.add(match)
+		if game.playerRight.user.username != "Nobody":
+			game.playerRight.user.profile.matches.add(match)
 
 	def save(self):
 		super().save()
 
 class Match(models.Model):
-	player_one = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="first_player")
-	player_two = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="second_player")
+	player_one = models.ForeignKey(
+		User,
+		on_delete=models.SET(create_nobody),
+		related_name="first_player"
+	)
+	player_two = models.ForeignKey(
+		User,
+		on_delete=models.SET(create_nobody),
+		related_name="second_player"
+	)
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	player_one_pts = models.IntegerField(default=0)
 	player_two_pts = models.IntegerField(default=0)
-	winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="winner")
+	winner = models.ForeignKey(
+		User,
+		on_delete=models.SET(create_nobody),
+		related_name="winner"
+	)
+	exchanges = models.IntegerField(default=0)
+	exchangesMax = models.IntegerField(default=0)
+	player_one_goals_up = models.IntegerField(default=0)
+	player_two_goals_up = models.IntegerField(default=0)
+	player_one_goals_mid = models.IntegerField(default=0)
+	player_two_goals_mid = models.IntegerField(default=0)
+	player_one_goals_down = models.IntegerField(default=0)
+	player_two_goals_down = models.IntegerField(default=0)
 
 	objects = MatchManager()
 
@@ -87,8 +120,17 @@ class TournamentMatch(Match):
 			player_two_pts=game.playerRight.score,
 			date=datetime.datetime.now(),
 			winner=game.winner.user,
+			exchanges=game.exchanges,
+			exchangesMax=game.exchangesMax,
+			player_one_goals_up=game.playerLeft.goalsUp,
+			player_two_goals_up=game.playerRight.goalsUp,
+			player_one_goals_mid=game.playerLeft.goalsMid,
+			player_two_goals_mid=game.playerRight.goalsMid,
+			player_one_goals_down=game.playerLeft.goalsDown,
+			player_two_goals_down=game.playerRight.goalsDown,
 			round=game.round,
-			match=game.match)
+			match=game.match
+		)
 		match.save()
 		return match
 
