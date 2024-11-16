@@ -978,7 +978,7 @@ function friendUpdate()
 					{
 						(response.json()).then((text) => {
 						friendRequest = Object.values(text.friends).find(request => request.username === data.username);
-						if (friendRequest  && !document.querySelector(`#onlineFriendList #${data.username}`))
+						if (friendRequest && !document.querySelector(`#onlineFriendList #${data.username}`))
 						{
 							if (document.querySelector(`#allFriendList #${data.username}`))
 								createFriendOnlineContainer(friendRequest);
@@ -1006,21 +1006,33 @@ function friendUpdate()
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 				}
 			}
-			else if (data.status === "remove")
+		}
+		else if (data.status && data.username && currentPage == "user")
+		{
+			if (data.status === "online")
 			{
-				if (document.getElementById(data.username))
-				{
-					if (document.querySelector(`#allFriendList #${data.username}`))
-					{
-						document.querySelector(`#allFriendList #${data.username}`).remove();
-						document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
-					}
-					if (document.querySelector(`#onlineFriendList #${data.username}`))
-					{
-						document.querySelector(`#onlineFriendList #${data.username}`).remove();
-						document.getElementById("onlineFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
-					}
-				}
+				document.getElementById("deleteFriendBtn").style.setProperty("display", "block");
+				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
+			}
+		}
+		else if (data.type === "friend_removed")
+		{
+			if (currentPage === "friends")
+			{
+				if (document.querySelector(`#allFriendList #${data.username}`))
+					document.querySelector(`#allFriendList #${data.username}`).remove();
+
+				if (document.querySelector(`#onlineFriendList #${data.username}`))
+					document.querySelector(`#onlineFriendList #${data.username}`).remove();
+
+				document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+				document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+			}
+			else if (currentPage === "user")
+			{
+				document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+
 			}
 		}
 	}
