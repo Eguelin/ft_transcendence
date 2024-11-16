@@ -87,19 +87,19 @@ var template = `
 				</div>
 				<ul class="dropDownContent">
 					<li>
-						<a id="EN_UK" tabindex="21" class="settingsLangDropDown">English</a>
+						<a id="EN_UK" lang="en-UK" tabindex="21" class="settingsLangDropDown">English</a>
 					</li>
 					<li>
-						<a id="FR_FR" tabindex="22" class="settingsLangDropDown">Français</a>
+						<a id="FR_FR" lang="fr" tabindex="22" class="settingsLangDropDown">Français</a>
 					</li>
 					<li>
-						<a id="DE_GE" tabindex="23" class="settingsLangDropDown">Deutsch</a>
+						<a id="DE_GE" lang="de" tabindex="23" class="settingsLangDropDown">Deutsch</a>
 					</li>
 					<li>
-						<a id="IT_IT" tabindex="24" class="settingsLangDropDown">Italiano</a>
+						<a id="IT_IT" lang="it" tabindex="24" class="settingsLangDropDown">Italiano</a>
 					</li>
 					<li>
-						<a id="AR_GH" tabindex="25" class="settingsLangDropDown">Pirate</a>
+						<a id="AR_GH" lang="" tabindex="25" class="settingsLangDropDown">Pirate</a>
 					</li>
 				</ul>
 			</div>
@@ -156,6 +156,7 @@ var template = `
 	document.getElementById("fontSizeRange").value = client.fontAmplifier;
 	notifCenterContainer.style.setProperty("display", "flex");
 	window.onkeydown = settingsKeyDownEvent
+	setNotifTabIndexes(26);
 }
 
 
@@ -401,6 +402,7 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 					client.langJson = content;
 				}
 				loadCurrentLang();
+				document.documentElement.setAttribute("lang", langMap[elem.id]);
 				if (client){
 					fetch('/api/user/update', {
 						method: 'POST',
