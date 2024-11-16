@@ -22,7 +22,7 @@ var template = `
             <div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
         </div>
         <div id="recentMatchHistory">
-            
+
         </div>
     </div>
 </div>
@@ -39,6 +39,7 @@ function updateUserLang(){
 
     sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
     allMatchesButton = document.getElementById("allMatchesHistoryBtn");
+    removeFriendBtn = document.getElementById("deleteFriendBtn");
 
     if (sendFriendRequestBtn){
         var splitPath = window.location.href.split('/');
@@ -58,6 +59,20 @@ function updateUserLang(){
         })
     }
 
+    if (removeFriendBtn){
+        var splitPath = window.location.href.split('/');
+        removeFriendBtn.addEventListener("click", (e) => {
+            fetch('/api/user/remove_friend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'username': splitPath[4]}),
+                credentials: 'include'
+            })
+        })
+    }
+
 	inputSearchUserContainer.style.setProperty("display", "block");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
@@ -67,15 +82,16 @@ function updateUserLang(){
     var splitPath = window.location.href.split('/');
 
     if (splitPath[4] == client.username || client.friends[splitPath[4]] != null) {
-        document.getElementById("sendFriendRequestBtn").remove();
+        document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
     }
     if (splitPath[4] == client.username || client.friends[splitPath[4]] == null)
-        document.getElementById("deleteFriendBtn").remove();
+        document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
 
     var endDate = new Date();
     var startDate = new Date();
     startDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
     endDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+	var tabIdx = 14;
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
@@ -97,7 +113,8 @@ function updateUserLang(){
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
                         recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], splitPath[4]));
                     };
-                    document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+					(async () => (loadCurrentLang()))();
+					document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
                         elem.addEventListener("keydown", (e) => {
                             if (e.key == "Enter"){
 								if (elem.querySelector(".tournament")){
@@ -115,13 +132,15 @@ function updateUserLang(){
                     });
 
                     document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
-                        var tabIdx = 14;
                         if (e.key == "Enter"){
                             document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-                                elem.tabIndex = tabIdx;
-                                tabIdx += 3;
+								if (elem.tabIndex == -1){
+									elem.tabIndex = tabIdx;
+									tabIdx += 3;
+								}
                             });
-                        }
+							setNotifTabIndexes(tabIdx);
+						}
                     });
                 }
                 catch{
@@ -135,6 +154,7 @@ function updateUserLang(){
                     messageContainer.appendChild(message);
                     recentMatchHistoryContainer.appendChild(messageContainer);
                 }
+				setNotifTabIndexes(tabIdx);
             })
         }
         else{
