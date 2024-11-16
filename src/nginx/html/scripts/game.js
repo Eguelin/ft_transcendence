@@ -609,6 +609,7 @@ function game() {
 	var tournamentContainer = document.getElementById("tournamentContainer");
 	var matchContainer = document.getElementById("matchContainer");
 	var gameContainer = document.getElementById("gameContainer");
+	matchContainer.style.setProperty("display", "none");
 	if (url.pathname.startsWith("/game")){
 		document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
 		const mode = url.searchParams.get("mode");
@@ -792,8 +793,8 @@ function game() {
 
 			}
 			if (mode == "remote"){
-				if (document.getElementById("waitContainer"))
-					document.getElementById("waitContainer").remove();
+				if (document.getElementById("waitingContainer"))
+					document.getElementById("waitingContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
 			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
@@ -920,6 +921,8 @@ function game() {
 				document.querySelector("#countdownContainer").remove();
 			if (document.querySelector("#winContainer"))
 				document.querySelector("#winContainer").remove();
+			if (document.querySelector("#waitingContainer"))
+				document.querySelector("#waitingContainer").remove();
 			clearInterval(displayInterval);
 			socket.close();
 		}
@@ -958,7 +961,7 @@ function game() {
 			if (event.key == "Escape"){
 				cleanup();
 				myPushState(`https://${hostname.host}/home`);
-				document.querySelectorAll("#winContainer, #waitContainer").forEach(function (elem){
+				document.querySelectorAll("#winContainer, #waitingContainer").forEach(function (elem){
 					elem.remove();
 				})
 			}
@@ -968,7 +971,7 @@ function game() {
 			if (event.target.id == "winBlur"){
 				cleanup();
 				myPushState(`https://${hostname.host}/home`);
-				document.querySelectorAll("#winContainer, #waitContainer").forEach(function (elem){
+				document.querySelectorAll("#winContainer, #waitingContainer").forEach(function (elem){
 					elem.remove();
 				})
 			}
@@ -976,18 +979,26 @@ function game() {
 
 		function displayWaiting(){
 			var container = document.createElement("div");
-			container.id = "waitContainer";
+			container.id = "waitingContainer";
 			container.innerHTML = `<div id="waitBlur"></div>
-				<div id="wait">${client.langJson['game']['wait']}</div>
+				<div id="waitContainer">
+					<div id="wait">${client.langJson['game']['wait']}</div>
+					<button id="quitWaitBtn">${client.langJson['game']['quit']}</button>
+				</div>
 			`
+			container.querySelector("#quitWaitBtn").onclick = function(){
+				cleanup()
+				myPushState(`https://${hostname.host}/home`);				
+			};
 			document.body.appendChild(container);
 			window.addEventListener("keydown", keydownExitEventListener);
 			document.querySelectorAll("#gameContainer .playerScore").forEach(function (e){e.innerText = "-";});
 			document.querySelectorAll("#gameContainer .playerName").forEach(function (e){e. innerText = "";});
 
-			document.querySelector("#gameContainer #playerOne > .playerName").innerText = client.username;
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), client.pfpUrl);
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), "");
+			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = client.username;
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), client.pfpUrl);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), "");
+			
 		}
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
