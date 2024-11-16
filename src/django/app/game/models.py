@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from login.views import create_nobody
-import game.game as Player
 import datetime
 import random
 
@@ -52,26 +51,20 @@ class MatchManager(models.Manager):
 		player_two.profile.matches.add(match)
 		return match
 
-	def addMatch(self, playerOne : Player, playerTwo : Player):
-		userOne = playerOne.user if User.objects.filter(username=playerOne.user.username).exists() else User.objects.get(username="Nobody")
-		userTwo = playerTwo.user if User.objects.filter(username=playerTwo.user.username).exists() else User.objects.get(username="Nobody")
-
+	def addMatch(self, game):
 		match = self.create(
-			player_one=userOne,
-			player_two=userTwo,
-			winner=userOne
+			player_one=game.playerLeft.user,
+			player_two=game.playerRight.user,
+			player_one_pts=game.playerLeft.score,
+			player_two_pts=game.playerRight.score,
+			date=datetime.datetime.now(),
+			winner=game.winner.user
 		)
 
-		match.player_one_pts = playerOne.score if playerOne.socket else 0
-		match.player_two_pts = playerTwo.score if userTwo.username == "AI" or playerTwo.socket else 0
-		match.date = datetime.datetime.now()
-		match.winner = userOne if playerOne.score > playerTwo.score or (userTwo.username != "AI" and not playerTwo.socket) else userTwo
-		match.save()
-
-		if userOne.username != "Nobody":
-			userOne.profile.matches.add(match)
-		if userTwo.username != "Nobody":
-			userTwo.profile.matches.add(match)
+		if game.playerLeft.user.username != "Nobody":
+			game.playerLeft.user.profile.matches.add(match)
+		if game.playerRight.user.username != "Nobody":
+			game.playerRight.user.profile.matches.add(match)
 
 	def save(self):
 		super().save()
@@ -105,14 +98,15 @@ class TournamentMatch(Match):
 
 	def createMatchFromGame(self, game):
 		match = self.objects.create(
-			player_one=game.playerLeft.user if User.objects.filter(username=game.playerLeft.user.username).exists() else User.objects.get(username="Nobody"),
-			player_two=game.playerRight.user if User.objects.filter(username=game.playerRight.user.username).exists() else User.objects.get(username="Nobody"),
+			player_one=game.playerLeft.user,
+			player_two=game.playerRight.user,
 			player_one_pts=game.playerLeft.score,
 			player_two_pts=game.playerRight.score,
 			date=datetime.datetime.now(),
-			winner=game.winner.user if User.objects.filter(username=game.winner.user.username).exists() else User.objects.get(username="Nobody"),
+			winner=game.winner.user,
 			round=game.round,
-			match=game.match)
+			match=game.match
+		)
 		match.save()
 		return match
 
