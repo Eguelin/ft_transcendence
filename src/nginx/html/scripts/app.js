@@ -1197,6 +1197,7 @@ async function loadCurrentLang(){
 }
 
 function setNotifTabIndexes(tabIdx){
+	console.log(tabIdx);
 	notifBtn.tabIndex = tabIdx++;
 	document.querySelectorAll(".notifContainer").forEach(function(elem){
 		elem.tabIndex = tabIdx;
@@ -1214,7 +1215,7 @@ function setNotifTabIndexes(tabIdx){
 }
 
 function createMatchResumeContainer(match, username) {
-	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
+	matchContainer = ft_create_element("a", {"class" : "matchDescContainer"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
 
@@ -1271,12 +1272,13 @@ function createMatchResumeContainer(match, username) {
 
 		matchContainer.appendChild(result);
 		matchContainer.appendChild(scoreContainer);
+		matchContainer.href = `https://${hostname.host}/match?id=${match.id}`;
 	}
 	else if (match.type == "tournament"){
 		result.classList.add("tournament");
 		result.innerHTML = client.langJson['user']['.tournament'];
 
-		result.href = `https://${hostname.host}/tournament?id=${match.id}`;
+		matchContainer.href = `https://${hostname.host}/tournament?id=${match.id}`;
 
 		matchContainer.appendChild(result);
 	}
