@@ -9,7 +9,7 @@ import random
 import math
 import time
 
-MAX_SCORE = 1
+MAX_SCORE = 5
 
 class Matchmaking():
 	_instance = None
@@ -23,14 +23,14 @@ class Matchmaking():
 
 	async def addPlayerRemote(self, player):
 		if len(self.waiting_players) > 0:
-			player2 = None
+			player1 = None
 			for waiting_player in self.waiting_players:
 				if DEBUG or player.user != waiting_player.user:
-					player2 = waiting_player
+					player1 = waiting_player
 					break
-			if player2:
-				self.waiting_players.remove(player2)
-				game = GameRemote(player, player2)
+			if player1:
+				self.waiting_players.remove(player1)
+				game = GameRemote(player1, player)
 				await game.start()
 				return
 		self.waiting_players.append(player)
@@ -94,7 +94,7 @@ class Ball():
 
 	def paddleCollision(self, pad):
 		if self.y < pad.y - Paddle.demieHeight - Ball.demieSize or self.y > pad.y + Paddle.demieHeight + Ball.demieSize:
-			return
+			return False
 
 		if self.speed < 12:
 			self.speed += 1
@@ -110,6 +110,7 @@ class Ball():
 			self.x = pad.x + Ball.demieSize
 			self.dx = math.cos(self.angle) * self.speed
 		self.dy = math.sin(self.angle) * self.speed
+		return True
 
 
 	def getInfo(self):
@@ -151,6 +152,10 @@ class Game():
 		self.ball: Ball = Ball()
 		self.timeLastPoint: float = 0
 		self.running: bool = False
+		self.exchanges = 0
+		self.exchangesMax = 0
+		self.exchangesActive = 0
+		self.lastGoal = "Left"
 
 	async def init(self):
 		pass
@@ -181,25 +186,50 @@ class Game():
 		await self.send('game_countdown', 'GO')
 		await asyncio.sleep(1)
 
+	def setExchanges(self):
+		self.exchanges += self.exchangesActive
+		if self.exchangesActive > self.exchangesMax:
+			self.exchangesMax = self.exchangesActive
+		self.exchangesActive = 0
+
+	def setGoalZone(self, player):
+		if player.y < Game.height / 3:
+			player.goalsUp += 1
+		elif player.y < 2 * Game.height / 3:
+			player.goalsMid += 1
+		else:
+			player.goalsDown += 1
+
+
 	def checkCollision(self):
 		if self.ball.x <= -Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerRight.score += 1
+			self.setGoalZone(self.playerRight)
+			self.lastGoal = "Right"
+			self.setExchanges()
 			if self.playerRight.score != Game.maxScore:
 				self.ball.init()
 
 		elif self.ball.x >= Game.width + Ball.size * 2:
 			self.timeLastPoint = time.time()
 			self.playerLeft.score += 1
+			self.setGoalZone(self.playerLeft)
+			self.lastGoal = "Left"
+			self.setExchanges()
 			if self.playerLeft.score != Game.maxScore:
 				self.ball.init()
 			self.ball.dx = -self.ball.dx
 
 		elif self.ball.x <= self.playerLeft.x and self.ball.x >= self.playerLeft.x - self.ball.speed:
-			self.ball.paddleCollision(self.playerLeft)
+			collision = self.ball.paddleCollision(self.playerLeft)
+			if collision and self.lastGoal == "Right":
+				self.exchangesActive += 1
 
 		elif self.ball.x >= self.playerRight.x and self.ball.x <= self.playerRight.x + self.ball.speed:
-			self.ball.paddleCollision(self.playerRight)
+			collision = self.ball.paddleCollision(self.playerRight)
+			if collision and self.lastGoal == "Left":
+				self.exchangesActive += 1
 
 		if self.ball.y <= Ball.demieSize or self.ball.y + Ball.demieSize >= Game.height:
 			self.ball.dy = -self.ball.dy
@@ -230,6 +260,7 @@ class GameRemote(Game):
 
 	def __init__(self, player1, player2):
 		super().__init__(player1, player2)
+		self.winner = None
 
 	async def init(self):
 		await self.playerLeft.init(self, 'left')
@@ -239,7 +270,7 @@ class GameRemote(Game):
 
 	@sync_to_async
 	def save(self):
-		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
+		models.Match.objects.addMatch(self)
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
@@ -255,12 +286,24 @@ class GameRemote(Game):
 			await self.loop()
 		await self.end()
 
+	@sync_to_async
+	def checkUser(self, player):
+		if not User.objects.filter(username=player.user.username).exists():
+			player.user = User.objects.get(username="Nobody")
+
 	async def end(self):
 		if not self.playerLeft.socket and not self.playerRight.socket:
 			return
+
+		await self.checkUser(self.playerLeft)
+		await self.checkUser(self.playerRight)
+
+		self.winner = self.playerLeft if self.playerLeft.score == Game.maxScore or not self.playerRight.socket else self.playerRight
+
 		await self.send('game_end', {
-			'winner': 'left' if self.playerLeft.score == Game.maxScore or not self.playerRight.socket else 'right'
+			'winner': self.winner.side,
 		})
+
 		await self.save()
 		self.running = False
 
@@ -311,27 +354,17 @@ class Gamelocal(Game):
 			})
 		self.running = False
 
-class GameAI(Game):
+class GameAI(GameRemote):
 
 	def __init__(self, player1):
 		super().__init__(player1, PlayerAI())
-
-	async def init(self):
-		await self.playerLeft.init(self, 'left')
-		await self.playerRight.init(self, 'right')
-		self.ball.init()
-		asyncio.create_task(self.playerRight.run())
-		await self.send('game_init', self.getInfo(True))
-
-	@sync_to_async
-	def save(self):
-		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
 
 	async def run(self):
 		await self.init()
+		asyncio.create_task(self.playerRight.run())
 		while not self.playerLeft.isReady or not self.playerLeft.socket:
 			await asyncio.sleep(0.1)
 		await self.countdown()
@@ -341,12 +374,25 @@ class GameAI(Game):
 		await self.end()
 
 	async def end(self):
+		await self.checkUser(self.playerLeft)
+
+		self.winner = self.playerLeft if self.playerLeft.score == Game.maxScore else self.playerRight
+
 		if self.playerLeft.socket:
 			await self.send('game_end', {
-				'winner': 'left' if self.playerLeft.score == Game.maxScore else 'right'
+				'winner': self.winner.side,
 			})
 		await self.save()
 		self.running = False
+
+	async def countdown(self):
+		for i in range(3, 0, -1):
+			if not self.playerLeft.socket:
+				return
+			await self.send('game_countdown', i)
+			await asyncio.sleep(1)
+		await self.send('game_countdown', 'GO')
+		await asyncio.sleep(1)
 
 class GameFullAI(Game):
 
@@ -407,6 +453,9 @@ class Player():
 		self.game = None
 		self.side = None
 		self.isReady = False
+		self.goalsUp = 0
+		self.goalsMid = 0
+		self.goalsDown = 0
 
 	def init(self, game, side):
 		self.game = game
@@ -461,7 +510,7 @@ class PlayerRemote(Player):
 		super().init(game, side)
 		self.input = {}
 		if not self.user:
-			self.user = User.objects.get(username='AI')
+			self.user = User.objects.get(username='Nobody')
 		self.profile = self.user.profile
 
 	async def send(self, type, message):
@@ -705,7 +754,8 @@ class Tournament():
 	@sync_to_async
 	def save(self):
 		for player in self.players:
-			player.user.profile.tournaments.add(self.model)
+			if User.objects.filter(username=player.user.username).exists():
+				player.user.profile.tournaments.add(self.model)
 
 class GameTournament(GameRemote):
 	def __init__(self, tournament, match, round):
@@ -713,7 +763,6 @@ class GameTournament(GameRemote):
 		self.tournament = tournament
 		self.match = match
 		self.round = round
-		self.winner = None
 		self.winnerSide = None
 
 	async def start(self):
@@ -736,6 +785,9 @@ class GameTournament(GameRemote):
 			await self.end()
 
 	async def end(self):
+		await self.checkUser(self.playerLeft)
+		await self.checkUser(self.playerRight)
+
 		if self.playerLeft.socket or self.playerRight.socket:
 			self.winner = self.playerLeft if self.playerLeft.score == Game.maxScore or not self.playerRight.socket else self.playerRight
 			self.playerLeft.inGame = False
@@ -751,7 +803,7 @@ class GameTournament(GameRemote):
 			else:
 				self.playerRight = self.playerRight.copy()
 		else:
-			self.winner = PlayerRemote(None)
+			self.winner =PlayerRemote(None)
 			self.winnerSide = "None"
 
 		self.running = False
