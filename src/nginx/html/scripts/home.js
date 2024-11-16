@@ -4,11 +4,11 @@ var template = `
 <div id="pageContentContainer" class="home">
 	<div id="homeButtonsContainer">
 		<a id="playBtn1v1" href="https://${hostname.host}/game?mode=remote" tabindex="12">Play</a>
-		<a id="playBtnLocal" href="https://${hostname.host}/game?mode=local" tabindex="12">Play</a>
-		<a id="playBtnAI" href="https://${hostname.host}/game?mode=ai" tabindex="12">Play</a>
-		<a id="playTournament" href="https://${hostname.host}/game?mode=tournament" tabindex="13">Play</a>
+		<a id="playBtnLocal" href="https://${hostname.host}/game?mode=local" tabindex="13">Play</a>
+		<a id="playBtnAI" href="https://${hostname.host}/game?mode=ai" tabindex="14">Play</a>
+		<a id="playTournament" href="https://${hostname.host}/game?mode=tournament" tabindex="15">Play</a>
 	</div>
-    <div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
+    <div id="recentMatchHistoryContainer" tabindex="16" aria-label="User today's matches">
         <div id="recentMatchHistory">
 
         </div>
@@ -25,7 +25,7 @@ var template = `
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
 	notifCenterContainer.style.setProperty("display", "flex");
-	tabIdx = 13;
+	tabIdx = 17;
 
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
@@ -62,15 +62,18 @@ var template = `
 			});
 
 			document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
-				var tabIdx = 14;
 				if (e.key == "Enter"){
 					document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-						elem.tabIndex = tabIdx;
-						tabIdx += 3;
+						if (elem.tabIndex == -1){
+							elem.tabIndex = tabIdx;
+							tabIdx += 3;
+						}
 					});
+					setNotifTabIndexes(tabIdx);
 				}
 			})
 		}
+		setNotifTabIndexes(tabIdx);
 	}
 	else
 		myReplaceState(`https://${hostname.host}/login`);

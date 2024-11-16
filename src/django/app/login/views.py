@@ -1,16 +1,13 @@
+import json, os, requests, base64, random, string, datetime,zxcvbn, re, io
+import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import json, os, requests, base64, random, string, subprocess, datetime
-import login.models as customModels
-import game.models as gameModels
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
-import json, os, requests, base64, random, datetime, zxcvbn, re, io
 from transcendence.settings import DEBUG
 from PIL import Image
-
 
 def generate_unique_username(base_username):
 	username = base_username

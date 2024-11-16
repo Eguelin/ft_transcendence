@@ -10,7 +10,7 @@ var treeCanva;
 
 var userContainerAnchor = `
 <div class="anchor"></div>
-<a class="username"></a>
+<a tabindex="-1" class="username"></a>
 <div class="score"></div>
 `
 
@@ -350,6 +350,7 @@ var tournament;
 	document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
 	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
 	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	setNotifTabIndexes(14);
 	game();
 }
 
@@ -1030,10 +1031,53 @@ function game() {
 			}
 			gameContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
+			tournamentContainer.classList.add("selectable");
+			document.querySelector(".contestMatchResume.quarter.match.one").tabIndex = 12;
+			document.querySelector(".contestMatchResume.quarter.match.two").tabIndex = 15;
+			document.querySelector(".contestMatchResume.quarter.match.three").tabIndex = 18;
+			document.querySelector(".contestMatchResume.quarter.match.four").tabIndex = 21;
+			document.querySelector(".contestMatchResume.semi.match.one").tabIndex = 24;
+			document.querySelector(".contestMatchResume.semi.match.two").tabIndex = 27;
+			document.querySelector(".contestMatchResume.final.match.one").tabIndex = 30;
+
+			document.querySelectorAll(".contestMatchResume").forEach(function (elem){
+				elem.onkeydown = function (e){
+					if (e.target.classList.contains("contestMatchResume") && e.key == "Enter"){
+						try{
+							elem.querySelector(".winner .username").tabIndex = elem.tabIndex + 1;
+							elem.querySelector(".loser .username").tabIndex = elem.tabIndex + 2;
+						}catch {
+							popUpError("Error tab indexes on user redirection");
+						}
+					}
+				}
+			})
+			setNotifTabIndexes(33);
 			(async () => (loadCurrentLang()))();
 			displayTournament(true);
+			setTournamentAriaLabeL();
 			window.addEventListener("resize", displayTournament);
 
 		})()
 	}
+}
+
+
+function setTournamentAriaLabeL(){
+	content = client.langJson['tournament'];
+	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
+		try {
+			elem.setAttribute("aria-label", 
+				content["matchResume"]
+				.replace("${MATCH_NUMBER}", content[elem.classList[3]])
+				.replace("${ROUND}", content[elem.classList[1]])
+				.replace("${WINNER_USERNAME}", elem.querySelector(".winner .username").innerText)
+				.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))	
+		} catch {
+			popUpError("Error setting aria labels");
+		}
+	})
+	document.querySelectorAll(".contestMatchResume .username").forEach(function (elem){
+		elem.setAttribute("aria-label", content["profile redirection"].replace("${USERNAME}", elem.innerText));
+	})
 }

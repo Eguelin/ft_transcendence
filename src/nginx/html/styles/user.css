@@ -15,6 +15,7 @@
 	display: flex;
 	height: 20vh;
 	gap: 1px;
+	overflow-y: hidden;
 }
 
 
@@ -175,11 +176,31 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 		}
 		to{
 			height: 20vh;
+			overflow-y: unset;
 		}
 	}
 	#recentMatchHistory{
 		height: 20vh;
 		animation: recentMatchHistoryContainerScale 500ms forwards;
+	}
+
+	@keyframes matchDescContainerFlash {
+		0%{
+			background: var(--input-bg-rgb);
+		}
+		
+		50%{
+			background: var(--page-bg-rgb);
+		}
+
+		100%{
+			background: var(--input-bg-rgb);
+		}
+	}
+	.matchDescContainer:focus-within, .contestMatchResume:focus-within{
+		outline: none;
+		animation: matchDescContainerFlash 2s ease-in infinite;
+		border-color: var(--input-bg-rgb);
 	}
 }
 

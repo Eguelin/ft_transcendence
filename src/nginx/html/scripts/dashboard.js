@@ -112,6 +112,7 @@ class Dashboard{
 	notifCenterContainer.style.setProperty("display", "flex");
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
+	setNotifTabIndexes(19);
     loadUserDashboard(startDate, today);
 }
 
@@ -717,6 +718,7 @@ function loadUserDashboard(startDate, endDate){
 			elem.tabIndex = tabIdx;
 			tabIdx += 3;
 		});
+		setNotifTabIndexes(tabIdx);
 		
 		document.querySelectorAll(".resultScoreName").forEach(function (elem){
 			if (!elem.classList.contains("deletedUser")){
