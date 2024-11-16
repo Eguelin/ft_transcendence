@@ -1053,7 +1053,13 @@ function friendUpdate()
 	};
 }
 
-
+function getElemWidth(elem){
+	return(Math.max(
+		elem.scrollWidth,
+		elem.offsetWidth,
+		elem.clientWidth
+	));
+}
 
 /*
 		______ __   __ _   _   ___  ___  ___ _____  _____      ______  _   _  _   _  _____  _____  _____  _____  _   _  _____
@@ -1330,6 +1336,9 @@ function checkResizeWindow(){
 	}
 	if (currentPage == "game")
 		checkMatchSize();
+	if (currentPage == "game" || currentPage == "tournament")
+		setTimeout(checkWinnerDisplaySize, 1)
+
 }
 
 function checkMatchResumeSize(){
@@ -1376,23 +1385,34 @@ function checkMatchSize(){
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	function getContainerWidth(){
-		return(Math.max(
-			container.scrollWidth,
-			container.offsetWidth,
-			container.clientWidth
-		));
-	}
-	while (getContainerWidth() == anchor.right && currentFontSize < baseFontSize){
+	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
 			currentFontSize += 1;
 		})
 	}
-	while (getContainerWidth() > anchor.right){
+	while (getElemWidth(container) > anchor.right){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) - 1}px`)
 		})
+	}
+}
+
+function checkWinnerDisplaySize(){
+	var container = document.querySelector("#winBg")
+	var text = document.querySelector("#winName");
+	if (!(container && text) || Math.abs(container.getBoundingClientRect().width - text.getBoundingClientRect().width) < 10)
+		return ;
+	var baseFontSize = parseInt(window.getComputedStyle(document.querySelector("#title")).fontSize);
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector("#winName")).fontSize);
+
+	while (container.getBoundingClientRect().width > text.getBoundingClientRect().width && currentFontSize < baseFontSize){
+		text.style.setProperty("font-size", `${parseInt(window.getComputedStyle(text).fontSize) + 1}px`)
+		currentFontSize += 1;
+	}
+	while (container.getBoundingClientRect().width < document.querySelector("#winName").getBoundingClientRect().width && currentFontSize > 1){
+		document.querySelector("#winName").style.setProperty("font-size", `${currentFontSize}px`)
+		currentFontSize -= 1;
 	}
 }
 

@@ -403,3 +403,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	color: var(--page-bg-rgb);
 	border-color: transparent;
 }
+
+#winContainer *{
+	transition: none;
+	text-wrap: nowrap;
+}

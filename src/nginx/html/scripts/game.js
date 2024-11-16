@@ -967,7 +967,6 @@ function game() {
 			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
 			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
 		}
-
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
 			container.id = "winContainer";
@@ -991,6 +990,7 @@ function game() {
 				if (e.key == "Tab")
 					e.preventDefault();
 			}
+			checkWinnerDisplaySize();
 			container.querySelector("#replayButton").addEventListener("click", (e) => {
 				window.removeEventListener("keydown", keydownExitEventListener);
 				window.removeEventListener("click", clickExitEventListener);
@@ -1002,7 +1002,7 @@ function game() {
 					displayWaiting();
 				}
 			})
-
+		
 			confetti({
 				particleCount: 500,
 				spread: 40,
@@ -1010,7 +1010,7 @@ function game() {
 				startVelocity : 100,
 				angle: 45
 			})
-
+		
 			confetti({
 				particleCount: 500,
 				spread: 40,
@@ -1069,7 +1069,6 @@ function game() {
 		})()
 	}
 }
-
 
 function setTournamentAriaLabeL(){
 	content = client.langJson['tournament'];
