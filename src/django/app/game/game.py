@@ -9,7 +9,7 @@ import random
 import math
 import time
 
-MAX_SCORE = 1
+MAX_SCORE = 5
 
 class Matchmaking():
 	_instance = None
@@ -230,6 +230,7 @@ class GameRemote(Game):
 
 	def __init__(self, player1, player2):
 		super().__init__(player1, player2)
+		self.winner = None
 
 	async def init(self):
 		await self.playerLeft.init(self, 'left')
@@ -239,7 +240,7 @@ class GameRemote(Game):
 
 	@sync_to_async
 	def save(self):
-		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
+		models.Match.objects.addMatch(self)
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
@@ -255,12 +256,24 @@ class GameRemote(Game):
 			await self.loop()
 		await self.end()
 
+	@sync_to_async
+	def checkUser(self, player):
+		if not User.objects.filter(username=player.user.username).exists():
+			player.user = User.objects.get(username="Nobody")
+
 	async def end(self):
 		if not self.playerLeft.socket and not self.playerRight.socket:
 			return
+
+		await self.checkUser(self.playerLeft)
+		await self.checkUser(self.playerRight)
+
+		self.winner = self.playerLeft if self.playerLeft.score == Game.maxScore or not self.playerRight.socket else self.playerRight
+
 		await self.send('game_end', {
-			'winner': 'left' if self.playerLeft.score == Game.maxScore or not self.playerRight.socket else 'right'
+			'winner': self.winner.side,
 		})
+
 		await self.save()
 		self.running = False
 
@@ -315,6 +328,7 @@ class GameAI(Game):
 
 	def __init__(self, player1):
 		super().__init__(player1, PlayerAI())
+		self.winner = None
 
 	async def init(self):
 		await self.playerLeft.init(self, 'left')
@@ -325,7 +339,7 @@ class GameAI(Game):
 
 	@sync_to_async
 	def save(self):
-		models.Match.objects.addMatch(self.playerLeft, self.playerRight)
+		models.Match.objects.addMatch(self)
 
 	async def send(self, type, message):
 		await self.playerLeft.send(type, message)
@@ -340,10 +354,19 @@ class GameAI(Game):
 			await self.loop()
 		await self.end()
 
+	@sync_to_async
+	def checkUser(self, player):
+		if not User.objects.filter(username=player.user.username).exists():
+			player.user = User.objects.get(username="Nobody")
+
 	async def end(self):
+		await self.checkUser(self.playerLeft)
+
+		self.winner = self.playerLeft if self.playerLeft.score == Game.maxScore else self.playerRight
+
 		if self.playerLeft.socket:
 			await self.send('game_end', {
-				'winner': 'left' if self.playerLeft.score == Game.maxScore else 'right'
+				'winner': self.winner.side,
 			})
 		await self.save()
 		self.running = False
@@ -705,7 +728,8 @@ class Tournament():
 	@sync_to_async
 	def save(self):
 		for player in self.players:
-			player.user.profile.tournaments.add(self.model)
+			if User.objects.filter(username=player.user.username).exists():
+				player.user.profile.tournaments.add(self.model)
 
 class GameTournament(GameRemote):
 	def __init__(self, tournament, match, round):
@@ -736,6 +760,9 @@ class GameTournament(GameRemote):
 			await self.end()
 
 	async def end(self):
+		await self.checkUser(self.playerLeft)
+		await self.checkUser(self.playerRight)
+
 		if self.playerLeft.socket or self.playerRight.socket:
 			self.winner = self.playerLeft if self.playerLeft.score == Game.maxScore or not self.playerRight.socket else self.playerRight
 			self.playerLeft.inGame = False
@@ -751,7 +778,7 @@ class GameTournament(GameRemote):
 			else:
 				self.playerRight = self.playerRight.copy()
 		else:
-			self.winner = PlayerRemote(None)
+			self.winner =PlayerRemote(None)
 			self.winnerSide = "None"
 
 		self.running = False
