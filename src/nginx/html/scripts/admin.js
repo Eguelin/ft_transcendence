@@ -98,7 +98,7 @@ var template = `
             },
             credentials: 'include',
             body: JSON.stringify({'userOne': playerOne, 'userTwo': playerTwo})
-    }).then(() => {
+        }).then(() => {
             unsetLoader()
         })
     })
