@@ -41,16 +41,23 @@ var template = `
 				if (fetchResult.ok) {
 				
 					var startDate = new Date();
-					client.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+					try {
+						client.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+					}
+					catch{
+						client.recentMatches = {}
+					}
 					if (Object.keys(client.recentMatches).length == 0){
-						var message = document.createElement("a");
-						recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
-						recentMatchHistoryContainer.style.setProperty("align-items", "center");
-						message.style.setProperty("color", "var(--main-text-rgb)");
-						message.style.setProperty("width", "100vw");
-						message.id="notPlayedToday";
-						message.innerText = client.langJson['home']['#notPlayedToday'];
-						recentMatchHistory.appendChild(message);
+						if (!document.querySelector("#notPlayedToday")){
+							var message = document.createElement("a");
+							recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
+							recentMatchHistoryContainer.style.setProperty("align-items", "center");
+							message.style.setProperty("color", "var(--main-text-rgb)");
+							message.style.setProperty("width", "100vw");
+							message.id="notPlayedToday";
+							message.innerText = client.langJson['home']['#notPlayedToday'];
+							recentMatchHistoryContainer.appendChild(message);
+						}
 					}
 					else{
 						recentMatchHistoryContainer.innerHTML = "";
