@@ -193,7 +193,28 @@ document.addEventListener("click", (e) => {
 			blockFriendPopup.style.setProperty("display", "none");
 			document.getElementById("popupBg").style.display = "none";
 			friend.remove();
+			fetch('/api/user/current', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include'
+			})
+			.then(response => {
+				if (response.ok)
+				{
+					(response.json()).then((text) => {
+					blockedUser = Object.values(text.friends).find(user => user.username === data.username);
+					if (blockedUser)
+					{
+						createBlockedUserContainer(blockedUser);
+						document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
+					}
+					});
+				}
+			});
 		}
+
 		if (e.target.className == "unblockBtn"){
 			const data = {username: e.target.parentElement.id};
 			fetch('/api/user/unblock_user', {
@@ -205,6 +226,7 @@ document.addEventListener("click", (e) => {
 				credentials: 'include'
 			})
 			e.target.closest(".friendContainer").remove();
+			document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`
 		}
 		if (e.target.className == "acceptRequestBtn"){
 			const data = {username: e.target.parentElement.id};
@@ -485,6 +507,7 @@ function createBlockedUserContainer(user){
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaBlocked.friendsOptionContainer']}`);
 
 	blockedListContainer.appendChild(friendContainer);
+	document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
 }
 
 function createFriendOnlineContainer(user)
