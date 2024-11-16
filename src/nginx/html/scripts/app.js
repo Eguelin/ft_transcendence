@@ -937,7 +937,7 @@ function friendUpdate()
 		const data = JSON.parse(event.data);
 		if (data.new_request)
 		{
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
 			if (currentPage === "friends" && !document.getElementById(data.sender_name))
 			{
 				fetch('/api/user/current', {
