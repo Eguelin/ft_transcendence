@@ -196,25 +196,14 @@
 	display: block;
 	background: var(--hover-text-rgb);
 	border: 1px solid var(--main-text-rgb);
-	border-radius: 2vw;
+	border-radius: 1rem;
+	overflow: hidden;
 	margin-top: 2vmin;
 	min-height: 1vh;
 	width: 50vw;
 	position: relative;
 	left: 50%;
 	translate: -50%;
-}
-
-.friendSlide .friendContainer:first-child .pfpContainer{
-	border-radius: 2vw 0 0 0;
-}
-
-.friendSlide .friendContainer:last-child .pfpContainer{
-	border-radius: 0 0 0 2vw;
-}
-
-.friendSlide .friendContainer:only-child .pfpContainer{
-	border-radius: 2vw 0 0 2vw;
 }
 
 .slideSelector{

@@ -230,7 +230,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 
 
 	//console.log(matches, username, startDate, endDate, clientMatches, clientUsername);
-    while (startDate.getDate() <= endDate.getDate()){
+    while (startDate.getTime() <= endDate.getTime() || startDate.getDate() <= endDate.getDate()){
         var countWin = 0, countMatch = 0;
         var clientCountWin = 0, clientCountMatch = 0;
         try{
@@ -279,7 +279,6 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         }
         startDate.setDate(startDate.getDate() + 1);
     }
-
 	if (totalMatch){
 
 		const totalDuration = (500 / LastXDaysDisplayed);
@@ -677,7 +676,7 @@ function displayCharts(){
 }
 
 function loadUserDashboard(startDate, endDate){
-
+	dashboard = null;
 
     var splitPath = window.location.href.split('/');
 	(async () => {

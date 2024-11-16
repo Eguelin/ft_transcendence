@@ -631,7 +631,7 @@ function game() {
 		socket.onopen = function() {
 			console.log("Connection established");
 			gamesend(mode, url.searchParams.get("room"));
-			if (mode == "game_remote"){
+			if (mode == "remote"){
 				displayWaiting();
 			}
 			displayInterval = setInterval(() => gameRender(), 16);
@@ -648,6 +648,7 @@ function game() {
 				window.removeEventListener("resize", displayTournament);
 				gameContainer.style.setProperty("display", "flex");
 				tournamentContainer.style.setProperty("display", "none");
+				checkMatchSize();
 				if (mode == "tournament")
 					checkTournementRound();
 				gameInit(data.message);
@@ -768,7 +769,7 @@ function game() {
 				player2.name = client.langJson['game']['playerTwo'];
 
 			}
-			if (mode == "game_remote"){
+			if (mode == "remote"){
 				if (document.getElementById("waitContainer"))
 					document.getElementById("waitContainer").remove();
 			}
@@ -966,7 +967,6 @@ function game() {
 			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
 			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
 		}
-
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
 			container.id = "winContainer";
@@ -985,16 +985,24 @@ function game() {
 			else
 				addPfpUrlToImgSrc(container.querySelector("#winPfp"), profile_picture);
 			document.body.appendChild(container);
+			document.querySelector("#replayButton").focus();
+			document.querySelector("#replayButton").onkeydown = function(e){
+				if (e.key == "Tab")
+					e.preventDefault();
+			}
+			checkWinnerDisplaySize();
 			container.querySelector("#replayButton").addEventListener("click", (e) => {
 				window.removeEventListener("keydown", keydownExitEventListener);
 				window.removeEventListener("click", clickExitEventListener);
 				gamesend(mode, url.searchParams.get("room"))
 				document.getElementById("winContainer").remove();
-				if (mode == "game_remote"){
+				if (mode == "remote"){
+					addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), "");
+					addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
 					displayWaiting();
 				}
 			})
-
+		
 			confetti({
 				particleCount: 500,
 				spread: 40,
@@ -1002,7 +1010,7 @@ function game() {
 				startVelocity : 100,
 				angle: 45
 			})
-
+		
 			confetti({
 				particleCount: 500,
 				spread: 40,
@@ -1061,7 +1069,6 @@ function game() {
 		})()
 	}
 }
-
 
 function setTournamentAriaLabeL(){
 	content = client.langJson['tournament'];

@@ -720,32 +720,6 @@ function popUpError(error){
 	document.body.appendChild(popupContainer);
 }
 
-function checkResizeWindow(){
-	if(currentPage == "dashboard"){
-		displayCharts();
-	}
-
-	var tmp = document.querySelector("#inputSearchUserContainer");
-	var fontSize = window.getComputedStyle(document.documentElement).fontSize.replace("px", "");
-	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
-	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
-	if (window.getComputedStyle(tmp).display != "none") {
-		var sectionWidth = 0;
-		document.querySelectorAll("#browseFlexContainer > *").forEach(function (elem) {
-			sectionWidth += elem.getBoundingClientRect().width;
-		})
-		var availableWidth = document.querySelector("#browseFlexContainer").getBoundingClientRect().width - sectionWidth;
-		if (availableWidth < fontSize * 1.5) {
-			document.querySelector("#mobileSearchBtn").style.setProperty("display", "block");
-		}
-		else {
-			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
-		}
-	}
-}
-
-window.addEventListener("resize", checkResizeWindow);
-
 function setLoader() {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
 
@@ -963,7 +937,7 @@ function friendUpdate()
 		const data = JSON.parse(event.data);
 		if (data.new_request)
 		{
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("USER", data.sender_name)}`, data.sender_name, "friend_request");
+			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
 			if (currentPage === "friends" && !document.getElementById(data.sender_name))
 			{
 				fetch('/api/user/current', {
@@ -1091,7 +1065,13 @@ function friendUpdate()
 	};
 }
 
-
+function getElemWidth(elem){
+	return(Math.max(
+		elem.scrollWidth,
+		elem.offsetWidth,
+		elem.clientWidth
+	));
+}
 
 /*
 		______ __   __ _   _   ___  ___  ___ _____  _____      ______  _   _  _   _  _____  _____  _____  _____  _   _  _____
@@ -1331,3 +1311,144 @@ async function updateUserAriaLabel(key, content){
 		})
 	}
 }
+
+/*	______  _____  _____  _____  ______ _____ 
+	| ___ \|  ___|/  ___||_   _||___  /|  ___|
+	| |_/ /| |__  \ `--.   | |     / / | |__  
+	|    / |  __|  `--. \  | |    / /  |  __| 
+	| |\ \ | |___ /\__/ / _| |_ ./ /___| |___ 
+	\_| \_|\____/ \____/  \___/ \_____/\____/ 
+ */
+
+
+function checkResizeWindow(){
+	if(currentPage == "dashboard"){
+		displayCharts();
+	}
+
+	var tmp = document.querySelector("#inputSearchUserContainer");
+	var fontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
+	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
+	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
+	if (window.getComputedStyle(tmp).display != "none") {
+		var sectionWidth = 0;
+		document.querySelectorAll("#browseFlexContainer > *").forEach(function (elem) {
+			sectionWidth += elem.getBoundingClientRect().width;
+		})
+		var availableWidth = document.querySelector("#browseFlexContainer").getBoundingClientRect().width - sectionWidth;
+		if (availableWidth < fontSize * 1.5) {
+			document.querySelector("#mobileSearchBtn").style.setProperty("display", "block");
+		}
+		else {
+			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
+		}
+	}
+
+	if (client){
+		tmp = document.querySelector("#quickSettingContainer");
+		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
+		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
+		
+		for (let i=0; i<tmp.childElementCount - 1;i++){
+			if (tmp.children[i].style.getPropertyValue("display") == "none")
+				continue ;
+			if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
+				break
+			
+			while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left && currentFontSize < baseFontSize){
+				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize += 1;
+			}
+			while (tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left && currentFontSize > 1){
+				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize -= 1;
+			}
+		}
+	}
+
+	if (currentPage == "home" || currentPage == "user"){
+		setTimeout(checkMatchResumeSize, 1)
+	}
+	if (currentPage == "game")
+		checkMatchSize();
+	if (currentPage == "game" || currentPage == "tournament")
+		setTimeout(checkWinnerDisplaySize, 1)
+
+}
+
+function checkMatchResumeSize(){
+	recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
+	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
+	var baseWidth = 16
+	var i = 0;
+	ch = 1
+	if (matches.length > 0){
+		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
+			i++;
+		if (i == matches.length)
+			return;
+		while (1 && ch <= baseWidth){
+			var width = matches[i].getBoundingClientRect().width;
+			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
+			
+			if (width * 5 <= getWindowWidth() && ch < baseWidth){
+				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					elem.style.setProperty("width", `${ch + 1}ch`);
+				})
+				var width = matches[i].getBoundingClientRect().width;
+			}
+			else
+				break;
+
+		}
+		while (1 && baseWidth > 1){
+			width = matches[i].getBoundingClientRect().width;
+			if (width * 5 > getWindowWidth()){
+				baseWidth--;
+				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					elem.style.setProperty("width", `${baseWidth}ch`);
+				})
+			}
+			else
+				break
+		}					
+	}
+}
+
+function checkMatchSize(){
+	var container = document.querySelector("#gameContainer")
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
+	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
+	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
+			currentFontSize += 1;
+		})
+	}
+	while (getElemWidth(container) > anchor.right){
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) - 1}px`)
+		})
+	}
+}
+
+function checkWinnerDisplaySize(){
+	var container = document.querySelector("#winBg")
+	var text = document.querySelector("#winName");
+	if (!(container && text) || Math.abs(container.getBoundingClientRect().width - text.getBoundingClientRect().width) < 10)
+		return ;
+	var baseFontSize = parseInt(window.getComputedStyle(document.querySelector("#title")).fontSize);
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector("#winName")).fontSize);
+
+	while (container.getBoundingClientRect().width > text.getBoundingClientRect().width && currentFontSize < baseFontSize){
+		text.style.setProperty("font-size", `${parseInt(window.getComputedStyle(text).fontSize) + 1}px`)
+		currentFontSize += 1;
+	}
+	while (container.getBoundingClientRect().width < document.querySelector("#winName").getBoundingClientRect().width && currentFontSize > 1){
+		document.querySelector("#winName").style.setProperty("font-size", `${currentFontSize}px`)
+		currentFontSize -= 1;
+	}
+}
+
+window.addEventListener("resize", checkResizeWindow);
