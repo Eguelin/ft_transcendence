@@ -372,6 +372,7 @@ def get_all_user_match_json(matches, tournaments, username):
 					'player_two_pts' : match.player_two_pts,
 					'winner' : match.winner.username,
 					'date' : match.date,
+					'id' : match.pk
 				}
 				i += 1
 	i = 0
@@ -424,6 +425,7 @@ def get_all_user_match_json(matches, tournaments, username):
 			'player_two_pts' : match.player_two_pts,
 			'winner' : match.winner.username,
 			'date' : match.date,
+			'id' : match.pk
 		}
 		i += 1
 	if (dateObj != ""):
@@ -432,43 +434,11 @@ def get_all_user_match_json(matches, tournaments, username):
 		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
-def get_user_match(matches, tournaments):
-	matches_json = {}
-	date = ""
-	i = 0
-	for tournament in tournaments:
-		matches_json[i] = {
-			'type' : 'tournament',
-			'id' : tournament.pk,
-			'date' : tournament.date,
-		}
-		i += 1
-	for match in matches:
-		try:
-			p1_name = match.player_one.username
-		except:
-			p1_name = "deleted"
-
-		try:
-			p2_name = match.player_two.username
-		except:
-			p2_name = "deleted"
-		matches_json[i] = {
-			'type' : 'match',
-			'id' : match.pk,
-			'player_one' : p1_name,
-			'player_two' : p2_name,
-			'player_one_pts' : match.player_one_pts,
-			'player_two_pts' : match.player_two_pts,
-			'winner' : match.winner.username,
-			'date' : match.date,
-		}
-		i += 1
-	return matches_json
-
-
 def get_user_json(user, startDate, endDate):
-	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)), user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)), user.username)
+	matches = get_all_user_match_json(
+		user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)),
+		user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)),
+		user.username)
 	return {'username' : user.username,
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
@@ -497,8 +467,12 @@ def current_user(request):
 		for e in friends_request_list:
 			friend_request_json[e.username] = get_user_preview_json(e)
 		for e in blocked_list:
+		
 			blocked_json[e.username] = get_user_preview_json(e)
-		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()), request.user.profile.tournaments.filter(date=datetime.date.today()))
+		matches = get_all_user_match_json(
+			request.user.profile.matches.order_by("date").filter(date__range=(datetime.date.today(), datetime.date.today())),
+			request.user.profile.tournaments.order_by("date").filter(date__range=(datetime.date.today(), datetime.date.today())),
+			request.user.username)
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'use_browser_theme': request.user.profile.use_browser_theme,

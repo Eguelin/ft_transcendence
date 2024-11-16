@@ -99,7 +99,10 @@ class Client {
 					this.friends = result.friends;
 					this.friend_requests = result.friend_requests;
 					this.blocked_user = result.blocked_user;
-					this.recentMatches = result.matches;
+					
+					var startDate = new Date();
+					this.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+					
 					this.#is_admin = result.is_admin;
 					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 					this.fontAmplifier = result.font_amplifier;
@@ -1369,7 +1372,7 @@ function checkResizeWindow(){
 	}
 
 	if (currentPage == "home" || currentPage == "user"){
-		setTimeout(checkMatchResumeSize, 1)
+		checkMatchResumeSize()
 	}
 	if (currentPage == "game")
 		checkMatchSize();
@@ -1393,7 +1396,7 @@ function checkMatchResumeSize(){
 			var width = matches[i].getBoundingClientRect().width;
 			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
 			
-			if (width * 5 <= getWindowWidth() && ch < baseWidth){
+			if (width * matches.length <= getWindowWidth() && ch < baseWidth){
 				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
 					elem.style.setProperty("width", `${ch + 1}ch`);
 				})
@@ -1405,7 +1408,7 @@ function checkMatchResumeSize(){
 		}
 		while (1 && baseWidth > 1){
 			width = matches[i].getBoundingClientRect().width;
-			if (width * 5 > getWindowWidth()){
+			if (width * matches.length > getWindowWidth()){
 				baseWidth--;
 				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
 					elem.style.setProperty("width", `${baseWidth}ch`);
