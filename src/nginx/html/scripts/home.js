@@ -30,50 +30,75 @@ var template = `
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 		recentMatchHistoryContainer.innerHTML = "";
-		if (Object.keys(client.recentMatches).length == 0){
-			var message = document.createElement("a");
-			recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
-			recentMatchHistoryContainer.style.setProperty("align-items", "center");
-			message.style.setProperty("color", "var(--main-text-rgb)");
-			message.style.setProperty("width", "100vw");
-			message.id="notPlayedToday";
-			message.innerText = client.langJson['home']['#notPlayedToday'];
-			recentMatchHistory.appendChild(message);
-		}
-		else{
-			for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
-				recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.username));
-			}
-			document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-				elem.addEventListener("keydown", (e) => {
-					if (e.key == "Enter"){
-						if (elem.querySelector(".tournament")){
-							elem.querySelector(".tournament").click()
-						}
-						else{
-							var idx = elem.tabIndex + 1
-							elem.querySelectorAll(".resultScoreName").forEach(function (names){
-								names.tabIndex = idx;
-								idx++;
-							})
-						}
-					}
+		( async() => {
+			try {
+				const fetchResult = await fetch('/api/user/current', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include'
 				})
-			});
-
-			document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
-				if (e.key == "Enter"){
-					document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
-						if (elem.tabIndex == -1){
-							elem.tabIndex = tabIdx;
-							tabIdx += 3;
+				const result = await fetchResult.json();
+				if (fetchResult.ok) {
+					client.recentMatches = result.matches;
+					if (Object.keys(client.recentMatches).length == 0){
+						var message = document.createElement("a");
+						recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
+						recentMatchHistoryContainer.style.setProperty("align-items", "center");
+						message.style.setProperty("color", "var(--main-text-rgb)");
+						message.style.setProperty("width", "100vw");
+						message.id="notPlayedToday";
+						message.innerText = client.langJson['home']['#notPlayedToday'];
+						recentMatchHistory.appendChild(message);
+					}
+					else{
+						for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
+							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.username));
 						}
-					});
+						document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+							elem.addEventListener("keydown", (e) => {
+								if (e.key == "Enter"){
+									if (elem.querySelector(".tournament")){
+										elem.querySelector(".tournament").click()
+									}
+									else{
+										var idx = elem.tabIndex + 1
+										elem.querySelectorAll(".resultScoreName").forEach(function (names){
+											names.tabIndex = idx;
+											idx++;
+										})
+									}
+								}
+							})
+						});
+			
+						document.getElementById("recentMatchHistoryContainer").addEventListener("keydown", (e) => {
+							if (e.key == "Enter"){
+								document.querySelectorAll(".matchDescContainer").forEach(function (elem) {
+									if (elem.tabIndex == -1){
+										elem.tabIndex = tabIdx;
+										tabIdx += 3;
+									}
+								});
+								setNotifTabIndexes(tabIdx);
+							}
+						})
+			
+					}
 					setNotifTabIndexes(tabIdx);
 				}
-			})
-		}
-		setNotifTabIndexes(tabIdx);
+			}
+			catch {
+				var template = `
+				<div id="pageContentContainer">
+					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
+				</div>
+				`
+				document.getElementById("container").innerHTML = template;
+				throw new Error("Error while reaching server");
+			}
+		})()
 	}
 	else
 		myReplaceState(`https://${hostname.host}/login`);
