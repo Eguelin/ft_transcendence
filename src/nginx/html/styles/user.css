@@ -63,6 +63,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	padding: 1vh 0;
 	color: var(--main-text-rgb);
 	justify-content: space-between;
+	transition: none;
 }
 
 .matchDescContainerScore{
