@@ -494,6 +494,5 @@ a.playerName:hover, a.playerName:focus{
 }
 
 #matchPlayersInfo .playerInfo > *{
-	font-size: 1em !important;
-
+	font-size: 1em;
 }

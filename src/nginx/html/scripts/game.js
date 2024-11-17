@@ -14,6 +14,8 @@ var match = null;
 
 var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
 
+var playerOneInfo = [0,0,0], playerTwoInfo = [0,0,0]
+
 var userContainerAnchor = `
 <div class="anchor"></div>
 <a tabindex="-1" class="username"></a>
@@ -1153,7 +1155,13 @@ function game() {
 				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
 				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
 				document.querySelector("#matchContainer #exchange").innerText = client.langJson['match']['exchange stats'].replace("${NUMBER_OF_EXCHANGE}", match.exchanges).replace("${AVERAGE_EXCHANGE}", (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2)).replace("${LONGEST}", match.exchangesMax)
-				drawMatchInfoGraph(match.player_one_goals_up, match.player_two_goals_up, match.player_one_goals_mid, match.player_two_goals_mid, match.player_one_goals_down, match.player_two_goals_down)
+				playerOneInfo[0] = match.player_one_goals_up;
+				playerOneInfo[1] = match.player_one_goals_mid;
+				playerOneInfo[2] = match.player_one_goals_down;
+				playerTwoInfo[0] = match.player_two_goals_up;
+				playerTwoInfo[1] = match.player_two_goals_mid;
+				playerTwoInfo[2] = match.player_two_goals_down;
+				drawMatchInfoGraph(300)
 
 			}
 			
@@ -1164,7 +1172,7 @@ function game() {
 }
 
 
-function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one_goals_mid, player_two_goals_mid, player_one_goals_down, player_two_goals_down){
+function drawMatchInfoGraph(size){
 	if (document.getElementById("matchInfoGraph"))
 		document.getElementById("matchInfoGraph").remove();
 
@@ -1188,10 +1196,10 @@ function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one
 
 	matchInfoGraph.height= 400;
 	matchInfoGraph.width = matchInfoGraph.height;
-	playerOneInfoGraph.height = 400;
-	playerOneInfoGraph.width = 400;
-	playerTwoInfoGraph.height = 400;
-	playerTwoInfoGraph.width = 400;
+	playerOneInfoGraph.height = size;
+	playerOneInfoGraph.width = size;
+	playerTwoInfoGraph.height = size;
+	playerTwoInfoGraph.width = size;
 
 
 	matchInfoContainer.appendChild(matchInfoGraph);
@@ -1242,7 +1250,7 @@ function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one
 		}
 		const data = {
 			datasets: [{
-				data : [player_one_goals_up, player_one_goals_mid, player_one_goals_down],
+				data : playerOneInfo,
 				backgroundColor : ['red','purple', 'blue'],
 				borderWidth : 0
 			}],
@@ -1282,7 +1290,7 @@ function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one
 		}
 		const data = {
 			datasets: [{
-				data : [player_two_goals_up, player_two_goals_mid, player_two_goals_down],
+				data : playerTwoInfo,
 				backgroundColor : ['red','purple', 'blue'],
 				borderWidth : 0
 			}],
@@ -1323,7 +1331,7 @@ function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one
 
 		const data = {
 			datasets: [{
-				data : [player_one_goals_up + player_two_goals_up, player_one_goals_mid + player_two_goals_mid, player_one_goals_down + player_two_goals_down],
+				data : [playerOneInfo[0] + playerTwoInfo[0], playerOneInfo[1] + playerTwoInfo[1], playerOneInfo[2] + playerTwoInfo[2]],
 				backgroundColor : ['red','purple', 'blue'],
 				borderWidth : 0
 			}],
@@ -1342,10 +1350,8 @@ function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one
 	drawPlayerOneInfo();
 	drawPlayerTwoInfo();
 	matchInfoChart.resize(400,400);
-	playerOneInfoChart.resize(300,300);
-	playerTwoInfoChart.resize(300,300);
-	console.log(matchInfoGraph.width);
-
+	playerOneInfoChart.resize(size,size);
+	playerTwoInfoChart.resize(size,size);
 }
 
 function setTournamentAriaLabeL(){
