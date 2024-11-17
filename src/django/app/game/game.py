@@ -524,7 +524,7 @@ class PlayerRemote(Player):
 
 		if init:
 			info['user'] = {
-				'username': self.user.username if not tournament else self.profile.tournament_name,
+				'username': self.user.username if not tournament else self.profile.display_name,
 				'profile_picture': self.profile.profile_picture
 			}
 
@@ -814,13 +814,13 @@ class GameTournament(GameRemote):
 	def getMatch(self):
 		return {
 			'playerLeft': {
-				'username': self.playerLeft.profile.tournament_name if self.playerLeft else None,
+				'username': self.playerLeft.profile.display_name if self.playerLeft else None,
 				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft else None,
 				'winner': self.winnerSide == "left" if self.winner else None,
 				'score': self.playerLeft.score if self.playerLeft and self.winner else None
 			},
 			'playerRight': {
-				'username': self.playerRight.profile.tournament_name if self.playerRight else None,
+				'username': self.playerRight.profile.display_name if self.playerRight else None,
 				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight else None,
 				'winner': self.winnerSide == "right" if self.winner else None,
 				'score': self.playerRight.score if self.playerRight and self.winner  else None

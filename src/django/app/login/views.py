@@ -9,14 +9,6 @@ from django.core.exceptions import ValidationError
 from transcendence.settings import DEBUG
 from PIL import Image
 
-def generate_unique_username(base_username):
-	username = base_username
-	counter = 1
-	while User.objects.filter(username=username).exists():
-		username = f"{base_username}{counter}"
-		counter += 1
-	return username
-
 def getClientId(request):
 	clientId = os.getenv('API_42_PUBLIC')
 	if not clientId:
@@ -70,7 +62,7 @@ def fortytwo(request):
 	pfp_url = user_json.get('image', {}).get('link', '')
 
 	username = re.sub(r'\W+', '', user_login)
-	user_login = username[:15]
+	user_login = username[:8]
 
 	id42 = user_json.get('id')
 	if not user_login or id42 is None:
@@ -86,15 +78,21 @@ def fortytwo(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 	except User.DoesNotExist:
-		user, user_existence = User.objects.get_or_create(username=user_login)
-		if user_existence is False:
-			user_login = generate_unique_username(user_login)
-		user_login
+		username = user_login
+		while User.objects.filter(username=username).exists():
+			username = user_login + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+		user = User.objects.create_user(username=username)
+
+		display_name = username
+		while User.objects.filter(profile__display_name=display_name).exists():
+			display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
 
 		user.set_password(str(id42))
 		user.save()
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
+		user.profile.is_active = True
+		user.profile.display_name = display_name
 
 		user.profile.save()
 		user = authenticate(request, username=user.username, password=str(id42))
@@ -141,15 +139,20 @@ def create_user(request):
 
 	if User.objects.filter(username=username).exists():
 		return JsonResponse({'message': 'User with same username already exist'}, status=400)
+
+	display_name = username
+	while User.objects.filter(profile__display_name=display_name).exists():
+		display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+
 	try:
 		if (username == "admin"):
 			user = User.objects.create_user(username=username, password=password, is_staff=True)
 		else:
 			user = User.objects.create_user(username=username, password=password)
 		user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
-		user.id42 = 0
+		user.profile.id42 = 0
 		user.profile.is_active = True
-
+		user.profile.display_name = display_name
 		if 'lang' in data:
 			user.profile.language_pack = data['lang']
 		if 'use_browser_theme' in data:
@@ -166,7 +169,7 @@ def create_ai():
 	if User.objects.filter(username="AI").exists():
 		return
 	username = "AI"
-	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
 	user = User.objects.create_user(username=username, password=password)
 	user.profile.profile_picture = "/images/defaults/defaultAi.gif"
 	user.id42 = 0
@@ -176,7 +179,7 @@ def create_nobody():
 	if User.objects.filter(username="Nobody").exists():
 		return User.objects.get(username="Nobody")
 	username = "Nobody"
-	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
 	user = User.objects.create_user(username=username, password=password)
 	user.profile.profile_picture = "/images/defaults/thisman.jpg"
 	user.id42 = 0
@@ -478,7 +481,6 @@ def get_user_match(matches, tournaments):
 		}
 		i += 1
 	return matches_json
-
 
 def get_user_json(user, startDate, endDate):
 	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)), user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)), user.username)
