@@ -48,7 +48,6 @@ class MatchManager(models.Manager):
 			player_one_pts = p1,
 			player_two_pts = p2,
 			winner = player_one if p1 > p2 else player_two,
-			date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds()))),
 			player_one_goals_up= random.randint(0, 3),
 			player_two_goals_up= random.randint(0, 3),
 			player_one_goals_mid= random.randint(0, 3),
@@ -58,6 +57,7 @@ class MatchManager(models.Manager):
 			exchangesMax = me,
 			exchanges = random.randint(me, 10),
 			)
+		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds())))
 		match.save()
 		player_one.profile.matches.add(match)
 		player_two.profile.matches.add(match)
