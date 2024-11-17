@@ -519,12 +519,12 @@ class PlayerRemote(Player):
 		except:
 			self.socket = None
 
-	def getInfo(self, init=False):
+	def getInfo(self, init=False, tournament=False):
 		info = super().getInfo()
 
 		if init:
 			info['user'] = {
-				'username': self.user.username,
+				'username': self.user.username if not tournament else self.profile.display_name,
 				'profile_picture': self.profile.profile_picture
 			}
 
@@ -709,7 +709,7 @@ class Tournament():
 
 	@sync_to_async
 	def setTournament(self):
-		self.model = models.TournamentModel()
+		self.model = models.TournamentModel(winner=User.objects.get(username='Nobody'))
 		self.model.save()
 
 	async def moveWinner(self, round, match, side, winner):
@@ -749,13 +749,15 @@ class Tournament():
 			'winner': winner.user.username,
 			'profile_picture': winner.profile.profile_picture
 		})
-		await self.save()
+		await self.save(winner)
 
 	@sync_to_async
-	def save(self):
+	def save(self, winner):
 		for player in self.players:
 			if User.objects.filter(username=player.user.username).exists():
 				player.user.profile.tournaments.add(self.model)
+		self.model.winner = winner.user
+		self.model.save()
 
 class GameTournament(GameRemote):
 	def __init__(self, tournament, match, round):
@@ -804,6 +806,7 @@ class GameTournament(GameRemote):
 				self.playerRight = self.playerRight.copy()
 		else:
 			self.winner =PlayerRemote(None)
+			await self.winner.init(None, None)
 			self.winnerSide = "None"
 
 		self.running = False
@@ -814,15 +817,28 @@ class GameTournament(GameRemote):
 	def getMatch(self):
 		return {
 			'playerLeft': {
-				'username': self.playerLeft.user.username if self.playerLeft else None,
-				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft and self.playerLeft.profile else None,
+				'username': self.playerLeft.profile.display_name if self.playerLeft else None,
+				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft else None,
 				'winner': self.winnerSide == "left" if self.winner else None,
 				'score': self.playerLeft.score if self.playerLeft and self.winner else None
 			},
 			'playerRight': {
-				'username': self.playerRight.user.username if self.playerRight else None,
-				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight and self.playerRight.profile else None,
+				'username': self.playerRight.profile.display_name if self.playerRight else None,
+				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight else None,
 				'winner': self.winnerSide == "right" if self.winner else None,
 				'score': self.playerRight.score if self.playerRight and self.winner  else None
 			}
 		}
+
+	def getInfo(self, init=False):
+		info = {
+			'player1': self.playerLeft.getInfo(init, True),
+			'player2': self.playerRight.getInfo(init, True),
+			'ball': self.ball.getInfo()
+		}
+
+		if init:
+			info['canvas'] = Game.getSize()
+			info['paddle'] = Paddle.getSize()
+
+		return info

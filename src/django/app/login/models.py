@@ -7,6 +7,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	display_name = models.CharField(max_length=15, default="Player")
 	use_browser_theme = models.BooleanField(default=True)
 	dark_theme = models.BooleanField(default=True)
 	theme_name = models.CharField(max_length=10, default="dark")
