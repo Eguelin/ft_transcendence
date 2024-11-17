@@ -1224,7 +1224,7 @@ function game() {
 }
 
 
-function drawMatchInfoGraph(size){
+function drawMatchInfoGraph(size, matchChartSize){
 	if (document.getElementById("matchInfoGraph"))
 		document.getElementById("matchInfoGraph").remove();
 
@@ -1246,7 +1246,7 @@ function drawMatchInfoGraph(size){
 	playerTwoInfoGraph = document.createElement("canvas");
 	playerTwoInfoGraph.id = "playerTwoInfoGraph";
 
-	matchInfoGraph.height= 400;
+	matchInfoGraph.height= matchChartSize;
 	matchInfoGraph.width = matchInfoGraph.height;
 	playerOneInfoGraph.height = size;
 	playerOneInfoGraph.width = size;
@@ -1401,7 +1401,7 @@ function drawMatchInfoGraph(size){
 	drawMatchInfo();
 	drawPlayerOneInfo();
 	drawPlayerTwoInfo();
-	matchInfoChart.resize(400,400);
+	matchInfoChart.resize(matchChartSize,matchChartSize);
 	playerOneInfoChart.resize(size,size);
 	playerTwoInfoChart.resize(size,size);
 }
