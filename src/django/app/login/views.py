@@ -697,6 +697,8 @@ def get_tournament(request):
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = match.player_two.profile.profile_picture
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winner.username == match.player_two.username else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["score"] = match.player_two_pts
+
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["id"] = match.pk
 		return JsonResponse(tournamentJson, status=200)
 #	except gameModels.DoesNotExist:
 #		return JsonResponse({'message': 'Tournament not found'}, status=404)

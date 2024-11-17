@@ -257,13 +257,18 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 .contestUserContainer{
 	display: flex;
-	width: fit-content;
+	width: 17ch;
 	align-items: center;
 	gap: 1ch;
 }
 .contestUserContainer .username{
 	text-align: left;
-	min-width: 15ch;
+	min-width: fit-content;
+}
+
+.contestUserContainer .score{
+	width: 100%;
+	text-align: right;
 }
 
 .contestUserContainer.loser .username{
@@ -406,7 +411,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	font-size: 3rem !important;
 }
 
-#tournamentContainer.selectable a:focus, #tournamentContainer.selectable a:hover{
+#tournamentContainer.selectable .username:focus, #tournamentContainer.selectable .username:hover{
 	opacity: 1;
 	text-decoration: underline;
 }
