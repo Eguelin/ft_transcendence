@@ -251,14 +251,17 @@ def profile_update(request):
 	if (request.user.is_authenticated):
 		if (request.method == 'POST'):
 			try:
+				valid = False
 				data = json.loads(request.body)
 				user = request.user
 				if "is_dark_theme" in data:
+					valid = True
 					if (isinstance(data['is_dark_theme'], (bool))):
 						user.profile.dark_theme = data['is_dark_theme']
 					else:
 						return JsonResponse({'message': 'Invalid is_dark_theme value, should be a boolean'}, status=400)
 				if "username" in data:
+					valid = True
 					if (isinstance(data['username'], (str))):
 						if User.objects.filter(username=data['username']).exists():
 							return JsonResponse({'message': 'Username is already taken'}, status=400)
@@ -273,6 +276,7 @@ def profile_update(request):
 				except ValidationError as e:
 					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
+					valid = True
 					if (isinstance(data['pfp'], (str, bytearray))):
 						if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
 							os.remove(user.profile.profile_picture)
@@ -294,26 +298,31 @@ def profile_update(request):
 					else:
 						return JsonResponse({'message': 'Invalid pfp value, should be a string'}, status=400)
 				if ("language_pack" in data):
+					valid = True
 					if (isinstance(data['language_pack'], (str))):	#TODO check if path is valid
 						user.profile.language_pack = data['language_pack']
 					else:
 						return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
 				if ("is_active" in data):
+					valid = True
 					if (isinstance(data['is_active'], (bool))):
 						user.profile.is_active = data['is_active']
 					else:
 						return JsonResponse({'message': 'Invalid is_active value, should be a boolean'}, status=400)
 				if ("font_amplifier" in data):
+					valid = True
 					if (isinstance(data['font_amplifier'], (float, int))):
 						user.profile.font_amplifier = data['font_amplifier']
 					else:
 						return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
 				if ("use_browser_theme" in data):
+					valid = True
 					if (isinstance(data['use_browser_theme'], (bool))):
 						user.profile.use_browser_theme = data['use_browser_theme']
 					else:
 						return JsonResponse({'message': 'Invalid use_browser_theme value, should be a boolean'}, status=400)
 				if ("theme_name" in data):
+					valid = True
 					if (isinstance(data['theme_name'], (str))):
 						max_length_validator = MaxLengthValidator(10, message='Theme_name must be 10 characters or fewer')
 						try:
@@ -324,10 +333,14 @@ def profile_update(request):
 					else:
 						return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
 				if ("do_not_disturb" in data):
+					valid = True
 					if (isinstance(data['do_not_disturb'], (bool))):
 						user.profile.do_not_disturb = data['do_not_disturb']
 					else:
 						return JsonResponse({'message': 'Invalid do_not_disturb value, should be a boolean'}, status=400)
+				if (valid == False):
+					return JsonResponse({'message': 'Field does not exist'}, status=400)
+
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
@@ -335,7 +348,7 @@ def profile_update(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-def get_all_user_match_json(matches, tournaments, username):
+def get_user_match_json(matches, tournaments, username, max=-1):
 	matches_json = {}
 	year_json = {}
 	month_json = {}
@@ -345,8 +358,11 @@ def get_all_user_match_json(matches, tournaments, username):
 	month = ""
 	day = ""
 	i = 0
+	total_count = 0
 
 	for tournament in tournaments:
+		if (max != -1 and total_count >= max):
+			break
 		if (dateObj != tournament.date):
 			if (year != ""):
 				if (year != tournament.date.year):
@@ -369,8 +385,11 @@ def get_all_user_match_json(matches, tournaments, username):
 			'date' : tournament.date,
 		}
 		i += 1
+		total_count += 1
 		for match in tournament.matches.all():
 			if match.player_one.username == username or match.player_two.username == username:
+				if (max != -1 and total_count >= max):
+					break
 				try:
 					p1_name = match.player_one.username
 				except:
@@ -388,8 +407,10 @@ def get_all_user_match_json(matches, tournaments, username):
 					'player_two_pts' : match.player_two_pts,
 					'winner' : match.winner.username,
 					'date' : match.date,
+					'id' : match.pk
 				}
 				i += 1
+				total_count += 1
 	i = 0
 
 	if (dateObj != ""):
@@ -402,6 +423,8 @@ def get_all_user_match_json(matches, tournaments, username):
 	day = ""
 	date_json = {}
 	for match in matches:
+		if (max != -1 and total_count >= max):
+			break
 		if (dateObj != match.date):
 			if (year != ""):
 				if (year != match.date.year):
@@ -440,7 +463,9 @@ def get_all_user_match_json(matches, tournaments, username):
 			'player_two_pts' : match.player_two_pts,
 			'winner' : match.winner.username,
 			'date' : match.date,
+			'id' : match.pk
 		}
+		total_count += 1
 		i += 1
 	if (dateObj != ""):
 		month_json["{0}".format(day)] = date_json
@@ -448,42 +473,11 @@ def get_all_user_match_json(matches, tournaments, username):
 		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
-def get_user_match(matches, tournaments):
-	matches_json = {}
-	date = ""
-	i = 0
-	for tournament in tournaments:
-		matches_json[i] = {
-			'type' : 'tournament',
-			'id' : tournament.pk,
-			'date' : tournament.date,
-		}
-		i += 1
-	for match in matches:
-		try:
-			p1_name = match.player_one.username
-		except:
-			p1_name = "deleted"
-
-		try:
-			p2_name = match.player_two.username
-		except:
-			p2_name = "deleted"
-		matches_json[i] = {
-			'type' : 'match',
-			'id' : match.pk,
-			'player_one' : p1_name,
-			'player_two' : p2_name,
-			'player_one_pts' : match.player_one_pts,
-			'player_two_pts' : match.player_two_pts,
-			'winner' : match.winner.username,
-			'date' : match.date,
-		}
-		i += 1
-	return matches_json
-
 def get_user_json(user, startDate, endDate):
-	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)), user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)), user.username)
+	matches = get_user_match_json(
+		user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)),
+		user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)),
+		user.username)
 	return {'username' : user.username,
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
@@ -512,8 +506,12 @@ def current_user(request):
 		for e in friends_request_list:
 			friend_request_json[e.username] = get_user_preview_json(e)
 		for e in blocked_list:
+
 			blocked_json[e.username] = get_user_preview_json(e)
-		matches = get_user_match(request.user.profile.matches.filter(date=datetime.date.today()), request.user.profile.tournaments.filter(date=datetime.date.today()))
+		matches = get_user_match_json(
+			request.user.profile.matches.filter(date=datetime.date.today()),
+			request.user.profile.tournaments.filter(date=datetime.date.today()),
+			request.user.username, 5)
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'use_browser_theme': request.user.profile.use_browser_theme,
@@ -712,9 +710,58 @@ def get_tournament(request):
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = match.player_two.profile.profile_picture
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winner.username == match.player_two.username else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["score"] = match.player_two_pts
+
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["id"] = match.pk
 		return JsonResponse(tournamentJson, status=200)
 #	except gameModels.DoesNotExist:
 #		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+def get_match(request):
+	if request.method != 'POST':
+		return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+	try:
+		data = json.loads(request.body)
+		match = gameModels.Match.objects.get(pk=data.get("id"))
+		try:
+			p1_name = match.player_one.username
+			p1_pfp = match.player_one.profile.profile_picture
+		except:
+			p1_name = "deleted"
+			p1_pfp = ""
+
+		try:
+			p2_name = match.player_two.username
+			p2_pfp = match.player_two.profile.profile_picture
+		except:
+			p2_name = "deleted"
+			p2_pfp = ""
+		match_json = {
+			'player_one' : p1_name,
+			'player_one_profile_picture' : p1_pfp,
+			'player_two' : p2_name,
+			'player_two_profile_picture' : p2_pfp,
+			'player_one_pts' : match.player_one_pts,
+			'player_two_pts' : match.player_two_pts,
+			'exchanges' : match.exchanges,
+			'exchangesMax' : match.exchangesMax,
+			'player_one_goals_up' : match.player_one_goals_up,
+			'player_two_goals_up' : match.player_two_goals_up,
+			'player_one_goals_mid' : match.player_one_goals_mid,
+			'player_two_goals_mid' : match.player_two_goals_mid,
+			'player_one_goals_down' : match.player_one_goals_down,
+			'player_two_goals_down' : match.player_two_goals_down,
+			'winner' : match.winner.username,
+			'date' : match.date,
+		}
+
+		return JsonResponse(match_json, status=200)
+#	except gameModels.DoesNotExist:
+#		return JsonResponse({'message': 'Tournament not found'}, status=404)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+

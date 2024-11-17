@@ -6,7 +6,15 @@ maxScore = 5;
 
 var gameContainer;
 var tournamentContainer;
+var matchContainer;
 var treeCanva;
+
+var tournament = null;
+var match = null;
+
+var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
+
+var playerOneInfo = [0,0,0], playerTwoInfo = [0,0,0]
 
 var userContainerAnchor = `
 <div class="anchor"></div>
@@ -46,7 +54,42 @@ var template = `
 		</div>
 	</div>
 
-
+	<div id="matchContainer">
+		<div id="matchInfo"> 
+			<div id="exchangeContainer">
+				<a id="exchange"></a>
+			</div>
+			<div id="matchInfoGraphContainer">
+				<canvas id="matchInfoGraph"></canvas>
+			</div>
+		</div>
+		<div id="matchPlayersInfo">
+			<div class="playerInfoContainer" id="playerOne">
+				<div class="playerInfo">
+					<div class="playerPfp">
+						<img id="playerOnePfp">
+					</div>
+					<a class="playerName"></a>
+					<h2 class="playerScore">-</h2>
+				</div>
+				<div id="playerInfoGraphContainer">
+					<canvas id="playerOneInfoGraph"></canvas>
+				</div>
+			</div>
+			<div class="playerInfoContainer" id="playerTwo">
+				<div class="playerInfo">
+					<div class="playerPfp">
+						<img id="playerTwoPfp">
+					</div>
+					<a class="playerName"></a>
+					<h2 class="playerScore">-</h2>
+				</div>
+				<div id="playerInfoGraphContainer">
+					<canvas id="playerTwoInfoGraph"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div id="tournamentContainer">
 		<div id="lobby">
 			${lobbyPlayerContainer}
@@ -60,47 +103,33 @@ var template = `
 		</div>
 		<div id="tournament">
 			<div class="round quarter left">
-				<div class="contestMatchResume quarter match one">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
-				<div class="contestMatchResume quarter match two">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume quarter match one">
+				</a>
+				<a class="contestMatchResume quarter match two">
+				</a>
 			</div>
 
 
 			<div class="round semi left">
-				<div class="contestMatchResume semi match one">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume semi match one">
+				</a>
 			</div>
 
 
 			<div class="round final">
-				<div class="contestMatchResume final match one">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume final match one">
+				</a>
 			</div>
 
 			<div class="round semi right">
-				<div class="contestMatchResume semi match two">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume semi match two">
+				</a>
 			</div>
 			<div class="round quarter right">
-				<div class="contestMatchResume quarter match three">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
-				<div class="contestMatchResume quarter match four">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume quarter match three">
+				</a>
+				<a class="contestMatchResume quarter match four">
+				</a>
 			</div>
 		</div>
 	</div>
@@ -226,8 +255,6 @@ function rightBtnKeydownEvent(e){
 		rightSlideBtn();
 }
 
-var tournament;
-
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -350,6 +377,13 @@ var tournament;
 	document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
 	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
 	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
+		elem.innerHTML = `
+		<div class="contestUserContainer left">${userContainerAnchor}</div>
+		<div class="contestUserContainer right">${userContainerAnchor}</div>
+		`
+	})
+	console.log(document.querySelector(".round.quarter.left"))
 	setNotifTabIndexes(14);
 	game();
 }
@@ -373,24 +407,30 @@ function setTournamentTreeValue(is_finished){
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
-				if (tournament[round][matchNumber][player]['username']){
-					if (round == "round_0")
-						players += 1;
-					document.querySelector(`${selector} .username`).classList.remove("waiting");
-					document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
-					if (is_finished)
-						document.querySelector(`${selector} .username`).href = `https://${hostname.host}/user/${tournament[round][matchNumber][player]['username']}`;
-					if (tournament[round][matchNumber][player]['score'] != null){
-						document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
-						document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
+				if (player != 'id'){
+					if (tournament[round][matchNumber][player]['username']){
+						if (round == "round_0")
+							players += 1;
+						document.querySelector(`${selector} .username`).classList.remove("waiting");
+						document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+						if (is_finished)
+							document.querySelector(`${selector} .username`).href = `https://${hostname.host}/user/${tournament[round][matchNumber][player]['username']}`;
+						if (tournament[round][matchNumber][player]['score'] != null){
+							document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
+							document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
+						}
+						else
+							document.querySelector(`${selector} .score`).innerText = '-';
 					}
-					else
-						document.querySelector(`${selector} .score`).innerText = '-';
+					else{
+						document.querySelector(`${selector} .username`).innerText = client.langJson['game']['waiting'];
+						document.querySelector(`${selector} .username`).classList.add("waiting");
+						document.querySelector(`${selector} .score`).innerText = '';
+					}
 				}
 				else{
-					document.querySelector(`${selector} .username`).innerText = client.langJson['game']['waiting'];
-					document.querySelector(`${selector} .username`).classList.add("waiting");
-					document.querySelector(`${selector} .score`).innerText = '';
+					document.querySelector(`${positionMap[round]}${positionMap[matchNumber]}`).href = `https://${hostname.host}/match?id=${tournament[round][matchNumber][player]}`;
+
 				}
 			})
 		})
@@ -455,8 +495,10 @@ function displayTournament(is_finished = false){
 		var minFullTreeWidth = 870;
 		gameContainer = document.getElementById("gameContainer");
 		tournamentContainer = document.getElementById("tournamentContainer");
+		matchContainer = document.getElementById("matchContainer");
 
 		gameContainer.style.setProperty("display", "none");
+		matchContainer.style.setProperty("display", "none");
 		tournamentContainer.style.setProperty("display", "flex");
 
 		const contestMatchPlacementMap = {
@@ -589,7 +631,9 @@ function game() {
 	const url =  new URL(window.location.href);
 
 	var tournamentContainer = document.getElementById("tournamentContainer");
+	var matchContainer = document.getElementById("matchContainer");
 	var gameContainer = document.getElementById("gameContainer");
+	matchContainer.style.setProperty("display", "none");
 	if (url.pathname.startsWith("/game")){
 		document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
 		const mode = url.searchParams.get("mode");
@@ -609,15 +653,15 @@ function game() {
 		let countdown = "";
 
 		if (mode == "local"){
-			document.querySelectorAll(".playerPfp").forEach(function (elem){
+			document.querySelectorAll("#gameContainer .playerPfp").forEach(function (elem){
 				elem.style.setProperty("display", "none");
 			})
-			document.querySelectorAll(".playerInfoContainer").forEach(function (elem) {
+			document.querySelectorAll("#gameContainer .playerInfoContainer").forEach(function (elem) {
 				elem.style.setProperty("justify-content", "center");
 			});
 		}
 		else{
-			document.querySelectorAll(".playerPfp").forEach(function (elem){
+			document.querySelectorAll("#gameContainer .playerPfp").forEach(function (elem){
 				elem.style.setProperty("display", "block");
 			})
 		}
@@ -647,8 +691,9 @@ function game() {
 			if (data.type === "game_init") {
 				window.removeEventListener("resize", displayTournament);
 				gameContainer.style.setProperty("display", "flex");
+				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "none");
-				checkMatchSize();
+				checkGameSize();
 				if (mode == "tournament")
 					checkTournementRound();
 				gameInit(data.message);
@@ -710,10 +755,12 @@ function game() {
 				checkTournementRound();
 				displayTournament();
 				gameContainer.style.setProperty("display", "none");
+				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
 				window.addEventListener("resize", displayTournament);
 			} else if (data.type === "tournament_end") {
 				gameContainer.style.setProperty("display", "none");
+				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
 				checkTournementRound();
 				displayWinner(data.message.winner, data.message.profile_picture)
@@ -770,20 +817,20 @@ function game() {
 
 			}
 			if (mode == "remote"){
-				if (document.getElementById("waitContainer"))
-					document.getElementById("waitContainer").remove();
+				if (document.getElementById("waitingContainer"))
+					document.getElementById("waitingContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
-			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), player1.profile_picture);
-			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), player2.profile_picture);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
 
-			document.querySelector("#playerOne > .playerName").innerText = player1.name;
-			document.querySelector("#playerTwo > .playerName").innerText = player2.name;
+			document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
+			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
 
 			if (mode == "full_ai")
-				document.getElementById("playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
+				document.querySelector("#gameContainer #playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 
-			document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
+			document.querySelectorAll("#gameContainer .playerScore").forEach(function (e){e.innerText = "-";});
 
 			var countdownBg = document.createElement("div");
 			countdownBg.id = "countdownContainer";
@@ -898,6 +945,8 @@ function game() {
 				document.querySelector("#countdownContainer").remove();
 			if (document.querySelector("#winContainer"))
 				document.querySelector("#winContainer").remove();
+			if (document.querySelector("#waitingContainer"))
+				document.querySelector("#waitingContainer").remove();
 			clearInterval(displayInterval);
 			socket.close();
 		}
@@ -936,7 +985,7 @@ function game() {
 			if (event.key == "Escape"){
 				cleanup();
 				myPushState(`https://${hostname.host}/home`);
-				document.querySelectorAll("#winContainer, #waitContainer").forEach(function (elem){
+				document.querySelectorAll("#winContainer, #waitingContainer").forEach(function (elem){
 					elem.remove();
 				})
 			}
@@ -946,7 +995,7 @@ function game() {
 			if (event.target.id == "winBlur"){
 				cleanup();
 				myPushState(`https://${hostname.host}/home`);
-				document.querySelectorAll("#winContainer, #waitContainer").forEach(function (elem){
+				document.querySelectorAll("#winContainer, #waitingContainer").forEach(function (elem){
 					elem.remove();
 				})
 			}
@@ -954,18 +1003,26 @@ function game() {
 
 		function displayWaiting(){
 			var container = document.createElement("div");
-			container.id = "waitContainer";
+			container.id = "waitingContainer";
 			container.innerHTML = `<div id="waitBlur"></div>
-				<div id="wait">${client.langJson['game']['wait']}</div>
+				<div id="waitContainer">
+					<div id="wait">${client.langJson['game']['wait']}</div>
+					<button id="quitWaitBtn">${client.langJson['game']['quit']}</button>
+				</div>
 			`
+			container.querySelector("#quitWaitBtn").onclick = function(){
+				cleanup()
+				myPushState(`https://${hostname.host}/home`);				
+			};
 			document.body.appendChild(container);
 			window.addEventListener("keydown", keydownExitEventListener);
-			document.querySelectorAll(".playerScore").forEach(function (e){e.innerText = "-";});
-			document.querySelectorAll(".playerName").forEach(function (e){e.innerText = "";});
+			document.querySelectorAll("#gameContainer .playerScore").forEach(function (e){e.innerText = "-";});
+			document.querySelectorAll("#gameContainer .playerName").forEach(function (e){e. innerText = "";});
 
-			document.querySelector("#playerOne > .playerName").innerText = client.username;
-			addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), client.pfpUrl);
-			addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
+			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = client.username;
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), client.pfpUrl);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), "");
+			
 		}
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
@@ -997,8 +1054,8 @@ function game() {
 				gamesend(mode, url.searchParams.get("room"))
 				document.getElementById("winContainer").remove();
 				if (mode == "remote"){
-					addPfpUrlToImgSrc(document.getElementById("playerOnePfp"), "");
-					addPfpUrlToImgSrc(document.getElementById("playerTwoPfp"), "");
+					addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), "");
+					addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), "");
 					displayWaiting();
 				}
 			})
@@ -1038,6 +1095,7 @@ function game() {
 				tournament = result;
 			}
 			gameContainer.style.setProperty("display", "none");
+			matchContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
 			tournamentContainer.classList.add("selectable");
 			document.querySelector(".contestMatchResume.quarter.match.one").tabIndex = 12;
@@ -1068,6 +1126,232 @@ function game() {
 
 		})()
 	}
+	else if (url.pathname.startsWith("/match")){
+		document.querySelector("#subtitle").innerText = client.langJson['game']['matchSubtitle'];
+		(async () => {
+			const fetchResult = await fetch('/api/user/get_match', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ "id": url.searchParams.get("id")}),
+				credentials: 'include'
+			})
+			const result = await fetchResult.json();
+			if (fetchResult.ok){
+
+				gameContainer.style.setProperty("display", "none");
+				matchContainer.style.setProperty("display", "flex");
+				tournamentContainer.style.setProperty("display", "none");
+				match = result;
+				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerOnePfp"), match.player_one_profile_picture);
+				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerTwoPfp"), match.player_two_profile_picture);
+	
+				document.querySelector("#matchContainer #playerOne .playerInfo > .playerName").innerText = match.player_one;
+				document.querySelector("#matchContainer #playerOne .playerInfo > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
+				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerName").innerText = match.player_two;
+				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
+				
+				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
+				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
+				document.querySelector("#matchContainer #exchange").innerText = client.langJson['match']['exchange stats'].replace("${NUMBER_OF_EXCHANGE}", match.exchanges).replace("${AVERAGE_EXCHANGE}", (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2)).replace("${LONGEST}", match.exchangesMax)
+				playerOneInfo[0] = match.player_one_goals_up;
+				playerOneInfo[1] = match.player_one_goals_mid;
+				playerOneInfo[2] = match.player_one_goals_down;
+				playerTwoInfo[0] = match.player_two_goals_up;
+				playerTwoInfo[1] = match.player_two_goals_mid;
+				playerTwoInfo[2] = match.player_two_goals_down;
+				drawMatchInfoGraph(300)
+
+			}
+			
+			setNotifTabIndexes(12);
+			(async () => (loadCurrentLang()))();
+		})()
+	}
+}
+
+
+function drawMatchInfoGraph(size){
+	if (document.getElementById("matchInfoGraph"))
+		document.getElementById("matchInfoGraph").remove();
+
+	if (document.querySelector("#playerOneInfoGraph"))
+		document.querySelector("#playerOneInfoGraph").remove();
+	if (document.querySelector("#playerTwoInfoGraph"))
+		document.querySelector("#playerTwoInfoGraph").remove();
+
+	matchInfoContainer = document.getElementById("matchInfoGraphContainer");
+
+	playerOneInfoGraphContainer = document.querySelector("#matchContainer #playerOne #playerInfoGraphContainer");
+	playerTwoInfoGraphContainer = document.querySelector("#matchContainer #playerTwo #playerInfoGraphContainer");
+
+	matchInfoGraph = document.createElement("canvas");
+	matchInfoGraph.id = "matchInfoGraph";
+
+	playerOneInfoGraph = document.createElement("canvas");
+	playerOneInfoGraph.id = "playerOneInfoGraph";
+	playerTwoInfoGraph = document.createElement("canvas");
+	playerTwoInfoGraph.id = "playerTwoInfoGraph";
+
+	matchInfoGraph.height= 400;
+	matchInfoGraph.width = matchInfoGraph.height;
+	playerOneInfoGraph.height = size;
+	playerOneInfoGraph.width = size;
+	playerTwoInfoGraph.height = size;
+	playerTwoInfoGraph.width = size;
+
+
+	matchInfoContainer.appendChild(matchInfoGraph);
+	playerOneInfoGraphContainer.appendChild(playerOneInfoGraph);
+	playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
+
+
+	if (matchInfoChart){
+		if (matchInfoChart instanceof Chart)
+			matchInfoChart.destroy();
+		else
+			matchInfoChart = null;
+	}
+	if (playerOneInfoChart){
+		if (playerOneInfoChart instanceof Chart)
+			playerOneInfoChart.destroy();
+		else
+			playerOneInfoChart = null;
+	}
+	if (playerTwoInfoChart){
+		if (playerTwoInfoChart instanceof Chart)
+			playerTwoInfoChart.destroy();
+		else
+			playerTwoInfoChart = null;
+	}
+
+	function drawPlayerOneInfo(){
+		const options = {
+			plugins: {
+				title: {
+					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+					text: client.langJson["match"]["CVmatchInfoGraph"],
+					font: {
+						family : "pong",
+						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+					},
+					display: true,
+				},
+				legend: {
+					labels: {
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						},
+					}
+				}
+			},
+		}
+		const data = {
+			datasets: [{
+				data : playerOneInfo,
+				backgroundColor : ['red','purple', 'blue'],
+				borderWidth : 0
+			}],
+			labels : [	
+				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
+			]
+		}
+
+		playerOneInfoChart = new Chart(document.querySelector("#playerOneInfoGraph"), {
+			type: 'pie',
+			data: data,
+			options: options
+		});
+	}
+
+	function drawPlayerTwoInfo(){
+		const options = {
+			plugins: {
+				title: {
+					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+					text: client.langJson["match"]["CVmatchInfoGraph"],
+					font: {
+						family : "pong",
+						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+					},
+					display: true,
+				},
+				legend: {
+					labels: {
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						},
+					}
+				}
+			},
+		}
+		const data = {
+			datasets: [{
+				data : playerTwoInfo,
+				backgroundColor : ['red','purple', 'blue'],
+				borderWidth : 0
+			}],
+			labels : [	
+				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
+			]
+		}
+
+		playerTwoInfoChart = new Chart(document.querySelector("#playerTwoInfoGraph"), {
+			type: 'pie',
+			data: data,
+			options: options
+		});
+	}
+
+	function drawMatchInfo(){
+		const options = {
+			plugins: {
+				title: {
+					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+					text: client.langJson["match"]["CVmatchInfoGraph"],
+					font: {
+						family : "pong",
+						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+					},
+					display: true,
+				},
+				legend: {
+					labels: {
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						},
+					}
+				}
+			},
+		}
+
+		const data = {
+			datasets: [{
+				data : [playerOneInfo[0] + playerTwoInfo[0], playerOneInfo[1] + playerTwoInfo[1], playerOneInfo[2] + playerTwoInfo[2]],
+				backgroundColor : ['red','purple', 'blue'],
+				borderWidth : 0
+			}],
+			labels : [	
+				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
+			]
+		}
+
+		matchInfoChart = new Chart(document.getElementById("matchInfoGraph"), {
+			type: 'pie',
+			data: data,
+			options: options
+		});
+	}
+	drawMatchInfo();
+	drawPlayerOneInfo();
+	drawPlayerTwoInfo();
+	matchInfoChart.resize(400,400);
+	playerOneInfoChart.resize(size,size);
+	playerTwoInfoChart.resize(size,size);
 }
 
 function setTournamentAriaLabeL(){

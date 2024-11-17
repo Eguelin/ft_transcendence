@@ -26,6 +26,7 @@ const routes = {
 	"/": `https://${hostname.host}/scripts/home.js`,
 	"/game": `https://${hostname.host}/scripts/game.js`,
 	"/tournament": `https://${hostname.host}/scripts/game.js`,
+	"/match": `https://${hostname.host}/scripts/game.js`,
 	"/settings": `https://${hostname.host}/scripts/settings.js`,
 	"/user": `https://${hostname.host}/scripts/user.js`,
 	"/dashboard": `https://${hostname.host}/scripts/dashboard.js`,
@@ -77,6 +78,7 @@ class Client {
 	mainTextRgb;
 	fontAmplifier;
 	doNotDisturb;
+	displayName;
 
 	constructor() {
 		return (async () => {
@@ -98,7 +100,16 @@ class Client {
 					this.friends = result.friends;
 					this.friend_requests = result.friend_requests;
 					this.blocked_user = result.blocked_user;
-					this.recentMatches = result.matches;
+					
+					
+					var startDate = new Date();
+					try{
+						this.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
+					}
+					catch{
+						this.recentMatches = {};
+					}
+					
 					this.#is_admin = result.is_admin;
 					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 					this.fontAmplifier = result.font_amplifier;
@@ -115,6 +126,13 @@ class Client {
 
 					usernameBtn.innerHTML = result.username;
 
+					try{
+						this.displayName = result.display_name;
+					}
+					catch{
+						this.displayName = result.username;
+					}
+
 					addPfpUrlToImgSrc(userPfp, result.pfp)
 
 					fetch('/api/user/update', {
@@ -130,7 +148,8 @@ class Client {
 				else if (fetchResult.status == 401)
 					return null
 			}
-			catch {
+			catch (error){
+				console.error(error);
 				var template = `
 				<div id="pageContentContainer">
 					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
@@ -1214,7 +1233,7 @@ function setNotifTabIndexes(tabIdx){
 }
 
 function createMatchResumeContainer(match, username) {
-	matchContainer = ft_create_element("div", {"class" : "matchDescContainer"});
+	matchContainer = ft_create_element("a", {"class" : "matchDescContainer"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
 
@@ -1271,12 +1290,13 @@ function createMatchResumeContainer(match, username) {
 
 		matchContainer.appendChild(result);
 		matchContainer.appendChild(scoreContainer);
+		matchContainer.href = `https://${hostname.host}/match?id=${match.id}`;
 	}
 	else if (match.type == "tournament"){
 		result.classList.add("tournament");
 		result.innerHTML = client.langJson['user']['.tournament'];
 
-		result.href = `https://${hostname.host}/tournament?id=${match.id}`;
+		matchContainer.href = `https://${hostname.host}/tournament?id=${match.id}`;
 
 		matchContainer.appendChild(result);
 	}
@@ -1367,12 +1387,14 @@ function checkResizeWindow(){
 	}
 
 	if (currentPage == "home" || currentPage == "user"){
-		setTimeout(checkMatchResumeSize, 1)
+		checkMatchResumeSize()
 	}
 	if (currentPage == "game")
-		checkMatchSize();
+		checkGameSize();
 	if (currentPage == "game" || currentPage == "tournament")
 		setTimeout(checkWinnerDisplaySize, 1)
+	if (currentPage == "match")
+		checkMatchSize();
 
 }
 
@@ -1391,7 +1413,7 @@ function checkMatchResumeSize(){
 			var width = matches[i].getBoundingClientRect().width;
 			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
 			
-			if (width * 5 <= getWindowWidth() && ch < baseWidth){
+			if (width * matches.length <= getWindowWidth() && ch < baseWidth){
 				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
 					elem.style.setProperty("width", `${ch + 1}ch`);
 				})
@@ -1403,7 +1425,7 @@ function checkMatchResumeSize(){
 		}
 		while (1 && baseWidth > 1){
 			width = matches[i].getBoundingClientRect().width;
-			if (width * 5 > getWindowWidth()){
+			if (width * matches.length > getWindowWidth()){
 				baseWidth--;
 				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
 					elem.style.setProperty("width", `${baseWidth}ch`);
@@ -1415,7 +1437,7 @@ function checkMatchResumeSize(){
 	}
 }
 
-function checkMatchSize(){
+function checkGameSize(){
 	var container = document.querySelector("#gameContainer")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
@@ -1423,14 +1445,51 @@ function checkMatchSize(){
 	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
-			currentFontSize += 1;
 		})
+		currentFontSize += 1;
 	}
 	while (getElemWidth(container) > anchor.right){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) - 1}px`)
 		})
 	}
+}
+
+function checkMatchSize(){
+	var container = document.querySelector("#matchContainer")
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+	var graphBaseSize = 300;
+	var graphCurrentSize;
+	if (playerOneInfoChart)
+		graphCurrentSize = playerOneInfoChart.width;
+	else
+		graphCurrentSize = 300;
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
+	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
+	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
+		console.log(`fontSize : ${currentFontSize} | graphSize : ${graphCurrentSize}`)
+		if (currentFontSize < baseFontSize){
+			container.querySelectorAll(".playerName").forEach(function (elem) {
+				elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
+			})
+			currentFontSize += 1;
+
+		}
+		if (graphCurrentSize + 5 <= graphBaseSize){
+			graphCurrentSize += 5;
+			drawMatchInfoGraph(graphCurrentSize);
+		}
+	}
+	while (getElemWidth(container) > anchor.right && currentFontSize > 1 && graphCurrentSize > 100){
+		console.log(currentFontSize);
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
+		})
+		currentFontSize -= 1;
+		graphCurrentSize -= 5;
+		drawMatchInfoGraph(graphCurrentSize);
+	}
+
 }
 
 function checkWinnerDisplaySize(){
