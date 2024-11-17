@@ -190,6 +190,20 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 		gap: 4rem;
 	}
 
+	#matchPlayersInfo .playerInfoContainer{
+		flex-direction: column !important;
+	}
+
+	#matchPlayersInfo .playerInfo{
+		height: unset !important;
+		gap:1ch;
+		margin-top: 1ch;
+	}
+
+	#matchPlayersInfo .playerPfp{
+		display: none;
+	}
+
 	.game{
 		rotate: 90deg;
 	}
@@ -495,4 +509,10 @@ a.playerName:hover, a.playerName:focus{
 
 #matchPlayersInfo .playerInfo > *{
 	font-size: 1em;
+}
+
+@media screen and (max-width:600px) {
+	#matchInfo{
+		flex-direction: column;
+	}
 }
