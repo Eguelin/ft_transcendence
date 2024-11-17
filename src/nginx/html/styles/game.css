@@ -490,12 +490,26 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 }
 
-a.playerName{
-	font-size: 1.5rem;
+.playerNamesContainer{
+	justify-items: center;
+}
+
+.playerNamesContainer .playerName{
+	width: fit-content;
+	font-size: 1.5em;
 	font-weight: bold;
 }
-a.playerName:hover, a.playerName:focus{
+
+.playerNamesContainer .playerDisplayName{
+	width: fit-content;
+	font-size: 1em;
+	opacity: .8;
+	display: block;
+}
+
+.playerNamesContainer a:hover, .playerNamesContainer a:focus{
 	text-decoration: underline;
+	opacity: 1;
 }
 
 #matchPlayersInfo .playerInfo .playerPfp{
@@ -505,6 +519,7 @@ a.playerName:hover, a.playerName:focus{
 
 #matchPlayersInfo .playerInfo{
 	font-size: 1rem;
+	width: 17ch;
 }
 
 #matchPlayersInfo .playerInfo > *{
@@ -545,4 +560,8 @@ table.landscape, table.portrait{
 
 table.landscape{
 	height: 40%;
+}
+
+.contestUserContainer .username.displayName{
+	font-style: italic;
 }
