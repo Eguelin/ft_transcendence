@@ -804,6 +804,7 @@ class GameTournament(GameRemote):
 				self.playerRight = self.playerRight.copy()
 		else:
 			self.winner =PlayerRemote(None)
+			await self.winner.init(None, None)
 			self.winnerSide = "None"
 
 		self.running = False
