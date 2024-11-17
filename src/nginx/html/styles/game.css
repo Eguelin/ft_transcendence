@@ -433,7 +433,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 #matchPlayersInfo, #matchInfo{
 	display: flex;
 	flex-direction: row;
-	flex: 1;
+	flex: 1;;
+}
+
+#matchContainer, #matchPlayersInfo{
+	gap: 1rem;
 }
 
 #matchInfo > *{
@@ -442,4 +446,27 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 #matchInfoGraph{
 	justify-self: center;
+}
+
+#matchContainer{
+	height: 100%;
+}
+
+#matchContainer .playerInfoContainer{
+	flex-direction: row;
+	background: var(--hover-text-rgb);
+}
+
+
+#matchContainer .playerInfoContainer#playerTwo{
+	flex-direction: row-reverse;
+}
+
+.playerInfo{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
 }
