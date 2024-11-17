@@ -1469,7 +1469,6 @@ function checkMatchSize(){
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
 	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
-		console.log(`fontSize : ${currentFontSize} | graphSize : ${graphCurrentSize}`)
 		if (currentFontSize < baseFontSize){
 			container.querySelectorAll(".playerName").forEach(function (elem) {
 				elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
@@ -1483,7 +1482,6 @@ function checkMatchSize(){
 		}
 	}
 	while (getElemWidth(container) > anchor.right && (currentFontSize > 8 || graphCurrentSize > 200)){
-		console.log(currentFontSize);
 		if (currentFontSize > 8){
 			container.querySelectorAll(".playerName").forEach(function (elem) {
 				elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
