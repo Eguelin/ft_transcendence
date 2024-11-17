@@ -186,7 +186,15 @@
 		"mid": "Center",
 		"down": "Bottom corner",
 		"CVmatchInfoGraph": "Most hit zone",
-		"points" : "${POINTS} points"
+		"points" : "${POINTS} points",
+		".exchangeTablesCaption" : "Exchange stats",
+		".portrait #totalExchangeTitle" : "Total",
+		".portrait #averageExchangeTitle" : "Average per point",
+		".portrait #longestExchangeTitle" : "Longest",
+
+		".landscape #totalExchangeTitle" : "Total",
+		".landscape #averageExchangeTitle" : "Average per point",
+		".landscape #longestExchangeTitle" : "Longest"
 	},
 	"404":{
 		"#title" : "ERROR 404",

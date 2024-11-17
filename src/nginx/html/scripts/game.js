@@ -57,7 +57,35 @@ var template = `
 	<div id="matchContainer">
 		<div id="matchInfo"> 
 			<div id="exchangeContainer">
-				<a id="exchange"></a>
+				<table class="landscape">
+					<caption class="exchangeTablesCaption"></caption>
+					<tr>
+						<th scope="row" id="totalExchangeTitle"></th>
+						<td id="totalExchange"></td>
+					</tr>
+					<tr>
+						<th scope="row" id="averageExchangeTitle"></th>
+						<td id="averageExchange"></td>
+					</tr>
+					<tr>
+						<th scope="row" id="longestExchangeTitle"></th>						
+						<td id="longestExchange"></td>
+					</tr>
+				</table>
+				<table class="portrait">
+					<caption class="exchangeTablesCaption"></caption>
+					<tr>
+						<th scope="col" id="totalExchangeTitle"></th>
+						<th scope="col" id="averageExchangeTitle"></th>
+						<th scope="col" id="longestExchangeTitle"></th>
+						
+					</tr>
+					<tr>
+						<td id="totalExchange"></td>
+						<td id="averageExchange"></td>
+						<td id="longestExchange"></td>
+					</tr>
+				</table>
 			</div>
 			<div id="matchInfoGraphContainer">
 				<canvas id="matchInfoGraph"></canvas>
@@ -1154,7 +1182,14 @@ function game() {
 				
 				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
 				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
-				document.querySelector("#matchContainer #exchange").innerText = client.langJson['match']['exchange stats'].replace("${NUMBER_OF_EXCHANGE}", match.exchanges).replace("${AVERAGE_EXCHANGE}", (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2)).replace("${LONGEST}", match.exchangesMax)
+				
+				document.querySelector("#matchContainer .portrait #totalExchange").innerText = match.exchanges;
+				document.querySelector("#matchContainer .portrait #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
+				document.querySelector("#matchContainer .portrait #longestExchange").innerText = match.exchangesMax;
+
+				document.querySelector("#matchContainer .landscape #totalExchange").innerText = match.exchanges;
+				document.querySelector("#matchContainer .landscape #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
+				document.querySelector("#matchContainer .landscape #longestExchange").innerText = match.exchangesMax;
 				playerOneInfo[0] = match.player_one_goals_up;
 				playerOneInfo[1] = match.player_one_goals_mid;
 				playerOneInfo[2] = match.player_one_goals_down;
@@ -1162,6 +1197,7 @@ function game() {
 				playerTwoInfo[1] = match.player_two_goals_mid;
 				playerTwoInfo[2] = match.player_two_goals_down;
 				drawMatchInfoGraph(300)
+				checkMatchSize()
 
 			}
 			
