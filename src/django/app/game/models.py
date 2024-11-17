@@ -107,7 +107,7 @@ class Match(models.Model):
 	winner = models.ForeignKey(
 		User,
 		on_delete=models.SET(create_nobody),
-		related_name="winner"
+		related_name="matches_won"
 	)
 	exchanges = models.IntegerField(default=0)
 	exchangesMax = models.IntegerField(default=0)
@@ -150,6 +150,11 @@ class TournamentMatch(Match):
 class TournamentModel(models.Model):
 	date = models.DateField(auto_now=False, auto_now_add=True)
 	matches = models.ManyToManyField(TournamentMatch, related_name="matches")
+	winner = models.ForeignKey(
+		User,
+		on_delete=models.SET(create_nobody),
+		related_name="tournaments_won"
+	)
 
 	def addMatchToTournament(self, game):
 		self.matches.add(TournamentMatch.createMatchFromGame(TournamentMatch, game))
