@@ -1457,7 +1457,9 @@ function checkGameSize(){
 
 function checkMatchSize(){
 	var container = document.querySelector("#matchContainer")
-	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
+	if (getWindowHeight() < getWindowWidth())
+		baseFontSize *= 1.5;
 	var graphBaseSize = 300;
 	var graphCurrentSize;
 	if (playerOneInfoChart)
@@ -1480,14 +1482,18 @@ function checkMatchSize(){
 			drawMatchInfoGraph(graphCurrentSize);
 		}
 	}
-	while (getElemWidth(container) > anchor.right && currentFontSize > 1 && graphCurrentSize > 100){
+	while (getElemWidth(container) > anchor.right && (currentFontSize > 8 || graphCurrentSize > 200)){
 		console.log(currentFontSize);
-		container.querySelectorAll(".playerName").forEach(function (elem) {
-			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
-		})
-		currentFontSize -= 1;
-		graphCurrentSize -= 5;
-		drawMatchInfoGraph(graphCurrentSize);
+		if (currentFontSize > 8){
+			container.querySelectorAll(".playerName").forEach(function (elem) {
+				elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
+			})
+			currentFontSize -= 1;
+		}
+		if (graphCurrentSize > 200) {
+			graphCurrentSize -= 5;
+			drawMatchInfoGraph(graphCurrentSize);
+		}
 	}
 
 }
