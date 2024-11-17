@@ -709,7 +709,7 @@ class Tournament():
 
 	@sync_to_async
 	def setTournament(self):
-		self.model = models.TournamentModel()
+		self.model = models.TournamentModel(winner=User.objects.get(username='Nobody'))
 		self.model.save()
 
 	async def moveWinner(self, round, match, side, winner):
@@ -749,13 +749,15 @@ class Tournament():
 			'winner': winner.user.username,
 			'profile_picture': winner.profile.profile_picture
 		})
-		await self.save()
+		await self.save(winner)
 
 	@sync_to_async
-	def save(self):
+	def save(self, winner):
 		for player in self.players:
 			if User.objects.filter(username=player.user.username).exists():
 				player.user.profile.tournaments.add(self.model)
+		self.model.winner = winner.user
+		self.model.save()
 
 class GameTournament(GameRemote):
 	def __init__(self, tournament, match, round):
