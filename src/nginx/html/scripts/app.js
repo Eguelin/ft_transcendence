@@ -1458,8 +1458,6 @@ function checkGameSize(){
 function checkMatchSize(){
 	var container = document.querySelector("#matchContainer")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
-	if (getWindowHeight() < getWindowWidth())
-		baseFontSize *= 1.5;
 	var graphBaseSize = 300;
 	var graphCurrentSize;
 	if (playerOneInfoChart)
@@ -1470,11 +1468,10 @@ function checkMatchSize(){
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
 	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
 		if (currentFontSize < baseFontSize){
-			container.querySelectorAll(".playerName").forEach(function (elem) {
-				elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
+			container.querySelectorAll(".playerInfo").forEach(function (elem) {
+				elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
 			})
 			currentFontSize += 1;
-
 		}
 		if (graphCurrentSize + 5 <= graphBaseSize){
 			graphCurrentSize += 5;
@@ -1483,7 +1480,7 @@ function checkMatchSize(){
 	}
 	while (getElemWidth(container) > anchor.right && (currentFontSize > 8 || graphCurrentSize > 200)){
 		if (currentFontSize > 8){
-			container.querySelectorAll(".playerName").forEach(function (elem) {
+			container.querySelectorAll(".playerInfo").forEach(function (elem) {
 				elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 			})
 			currentFontSize -= 1;

@@ -97,7 +97,10 @@ var template = `
 					<div class="playerPfp">
 						<img id="playerOnePfp">
 					</div>
-					<a class="playerName"></a>
+					<div class="playerNamesContainer">
+						<a class="playerName"></a>
+						<a class="playerDisplayName"></a>
+					</div>
 					<h2 class="playerScore">-</h2>
 				</div>
 				<div id="playerInfoGraphContainer">
@@ -109,7 +112,10 @@ var template = `
 					<div class="playerPfp">
 						<img id="playerTwoPfp">
 					</div>
-					<a class="playerName"></a>
+					<div class="playerNamesContainer">
+						<a class="playerName"></a>
+						<a class="playerDisplayName"></a>
+					</div>
 					<h2 class="playerScore">-</h2>
 				</div>
 				<div id="playerInfoGraphContainer">
@@ -430,17 +436,19 @@ function setTournamentTreeValue(is_finished){
 		"playerLeft" : ".contestUserContainer.left",
 		"playerRight" : ".contestUserContainer.right",
 	}
-	var players = 0;
 	Object.keys(tournament).forEach(function(round){
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
 				if (player != 'id'){
 					if (tournament[round][matchNumber][player]['username']){
-						if (round == "round_0")
-							players += 1;
 						document.querySelector(`${selector} .username`).classList.remove("waiting");
-						document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+						if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])
+							document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+						else{
+							document.querySelector(`${selector} .username`).classList.add("displayName")
+							document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['display_name'];
+						}
 						if (is_finished)
 							document.querySelector(`${selector} .username`).href = `https://${hostname.host}/user/${tournament[round][matchNumber][player]['username']}`;
 						if (tournament[round][matchNumber][player]['score'] != null){
@@ -1175,10 +1183,18 @@ function game() {
 				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerOnePfp"), match.player_one_profile_picture);
 				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerTwoPfp"), match.player_two_profile_picture);
 	
-				document.querySelector("#matchContainer #playerOne .playerInfo > .playerName").innerText = match.player_one;
-				document.querySelector("#matchContainer #playerOne .playerInfo > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
-				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerName").innerText = match.player_two;
-				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = match.player_one;
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_one_display_name}`;
+				
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_one}`;
+				
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = match.player_two;
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_two_display_name}`;
+				
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_two}`;
+				
 				
 				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
 				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
