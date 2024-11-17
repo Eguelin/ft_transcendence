@@ -423,16 +423,23 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 #exchangeContainer{
 	text-align: left;
-	flex: 1;
 	padding: 1rem;
 }
 
-#matchInfoGraph{
-	flex: 1;
+#matchContainer{
+	flex-direction: column;
 }
-
 
 #matchPlayersInfo, #matchInfo{
 	display: flex;
 	flex-direction: row;
+	flex: 1;
+}
+
+#matchInfo > *{
+	flex: 1;
+}
+
+#matchInfoGraph{
+	justify-self: center;
 }
