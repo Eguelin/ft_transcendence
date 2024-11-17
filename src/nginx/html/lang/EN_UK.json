@@ -185,7 +185,8 @@
 		"up": "Top corner",
 		"mid": "Center",
 		"down": "Bottom corner",
-		"CVmatchInfoGraph": "Most hit zone"
+		"CVmatchInfoGraph": "Most hit zone",
+		"points" : "${POINTS} points"
 	},
 	"404":{
 		"#title" : "ERROR 404",

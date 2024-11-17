@@ -67,7 +67,7 @@ var template = `
 					<div class="playerPfp">
 						<img id="playerOnePfp">
 					</div>
-					<h2 class="playerName"></h2>
+					<a class="playerName"></a>
 					<h2 class="playerScore">-</h2>
 				</div>
 				<div id="playerInfoGraphContainer">
@@ -79,7 +79,7 @@ var template = `
 					<div class="playerPfp">
 						<img id="playerTwoPfp">
 					</div>
-					<h2 class="playerName"></h2>
+					<a class="playerName"></a>
 					<h2 class="playerScore">-</h2>
 				</div>
 				<div id="playerInfoGraphContainer">
@@ -1146,10 +1146,12 @@ function game() {
 				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerTwoPfp"), match.player_two_profile_picture);
 	
 				document.querySelector("#matchContainer #playerOne .playerInfo > .playerName").innerText = match.player_one;
+				document.querySelector("#matchContainer #playerOne .playerInfo > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
 				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerName").innerText = match.player_two;
+				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
 				
-				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = match.player_one_pts;
-				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = match.player_two_pts;
+				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
+				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
 				document.querySelector("#matchContainer #exchange").innerText = client.langJson['match']['exchange stats'].replace("${NUMBER_OF_EXCHANGE}", match.exchanges).replace("${AVERAGE_EXCHANGE}", (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2)).replace("${LONGEST}", match.exchangesMax)
 				drawMatchInfoGraph(match.player_one_goals_up, match.player_two_goals_up, match.player_one_goals_mid, match.player_two_goals_mid, match.player_one_goals_down, match.player_two_goals_down)
 
