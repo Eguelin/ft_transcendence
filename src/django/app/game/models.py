@@ -39,16 +39,29 @@ class MatchManager(models.Manager):
 			player_two = User.objects.get_or_create(username=userTwo)[0]
 			player_two.save()
 
-		match = self.create(player_one=player_one, player_two=player_two)
-		match.player_one_pts = random.randint(0, 10)
-		match.player_two_pts = random.randint(0, 10)
-		match.save()
-		match.winner = player_one if match.player_one_pts > match.player_two_pts else player_two
-		match.save()
+		p1 = random.randint(0,10)
+		p2 = random.randint(0,10)
+		me = random.randint(2,4)
+		match = self.create(
+			player_one=player_one, 
+			player_two=player_two,
+			player_one_pts = p1,
+			player_two_pts = p2,
+			winner = player_one if p1 > p2 else player_two,
+			player_one_goals_up= random.randint(0, 3),
+			player_two_goals_up= random.randint(0, 3),
+			player_one_goals_mid= random.randint(0, 3),
+			player_two_goals_mid= random.randint(0, 3),
+			player_one_goals_down= random.randint(0, 3),
+			player_two_goals_down= random.randint(0, 3),
+			exchangesMax = me,
+			exchanges = random.randint(me, 10),
+			)
 		match.date = startDate + datetime.timedelta(seconds=random.randint(0, int((endDate - startDate).total_seconds())))
 		match.save()
 		player_one.profile.matches.add(match)
 		player_two.profile.matches.add(match)
+
 		return match
 
 	def addMatch(self, game):

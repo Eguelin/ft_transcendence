@@ -40,6 +40,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	height: inherit;
 	display: flex;
 	padding-left: 1rem;
+	align-items: center;
 }
 
 #browseFlexContainer div{
@@ -53,7 +54,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 #goHomeButton{
 	mask-image:url("../icons/home.svg");
 	background:var(--main-text-rgb);
-	height:inherit;
+	height:4rem;
 	width:4rem;
 	margin: 0 !important;
 	mask-size:contain;

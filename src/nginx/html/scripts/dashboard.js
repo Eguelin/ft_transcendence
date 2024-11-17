@@ -207,12 +207,24 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         return ;    
     }
         
-    if (chartAverage)
-        chartAverage.destroy();
-    if (chartAbs)
-        chartAbs.destroy();
-	if (chartStats)
-		chartStats.destroy();
+    if (chartAverage){
+		if (chartAverage instanceof Chart)
+        	chartAverage.destroy();
+		else
+			chartAverage = null
+	}
+    if (chartAbs){
+		if (chartAbs instanceof Chart)
+        	chartAbs.destroy();
+		else
+			chartAbs = null
+	}
+	if (chartStats){
+		if (chartStats instanceof Chart)
+			chartStats.destroy();
+		else
+			chartStats = null
+	}
 
 	if (document.querySelector("#notPlayedPeriod"))
 		document.querySelector("#notPlayedPeriod").remove();

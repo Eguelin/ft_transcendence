@@ -98,7 +98,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	width: 15ch;
 }
 
-#winContainer, #waitContainer, #countdownContainer{
+#winContainer, #waitingContainer, #countdownContainer{
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -137,16 +137,28 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	align-items: center;
 }
 
-#wait {
+#waitContainer{
 	position: absolute;
 	z-index: 11;
-
-	color: var(--main-text-rgb);
-	width: 100%;
-	font-size: 2rem;
-
 	top:50%;
 	translate: 0 -50%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 3rem;
+}
+
+#waitContainer *{
+	position: relative;
+	left: 50%;
+	translate: -50%;
+}
+
+#wait {
+
+	color: var(--main-text-rgb);
+	font-size: 2rem;
+
 	text-align: center;
 	animation: waitAnim 5s infinite;
 }
@@ -245,13 +257,18 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 
 .contestUserContainer{
 	display: flex;
-	width: fit-content;
+	width: 17ch;
 	align-items: center;
 	gap: 1ch;
 }
 .contestUserContainer .username{
 	text-align: left;
-	min-width: 15ch;
+	min-width: fit-content;
+}
+
+.contestUserContainer .score{
+	width: 100%;
+	text-align: right;
 }
 
 .contestUserContainer.loser .username{
@@ -394,7 +411,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 	font-size: 3rem !important;
 }
 
-#tournamentContainer.selectable a:focus, #tournamentContainer.selectable a:hover{
+#tournamentContainer.selectable .username:focus, #tournamentContainer.selectable .username:hover{
 	opacity: 1;
 	text-decoration: underline;
 }
@@ -407,4 +424,75 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 #winContainer *{
 	transition: none;
 	text-wrap: nowrap;
+}
+
+#exchangeContainer{
+	text-align: left;
+	padding: 1rem;
+}
+
+#matchContainer{
+	flex-direction: column;
+}
+
+#matchPlayersInfo, #matchInfo{
+	display: flex;
+	flex-direction: row;
+	flex: 1;;
+}
+
+#matchContainer, #matchPlayersInfo{
+	gap: 1rem;
+}
+
+#matchInfo > *{
+	flex: 1;
+}
+
+#matchInfoGraph{
+	justify-self: center;
+}
+
+#matchContainer{
+	height: 100%;
+}
+
+#matchContainer .playerInfoContainer{
+	flex-direction: row;
+	background: var(--hover-text-rgb);
+}
+
+
+#matchContainer .playerInfoContainer#playerTwo{
+	flex-direction: row-reverse;
+}
+
+.playerInfo{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+a.playerName{
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+a.playerName:hover, a.playerName:focus{
+	text-decoration: underline;
+}
+
+#matchPlayersInfo .playerInfo .playerPfp{
+	width: 7rem;
+	height: 7rem;
+}
+
+#matchPlayersInfo .playerInfo{
+	font-size: 1rem;
+}
+
+#matchPlayersInfo .playerInfo > *{
+	font-size: 1em;
 }
