@@ -12,6 +12,8 @@ var treeCanva;
 var tournament = null;
 var match = null;
 
+var matchInfoChart = null;
+
 var userContainerAnchor = `
 <div class="anchor"></div>
 <a tabindex="-1" class="username"></a>
@@ -55,7 +57,9 @@ var template = `
 			<div id="exchangeContainer">
 				<a id="exchange"></a>
 			</div>
-			<canvas id="matchInfoGraph"></canvas>
+			<div id="matchInfoGraphContainer">
+				<canvas id="matchInfoGraph"></canvas>
+			</div>
 		</div>
 		<div id="matchPlayersInfo">
 			<div class="playerInfoContainer" id="playerOne">
@@ -1123,6 +1127,10 @@ function game() {
 			})
 			const result = await fetchResult.json();
 			if (fetchResult.ok){
+
+				gameContainer.style.setProperty("display", "none");
+				matchContainer.style.setProperty("display", "flex");
+				tournamentContainer.style.setProperty("display", "none");
 				match = result;
 				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerOnePfp"), match.player_one_profile_picture);
 				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerTwoPfp"), match.player_two_profile_picture);
@@ -1133,16 +1141,78 @@ function game() {
 				document.querySelector("#matchContainer #playerOne > .playerScore").innerText = match.player_one_pts;
 				document.querySelector("#matchContainer #playerTwo > .playerScore").innerText = match.player_two_pts;
 				document.querySelector("#matchContainer #exchange").innerText = client.langJson['match']['exchange stats'].replace("${NUMBER_OF_EXCHANGE}", match.exchanges).replace("${AVERAGE_EXCHANGE}", (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2)).replace("${LONGEST}", match.exchangesMax)
-				//"During this match, there was a total of ${NUMBER_OF_EXCHANGE}, with an average of ${AVERAGE_EXCHANGE}, and the longest exchange being of ${LONGEST}"
+				drawMatchInfoGraph(match.player_one_goals_up, match.player_two_goals_up, match.player_one_goals_mid, match.player_two_goals_mid, match.player_one_goals_down, match.player_two_goals_down)
+
 			}
 			
-			gameContainer.style.setProperty("display", "none");
-			matchContainer.style.setProperty("display", "block");
-			tournamentContainer.style.setProperty("display", "none");
 			setNotifTabIndexes(12);
 			(async () => (loadCurrentLang()))();
 		})()
 	}
+}
+
+function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one_goals_mid, player_two_goals_mid, player_one_goals_down, player_two_goals_down){
+	if (document.getElementById("matchInfoGraph"))
+		document.getElementById("matchInfoGraph").remove();
+
+	matchInfoContainer = document.getElementById("matchInfoGraphContainer");
+
+	matchInfoGraph = document.createElement("canvas");
+	matchInfoGraph.id = "matchInfoGraph";
+
+	matchInfoGraph.height= 400;
+	matchInfoGraph.width = matchInfoGraph.height;
+
+	matchInfoContainer.appendChild(matchInfoGraph);
+
+	if (matchInfoChart){
+		if (matchInfoChart instanceof Chart)
+			matchInfoChart.destroy();
+		else
+			matchInfoChart = null;
+	}
+	const duration = 500;
+	function drawMatchInfo(){
+		data = {
+			datasets: [{
+				data : [player_one_goals_up + player_two_goals_up, player_one_goals_mid + player_two_goals_mid, player_one_goals_down + player_two_goals_down],
+				backgroundColor : ['red','purple', 'blue'],
+				borderWidth : 0
+			}],
+			labels : [	
+				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
+			]
+		}
+		matchInfoChart = new Chart(document.getElementById("matchInfoGraph"), {
+			type: 'pie',
+			data: data,
+			options:{
+				plugins: {
+					title: {
+						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+						text: client.langJson["match"]["CVmatchInfoGraph"],
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+						},
+						display: true,
+					},
+					legend: {
+						labels: {
+							font: {
+								family : "pong",
+								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+							},
+						}
+					}
+				},
+			}
+		});
+	}
+	drawMatchInfo();
+	matchInfoChart.resize(400,400)
+	console.log(matchInfoGraph.width);
+
 }
 
 function setTournamentAriaLabeL(){
