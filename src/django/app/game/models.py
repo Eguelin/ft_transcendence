@@ -43,7 +43,7 @@ class MatchManager(models.Manager):
 		p2 = random.randint(0,10)
 		me = random.randint(2,4)
 		match = self.create(
-			player_one=player_one, 
+			player_one=player_one,
 			player_two=player_two,
 			player_one_pts = p1,
 			player_two_pts = p2,
