@@ -1392,9 +1392,9 @@ function checkResizeWindow(){
 	if (currentPage == "game")
 		checkGameSize();
 	if (currentPage == "game" || currentPage == "tournament")
-		setTimeout(checkWinnerDisplaySize, 1)/*
+		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "match")
-		checkMatchSize();*/
+		checkMatchSize();
 
 }
 
@@ -1454,27 +1454,43 @@ function checkGameSize(){
 		})
 	}
 }
-/*
+
 function checkMatchSize(){
 	var container = document.querySelector("#matchContainer")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+	var graphBaseSize = 300;
+	var graphCurrentSize;
+	if (playerOneInfoChart)
+		graphCurrentSize = playerOneInfoChart.width;
+	else
+		graphCurrentSize = 300;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
-		container.querySelectorAll(".playerName").forEach(function (elem) {
-			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
-		})
-		currentFontSize += 1;
+	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
+		console.log(`fontSize : ${currentFontSize} | graphSize : ${graphCurrentSize}`)
+		if (currentFontSize < baseFontSize){
+			container.querySelectorAll(".playerName").forEach(function (elem) {
+				elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
+			})
+			currentFontSize += 1;
+
+		}
+		if (graphCurrentSize + 5 <= graphBaseSize){
+			graphCurrentSize += 5;
+			drawMatchInfoGraph(graphCurrentSize);
+		}
 	}
-	while (getElemWidth(container) > anchor.right && currentFontSize > 1){
+	while (getElemWidth(container) > anchor.right && currentFontSize > 1 && graphCurrentSize > 100){
 		console.log(currentFontSize);
 		container.querySelectorAll(".playerName").forEach(function (elem) {
-			elem.style.setProperty("font-size", `${currentFontSize}px`)
+			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
 		currentFontSize -= 1;
+		graphCurrentSize -= 5;
+		drawMatchInfoGraph(graphCurrentSize);
 	}
 
-}*/
+}
 
 function checkWinnerDisplaySize(){
 	var container = document.querySelector("#winBg")
