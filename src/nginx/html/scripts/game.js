@@ -101,47 +101,33 @@ var template = `
 		</div>
 		<div id="tournament">
 			<div class="round quarter left">
-				<div class="contestMatchResume quarter match one">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
-				<div class="contestMatchResume quarter match two">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume quarter match one">
+				</a>
+				<a class="contestMatchResume quarter match two">
+				</a>
 			</div>
 
 
 			<div class="round semi left">
-				<div class="contestMatchResume semi match one">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume semi match one">
+				</a>
 			</div>
 
 
 			<div class="round final">
-				<div class="contestMatchResume final match one">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume final match one">
+				</a>
 			</div>
 
 			<div class="round semi right">
-				<div class="contestMatchResume semi match two">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume semi match two">
+				</a>
 			</div>
 			<div class="round quarter right">
-				<div class="contestMatchResume quarter match three">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
-				<div class="contestMatchResume quarter match four">
-					<div class="contestUserContainer left">${userContainerAnchor}</div>
-					<div class="contestUserContainer right">${userContainerAnchor}</div>
-				</div>
+				<a class="contestMatchResume quarter match three">
+				</a>
+				<a class="contestMatchResume quarter match four">
+				</a>
 			</div>
 		</div>
 	</div>
@@ -389,6 +375,13 @@ function rightBtnKeydownEvent(e){
 	document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
 	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
 	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
+		elem.innerHTML = `
+		<div class="contestUserContainer left">${userContainerAnchor}</div>
+		<div class="contestUserContainer right">${userContainerAnchor}</div>
+		`
+	})
+	console.log(document.querySelector(".round.quarter.left"))
 	setNotifTabIndexes(14);
 	game();
 }
@@ -412,24 +405,30 @@ function setTournamentTreeValue(is_finished){
 		Object.keys(tournament[round]).forEach(function(matchNumber){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
-				if (tournament[round][matchNumber][player]['username']){
-					if (round == "round_0")
-						players += 1;
-					document.querySelector(`${selector} .username`).classList.remove("waiting");
-					document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
-					if (is_finished)
-						document.querySelector(`${selector} .username`).href = `https://${hostname.host}/user/${tournament[round][matchNumber][player]['username']}`;
-					if (tournament[round][matchNumber][player]['score'] != null){
-						document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
-						document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
+				if (player != 'id'){
+					if (tournament[round][matchNumber][player]['username']){
+						if (round == "round_0")
+							players += 1;
+						document.querySelector(`${selector} .username`).classList.remove("waiting");
+						document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+						if (is_finished)
+							document.querySelector(`${selector} .username`).href = `https://${hostname.host}/user/${tournament[round][matchNumber][player]['username']}`;
+						if (tournament[round][matchNumber][player]['score'] != null){
+							document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
+							document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
+						}
+						else
+							document.querySelector(`${selector} .score`).innerText = '-';
 					}
-					else
-						document.querySelector(`${selector} .score`).innerText = '-';
+					else{
+						document.querySelector(`${selector} .username`).innerText = client.langJson['game']['waiting'];
+						document.querySelector(`${selector} .username`).classList.add("waiting");
+						document.querySelector(`${selector} .score`).innerText = '';
+					}
 				}
 				else{
-					document.querySelector(`${selector} .username`).innerText = client.langJson['game']['waiting'];
-					document.querySelector(`${selector} .username`).classList.add("waiting");
-					document.querySelector(`${selector} .score`).innerText = '';
+					document.querySelector(`${positionMap[round]}${positionMap[matchNumber]}`).href = `https://${hostname.host}/match?id=${tournament[round][matchNumber][player]}`;
+
 				}
 			})
 		})
@@ -494,6 +493,7 @@ function displayTournament(is_finished = false){
 		var minFullTreeWidth = 870;
 		gameContainer = document.getElementById("gameContainer");
 		tournamentContainer = document.getElementById("tournamentContainer");
+		matchContainer = document.getElementById("matchContainer");
 
 		gameContainer.style.setProperty("display", "none");
 		matchContainer.style.setProperty("display", "none");
