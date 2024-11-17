@@ -332,7 +332,7 @@ def profile_update(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-def get_all_user_match_json(matches, tournaments, username):
+def get_user_match_json(matches, tournaments, username, max=-1):
 	matches_json = {}
 	year_json = {}
 	month_json = {}
@@ -342,8 +342,11 @@ def get_all_user_match_json(matches, tournaments, username):
 	month = ""
 	day = ""
 	i = 0
+	total_count = 0
 
 	for tournament in tournaments:
+		if (max != -1 and total_count >= max):
+			break
 		if (dateObj != tournament.date):
 			if (year != ""):
 				if (year != tournament.date.year):
@@ -366,8 +369,11 @@ def get_all_user_match_json(matches, tournaments, username):
 			'date' : tournament.date,
 		}
 		i += 1
+		total_count += 1
 		for match in tournament.matches.all():
 			if match.player_one.username == username or match.player_two.username == username:
+				if (max != -1 and total_count >= max):
+					break
 				try:
 					p1_name = match.player_one.username
 				except:
@@ -388,6 +394,7 @@ def get_all_user_match_json(matches, tournaments, username):
 					'id' : match.pk
 				}
 				i += 1
+				total_count += 1
 	i = 0
 
 	if (dateObj != ""):
@@ -400,6 +407,8 @@ def get_all_user_match_json(matches, tournaments, username):
 	day = ""
 	date_json = {}
 	for match in matches:
+		if (max != -1 and total_count >= max):
+			break
 		if (dateObj != match.date):
 			if (year != ""):
 				if (year != match.date.year):
@@ -440,6 +449,7 @@ def get_all_user_match_json(matches, tournaments, username):
 			'date' : match.date,
 			'id' : match.pk
 		}
+		total_count += 1
 		i += 1
 	if (dateObj != ""):
 		month_json["{0}".format(day)] = date_json
@@ -448,7 +458,7 @@ def get_all_user_match_json(matches, tournaments, username):
 	return matches_json
 
 def get_user_json(user, startDate, endDate):
-	matches = get_all_user_match_json(
+	matches = get_user_match_json(
 		user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)),
 		user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)),
 		user.username)
@@ -482,10 +492,10 @@ def current_user(request):
 		for e in blocked_list:
 		
 			blocked_json[e.username] = get_user_preview_json(e)
-		matches = get_all_user_match_json(
+		matches = get_user_match_json(
 			request.user.profile.matches.filter(date=datetime.date.today()),
 			request.user.profile.tournaments.filter(date=datetime.date.today()),
-			request.user.username)
+			request.user.username, 5)
 		return JsonResponse({'username': request.user.username,
 			'is_dark_theme': request.user.profile.dark_theme,
 			'use_browser_theme': request.user.profile.use_browser_theme,
