@@ -63,18 +63,22 @@ var template = `
 		</div>
 		<div id="matchPlayersInfo">
 			<div class="playerInfoContainer" id="playerOne">
-				<div class="playerPfp">
-					<img id="playerOnePfp">
+				<div class="playerInfo">
+					<div class="playerPfp">
+						<img id="playerOnePfp">
+					</div>
+					<h2 class="playerName"></h2>
+					<h2 class="playerScore">-</h2>
 				</div>
-				<h2 class="playerName"></h2>
-				<h2 class="playerScore">-</h2>
 			</div>
 			<div class="playerInfoContainer" id="playerTwo">
-				<div class="playerPfp">
-					<img id="playerTwoPfp">
+				<div class="playerInfo">
+					<div class="playerPfp">
+						<img id="playerTwoPfp">
+					</div>
+					<h2 class="playerName"></h2>
+					<h2 class="playerScore">-</h2>
 				</div>
-				<h2 class="playerName"></h2>
-				<h2 class="playerScore">-</h2>
 			</div>
 		</div>
 	</div>
@@ -1135,11 +1139,11 @@ function game() {
 				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerOnePfp"), match.player_one_profile_picture);
 				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerTwoPfp"), match.player_two_profile_picture);
 	
-				document.querySelector("#matchContainer #playerOne > .playerName").innerText = match.player_one;
-				document.querySelector("#matchContainer #playerTwo > .playerName").innerText = match.player_two;
+				document.querySelector("#matchContainer #playerOne .playerInfo > .playerName").innerText = match.player_one;
+				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerName").innerText = match.player_two;
 				
-				document.querySelector("#matchContainer #playerOne > .playerScore").innerText = match.player_one_pts;
-				document.querySelector("#matchContainer #playerTwo > .playerScore").innerText = match.player_two_pts;
+				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = match.player_one_pts;
+				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = match.player_two_pts;
 				document.querySelector("#matchContainer #exchange").innerText = client.langJson['match']['exchange stats'].replace("${NUMBER_OF_EXCHANGE}", match.exchanges).replace("${AVERAGE_EXCHANGE}", (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2)).replace("${LONGEST}", match.exchangesMax)
 				drawMatchInfoGraph(match.player_one_goals_up, match.player_two_goals_up, match.player_one_goals_mid, match.player_two_goals_mid, match.player_one_goals_down, match.player_two_goals_down)
 
