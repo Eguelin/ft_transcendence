@@ -157,12 +157,14 @@
 		"winnedText" : "won!!",
 		"replay" : "Replay",
 		"wait" : "Waiting for another player to arrive...",
+		"quit" : "Quit",
 		"waiting" : "Waiting",
 		"tournamentSubtitle" : "Tournament",
 		"quarter" : "Quarter",
 		"semi" : "Semi",
 		"final" : "final",
-		"tournamentLobby" : "Lobby"
+		"tournamentLobby" : "Lobby",
+		"matchSubtitle" : "Match"
 	},
 	"tournament":{
 		"#title" : "",
@@ -176,6 +178,15 @@
 		"semi" : "Semi finals",
 		"final" : "finals",
 		"profile redirection" : "${USERNAME} profile redirection"
+	},
+	"match" : {
+		"#title" : "",
+		"exchange stats" : "Total number of exchange : ${NUMBER_OF_EXCHANGE}\nAverage number of exchange per point : ${AVERAGE_EXCHANGE}\nLongest exchange : ${LONGEST}",
+		"up": "Top corner",
+		"mid": "Center",
+		"down": "Bottom corner",
+		"CVmatchInfoGraph": "Most hit zone",
+		"points" : "${POINTS} points"
 	},
 	"404":{
 		"#title" : "ERROR 404",
