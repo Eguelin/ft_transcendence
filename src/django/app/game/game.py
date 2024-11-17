@@ -519,12 +519,12 @@ class PlayerRemote(Player):
 		except:
 			self.socket = None
 
-	def getInfo(self, init=False):
+	def getInfo(self, init=False, tournament=False):
 		info = super().getInfo()
 
 		if init:
 			info['user'] = {
-				'username': self.user.username,
+				'username': self.user.username if not tournament else self.profile.tournament_name,
 				'profile_picture': self.profile.profile_picture
 			}
 
@@ -814,15 +814,28 @@ class GameTournament(GameRemote):
 	def getMatch(self):
 		return {
 			'playerLeft': {
-				'username': self.playerLeft.user.username if self.playerLeft else None,
-				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft and self.playerLeft.profile else None,
+				'username': self.playerLeft.profile.tournament_name if self.playerLeft else None,
+				'profile_picture': self.playerLeft.profile.profile_picture if self.playerLeft else None,
 				'winner': self.winnerSide == "left" if self.winner else None,
 				'score': self.playerLeft.score if self.playerLeft and self.winner else None
 			},
 			'playerRight': {
-				'username': self.playerRight.user.username if self.playerRight else None,
-				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight and self.playerRight.profile else None,
+				'username': self.playerRight.profile.tournament_name if self.playerRight else None,
+				'profile_picture': self.playerRight.profile.profile_picture if self.playerRight else None,
 				'winner': self.winnerSide == "right" if self.winner else None,
 				'score': self.playerRight.score if self.playerRight and self.winner  else None
 			}
 		}
+
+	def getInfo(self, init=False):
+		info = {
+			'player1': self.playerLeft.getInfo(init, True),
+			'player2': self.playerRight.getInfo(init, True),
+			'ball': self.ball.getInfo()
+		}
+
+		if init:
+			info['canvas'] = Game.getSize()
+			info['paddle'] = Paddle.getSize()
+
+		return info
