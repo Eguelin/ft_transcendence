@@ -7,8 +7,12 @@ var template = `
 		<a id="playBtnLocal" href="https://${hostname.host}/game?mode=local" tabindex="13">Play</a>
 		<a id="playBtnAI" href="https://${hostname.host}/game?mode=ai" tabindex="14">Play</a>
 		<a id="playTournament" href="https://${hostname.host}/game?mode=tournament" tabindex="15">Play</a>
+		<div class="forms" id="saveDisplayNameContainer">
+			<input tabindex="16" type="text" id="inputChangeDisplayName" class="formInput" name="displayName" placeholder="Display name"/>
+			<div tabindex="17" id="saveDisplayNameBtn"></div>
+		</div>
 	</div>
-    <div id="recentMatchHistoryContainer" tabindex="16" aria-label="User today's matches">
+    <div id="recentMatchHistoryContainer" tabindex="18" aria-label="User today's matches">
         <div id="recentMatchHistory">
 
         </div>
@@ -25,9 +29,11 @@ var template = `
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "none");
 	notifCenterContainer.style.setProperty("display", "flex");
+	displayNameInput = document.querySelector("#inputChangeDisplayName")
 
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
+		displayNameInput.placeholder = client.displayName;
 		( async() => {
 			try {
 				const fetchResult = await fetch('/api/user/current', {
@@ -62,10 +68,10 @@ var template = `
 					else{
 						recentMatchHistoryContainer.innerHTML = "";
 						for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
-							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.username));
+							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.displayName));
 						}
 						checkMatchResumeSize();
-						var tabIdx = 17;
+						var tabIdx = 19;
 						var container = document.getElementById("recentMatchHistoryContainer");
 						container.addEventListener("keydown", (e) => {
 							if (e.key == "Enter"){
@@ -94,6 +100,48 @@ var template = `
 				throw new Error("Error while reaching server");
 			}
 		})()
+
+		document.querySelector("#saveDisplayNameBtn").onclick = function (){
+			displayName = displayNameInput.value;
+
+			if (displayNameInput.previousElementSibling)
+				displayNameInput.previousElementSibling.remove();
+		
+			if (displayName != ""){
+					fetch('/api/user/update', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({'display_name': displayName}),
+						credentials: 'include'
+					}).then(response => {
+						if (response.ok){
+							if (displayNameInput.previousElementSibling)
+								displayNameInput.previousElementSibling.remove();
+							success = document.createElement("a");
+							success.className = "success";
+							success.text = "Display name successfully updated";
+							displayNameInput.before(success);
+		
+						}
+						else {
+							response.json().then(response => {
+							warning = document.createElement("a");
+							warning.className = "warning";
+							warning.text = response.message;
+							displayNameInput.before(warning);
+							})
+						}
+					})
+			}
+			else{
+				warning = document.createElement("a");
+				warning.className = "warning";
+				warning.text = "Display name can't be empty";
+				displayNameInput.before(warning);
+			}
+		}
 	}
 	else
 		myReplaceState(`https://${hostname.host}/login`);

@@ -325,6 +325,9 @@ def profile_update(request):
 						user.profile.do_not_disturb = data['do_not_disturb']
 					else:
 						return JsonResponse({'message': 'Invalid do_not_disturb value, should be a boolean'}, status=400)
+				else:
+					return JsonResponse({'message': 'Field does not exist'}, status=400)
+
 				user.save()
 				return JsonResponse({'message': 'User profile updated'}, status=200)
 			except json.JSONDecodeError:
