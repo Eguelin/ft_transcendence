@@ -408,20 +408,26 @@ def get_user_match_json(matches, tournaments, username, max=-1):
 					break
 				try:
 					p1_name = match.player_one.username
+					p1_display_name = match.player_one.profile.display_name
 				except:
 					p1_name = "deleted"
+					p1_display_name = "deleted"
 
 				try:
 					p2_name = match.player_two.username
+					p2_display_name = match.player_two.profile.display_name
 				except:
 					p2_name = "deleted"
+					p2_display_name = "deleted"
 				date_json[i] = {
 					'type' : 'match',
 					'player_one' : p1_name,
 					'player_two' : p2_name,
+					'player_one_display_name' : p1_display_name,
+					'player_two_display_name' : p2_display_name,
 					'player_one_pts' : match.player_one_pts,
 					'player_two_pts' : match.player_two_pts,
-					'winner' : match.winner.username,
+					'winner' : match.winner.profile.display_name,
 					'date' : match.date,
 					'id' : match.pk
 				}
@@ -462,22 +468,28 @@ def get_user_match_json(matches, tournaments, username, max=-1):
 			i = 0
 		try:
 			p1_name = match.player_one.username
+			p1_display_name = match.player_one.profile.display_name
 		except:
 			p1_name = "deleted"
+			p1_display_name = "deleted"
 
 		try:
 			p2_name = match.player_two.username
+			p2_display_name = match.player_two.profile.display_name
 		except:
 			p2_name = "deleted"
+			p2_display_name = "deleted"
 		while (i in date_json):
 			i += 1
 		date_json[i] = {
 			'type' : 'match',
 			'player_one' : p1_name,
 			'player_two' : p2_name,
+			'player_one_display_name' : p1_display_name,
+			'player_two_display_name' : p2_display_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
-			'winner' : match.winner.username,
+			'winner' : match.winner.profile.display_name,
 			'date' : match.date,
 			'id' : match.pk
 		}
@@ -497,6 +509,7 @@ def get_user_json(user, startDate, endDate):
 	return {'username' : user.username,
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
+		'display_name' : user.profile.display_name,
 		'matches' : matches
 	}
 
@@ -541,7 +554,8 @@ def current_user(request):
 			'matches' : matches,
 			'is_admin' : request.user.is_staff,
 			'font_amplifier' : request.user.profile.font_amplifier,
-			'do_not_disturb' : request.user.profile.do_not_disturb
+			'do_not_disturb' : request.user.profile.do_not_disturb,
+			'display_name': request.user.profile.display_name
 		})
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)

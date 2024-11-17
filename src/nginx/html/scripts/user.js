@@ -109,7 +109,7 @@ function updateUserLang(){
                     matchObj = user.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()]; // get matches object of today
                     recentMatchHistoryContainer.innerHTML = "";
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
-                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], splitPath[4]));
+                        recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], user.display_name));
                     };
 					checkMatchResumeSize();    
 					(async () => (loadCurrentLang()))();
