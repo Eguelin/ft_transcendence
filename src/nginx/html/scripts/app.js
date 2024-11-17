@@ -78,6 +78,7 @@ class Client {
 	mainTextRgb;
 	fontAmplifier;
 	doNotDisturb;
+	displayName;
 
 	constructor() {
 		return (async () => {
@@ -124,6 +125,13 @@ class Client {
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
 
 					usernameBtn.innerHTML = result.username;
+
+					try{
+						this.displayName = result.display_name;
+					}
+					catch{
+						this.displayName = result.username;
+					}
 
 					addPfpUrlToImgSrc(userPfp, result.pfp)
 
