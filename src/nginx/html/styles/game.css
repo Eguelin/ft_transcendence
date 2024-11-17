@@ -543,6 +543,10 @@ table.portrait{
 		display: block;
 	}
 	
+	#exchangeContainer{
+		flex: none;
+	}
+
 	table.landscape{
 		display: none;
 	}

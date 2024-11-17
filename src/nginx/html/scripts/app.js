@@ -1459,11 +1459,17 @@ function checkMatchSize(){
 	var container = document.querySelector("#matchContainer")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 	var graphBaseSize = 300;
-	var graphCurrentSize;
+	var graphCurrentSize, graphMatchCurrentSize;
 	if (playerOneInfoChart)
 		graphCurrentSize = playerOneInfoChart.width;
 	else
 		graphCurrentSize = 300;
+
+	if (matchInfoChart)
+		graphMatchCurrentSize = matchInfoChart.width;
+	else
+		graphMatchCurrentSize = 400;
+
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
 	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
@@ -1475,7 +1481,7 @@ function checkMatchSize(){
 		}
 		if (graphCurrentSize + 5 <= graphBaseSize){
 			graphCurrentSize += 5;
-			drawMatchInfoGraph(graphCurrentSize);
+			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 		}
 	}
 	while (getElemWidth(container) > anchor.right && (currentFontSize > 8 || graphCurrentSize > 200)){
@@ -1487,7 +1493,17 @@ function checkMatchSize(){
 		}
 		if (graphCurrentSize > 200) {
 			graphCurrentSize -= 5;
-			drawMatchInfoGraph(graphCurrentSize);
+			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+		}
+	}
+
+	while (getWindowWidth() <= 715 && getWindowHeight() >= document.querySelector("#matchContainer").getBoundingClientRect().bottom){
+		if (graphMatchCurrentSize > 200) {
+			graphMatchCurrentSize -= 5;
+			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+		}
+		else{
+			break
 		}
 	}
 
