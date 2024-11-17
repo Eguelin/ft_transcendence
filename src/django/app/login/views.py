@@ -268,13 +268,29 @@ def profile_update(request):
 						user.username = data['username']
 					else:
 						return JsonResponse({'message': 'Invalid username value, should be a string'}, status=400)
-				username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
-				max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
-				try:
-					username_validator(user.username)
-					max_length_validator(user.username)
-				except ValidationError as e:
-					return JsonResponse({'message': e.message}, status=400)
+					username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
+					max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
+					try:
+						username_validator(user.username)
+						max_length_validator(user.username)
+					except ValidationError as e:
+						return JsonResponse({'message': e.message}, status=400)
+				if "display_name" in data:
+					valid = True
+					if (isinstance(data['display_name'], (str))):
+						if User.objects.filter(profile__display_name=data['display_name']).exists():
+							return JsonResponse({'message': 'Display name is already taken'}, status=400)
+						user.profile.display_name = data['display_name']
+					else:
+						return JsonResponse({'message': 'Invalid display name value, should be a string'}, status=400)
+					display_name_validator = RegexValidator(regex=r'^[\w-]+$', message='Display name must be alphanumeric')
+					max_length_validator = MaxLengthValidator(15, message='Display name must be 15 characters or fewer')
+					try:
+						display_name_validator(user.profile.display_name)
+						max_length_validator(user.profile.display_name)
+					except ValidationError as e:
+						return JsonResponse({'message': e.message}, status=400)
+					user.profile.save()
 				if "pfp" in data:
 					valid = True
 					if (isinstance(data['pfp'], (str, bytearray))):
