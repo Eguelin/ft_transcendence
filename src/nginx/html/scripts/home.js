@@ -101,6 +101,8 @@ var template = `
 			}
 		})()
 
+		document.querySelector("#saveDisplayNameBtn").onkeydown = function(e){if (e.key == "Enter"){e.target.click();}};
+
 		document.querySelector("#saveDisplayNameBtn").onclick = function (){
 			displayName = displayNameInput.value;
 

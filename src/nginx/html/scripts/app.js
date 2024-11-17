@@ -1243,18 +1243,18 @@ function createMatchResumeContainer(match, username) {
 		scoreUser = ft_create_element("div", {"class" : "resultScore"});
 		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
-		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_one : match.player_two, "tabIndex" : "-1"});
-		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_one_pts : match.player_two_pts});
+		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one_display_name == username ? match.player_one_display_name : match.player_two_display_name, "tabIndex" : "-1"});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_one_pts : match.player_two_pts});
 
-		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one == username ? match.player_two : match.player_one, "tabIndex" : "-1"});
-		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one == username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one_display_name == username ? match.player_two_display_name : match.player_one_display_name, "tabIndex" : "-1"});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_two_pts : match.player_one_pts});
 
 		if (scoreUserName.innerText == "deleted"){
 			scoreUserName.classList.add("deletedUser");
 			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreUserName.href = `https://${hostname.host}/user/${scoreUserName.innerText}`
+			scoreUserName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_one : match.player_two}`
 			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
 		}
 
@@ -1264,7 +1264,7 @@ function createMatchResumeContainer(match, username) {
 			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreOpponentName.href = `https://${hostname.host}/user/${scoreOpponentName.innerText}`
+			scoreOpponentName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_two : match.player_one}`
 			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
 		}
 
