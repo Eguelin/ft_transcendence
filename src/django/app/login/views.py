@@ -628,12 +628,14 @@ def get_tournament(request):
 				"match_0" : {
 					"playerLeft":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
 					},
 					"playerRight":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
@@ -642,12 +644,14 @@ def get_tournament(request):
 				"match_1" : {
 					"playerLeft":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
 					},
 					"playerRight":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
@@ -656,12 +660,14 @@ def get_tournament(request):
 				"match_2" : {
 					"playerLeft":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
 					},
 					"playerRight":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
@@ -670,12 +676,14 @@ def get_tournament(request):
 				"match_3" : {
 					"playerLeft":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
 					},
 					"playerRight":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
@@ -686,12 +694,14 @@ def get_tournament(request):
 				"match_0" : {
 					"playerLeft":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
 					},
 					"playerRight":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
@@ -700,12 +710,14 @@ def get_tournament(request):
 				"match_1" : {
 					"playerLeft":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
 					},
 					"playerRight":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
@@ -716,12 +728,14 @@ def get_tournament(request):
 				"match_0" : {
 					"playerLeft":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
 					},
 					"playerRight":{
 						"username": None,
+						"display_name": None,
 						"profile_picture": None,
 						"winner": None,
 						"score": 0,
@@ -732,11 +746,13 @@ def get_tournament(request):
 		for match in tournament.matches.all():
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = match.player_one.username
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["display_name"] = match.player_one.profile.display_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = match.player_one.profile.profile_picture
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winner.username == match.player_one.username else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["score"] = match.player_one_pts
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["username"] = match.player_two.username
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["display_name"] = match.player_two.profile.display_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = match.player_two.profile.profile_picture
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winner.username == match.player_two.username else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["score"] = match.player_two_pts
@@ -759,20 +775,27 @@ def get_match(request):
 		try:
 			p1_name = match.player_one.username
 			p1_pfp = match.player_one.profile.profile_picture
+			p1_display_name = match.player_one.profile.display_name
 		except:
 			p1_name = "deleted"
 			p1_pfp = ""
+			p1_display_name = "deleted"
 
 		try:
 			p2_name = match.player_two.username
 			p2_pfp = match.player_two.profile.profile_picture
+			p2_display_name = match.player_two.profile.display_name
 		except:
 			p2_name = "deleted"
 			p2_pfp = ""
+			p2_display_name = "deleted"
+
 		match_json = {
 			'player_one' : p1_name,
+			'player_one_display_name' : p1_display_name,
 			'player_one_profile_picture' : p1_pfp,
 			'player_two' : p2_name,
+			'player_two_display_name' : p2_display_name,
 			'player_two_profile_picture' : p2_pfp,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
