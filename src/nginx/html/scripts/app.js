@@ -522,6 +522,18 @@ function switchTheme(theme) {
 		chartStats._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
 		chartStats.update();
 	}
+	if (currentPage == "match"){
+		matchInfoChart._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
+		matchInfoChart.update();
+
+		playerOneInfoChart._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
+		playerOneInfoChart.update();
+
+
+		playerTwoInfoChart._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
+		playerTwoInfoChart.update();
+
+	}
 	if (currentPage == "game") {
 		displayTournament();
 	}
