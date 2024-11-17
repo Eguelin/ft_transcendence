@@ -248,14 +248,17 @@ def profile_update(request):
 	if (request.user.is_authenticated):
 		if (request.method == 'POST'):
 			try:
+				valid = False
 				data = json.loads(request.body)
 				user = request.user
 				if "is_dark_theme" in data:
+					valid = True
 					if (isinstance(data['is_dark_theme'], (bool))):
 						user.profile.dark_theme = data['is_dark_theme']
 					else:
 						return JsonResponse({'message': 'Invalid is_dark_theme value, should be a boolean'}, status=400)
 				if "username" in data:
+					valid = True
 					if (isinstance(data['username'], (str))):
 						if User.objects.filter(username=data['username']).exists():
 							return JsonResponse({'message': 'Username is already taken'}, status=400)
@@ -270,6 +273,7 @@ def profile_update(request):
 				except ValidationError as e:
 					return JsonResponse({'message': e.message}, status=400)
 				if "pfp" in data:
+					valid = True
 					if (isinstance(data['pfp'], (str, bytearray))):
 						if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
 							os.remove(user.profile.profile_picture)
@@ -291,26 +295,31 @@ def profile_update(request):
 					else:
 						return JsonResponse({'message': 'Invalid pfp value, should be a string'}, status=400)
 				if ("language_pack" in data):
+					valid = True
 					if (isinstance(data['language_pack'], (str))):	#TODO check if path is valid
 						user.profile.language_pack = data['language_pack']
 					else:
 						return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
 				if ("is_active" in data):
+					valid = True
 					if (isinstance(data['is_active'], (bool))):
 						user.profile.is_active = data['is_active']
 					else:
 						return JsonResponse({'message': 'Invalid is_active value, should be a boolean'}, status=400)
 				if ("font_amplifier" in data):
+					valid = True
 					if (isinstance(data['font_amplifier'], (float, int))):
 						user.profile.font_amplifier = data['font_amplifier']
 					else:
 						return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
 				if ("use_browser_theme" in data):
+					valid = True
 					if (isinstance(data['use_browser_theme'], (bool))):
 						user.profile.use_browser_theme = data['use_browser_theme']
 					else:
 						return JsonResponse({'message': 'Invalid use_browser_theme value, should be a boolean'}, status=400)
 				if ("theme_name" in data):
+					valid = True
 					if (isinstance(data['theme_name'], (str))):
 						max_length_validator = MaxLengthValidator(10, message='Theme_name must be 10 characters or fewer')
 						try:
@@ -321,11 +330,12 @@ def profile_update(request):
 					else:
 						return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
 				if ("do_not_disturb" in data):
+					valid = True
 					if (isinstance(data['do_not_disturb'], (bool))):
 						user.profile.do_not_disturb = data['do_not_disturb']
 					else:
 						return JsonResponse({'message': 'Invalid do_not_disturb value, should be a boolean'}, status=400)
-				else:
+				if (valid == False):
 					return JsonResponse({'message': 'Field does not exist'}, status=400)
 
 				user.save()
