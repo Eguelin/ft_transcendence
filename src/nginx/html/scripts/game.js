@@ -12,7 +12,7 @@ var treeCanva;
 var tournament = null;
 var match = null;
 
-var matchInfoChart = null;
+var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
 
 var userContainerAnchor = `
 <div class="anchor"></div>
@@ -70,6 +70,9 @@ var template = `
 					<h2 class="playerName"></h2>
 					<h2 class="playerScore">-</h2>
 				</div>
+				<div id="playerInfoGraphContainer">
+					<canvas id="playerOneInfoGraph"></canvas>
+				</div>
 			</div>
 			<div class="playerInfoContainer" id="playerTwo">
 				<div class="playerInfo">
@@ -78,6 +81,9 @@ var template = `
 					</div>
 					<h2 class="playerName"></h2>
 					<h2 class="playerScore">-</h2>
+				</div>
+				<div id="playerInfoGraphContainer">
+					<canvas id="playerTwoInfoGraph"></canvas>
 				</div>
 			</div>
 		</div>
@@ -1155,19 +1161,41 @@ function game() {
 	}
 }
 
+
 function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one_goals_mid, player_two_goals_mid, player_one_goals_down, player_two_goals_down){
 	if (document.getElementById("matchInfoGraph"))
 		document.getElementById("matchInfoGraph").remove();
 
+	if (document.querySelector("#playerOneInfoGraph"))
+		document.querySelector("#playerOneInfoGraph").remove();
+	if (document.querySelector("#playerTwoInfoGraph"))
+		document.querySelector("#playerTwoInfoGraph").remove();
+
 	matchInfoContainer = document.getElementById("matchInfoGraphContainer");
+
+	playerOneInfoGraphContainer = document.querySelector("#matchContainer #playerOne #playerInfoGraphContainer");
+	playerTwoInfoGraphContainer = document.querySelector("#matchContainer #playerTwo #playerInfoGraphContainer");
 
 	matchInfoGraph = document.createElement("canvas");
 	matchInfoGraph.id = "matchInfoGraph";
 
+	playerOneInfoGraph = document.createElement("canvas");
+	playerOneInfoGraph.id = "playerOneInfoGraph";
+	playerTwoInfoGraph = document.createElement("canvas");
+	playerTwoInfoGraph.id = "playerTwoInfoGraph";
+
 	matchInfoGraph.height= 400;
 	matchInfoGraph.width = matchInfoGraph.height;
+	playerOneInfoGraph.height = 400;
+	playerOneInfoGraph.width = 400;
+	playerTwoInfoGraph.height = 400;
+	playerTwoInfoGraph.width = 400;
+
 
 	matchInfoContainer.appendChild(matchInfoGraph);
+	playerOneInfoGraphContainer.appendChild(playerOneInfoGraph);
+	playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
+
 
 	if (matchInfoChart){
 		if (matchInfoChart instanceof Chart)
@@ -1175,9 +1203,123 @@ function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one
 		else
 			matchInfoChart = null;
 	}
-	const duration = 500;
+	if (playerOneInfoChart){
+		if (playerOneInfoChart instanceof Chart)
+			playerOneInfoChart.destroy();
+		else
+			playerOneInfoChart = null;
+	}
+	if (playerTwoInfoChart){
+		if (playerTwoInfoChart instanceof Chart)
+			playerTwoInfoChart.destroy();
+		else
+			playerTwoInfoChart = null;
+	}
+
+	function drawPlayerOneInfo(){
+		const options = {
+			plugins: {
+				title: {
+					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+					text: client.langJson["match"]["CVmatchInfoGraph"],
+					font: {
+						family : "pong",
+						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+					},
+					display: true,
+				},
+				legend: {
+					labels: {
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						},
+					}
+				}
+			},
+		}
+		const data = {
+			datasets: [{
+				data : [player_one_goals_up, player_one_goals_mid, player_one_goals_down],
+				backgroundColor : ['red','purple', 'blue'],
+				borderWidth : 0
+			}],
+			labels : [	
+				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
+			]
+		}
+
+		playerOneInfoChart = new Chart(document.querySelector("#playerOneInfoGraph"), {
+			type: 'pie',
+			data: data,
+			options: options
+		});
+	}
+
+	function drawPlayerTwoInfo(){
+		const options = {
+			plugins: {
+				title: {
+					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+					text: client.langJson["match"]["CVmatchInfoGraph"],
+					font: {
+						family : "pong",
+						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+					},
+					display: true,
+				},
+				legend: {
+					labels: {
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						},
+					}
+				}
+			},
+		}
+		const data = {
+			datasets: [{
+				data : [player_two_goals_up, player_two_goals_mid, player_two_goals_down],
+				backgroundColor : ['red','purple', 'blue'],
+				borderWidth : 0
+			}],
+			labels : [	
+				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
+			]
+		}
+
+		playerTwoInfoChart = new Chart(document.querySelector("#playerTwoInfoGraph"), {
+			type: 'pie',
+			data: data,
+			options: options
+		});
+	}
+
 	function drawMatchInfo(){
-		data = {
+		const options = {
+			plugins: {
+				title: {
+					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+					text: client.langJson["match"]["CVmatchInfoGraph"],
+					font: {
+						family : "pong",
+						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
+					},
+					display: true,
+				},
+				legend: {
+					labels: {
+						font: {
+							family : "pong",
+							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						},
+					}
+				}
+			},
+		}
+
+		const data = {
 			datasets: [{
 				data : [player_one_goals_up + player_two_goals_up, player_one_goals_mid + player_two_goals_mid, player_one_goals_down + player_two_goals_down],
 				backgroundColor : ['red','purple', 'blue'],
@@ -1187,34 +1329,19 @@ function drawMatchInfoGraph(player_one_goals_up, player_two_goals_up, player_one
 				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
 			]
 		}
+
 		matchInfoChart = new Chart(document.getElementById("matchInfoGraph"), {
 			type: 'pie',
 			data: data,
-			options:{
-				plugins: {
-					title: {
-						color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-						text: client.langJson["match"]["CVmatchInfoGraph"],
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-						},
-						display: true,
-					},
-					legend: {
-						labels: {
-							font: {
-								family : "pong",
-								size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-							},
-						}
-					}
-				},
-			}
+			options: options
 		});
 	}
 	drawMatchInfo();
-	matchInfoChart.resize(400,400)
+	drawPlayerOneInfo();
+	drawPlayerTwoInfo();
+	matchInfoChart.resize(400,400);
+	playerOneInfoChart.resize(300,300);
+	playerTwoInfoChart.resize(300,300);
 	console.log(matchInfoGraph.width);
 
 }
