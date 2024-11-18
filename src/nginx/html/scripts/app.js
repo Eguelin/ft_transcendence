@@ -1483,7 +1483,37 @@ function checkMatchResumeSize(){
 	}
 }
 
-function checkGameSize(){/*
+
+const keyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "KeyA", "KeyD" : "KeyD", "ArrowUp" : "ArrowUp", "ArrowDown" : "ArrowDown", "ArrowLeft" : "ArrowLeft", "ArrowRight" : "ArrowRight"};
+const inversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
+
+function checkGameSize(){
+	if (!window.matchMedia("(orientation: portrait)").matches){
+		if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
+			document.querySelector("#game").style.setProperty("rotate", "0deg");
+			document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
+			playerKeyMap = keyMap;
+		}
+		else{
+			document.querySelector("#game").style.setProperty("rotate", "180deg");
+			document.querySelector("#gameContainer").style.setProperty("flex-direction", "row-reverse");
+			playerKeyMap = inversedKeyMap;
+		}
+	}
+	else{
+		if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
+			document.querySelector("#game").style.setProperty("rotate", "270deg");
+			document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
+			playerKeyMap = inversedKeyMap;
+		}
+		else{
+			document.querySelector("#game").style.setProperty("rotate", "90deg");
+			document.querySelector("#gameContainer").style.setProperty("flex-direction", "column");
+			playerKeyMap = keyMap;
+		}
+	}
+	/*
+
 	var container = document.querySelector("#gameContainer")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
