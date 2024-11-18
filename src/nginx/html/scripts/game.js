@@ -536,6 +536,7 @@ function displayTournament(is_finished = false){
 	document.querySelector("#controler .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
 	if (playersCount == 8/* || 1*/){
+		console.log("e")
 
 		document.querySelector("#controler .leftBtnContainer").onclick = leftSlideBtn;
 		document.querySelector("#controler .rightBtnContainer").onclick = rightSlideBtn;
