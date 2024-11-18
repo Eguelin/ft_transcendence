@@ -70,7 +70,7 @@ html.mobile{
 	}
 }
 
-@media screen and (orientation:portrait) and (max-width:920px), (max-height:590px){
+@media screen and (orientation:portrait), (max-height:590px){
 	body{
 		font-size: calc(12px * var(--font-size-amplifier));
 		transition: 500ms;
