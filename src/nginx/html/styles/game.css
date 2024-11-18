@@ -189,7 +189,7 @@
 	}
 
 	.game{
-		rotate: 270deg;
+		rotate: 90deg;
 	}
 
 	.playerPfp{
@@ -594,6 +594,11 @@ table.landscape{
 		display: flex !important;
 	}
 	*/
+	
+	
+	.game{
+		rotate: 90deg;
+	}
 	
 	#matchContainer {
 		#matchPlayersInfo{
