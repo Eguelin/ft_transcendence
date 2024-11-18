@@ -18,8 +18,8 @@
 #homeButtonsContainer{
 	display: flex;
 	flex-direction: column;
-	width: -webkit-fill-available;
-	width: -moz-available;
+	width: fit-content;
+	justify-self: center;
 	height: fit-content;
 	align-items: center;
 	gap: 3rem;
@@ -33,8 +33,8 @@
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
 
-	width: 3vw;
-	height: 3vw;
+	width: 3rem;
+	height: 3rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;

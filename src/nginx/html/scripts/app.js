@@ -222,7 +222,7 @@ class Client {
 				document.body.appendChild(s);
 			}
 			catch {
-				popUpError(client.langJson['index']['error reaching server']);
+				popUpError(client.langJson['index']['error_reaching_server']);
 				unsetLoader();
 			}
 		})();
@@ -414,7 +414,7 @@ window.addEventListener('load', (e) => {
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
 	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
-		document.body.classList.add("mobile");
+		document.documentElement.classList.add("mobile");
 		document.documentElement.style.setProperty("--is-mobile", 1)
 	}
 	else
@@ -660,6 +660,14 @@ usernameBtn.addEventListener("keydown", (e) => {
 	}
 })
 
+
+const langMap = {
+	"EN_UK" : "en-UK",
+	"FR_FR" : "fr",
+	"DE_GE" : "de",
+	"IT_IT" : "it",
+}
+
 dropDownLangOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		(async () => {
@@ -672,6 +680,7 @@ dropDownLangOption.forEach(function (button) {
 					client.langJson = content;
 				}
 				loadCurrentLang();
+				document.documentElement.setAttribute("lang", langMap[button.id]);
 				if (client) {
 					fetch('/api/user/update', {
 						method: 'POST',
@@ -974,7 +983,7 @@ function friendUpdate()
 		const data = JSON.parse(event.data);
 		if (data.new_request)
 		{
-			sendNotif(`${client.langJson.friends['incoming pending request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
+			sendNotif(`${client.langJson.friends['incoming_pending_request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
 			if (currentPage === "friends" && !document.getElementById(data.sender_name))
 			{
 				fetch('/api/user/current', {
@@ -1092,7 +1101,7 @@ function friendUpdate()
 						socket.send(message);
 					}
 					else {
-						popUpError(client.langJson['friends']['error sending request'])
+						popUpError(client.langJson['friends']['error_sending_request'])
 					}
 				});
 			}

@@ -15,7 +15,7 @@
 		"aria#FR_FR" : "Français",
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italiano",
-		"error reaching server" : "Error reaching server",
+		"error_reaching_server" : "Error reaching server",
 		".notifMessage.friend_request" : "Incoming friend request from ${USERNAME}"
 	},
 	"home" : {
@@ -32,7 +32,7 @@
 		"aria#recentMatchHistoryContainer" : "User today's matches",
 		"ariaResumeMatch.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
 		"ariaResumeTournament.matchDescContainer" : "Tournament on the ${DATE}",
-		"aria.resultScoreName" : "profile redirection"
+		"aria.resultScoreName" : "profile_redirection"
 	},
 	"login" : {
 		"#title" : "LOGIN",
@@ -100,8 +100,8 @@
 		"ariaAll.friendsOptionContainer" : "friend options",
 		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
 		"ariaBlocked.friendsOptionContainer" : "blocked user options",
-		"incoming pending request" : "Incoming friend request from ${USERNAME}",
-		"error sending request" : "Couldn't send friend request."
+		"incoming_pending_request" : "Incoming friend request from ${USERNAME}",
+		"error_sending_request" : "Couldn't send friend request."
 
 	},
 	"user":{
@@ -116,7 +116,7 @@
 		".draw" : "DRAW",
 		".tournament" : "TOURNAMENT",
 		"ariaResume.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
-		"aria.resultScoreName" : "profile redirection"
+		"aria.resultScoreName" : "profile_redirection"
 	},
 	"dashboard":{
 		"#title" : "",
@@ -144,7 +144,7 @@
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Search",
-		"aria.userResume" : "profile redirection"
+		"aria.userResume" : "profile_redirection"
 	},
 	"game":{
 		"#title" : "",
@@ -177,7 +177,7 @@
 		"quarter" : "Quarter finals",
 		"semi" : "Semi finals",
 		"final" : "finals",
-		"profile redirection" : "${USERNAME} profile redirection"
+		"profile_redirection" : "${USERNAME} profile_redirection"
 	},
 	"match" : {
 		"#title" : "",

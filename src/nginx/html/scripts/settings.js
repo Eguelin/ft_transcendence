@@ -440,7 +440,8 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
 				}
 			}
-			catch{
+			catch (error){
+				console.error(error);
 				popUpError(`Could not load ${elem.id} language pack`);
 			}
 		})();
