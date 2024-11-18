@@ -1,23 +1,15 @@
-/* Mobile */
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (                min-resolution: 192dpi) and (min-width: 320px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
-	#dropDownLangContainer{
-		display: none !important;
-	}
-	#themeButton{
-		display: none !important;
-	}
-	#mobileSearchBtn{
-		display: block !important;
-	}
-	#inputSearchUser{
-		display: none !important;
-	}
+
+.mobile #dropDownLangContainer{
+	display: none !important;
+}
+.mobile #themeButton{
+	display: none !important;
+}
+.mobile #mobileSearchBtn{
+	display: block !important;
+}
+.mobile #inputSearchUser{
+	display: none !important;
 }
 
 #titleFlexContainer{
@@ -48,7 +40,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 320px) 
 }
 
 #title{
-	width: 40vw;
+	flex: 1;
 }
 
 #goHomeButton{
