@@ -4,11 +4,7 @@ var usernameInput;
 var saveUsernameBtn;
 var pfpInput;
 var pfpInputLabel;
-var lightTheme;
-var darkTheme;
 var settingsThemeDevice;
-var germanBtn;
-var englishBtn;
 var dropDownContent;
 var settingsSlides;
 var rightSlideBtn;
@@ -16,95 +12,107 @@ var leftSlideBtn;
 var confirmDeleteInput;
 var confirmPfpBtn;
 
+
+var accoutSlide = `
+<div id="saveUsernameContainer">
+	<input tabindex="13" type="text" id="inputChangeUsername" class="formInput" name="username" placeholder="Username"/>
+	<div tabindex="14" id="saveUsernameBtn"></div>
+</div>
+
+<div>
+	<label tabindex="15" for="inputPfp" id="pfpLabel" aria-label="Change profile picture">Profile picture</label>
+	<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
+</div>
+
+
+<div>
+	<button tabindex="17" id="deleteAccountBtn" class="deleteBtn">DELETE ACCOUNT</button>
+</div>`
+
+var accessibilitySlide = `
+<div style="height: fit-content;" id="fontSizeRangeContainer">
+	<span id="fontSizeRangeText">Font size amplifier</span>
+	<div>
+		<input tabindex="13" id="fontSizeRange" type="range" min="0.25" max="1.75" value="1" step="0.1" list="fontSizeList">
+		<datalist id="fontSizeList">
+			<option value="0.25" label="XS"></option>
+			<option value="0.5" ></option>
+			<option value="1.0" label="M"></option>
+			<option value="1.5" ></option>
+			<option value="1.75" label="XL"></option>
+		</datalist>				
+	</div>
+</div>
+
+
+<div id="settingsDropDownContainer" style="height:fit-content;">
+	<div id="settingsDropDownTheme" class="settingsDropDown" tabindex="14" aria-label="Theme dropdown menu">
+		<div class="dropDownOptionContainer">
+			<button tabindex="-1" id="themesDropDown" class="dropDownBtn">Themes</button>
+			<div class="dropDownArrow"></div>
+		</div>
+		<ul class="dropDownContent">
+			<li>
+				<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeLight" >Light</a>
+			</li>
+			<li>
+				<a class="settingsThemeDropDown" tabindex="16" id="settingsThemeDark"  >Dark</a>
+			</li>
+			<li>
+				<a class="settingsThemeDropDown" tabindex="17" id="settingsThemeHCLight"  >High contrast light</a>
+			</li>
+			<li>
+				<a class="settingsThemeDropDown" tabindex="18" id="settingsThemeHCDark"  >High contrast dark</a>
+			</li>
+			<li>
+				<a class="settingsThemeDropDown" tabindex="19" id="settingsThemeDevice"  >Devices mode</a>
+			</li>
+		</ul>
+	</div>
+	<div id="settingsDropDownLang" class="settingsDropDown" tabindex="20" aria-label="Language dropdown menu">
+		<div class="dropDownOptionContainer">
+			<button tabindex="-1" id="languagesDropDown" class="dropDownBtn">Language</button>
+			<div class="dropDownArrow"></div>
+		</div>
+		<ul class="dropDownContent">
+			<li>
+				<a id="EN_UK" lang="en-UK" tabindex="21" class="settingsLangDropDown">English</a>
+			</li>
+			<li>
+				<a id="FR_FR" lang="fr" tabindex="22" class="settingsLangDropDown">Français</a>
+			</li>
+			<li>
+				<a id="DE_GE" lang="de" tabindex="23" class="settingsLangDropDown">Deutsch</a>
+			</li>
+			<li>
+				<a id="IT_IT" lang="it" tabindex="24" class="settingsLangDropDown">Italiano</a>
+			</li>
+			<li>
+				<a id="AR_GH" lang="" tabindex="25" class="settingsLangDropDown">Pirate</a>
+			</li>
+		</ul>
+	</div>
+</div>`
+
 var template = `
 <div style="height: fit-content; text-align: center; display: flex;">
-	<div id="leftSlideBtn" tabindex="12" aria-label="Switch settings page"></div>
-	<div id="rightSlideBtn" tabindex="23" aria-label="Switch settings page"></div>
-	<div class="settingSlide">
-		<h2 id="accountTitle">Account</h2>
-		<div class="forms" id="saveUsernameContainer">
-			<input tabindex="13" type="text" id="inputChangeUsername" class="formInput" name="username" placeholder="Username"/>
-			<div tabindex="14" id="saveUsernameBtn"></div>
+
+	<div id="settingSlidesContainer">
+		<div id="settingsSlideSelector">
+			<div id="accountSelector" class="settingsSlideSelector activeSelector" tabindex="12">
+				<div id="accountSelectorText">Account</div>
+			</div>
+			<div id="accessibilitySelector" class="settingsSlideSelector" tabindex="13">
+				<div id="accessibilitySelectorText">Accessibility</div>
+			</div>
+			<div id="slideSelectorBg"></div>
 		</div>
-
-		<div class="forms">
-			<label tabindex="15" for="inputPfp" id="pfpLabel" aria-label="Change profile picture">Profile picture</label>
-			<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
-		</div>
-
-
-		<div class="forms">
-			<button tabindex="17" id="deleteAccountBtn" class="deleteBtn">DELETE ACCOUNT</button>
-		</div>
-	</div>
-
-
-	<div class="settingSlide">
-		<h2 id="accessibilityTitle">Accessibility</h2>
-		<div style="height: fit-content;" id="fontSizeRangeContainer">
-			<span id="fontSizeRangeText">Font size amplifier</span>
-			<div>
-				<input tabindex="13" id="fontSizeRange" type="range" min="0.25" max="1.75" value="1" step="0.1" list="fontSizeList">
-				<datalist id="fontSizeList">
-					<option value="0.25" label="XS"></option>
-					<option value="0.5" ></option>
-					<option value="1.0" label="M"></option>
-					<option value="1.5" ></option>
-					<option value="1.75" label="XL"></option>
-				</datalist>				
+		<div style="position: relative;">
+			<div id="settingSlides">
+				<div class="settingSlide" id="accoutSlide">${accoutSlide}</div>
+				<div class="settingSlide" id="accessibilitySlide">${accessibilitySlide}</div>
 			</div>
 		</div>
-		
-		
-		<div id="settingsDropDownContainer" style="height:fit-content;">
-			<div id="settingsDropDownTheme" class="settingsDropDown" tabindex="14" aria-label="Theme dropdown menu">
-				<div class="dropDownOptionContainer">
-					<button tabindex="-1" id="themesDropDown" class="dropDownBtn">Themes</button>
-					<div class="dropDownArrow"></div>
-				</div>
-				<ul class="dropDownContent">
-					<li>
-						<a class="settingsThemeDropDown" tabindex="15" id="settingsThemeLight" >Light</a>
-					</li>
-					<li>
-						<a class="settingsThemeDropDown" tabindex="16" id="settingsThemeDark"  >Dark</a>
-					</li>
-					<li>
-						<a class="settingsThemeDropDown" tabindex="17" id="settingsThemeHCLight"  >High contrast light</a>
-					</li>
-					<li>
-						<a class="settingsThemeDropDown" tabindex="18" id="settingsThemeHCDark"  >High contrast dark</a>
-					</li>
-					<li>
-						<a class="settingsThemeDropDown" tabindex="19" id="settingsThemeDevice"  >Devices mode</a>
-					</li>
-				</ul>
-			</div>
-			<div id="settingsDropDownLang" class="settingsDropDown" tabindex="20" aria-label="Language dropdown menu">
-				<div class="dropDownOptionContainer">
-					<button tabindex="-1" id="languagesDropDown" class="dropDownBtn">Language</button>
-					<div class="dropDownArrow"></div>
-				</div>
-				<ul class="dropDownContent">
-					<li>
-						<a id="EN_UK" lang="en-UK" tabindex="21" class="settingsLangDropDown">English</a>
-					</li>
-					<li>
-						<a id="FR_FR" lang="fr" tabindex="22" class="settingsLangDropDown">Français</a>
-					</li>
-					<li>
-						<a id="DE_GE" lang="de" tabindex="23" class="settingsLangDropDown">Deutsch</a>
-					</li>
-					<li>
-						<a id="IT_IT" lang="it" tabindex="24" class="settingsLangDropDown">Italiano</a>
-					</li>
-					<li>
-						<a id="AR_GH" lang="" tabindex="25" class="settingsLangDropDown">Pirate</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		
 	</div>
 
 	<div id="popupBg" style="z-index: 1;">
@@ -137,60 +145,77 @@ var template = `
 	saveUsernameBtn = document.getElementById("saveUsernameBtn");
 	pfpInput = document.getElementById("inputPfp");
 	pfpInputLabel = document.getElementById("pfpLabel");
-	lightTheme = document.getElementsByClassName("loadLight");
-	darkTheme = document.getElementsByClassName("loadDark");
 	settingsThemeDevice = document.getElementById("settingsThemeDevice");
-	germanBtn = document.getElementsByClassName("germanBtn");
-	englishBtn = document.getElementsByClassName("englishBtn");
 	dropDownContent = document.querySelectorAll(".settingsDropDown, .dropDownLandscape");
 	settingsSlides = document.querySelectorAll(".settingSlide");
-	rightSlideBtn = document.getElementById("rightSlideBtn");
-	leftSlideBtn = document.getElementById("leftSlideBtn");
 	confirmDeleteInput = document.getElementById("confirmDeleteInput");
 	confirmPfpBtn = document.getElementById("confirmPfpBtn");
 
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
-	homeBtn.focus();
 	document.getElementById("fontSizeRange").value = client.fontAmplifier;
 	notifCenterContainer.style.setProperty("display", "flex");
 	window.onkeydown = settingsKeyDownEvent
+
+	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .settingsSlideSelector");
+	var slideIdx = 0;
+
+	settingsSlideSelector.forEach(function(key) {
+		key.addEventListener("click", (e) => {
+			save = slideIdx;
+			slideIdx = Array.from(e.target.closest(".settingsSlideSelector").parentElement.children).indexOf(e.target.closest(".settingsSlideSelector"));
+			if (save != slideIdx){
+				settingsSlideSelector[save].classList.remove("activeSelector");
+				settingsSlideSelector[slideIdx].classList.add('activeSelector');
+				var tmp = document.querySelector("#settingSlides");
+				var left = tmp.getBoundingClientRect().left;
+				var move = [
+					{ left: `${left}px`},
+					{ left: `-${slideIdx}00vw`}
+				];
+				var time = {
+					duration: 500,
+					iterations: 1,
+				}
+				tmp.animate(move, time);
+				tmp.style.setProperty("left", `-${slideIdx}00vw`)
+				if (slideIdx == 0){
+					move = [
+						{ left: `50%`},
+						{ left: `0%`}
+					];
+					document.getElementById("slideSelectorBg").animate(move, time);
+					document.getElementById("slideSelectorBg").style.setProperty("left", "0");
+				}
+				else{
+					move = [
+						{ left: `0%`},
+						{ left: `50%`}
+					];
+					document.getElementById("slideSelectorBg").animate(move, time);
+					document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
+				}
+			}
+		})
+		key.onkeydown = (e) => {
+			if (e.key == "Enter")
+				key.click();
+		}
+	})
+
 	setNotifTabIndexes(26);
 }
 
 
 var buf = "";
 
-var slideIdx = 1;
-for (i = 0; i < settingsSlides.length; i++)
-	settingsSlides[i].style.display = "none";
-settingsSlides[slideIdx].style.display = "flex";
-
-document.querySelectorAll("#rightSlideBtn, #leftSlideBtn, #pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
+document.querySelectorAll("#pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
 	elem.addEventListener("keydown", (e) => {
 		if (e.key == "Enter")
 			elem.click();
 	})
 })
-
-rightSlideBtn.addEventListener("click", () => {
-	slideIdx += 1;
-	if (slideIdx > settingsSlides.length - 1)
-		slideIdx = 0;
-	for (let i = 0; i < settingsSlides.length; i++)
-		settingsSlides[i].style.display = "none";
-	settingsSlides[slideIdx].style.display = "flex";
-});
-
-leftSlideBtn.addEventListener("click", () => {
-	slideIdx -= 1;
-	if (slideIdx < 0 )
-		slideIdx = settingsSlides.length - 1;
-	for (let i = 0; i < settingsSlides.length; i++)
-		settingsSlides[i].style.display = "none";
-	settingsSlides[slideIdx].style.display = "flex";
-});
 
 pfpInput.addEventListener("change", (e) => {
 	if (pfpInput.files.length >= 1){
@@ -545,17 +570,45 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 
 function settingsKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		var save = slideIdx;
+		var tmp = document.querySelector("#settingSlides");
 		if (e.key == "ArrowLeft")
 			slideIdx -= 1;
 		else
 			slideIdx += 1;
-		if (slideIdx > settingsSlides.length - 1)
+		if (slideIdx > 1)
 			slideIdx = 0;
 		if (slideIdx < 0)
-			slideIdx = settingsSlides.length - 1;
-		for (let i = 0; i < settingsSlides.length; i++)
-			settingsSlides[i].style.display = "none";
-		settingsSlides[slideIdx].style.display = "flex";
+			slideIdx = 1;
+		settingsSlideSelector[save].classList.remove("activeSelector");
+		settingsSlideSelector[slideIdx].classList.add('activeSelector');
+		var left = tmp.getBoundingClientRect().left;
+		var move = [
+			{ left: `${left}px`},
+			{ left: `-${slideIdx}00vw`}
+		];
+		var time = {
+			duration: 500,
+			iterations: 1,
+		}
+		tmp.animate(move, time);
+		tmp.style.setProperty("left", `-${slideIdx}00vw`)
+		if (slideIdx == 0){
+			move = [
+				{ left: `50%`},
+				{ left: `0%`}
+			];
+			document.getElementById("slideSelectorBg").animate(move, time);
+			document.getElementById("slideSelectorBg").style.setProperty("left", "0");
+		}
+		else{
+			move = [
+				{ left: `0%`},
+				{ left: `50%`}
+			];
+			document.getElementById("slideSelectorBg").animate(move, time);
+			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
+		}
 	}
 }
 

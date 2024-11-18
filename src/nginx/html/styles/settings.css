@@ -9,16 +9,19 @@
 	font-size: 1rem;
 	align-content: center;
 	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 	display: block;
 	transition: 500ms;
+	height: fit-content;
+	padding: 1rem;
 }
 #confirmPfpMask{
 	opacity: .5;
 }
 #inputChangeUsername{
-	width: 14vw;
-	border: 0;
+	width: -webkit-fill-available;
+	width: -moz-available;
+	border: 0.2px solid var(--main-text-rgb);
 }
 
 #saveUsernameBtn{
@@ -28,11 +31,14 @@
 	border: 0.2px solid var(--main-text-rgb);
 	border-radius: 1.5vw;
 
-	width: 3vw;
-	height: 3vw;
+	width: 2rem;
+	height: 2rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
+
+	position: absolute;
+	right: 1ch;
 }
 
 #saveUsernameBtn:hover, #saveUsernameBtn:focus {
@@ -44,7 +50,6 @@
 	align-items: center;
 	background-color: var(--hover-text-rgb);
 	border-radius: 1.5vw;
-	border: 0.2px solid var(--main-text-rgb);
 }
 
 
@@ -141,6 +146,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 4.2rem;
+	align-items: center;
 }
 
 #fontSizeRange {
@@ -194,4 +200,49 @@
 #fontSizeRange:focus::-moz-range-thumb{
 	outline: 3px solid var(--main-text-rgb);
 	outline-offset: 0.125rem;
+}
+
+#settingsSlideSelector {
+	width: fit-content;
+	min-width: 40vw;
+	display: flex;
+	position: relative;
+	left: 50%;
+	translate: -50%;
+	height: 2rem;
+}
+
+#settingsSlideSelector > div{
+	width: 50%;
+	outline: none;
+}
+
+#settingSlidesContainer{
+	width: 100vw;
+
+	min-width: -webkit-fill-available;
+	min-width: -moz-available;
+	display: flex;
+	flex-direction: column;
+}
+
+#settingSlides{
+	display: flex;
+	flex-direction: row;
+	position: fixed;
+	width: 100vw;
+	left: 0;
+	top: 50%;
+	translate: 0 -50%;
+}
+
+#settingSlides > *{
+	width: 100vw;
+	flex: none;
+}
+
+.settingSlide#accoutSlide > div{
+	text-align: center;
+	width: 20vw;
+	position: relative;
 }

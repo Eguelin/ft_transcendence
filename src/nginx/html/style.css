@@ -228,7 +228,7 @@ a {
 
 .warning, .success {
 	font-size: min(0.9vh, 0.9vw);
-	position: relative;
+	position: absolute;
 	top: -2vh;
 	text-align: left;
 	display: block;

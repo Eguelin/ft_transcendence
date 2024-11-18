@@ -2,8 +2,6 @@
 	display: flex;
 	width: fit-content;
 	position: relative;
-	left: 50%;
-	translate: -50%;
 	gap: 4.2rem;
 }
 
