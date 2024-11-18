@@ -762,6 +762,11 @@ function popUpError(error){
 			popupContainer.remove();
 		}, 500)
 	})
+	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+		setTimeout(function (container){
+			container.remove()
+		}, 5000, popupContainer);
+	}
 	document.body.appendChild(popupContainer);
 }
 
