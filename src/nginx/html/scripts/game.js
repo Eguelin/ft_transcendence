@@ -712,6 +712,7 @@ function game() {
 		}
 
 		if (mode == "local"){
+			document.querySelector("#gameContainer").classList.add("local");
 			document.querySelectorAll("#gameContainer .playerPfp").forEach(function (elem){
 				elem.style.setProperty("display", "none");
 			})
@@ -720,8 +721,6 @@ function game() {
 			});
 			if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
 				document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
-				document.querySelector("#gameContainer").style.setProperty("top", "12rem")
-				document.querySelector("#game").style.setProperty("rotate", "270deg")
 			}
 		}
 		else{
@@ -927,7 +926,7 @@ function game() {
 					document.querySelector("#game").style.setProperty("rotate", "270deg")
 					playerKeyMap = inversedKeyMap;
 				}
-				else
+				else if (mode != "local")
 					playerTouchMap = inversedKeyMap;
 			}
 				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
