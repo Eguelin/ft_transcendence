@@ -700,8 +700,6 @@ function game() {
 		const player2 = {};
 		const ball = {};
 		const ballTrail = [];
-		const keyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "KeyA", "KeyD" : "KeyD", "ArrowUp" : "ArrowUp", "ArrowDown" : "ArrowDown", "ArrowLeft" : "ArrowLeft", "ArrowRight" : "ArrowRight"};
-		const inversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
 		let KeyPressInterval;
 		let displayInterval;
 		let oldKeysDown = {};
