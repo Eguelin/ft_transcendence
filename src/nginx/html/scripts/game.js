@@ -1421,6 +1421,6 @@ function setTournamentAriaLabeL(){
 		}
 	})
 	document.querySelectorAll(".contestMatchResume .username").forEach(function (elem){
-		elem.setAttribute("aria-label", content["profile redirection"].replace("${USERNAME}", elem.innerText));
+		elem.setAttribute("aria-label", content["profile_redirection"].replace("${USERNAME}", elem.innerText));
 	})
 }
