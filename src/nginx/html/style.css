@@ -34,7 +34,7 @@ html{
 
 html.mobile{
 	font-size: calc(32px * var(--font-size-amplifier));
-	transition: 500ms;
+	transition: none !important;
 }
 .mobile body{
 	font-size: calc(32px * var(--font-size-amplifier));
