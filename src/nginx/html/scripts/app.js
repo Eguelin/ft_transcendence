@@ -421,7 +421,6 @@ window.addEventListener('load', (e) => {
 		document.documentElement.style.setProperty("--is-mobile", 0)
 });
 
-
 function myReplaceState(url) {
 	history.replaceState("", "", url);
 	load();
@@ -1367,10 +1366,24 @@ async function updateUserAriaLabel(key, content){
 	\_| \_|\____/ \____/  \___/ \_____/\____/ 
  */
 
+let ua = navigator.userAgent;
+setInterval(function() {
+  if (navigator.userAgent !== ua) {	
+	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+		document.documentElement.classList.add("mobile");
+	}
+	else{
+		document.documentElement.classList.remove("mobile");
+	}
+	ua = navigator.userAgent;
+  }
+}, 500);
+
 
 function checkResizeWindow(){
-	if (navigator.userAgent.match(/iphone|android|blackberry/ig))
+	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
 		return;
+	}
 	if(currentPage == "dashboard"){
 		displayCharts();
 	}
@@ -1472,14 +1485,15 @@ function checkGameSize(){
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
 	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
-			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) + 1}px`)
+			elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
 		})
 		currentFontSize += 1;
 	}
-	while (getElemWidth(container) > anchor.right){
+	while (getElemWidth(container) > anchor.right && currentFontSize > 1){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
-			elem.style.setProperty("font-size", `${parseInt(window.getComputedStyle(elem).fontSize) - 1}px`)
+			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
+		currentFontSize -= 1;
 	}
 }
 

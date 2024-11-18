@@ -589,9 +589,31 @@ table.landscape{
 	#replayButton{
 		font-size: 1rem !important;
 	}
-	
+	/*
 	#controler{
 		display: flex !important;
+	}
+	*/
+	
+	#matchContainer {
+		#matchPlayersInfo{
+			flex: unset;
+			height: fit-content;
+		}
+		 
+		#exchangeContainer{
+			flex: 1.5;
+		}
+		
+		#matchInfo{
+			flex-direction: column;
+		}
+		
+		.playerScore{
+			width: fit-content;
+			word-break: keep-all;
+			white-space: nowrap;
+		}
 	}
 	
 	#controler > div, #controlerPlayerTwo > div{
