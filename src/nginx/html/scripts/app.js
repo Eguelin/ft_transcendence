@@ -1483,7 +1483,7 @@ function checkMatchResumeSize(){
 	}
 }
 
-function checkGameSize(){
+function checkGameSize(){/*
 	var container = document.querySelector("#gameContainer")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
@@ -1499,7 +1499,7 @@ function checkGameSize(){
 			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
 		currentFontSize -= 1;
-	}
+	}*/
 }
 
 function checkMatchSize(){

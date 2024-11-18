@@ -35,7 +35,7 @@ var lobbyPlayerContainer= `
 
 var gameContainer = `
 <div id="gameContainer">
-	<div class="playerInfoContainer" id="playerTwo">
+	<div class="playerInfoContainer" id="playerOne">
 		<div class="playerPfp">
 			<img id="playerOnePfp">
 		</div>
@@ -44,7 +44,7 @@ var gameContainer = `
 	</div>
 	<canvas id="game" class="game">
 	</canvas>
-	<div class="playerInfoContainer" id="playerOne">
+	<div class="playerInfoContainer" id="playerTwo">
 		<div class="playerPfp">
 			<img id="playerTwoPfp">
 		</div>
@@ -700,10 +700,18 @@ function game() {
 		const player2 = {};
 		const ball = {};
 		const ballTrail = [];
+		const keyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "KeyA", "KeyD" : "KeyD", "ArrowUp" : "ArrowUp", "ArrowDown" : "ArrowDown", "ArrowLeft" : "ArrowLeft", "ArrowRight" : "ArrowRight"};
+		const inversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
 		let KeyPressInterval;
 		let displayInterval;
 		let oldKeysDown = {};
 		let countdown = "";
+		var playerKeyMap = keyMap;
+		var playerTouchMap = keyMap;
+
+		if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+			document.querySelector("#controler").style.setProperty("display", "flex");
+		}
 
 		if (mode == "local"){
 			document.querySelectorAll("#gameContainer .playerPfp").forEach(function (elem){
@@ -803,21 +811,21 @@ function game() {
 				document.querySelector("#controler .rightBtnContainer").onclick = function() {};
 				document.querySelector("#controler .rightBtnContainer").onkeydown = function() {};
 				document.querySelector("#controler .leftBtnContainer").onpointerdown = function() {
-					keysDown['KeyD'] = true;
+					keysDown[playerTouchMap['KeyD']] = true;
 					leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
 				document.querySelector("#controler .leftBtnContainer").onpointerup = function() {
-					keysDown['KeyD'] = false;
+					keysDown[playerTouchMap['KeyD']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 				};
 				
 
 				document.querySelector("#controler .rightBtnContainer").onpointerdown = function() {
-					keysDown['KeyA'] = true;
+					keysDown[playerTouchMap['KeyA']] = true;
 					rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
 				document.querySelector("#controler .rightBtnContainer").onpointerup = function() {
-					keysDown['KeyA'] = false;
+					keysDown[playerTouchMap['KeyA']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 				};
 
@@ -914,11 +922,22 @@ function game() {
 					document.getElementById("waitingContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
-
-			document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
-			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
+			console.log(player1)
+			if (getWindowHeight() > getWindowWidth()){
+				if (client.username == player1.name){
+					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
+					document.querySelector("#game").style.setProperty("rotate", "270deg")
+					playerKeyMap = inversedKeyMap;
+				}
+				else
+					playerTouchMap = inversedKeyMap;
+			}
+				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
+				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
+	
+				document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
+				document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
+			
 
 			if (mode == "full_ai")
 				document.querySelector("#gameContainer #playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
@@ -939,8 +958,19 @@ function game() {
 				playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
 			}
 			else{
+			
 				playerOneScore.innerText = message.player1.score;
 				playerTwoScore.innerText = message.player2.score;
+				
+				/*
+				if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+					playerOneScore.innerText = message.player2.score;
+					playerTwoScore.innerText = message.player1.score;
+				}
+				else{
+					playerOneScore.innerText = message.player1.score;
+					playerTwoScore.innerText = message.player2.score;
+				}*/
 			}
 			player1.x = message.player1.x;
 			player1.y = message.player1.y;
@@ -1057,13 +1087,15 @@ function game() {
 		}
 
 		function handleKeyDown(event) {
-			if (mapAvailableKeyCode[event.code])
-				keysDown[event.code] = true;
+			if (mapAvailableKeyCode[event.code]){
+					keysDown[playerKeyMap[event.code]] = true;
+			}
 		}
 
 		function handleKeyUp(event) {
-			if (mapAvailableKeyCode[event.code])
-				keysDown[event.code] = false;
+			if (mapAvailableKeyCode[event.code]){
+				keysDown[playerKeyMap[event.code]] = false;
+			}
 		}
 
 		function KeyPress() {
