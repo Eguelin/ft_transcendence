@@ -413,6 +413,12 @@ function isMobile(){
 window.addEventListener('load', (e) => {
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
+	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+		document.body.classList.add("mobile");
+		document.documentElement.style.setProperty("--is-mobile", 1)
+	}
+	else
+		document.documentElement.style.setProperty("--is-mobile", 0)
 });
 
 
@@ -1354,6 +1360,8 @@ async function updateUserAriaLabel(key, content){
 
 
 function checkResizeWindow(){
+	if (navigator.userAgent.match(/iphone|android|blackberry/ig))
+		return;
 	if(currentPage == "dashboard"){
 		displayCharts();
 	}
@@ -1397,7 +1405,6 @@ function checkResizeWindow(){
 			}
 		}
 	}
-
 	if (currentPage == "home" || currentPage == "user"){
 		checkMatchResumeSize()
 	}

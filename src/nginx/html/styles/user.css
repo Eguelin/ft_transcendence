@@ -40,17 +40,9 @@
 	outline: none;
 }
 
-/* Mobile */
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (                min-resolution: 192dpi) and (min-width: 320px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 320px) { 
-	#recentMatchHistory{
-		flex-direction: column;
-	}
+
+.mobile #recentMatchHistory{
+	flex-direction: column;
 }
 
 .matchDescContainer{
@@ -410,15 +402,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
-/* Mobile */
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 320px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 320px),
-only screen and (                min-resolution: 192dpi) and (min-width: 320px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 320px),
-only screen and (max-width:920px){ 
+
+@media screen  and (max-width:920px){ 
 	#timelineSelectionContainer{
 		flex-direction: column;
 		width: -moz-available;
@@ -429,6 +414,17 @@ only screen and (max-width:920px){
 	#profileGraphs{
 		flex-direction: column;
 	}
+}
+
+.mobile #timelineSelectionContainer{
+	flex-direction: column;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	align-items: center;
+	margin: 1rem;
+}
+.mobile #profileGraphs{
+	flex-direction: column;
 }
 
 #notPlayedPeriod{
