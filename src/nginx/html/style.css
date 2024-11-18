@@ -32,7 +32,7 @@ html{
 	transition: 500ms;
 }
 
-.mobile html{
+html.mobile{
 	font-size: calc(32px * var(--font-size-amplifier));
 	transition: 500ms;
 }
@@ -125,6 +125,10 @@ button{
 	outline: none;
 }
 
+.mobile button{
+	border-width: 4.2px;
+}
+
 button:focus, button:hover{
 	border-color: var(--main-text-rgb);
 }
@@ -169,6 +173,10 @@ input{
 	font-size: .5rem;
 	padding: 1rem;
 	width: 18vw;
+}
+
+.mobile input{
+	border-width: 4.2px;
 }
 
 input:focus{
