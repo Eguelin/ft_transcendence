@@ -33,146 +33,163 @@ var lobbyPlayerContainer= `
 </div>
 `
 
+var gameContainer = `
+<div id="gameContainer">
+	<div class="playerInfoContainer" id="playerTwo">
+		<div class="playerPfp">
+			<img id="playerOnePfp">
+		</div>
+		<h2 class="playerName"></h2>
+		<h2 class="playerScore">-</h2>
+	</div>
+	<canvas id="game" class="game">
+	</canvas>
+	<div class="playerInfoContainer" id="playerOne">
+		<div class="playerPfp">
+			<img id="playerTwoPfp">
+		</div>
+		<h2 class="playerName"></h2>
+		<h2 class="playerScore">-</h2>
+	</div>
+</div>`
+
+var matchContainer = `
+<div id="matchContainer">
+	<div id="matchInfo"> 
+		<div id="exchangeContainer">
+			<table class="landscape">
+				<caption class="exchangeTablesCaption"></caption>
+				<tr>
+					<th scope="row" id="totalExchangeTitle"></th>
+					<td id="totalExchange"></td>
+				</tr>
+				<tr>
+					<th scope="row" id="averageExchangeTitle"></th>
+					<td id="averageExchange"></td>
+				</tr>
+				<tr>
+					<th scope="row" id="longestExchangeTitle"></th>						
+					<td id="longestExchange"></td>
+				</tr>
+			</table>
+			<table class="portrait">
+				<caption class="exchangeTablesCaption"></caption>
+				<tr>
+					<th scope="col" id="totalExchangeTitle"></th>
+					<th scope="col" id="averageExchangeTitle"></th>
+					<th scope="col" id="longestExchangeTitle"></th>
+					
+				</tr>
+				<tr>
+					<td id="totalExchange"></td>
+					<td id="averageExchange"></td>
+					<td id="longestExchange"></td>
+				</tr>
+			</table>
+		</div>
+		<div id="matchInfoGraphContainer">
+			<canvas id="matchInfoGraph"></canvas>
+		</div>
+	</div>
+	<div id="matchPlayersInfo">
+		<div class="playerInfoContainer" id="playerOne">
+			<div class="playerInfo">
+				<div class="playerPfp">
+					<img id="playerOnePfp">
+				</div>
+				<div class="playerNamesContainer">
+					<a class="playerName"></a>
+					<a class="playerDisplayName"></a>
+				</div>
+				<h2 class="playerScore">-</h2>
+			</div>
+			<div id="playerInfoGraphContainer">
+				<canvas id="playerOneInfoGraph"></canvas>
+			</div>
+		</div>
+		<div class="playerInfoContainer" id="playerTwo">
+			<div class="playerInfo">
+				<div class="playerPfp">
+					<img id="playerTwoPfp">
+				</div>
+				<div class="playerNamesContainer">
+					<a class="playerName"></a>
+					<a class="playerDisplayName"></a>
+				</div>
+				<h2 class="playerScore">-</h2>
+			</div>
+			<div id="playerInfoGraphContainer">
+				<canvas id="playerTwoInfoGraph"></canvas>
+			</div>
+		</div>
+	</div>
+</div>`
+
+var tournamentContainer = `
+<div id="tournamentContainer">
+	<div id="lobby">
+		${lobbyPlayerContainer}
+		${lobbyPlayerContainer}
+		${lobbyPlayerContainer}
+		${lobbyPlayerContainer}
+		${lobbyPlayerContainer}
+		${lobbyPlayerContainer}
+		${lobbyPlayerContainer}
+		${lobbyPlayerContainer}
+	</div>
+	<div id="tournament">
+		<div class="round quarter left">
+			<a class="contestMatchResume quarter match one">
+			</a>
+			<a class="contestMatchResume quarter match two">
+			</a>
+		</div>
+
+
+		<div class="round semi left">
+			<a class="contestMatchResume semi match one">
+			</a>
+		</div>
+
+
+		<div class="round final">
+			<a class="contestMatchResume final match one">
+			</a>
+		</div>
+
+		<div class="round semi right">
+			<a class="contestMatchResume semi match two">
+			</a>
+		</div>
+		<div class="round quarter right">
+			<a class="contestMatchResume quarter match three">
+			</a>
+			<a class="contestMatchResume quarter match four">
+			</a>
+		</div>
+	</div>
+</div>`
+
+
 var template = `
 <div id="pageContentContainer">
-	<div id="gameContainer">
-		<div class="playerInfoContainer" id="playerOne">
-			<div class="playerPfp">
-				<img id="playerOnePfp">
-			</div>
-			<h2 class="playerName"></h2>
-			<h2 class="playerScore">-</h2>
+	<div id="controlerPlayerTwo">
+		<div class="leftBtnContainer" tabindex="14">
+			<button class="leftBtn"></button>
 		</div>
-		<canvas id="game" class="game">
-		</canvas>
-		<div class="playerInfoContainer" id="playerTwo">
-			<div class="playerPfp">
-				<img id="playerTwoPfp">
-			</div>
-			<h2 class="playerName"></h2>
-			<h2 class="playerScore">-</h2>
+		<div class="rightBtnContainer" tabindex="15">
+			<button class="rightBtn"></button>
 		</div>
 	</div>
-
-	<div id="matchContainer">
-		<div id="matchInfo"> 
-			<div id="exchangeContainer">
-				<table class="landscape">
-					<caption class="exchangeTablesCaption"></caption>
-					<tr>
-						<th scope="row" id="totalExchangeTitle"></th>
-						<td id="totalExchange"></td>
-					</tr>
-					<tr>
-						<th scope="row" id="averageExchangeTitle"></th>
-						<td id="averageExchange"></td>
-					</tr>
-					<tr>
-						<th scope="row" id="longestExchangeTitle"></th>						
-						<td id="longestExchange"></td>
-					</tr>
-				</table>
-				<table class="portrait">
-					<caption class="exchangeTablesCaption"></caption>
-					<tr>
-						<th scope="col" id="totalExchangeTitle"></th>
-						<th scope="col" id="averageExchangeTitle"></th>
-						<th scope="col" id="longestExchangeTitle"></th>
-						
-					</tr>
-					<tr>
-						<td id="totalExchange"></td>
-						<td id="averageExchange"></td>
-						<td id="longestExchange"></td>
-					</tr>
-				</table>
-			</div>
-			<div id="matchInfoGraphContainer">
-				<canvas id="matchInfoGraph"></canvas>
-			</div>
-		</div>
-		<div id="matchPlayersInfo">
-			<div class="playerInfoContainer" id="playerOne">
-				<div class="playerInfo">
-					<div class="playerPfp">
-						<img id="playerOnePfp">
-					</div>
-					<div class="playerNamesContainer">
-						<a class="playerName"></a>
-						<a class="playerDisplayName"></a>
-					</div>
-					<h2 class="playerScore">-</h2>
-				</div>
-				<div id="playerInfoGraphContainer">
-					<canvas id="playerOneInfoGraph"></canvas>
-				</div>
-			</div>
-			<div class="playerInfoContainer" id="playerTwo">
-				<div class="playerInfo">
-					<div class="playerPfp">
-						<img id="playerTwoPfp">
-					</div>
-					<div class="playerNamesContainer">
-						<a class="playerName"></a>
-						<a class="playerDisplayName"></a>
-					</div>
-					<h2 class="playerScore">-</h2>
-				</div>
-				<div id="playerInfoGraphContainer">
-					<canvas id="playerTwoInfoGraph"></canvas>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="tournamentContainer">
-		<div id="lobby">
-			${lobbyPlayerContainer}
-			${lobbyPlayerContainer}
-			${lobbyPlayerContainer}
-			${lobbyPlayerContainer}
-			${lobbyPlayerContainer}
-			${lobbyPlayerContainer}
-			${lobbyPlayerContainer}
-			${lobbyPlayerContainer}
-		</div>
-		<div id="tournament">
-			<div class="round quarter left">
-				<a class="contestMatchResume quarter match one">
-				</a>
-				<a class="contestMatchResume quarter match two">
-				</a>
-			</div>
-
-
-			<div class="round semi left">
-				<a class="contestMatchResume semi match one">
-				</a>
-			</div>
-
-
-			<div class="round final">
-				<a class="contestMatchResume final match one">
-				</a>
-			</div>
-
-			<div class="round semi right">
-				<a class="contestMatchResume semi match two">
-				</a>
-			</div>
-			<div class="round quarter right">
-				<a class="contestMatchResume quarter match three">
-				</a>
-				<a class="contestMatchResume quarter match four">
-				</a>
-			</div>
-		</div>
-	</div>
+	${gameContainer}
+	${matchContainer}
+	${tournamentContainer}
 	<div id="controler">
-		<div id="leftBtnContainer" tabindex="12" aria-label="Switch tournament section">
-			<button id="leftBtn"></button>
+		<div class="leftBtnContainer" tabindex="12" aria-label="Switch tournament section">
+			<button class="leftBtn"></button>
 		</div>
-		<div id="rightBtnContainer" tabindex="13" aria-label="Switch tournament section">
-			<button id="rightBtn"></button>
+		<div class="rightBtnContainer" tabindex="13" aria-label="Switch tournament section">
+			<button class="rightBtn"></button>
 		</div>
 	</div>
 </div>
@@ -200,10 +217,10 @@ function leftSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#leftBtnContainer").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#leftBtnContainer").onkeydown = null;
-		document.querySelector("#rightBtnContainer").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#rightBtnContainer").onkeydown = null;
+		document.querySelector("#controler .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controler .leftBtnContainer").onkeydown = null;
+		document.querySelector("#controler .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controler .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -221,10 +238,10 @@ function leftSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#leftBtnContainer").addEventListener("click", leftSlideBtn);
-			document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
-			document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -250,10 +267,10 @@ function rightSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#leftBtnContainer").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#leftBtnContainer").onkeydown = null;
-		document.querySelector("#rightBtnContainer").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#rightBtnContainer").onkeydown = null;
+		document.querySelector("#controler .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controler .leftBtnContainer").onkeydown = null;
+		document.querySelector("#controler .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controler .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -271,10 +288,10 @@ function rightSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#leftBtnContainer").addEventListener("click", leftSlideBtn);
-			document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
-			document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -407,17 +424,16 @@ function rightBtnKeydownEvent(e){
 		}
 	}
 
-	document.querySelector("#leftBtnContainer").addEventListener("click", leftSlideBtn);
-	document.querySelector("#leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-	document.querySelector("#rightBtnContainer").addEventListener("click", rightSlideBtn);
-	document.querySelector("#rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
+	document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+	document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
+	document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
 		elem.innerHTML = `
 		<div class="contestUserContainer left">${userContainerAnchor}</div>
 		<div class="contestUserContainer right">${userContainerAnchor}</div>
 		`
 	})
-	console.log(document.querySelector(".round.quarter.left"))
 	setNotifTabIndexes(14);
 	game();
 }
@@ -514,17 +530,17 @@ function displayTournament(is_finished = false){
 			}
 		})
 	})
-	document.getElementById("leftBtnContainer").onmousedown = function() {};
-	document.getElementById("leftBtnContainer").onmouseup = function() {};
-	document.getElementById("rightBtnContainer").onmousedown = function() {};
-	document.getElementById("rightBtnContainer").onmouseup = function() {};
+	document.querySelector("#controler .leftBtnContainer").onmousedown = function() {};
+	document.querySelector("#controler .leftBtnContainer").onmouseup = function() {};
+	document.querySelector("#controler .rightBtnContainer").onmousedown = function() {};
+	document.querySelector("#controler .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
 	if (playersCount == 8/* || 1*/){
 
-		document.getElementById("leftBtnContainer").onclick = leftSlideBtn;
-		document.getElementById("rightBtnContainer").onclick = rightSlideBtn;
-		document.getElementById("leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-		document.getElementById("rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+		document.querySelector("#controler .leftBtnContainer").onclick = leftSlideBtn;
+		document.querySelector("#controler .rightBtnContainer").onclick = rightSlideBtn;
+		document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+		document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 
 		document.querySelector("#lobby").style.setProperty("display", "none");
 		document.querySelector("#tournament").style.setProperty("display", "flex");
@@ -695,6 +711,11 @@ function game() {
 			document.querySelectorAll("#gameContainer .playerInfoContainer").forEach(function (elem) {
 				elem.style.setProperty("justify-content", "center");
 			});
+			if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+				document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
+				document.querySelector("#gameContainer").style.setProperty("top", "12rem")
+				document.querySelector("#game").style.setProperty("rotate", "270deg")
+			}
 		}
 		else{
 			document.querySelectorAll("#gameContainer .playerPfp").forEach(function (elem){
@@ -739,37 +760,72 @@ function game() {
 				countdown = "";
 				updateGame(data.message);
 			} else if (data.type === "game_start") {
-				var leftBtnInterval;
-				var rightBtnInterval;
+				var leftBtnInterval, p2leftBtnInterval;
+				var rightBtnInterval, p2rightBtnInterval;
 
-				document.getElementById("leftBtnContainer").onclick = function() {};
-				document.getElementById("leftBtnContainer").onkeydown = function() {};
-				document.getElementById("rightBtnContainer").onclick = function() {};
-				document.getElementById("rightBtnContainer").onkeydown = function() {};
-				document.getElementById("leftBtnContainer").onpointerdown = function() {
-					keysDown['KeyA'] = true;
+				if (mode=="local" && navigator.userAgent.match(/iphone|android|blackberry/ig)){
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = function() {
+						keysDown['ArrowUp'] = true;
+						p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+					};
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = function() {
+						keysDown['ArrowUp'] = false;
+						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
+					};
+					
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = function() {
+						keysDown['ArrowDown'] = true;
+						p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+					};
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = function() {
+						keysDown['ArrowDown'] = false;
+						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
+					};
+					
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
+					
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
+				}
+				else{
+					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = null;
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = null;
+					
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = null;
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = null;
+				}
+
+				document.querySelector("#controler .leftBtnContainer").onclick = function() {};
+				document.querySelector("#controler .leftBtnContainer").onkeydown = function() {};
+				document.querySelector("#controler .rightBtnContainer").onclick = function() {};
+				document.querySelector("#controler .rightBtnContainer").onkeydown = function() {};
+				document.querySelector("#controler .leftBtnContainer").onpointerdown = function() {
+					keysDown['KeyD'] = true;
 					leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
-				document.getElementById("leftBtnContainer").onpointerup = function() {
-					keysDown['KeyA'] = false;
+				document.querySelector("#controler .leftBtnContainer").onpointerup = function() {
+					keysDown['KeyD'] = false;
 					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 				};
+				
 
-				document.getElementById("rightBtnContainer").onpointerdown = function() {
-					keysDown['KeyD'] = true;
+				document.querySelector("#controler .rightBtnContainer").onpointerdown = function() {
+					keysDown['KeyA'] = true;
 					rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
-				document.getElementById("rightBtnContainer").onpointerup = function() {
-					keysDown['KeyD'] = false;
+				document.querySelector("#controler .rightBtnContainer").onpointerup = function() {
+					keysDown['KeyA'] = false;
 					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 				};
 
-				document.getElementById("leftBtnContainer").oncontextmenu = function(event) {
+				document.querySelector("#controler .leftBtnContainer").oncontextmenu = function(event) {
 					event.preventDefault();
 					event.stopPropagation();
 					return false;
 				};
-				document.getElementById("rightBtnContainer").oncontextmenu = function(event) {
+				document.querySelector("#controler .rightBtnContainer").oncontextmenu = function(event) {
 					event.preventDefault();
 					event.stopPropagation();
 					return false;
