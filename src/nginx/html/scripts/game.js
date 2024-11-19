@@ -35,6 +35,14 @@ var lobbyPlayerContainer= `
 
 var gameContainer = `
 <div id="gameContainer">
+	<div id="controlerPlayerOne">
+		<div class="leftBtnContainer" tabindex="14">
+			<button class="leftBtn"></button>
+		</div>
+		<div class="rightBtnContainer" tabindex="15">
+			<button class="rightBtn"></button>
+		</div>
+	</div>
 	<div class="playerInfoContainer" id="playerOne">
 		<div class="playerPfp">
 			<img id="playerOnePfp">
@@ -50,6 +58,14 @@ var gameContainer = `
 		</div>
 		<h2 class="playerName"></h2>
 		<h2 class="playerScore">-</h2>
+	</div>
+	<div id="controlerPlayerTwo">
+		<div class="leftBtnContainer" tabindex="14">
+			<button class="leftBtn"></button>
+		</div>
+		<div class="rightBtnContainer" tabindex="15">
+			<button class="rightBtn"></button>
+		</div>
 	</div>
 </div>`
 
@@ -173,18 +189,10 @@ var tournamentContainer = `
 
 var template = `
 <div id="pageContentContainer">
-	<div id="controlerPlayerTwo">
-		<div class="leftBtnContainer" tabindex="14">
-			<button class="leftBtn"></button>
-		</div>
-		<div class="rightBtnContainer" tabindex="15">
-			<button class="rightBtn"></button>
-		</div>
-	</div>
 	${gameContainer}
 	${matchContainer}
 	${tournamentContainer}
-	<div id="controler">
+	<div id="controlerSlide">
 		<div class="leftBtnContainer" tabindex="12" aria-label="Switch tournament section">
 			<button class="leftBtn"></button>
 		</div>
@@ -217,10 +225,10 @@ function leftSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#controler .leftBtnContainer").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#controler .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controler .rightBtnContainer").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#controler .rightBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -238,10 +246,10 @@ function leftSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
-			document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
-			document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -267,10 +275,10 @@ function rightSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#controler .leftBtnContainer").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#controler .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controler .rightBtnContainer").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#controler .rightBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -288,10 +296,10 @@ function rightSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
-			document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
-			document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -424,10 +432,10 @@ function rightBtnKeydownEvent(e){
 		}
 	}
 
-	document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
-	document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-	document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
-	document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+	document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+	document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+	document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
 		elem.innerHTML = `
 		<div class="contestUserContainer left">${userContainerAnchor}</div>
@@ -530,18 +538,18 @@ function displayTournament(is_finished = false){
 			}
 		})
 	})
-	document.querySelector("#controler .leftBtnContainer").onmousedown = function() {};
-	document.querySelector("#controler .leftBtnContainer").onmouseup = function() {};
-	document.querySelector("#controler .rightBtnContainer").onmousedown = function() {};
-	document.querySelector("#controler .rightBtnContainer").onmouseup = function() {};
+	document.querySelector("#controlerSlide .leftBtnContainer").onmousedown = function() {};
+	document.querySelector("#controlerSlide .leftBtnContainer").onmouseup = function() {};
+	document.querySelector("#controlerSlide .rightBtnContainer").onmousedown = function() {};
+	document.querySelector("#controlerSlide .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
 	if (playersCount == 8/* || 1*/){
 		console.log("e")
 
-		document.querySelector("#controler .leftBtnContainer").onclick = leftSlideBtn;
-		document.querySelector("#controler .rightBtnContainer").onclick = rightSlideBtn;
-		document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-		document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+		document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
+		document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 
 		document.querySelector("#lobby").style.setProperty("display", "none");
 		document.querySelector("#tournament").style.setProperty("display", "flex");
@@ -601,12 +609,12 @@ function displayTournament(is_finished = false){
 		})
 
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-			document.querySelector("#controler").classList.add("singleRoundDisplay");
+			document.querySelector("#controlerSlide").classList.add("singleRoundDisplay");
 			tournamentContainer.classList.add("singleRoundDisplay");
 		}
 		else {
 			tournamentContainer.classList.remove("singleRoundDisplay");
-			document.querySelector("#controler").classList.remove("singleRoundDisplay");
+			document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay");
 			tournamentContainer.style.setProperty("left", `0px`)
 			if (document.getElementById("treeCanva"))
 				document.querySelector("#treeCanva").style.setProperty("left", `0px`)
@@ -655,7 +663,7 @@ function displayTournament(is_finished = false){
 	else{
 		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentLobby']} ${playersCount}/8`
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
-		document.querySelector("#controler").classList.remove("singleRoundDisplay")
+		document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay")
 		document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
 		if (document.getElementById("treeCanva"))
 			document.getElementById("treeCanva").remove();
@@ -679,6 +687,7 @@ function displayTournament(is_finished = false){
 		})
 	}
 }
+var playerKeyMap;
 
 function game() {
 	const url =  new URL(window.location.href);
@@ -704,11 +713,11 @@ function game() {
 		let displayInterval;
 		let oldKeysDown = {};
 		let countdown = "";
-		var playerKeyMap = keyMap;
+		playerKeyMap = keyMap;
 		var playerTouchMap = keyMap;
-
 		if (isMobile()){
-			document.querySelector("#controler").style.setProperty("display", "flex");
+			document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
+//			document.querySelector("#controlerSlide").style.setProperty("display", "flex");
 		}
 
 		if (mode == "local"){
@@ -769,22 +778,27 @@ function game() {
 				var leftBtnInterval, p2leftBtnInterval;
 				var rightBtnInterval, p2rightBtnInterval;
 
-				if (mode=="local" && isMobile()){
+				if ((mode=="local" || client.username == player2.name) && isMobile()){
+					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
+					if (mode != "local"){
+						document.querySelector("#controlerPlayerOne").style.setProperty("display", "none");
+						playerTouchMap = FullInversedKeyMap;
+					}
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = function() {
-						keysDown['ArrowUp'] = true;
+						keysDown[playerTouchMap['ArrowUp']] = true;
 						p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 					};
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = function() {
-						keysDown['ArrowUp'] = false;
+						keysDown[playerTouchMap['ArrowUp']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
 					};
 					
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = function() {
-						keysDown['ArrowDown'] = true;
+						keysDown[playerTouchMap['ArrowDown']] = true;
 						p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 					};
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = function() {
-						keysDown['ArrowDown'] = false;
+						keysDown[playerTouchMap['ArrowDown']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
 					};
 					
@@ -803,35 +817,35 @@ function game() {
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = null;
 				}
 
-				document.querySelector("#controler .leftBtnContainer").onclick = function() {};
-				document.querySelector("#controler .leftBtnContainer").onkeydown = function() {};
-				document.querySelector("#controler .rightBtnContainer").onclick = function() {};
-				document.querySelector("#controler .rightBtnContainer").onkeydown = function() {};
-				document.querySelector("#controler .leftBtnContainer").onpointerdown = function() {
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onclick = function() {};
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onkeydown = function() {};
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onclick = function() {};
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onkeydown = function() {};
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerdown = function() {
 					keysDown[playerTouchMap['KeyD']] = true;
 					leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
-				document.querySelector("#controler .leftBtnContainer").onpointerup = function() {
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerup = function() {
 					keysDown[playerTouchMap['KeyD']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 				};
 				
 
-				document.querySelector("#controler .rightBtnContainer").onpointerdown = function() {
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerdown = function() {
 					keysDown[playerTouchMap['KeyA']] = true;
 					rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
-				document.querySelector("#controler .rightBtnContainer").onpointerup = function() {
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerup = function() {
 					keysDown[playerTouchMap['KeyA']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 				};
 
-				document.querySelector("#controler .leftBtnContainer").oncontextmenu = function(event) {
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").oncontextmenu = function(event) {
 					event.preventDefault();
 					event.stopPropagation();
 					return false;
 				};
-				document.querySelector("#controler .rightBtnContainer").oncontextmenu = function(event) {
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").oncontextmenu = function(event) {
 					event.preventDefault();
 					event.stopPropagation();
 					return false;
@@ -919,15 +933,14 @@ function game() {
 					document.getElementById("waitingContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
-			console.log(player1)
 			if (getWindowHeight() > getWindowWidth()){
 				if (client.username == player1.name){
-					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
-					document.querySelector("#game").style.setProperty("rotate", "270deg")
-					playerKeyMap = inversedKeyMap;
+					//document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
+					//document.querySelector("#game").style.setProperty("rotate", "270deg")
+					//playerKeyMap = FullInversedKeyMap;
 				}
 				else if (mode != "local")
-					playerTouchMap = inversedKeyMap;
+					playerTouchMap = FullInversedKeyMap;
 			}
 				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
 				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
@@ -1085,7 +1098,7 @@ function game() {
 
 		function handleKeyDown(event) {
 			if (mapAvailableKeyCode[event.code]){
-					keysDown[playerKeyMap[event.code]] = true;
+				keysDown[playerKeyMap[event.code]] = true;
 			}
 		}
 
