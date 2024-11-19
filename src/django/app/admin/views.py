@@ -1,13 +1,9 @@
-from django.db import DatabaseError
 from django.contrib.auth.models import User
-from django.http import JsonResponse
-import json, os, requests, base64, random, string, subprocess, datetime
-import game.models as customModels
-from django.core.validators import RegexValidator, MaxLengthValidator
-from django.core.exceptions import ValidationError
-import json, os, requests, base64, random, zxcvbn, re
+from django.http import JsonResponse, HttpResponse
+from django.db import DatabaseError
+import json, os, random
 import login.views
-
+import game.models as customModels
 
 def generate_unique_username(base_username):
 	username = base_username
@@ -51,18 +47,34 @@ def create_match(request):
 	if request.user.is_authenticated:
 		if not request.user.is_staff:
 			return JsonResponse({'message': 'user is not admin'}, status=403)
+
 		try:
 			data = json.loads(request.body)
+			nbr = data['range']
+			userOne = data['userOne']
+			userTwo = data['userTwo']
 		except json.JSONDecodeError:
-			return JsonResponse({'message': 'Invalid JSON'}, status=400)
+			return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		except KeyError:
+			return HttpResponse("Missing Data: " + str(request.body), status=400)
+
+		if not isinstance(nbr, int) or nbr < 1 or not isinstance(userOne, str) or not isinstance(userTwo, str):
+			return HttpResponse("Invalid Data: " + str(request.body), status=400)
+
 		matches = {}
-		for i in range(0, data['range']):
-			match = customModels.Match.objects.createWithTwoOpps(data['userOne'], data['userTwo'])
-			matches[i] = {'playerOne': match.player_one.username,
-				 'playerTwo': match.player_two.username,
-				 'playerOnePts': match.player_one_pts,
-				 'playerTwoPts': match.player_two_pts,
-				 'date': match.date,}
+		for i in range(0, nbr):
+			try:
+				match = customModels.Match.objects.createWithTwoOpps(userOne, userTwo)
+				matches[i] = {'playerOne': match.player_one.username,
+							'playerTwo': match.player_two.username,
+							'playerOnePts': match.player_one_pts,
+							'playerTwoPts': match.player_two_pts,
+							'date': match.date,}
+			except DatabaseError:
+				return HttpResponse("Database error", status=500)
+			except Exception:
+				return HttpResponse("Internal server error", status=500)
+
 		return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
