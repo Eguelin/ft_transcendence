@@ -84,6 +84,10 @@
 	overflow: hidden;
 }
 
+.resultScoreName.displayName{
+	font-style: italic;
+}
+
 .resultScoreName:hover, .resultScoreName:focus{
 	text-decoration: underline from-font solid var(--main-text-rgb);
 }
@@ -105,8 +109,8 @@
 
 #profilePfpContainer {
 	position: relative;
-	height: 7vw;
-	width: 7vw;
+	height: 7rem;
+	width: 7rem;
 	overflow: hidden;
 	border-radius: 50%;
 }
@@ -143,9 +147,8 @@
 	position: relative;
 	display: flex;
 	gap: 1ch;
-	left: 50%;
-	translate: -50%;
 	width: max-content;
+	font-size: 1rem;
 }
 
 @media screen and (min-height:590px){
@@ -416,15 +419,43 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 	}
 }
 
-.mobile #timelineSelectionContainer{
-	flex-direction: column;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	align-items: center;
-	margin: 1rem;
+#profileInfo{
+	display: flex;
+	flex: auto;
 }
-.mobile #profileGraphs{
-	flex-direction: column;
+
+#profileFriendsButton{
+	flex: none;
+}
+
+@media screen and (orientation:portrait){
+	#profileInfoContainer{
+		flex-direction: column;
+		gap: 1rem;
+	}
+}
+
+.mobile{
+	#profileInfoContainer{
+		margin: 0;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	#profilePfpContainer{
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	#timelineSelectionContainer{
+		flex-direction: column;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		align-items: center;
+		margin: 1rem;
+	}
+	#profileGraphs{
+		flex-direction: column;
+	}
 }
 
 #notPlayedPeriod{
