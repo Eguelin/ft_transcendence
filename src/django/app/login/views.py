@@ -3,7 +3,7 @@ import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 from transcendence.settings import DEBUG
@@ -113,11 +113,12 @@ def create_user(request, staff=False):
 		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
-	except Exception as e:
-		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+	except (json.JSONDecodeError, KeyError):
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+
 
 	if username is None or password is None or not isinstance(username, str) or not isinstance(password, str):
-		return JsonResponse({'message': 'Invalid username or password'}, status=400)
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
 
 	username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
 	max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
@@ -133,9 +134,11 @@ def create_user(request, staff=False):
 	if len(password) == 0 and not staff:
 		return JsonResponse({'message': 'Password too short'}, status=400)
 
-	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and not DEBUG and not staff:
-		return JsonResponse({'message': 'Password too weak'}, status=400)
+
+	if not staff:
+		result = zxcvbn.zxcvbn(password)
+		if result['score'] < 4 and not DEBUG:
+			return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	if User.objects.filter(username=username).exists():
 		return JsonResponse({'message': 'User with same username already exist'}, status=400)
