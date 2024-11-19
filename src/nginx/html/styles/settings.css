@@ -49,7 +49,7 @@
 	display: flex;
 	align-items: center;
 	background-color: var(--hover-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 }
 
 
@@ -80,6 +80,7 @@
 	border: 0;
 	border-top: 1px solid var(--main-text-rgb);
 	outline: none;
+	align-self: center;
 }
 
 #confirmPfpBtn:hover, #confirmPfpBtn:focus{
@@ -232,8 +233,9 @@
 	position: fixed;
 	width: 100vw;
 	left: 0;
-	top: 50%;
+	top: 60%;
 	translate: 0 -50%;
+	height: 50%;
 }
 
 #settingSlides > *{
@@ -245,4 +247,90 @@
 	text-align: center;
 	width: 20vw;
 	position: relative;
+}
+
+@media screen and (orientation:portrait) {
+	.settingSlide#accoutSlide > div{
+		width: 40vw;
+	}
+	.settingSlide#accoutSlide{
+	 	.deleteBtn{
+			width: 40vw;
+			border-color: transparent;
+			padding: 1rem;
+	 	}
+		#inputChangeUsername, #pfpLabel{
+			border-width: 2.2px;
+		}
+		#inputChangeUsername:focus{
+			border-width: 4.2px;
+		}
+	}
+	#confirmPfpContainer{
+		width: 40vw;
+	}
+
+	#fontSizeRangeContainer{
+		flex-direction: column;
+		width: 40vw;
+	}
+
+	#fontSizeRangeText, #fontSizeRange, #fontSizeList, #fontSizeRangeContainer > div{
+		width: inherit;
+	}
+
+	#settingSlides{
+		top: 30%;
+		translate: 0 0;
+		height: 70%;
+
+		.dropDownContent a{
+			width: min-content;
+		}
+	}
+}
+
+.mobile{
+	.settingSlide#accoutSlide > div{
+		width: 60vw;
+	}
+	.settingSlide#accoutSlide{
+	 	.deleteBtn{
+			width: 60vw;
+			border-color: transparent;
+			padding: 1rem;
+	 	}
+		#inputChangeUsername, #pfpLabel{
+			border-width: 2.2px;
+		}
+		#inputChangeUsername:focus{
+			border-width: 4.2px;
+		}
+	}
+	#confirmPfpContainer{
+		width: 60vw;
+	}
+
+	#settingsSlideSelector{
+		width: auto;
+	}
+
+	#fontSizeRangeContainer{
+		flex-direction: column;
+		width: 60vw;
+	}
+
+	#fontSizeRangeText, #fontSizeRange, #fontSizeList, #fontSizeRangeContainer > div{
+		width: inherit;
+	}
+
+	#settingSlides{
+		top: 30%;
+		translate: 0 0;
+		height: 70%;
+
+		.dropDownContent a{
+			width: min-content;
+		}
+	}
 }
