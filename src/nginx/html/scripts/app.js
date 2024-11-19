@@ -61,6 +61,14 @@ function addPfpUrlToImgSrc(img, path) {
 		img.style.setProperty("display", "none");
 }
 
+
+/*	 _____  _       ___   _____  _____ 
+	/  __ \| |     / _ \ /  ___|/  ___|
+	| /  \/| |    / /_\ \\ `--. \ `--. 
+	| |    | |    |  _  | `--. \ `--. \
+	| \__/\| |____| | | |/\__/ //\__/ /
+	 \____/\_____/\_| |_/\____/ \____/*/
+
 class Client {
 	username;
 	currentPage;
@@ -229,6 +237,57 @@ class Client {
 	}
 }
 
+class Dashboard{
+	startDate;
+	endDate;
+	startDateStr;
+	endDateStr;
+	username;
+	matches;
+	clientUsername;
+	clientMatches;
+
+	constructor (startDate, endDate, username, clientUsername){
+		return (async () =>{
+			try {
+				this.startDate = startDate;
+				this.endDate = endDate;
+				this.startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+				this.endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+				this.username = username;
+				this.clientUsername = clientUsername;
+				const matchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : username, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.matches = await matchesFetch.json();
+				this.matches = this.matches.matches;
+
+				const clientMatchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : this.clientUsername, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.clientMatches = await clientMatchesFetch.json();
+				this.clientMatches = this.clientMatches.matches;
+			}
+			catch{
+				var template = `
+				<div id="pageContentContainer">
+					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
+				</div>
+				`
+				document.getElementById("container").innerHTML = template;
+				throw new Error("Error while reaching server");
+			}
+			return (this);
+		})();
+	}
+}
+
 XMLHttpRequest.prototype.send = function () {
 	return false;
 }
@@ -303,7 +362,6 @@ function load() {
 		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
 		document.body.appendChild(s);
 	}
-	homeBtn.focus();
 }
 
 
@@ -1450,7 +1508,6 @@ function checkMatchResumeSize(){
 	var baseWidth = 16
 	var i = 0;
 	ch = 1
-	console.log(matches);
 	if (matches.length > 0){
 		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
 			i++;
@@ -1484,6 +1541,8 @@ function checkMatchResumeSize(){
 	}
 	else {
 		var text = document.querySelector("#notPlayedToday");
+		if (!text)
+			return;
 		
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 		var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
