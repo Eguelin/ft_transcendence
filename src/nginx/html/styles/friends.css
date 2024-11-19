@@ -232,6 +232,12 @@
 	display: flex;
 	flex-direction: column;
 	padding-top: .25rem;
+	font-size: 1em;
+	align-items: center;
+}
+
+#friendSlideSelector{
+	font-size: 1rem;
 }
 
 .slideSelector div{
@@ -290,87 +296,101 @@
 	display: none;
 }
 
-.mobile #friendSlideSelector{
-	width: 100vw;
-	z-index: 20;
-}
-.mobile .friendSlide{
-	width: 50vw;
-	display: flex;
-	flex-direction: column;
-	gap: 2ch;
-	background: none;
-	border: none;
-	margin: 2rem 0;
-}
+.mobile{	
+	#friendSlideSelector{
+		width: 100vw;
+		z-index: 20;
+		gap: 1ch;
+	}
+	.friendSlide{
+		width: 50vw;
+		display: flex;
+		flex-direction: column;
+		gap: 2ch;
+		background: none;
+		border: none;
+		margin: 2rem 0;
+	}
+	
+	.gradient, .endGradient{
+		display: block;
+		position: absolute;
+		height: 2rem;
+		width: 100vw;
+		top: -.2rem;
+		background: linear-gradient(0deg, transparent 0%, var(--page-bg-rgb) 100%);
+		z-index: 10;
+	}
+	
+	.endGradient {
+		top: unset;
+		background: linear-gradient(180deg, transparent 0%, var(--page-bg-rgb) 100%);
+		bottom: 0;
+	}
+	
+	#friendSlides > *{
+		height: 75vh;
+		overflow-y: scroll;
+		margin: 0;
+	}
+	
+	.friendContainer{
+		flex-direction: column;
+		gap: 1ch;
+		background: var(--hover-text-rgb);
+		border: 3px solid var(--main-text-rgb);
+		border-radius: 1rem;
+	}
+	
+	.friendContainer .pfpContainer{
+		width: 50vw;
+		height: 50vw;
+	}
+	
+	.friendContainer a{
+		text-align: center;
+	}
+	
+	.friendContainer .moreBtn{
+		display: none;
+	}
+	
+	.friendContainer .friendsOptionContainer{
+		width: 100%;
+		margin: .5rem 0;
+	}
+	
+	.friendContainer .friendsOption{
+		display: flex;
+		width: inherit;
+	}
+	
+	.friendContainer .friendsOption div{
+		margin: 0;
+		flex: 1;
+	}
+	
+	.friendSlide .pfpContainer{
+		border-radius: 0;
+		border-top-left-radius: 1rem;
+		border-top-right-radius: 1rem;
+		width: -webkit-fill-available;
+		width: -moz-available;
+	}
+	
+	#confirmDelete, #confirmBlock{
+		width: 80vw;
+	}
 
-.mobile .gradient, .mobile .endGradient{
-	display: block;
-	position: absolute;
-	height: 2rem;
-	width: 100vw;
-	top: -.2rem;
-	background: linear-gradient(0deg, transparent 0%, var(--page-bg-rgb) 100%);
-	z-index: 10;
-}
+	#friendInfo .slideSelector .slideSelectorText{
+		width: fit-content;
+		font-size: 1em;
+	}
 
-.mobile .endGradient {
-	top: unset;
-	background: linear-gradient(180deg, transparent 0%, var(--page-bg-rgb) 100%);
-	bottom: 0;
-}
-
-.mobile #friendSlides > *{
-	height: 75vh;
-	overflow-y: scroll;
-	margin: 0;
-}
-
-.mobile .friendContainer{
-	flex-direction: column;
-	gap: 1ch;
-	background: var(--hover-text-rgb);
-	border: 3px solid var(--main-text-rgb);
-	border-radius: 1rem;
-	overflow: hidden;
-}
-
-.mobile .friendContainer .pfpContainer{
-	width: 50vw;
-	height: 50vw;
-}
-
-.mobile .friendContainer a{
-	text-align: center;
-}
-
-.mobile .friendContainer .moreBtn{
-	display: none;
-}
-
-.mobile .friendContainer .friendsOptionContainer{
-	width: 100%;
-	margin: .5rem 0;
-}
-
-.mobile .friendContainer .friendsOption{
-	display: flex;
-	width: inherit;
-}
-
-.mobile .friendContainer .friendsOption div{
-	margin: 0;
-	flex: 1;
-}
-
-.mobile .friendSlide .friendContainer:first-child .pfpContainer, .mobile .friendSlide .friendContainer:last-child .pfpContainer, .mobile .friendSlide .friendContainer:only-child .pfpContainer{
-	border-radius: 0;
-}
-
-.mobile #confirmDelete, .mobile #confirmBlock{
-	width: 80vw;
-}
-
+	#friendInfo .slideSelector{
+		width: 25%;
+	}
+}	
 
 @media screen and (orientation:portrait) {
 	.friendSlide{

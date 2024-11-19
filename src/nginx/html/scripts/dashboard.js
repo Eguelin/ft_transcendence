@@ -45,57 +45,6 @@ var template = `
     <div id="matchHistoryContainer"></div>
 </div>`
 
-class Dashboard{
-	startDate;
-	endDate;
-	startDateStr;
-	endDateStr;
-	username;
-	matches;
-	clientUsername;
-	clientMatches;
-
-	constructor (startDate, endDate, username, clientUsername){
-		return (async () =>{
-			try {
-				this.startDate = startDate;
-				this.endDate = endDate;
-				this.startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
-				this.endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
-				this.username = username;
-				this.clientUsername = clientUsername;
-				const matchesFetch = await fetch('/api/user/get', {
-					method: 'POST', //GET forbid the use of body :(
-					headers: {'Content-Type': 'application/json',},
-					body: JSON.stringify({"name" : username, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
-					credentials: 'include'
-				})
-				this.matches = await matchesFetch.json();
-				this.matches = this.matches.matches;
-
-				const clientMatchesFetch = await fetch('/api/user/get', {
-					method: 'POST', //GET forbid the use of body :(
-					headers: {'Content-Type': 'application/json',},
-					body: JSON.stringify({"name" : this.clientUsername, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
-					credentials: 'include'
-				})
-				this.clientMatches = await clientMatchesFetch.json();
-				this.clientMatches = this.clientMatches.matches;
-			}
-			catch{
-				var template = `
-				<div id="pageContentContainer">
-					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
-				</div>
-				`
-				document.getElementById("container").innerHTML = template;
-				throw new Error("Error while reaching server");
-			}
-			return (this);
-		})();
-	}
-}
-
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -242,6 +191,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 
 
 	//console.log(matches, username, startDate, endDate, clientMatches, clientUsername);
+	var minAbs=0, maxAbs =0;
     while (startDate.getTime() <= endDate.getTime() || startDate.getDate() <= endDate.getDate()){
         var countWin = 0, countMatch = 0;
         var clientCountWin = 0, clientCountMatch = 0;
@@ -282,12 +232,16 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 			totalWin += countWin;
             average = (countWin / countMatch) * 100;
             absResult = (countWin - (countMatch - countWin));
-            mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : average});
+            mapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : parseInt(average)});
             mapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : absResult});
+			minAbs = absResult < minAbs ? absResult : minAbs;
+			maxAbs = absResult > maxAbs ? absResult : maxAbs;
             clientAverage = (clientCountWin / clientCountMatch) * 100;
             clientAbsResult = (clientCountWin - (clientCountMatch - clientCountWin));
-            clientMapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : clientAverage});
+            clientMapAverage.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : parseInt(clientAverage)});
             clientMapAbs.push({'date' : `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`, 'result' : clientAbsResult});
+			minAbs = clientAbsResult < minAbs ? clientAbsResult : minAbs;
+			maxAbs = clientAbsResult > maxAbs ? clientAbsResult : maxAbs;
         }
         startDate.setDate(startDate.getDate() + 1);
     }
@@ -363,7 +317,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				}
 			});
 		};
-	
+
 		function drawAverage(){
 			datasets = [
 				{
@@ -451,7 +405,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 								font: {
 									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
 								},
 							},
 							grid: {
@@ -467,7 +421,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 								font: {
 									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
 								},
 							},
 							grid: {
@@ -569,21 +523,23 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 								font: {
 									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
 								},
 							},
 							grid: {
 								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 								lineWidth:graphLineWidth,
 								drawTicks: false,
-							}
+							},
+							min: Math.abs(minAbs) > Math.abs(maxAbs) ? minAbs : -maxAbs,
+							max: Math.abs(minAbs) > Math.abs(maxAbs) ? -minAbs : maxAbs
 						},
 						x: {
 							ticks: {
 								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 								font: {
 									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 2
+									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
 								},
 							},
 							grid: {
@@ -672,11 +628,11 @@ function displayCharts(){
 			userStatGraph.height = y * 21;
 		}
 		else{
-			wLGraph.width = x * 70;
-			wLAbsGraph.width = x * 70;
+			wLGraph.width = x * 80;
+			wLAbsGraph.width = x * 80;
 			userStatGraph.width = x * 70;
-			wLGraph.height = y * 21;
-			wLAbsGraph.height = y * 21;
+			wLGraph.height = y * 40;
+			wLAbsGraph.height = y * 40;
 			userStatGraph.height = y * 21;
 		}
 

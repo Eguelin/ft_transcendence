@@ -32,7 +32,7 @@
 		"aria#recentMatchHistoryContainer" : "User today's matches",
 		"ariaResumeMatch.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
 		"ariaResumeTournament.matchDescContainer" : "Tournament on the ${DATE}",
-		"aria.resultScoreName" : "profile_redirection"
+		"aria.resultScoreName" : "${USERNAME} profile redirection"
 	},
 	"login" : {
 		"#title" : "LOGIN",
@@ -116,7 +116,7 @@
 		".draw" : "DRAW",
 		".tournament" : "TOURNAMENT",
 		"ariaResume.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
-		"aria.resultScoreName" : "profile_redirection"
+		"aria.resultScoreName" : "${USERNAME} profile redirection"
 	},
 	"dashboard":{
 		"#title" : "",
@@ -144,7 +144,7 @@
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Search",
-		"aria.userResume" : "profile_redirection"
+		"aria.userResume" : "${USERNAME} profile redirection"
 	},
 	"game":{
 		"#title" : "",
@@ -177,7 +177,7 @@
 		"quarter" : "Quarter finals",
 		"semi" : "Semi finals",
 		"final" : "finals",
-		"profile_redirection" : "${USERNAME} profile_redirection"
+		"profile_redirection" : "${USERNAME} profile redirection"
 	},
 	"match" : {
 		"#title" : "",

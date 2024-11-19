@@ -4,27 +4,31 @@ var allMatchesButton;
 
 var template = `
 <div id="pageContentContainer">
-    <div id="profileInfoContainer">
-        <div id="profilePfpContainer">
-            <img id="profilePfp"></img>
-        </div>
-        <div id="profileNameContainer">
-            <h1 id="profileName">Default</h1>
-        </div>
-        <button tabindex="12" id="sendFriendRequestBtn">Send friend request</button>
-        <button tabindex="12" id="deleteFriendBtn">Remove friend</button>
-    </div>
+	<div id="profileInfoContainer">
+		<div id="profileInfo">
+			<div id="profilePfpContainer">
+				<img id="profilePfp"></img>
+			</div>
+			<div id="profileNameContainer">
+				<h1 id="profileName">Default</h1>
+			</div>
+		</div>
+		<div id="profileFriendsButton">
+			<button tabindex="12" id="sendFriendRequestBtn">Send friend request</button>
+			<button tabindex="12" id="deleteFriendBtn">Remove friend</button>
+		</div>
+	</div>
 
-    <div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
-        <div id="MatchHistoryTextContainer">
-            <div id="recentMatchHistoryText">Recent matches</div>
-            <a> | </a>
-            <div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
-        </div>
-        <div id="recentMatchHistory">
+	<div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
+		<div id="MatchHistoryTextContainer">
+			<div id="recentMatchHistoryText">Recent matches</div>
+			<a> | </a>
+			<div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
+		</div>
+		<div id="recentMatchHistory">
 
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 `
 
@@ -111,7 +115,6 @@ function updateUserLang(){
                     for (var i=0; i<Object.keys(matchObj).length && i<5;i++){
                         recentMatchHistoryContainer.appendChild(createMatchResumeContainer(matchObj[i], user.display_name));
                     };
-					checkMatchResumeSize();    
 					(async () => (loadCurrentLang()))();
 
                     var container = document.getElementById("recentMatchHistoryContainer");
@@ -128,17 +131,23 @@ function updateUserLang(){
                     });
                 }
                 catch{
-                    var messageContainer = document.createElement("div");
-                    var message = document.createElement("a");
-                    recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
-                    recentMatchHistoryContainer.style.setProperty("align-items", "center");
-                    messageContainer.id = "notPlayedTodayContainer";
-                    message.id="notPlayedToday";
-			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
-                    messageContainer.appendChild(message);
-                    recentMatchHistoryContainer.appendChild(messageContainer);
+
+					if (!document.querySelector("#notPlayedToday")){
+						var messageContainer = document.createElement("div");
+						var message = document.createElement("a");
+						recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
+						recentMatchHistoryContainer.style.setProperty("align-items", "center");
+						recentMatchHistoryContainer.style.setProperty("justify-content", "center");
+						messageContainer.id = "notPlayedTodayContainer";
+						message.id="notPlayedToday";
+						message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
+						messageContainer.appendChild(message);
+						recentMatchHistoryContainer.appendChild(messageContainer);
+					}
                 }
+				checkMatchResumeSize();    
 				setNotifTabIndexes(tabIdx);
+				checkUserPageSize();
             })
         }
         else{

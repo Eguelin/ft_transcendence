@@ -61,6 +61,14 @@ function addPfpUrlToImgSrc(img, path) {
 		img.style.setProperty("display", "none");
 }
 
+
+/*	 _____  _       ___   _____  _____ 
+	/  __ \| |     / _ \ /  ___|/  ___|
+	| /  \/| |    / /_\ \\ `--. \ `--. 
+	| |    | |    |  _  | `--. \ `--. \
+	| \__/\| |____| | | |/\__/ //\__/ /
+	 \____/\_____/\_| |_/\____/ \____/*/
+
 class Client {
 	username;
 	currentPage;
@@ -229,6 +237,57 @@ class Client {
 	}
 }
 
+class Dashboard{
+	startDate;
+	endDate;
+	startDateStr;
+	endDateStr;
+	username;
+	matches;
+	clientUsername;
+	clientMatches;
+
+	constructor (startDate, endDate, username, clientUsername){
+		return (async () =>{
+			try {
+				this.startDate = startDate;
+				this.endDate = endDate;
+				this.startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
+				this.endDateStr = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`
+				this.username = username;
+				this.clientUsername = clientUsername;
+				const matchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : username, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.matches = await matchesFetch.json();
+				this.matches = this.matches.matches;
+
+				const clientMatchesFetch = await fetch('/api/user/get', {
+					method: 'POST', //GET forbid the use of body :(
+					headers: {'Content-Type': 'application/json',},
+					body: JSON.stringify({"name" : this.clientUsername, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+					credentials: 'include'
+				})
+				this.clientMatches = await clientMatchesFetch.json();
+				this.clientMatches = this.clientMatches.matches;
+			}
+			catch{
+				var template = `
+				<div id="pageContentContainer">
+					<h2 id="NotFoundtitle">Error while connecting to server :(</h2>
+				</div>
+				`
+				document.getElementById("container").innerHTML = template;
+				throw new Error("Error while reaching server");
+			}
+			return (this);
+		})();
+	}
+}
+
 XMLHttpRequest.prototype.send = function () {
 	return false;
 }
@@ -303,7 +362,6 @@ function load() {
 		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
 		document.body.appendChild(s);
 	}
-	homeBtn.focus();
 }
 
 
@@ -1274,19 +1332,25 @@ function createMatchResumeContainer(match, username) {
 		scoreUser = ft_create_element("div", {"class" : "resultScore"});
 		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
-		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one_display_name == username ? match.player_one_display_name : match.player_two_display_name, "tabIndex" : "-1"});
-		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_one_pts : match.player_two_pts});
+		scoreUserName = ft_create_element("a", {"class" : `resultScoreName ${
+			match.player_one_display_name == username || match.player_one== username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
+			 "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_display_name : match.player_two_display_name,
+			 "tabIndex" : "-1"});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_pts : match.player_two_pts});
 
-		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one_display_name == username ? match.player_two_display_name : match.player_one_display_name, "tabIndex" : "-1"});
-		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentName = ft_create_element("a", {"class" : `resultScoreName ${
+			match.player_one_display_name == username || match.player_one== username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
+			"innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_display_name : match.player_one_display_name,
+			"tabIndex" : "-1"});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_pts : match.player_one_pts});
 
 		if (scoreUserName.innerText == "deleted"){
 			scoreUserName.classList.add("deletedUser");
 			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreUserName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_one : match.player_two}`
-			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+			scoreUserName.href = `https://${hostname.host}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_one : match.player_two}`
+			scoreUserName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreUserName.innerText)}`);
 		}
 
 
@@ -1295,8 +1359,8 @@ function createMatchResumeContainer(match, username) {
 			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreOpponentName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_two : match.player_one}`
-			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
+			scoreOpponentName.href = `https://${hostname.host}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_two : match.player_one}`
+			scoreOpponentName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreOpponentName.innerText)}`);
 		}
 
 		scoreOpponentName.innerText += ":"
@@ -1386,13 +1450,6 @@ setInterval(function() {
 
 
 function checkResizeWindow(){
-	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
-		return;
-	}
-	if(currentPage == "dashboard"){
-		displayCharts();
-	}
-
 	var tmp = document.querySelector("#inputSearchUserContainer");
 	var fontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
@@ -1416,8 +1473,8 @@ function checkResizeWindow(){
 		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
 		
-		for (let i=0; i<tmp.childElementCount - 1;i++){
-			if (tmp.children[i].style.getPropertyValue("display") == "none")
+		for (let i=0; i<tmp.childElementCount;i++){
+			if (tmp.children[i].style.getPropertyValue("display") == "none" || tmp.children[i].style.getPropertyValue("display") == "")
 				continue ;
 			if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
 				break
@@ -1431,21 +1488,82 @@ function checkResizeWindow(){
 				currentFontSize -= 1;
 			}
 		}
+		tmp = document.querySelector("#subtitle");
+		if (tmp.innerText != ""){
+			var currentFontSize = parseInt(window.getComputedStyle(tmp).fontSize)
+			var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+			var anchor = document.querySelector("#quickSettingContainer");
+			console.log(tmp.getBoundingClientRect(), anchor.getBoundingClientRect());
+			console.log(currentFontSize, baseFontSize);
+			while (tmp.getBoundingClientRect().right < anchor.getBoundingClientRect().left && currentFontSize < baseFontSize){
+				tmp.style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize += 1;
+			}
+			while (tmp.getBoundingClientRect().right > anchor.getBoundingClientRect().left && currentFontSize > 1){
+				tmp.style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize -= 1;
+			}
+		}
+	}
+	if(currentPage == "dashboard"){
+		displayCharts();
 	}
 	if (currentPage == "home" || currentPage == "user"){
 		checkMatchResumeSize()
 	}
+	if (currentPage == "user")
+		checkUserPageSize();
 	if (currentPage == "game")
 		checkGameSize();
 	if (currentPage == "game" || currentPage == "tournament")
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "match")
 		checkMatchSize();
+	if (currentPage == "friends")
+		checkFriendPageSize()
 
 }
 
+function checkUserPageSize(){
+	var text = document.querySelector("#profileName");
+	if (!text)
+		return;
+	
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 4;
+	var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
+	while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
+		text.style.setProperty("font-size", `${currentFontSize}px`)
+		currentFontSize += 1;
+	}
+	while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 1){
+		text.style.setProperty("font-size", `${currentFontSize}px`)
+		currentFontSize -= 1;
+	}
+}
+
+function checkFriendPageSize(){
+
+	var texts = document.querySelectorAll("#friendInfo .slideSelector .slideSelectorText");
+	var ancestor = document.querySelector("#friendSlideSelector");
+	if (texts.length == 0 || !ancestor)
+		return;
+	var i =0;
+	var baseFontSize = parseInt(window.getComputedStyle(document.body).fontSize);
+	var currentFontSize = parseInt(window.getComputedStyle(texts[0].parentElement).fontSize);
+	texts.forEach(function(text){
+		while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
+			ancestor.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize += 1;
+		}
+		while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 1){
+			ancestor.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize -= 1;
+		}
+	})
+}
+
 function checkMatchResumeSize(){
-	recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
+	var recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
 	var baseWidth = 16
 	var i = 0;
@@ -1480,6 +1598,22 @@ function checkMatchResumeSize(){
 			else
 				break
 		}					
+	}
+	else {
+		var text = document.querySelector("#notPlayedToday");
+		if (!text)
+			return;
+		
+		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
+		var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
+		while (text.getBoundingClientRect().width < recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize <= baseFontSize){
+			text.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize += 1;
+		}
+		while (text.getBoundingClientRect().width > recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize > 1){
+			text.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize -= 1;
+		}
 	}
 }
 
