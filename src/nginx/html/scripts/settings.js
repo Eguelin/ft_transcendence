@@ -33,13 +33,11 @@ var accessibilitySlide = `
 <div style="height: fit-content;" id="fontSizeRangeContainer">
 	<span id="fontSizeRangeText">Font size amplifier</span>
 	<div>
-		<input tabindex="13" id="fontSizeRange" type="range" min="0.25" max="1.75" value="1" step="0.1" list="fontSizeList">
+		<input tabindex="13" id="fontSizeRange" type="range" min="0.5" max="1.5" value="1" step="0.1" list="fontSizeList">
 		<datalist id="fontSizeList">
-			<option value="0.25" label="XS"></option>
-			<option value="0.5" ></option>
+			<option value="0.5" label="XS"></option>
 			<option value="1.0" label="M"></option>
-			<option value="1.5" ></option>
-			<option value="1.75" label="XL"></option>
+			<option value="1.5" label="XL"></option>
 		</datalist>				
 	</div>
 </div>

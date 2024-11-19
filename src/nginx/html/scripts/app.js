@@ -1468,7 +1468,7 @@ function checkResizeWindow(){
 		}
 	}
 
-	if (client && (!navigator.userAgent.match(/iphone|android|blackberry/ig) || 1)){
+	if (client){
 		tmp = document.querySelector("#quickSettingContainer");
 		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
@@ -1485,6 +1485,22 @@ function checkResizeWindow(){
 			}
 			while (tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left && currentFontSize > 1){
 				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize -= 1;
+			}
+		}
+		tmp = document.querySelector("#subtitle");
+		if (tmp.innerText != ""){
+			var currentFontSize = parseInt(window.getComputedStyle(tmp).fontSize)
+			var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+			var anchor = document.querySelector("#quickSettingContainer");
+			console.log(tmp.getBoundingClientRect(), anchor.getBoundingClientRect());
+			console.log(currentFontSize, baseFontSize);
+			while (tmp.getBoundingClientRect().right < anchor.getBoundingClientRect().left && currentFontSize < baseFontSize){
+				tmp.style.setProperty("font-size", `${currentFontSize}px`)
+				currentFontSize += 1;
+			}
+			while (tmp.getBoundingClientRect().right > anchor.getBoundingClientRect().left && currentFontSize > 1){
+				tmp.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize -= 1;
 			}
 		}
