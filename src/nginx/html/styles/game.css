@@ -6,6 +6,15 @@
 	width: 100%;
 	gap: 1rem;
 	overflow: hidden;
+	height: 100%;
+}
+
+#gameDisplay{
+	display: flex;
+	width: 100%;
+	gap: 1rem;
+	align-items: center;
+	height: 100%;
 }
 
 .game{
@@ -583,20 +592,23 @@ table.landscape{
 			gap: 0;
 			width: 100vw;
 		}
-	/*	
 		.game{
 			width: unset;
 			height: unset;
-		}*/
+		}
 		
 		#gameContainer{
 			gap: 5rem;
+			height: 100%;
 		}
 	
 		#gameContainer.local {
 			flex-direction: column-reverse;
 			#game {
 				rotate : 270deg;
+			}
+			#gameDisplay{
+				flex-direction: column-reverse;
 			}
 		}
 		#replayButton{
@@ -608,7 +620,10 @@ table.landscape{
 		}
 		*/
 		
-		
+		#gameDisplay {
+			height: 100%;
+		}
+
 		.game{
 			rotate: 90deg;
 		}
@@ -643,6 +658,16 @@ table.landscape{
 		#tournamentContainer, #tournamentContainer *{
 			transition: none;
 		}
+
+		.local #playerTwo {
+			flex-direction: row-reverse;
+			.playerPfp{
+				rotate: 270deg;
+			}
+			.playerName, .playerScore{
+				rotate: 180deg;
+			}
+		}
 	}
 }
 
@@ -652,21 +677,29 @@ table.landscape{
 	.mobile {
 		#gameContainer{
 			height: 100%;
+			justify-content: space-between;
+			.game{
+				width: auto;
+				height: 25vw;
+			}
+		}
+
+		
+		.local{
+			justify-content: unset;
+			#playerOne .playerPfp, #playerTwo .playerPfp{
+				rotate: 90deg;
+			}
+
 			.playerName, .playerScore{
 				writing-mode: vertical-lr;
 				width: 1ch;
-			}
+			}/*
 			.game{
-				width: auto;
-				height: auto;
-			}
-		}
-
-		#playerOne .playerPfp, #playerTwo .playerPfp{
-			rotate: 90deg;
-		}
-
-		.local{
+				width: auto !important;
+				height: auto !important;
+			}*/
+		
 			#playerTwo {
 				.playerPfp{
 					rotate: 270deg;
@@ -675,25 +708,39 @@ table.landscape{
 					rotate: 180deg;
 				}
 			}
+			#controlerPlayerOne,#controlerPlayerTwo{
+				flex-direction: column;
+				width: 15rem;
+				height: auto;
+
+				.leftBtnContainer, .rightBtnContainer{
+					height: 50%;
+					width: 100%;
+					align-content: center;
+				}
+	
+				.leftBtn, .rightBtn{
+					mask-size: 50%;
+				}
+			}
 		}
 
 		#controlerPlayerOne,#controlerPlayerTwo{
-			flex-direction: column;
-			height: auto;
-			width: 15rem;
+			flex-direction: row;
+			height: 25%;
 
 			.leftBtnContainer, .rightBtnContainer{
-				height: 50%;
-				width: 100%;
+				height: 100%;
+				width: 50%;
 				align-content: center;
 			}
 
 			.leftBtn, .rightBtn{
 				width: 100%;
 				height: 100%;
-				mask-size: 50%;
-				rotate: 90deg;
+				mask-size: 10%;
 				min-width: 0;
+				rotate: 90deg;
 			}
 		}
 	}
