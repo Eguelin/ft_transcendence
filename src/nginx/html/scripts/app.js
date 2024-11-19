@@ -1445,11 +1445,12 @@ function checkResizeWindow(){
 }
 
 function checkMatchResumeSize(){
-	recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
+	var recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
 	var baseWidth = 16
 	var i = 0;
 	ch = 1
+	console.log(matches);
 	if (matches.length > 0){
 		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
 			i++;
@@ -1480,6 +1481,20 @@ function checkMatchResumeSize(){
 			else
 				break
 		}					
+	}
+	else {
+		var text = document.querySelector("#notPlayedToday");
+		
+		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
+		var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
+		while (text.getBoundingClientRect().width < recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize <= baseFontSize){
+			text.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize += 1;
+		}
+		while (text.getBoundingClientRect().width > recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize > 1){
+			text.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize -= 1;
+		}
 	}
 }
 
