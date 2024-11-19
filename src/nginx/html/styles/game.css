@@ -189,7 +189,7 @@
 	}
 
 	.game{
-		rotate: 270deg;
+		rotate: 90deg;
 	}
 
 	.playerPfp{
@@ -577,14 +577,22 @@ table.landscape{
 		gap: 0;
 		width: 100vw;
 	}
-	
+/*	
 	.game{
 		width: unset;
 		height: unset;
-	}
+	}*/
 	
 	#gameContainer{
 		gap: 5rem;
+	}
+
+	#gameContainer.local {
+		top : 10rem;
+		flex-direction: column-reverse;
+		#game {
+			rotate : 270deg;
+		}
 	}
 	#replayButton{
 		font-size: 1rem !important;
@@ -594,6 +602,11 @@ table.landscape{
 		display: flex !important;
 	}
 	*/
+	
+	
+	.game{
+		rotate: 90deg;
+	}
 	
 	#matchContainer {
 		#matchPlayersInfo{
@@ -622,4 +635,7 @@ table.landscape{
 		align-content: center;
 	}
 	
+	#tournamentContainer, #tournamentContainer *{
+		transition: none;
+	}
 }
