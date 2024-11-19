@@ -43,21 +43,23 @@ var gameContainer = `
 			<button class="rightBtn"></button>
 		</div>
 	</div>
-	<div class="playerInfoContainer" id="playerOne">
-		<div class="playerPfp">
-			<img id="playerOnePfp">
+	<div id="gameDisplay">
+		<div class="playerInfoContainer" id="playerOne">
+			<div class="playerPfp">
+				<img id="playerOnePfp">
+			</div>
+			<h2 class="playerName"></h2>
+			<h2 class="playerScore">-</h2>
 		</div>
-		<h2 class="playerName"></h2>
-		<h2 class="playerScore">-</h2>
-	</div>
-	<canvas id="game" class="game">
-	</canvas>
-	<div class="playerInfoContainer" id="playerTwo">
-		<div class="playerPfp">
-			<img id="playerTwoPfp">
+		<canvas id="game" class="game">
+		</canvas>
+		<div class="playerInfoContainer" id="playerTwo">
+			<div class="playerPfp">
+				<img id="playerTwoPfp">
+			</div>
+			<h2 class="playerName"></h2>
+			<h2 class="playerScore">-</h2>
 		</div>
-		<h2 class="playerName"></h2>
-		<h2 class="playerScore">-</h2>
 	</div>
 	<div id="controlerPlayerTwo">
 		<div class="leftBtnContainer" tabindex="14">
@@ -807,6 +809,7 @@ function game() {
 					
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
+
 				}
 				else{
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
@@ -934,12 +937,7 @@ function game() {
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
 			if (getWindowHeight() > getWindowWidth()){
-				if (client.username == player1.name){
-					//document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
-					//document.querySelector("#game").style.setProperty("rotate", "270deg")
-					//playerKeyMap = FullInversedKeyMap;
-				}
-				else if (mode != "local")
+				if (mode != "local")
 					playerTouchMap = FullInversedKeyMap;
 			}
 				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);

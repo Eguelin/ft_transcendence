@@ -1628,11 +1628,13 @@ function checkGameSize(){
 			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column-reverse");
 				playerKeyMap = FullInversedKeyMap;
 			}
 			else{
 				document.querySelector("#game").style.setProperty("rotate", "90deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column");
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column");
 				playerKeyMap = keyMap;
 			}
 		}
@@ -1640,12 +1642,20 @@ function checkGameSize(){
 			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
 				document.querySelector("#game").style.setProperty("rotate", "0deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row");
 				playerKeyMap = HorizontalInversedkeyMap;
+				if (isMobile()){
+					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse")
+				}
 			}
 			else{
 				document.querySelector("#game").style.setProperty("rotate", "180deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row-reverse");
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row-reverse");
 				playerKeyMap = verticalInversedkeyMap;
+				if (isMobile()){
+					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column")
+				}
 			}
 		}
 	}
