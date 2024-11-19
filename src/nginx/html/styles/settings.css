@@ -285,47 +285,50 @@
 			width: min-content;
 		}
 	}
-}
 
-.mobile{
-	.settingSlide#accoutSlide > div{
-		width: 60vw;
-	}
-	.settingSlide#accoutSlide{
-	 	.deleteBtn{
+
+
+
+	.mobile{
+		.settingSlide#accoutSlide > div{
 			width: 60vw;
-			border-color: transparent;
-			padding: 1rem;
-	 	}
-		#inputChangeUsername, #pfpLabel{
-			border-width: 2.2px;
 		}
-		#inputChangeUsername:focus{
-			border-width: 4.2px;
+		.settingSlide#accoutSlide{
+			.deleteBtn{
+				width: 60vw;
+				border-color: transparent;
+				padding: 1rem;
+			}
+			#inputChangeUsername, #pfpLabel{
+				border-width: 2.2px;
+			}
+			#inputChangeUsername:focus{
+				border-width: 4.2px;
+			}
 		}
-	}
-	#confirmPfpContainer{
-		width: 60vw;
-	}
-
-	#settingsSlideSelector{
-		width: auto;
-	}
-
-	#fontSizeRangeContainer{
-		flex-direction: column;
-		width: 60vw;
-	}
-
-	#fontSizeRangeText, #fontSizeRange, #fontSizeList, #fontSizeRangeContainer > div{
-		width: inherit;
-	}
-
-	#settingSlides{
-		height: 70%;
-
-		.dropDownContent a{
-			width: min-content;
+		#confirmPfpContainer{
+			width: 60vw;
+		}
+	
+		#settingsSlideSelector{
+			width: auto;
+		}
+	
+		#fontSizeRangeContainer{
+			flex-direction: column;
+			width: 60vw;
+		}
+	
+		#fontSizeRangeText, #fontSizeRange, #fontSizeList, #fontSizeRangeContainer > div{
+			width: inherit;
+		}
+	
+		#settingSlides{
+			height: 70%;
+	
+			.dropDownContent a{
+				width: min-content;
+			}
 		}
 	}
 }

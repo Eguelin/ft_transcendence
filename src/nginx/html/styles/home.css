@@ -64,10 +64,15 @@
 
 
 
-.mobile .home #homeButtonsContainer a{
-	font-size: 2rem;
-}
 
-.mobile #title{
-	font-size: 3rem;
+@media screen and (orientation:portrait) {	
+	.mobile {
+		.home #homeButtonsContainer a{
+			font-size: 2rem;
+		}
+		
+		#title{
+			font-size: 3rem;
+		}
+	}
 }

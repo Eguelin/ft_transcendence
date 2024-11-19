@@ -560,82 +560,111 @@ table.landscape{
 	top: 10rem;
 	bottom: unset;
 }
-.mobile {
-	.playerScore{
-		width: 5rem;
-	}
-	
-	.playerPfp{
-		height: 5rem;
-		width: 5rem;
-		border-radius: 25%;
-		border-bottom-left-radius: 0;
-		border-top-left-radius: 0;
-	}
-	
-	.playerInfoContainer{
-		gap: 0;
-		width: 100vw;
-	}
-/*	
-	.game{
-		width: unset;
-		height: unset;
-	}*/
-	
-	#gameContainer{
-		gap: 5rem;
-	}
 
-	#gameContainer.local {
-		top : 10rem;
-		flex-direction: column-reverse;
-		#game {
-			rotate : 270deg;
-		}
-	}
-	#replayButton{
-		font-size: 1rem !important;
-	}
-	/*
-	#controler{
-		display: flex !important;
-	}
-	*/
-	
-	
-	.game{
-		rotate: 90deg;
-	}
-	
-	#matchContainer {
-		#matchPlayersInfo{
-			flex: unset;
-			height: fit-content;
-		}
-		 
-		#exchangeContainer{
-			flex: 1.5;
-		}
-		
-		#matchInfo{
-			flex-direction: column;
-		}
-		
+@media screen and (orientation:portrait) {	
+	.mobile {
 		.playerScore{
-			width: fit-content;
-			word-break: keep-all;
-			white-space: nowrap;
+			width: 5rem;
+		}
+		
+		.playerPfp{
+			height: 5rem;
+			width: 5rem;
+			border-radius: 25%;
+			border-bottom-left-radius: 0;
+			border-top-left-radius: 0;
+		}
+		
+		.playerInfoContainer{
+			gap: 0;
+			width: 100vw;
+		}
+	/*	
+		.game{
+			width: unset;
+			height: unset;
+		}*/
+		
+		#gameContainer{
+			gap: 5rem;
+		}
+	
+		#gameContainer.local {
+			top : 10rem;
+			flex-direction: column-reverse;
+			#game {
+				rotate : 270deg;
+			}
+		}
+		#replayButton{
+			font-size: 1rem !important;
+		}
+		/*
+		#controler{
+			display: flex !important;
+		}
+		*/
+		
+		
+		.game{
+			rotate: 90deg;
+		}
+		
+		#matchContainer {
+			#matchPlayersInfo{
+				flex: unset;
+				height: fit-content;
+			}
+			 
+			#exchangeContainer{
+				flex: 1.5;
+			}
+			
+			#matchInfo{
+				flex-direction: column;
+			}
+			
+			.playerScore{
+				width: fit-content;
+				word-break: keep-all;
+				white-space: nowrap;
+			}
+		}
+		
+		#controler > div, #controlerPlayerTwo > div{
+			flex: 1;
+			height: 100%;
+			align-content: center;
+		}
+		
+		#tournamentContainer, #tournamentContainer *{
+			transition: none;
 		}
 	}
-	
-	#controler > div, #controlerPlayerTwo > div{
-		flex: 1;
-		height: 100%;
-		align-content: center;
-	}
-	
-	#tournamentContainer, #tournamentContainer *{
-		transition: none;
+}
+
+
+
+@media screen and (orientation:landscape) {	
+	.mobile {
+		#gameContainer{
+			.playerName, .playerScore{
+				writing-mode: vertical-lr;
+				width: 1ch;
+			}
+		}
+
+		#playerOne .playerPfp{
+			rotate: 90deg;
+		}
+
+		#playerTwo {
+			.playerPfp{
+				rotate: 270deg;
+			}
+			.playerName, .playerScore{
+				rotate: 180deg;
+			}
+		}
 	}
 }
