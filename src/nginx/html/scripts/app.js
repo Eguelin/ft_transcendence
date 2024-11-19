@@ -1333,23 +1333,23 @@ function createMatchResumeContainer(match, username) {
 		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
 		scoreUserName = ft_create_element("a", {"class" : `resultScoreName ${
-			match.player_one_display_name == username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
-			 "innerText" : match.player_one_display_name == username ? match.player_one_display_name : match.player_two_display_name,
+			match.player_one_display_name == username || match.player_one== username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
+			 "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_display_name : match.player_two_display_name,
 			 "tabIndex" : "-1"});
-		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_one_pts : match.player_two_pts});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_pts : match.player_two_pts});
 
 		scoreOpponentName = ft_create_element("a", {"class" : `resultScoreName ${
-			match.player_one_display_name == username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
-			"innerText" : match.player_one_display_name == username ? match.player_two_display_name : match.player_one_display_name,
+			match.player_one_display_name == username || match.player_one== username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
+			"innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_display_name : match.player_one_display_name,
 			"tabIndex" : "-1"});
-		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_pts : match.player_one_pts});
 
 		if (scoreUserName.innerText == "deleted"){
 			scoreUserName.classList.add("deletedUser");
 			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreUserName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_one : match.player_two}`
+			scoreUserName.href = `https://${hostname.host}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_one : match.player_two}`
 			scoreUserName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreUserName.innerText)}`);
 		}
 
@@ -1359,7 +1359,7 @@ function createMatchResumeContainer(match, username) {
 			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreOpponentName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_two : match.player_one}`
+			scoreOpponentName.href = `https://${hostname.host}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_two : match.player_one}`
 			scoreOpponentName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreOpponentName.innerText)}`);
 		}
 
@@ -1495,6 +1495,8 @@ function checkResizeWindow(){
 	if (currentPage == "home" || currentPage == "user"){
 		checkMatchResumeSize()
 	}
+	if (currentPage == "user")
+		checkUserPageSize();
 	if (currentPage == "game")
 		checkGameSize();
 	if (currentPage == "game" || currentPage == "tournament")
@@ -1502,6 +1504,23 @@ function checkResizeWindow(){
 	if (currentPage == "match")
 		checkMatchSize();
 
+}
+
+function checkUserPageSize(){
+	var text = document.querySelector("#profileName");
+	if (!text)
+		return;
+	
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 4;
+	var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
+	while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
+		text.style.setProperty("font-size", `${currentFontSize}px`)
+		currentFontSize += 1;
+	}
+	while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 1){
+		text.style.setProperty("font-size", `${currentFontSize}px`)
+		currentFontSize -= 1;
+	}
 }
 
 function checkMatchResumeSize(){
