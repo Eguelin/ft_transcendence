@@ -1332,10 +1332,16 @@ function createMatchResumeContainer(match, username) {
 		scoreUser = ft_create_element("div", {"class" : "resultScore"});
 		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
-		scoreUserName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one_display_name == username ? match.player_one_display_name : match.player_two_display_name, "tabIndex" : "-1"});
+		scoreUserName = ft_create_element("a", {"class" : `resultScoreName ${
+			match.player_one_display_name == username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
+			 "innerText" : match.player_one_display_name == username ? match.player_one_display_name : match.player_two_display_name,
+			 "tabIndex" : "-1"});
 		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_one_pts : match.player_two_pts});
 
-		scoreOpponentName = ft_create_element("a", {"class" : "resultScoreName", "innerText" : match.player_one_display_name == username ? match.player_two_display_name : match.player_one_display_name, "tabIndex" : "-1"});
+		scoreOpponentName = ft_create_element("a", {"class" : `resultScoreName ${
+			match.player_one_display_name == username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
+			"innerText" : match.player_one_display_name == username ? match.player_two_display_name : match.player_one_display_name,
+			"tabIndex" : "-1"});
 		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username ? match.player_two_pts : match.player_one_pts});
 
 		if (scoreUserName.innerText == "deleted"){
@@ -1344,7 +1350,7 @@ function createMatchResumeContainer(match, username) {
 		}
 		else{
 			scoreUserName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_one : match.player_two}`
-			scoreUserName.setAttribute("aria-label", `${scoreUserName.innerText} ${client.langJson['search']['aria.userResume']}`);
+			scoreUserName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreUserName.innerText)}`);
 		}
 
 
@@ -1354,7 +1360,7 @@ function createMatchResumeContainer(match, username) {
 		}
 		else{
 			scoreOpponentName.href = `https://${hostname.host}/user/${match.player_one_display_name == username ? match.player_two : match.player_one}`
-			scoreOpponentName.setAttribute("aria-label", `${scoreOpponentName.innerText} ${client.langJson['search']['aria.userResume']}`);
+			scoreOpponentName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreOpponentName.innerText)}`);
 		}
 
 		scoreOpponentName.innerText += ":"
@@ -1444,13 +1450,6 @@ setInterval(function() {
 
 
 function checkResizeWindow(){
-	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
-		return;
-	}
-	if(currentPage == "dashboard"){
-		displayCharts();
-	}
-
 	var tmp = document.querySelector("#inputSearchUserContainer");
 	var fontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
@@ -1469,13 +1468,13 @@ function checkResizeWindow(){
 		}
 	}
 
-	if (client){
+	if (client && (!navigator.userAgent.match(/iphone|android|blackberry/ig) || 1)){
 		tmp = document.querySelector("#quickSettingContainer");
 		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
 		
-		for (let i=0; i<tmp.childElementCount - 1;i++){
-			if (tmp.children[i].style.getPropertyValue("display") == "none")
+		for (let i=0; i<tmp.childElementCount;i++){
+			if (tmp.children[i].style.getPropertyValue("display") == "none" || tmp.children[i].style.getPropertyValue("display") == "")
 				continue ;
 			if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
 				break
@@ -1489,6 +1488,9 @@ function checkResizeWindow(){
 				currentFontSize -= 1;
 			}
 		}
+	}
+	if(currentPage == "dashboard"){
+		displayCharts();
 	}
 	if (currentPage == "home" || currentPage == "user"){
 		checkMatchResumeSize()
