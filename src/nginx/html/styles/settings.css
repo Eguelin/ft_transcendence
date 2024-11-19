@@ -225,6 +225,7 @@
 	min-width: -moz-available;
 	display: flex;
 	flex-direction: column;
+	gap: 5ch;
 }
 
 #settingSlides{
@@ -233,8 +234,6 @@
 	position: fixed;
 	width: 100vw;
 	left: 0;
-	top: 60%;
-	translate: 0 -50%;
 	height: 50%;
 }
 
@@ -280,8 +279,6 @@
 	}
 
 	#settingSlides{
-		top: 30%;
-		translate: 0 0;
 		height: 70%;
 
 		.dropDownContent a{
@@ -325,8 +322,6 @@
 	}
 
 	#settingSlides{
-		top: 30%;
-		translate: 0 0;
 		height: 70%;
 
 		.dropDownContent a{
