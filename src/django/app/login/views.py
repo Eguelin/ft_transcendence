@@ -166,9 +166,9 @@ def create_user(request, staff=False):
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
-		return JsonResponse({'message': 'Database error'}, status=500)
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+		return HttpResponse("Database error", status=500)
+	except Exception:
+		return HttpResponse("Internal server error", status=500)
 
 def create_ai():
 	if User.objects.filter(username="AI").exists():
@@ -195,19 +195,22 @@ def create_nobody():
 def user_login(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
+
 	try:
 		data = json.loads(request.body)
+		username = data['username']
+		password = data['password']
 	except json.JSONDecodeError:
-		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except KeyError:
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
 
-	try :
-		username = data.get('username')
-		password = data.get('password')
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+	if not username or not password or not isinstance(username, str) or not isinstance(password, str):
+		return HttpResponse("Invalid Data: " + str(request.body), status=400)
 
-	if not username or not password:
-		return JsonResponse({'message': 'Username and password are required'}, status=400)
+	if len(password) > 128:
+		return JsonResponse({'message': 'Password too long'}, status=400)
+
 	try:
 		user = User.objects.get(username=username)
 
@@ -224,8 +227,10 @@ def user_login(request):
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'Invalid credentials'}, status=400)
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+	except DatabaseError:
+		return HttpResponse("Database error", status=500)
+	except Exception:
+		return HttpResponse("Internal server error", status=500)
 
 def user_logout(request):
 	if request.method != 'POST':
