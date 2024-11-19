@@ -1503,6 +1503,8 @@ function checkResizeWindow(){
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "match")
 		checkMatchSize();
+	if (currentPage == "friends")
+		checkFriendPageSize()
 
 }
 
@@ -1521,6 +1523,27 @@ function checkUserPageSize(){
 		text.style.setProperty("font-size", `${currentFontSize}px`)
 		currentFontSize -= 1;
 	}
+}
+
+function checkFriendPageSize(){
+
+	var texts = document.querySelectorAll("#friendInfo .slideSelector .slideSelectorText");
+	var ancestor = document.querySelector("#friendSlideSelector");
+	if (texts.length == 0 || !ancestor)
+		return;
+	var i =0;
+	var baseFontSize = parseInt(window.getComputedStyle(document.body).fontSize);
+	var currentFontSize = parseInt(window.getComputedStyle(texts[0].parentElement).fontSize);
+	texts.forEach(function(text){
+		while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
+			ancestor.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize += 1;
+		}
+		while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 1){
+			ancestor.style.setProperty("font-size", `${currentFontSize}px`)
+			currentFontSize -= 1;
+		}
+	})
 }
 
 function checkMatchResumeSize(){
