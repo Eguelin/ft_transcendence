@@ -113,12 +113,14 @@ def create_user(request, staff=False):
 		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
-	except (json.JSONDecodeError, KeyError):
+	except json.JSONDecodeError:
 		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except KeyError:
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
 
 
 	if username is None or password is None or not isinstance(username, str) or not isinstance(password, str):
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return HttpResponse("Invalid Data: " + str(request.body), status=400)
 
 	username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
 	max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
