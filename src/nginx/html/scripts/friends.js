@@ -17,19 +17,19 @@ var template = `
 <div id="friendInfo">
 	<div id="friendSlideSelector">
 		<div id="onlineFriendSelector" class="slideSelector" tabindex="12">
-			<div id="onlineFriendSelectorText">Online</div>
+			<div id="onlineFriendSelectorText" class="slideSelectorText">Online</div>
 			<div id="onlineFriendSelectorCount" class="userSlideCount">(0)</div>
 		</div>
 		<div id="allFriendSelector" class="slideSelector" tabindex="13">
-			<div id="allFriendSelectorText">All</div>
+			<div id="allFriendSelectorText" class="slideSelectorText">All</div>
 			<div id="allFriendSelectorCount" class="userSlideCount">(0)</div>
 		</div>
 		<div id="pendingFriendRequestSelector" class="slideSelector" tabindex="14">
-			<div id="pendingFriendRequestSelectorText">Pending</div>
+			<div id="pendingFriendRequestSelectorText" class="slideSelectorText">Pending</div>
 			<div id="pendingFriendRequestSelectorCount" class="userSlideCount">(0)</div>
 		</div>
 		<div id="blockedSelector" class="slideSelector" tabindex="15">
-			<div id="blockedSelectorText">Blocked</div>
+			<div id="blockedSelectorText" class="slideSelectorText">Blocked</div>
 			<div id="blockedSelectorCount" class="userSlideCount">(0)</div>
 		</div>
 		<div id="slideSelectorBg"></div>
@@ -58,7 +58,7 @@ var template = `
 				<div class="endGradient"></div>
 			</div>
 		</div>
-		<div style="z-index: 21;">
+		<div style="z-index: 100; position:relative;">
 			<div id="popupBg" style="display: none;"></div>
 			<div id="deleteFriendPopup">
 				<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
@@ -143,6 +143,7 @@ var template = `
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
 
+
 	checkUpdate();
 
 	document.querySelectorAll("#confirmDelete, #confirmBlock, #unblockBtn").forEach(function (elem) {
@@ -153,6 +154,8 @@ var template = `
 			window.onkeydown = friendKeyDownEvent;
 		});
 	})
+	setTimeout(checkFriendPageSize, 10);
+	
 }
 
 
@@ -440,7 +443,7 @@ function createFriendContainer(user){
 
 	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaAll.friendsOptionContainer']}`);
 
-	if (user.is_active == true){
+	if (user.is_active == true || 1){
 		var clone = friendContainer.cloneNode(true);
 		var img = clone.querySelector(".profilePicture");
 		addPfpUrlToImgSrc(img, `${img.src}`);

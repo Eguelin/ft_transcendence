@@ -71,7 +71,6 @@ var template = `
 						for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
 							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.displayName));
 						}
-						checkMatchResumeSize();
 						var tabIdx = 19;
 						var container = document.getElementById("recentMatchHistoryContainer");
 						container.addEventListener("keydown", (e) => {
@@ -87,6 +86,7 @@ var template = `
 						})
 			
 					}
+					checkMatchResumeSize();
 					setNotifTabIndexes(tabIdx);
 				}
 			}
