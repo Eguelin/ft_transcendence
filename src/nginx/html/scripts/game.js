@@ -467,6 +467,7 @@ function setTournamentTreeValue(is_finished){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
 				if (player != 'id'){
+					console.log(selector, tournament[round][matchNumber][player]['username'])
 					if (tournament[round][matchNumber][player]['username']){
 						document.querySelector(`${selector} .username`).classList.remove("waiting");
 						if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])

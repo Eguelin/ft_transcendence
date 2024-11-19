@@ -668,6 +668,10 @@ table.landscape{
 				rotate: 180deg;
 			}
 		}
+
+		.lobbyPlayerPfpContainer{
+			height: 10ch;
+		}
 	}
 }
 
