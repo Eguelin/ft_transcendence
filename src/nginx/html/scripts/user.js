@@ -4,27 +4,31 @@ var allMatchesButton;
 
 var template = `
 <div id="pageContentContainer">
-    <div id="profileInfoContainer">
-        <div id="profilePfpContainer">
-            <img id="profilePfp"></img>
-        </div>
-        <div id="profileNameContainer">
-            <h1 id="profileName">Default</h1>
-        </div>
-        <button tabindex="12" id="sendFriendRequestBtn">Send friend request</button>
-        <button tabindex="12" id="deleteFriendBtn">Remove friend</button>
-    </div>
+	<div id="profileInfoContainer">
+		<div id="profileInfo">
+			<div id="profilePfpContainer">
+				<img id="profilePfp"></img>
+			</div>
+			<div id="profileNameContainer">
+				<h1 id="profileName">Default</h1>
+			</div>
+		</div>
+		<div id="profileFriendsButton">
+			<button tabindex="12" id="sendFriendRequestBtn">Send friend request</button>
+			<button tabindex="12" id="deleteFriendBtn">Remove friend</button>
+		</div>
+	</div>
 
-    <div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
-        <div id="MatchHistoryTextContainer">
-            <div id="recentMatchHistoryText">Recent matches</div>
-            <a> | </a>
-            <div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
-        </div>
-        <div id="recentMatchHistory">
+	<div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
+		<div id="MatchHistoryTextContainer">
+			<div id="recentMatchHistoryText">Recent matches</div>
+			<a> | </a>
+			<div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
+		</div>
+		<div id="recentMatchHistory">
 
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 `
 
@@ -143,6 +147,7 @@ function updateUserLang(){
                 }
 				checkMatchResumeSize();    
 				setNotifTabIndexes(tabIdx);
+				checkUserPageSize();
             })
         }
         else{
