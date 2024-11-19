@@ -105,24 +105,23 @@ def fortytwo(request):
 def create_user(request):
 	create_ai()
 	create_nobody()
+
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	try:
-		data = json.loads(request.body)
-	except json.JSONDecodeError:
-		return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
 	try:
+		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
 	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
-	if username is None or password is None:
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if username is None or password is None or not isinstance(username, str) or not isinstance(password, str):
+		return JsonResponse({'message': 'Invalid username or password'}, status=400)
 
 	username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
 	max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
+
 	try:
 		username_validator(username)
 		max_length_validator(username)
@@ -133,6 +132,7 @@ def create_user(request):
 		return JsonResponse({'message': 'Password too long'}, status=400)
 	if len(password) == 0:
 		return JsonResponse({'message': 'Password too short'}, status=400)
+
 	result = zxcvbn.zxcvbn(password)
 	if result['score'] < 4 and not DEBUG:
 		return JsonResponse({'message': 'Password too weak'}, status=400)
