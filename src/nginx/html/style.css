@@ -31,17 +31,8 @@ html{
 	transition: 500ms;
 }
 
-html.mobile{
-	font-size: calc(32px * var(--font-size-amplifier));
-	transition: none !important;
-}
-.mobile body{
-	font-size: calc(32px * var(--font-size-amplifier));
-}
 
-.mobile *{
-	transition: none !important;
-}
+
 
 @media screen and (orientation:landscape){
 	body{
@@ -128,9 +119,6 @@ button{
 	outline: none;
 }
 
-.mobile button{
-	border-width: 4.2px;
-}
 
 button:focus, button:hover{
 	border-color: var(--main-text-rgb);
@@ -176,10 +164,6 @@ input{
 	font-size: .5rem;
 	padding: 1rem;
 	width: 18vw;
-}
-
-.mobile input{
-	border-width: 4.2px;
 }
 
 input:focus{
@@ -382,4 +366,30 @@ a {
 
 .admin button{
 	font-size: 1rem;
+}
+
+@media screen and (orientation:portrait) {
+	html.mobile{
+		font-size: calc(32px * var(--font-size-amplifier));
+		transition: none !important;
+	}
+	
+	.mobile *{
+		transition: none !important;
+	}
+	
+	.mobile {
+		body{
+			font-size: calc(32px * var(--font-size-amplifier));
+		}
+
+		button{
+			border-width: 4.2px;
+		}
+	
+		input{
+			border-width: 4.2px;
+		}
+	}
+
 }

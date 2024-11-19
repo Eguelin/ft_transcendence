@@ -707,7 +707,7 @@ function game() {
 		var playerKeyMap = keyMap;
 		var playerTouchMap = keyMap;
 
-		if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+		if (isMobile()){
 			document.querySelector("#controler").style.setProperty("display", "flex");
 		}
 
@@ -719,7 +719,7 @@ function game() {
 			document.querySelectorAll("#gameContainer .playerInfoContainer").forEach(function (elem) {
 				elem.style.setProperty("justify-content", "center");
 			});
-			if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+			if (isMobile()){
 				document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
 			}
 		}
@@ -769,7 +769,7 @@ function game() {
 				var leftBtnInterval, p2leftBtnInterval;
 				var rightBtnInterval, p2rightBtnInterval;
 
-				if (mode=="local" && navigator.userAgent.match(/iphone|android|blackberry/ig)){
+				if (mode=="local" && isMobile()){
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = function() {
 						keysDown['ArrowUp'] = true;
 						p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
@@ -836,7 +836,7 @@ function game() {
 					event.stopPropagation();
 					return false;
 				};
-
+				checkGameSize();
 				KeyPressInterval = setInterval(() => KeyPress(), 16);
 				if(document.getElementById("countdownContainer"))
 					document.getElementById("countdownContainer").remove();
@@ -960,7 +960,7 @@ function game() {
 				playerTwoScore.innerText = message.player2.score;
 				
 				/*
-				if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+				if (isMobile()){
 					playerOneScore.innerText = message.player2.score;
 					playerTwoScore.innerText = message.player1.score;
 				}

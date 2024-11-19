@@ -1,17 +1,3 @@
-
-.mobile #dropDownLangContainer{
-	display: none !important;
-}
-.mobile #themeButton{
-	display: none !important;
-}
-.mobile #mobileSearchBtn{
-	display: block !important;
-}
-.mobile #inputSearchUser{
-	display: none !important;
-}
-
 #titleFlexContainer{
 	position: relative;
 	z-index: 1;
@@ -536,4 +522,23 @@
 	width: 2rem;
 	mask-image: url(../icons/search.svg);
 	margin: 0 !important;
+}
+
+
+@media screen and (orientation:portrait){
+	.mobile{
+		#dropDownLangContainer{
+			display: none !important;
+		}
+		#themeButton{
+			display: none !important;
+		}
+		#mobileSearchBtn{
+			display: block !important;
+		}
+		#inputSearchUser{
+			display: none !important;
+		}
+	}
+	
 }
