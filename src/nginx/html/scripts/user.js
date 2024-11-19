@@ -127,16 +127,19 @@ function updateUserLang(){
                     });
                 }
                 catch{
-                    var messageContainer = document.createElement("div");
-                    var message = document.createElement("a");
-                    recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
-                    recentMatchHistoryContainer.style.setProperty("align-items", "center");
-					recentMatchHistoryContainer.style.setProperty("justify-content", "center");
-                    messageContainer.id = "notPlayedTodayContainer";
-                    message.id="notPlayedToday";
-			        message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
-                    messageContainer.appendChild(message);
-                    recentMatchHistoryContainer.appendChild(messageContainer);
+
+					if (!document.querySelector("#notPlayedToday")){
+						var messageContainer = document.createElement("div");
+						var message = document.createElement("a");
+						recentMatchHistoryContainer.style.setProperty("background", "var(--input-bg-rgb)");
+						recentMatchHistoryContainer.style.setProperty("align-items", "center");
+						recentMatchHistoryContainer.style.setProperty("justify-content", "center");
+						messageContainer.id = "notPlayedTodayContainer";
+						message.id="notPlayedToday";
+						message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
+						messageContainer.appendChild(message);
+						recentMatchHistoryContainer.appendChild(messageContainer);
+					}
                 }
 				checkMatchResumeSize();    
 				setNotifTabIndexes(tabIdx);

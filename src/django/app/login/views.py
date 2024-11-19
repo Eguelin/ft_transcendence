@@ -172,6 +172,7 @@ def create_ai():
 	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
 	user = User.objects.create_user(username=username, password=password)
 	user.profile.profile_picture = "/images/defaults/defaultAi.gif"
+	user.profile.display_name = "AI"
 	user.id42 = 0
 	user.save()
 

@@ -40,6 +40,10 @@ html.mobile{
 	font-size: calc(32px * var(--font-size-amplifier));
 }
 
+.mobile *{
+	transition: none !important;
+}
+
 @media screen and (orientation:landscape){
 	body{
 		font-size: calc(24px * var(--font-size-amplifier));
@@ -73,7 +77,7 @@ html.mobile{
 @media screen and (orientation:portrait), (max-height:590px){
 	body{
 		font-size: calc(12px * var(--font-size-amplifier));
-		transition: 500ms;
+		/*transition: 500ms;*/
 	}
 	html{
 		font-size: calc(12px * var(--font-size-amplifier));
