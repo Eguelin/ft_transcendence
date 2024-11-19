@@ -102,7 +102,7 @@ def fortytwo(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
-def create_user(request):
+def create_user(request, staff=False):
 	create_ai()
 	create_nobody()
 
@@ -130,11 +130,11 @@ def create_user(request):
 
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
-	if len(password) == 0:
+	if len(password) == 0 and not staff:
 		return JsonResponse({'message': 'Password too short'}, status=400)
 
 	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and not DEBUG:
+	if result['score'] < 4 and not DEBUG and not staff:
 		return JsonResponse({'message': 'Password too weak'}, status=400)
 
 	if User.objects.filter(username=username).exists():
