@@ -454,6 +454,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 		#recentMatchHistory{
 			flex-direction: column;
 		}
+		
+		.matchDescContainerScore{
+			top: unset;
+			translate: unset;
+		}
 	}
 }
 
