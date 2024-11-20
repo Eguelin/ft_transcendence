@@ -619,7 +619,7 @@ table.landscape{
 			display: flex !important;
 		}
 		*/
-		
+
 		#gameDisplay {
 			height: 100%;
 		}
@@ -629,13 +629,9 @@ table.landscape{
 		}
 		
 		#matchContainer {
+			justify-content: space-between;
 			#matchPlayersInfo{
-				flex: unset;
 				height: fit-content;
-			}
-			 
-			#exchangeContainer{
-				flex: 1.5;
 			}
 			
 			#matchInfo{
@@ -671,6 +667,35 @@ table.landscape{
 
 		.lobbyPlayerPfpContainer{
 			height: 10ch;
+		}
+		
+		#matchInfo, #matchInfo > *{
+			flex: none;
+		}
+		
+		#matchPlayersInfo{
+			flex: .8;
+		}
+		.playerInfoContainer > div{
+			flex: 1;
+		}
+		#matchInfoGraphContainer{
+			height: 30vh;
+		}
+		
+		.playerInfoContainer{
+			#playerInfoGraphContainer{
+				justify-items: center;
+				width: 100%;
+			}
+			
+			.playerInfo{
+				justify-content: center;
+			}
+			
+			.playerName, .playerScore{
+				flex: unset;
+			}
 		}
 	}
 }
