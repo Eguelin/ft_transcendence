@@ -11,7 +11,7 @@
 
 #gameDisplay{
 	display: flex;
-	width: 100%;
+	width: fit-content;
 	gap: 1rem;
 	align-items: center;
 	height: 100%;
@@ -677,7 +677,13 @@ table.landscape{
 
 
 
+
 @media screen and (orientation:landscape) {	
+	#gameDisplay{
+		position: relative;
+		left: 50%;
+		translate: -50%;
+	}
 	.mobile {
 		#gameContainer{
 			height: 100%;
@@ -686,11 +692,18 @@ table.landscape{
 				width: auto;
 				height: 25vw;
 			}
+			#gameDisplay{
+				width: 100%;
+				position: unset;
+				left: unset;
+				translate: unset;
+			}
 		}
 
 		
 		.local{
 			justify-content: unset;
+			
 			#playerOne .playerPfp, #playerTwo .playerPfp{
 				rotate: 90deg;
 			}

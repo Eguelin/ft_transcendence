@@ -467,7 +467,6 @@ function setTournamentTreeValue(is_finished){
 			Object.keys(tournament[round][matchNumber]).forEach(function(player){
 				var selector = `${positionMap[round]}${positionMap[matchNumber]} ${positionMap[player]}`;
 				if (player != 'id'){
-					console.log(selector, tournament[round][matchNumber][player]['username'])
 					if (tournament[round][matchNumber][player]['username']){
 						document.querySelector(`${selector} .username`).classList.remove("waiting");
 						if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])
@@ -547,7 +546,6 @@ function displayTournament(is_finished = false){
 	document.querySelector("#controlerSlide .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
 	if (playersCount == 8/* || 1*/){
-		console.log("e")
 
 		document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
 		document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
@@ -690,7 +688,7 @@ function displayTournament(is_finished = false){
 		})
 	}
 }
-var playerKeyMap;
+var playerKeyMap, playerTouchMap;
 
 function game() {
 	const url =  new URL(window.location.href);
@@ -717,7 +715,7 @@ function game() {
 		let oldKeysDown = {};
 		let countdown = "";
 		playerKeyMap = keyMap;
-		var playerTouchMap = keyMap;
+		playerTouchMap = keyMap;
 		if (isMobile()){
 			document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 //			document.querySelector("#controlerSlide").style.setProperty("display", "flex");
