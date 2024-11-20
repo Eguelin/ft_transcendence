@@ -802,13 +802,6 @@ function game() {
 						keysDown[playerTouchMap['ArrowDown']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
 					};
-					
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
-					
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
-
 				}
 				else{
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
@@ -819,10 +812,6 @@ function game() {
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = null;
 				}
 
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").onclick = function() {};
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").onkeydown = function() {};
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").onclick = function() {};
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").onkeydown = function() {};
 				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerdown = function() {
 					keysDown[playerTouchMap['KeyD']] = true;
 					leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
@@ -842,16 +831,10 @@ function game() {
 					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 				};
 
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").oncontextmenu = function(event) {
-					event.preventDefault();
-					event.stopPropagation();
-					return false;
-				};
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").oncontextmenu = function(event) {
-					event.preventDefault();
-					event.stopPropagation();
-					return false;
-				};
+				document.querySelectorAll(".leftBtnContainer, .rightBtnContainer").forEach(function (elem){
+					elem.oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
+				})
+				
 				checkGameSize();
 				KeyPressInterval = setInterval(() => KeyPress(), 16);
 				if(document.getElementById("countdownContainer"))
@@ -935,17 +918,13 @@ function game() {
 					document.getElementById("waitingContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
-			if (getWindowHeight() > getWindowWidth()){
-				if (mode != "local")
-					playerTouchMap = FullInversedKeyMap;
-			}
-				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
-				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
-	
-				document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
-				document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
-			
+		
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
 
+			document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
+			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
+		
 			if (mode == "full_ai")
 				document.querySelector("#gameContainer #playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 
@@ -955,6 +934,7 @@ function game() {
 			countdownBg.id = "countdownContainer";
 			countdownBg.innerHTML = `<div id=countdownBlur></div><h1 id="countdownText"></h1>`
 			document.body.appendChild(countdownBg);
+			checkGameSize();
 			gamesend("game_ready");
 		}
 
@@ -965,19 +945,8 @@ function game() {
 				playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
 			}
 			else{
-			
 				playerOneScore.innerText = message.player1.score;
 				playerTwoScore.innerText = message.player2.score;
-				
-				/*
-				if (isMobile()){
-					playerOneScore.innerText = message.player2.score;
-					playerTwoScore.innerText = message.player1.score;
-				}
-				else{
-					playerOneScore.innerText = message.player1.score;
-					playerTwoScore.innerText = message.player2.score;
-				}*/
 			}
 			player1.x = message.player1.x;
 			player1.y = message.player1.y;
