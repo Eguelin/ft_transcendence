@@ -533,24 +533,6 @@ table.portrait{
 	padding: 0 1.5ch;
 }
 
-@media screen and (max-width:715px) {
-	#matchInfo{
-		flex-direction: column;
-	}
-
-	table.portrait{
-		display: block;
-	}
-	
-	#exchangeContainer{
-		flex: none;
-	}
-
-	table.landscape{
-		display: none;
-	}
-}
-
 table.landscape, table.portrait{
 	position: relative;
 	top: 50%;
@@ -575,7 +557,26 @@ table.landscape{
 }
 
 @media screen and (orientation:portrait) {	
+	#matchInfo{
+		flex-direction: column;
+	}
+
+	table.portrait{
+		display: block;
+	}
+	
+	#exchangeContainer{
+		flex: none;
+	}
+
+	table.landscape{
+		display: none;
+	}
 	.mobile {
+	
+		#exchangeContainer th,#exchangeContainer td{
+			padding: 0 .5ch;
+		}
 		.playerScore{
 			width: 5rem;
 		}
@@ -684,7 +685,7 @@ table.landscape{
 		}
 		
 		.playerInfoContainer{
-			#playerInfoGraphContainer{
+			.playerInfoGraphContainer{
 				justify-items: center;
 				width: 100%;
 			}
@@ -697,6 +698,36 @@ table.landscape{
 				flex: unset;
 			}
 		}
+		
+	}
+	
+	#matchInfoGraphContainer{
+		display: flex;
+		flex-direction: row;
+		flex: auto;
+		height: 30vh;
+		align-self: center;
+	}
+	.legendContainer {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		padding: 0;
+		justify-content: space-around;
+		height: 100%;
+	}
+	
+	.playerInfoGraphContainer{
+		display: flex;
+		flex-direction: column;
+	}
+	.playerLegendContainer .legendContainer{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.playerInfoContainer{
+		width: calc(50% - 1rem);
 	}
 }
 
@@ -786,28 +817,62 @@ table.landscape{
 			}
 		}
 		
-		#matchPlayersInfo, #matchInfo{
-			height: calc(50% - 1rem);
-			#playerInfoGraphContainer{
-				height: 100%;
-			}
-		}
-		#matchInfoGraphContainer, #playerInfoGraphContainer{
-			display: flex;
-			justify-content: center;
-		}
-		
-		.legendContainer {
-			display: flex;
+	}
+	#matchPlayersInfo, #matchInfo{
+		height: calc(50% - 1rem);
+		.playerInfoGraphContainer{
+			height: 80%;
 			flex-direction: column;
-			margin: 0;
-			padding: 0;
-			justify-content: space-around;
-			height: 100%;
-		}
-		
-		#playerOne #playerInfoGraphContainer{
-			flex-direction: row-reverse;
+			align-items: center;
 		}
 	}
+	#matchInfoGraphContainer, .playerInfoGraphContainer{
+		display: flex;
+		justify-content: center;
+	}
+	
+	.playerInfoContainer{
+	}
+	
+	.playerInfoContainer{
+		width :calc(50% - 1rem);
+		gap: unset;
+		justify-content: space-around;
+	}
+	
+	.legendContainer {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		padding: 0;
+		justify-content: space-around;
+		height: 100%;
+	}
+	
+	.playerInfo{
+		width: unset !important;
+		max-width: 15rem;
+	}
+	
+	.playerLegendContainer{
+		.legendContainer{
+			flex-direction: row;
+		}
+	}
+
+}
+
+
+.legendElementContainer{
+	align-items: center; cursor: pointer; display: flex; flex-direction: row; margin-left: 10px;
+}
+
+.legendTextContainer{
+	color: rgb(102, 102, 102);
+	margin: 0px;
+	padding: 0px;
+}
+
+#matchContainer{
+	display: flex;
 }

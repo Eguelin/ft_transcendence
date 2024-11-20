@@ -26,7 +26,7 @@ const routes = {
 	"/": `https://${hostname.host}/scripts/home.js`,
 	"/game": `https://${hostname.host}/scripts/game.js`,
 	"/tournament": `https://${hostname.host}/scripts/game.js`,
-	"/match": `https://${hostname.host}/scripts/game.js`,
+	"/match": `https://${hostname.host}/scripts/match.js`,
 	"/settings": `https://${hostname.host}/scripts/settings.js`,
 	"/user": `https://${hostname.host}/scripts/user.js`,
 	"/dashboard": `https://${hostname.host}/scripts/dashboard.js`,
@@ -1707,10 +1707,12 @@ function checkMatchSize(){
 	else
 		graphMatchCurrentSize = 400;
 
-	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerInfo")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
+	console.log(getElemWidth(container), parseInt(anchor.right))
+	while (getElemWidth(container) <= parseInt(anchor.right) && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
 		if (currentFontSize < baseFontSize){
+			console.log("increase",currentFontSize, baseFontSize);
 			container.querySelectorAll(".playerInfo").forEach(function (elem) {
 				elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
 			})
@@ -1721,8 +1723,9 @@ function checkMatchSize(){
 			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 		}
 	}
-	while (getElemWidth(container) > anchor.right && (currentFontSize > 8 || graphCurrentSize > 200)){
+	while (getElemWidth(container) > parseInt(anchor.right) && (currentFontSize > 8 || graphCurrentSize > 200)){
 		if (currentFontSize > 8){
+			console.log("decrease",currentFontSize, baseFontSize);
 			container.querySelectorAll(".playerInfo").forEach(function (elem) {
 				elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 			})
