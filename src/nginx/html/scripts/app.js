@@ -362,6 +362,7 @@ function load() {
 		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
 		document.body.appendChild(s);
 	}
+	checkResizeWindow();
 }
 
 
@@ -1568,35 +1569,42 @@ function checkMatchResumeSize(){
 	var i = 0;
 	ch = 1
 	if (matches.length > 0){
-		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
-			i++;
-		if (i == matches.length)
-			return;
-		while (1 && ch <= baseWidth){
-			var width = matches[i].getBoundingClientRect().width;
-			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
-			
-			if (width * matches.length <= getWindowWidth() && ch < baseWidth){
-				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
-					elem.style.setProperty("width", `${ch + 1}ch`);
-				})
+		if (!(window.matchMedia("(orientation: portrait)").matches && isMobile())){
+			while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
+				i++;
+			if (i == matches.length)
+				return;
+			while (1 && ch <= baseWidth){
 				var width = matches[i].getBoundingClientRect().width;
+				var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
+				
+				if (width * matches.length <= getWindowWidth() && ch < baseWidth){
+					recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+						elem.style.setProperty("width", `${ch + 1}ch`);
+					})
+					var width = matches[i].getBoundingClientRect().width;
+				}
+				else
+					break;
+	
 			}
-			else
-				break;
-
+			while (1 && baseWidth > 1){
+				width = matches[i].getBoundingClientRect().width;
+				if (width * matches.length > getWindowWidth()){
+					baseWidth--;
+					recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+						elem.style.setProperty("width", `${baseWidth}ch`);
+					})
+				}
+				else
+					break
+			}
 		}
-		while (1 && baseWidth > 1){
-			width = matches[i].getBoundingClientRect().width;
-			if (width * matches.length > getWindowWidth()){
-				baseWidth--;
-				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
-					elem.style.setProperty("width", `${baseWidth}ch`);
-				})
-			}
-			else
-				break
-		}					
+		else{
+			recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+				elem.style.setProperty("width", "16ch");
+			})
+		}
 	}
 	else {
 		var text = document.querySelector("#notPlayedToday");
