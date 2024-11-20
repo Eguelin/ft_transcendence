@@ -118,8 +118,7 @@ def create_user(request, staff=False):
 	except KeyError:
 		return HttpResponse("Missing Data: " + str(request.body), status=400)
 
-
-	if username is None or password is None or not isinstance(username, str) or not isinstance(password, str):
+	if not username or password is None or not isinstance(username, str) or not isinstance(password, str):
 		return HttpResponse("Invalid Data: " + str(request.body), status=400)
 
 	username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
@@ -261,6 +260,7 @@ def file_opener(path, flags):
 def profile_update(request):
 	if (request.user.is_authenticated):
 		if (request.method == 'POST'):
+
 			try:
 				valid = False
 				data = json.loads(request.body)
