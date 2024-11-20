@@ -462,6 +462,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 	}
 }
 
+@media screen and (orientation:landscape){
+	#profileInfoContainer{
+		flex-direction: column;
+		gap: 1rem;
+	}
+	
+	.mobile{
+		#recentMatchHistory{
+			animation: unset;
+			min-width: none;
+		}
+		.matchDescContainerResult, .matchDescContainerDate{
+			animation: unset;
+		}
+	}
+}
+
 
 #notPlayedPeriod{
 	color: var(--main-text-rgb);
