@@ -762,6 +762,7 @@ function game() {
 				myPushState(`https://${hostname.host}/home`);
 			}
 			if (data.type === "game_init") {
+				document.querySelector("#game").style.setProperty("display", "block");
 				window.removeEventListener("resize", displayTournament);
 				gameContainer.style.setProperty("display", "flex");
 				matchContainer.style.setProperty("display", "none");
@@ -1120,10 +1121,11 @@ function game() {
 			document.querySelectorAll("#gameContainer .playerScore").forEach(function (e){e.innerText = "-";});
 			document.querySelectorAll("#gameContainer .playerName").forEach(function (e){e. innerText = "";});
 
-			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = client.username;
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), client.pfpUrl);
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), "");
-			
+			document.querySelector("#gameContainer #playerOne > .playerName").innerText = client.username;
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), client.pfpUrl);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), "");
+			checkGameSize();
+			document.querySelector("#game").style.setProperty("display", "none");
 		}
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
