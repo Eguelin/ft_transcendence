@@ -1330,16 +1330,12 @@ function drawMatchInfoGraph(size, matchChartSize){
 	playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
 
 	const getOrCreateLegendList = (chart, id) => {
-		console.log(id);
 		const legendContainer = document.getElementById(id);
 		let listContainer = legendContainer.querySelector('ul');
 	  
 		if (!listContainer) {
 		  listContainer = document.createElement('ul');
-		  listContainer.style.display = 'flex';
-		  listContainer.style.flexDirection = 'row';
-		  listContainer.style.margin = 0;
-		  listContainer.style.padding = 0;
+		  listContainer.className = "legendContainer"
 	  
 		  legendContainer.appendChild(listContainer);
 		}

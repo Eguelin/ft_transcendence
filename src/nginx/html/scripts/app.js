@@ -1708,7 +1708,7 @@ function checkMatchSize(){
 		graphMatchCurrentSize = 400;
 
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
-	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()/*
+	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
 	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
 		if (currentFontSize < baseFontSize){
 			container.querySelectorAll(".playerInfo").forEach(function (elem) {
@@ -1741,21 +1741,6 @@ function checkMatchSize(){
 		}
 		else{
 			break
-		}
-	}*/
-	
-	if (!window.matchMedia("(orientation: portrait)").matches && isMobile()){
-		if (matchInfoChart){
-			matchInfoChart._plugins._cache[3].options.position = "left";
-			matchInfoChart.update();
-		}
-		if (playerOneInfoChart){
-			playerOneInfoChart._plugins._cache[3].options.position = "right";
-			playerOneInfoChart.update();
-		}
-		if (playerTwoInfoChart){
-			playerTwoInfoChart._plugins._cache[3].options.position = "left";
-			playerTwoInfoChart.update();
 		}
 	}
 }
