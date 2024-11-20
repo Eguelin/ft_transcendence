@@ -1630,12 +1630,14 @@ function checkGameSize(){
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column-reverse");
 				playerKeyMap = FullInversedKeyMap;
+				playerTouchMap = keyMap;
 			}
 			else{
 				document.querySelector("#game").style.setProperty("rotate", "90deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column");
 				playerKeyMap = keyMap;
+				playerTouchMap = FullInversedKeyMap;
 			}
 		}
 		else {
@@ -1644,6 +1646,7 @@ function checkGameSize(){
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row");
 				playerKeyMap = HorizontalInversedkeyMap;
+				playerTouchMap = verticalInversedkeyMap;
 				if (isMobile()){
 					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse")
 				}
@@ -1653,6 +1656,7 @@ function checkGameSize(){
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row-reverse");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row-reverse");
 				playerKeyMap = verticalInversedkeyMap;
+				playerTouchMap = verticalInversedkeyMap;
 				if (isMobile()){
 					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column")
 				}
@@ -1660,23 +1664,21 @@ function checkGameSize(){
 		}
 	}
 
-	if (window.matchMedia("(orientation: portrait)").matches){
-		var container = document.querySelector("#gameContainer")
-		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
-		var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
-		var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-		while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
-			container.querySelectorAll(".playerName").forEach(function (elem) {
-				elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
-			})
-			currentFontSize += 1;
-		}
-		while (getElemWidth(container) > anchor.right && currentFontSize > 1){
-			container.querySelectorAll(".playerName").forEach(function (elem) {
-				elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
-			})
-			currentFontSize -= 1;
-		}
+	var container = document.querySelector("#gameDisplay")
+	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
+	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
+	while (parseInt(getElemWidth(container)) <= parseInt(anchor.right) && currentFontSize < baseFontSize){
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
+		})
+		currentFontSize += 1;
+	}
+	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 1){
+		container.querySelectorAll(".playerName").forEach(function (elem) {
+			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
+		})
+		currentFontSize -= 1;
 	}
 }
 /*
