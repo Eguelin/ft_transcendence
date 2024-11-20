@@ -574,16 +574,37 @@ def current_user(request):
 def get(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		try:
-			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
-		except User.DoesNotExist:
-			return JsonResponse({'message': "can't find user"}, status=404)
-		except Exception as error:
-			return JsonResponse({'message': error}, status=500)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+	try:
+		data = json.loads(request.body)
+
+		username = data['name']
+		startDate = data['startDate']
+		endDate = data['endDate']
+
+		if not username or not startDate or not endDate or \
+			not isinstance(username, str) or not isinstance(startDate, str) or not isinstance(endDate, str):
+			return HttpResponse("Invalid Data: " + str(request.body), status=400)
+
+		datetime.datetime.strptime(startDate, '%Y-%m-%d')
+		datetime.datetime.strptime(endDate, '%Y-%m-%d')
+
+		user = User.objects.get(username=username)
+		response = get_user_json(user, startDate, endDate)
+
+		return JsonResponse(response, status=200)
+	except json.JSONDecodeError:
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except (KeyError, ValueError):
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
+	except User.DoesNotExist:
+		return JsonResponse({'message': "can't find user"}, status=404)
+	except DatabaseError:
+		return HttpResponse("Database error", status=500)
+	except Exception:
+		return HttpResponse("Internal server error", status=500)
 
 def search_by_username(request):
 	if (request.method != 'POST'):
