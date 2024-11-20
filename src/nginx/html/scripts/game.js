@@ -106,6 +106,7 @@ var matchContainer = `
 			</table>
 		</div>
 		<div id="matchInfoGraphContainer">
+			<div id="matchInfoLegendContainer"></div>
 			<canvas id="matchInfoGraph"></canvas>
 		</div>
 	</div>
@@ -122,6 +123,7 @@ var matchContainer = `
 				<h2 class="playerScore">-</h2>
 			</div>
 			<div id="playerInfoGraphContainer">
+				<div id="playerOneLegendContainer"></div>
 				<canvas id="playerOneInfoGraph"></canvas>
 			</div>
 		</div>
@@ -137,6 +139,7 @@ var matchContainer = `
 				<h2 class="playerScore">-</h2>
 			</div>
 			<div id="playerInfoGraphContainer">
+				<div id="playerTwoLegendContainer"></div>
 				<canvas id="playerTwoInfoGraph"></canvas>
 			</div>
 		</div>
@@ -1314,17 +1317,95 @@ function drawMatchInfoGraph(size, matchChartSize){
 	playerTwoInfoGraph.id = "playerTwoInfoGraph";
 
 	matchInfoGraph.height= matchChartSize;
-	matchInfoGraph.width = matchInfoGraph.height;
+	matchInfoGraph.width = matchInfoGraph.height;	
 	playerOneInfoGraph.height = size;
 	playerOneInfoGraph.width = size;
 	playerTwoInfoGraph.height = size;
 	playerTwoInfoGraph.width = size;
 
 
+
 	matchInfoContainer.appendChild(matchInfoGraph);
 	playerOneInfoGraphContainer.appendChild(playerOneInfoGraph);
 	playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
 
+	const getOrCreateLegendList = (chart, id) => {
+		console.log(id);
+		const legendContainer = document.getElementById(id);
+		let listContainer = legendContainer.querySelector('ul');
+	  
+		if (!listContainer) {
+		  listContainer = document.createElement('ul');
+		  listContainer.style.display = 'flex';
+		  listContainer.style.flexDirection = 'row';
+		  listContainer.style.margin = 0;
+		  listContainer.style.padding = 0;
+	  
+		  legendContainer.appendChild(listContainer);
+		}
+	  
+		return listContainer;
+	};
+
+	const htmlLegendPlugin = {
+		id: 'htmlLegend',
+		afterUpdate(chart, args, options) {
+		  const ul = getOrCreateLegendList(chart, options.containerID);
+	  
+		  // Remove old legend items
+		  while (ul.firstChild) {
+			ul.firstChild.remove();
+		  }
+	  
+		  // Reuse the built-in legendItems generator
+		  const items = chart.options.plugins.legend.labels.generateLabels(chart);
+	  
+		  items.forEach(item => {
+			const li = document.createElement('li');
+			li.style.alignItems = 'center';
+			li.style.cursor = 'pointer';
+			li.style.display = 'flex';
+			li.style.flexDirection = 'row';
+			li.style.marginLeft = '10px';
+	  
+			li.onclick = () => {
+			  const {type} = chart.config;
+			  if (type === 'pie' || type === 'doughnut') {
+				// Pie and doughnut charts only have a single dataset and visibility is per item
+				chart.toggleDataVisibility(item.index);
+			  } else {
+				chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
+			  }
+			  chart.update();
+			};
+	  
+			// Color box
+			const boxSpan = document.createElement('span');
+			boxSpan.style.background = item.fillStyle;
+			boxSpan.style.borderColor = item.strokeStyle;
+			boxSpan.style.borderWidth = item.lineWidth + 'px';
+			boxSpan.style.display = 'inline-block';
+			boxSpan.style.flexShrink = 0;
+			boxSpan.style.height = '20px';
+			boxSpan.style.marginRight = '10px';
+			boxSpan.style.width = '20px';
+	  
+			// Text
+			const textContainer = document.createElement('p');
+			textContainer.style.color = item.fontColor;
+			textContainer.style.margin = 0;
+			textContainer.style.padding = 0;
+			textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
+	  
+			const text = document.createTextNode(item.text);
+			textContainer.appendChild(text);
+	  
+			li.appendChild(boxSpan);
+			li.appendChild(textContainer);
+			ul.appendChild(li);
+		  });
+		}
+	  };
 
 	if (matchInfoChart){
 		if (matchInfoChart instanceof Chart)
@@ -1348,6 +1429,9 @@ function drawMatchInfoGraph(size, matchChartSize){
 	function drawPlayerOneInfo(){
 		const options = {
 			plugins: {
+				htmlLegend:{
+					containerID: 'playerOneLegendContainer'
+				},
 				title: {
 					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
 					text: client.langJson["match"]["CVmatchInfoGraph"],
@@ -1358,12 +1442,7 @@ function drawMatchInfoGraph(size, matchChartSize){
 					display: true,
 				},
 				legend: {
-					labels: {
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-						},
-					}
+					display: false,
 				}
 			},
 		}
@@ -1381,7 +1460,8 @@ function drawMatchInfoGraph(size, matchChartSize){
 		playerOneInfoChart = new Chart(document.querySelector("#playerOneInfoGraph"), {
 			type: 'pie',
 			data: data,
-			options: options
+			options: options,
+			plugins: [htmlLegendPlugin]
 		});
 	}
 
@@ -1398,12 +1478,10 @@ function drawMatchInfoGraph(size, matchChartSize){
 					display: true,
 				},
 				legend: {
-					labels: {
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-						},
-					}
+					display: false
+				},
+				htmlLegend:{
+					containerID : 'playerTwoLegendContainer'
 				}
 			},
 		}
@@ -1421,7 +1499,8 @@ function drawMatchInfoGraph(size, matchChartSize){
 		playerTwoInfoChart = new Chart(document.querySelector("#playerTwoInfoGraph"), {
 			type: 'pie',
 			data: data,
-			options: options
+			options: options,
+			plugins: [htmlLegendPlugin]
 		});
 	}
 
@@ -1438,12 +1517,10 @@ function drawMatchInfoGraph(size, matchChartSize){
 					display: true,
 				},
 				legend: {
-					labels: {
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-						},
-					}
+					display: false
+				},
+				htmlLegend:{
+					containerID : 'matchInfoLegendContainer'
 				}
 			},
 		}
@@ -1462,7 +1539,8 @@ function drawMatchInfoGraph(size, matchChartSize){
 		matchInfoChart = new Chart(document.getElementById("matchInfoGraph"), {
 			type: 'pie',
 			data: data,
-			options: options
+			options: options,
+			plugins: [htmlLegendPlugin]
 		});
 	}
 	drawMatchInfo();

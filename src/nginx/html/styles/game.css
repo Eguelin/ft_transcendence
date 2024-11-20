@@ -785,5 +785,12 @@ table.landscape{
 				rotate: 90deg;
 			}
 		}
+		
+		#matchPlayersInfo, #matchInfo{
+			height: 50%;
+			#playerInfoGraphContainer{
+				height: 100%;
+			}
+		}
 	}
 }
