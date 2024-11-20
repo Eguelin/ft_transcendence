@@ -1322,7 +1322,7 @@ function setNotifTabIndexes(tabIdx){
 	})
 }
 
-function createMatchResumeContainer(match, username) {
+function createMatchResumeContainer(match, username, displayName) {
 	matchContainer = ft_create_element("a", {"class" : "matchDescContainer"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
@@ -1334,16 +1334,16 @@ function createMatchResumeContainer(match, username) {
 		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
 		scoreUserName = ft_create_element("a", {"class" : `resultScoreName ${
-			match.player_one_display_name == username || match.player_one== username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
-			 "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_display_name : match.player_two_display_name,
+			match.player_one_display_name == displayName || match.player_one== username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
+			 "innerText" : match.player_one_display_name == displayName || match.player_one== username ? match.player_one_display_name : match.player_two_display_name,
 			 "tabIndex" : "-1"});
-		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_pts : match.player_two_pts});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one == username ? match.player_one_pts : match.player_two_pts});
 
 		scoreOpponentName = ft_create_element("a", {"class" : `resultScoreName ${
-			match.player_one_display_name == username || match.player_one== username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
-			"innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_display_name : match.player_one_display_name,
+			match.player_one_display_name == displayName || match.player_one== username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
+			"innerText" : match.player_one_display_name == displayName || match.player_one== username ? match.player_two_display_name : match.player_one_display_name,
 			"tabIndex" : "-1"});
-		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == displayName || match.player_one == username ? match.player_two_pts : match.player_one_pts});
 
 		if (scoreUserName.innerText == "deleted"){
 			scoreUserName.classList.add("deletedUser");

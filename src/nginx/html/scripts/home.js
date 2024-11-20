@@ -69,7 +69,7 @@ var template = `
 					else{
 						recentMatchHistoryContainer.innerHTML = "";
 						for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
-							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.displayName));
+							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.username, client.displayName));
 						}
 						var tabIdx = 19;
 						var container = document.getElementById("recentMatchHistoryContainer");
@@ -84,7 +84,6 @@ var template = `
 								setNotifTabIndexes(tabIdx);
 							}
 						})
-			
 					}
 					checkMatchResumeSize();
 					setNotifTabIndexes(tabIdx);
