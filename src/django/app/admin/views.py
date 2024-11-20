@@ -16,13 +16,11 @@ def generate_unique_username(base_username):
 def create_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-
-	if request.user.is_authenticated:
-		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=403)
-		return login.views.create_user(request, staff=True)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
+	return login.views.create_user(request, staff=True)
 
 def remove_user(request):
 	if request.method != 'POST' :
@@ -40,45 +38,42 @@ def remove_user(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-
 def create_match(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=403)
-
-		try:
-			data = json.loads(request.body)
-			nbr = data['range']
-			userOne = data['userOne']
-			userTwo = data['userTwo']
-		except json.JSONDecodeError:
-			return HttpResponse("Invalid JSON: " + str(request.body), status=400)
-		except KeyError:
-			return HttpResponse("Missing Data: " + str(request.body), status=400)
-
-		if not isinstance(nbr, int) or nbr < 1 or not isinstance(userOne, str) or not isinstance(userTwo, str):
-			return HttpResponse("Invalid Data: " + str(request.body), status=400)
-
-		matches = {}
-		for i in range(0, nbr):
-			try:
-				match = customModels.Match.objects.createWithTwoOpps(userOne, userTwo)
-				matches[i] = {'playerOne': match.player_one.username,
-							'playerTwo': match.player_two.username,
-							'playerOnePts': match.player_one_pts,
-							'playerTwoPts': match.player_two_pts,
-							'date': match.date,}
-			except DatabaseError:
-				return HttpResponse("Database error", status=500)
-			except Exception:
-				return HttpResponse("Internal server error", status=500)
-
-		return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
 
+	try:
+		data = json.loads(request.body)
+		nbr = data['range']
+		userOne = data['userOne']
+		userTwo = data['userTwo']
+	except json.JSONDecodeError:
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except KeyError:
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
+
+	if not isinstance(nbr, int) or nbr < 1 or not isinstance(userOne, str) or not isinstance(userTwo, str):
+		return HttpResponse("Invalid Data: " + str(request.body), status=400)
+
+	matches = {}
+	for i in range(0, nbr):
+		try:
+			match = customModels.Match.objects.createWithTwoOpps(userOne, userTwo)
+			matches[i] = {'playerOne': match.player_one.username,
+						'playerTwo': match.player_two.username,
+						'playerOnePts': match.player_one_pts,
+						'playerTwoPts': match.player_two_pts,
+						'date': match.date,}
+		except DatabaseError:
+			return HttpResponse("Database error", status=500)
+		except Exception:
+			return HttpResponse("Internal server error", status=500)
+
+	return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
 
 def create_friendship(request):
 	if request.method != 'POST' :
@@ -273,7 +268,6 @@ def get_user_match(matches):
 		}
 		i += 1
 	return matches_json
-
 
 def get_user_json(user, startDate, endDate):
 	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
