@@ -787,10 +787,27 @@ table.landscape{
 		}
 		
 		#matchPlayersInfo, #matchInfo{
-			height: 50%;
+			height: calc(50% - 1rem);
 			#playerInfoGraphContainer{
 				height: 100%;
 			}
+		}
+		#matchInfoGraphContainer, #playerInfoGraphContainer{
+			display: flex;
+			justify-content: center;
+		}
+		
+		.legendContainer {
+			display: flex;
+			flex-direction: column;
+			margin: 0;
+			padding: 0;
+			justify-content: space-around;
+			height: 100%;
+		}
+		
+		#playerOne #playerInfoGraphContainer{
+			flex-direction: row-reverse;
 		}
 	}
 }
