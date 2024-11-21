@@ -1471,6 +1471,7 @@ function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry
 function checkResizeIndex(){
 	var tmp = document.querySelector("#inputSearchUserContainer");
 	var fontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
+	var spareWidth = 0;
 	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
 	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
 	if (window.getComputedStyle(tmp).display != "none") {
@@ -1486,6 +1487,9 @@ function checkResizeIndex(){
 			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
 		}
 	}
+	if (window.matchMedia("(orientation: portrait)").matches && isMobile()){
+		spareWidth = document.querySelector("#quickSettingContainer").getBoundingClientRect().width - document.querySelector("#dropDownUserContainer").getBoundingClientRect().width;
+	}
 
 	if (client){
 		tmp = document.querySelector("#quickSettingContainer");
@@ -1494,7 +1498,8 @@ function checkResizeIndex(){
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
 		var texts = document.querySelectorAll("#usernameBtm, .dropDownMenuBtn");
 		var biggest = texts[0];
-
+		var dropDownUserContainer = document.querySelector("#dropDownUserContainer").getBoundingClientRect().width
+		username.style.fontSize = `${baseFontSize}px`
 		texts.forEach(function(elem){
 			if (elem.getBoundingClientRect().width > biggest.getBoundingClientRect().width)
 				biggest = elem;
@@ -1506,7 +1511,10 @@ function checkResizeIndex(){
 			if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
 				break
 
-			while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left && currentFontSize < baseFontSize){
+			while ((tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left || spareWidth > 0) && currentFontSize < baseFontSize){
+				if (window.matchMedia("(orientation: portrait)").matches && isMobile()){
+					spareWidth = document.querySelector("#quickSettingContainer").getBoundingClientRect().width - document.querySelector("#dropDownUserContainer").getBoundingClientRect().width;
+				}
 				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
 			}
@@ -1519,6 +1527,8 @@ function checkResizeIndex(){
 		if (tmp.innerText != ""){
 			var currentFontSize = parseInt(window.getComputedStyle(tmp).fontSize)
 			var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+			if (currentFontSize > baseFontSize)
+				tmp.style.setProperty("font-size", `${baseFontSize}px`)
 			var anchor = document.querySelector("#quickSettingContainer");
 			while (tmp.getBoundingClientRect().right < anchor.getBoundingClientRect().left && currentFontSize < baseFontSize){
 				tmp.style.setProperty("font-size", `${currentFontSize}px`)
