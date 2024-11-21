@@ -838,9 +838,6 @@ table.landscape{
 	}
 	
 	.playerInfoContainer{
-	}
-	
-	.playerInfoContainer{
 		width :calc(50% - 1rem);
 		gap: unset;
 		justify-content: space-around;
