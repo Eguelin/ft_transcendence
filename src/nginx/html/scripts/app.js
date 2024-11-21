@@ -1489,8 +1489,16 @@ function checkResizeIndex(){
 
 	if (client){
 		tmp = document.querySelector("#quickSettingContainer");
+		username = document.querySelector("#dropDownUser");
 		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
+		var texts = document.querySelectorAll("#usernameBtm, .dropDownMenuBtn");
+		var biggest = texts[0];
+
+		texts.forEach(function(elem){
+			if (elem.getBoundingClientRect().width > biggest.getBoundingClientRect().width)
+				biggest = elem;
+		})
 
 		for (let i=0; i<tmp.childElementCount;i++){
 			if (tmp.children[i].style.getPropertyValue("display") == "none" || tmp.children[i].style.getPropertyValue("display") == "")
@@ -1499,11 +1507,11 @@ function checkResizeIndex(){
 				break
 
 			while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left && currentFontSize < baseFontSize){
-				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
 			}
-			while (tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left && currentFontSize > 1){
-				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+			while ((tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left || biggest.getBoundingClientRect().right > document.documentElement.offsetWidth) && currentFontSize > 1){
+				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize -= 1;
 			}
 		}
