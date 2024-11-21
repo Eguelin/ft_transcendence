@@ -365,7 +365,7 @@ def profile_update(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-def get_user_match_json(matches, tournaments, username, max=-1):
+def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 	matches_json = {}
 	year_json = {}
 	month_json = {}
@@ -410,6 +410,10 @@ def get_user_match_json(matches, tournaments, username, max=-1):
 				try:
 					p1_name = match.player_one.username
 					p1_display_name = match.player_one.profile.display_name
+					if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+						p1_name = "deleted"
+						p1_display_name = "deleted"
+					
 				except:
 					p1_name = "deleted"
 					p1_display_name = "deleted"
@@ -417,6 +421,9 @@ def get_user_match_json(matches, tournaments, username, max=-1):
 				try:
 					p2_name = match.player_two.username
 					p2_display_name = match.player_two.profile.display_name
+					if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+						p2_name = "deleted"
+						p2_display_name = "deleted"
 				except:
 					p2_name = "deleted"
 					p2_display_name = "deleted"
@@ -469,11 +476,15 @@ def get_user_match_json(matches, tournaments, username, max=-1):
 			i = 0
 		try:
 			p1_name = match.player_one.username
+			if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+				p1_name = "deleted"
 		except:
 			p1_name = "deleted"
 
 		try:
 			p2_name = match.player_two.username
+			if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+				p2_name = "deleted"
 		except:
 			p2_name = "deleted"
 		while (i in date_json):
@@ -498,8 +509,9 @@ def get_user_match_json(matches, tournaments, username, max=-1):
 		matches_json["{0}".format(year)] = year_json
 	return matches_json
 
-def get_user_json(user, startDate, endDate):
+def get_user_json(user_origin, user, startDate, endDate):
 	matches = get_user_match_json(
+		user_origin,
 		user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)),
 		user.profile.tournaments.order_by("date").filter(date__range=(startDate, endDate)),
 		user.username)
@@ -535,6 +547,7 @@ def current_user(request):
 
 			blocked_json[e.username] = get_user_preview_json(e)
 		matches = get_user_match_json(
+			request.user,
 			request.user.profile.matches.filter(date=datetime.date.today()),
 			request.user.profile.tournaments.filter(date=datetime.date.today()),
 			request.user.username, 5)
@@ -563,7 +576,10 @@ def get(request):
 	if request.user.is_authenticated:
 		data = json.loads(request.body)
 		try:
-			return JsonResponse(get_user_json(User.objects.get(username=data['name']), data['startDate'], data['endDate']), status=200)
+			user = User.objects.get(username=data['name'])
+			if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				return JsonResponse({'message': "can't find user"}, status=404)
+			return JsonResponse(request.user, get_user_json(user, data['startDate'], data['endDate']), status=200)
 		except User.DoesNotExist:
 			return JsonResponse({'message': "can't find user"}, status=404)
 		except Exception as error:
@@ -581,7 +597,8 @@ def search_by_username(request):
 			query_users = User.objects.filter(username__icontains=data['name'])
 			i = 0
 			for user in query_users:
-				users_json[i] = get_user_preview_json(user)
+				if not (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
+					users_json[i] = get_user_preview_json(user)
 				i += 1
 			if i == 0:
 				return JsonResponse({}, status=200)
@@ -741,16 +758,41 @@ def get_tournament(request):
 			}
 		}
 		for match in tournament.matches.all():
+			try:
+				p1_name = match.player_one.username
+				p1_pfp = match.player_one.profile.profile_picture
+				p1_display_name = match.player_one.profile.display_name
+				if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
+					p1_name = "deleted"
+					p1_pfp = ""
+					p1_display_name = "deleted"
+			except:
+				p1_name = "deleted"
+				p1_pfp = ""
+				p1_display_name = "deleted"
 
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = match.player_one.username
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["display_name"] = match.player_one.profile.display_name
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = match.player_one.profile.profile_picture
+			try:
+				p2_name = match.player_two.username
+				p2_pfp = match.player_two.profile.profile_picture
+				p2_display_name = match.player_two.profile.display_name
+				if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
+					p2_name = "deleted"
+					p2_pfp = ""
+					p2_display_name = "deleted"
+			except:
+				p2_name = "deleted"
+				p2_pfp = ""
+				p2_display_name = "deleted"
+
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = p1_name
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["display_name"] = p1_display_name
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = p1_pfp
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winner.username == match.player_one.username else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["score"] = match.player_one_pts
 
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["username"] = match.player_two.username
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["display_name"] = match.player_two.profile.display_name
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = match.player_two.profile.profile_picture
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["username"] = p2_name
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["display_name"] = p2_display_name
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = p2_pfp
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winner.username == match.player_two.username else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["score"] = match.player_two_pts
 
@@ -773,6 +815,10 @@ def get_match(request):
 			p1_name = match.player_one.username
 			p1_pfp = match.player_one.profile.profile_picture
 			p1_display_name = match.player_one.profile.display_name
+			if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				p1_name = "deleted"
+				p1_pfp = ""
+				p1_display_name = "deleted"
 		except:
 			p1_name = "deleted"
 			p1_pfp = ""
@@ -782,6 +828,10 @@ def get_match(request):
 			p2_name = match.player_two.username
 			p2_pfp = match.player_two.profile.profile_picture
 			p2_display_name = match.player_two.profile.display_name
+			if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				p2_name = "deleted"
+				p2_pfp = ""
+				p2_display_name = "deleted"
 		except:
 			p2_name = "deleted"
 			p2_pfp = ""
