@@ -62,9 +62,9 @@ function addPfpUrlToImgSrc(img, path) {
 }
 
 
-/*	 _____  _       ___   _____  _____ 
+/*	 _____  _       ___   _____  _____
 	/  __ \| |     / _ \ /  ___|/  ___|
-	| /  \/| |    / /_\ \\ `--. \ `--. 
+	| /  \/| |    / /_\ \\ `--. \ `--.
 	| |    | |    |  _  | `--. \ `--. \
 	| \__/\| |____| | | |/\__/ //\__/ /
 	 \____/\_____/\_| |_/\____/ \____/*/
@@ -75,7 +75,6 @@ class Client {
 	currentLang;
 	langJson;
 	pfpUrl;
-	use_dark_theme;
 	use_browser_theme;
 	theme_name;
 	friends;
@@ -103,13 +102,12 @@ class Client {
 					this.username = result.username;
 					this.currentLang = result.lang;
 					this.pfpUrl = result.pfp;
-					this.use_dark_theme = result.is_dark_theme;
 					this.theme_name = result.theme_name;
 					this.friends = result.friends;
 					this.friend_requests = result.friend_requests;
 					this.blocked_user = result.blocked_user;
-					
-					
+
+
 					var startDate = new Date();
 					try{
 						this.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
@@ -117,13 +115,13 @@ class Client {
 					catch{
 						this.recentMatches = {};
 					}
-					
+
 					this.#is_admin = result.is_admin;
 					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 					this.fontAmplifier = result.font_amplifier;
-					this.use_browser_theme = result.use_browser_theme;
+					this.use_browser_theme = this.theme_name === "browser" ? true : false;
 					this.doNotDisturb = result.do_not_disturb;
-					use_browser_theme = result.use_browser_theme;
+					use_browser_theme = this.use_browser_theme;
 					if (use_browser_theme == false)
 						switchTheme(this.theme_name);
 					if (this.doNotDisturb == true)
@@ -560,7 +558,6 @@ function switchTheme(theme) {
 	})
 	if (client) {
 		client.mainTextRgb = themeMap[theme]["--main-text-rgb"];
-		client.use_dark_theme = themeMap[theme]["is-dark"];
 	}
 
 	document.documentElement.style.setProperty("--is-dark-theme", themeMap[theme]["is-dark"]);
@@ -612,7 +609,7 @@ swichTheme.addEventListener("click", () => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: false, theme_name: theme_name }),
+			body: JSON.stringify({ theme_name: theme_name }),
 			credentials: 'include'
 		})
 		client.use_browser_theme = false;
@@ -1428,17 +1425,17 @@ async function updateUserAriaLabel(key, content){
 	}
 }
 
-/*	______  _____  _____  _____  ______ _____ 
+/*	______  _____  _____  _____  ______ _____
 	| ___ \|  ___|/  ___||_   _||___  /|  ___|
-	| |_/ /| |__  \ `--.   | |     / / | |__  
-	|    / |  __|  `--. \  | |    / /  |  __| 
-	| |\ \ | |___ /\__/ / _| |_ ./ /___| |___ 
-	\_| \_|\____/ \____/  \___/ \_____/\____/ 
+	| |_/ /| |__  \ `--.   | |     / / | |__
+	|    / |  __|  `--. \  | |    / /  |  __|
+	| |\ \ | |___ /\__/ / _| |_ ./ /___| |___
+	\_| \_|\____/ \____/  \___/ \_____/\____/
  */
 
 let ua = navigator.userAgent;
 setInterval(function() {
-  if (navigator.userAgent !== ua) {	
+  if (navigator.userAgent !== ua) {
 	if (isMobile()){
 		document.documentElement.classList.add("mobile");
 	}
@@ -1474,13 +1471,13 @@ function checkResizeWindow(){
 		tmp = document.querySelector("#quickSettingContainer");
 		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
-		
+
 		for (let i=0; i<tmp.childElementCount;i++){
 			if (tmp.children[i].style.getPropertyValue("display") == "none" || tmp.children[i].style.getPropertyValue("display") == "")
 				continue ;
 			if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
 				break
-			
+
 			while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left && currentFontSize < baseFontSize){
 				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
@@ -1528,7 +1525,7 @@ function checkUserPageSize(){
 	var text = document.querySelector("#profileName");
 	if (!text)
 		return;
-	
+
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 4;
 	var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
 	while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
@@ -1577,7 +1574,7 @@ function checkMatchResumeSize(){
 			while (1 && ch <= baseWidth){
 				var width = matches[i].getBoundingClientRect().width;
 				var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
-				
+
 				if (width * matches.length <= getWindowWidth() && ch < baseWidth){
 					recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
 						elem.style.setProperty("width", `${ch + 1}ch`);
@@ -1586,7 +1583,7 @@ function checkMatchResumeSize(){
 				}
 				else
 					break;
-	
+
 			}
 			while (1 && baseWidth > 1){
 				width = matches[i].getBoundingClientRect().width;
@@ -1610,7 +1607,7 @@ function checkMatchResumeSize(){
 		var text = document.querySelector("#notPlayedToday");
 		if (!text)
 			return;
-		
+
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 		var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
 		while (text.getBoundingClientRect().width < recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize <= baseFontSize){
@@ -1727,7 +1724,7 @@ function checkMatchSize(){
 				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 			}
 		}
-		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8) || 
+		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8) ||
 			((graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width || document.documentElement.clientHeight - 5 < graphSample.getBoundingClientRect().bottom) && graphCurrentSize > 200)){
 			if (currentFontSize > 8){
 				container.style.setProperty("font-size", `${currentFontSize - 1}px`)

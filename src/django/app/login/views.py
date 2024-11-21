@@ -143,12 +143,14 @@ def create_user(request, staff=False):
 	create_nobody()
 
 	if request.method != 'POST' :
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+		return HttpResponse("Invalid request", status=405)
 
 	try:
 		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
+		language = data['lang']
+		theme_name = data['theme_name']
 	except json.JSONDecodeError:
 		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
 	except KeyError:
@@ -175,10 +177,8 @@ def create_user(request, staff=False):
 		user.profile.id42 = 0
 		user.profile.is_active = True
 		user.profile.display_name = display_name
-		if 'lang' in data:
-			user.profile.language_pack = data['lang']
-		if 'use_browser_theme' in data:
-			user.profile.use_browser_theme = data['use_browser_theme']
+		user.profile.language_pack = language
+		user.profile.theme_name = theme_name
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
@@ -299,6 +299,7 @@ def set_pfp(user, pfp):
 		f.write(image_data)
 
 	user.profile.profile_picture = pfpName
+	return True, None
 
 def profile_update(request):
 	if request.method != 'POST' :
@@ -313,8 +314,7 @@ def profile_update(request):
 		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
 
 	user = request.user
-
-	boolean_fields = ["is_dark_theme", "do_not_disturb", "is_active", "use_browser_theme"]
+	boolean_fields = ["do_not_disturb", "is_active"]
 	for field in boolean_fields:
 		if field in data:
 			valid = True
@@ -356,12 +356,16 @@ def profile_update(request):
 			return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
 		user.profile.font_amplifier = data['font_amplifier']
 
-	if ("theme_name" in data):
+	if "theme_name" in data:
 		valid = True
-		themes = ["dark", "light", "high_dark", "high_light"]
+		themes = ["dark", "light", "high_dark", "high_light", "browser"]
 		theme = data['theme_name']
-		if not theme or not isinstance(theme, str) or theme not in themes:
+
+		if not theme or not isinstance(theme, str):
 			return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
+		if theme not in themes:
+			return JsonResponse({'message': "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'"}, status=400)
+
 		user.profile.theme_name = data['theme_name']
 
 	if (valid == False):
@@ -557,8 +561,6 @@ def current_user(request):
 			request.user.profile.tournaments.filter(date=datetime.date.today()),
 			request.user.username, 5)
 		return JsonResponse({'username': request.user.username,
-			'is_dark_theme': request.user.profile.dark_theme,
-			'use_browser_theme': request.user.profile.use_browser_theme,
 			'theme_name' : request.user.profile.theme_name,
 			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
