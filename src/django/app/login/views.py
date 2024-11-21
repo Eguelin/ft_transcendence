@@ -263,8 +263,6 @@ def user_logout(request):
 	return JsonResponse({'message':  'logged out'}, status=200)
 
 def delete_user(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
 	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 	try:
