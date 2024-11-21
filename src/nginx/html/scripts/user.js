@@ -3,7 +3,7 @@ var sendFriendRequestBtn;
 var allMatchesButton;
 
 var template = `
-<div id="pageContentContainer">
+<div id="pageContentContainer" class="user">
 	<div id="profileInfoContainer">
 		<div id="profileInfo">
 			<div id="profilePfpContainer">
@@ -150,6 +150,8 @@ function updateUserLang(){
 				checkUserPageSize();
             })
         }
+		else if (user.status == 403)
+            client.loadPage("/403");
         else{
             client.loadPage("/404");
         }

@@ -1,5 +1,3 @@
-var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
-
 var playerOneInfo = [0,0,0], playerTwoInfo = [0,0,0]
 
 var template = `
