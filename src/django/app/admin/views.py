@@ -25,18 +25,33 @@ def create_user(request):
 def remove_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=403)
-		try:
-			data = json.loads(request.body)
-		except json.JSONDecodeError:
-			return JsonResponse({'message': 'Invalid JSON'}, status=400)
-		print(data['username'])
-		User.objects.get(username=data['username']).delete()
-		return JsonResponse({'message': 'User deleted'}, status=200)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
+
+	try:
+		data = json.loads(request.body)
+		username = data['username']
+
+		if not username or not isinstance(username, str):
+			return JsonResponse({'message': 'Invalid Data'}, status=400)
+
+		User.objects.get(username=username).delete()
+
+		return JsonResponse({'message': 'User deleted'}, status=200)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+	except KeyError:
+		return JsonResponse({'message': 'Missing Data'}, status=400)
+
+	except User.DoesNotExist:
+		return JsonResponse({'message': 'User not found'}, status=404)
+
+	except Exception:
+		return JsonResponse({'message': 'Internal server error'}, status=500)
 
 def create_match(request):
 	if request.method != 'POST' :
