@@ -3,7 +3,7 @@ import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 from transcendence.settings import DEBUG
@@ -102,43 +102,67 @@ def fortytwo(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
-def create_user(request):
-	create_ai()
-	create_nobody()
-	if request.method != 'POST' :
-		return JsonResponse({'message': 'Invalid request'}, status=405)
-	try:
-		data = json.loads(request.body)
-	except json.JSONDecodeError:
-		return JsonResponse({'message': 'Invalid JSON'}, status=400)
-
-	try:
-		username = data['username']
-		password = data['password']
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
-
-	if username is None or password is None:
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+def check_username(username):
+	if not username or not isinstance(username, str):
+		return False, 'Invalid username'
 
 	username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
 	max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
+
 	try:
 		username_validator(username)
 		max_length_validator(username)
 	except ValidationError as e:
-		return JsonResponse({'message': e.message}, status=400)
-
-	if len(password) > 128:
-		return JsonResponse({'message': 'Password too long'}, status=400)
-	if len(password) == 0:
-		return JsonResponse({'message': 'Password too short'}, status=400)
-	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and not DEBUG:
-		return JsonResponse({'message': 'Password too weak'}, status=400)
+		return False, e.message
 
 	if User.objects.filter(username=username).exists():
-		return JsonResponse({'message': 'User with same username already exist'}, status=400)
+		return False, 'Username already taken'
+
+	return True, None
+
+def check_password(password, staff=False):
+	if not password or not isinstance(password, str):
+		return False, 'Invalid password'
+
+	if staff:
+		return True, None
+
+	if len(password) > 128:
+		return False, 'Password too long'
+	if len(password) == 0:
+		return False, 'Password too short'
+
+	result = zxcvbn.zxcvbn(password)
+	if result['score'] < 4 and not DEBUG:
+		return False, 'Password too weak'
+
+	return True, None
+
+def create_user(request, staff=False):
+	create_ai()
+	create_nobody()
+
+	if request.method != 'POST' :
+		return HttpResponse("Invalid request", status=405)
+
+	try:
+		data = json.loads(request.body)
+		username = data['username']
+		password = data['password']
+		language = data['lang']
+		theme_name = data['theme_name']
+	except json.JSONDecodeError:
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except KeyError:
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
+
+	valid, message = check_username(username)
+	if not valid:
+		return JsonResponse({'message': message}, status=400)
+
+	valid, message = check_password(password, staff)
+	if not valid:
+		return JsonResponse({'message': message}, status=400)
 
 	display_name = username
 	while User.objects.filter(profile__display_name=display_name).exists():
@@ -153,17 +177,15 @@ def create_user(request):
 		user.profile.id42 = 0
 		user.profile.is_active = True
 		user.profile.display_name = display_name
-		if 'lang' in data:
-			user.profile.language_pack = data['lang']
-		if 'use_browser_theme' in data:
-			user.profile.use_browser_theme = data['use_browser_theme']
+		user.profile.language_pack = language
+		user.profile.theme_name = theme_name
 		user.save()
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
-		return JsonResponse({'message': 'Database error'}, status=500)
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+		return HttpResponse("Database error", status=500)
+	except Exception:
+		return HttpResponse("Internal server error", status=500)
 
 def create_ai():
 	if User.objects.filter(username="AI").exists():
@@ -190,19 +212,22 @@ def create_nobody():
 def user_login(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
+
 	try:
 		data = json.loads(request.body)
+		username = data['username']
+		password = data['password']
 	except json.JSONDecodeError:
-		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except KeyError:
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
 
-	try :
-		username = data.get('username')
-		password = data.get('password')
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+	if not username or not password or not isinstance(username, str) or not isinstance(password, str):
+		return HttpResponse("Invalid Data: " + str(request.body), status=400)
 
-	if not username or not password:
-		return JsonResponse({'message': 'Username and password are required'}, status=400)
+	if len(password) > 128:
+		return JsonResponse({'message': 'Password too long'}, status=400)
+
 	try:
 		user = User.objects.get(username=username)
 
@@ -219,8 +244,10 @@ def user_login(request):
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'Invalid credentials'}, status=400)
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+	except DatabaseError:
+		return HttpResponse("Database error", status=500)
+	except Exception:
+		return HttpResponse("Internal server error", status=500)
 
 def user_logout(request):
 	if request.method != 'POST':
@@ -248,122 +275,104 @@ def delete_user(request):
 def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
 
+def set_pfp(user, pfp):
+	if not pfp or not isinstance(pfp, str):
+		return False, 'Invalid pfp value, should be a string'
+
+	try:
+		image_data = base64.b64decode(pfp)
+		image = Image.open(io.BytesIO(image_data))
+		image.verify()
+
+		image = Image.open(io.BytesIO(image_data))
+
+		if image.format not in ['JPEG', 'PNG', 'GIF']:
+			return False, 'Image format not supported, use JPEG, PNG or GIF'
+	except:
+		return False, 'Invalid base64 string'
+
+	if os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
+		os.remove(user.profile.profile_picture)
+
+	pfpName = f"/images/{user.username}.{image.format.lower()}"
+	with open(pfpName, "wb", opener=file_opener) as f:
+		f.write(image_data)
+
+	user.profile.profile_picture = pfpName
+	return True, None
+
 def profile_update(request):
-	if (request.user.is_authenticated):
-		if (request.method == 'POST'):
-			try:
-				valid = False
-				data = json.loads(request.body)
-				user = request.user
-				if "is_dark_theme" in data:
-					valid = True
-					if (isinstance(data['is_dark_theme'], (bool))):
-						user.profile.dark_theme = data['is_dark_theme']
-					else:
-						return JsonResponse({'message': 'Invalid is_dark_theme value, should be a boolean'}, status=400)
-				if "username" in data:
-					valid = True
-					if (isinstance(data['username'], (str))):
-						if User.objects.filter(username=data['username']).exists():
-							return JsonResponse({'message': 'Username is already taken'}, status=400)
-						user.username = data['username']
-					else:
-						return JsonResponse({'message': 'Invalid username value, should be a string'}, status=400)
-					username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
-					max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
-					try:
-						username_validator(user.username)
-						max_length_validator(user.username)
-					except ValidationError as e:
-						return JsonResponse({'message': e.message}, status=400)
-				if "display_name" in data:
-					valid = True
-					if (isinstance(data['display_name'], (str))):
-						if User.objects.filter(profile__display_name=data['display_name']).exists():
-							return JsonResponse({'message': 'Display name is already taken'}, status=400)
-						user.profile.display_name = data['display_name']
-					else:
-						return JsonResponse({'message': 'Invalid display name value, should be a string'}, status=400)
-					display_name_validator = RegexValidator(regex=r'^[\w-]+$', message='Display name must be alphanumeric')
-					max_length_validator = MaxLengthValidator(15, message='Display name must be 15 characters or fewer')
-					try:
-						display_name_validator(user.profile.display_name)
-						max_length_validator(user.profile.display_name)
-					except ValidationError as e:
-						return JsonResponse({'message': e.message}, status=400)
-					user.profile.save()
-				if "pfp" in data:
-					valid = True
-					if (isinstance(data['pfp'], (str, bytearray))):
-						if user.profile.profile_picture and os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
-							os.remove(user.profile.profile_picture)
-						try:
-							image_data = base64.b64decode(data['pfp'])
-							image = Image.open(io.BytesIO(image_data))
-							image.verify()
-
-							image = Image.open(io.BytesIO(image_data))
-
-							if image.format not in ['JPEG', 'PNG', 'GIF']:
-								return JsonResponse({'message': 'Image format not supported, use JPEG, PNG or GIF'}, status=400)
-						except:
-							return JsonResponse({'message': 'Invalid base64 string'}, status=400)
-						pfpName = "/images/{0}.jpg".format(user.username)
-						with open(pfpName, "wb", opener=file_opener) as f:
-							f.write(image_data)
-						user.profile.profile_picture = pfpName
-					else:
-						return JsonResponse({'message': 'Invalid pfp value, should be a string'}, status=400)
-				if ("language_pack" in data):
-					valid = True
-					if (isinstance(data['language_pack'], (str))):	#TODO check if path is valid
-						user.profile.language_pack = data['language_pack']
-					else:
-						return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
-				if ("is_active" in data):
-					valid = True
-					if (isinstance(data['is_active'], (bool))):
-						user.profile.is_active = data['is_active']
-					else:
-						return JsonResponse({'message': 'Invalid is_active value, should be a boolean'}, status=400)
-				if ("font_amplifier" in data):
-					valid = True
-					if (isinstance(data['font_amplifier'], (float, int))):
-						user.profile.font_amplifier = data['font_amplifier']
-					else:
-						return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
-				if ("use_browser_theme" in data):
-					valid = True
-					if (isinstance(data['use_browser_theme'], (bool))):
-						user.profile.use_browser_theme = data['use_browser_theme']
-					else:
-						return JsonResponse({'message': 'Invalid use_browser_theme value, should be a boolean'}, status=400)
-				if ("theme_name" in data):
-					valid = True
-					if (isinstance(data['theme_name'], (str))):
-						max_length_validator = MaxLengthValidator(10, message='Theme_name must be 10 characters or fewer')
-						try:
-							max_length_validator(data['theme_name'])
-						except ValidationError as e:
-							return JsonResponse({'message': e.message}, status=400)
-						user.profile.theme_name = data['theme_name']
-					else:
-						return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
-				if ("do_not_disturb" in data):
-					valid = True
-					if (isinstance(data['do_not_disturb'], (bool))):
-						user.profile.do_not_disturb = data['do_not_disturb']
-					else:
-						return JsonResponse({'message': 'Invalid do_not_disturb value, should be a boolean'}, status=400)
-				if (valid == False):
-					return JsonResponse({'message': 'Field does not exist'}, status=400)
-
-				user.save()
-				return JsonResponse({'message': 'User profile updated'}, status=200)
-			except json.JSONDecodeError:
-				return JsonResponse({'message': 'Invalid JSON'}, status=400)
-	else:
+	if request.method != 'POST' :
+		return HttpResponse("Invalid request", status=405)
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+	valid = False
+	try:
+		data = json.loads(request.body)
+	except json.JSONDecodeError:
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+
+	user = request.user
+	boolean_fields = ["do_not_disturb", "is_active"]
+	for field in boolean_fields:
+		if field in data:
+			valid = True
+			if not isinstance(data[field], (bool)):
+				return JsonResponse({'message': 'Invalid {0} value, should be a boolean'.format(field)}, status=400)
+			setattr(user.profile, field, data[field])
+
+	if "username" in data:
+		valid, message = check_username(data['username'])
+		if not valid:
+			return JsonResponse({'message': message}, status=400)
+		user.username = data['username']
+
+	if "display_name" in data:
+		valid, message = check_username(data['display_name'])
+		if not valid:
+			return JsonResponse({'message': message}, status=400)
+		user.profile.display_name = data['display_name']
+
+	if "pfp" in data:
+		valid, message = set_pfp(user, data['pfp'])
+		if not valid:
+			return JsonResponse({'message': message}, status=400)
+
+	if ("language_pack" in data):
+		valid = True
+		languages = ["lang/DE_GE.json",
+					"lang/EN_UK.json",
+					"lang/FR_FR.json",
+					"lang/IT_IT.json"]
+		language = data['language_pack']
+		if not language or not isinstance(language, str) or language not in languages:
+			return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
+		user.profile.language_pack = data['language_pack']
+
+	if ("font_amplifier" in data):
+		valid = True
+		if not isinstance(data['font_amplifier'], (float, int)):
+			return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
+		user.profile.font_amplifier = data['font_amplifier']
+
+	if "theme_name" in data:
+		valid = True
+		themes = ["dark", "light", "high_dark", "high_light", "browser"]
+		theme = data['theme_name']
+
+		if not theme or not isinstance(theme, str):
+			return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
+		if theme not in themes:
+			return JsonResponse({'message': "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'"}, status=400)
+
+		user.profile.theme_name = data['theme_name']
+
+	if (valid == False):
+		return JsonResponse({'message': 'Field does not exist'}, status=400)
+
+	user.save()
+	return JsonResponse({'message': 'User profile updated'}, status=200)
 
 def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 	matches_json = {}
@@ -413,7 +422,7 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 					if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
 						p1_name = "deleted"
 						p1_display_name = "deleted"
-					
+
 				except:
 					p1_name = "deleted"
 					p1_display_name = "deleted"
@@ -552,8 +561,6 @@ def current_user(request):
 			request.user.profile.tournaments.filter(date=datetime.date.today()),
 			request.user.username, 5)
 		return JsonResponse({'username': request.user.username,
-			'is_dark_theme': request.user.profile.dark_theme,
-			'use_browser_theme': request.user.profile.use_browser_theme,
 			'theme_name' : request.user.profile.theme_name,
 			'pfp': request.user.profile.profile_picture,
 			'lang': request.user.profile.language_pack,
@@ -573,19 +580,40 @@ def current_user(request):
 def get(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		try:
-			user = User.objects.get(username=data['name'])
-			if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				return JsonResponse({'message': "can't find user"}, status=403)
-			return JsonResponse(get_user_json(request.user, user, data['startDate'], data['endDate']), status=200)
-		except User.DoesNotExist:
-			return JsonResponse({'message': "can't find user"}, status=404)
-		except Exception as error:
-			return JsonResponse({'message': error}, status=500)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+	try:
+		data = json.loads(request.body)
+
+		username = data['name']
+		startDate = data['startDate']
+		endDate = data['endDate']
+
+		if not username or not startDate or not endDate or \
+			not isinstance(username, str) or not isinstance(startDate, str) or not isinstance(endDate, str):
+			return HttpResponse("Invalid Data: " + str(request.body), status=400)
+
+		datetime.datetime.strptime(startDate, '%Y-%m-%d')
+		datetime.datetime.strptime(endDate, '%Y-%m-%d')
+
+		user = User.objects.get(username=username)
+		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
+			return JsonResponse({'message': "can't find user"}, status=403)
+
+		response = get_user_json(user, startDate, endDate)
+
+		return JsonResponse(response, status=200)
+	except json.JSONDecodeError:
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except (KeyError, ValueError):
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
+	except User.DoesNotExist:
+		return JsonResponse({'message': "can't find user"}, status=404)
+	except DatabaseError:
+		return HttpResponse("Database error", status=500)
+	except Exception:
+		return HttpResponse("Internal server error", status=500)
 
 def search_by_username(request):
 	if (request.method != 'POST'):

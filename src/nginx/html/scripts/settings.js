@@ -38,7 +38,7 @@ var accessibilitySlide = `
 			<option value="0.5" label="XS"></option>
 			<option value="1.0" label="M"></option>
 			<option value="1.5" label="XL"></option>
-		</datalist>				
+		</datalist>
 	</div>
 </div>
 
@@ -404,7 +404,7 @@ document.addEventListener("click", (e) => {
 				elem.classList.remove("activeDropDown");
 				void elem.offsetWidth;
 				elem.classList.add("inactiveSettingsDropDown");
-	
+
 				setTimeout((elem) => {
 					elem.classList.remove("inactiveSettingsDropDown");
 				}, 300, elem);
@@ -452,14 +452,14 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 
 document.getElementById("settingsThemeLight").addEventListener("click", (e) => {
 	switchTheme('light');
-	
+
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ is_dark_theme: false, use_browser_theme: false, theme_name: 'light'}),
+		body: JSON.stringify({ theme_name: 'light'}),
 		credentials: 'include'
 	})
 	client.use_browser_theme = false;
@@ -473,7 +473,7 @@ document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ is_dark_theme: true, use_browser_theme: false, theme_name: 'dark'}),
+		body: JSON.stringify({ theme_name: 'dark'}),
 		credentials: 'include'
 	})
 	client.use_browser_theme = false;
@@ -481,14 +481,14 @@ document.getElementById("settingsThemeDark").addEventListener("click", (e) => {
 
 document.getElementById("settingsThemeHCLight").addEventListener("click", (e) => {
 	switchTheme('high_light');
-	
+
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent);
 	fetch('/api/user/update', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ is_dark_theme: false, use_browser_theme: false, theme_name: 'high_light'}),
+		body: JSON.stringify({ theme_name: 'high_light'}),
 		credentials: 'include'
 	})
 	client.use_browser_theme = false;
@@ -502,7 +502,7 @@ document.getElementById("settingsThemeHCDark").addEventListener("click", (e) => 
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ is_dark_theme: true, use_browser_theme: false, theme_name: 'high_dark'}),
+		body: JSON.stringify({ theme_name: 'high_dark'}),
 		credentials: 'include'
 	})
 	client.use_browser_theme = false;
@@ -520,7 +520,7 @@ settingsThemeDevice.addEventListener("click", (e) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ is_dark_theme: theme, use_browser_theme: true}),
+		body: JSON.stringify({ theme_name: "browser" }),
 		credentials: 'include'
 	})
 	client.use_browser_theme = true;
@@ -556,7 +556,7 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 					elem.classList.remove("activeDropDown");
 					void elem.offsetWidth;
 					elem.classList.add("inactiveSettingsDropDown");
-		
+
 					setTimeout((elem) => {
 						elem.classList.remove("inactiveSettingsDropDown");
 					}, 300, elem);

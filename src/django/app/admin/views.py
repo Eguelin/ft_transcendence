@@ -1,13 +1,9 @@
-from django.contrib.auth import login, authenticate, logout
-from django.db import DatabaseError
 from django.contrib.auth.models import User
-from django.http import JsonResponse
-import json, os, requests, base64, random, string, subprocess, datetime
+from django.http import JsonResponse, HttpResponse
+from django.db import DatabaseError
+import json, os, random
+import login.views
 import game.models as customModels
-from django.core.validators import RegexValidator, MaxLengthValidator
-from django.core.exceptions import ValidationError
-import json, os, requests, base64, random, zxcvbn, re
-
 
 def generate_unique_username(base_username):
 	username = base_username
@@ -20,52 +16,11 @@ def generate_unique_username(base_username):
 def create_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=403)
-		try:
-			data = json.loads(request.body)
-		except json.JSONDecodeError:
-			return JsonResponse({'message': 'Invalid JSON'}, status=400)
-
-		try:
-			username = data['username']
-			password = data['password']
-		except Exception as e:
-			return JsonResponse({'message': str(e)}, status=500)
-
-		if username is None or password is None:
-			return JsonResponse({'message': 'Invalid request'}, status=405)
-
-		username_validator = RegexValidator(regex=r'^[\w-]+$', message='Username must be alphanumeric')
-		max_length_validator = MaxLengthValidator(15, message='Username must be 15 characters or fewer')
-		try:
-			username_validator(username)
-			max_length_validator(username)
-		except ValidationError as e:
-			return JsonResponse({'message': e.message}, status=400)
-
-		if len(password) > 128:
-			return JsonResponse({'message': 'Password too long'}, status=400)
-		result = zxcvbn.zxcvbn(password)
-		if result['score'] < 4 and os.getenv('DEBUG') == 'False':
-			return JsonResponse({'message': 'Password too weak'}, status=400)
-
-		if User.objects.filter(username=username).exists():
-			return JsonResponse({'message': 'User with same username already exists'}, status=400)
-		try:
-			user = User.objects.create_user(username=username, password=password)
-			user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
-			user.id42 = 0
-
-			# CREATE RANDOM FIRST MATCH
-			return JsonResponse({'message': 'User created'}, status=201)
-		except DatabaseError:
-			return JsonResponse({'message': 'Database error'}, status=500)
-		except Exception as e:
-			return JsonResponse({'message': str(e)}, status=500)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
+	return login.views.create_user(request, staff=True)
 
 def remove_user(request):
 	if request.method != 'POST' :
@@ -83,8 +38,44 @@ def remove_user(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-
 def create_match(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
+
+	try:
+		data = json.loads(request.body)
+		nbr = data['range']
+		userOne = data['userOne']
+		userTwo = data['userTwo']
+	except json.JSONDecodeError:
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+	except KeyError:
+		return HttpResponse("Missing Data: " + str(request.body), status=400)
+
+	if not isinstance(nbr, int) or nbr < 1 or not isinstance(userOne, str) or not isinstance(userTwo, str):
+		return HttpResponse("Invalid Data: " + str(request.body), status=400)
+
+	matches = {}
+	for i in range(0, nbr):
+		try:
+			match = customModels.Match.objects.createWithTwoOpps(userOne, userTwo)
+			matches[i] = {'playerOne': match.player_one.username,
+						'playerTwo': match.player_two.username,
+						'playerOnePts': match.player_one_pts,
+						'playerTwoPts': match.player_two_pts,
+						'date': match.date,}
+		except DatabaseError:
+			return HttpResponse("Database error", status=500)
+		except Exception:
+			return HttpResponse("Internal server error", status=500)
+
+	return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
+
+def create_friendship(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
 	if request.user.is_authenticated:
@@ -94,30 +85,7 @@ def create_match(request):
 			data = json.loads(request.body)
 		except json.JSONDecodeError:
 			return JsonResponse({'message': 'Invalid JSON'}, status=400)
-		matches = {}
-		for i in range(0, data['range']):
-			match = customModels.Match.objects.createWithTwoOpps(data['userOne'], data['userTwo'])
-			matches[i] = {'playerOne': match.player_one.username,
-				 'playerTwo': match.player_two.username,
-				 'playerOnePts': match.player_one_pts,
-				 'playerTwoPts': match.player_two_pts,
-				 'date': match.date,}
-		return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
-	else:
-		return JsonResponse({'message': "Client is not logged"}, status=401)
-		
 
-def create_friendship(request):
-	if request.method != 'POST' :
-		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:	
-		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=403)
-		try:
-			data = json.loads(request.body)
-		except json.JSONDecodeError:
-			return JsonResponse({'message': 'Invalid JSON'}, status=400)
-		
 		if not User.objects.filter(username=data['userOne']).exists():
 			user1 = User.objects.create_user(username=data['userOne'], password="password")
 			user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
@@ -151,14 +119,14 @@ def create_friendship(request):
 def create_friendship_request(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:	
+	if request.user.is_authenticated:
 		if not request.user.is_staff:
 			return JsonResponse({'message': 'user is not admin'}, status=403)
 		try:
 			data = json.loads(request.body)
 		except json.JSONDecodeError:
 			return JsonResponse({'message': 'Invalid JSON'}, status=400)
-		
+
 		if not User.objects.filter(username=data['to']).exists():
 			user1 = User.objects.create_user(username=data['to'], password="password")
 			user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
@@ -181,7 +149,7 @@ def create_friendship_request(request):
 			user1.profile.blocked_users.remove(user2)
 		if ((user2.profile.blocked_users.filter(pk=user1.pk)).exists()):
 			user2.profile.blocked_users.remove(user1)
-		if not ((user1.profile.friends_request.filter(pk=user2.pk)).exists()):	
+		if not ((user1.profile.friends_request.filter(pk=user2.pk)).exists()):
 			user1.profile.friends_request.add(user2)
 			user1.save()
 		return JsonResponse({'message': 'Friendship request created'}, status=201)
@@ -191,14 +159,14 @@ def create_friendship_request(request):
 def create_blocked_friendship(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:	
+	if request.user.is_authenticated:
 		if not request.user.is_staff:
 			return JsonResponse({'message': 'user is not admin'}, status=403)
 		try:
 			data = json.loads(request.body)
 		except json.JSONDecodeError:
 			return JsonResponse({'message': 'Invalid JSON'}, status=400)
-		
+
 		if not User.objects.filter(username=data['userOne']).exists():
 			user1 = User.objects.create_user(username=data['userOne'], password="password")
 			user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
@@ -300,7 +268,6 @@ def get_user_match(matches):
 		}
 		i += 1
 	return matches_json
-
 
 def get_user_json(user, startDate, endDate):
 	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
