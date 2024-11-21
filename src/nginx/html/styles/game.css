@@ -455,6 +455,7 @@
 }
 
 #matchContainer, #matchPlayersInfo{
+	font-size: 1rem;
 	gap: 1rem;
 }
 
@@ -471,6 +472,7 @@
 }
 
 #matchContainer .playerInfoContainer{
+	font-size: 1em;
 	flex-direction: row;
 	background: var(--hover-text-rgb);
 }
@@ -517,7 +519,7 @@
 }
 
 #matchPlayersInfo .playerInfo{
-	font-size: 1rem;
+	font-size: 1em;
 	width: 17ch;
 }
 
@@ -816,6 +818,10 @@ table.landscape{
 				rotate: 90deg;
 			}
 		}
+
+		.legendTextContainer{
+			font-size: 1rem;
+		}
 		
 	}
 	#matchPlayersInfo, #matchInfo{
@@ -871,6 +877,7 @@ table.landscape{
 	color: rgb(102, 102, 102);
 	margin: 0px;
 	padding: 0px;
+	font-size: .5rem;
 }
 
 #matchContainer{
