@@ -205,7 +205,7 @@ var template = `
 			window.onkeydown = loginKeyDownEvent;
 		})
 	});
-	
+
 	function login(){
 		username = document.getElementById('inputUsername').value;
 		pw = document.getElementById('inputPassword').value;
@@ -327,7 +327,7 @@ var template = `
 			if (registerBtn.previousElementSibling)
 				registerBtn.previousElementSibling.remove();
 
-			const data = {username: username, password: pw, 'lang': currentLang, use_browser_theme: use_browser_theme};
+			const data = {username: username, password: pw, 'lang': currentLang, theme_name: "browser"};
 			fetch('/api/user/create', {
 				method: 'POST',
 				headers: {
