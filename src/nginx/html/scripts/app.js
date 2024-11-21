@@ -13,6 +13,7 @@ notifCenterContainer = document.getElementById("notifCenterContainer")
 
 var currentPage = "";
 var currentLang = "lang/EN_UK.json"
+var currentTheme = "browser";
 var username = "";
 const hostname = new URL(window.location.href);
 const preferedColorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
@@ -604,8 +605,8 @@ function switchTheme(theme) {
 }
 
 swichTheme.addEventListener("click", () => {
-	var theme = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? false : true;
 	var theme_name = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? 'light' : 'dark';
+	currentTheme = theme_name;
 	if (client) {
 		fetch('/api/user/update', {
 			method: 'POST',
