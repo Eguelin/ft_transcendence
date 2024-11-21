@@ -6,6 +6,15 @@
 	width: 100%;
 	gap: 1rem;
 	overflow: hidden;
+	height: 100%;
+}
+
+#gameDisplay{
+	display: flex;
+	width: fit-content;
+	gap: 1rem;
+	align-items: center;
+	height: 100%;
 }
 
 .game{
@@ -319,7 +328,7 @@
 	left: 50%;
 }
 
-#controler, #controlerPlayerTwo{
+#controlerSlide, #controlerPlayerOne, #controlerPlayerTwo{
 	display: none;
 	height: 7rem;
 	position: fixed;
@@ -331,11 +340,15 @@
 	justify-content: space-around;
 }
 
-.singleRoundDisplay#controler{
+#controlerPlayerOne, #controlerPlayerTwo{
+	position: relative;
+}
+
+.singleRoundDisplay#controlerSlide{
 	display: flex;
 }
 
-#controler .leftBtn, #controler .rightBtn, #controlerPlayerTwo .leftBtn, #controlerPlayerTwo .rightBtn{
+#controlerSlide .leftBtn, #controlerSlide .rightBtn, #controlerPlayerOne .leftBtn, #controlerPlayerOne .rightBtn, #controlerPlayerTwo .leftBtn, #controlerPlayerTwo .rightBtn{
 	background:var(--main-text-rgb);
 	height:5rem;
 	width:5rem;
@@ -344,20 +357,21 @@
 	mask-repeat:no-repeat;
 }
 
-#controler .leftBtn, #controlerPlayerTwo .leftBtn{
+#controlerSlide .leftBtn, #controlerPlayerOne .leftBtn, #controlerPlayerTwo .leftBtn{
 	mask-image:url("../icons/left_arrow.svg");
 }
 
-#controler .rightBtn, #controlerPlayerTwo .rightBtn{
+#controlerSlide .rightBtn, #controlerPlayerOne .rightBtn, #controlerPlayerTwo .rightBtn{
 	mask-image:url("../icons/right_arrow.svg");
 	right: 0;
 }
 
-#controler > div, #controlerPlayerTwo > div{
+#controlerSlide > div, #controlerPlayerOne > div, #controlerPlayerTwo > div{
 	outline: none;
 }
 
-#controler .leftBtnContainer:focus .leftBtn, #controler .rightBtnContainer:focus .rightBtn, #controler .leftBtnContainer:hover .leftBtn, #controler .rightBtnContainer:hover .rightBtn,
+#controlerSlide .leftBtnContainer:focus .leftBtn, #controlerSlide .rightBtnContainer:focus .rightBtn, #controlerSlide .leftBtnContainer:hover .leftBtn, #controlerSlide .rightBtnContainer:hover .rightBtn,
+#controlerPlayerOne .leftBtnContainer:focus .leftBtn, #controlerPlayerOne .rightBtnContainer:focus .rightBtn, #controlerPlayerOne .leftBtnContainer:hover .leftBtn, #controlerPlayerOne .rightBtnContainer:hover .rightBtn,
 #controlerPlayerTwo .leftBtnContainer:focus .leftBtn, #controlerPlayerTwo .rightBtnContainer:focus .rightBtn, #controlerPlayerTwo .leftBtnContainer:hover .leftBtn, #controlerPlayerTwo .rightBtnContainer:hover .rightBtn{
 	background: var(--page-bg-rgb);
 }
@@ -441,6 +455,7 @@
 }
 
 #matchContainer, #matchPlayersInfo{
+	font-size: 1rem;
 	gap: 1rem;
 }
 
@@ -457,6 +472,7 @@
 }
 
 #matchContainer .playerInfoContainer{
+	font-size: 1em;
 	flex-direction: row;
 	background: var(--hover-text-rgb);
 }
@@ -503,7 +519,7 @@
 }
 
 #matchPlayersInfo .playerInfo{
-	font-size: 1rem;
+	font-size: 1em;
 	width: 17ch;
 }
 
@@ -517,24 +533,6 @@ table.portrait{
 
 #exchangeContainer th,#exchangeContainer td{
 	padding: 0 1.5ch;
-}
-
-@media screen and (max-width:715px) {
-	#matchInfo{
-		flex-direction: column;
-	}
-
-	table.portrait{
-		display: block;
-	}
-	
-	#exchangeContainer{
-		flex: none;
-	}
-
-	table.landscape{
-		display: none;
-	}
 }
 
 table.landscape, table.portrait{
@@ -557,85 +555,328 @@ table.landscape{
 
 #controlerPlayerTwo{
 	display: none;
-	top: 10rem;
 	bottom: unset;
 }
-.mobile {
-	.playerScore{
-		width: 5rem;
+
+@media screen and (orientation:portrait) {	
+	#matchInfo{
+		flex-direction: column;
+	}
+
+	table.portrait{
+		display: block;
 	}
 	
-	.playerPfp{
-		height: 5rem;
-		width: 5rem;
-		border-radius: 25%;
-		border-bottom-left-radius: 0;
-		border-top-left-radius: 0;
+	#exchangeContainer{
+		flex: none;
+	}
+
+	table.landscape{
+		display: none;
+	}
+	.mobile {
+	
+		#exchangeContainer th,#exchangeContainer td{
+			padding: 0 .5ch;
+		}
+		.playerScore{
+			width: 5rem;
+		}
+		
+		.playerPfp{
+			height: 5rem;
+			width: 5rem;
+			border-radius: 25%;
+			border-bottom-left-radius: 0;
+			border-top-left-radius: 0;
+		}
+		
+		.playerInfoContainer{
+			gap: 0;
+			width: 100vw;
+		}
+		.game{
+			width: unset;
+			height: unset;
+		}
+		
+		#gameContainer{
+			gap: 5rem;
+			height: 100%;
+		}
+	
+		#gameContainer.local {
+			flex-direction: column-reverse;
+			#game {
+				rotate : 270deg;
+			}
+			#gameDisplay{
+				flex-direction: column-reverse;
+			}
+		}
+		#replayButton{
+			font-size: 1rem !important;
+		}
+		/*
+		#controlerSlide{
+			display: flex !important;
+		}
+		*/
+
+		#gameDisplay {
+			height: 100%;
+		}
+
+		.game{
+			rotate: 90deg;
+		}
+		
+		#matchContainer {
+			justify-content: space-between;
+			#matchPlayersInfo{
+				height: fit-content;
+			}
+			
+			#matchInfo{
+				flex-direction: column;
+			}
+			
+			.playerScore{
+				width: fit-content;
+				word-break: keep-all;
+				white-space: nowrap;
+			}
+		}
+		
+		#controlerSlide > div, #controlerPlayerOne > div, #controlerPlayerTwo > div{
+			flex: 1;
+			height: 100%;
+			align-content: center;
+		}
+		
+		#tournamentContainer, #tournamentContainer *{
+			transition: none;
+		}
+
+		.local #playerTwo {
+			flex-direction: row-reverse;
+			.playerPfp{
+				rotate: 270deg;
+			}
+			.playerName, .playerScore{
+				rotate: 180deg;
+			}
+		}
+
+		.lobbyPlayerPfpContainer{
+			height: 10ch;
+		}
+		
+		#matchInfo, #matchInfo > *{
+			flex: none;
+		}
+		
+		#matchPlayersInfo{
+			flex: .8;
+		}
+		.playerInfoContainer > div{
+			flex: 1;
+		}
+		#matchInfoGraphContainer{
+			height: 30vh;
+		}
+		
+		.playerInfoContainer{
+			.playerInfoGraphContainer{
+				justify-items: center;
+				width: 100%;
+			}
+			
+			.playerInfo{
+				justify-content: center;
+			}
+			
+			.playerName, .playerScore{
+				flex: unset;
+			}
+		}
+		
+	}
+	
+	#matchInfoGraphContainer{
+		display: flex;
+		flex-direction: row;
+		flex: auto;
+		height: 30vh;
+		align-self: center;
+	}
+	.legendContainer {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		padding: 0;
+		justify-content: space-around;
+		height: 100%;
+	}
+	
+	.playerInfoGraphContainer{
+		display: flex;
+		flex-direction: column;
+	}
+	.playerLegendContainer .legendContainer{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.playerInfoContainer{
+		width: calc(50% - 1rem);
+	}
+}
+
+
+
+
+@media screen and (orientation:landscape) {	
+	#gameDisplay{
+		position: relative;
+		left: 50%;
+		translate: -50%;
+	}
+	.mobile {
+		#gameContainer{
+			height: 100%;
+			justify-content: space-between;
+			.game{
+				width: auto;
+				height: 25vw;
+			}
+			#gameDisplay{
+				width: 100%;
+				position: unset;
+				left: unset;
+				translate: unset;
+			}
+		}
+
+		
+		.local{
+			justify-content: unset;
+			
+			#playerOne .playerPfp, #playerTwo .playerPfp{
+				rotate: 90deg;
+			}
+
+			.playerName, .playerScore{
+				writing-mode: vertical-lr;
+				width: 1ch;
+			}/*
+			.game{
+				width: auto !important;
+				height: auto !important;
+			}*/
+		
+			#playerTwo {
+				.playerPfp{
+					rotate: 270deg;
+				}
+				.playerName, .playerScore{
+					rotate: 180deg;
+				}
+			}
+			#controlerPlayerOne,#controlerPlayerTwo{
+				flex-direction: column;
+				width: 15rem;
+				height: auto;
+
+				.leftBtnContainer, .rightBtnContainer{
+					height: 50%;
+					width: 100%;
+					align-content: center;
+				}
+	
+				.leftBtn, .rightBtn{
+					mask-size: 50%;
+				}
+			}
+		}
+
+		#controlerPlayerOne,#controlerPlayerTwo{
+			flex-direction: row;
+			height: 25%;
+
+			.leftBtnContainer, .rightBtnContainer{
+				height: 100%;
+				width: 50%;
+				align-content: center;
+			}
+
+			.leftBtn, .rightBtn{
+				width: 100%;
+				height: 100%;
+				mask-size: 10%;
+				min-width: 0;
+				rotate: 90deg;
+			}
+		}
+
+		.legendTextContainer{
+			font-size: 1rem;
+		}
+		
+	}
+	#matchPlayersInfo, #matchInfo{
+		height: calc(50% - 1rem);
+		.playerInfoGraphContainer{
+			height: 80%;
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+	#matchInfoGraphContainer, .playerInfoGraphContainer{
+		display: flex;
+		justify-content: center;
 	}
 	
 	.playerInfoContainer{
-		gap: 0;
-		width: 100vw;
+		width :calc(50% - 1rem);
+		gap: unset;
+		justify-content: space-around;
 	}
-/*	
-	.game{
-		width: unset;
-		height: unset;
-	}*/
 	
-	#gameContainer{
-		gap: 5rem;
+	.legendContainer {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		padding: 0;
+		justify-content: space-around;
+		height: 100%;
+	}
+	
+	.playerInfo{
+		width: unset !important;
+		max-width: 15rem;
+	}
+	
+	.playerLegendContainer{
+		.legendContainer{
+			flex-direction: row;
+		}
 	}
 
-	#gameContainer.local {
-		top : 10rem;
-		flex-direction: column-reverse;
-		#game {
-			rotate : 270deg;
-		}
-	}
-	#replayButton{
-		font-size: 1rem !important;
-	}
-	/*
-	#controler{
-		display: flex !important;
-	}
-	*/
-	
-	
-	.game{
-		rotate: 90deg;
-	}
-	
-	#matchContainer {
-		#matchPlayersInfo{
-			flex: unset;
-			height: fit-content;
-		}
-		 
-		#exchangeContainer{
-			flex: 1.5;
-		}
-		
-		#matchInfo{
-			flex-direction: column;
-		}
-		
-		.playerScore{
-			width: fit-content;
-			word-break: keep-all;
-			white-space: nowrap;
-		}
-	}
-	
-	#controler > div, #controlerPlayerTwo > div{
-		flex: 1;
-		height: 100%;
-		align-content: center;
-	}
-	
-	#tournamentContainer, #tournamentContainer *{
-		transition: none;
-	}
+}
+
+
+.legendElementContainer{
+	align-items: center; cursor: pointer; display: flex; flex-direction: row; margin-left: 10px;
+}
+
+.legendTextContainer{
+	color: rgb(102, 102, 102);
+	margin: 0px;
+	padding: 0px;
+	font-size: .5rem;
+}
+
+#matchContainer{
+	display: flex;
 }

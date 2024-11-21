@@ -103,10 +103,13 @@
 }
 
 
-.mobile .loginSlideContainer button{
-	font-size: 1rem;
-	border-radius: 1rem;;
+@media screen and (orientation:portrait) {
+	.mobile .loginSlideContainer button{
+		font-size: 1rem;
+		border-radius: 1rem;;
+	}
 }
+
 
 #loginSlideSelector .slideSelector{
 	padding: .5rem;
