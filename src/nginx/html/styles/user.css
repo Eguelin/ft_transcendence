@@ -1,8 +1,6 @@
 #recentMatchHistoryContainer{
 	width: -webkit-fill-available;
 	width: -moz-available;
-	position: absolute;
-	bottom: 0;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -95,6 +93,7 @@
 #profileInfoContainer {
 	display: flex;
 	margin: 3vw 3vw 0 3vw;
+	width: 100%;
 }
 
 #profileNameContainer {
