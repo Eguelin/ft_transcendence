@@ -541,42 +541,43 @@ def get_user_preview_json(user):
 def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		friends_list = request.user.profile.friends.all()
-		friends_request_list = request.user.profile.friends_request.all()
-		blocked_list = request.user.profile.blocked_users.all()
-		friend_json = {}
-		friend_request_json = {}
-		blocked_json = {}
-
-		for e in friends_list:
-			friend_json[e.username] = get_user_preview_json(e)
-		for e in friends_request_list:
-			friend_request_json[e.username] = get_user_preview_json(e)
-		for e in blocked_list:
-
-			blocked_json[e.username] = get_user_preview_json(e)
-		matches = get_user_match_json(
-			request.user,
-			request.user.profile.matches.filter(date=datetime.date.today()),
-			request.user.profile.tournaments.filter(date=datetime.date.today()),
-			request.user.username, 5)
-		return JsonResponse({'username': request.user.username,
-			'theme_name' : request.user.profile.theme_name,
-			'pfp': request.user.profile.profile_picture,
-			'lang': request.user.profile.language_pack,
-			'friends': friend_json,
-			'friend_requests': friend_request_json,
-			'blocked_users': blocked_json,
-			'is_active': request.user.profile.is_active,
-			'matches' : matches,
-			'is_admin' : request.user.is_staff,
-			'font_amplifier' : request.user.profile.font_amplifier,
-			'do_not_disturb' : request.user.profile.do_not_disturb,
-			'display_name': request.user.profile.display_name
-		})
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+	friends_list = request.user.profile.friends.all()
+	friends_request_list = request.user.profile.friends_request.all()
+	blocked_list = request.user.profile.blocked_users.all()
+	friend_json = {}
+	friend_request_json = {}
+	blocked_json = {}
+
+	for e in friends_list:
+		friend_json[e.username] = get_user_preview_json(e)
+	for e in friends_request_list:
+		friend_request_json[e.username] = get_user_preview_json(e)
+	for e in blocked_list:
+		blocked_json[e.username] = get_user_preview_json(e)
+
+	matches = get_user_match_json(
+		request.user,
+		request.user.profile.matches.filter(date=datetime.date.today()),
+		request.user.profile.tournaments.filter(date=datetime.date.today()),
+		request.user.username, 5)
+
+	return JsonResponse({'username': request.user.username,
+		'theme_name' : request.user.profile.theme_name,
+		'pfp': request.user.profile.profile_picture,
+		'lang': request.user.profile.language_pack,
+		'friends': friend_json,
+		'friend_requests': friend_request_json,
+		'blocked_users': blocked_json,
+		'is_active': request.user.profile.is_active,
+		'matches' : matches,
+		'is_admin' : request.user.is_staff,
+		'font_amplifier' : request.user.profile.font_amplifier,
+		'do_not_disturb' : request.user.profile.do_not_disturb,
+		'display_name': request.user.profile.display_name
+	})
 
 def get(request):
 	if request.method != 'POST' :
