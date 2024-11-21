@@ -52,12 +52,12 @@ def create_match(request):
 		userOne = data['userOne']
 		userTwo = data['userTwo']
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except KeyError:
-		return HttpResponse("Missing Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 
 	if not isinstance(nbr, int) or nbr < 1 or not isinstance(userOne, str) or not isinstance(userTwo, str):
-		return HttpResponse("Invalid Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
 
 	matches = {}
 	for i in range(0, nbr):
@@ -69,9 +69,9 @@ def create_match(request):
 						'playerTwoPts': match.player_two_pts,
 						'date': match.date,}
 		except DatabaseError:
-			return HttpResponse("Database error", status=500)
+			return JsonResponse({'message':  "Database error"}, status=500)
 		except Exception:
-			return HttpResponse("Internal server error", status=500)
+			return JsonResponse({'message':  "Internal server error"}, status=500)
 
 	return JsonResponse({'message': 'Matches created', 'matches' : matches}, status=201)
 
