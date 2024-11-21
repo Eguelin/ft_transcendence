@@ -1727,7 +1727,8 @@ function checkMatchSize(){
 				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 			}
 		}
-		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8) || (graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && graphCurrentSize > 200)){
+		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8) || 
+			((graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width || document.documentElement.clientHeight - 5 < graphSample.getBoundingClientRect().bottom) && graphCurrentSize > 200)){
 			if (currentFontSize > 8){
 				container.style.setProperty("font-size", `${currentFontSize - 1}px`)
 				currentFontSize -= 1;
@@ -1739,7 +1740,6 @@ function checkMatchSize(){
 		}
 	}
 	else{
-	
 		anchor = biggest.closest(".playerInfoContainer");
 		infoAnchor = biggest.closest(".playerInfo");
 		graphAnchor = anchor.querySelector(".playerInfoGraphContainer");
@@ -1750,16 +1750,6 @@ function checkMatchSize(){
 		while ((biggest.getBoundingClientRect().width > infoAnchor.getBoundingClientRect().width || anchor.getBoundingClientRect().width < parseInt(graphAnchor.getBoundingClientRect().right)) && currentFontSize > 8){
 			container.style.setProperty("font-size", `${currentFontSize - 1}px`);
 			currentFontSize -= 1;
-		}
-	}
-
-	while (getWindowWidth() <= 715 && getWindowHeight() >= document.querySelector("#matchContainer").getBoundingClientRect().bottom){
-		if (graphMatchCurrentSize > 200) {
-			graphMatchCurrentSize -= 5;
-			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
-		}
-		else{
-			break
 		}
 	}
 }
