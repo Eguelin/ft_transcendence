@@ -29,6 +29,8 @@ DEBUG = True if os.getenv('DJANGO_DEBUG') == 'True' else False
 
 ALLOWED_HOSTS = [
 	'localhost',
+	'127.0.0.1',
+	'127.0.1.1',
 	os.getenv('DJANGO_ALLOWED_HOST'),
 ]
 
