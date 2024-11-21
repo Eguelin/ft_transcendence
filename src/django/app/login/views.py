@@ -578,7 +578,7 @@ def get(request):
 		try:
 			user = User.objects.get(username=data['name'])
 			if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				return JsonResponse({'message': "can't find user"}, status=404)
+				return JsonResponse({'message': "can't find user"}, status=403)
 			return JsonResponse(get_user_json(request.user, user, data['startDate'], data['endDate']), status=200)
 		except User.DoesNotExist:
 			return JsonResponse({'message': "can't find user"}, status=404)

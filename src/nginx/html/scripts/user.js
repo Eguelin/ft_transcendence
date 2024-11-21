@@ -150,6 +150,8 @@ function updateUserLang(){
 				checkUserPageSize();
             })
         }
+		else if (user.status == 403)
+            client.loadPage("/403");
         else{
             client.loadPage("/404");
         }
