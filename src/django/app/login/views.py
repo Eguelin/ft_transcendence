@@ -264,14 +264,13 @@ def user_logout(request):
 def delete_user(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if (request.user.is_authenticated):
-		try:
-			request.user.delete()
-			return JsonResponse({'message': 'User deleted'}, status=200)
-		except Exception as e:
-			return JsonResponse({'message': e}, status=500)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+	try:
+		request.user.delete()
+		return JsonResponse({'message': 'User deleted'}, status=200)
+	except Exception:
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
