@@ -205,6 +205,7 @@ def create_nobody():
 	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
 	user = User.objects.create_user(username=username, password=password)
 	user.profile.profile_picture = "/images/defaults/thisman.jpg"
+	user.profile.display_name = "Nobody"
 	user.id42 = 0
 	user.save()
 	return user
