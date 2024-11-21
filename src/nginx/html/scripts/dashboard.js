@@ -619,20 +619,20 @@ function displayCharts(){
 		x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
 		y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
 
-		if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 0){
-			wLGraph.width = x * 30;
-			wLAbsGraph.width = x * 30;
-			userStatGraph.width = x * 30;
-			wLGraph.height = y * 21;
-			wLAbsGraph.height = y * 21;
-			userStatGraph.height = y * 21;
-		}
-		else{
+		if (isMobile() && window.matchMedia("(orientation: portrait)").matches){
 			wLGraph.width = x * 80;
 			wLAbsGraph.width = x * 80;
 			userStatGraph.width = x * 70;
 			wLGraph.height = y * 40;
 			wLAbsGraph.height = y * 40;
+			userStatGraph.height = y * 21;
+		}
+		else{
+			wLGraph.width = x * 30;
+			wLAbsGraph.width = x * 30;
+			userStatGraph.width = x * 30;
+			wLGraph.height = y * 21;
+			wLAbsGraph.height = y * 21;
 			userStatGraph.height = y * 21;
 		}
 

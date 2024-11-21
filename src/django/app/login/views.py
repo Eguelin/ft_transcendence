@@ -598,6 +598,9 @@ def get(request):
 		datetime.datetime.strptime(endDate, '%Y-%m-%d')
 
 		user = User.objects.get(username=username)
+		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
+			return JsonResponse({'message': "can't find user"}, status=403)
+
 		response = get_user_json(user, startDate, endDate)
 
 		return JsonResponse(response, status=200)
