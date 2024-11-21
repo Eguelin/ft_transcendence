@@ -204,6 +204,7 @@
 }
 
 #settingsSlideSelector {
+	word-break: break-all;
 	width: fit-content;
 	min-width: 40vw;
 	display: flex;
@@ -280,10 +281,6 @@
 
 	#settingSlides{
 		height: 70%;
-
-		.dropDownContent a{
-			width: min-content;
-		}
 	}
 
 
@@ -325,10 +322,6 @@
 	
 		#settingSlides{
 			height: 70%;
-	
-			.dropDownContent a{
-				width: min-content;
-			}
 		}
 	}
 }
