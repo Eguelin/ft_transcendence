@@ -454,6 +454,8 @@ function checkTournementRound(){
 }
 
 function displayTournament(is_finished = false){
+	if (!tournament)
+		return
 	document.querySelectorAll(".loser, .winner").forEach(function(elem){
 		elem.classList.remove("loser");
 		elem.classList.remove("winner");
@@ -471,7 +473,7 @@ function displayTournament(is_finished = false){
 	document.querySelector("#controlerSlide .rightBtnContainer").onmousedown = function() {};
 	document.querySelector("#controlerSlide .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
-	if (playersCount == 8/* || 1*/){
+	if (playersCount == 8 || is_finished){
 
 		document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
 		document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
@@ -684,8 +686,8 @@ function game() {
 				myPushState(`https://${hostname.host}/home`);
 			}
 			if (data.type === "game_init") {
+				document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay");
 				document.querySelector("#game").style.setProperty("display", "block");
-				window.removeEventListener("resize", displayTournament);
 				gameContainer.style.setProperty("display", "flex");
 				tournamentContainer.style.setProperty("display", "none");
 				checkGameSize();
@@ -775,13 +777,11 @@ function game() {
 				displayTournament();
 				gameContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
-				window.addEventListener("resize", displayTournament);
 			} else if (data.type === "tournament_end") {
 				gameContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
 				checkTournementRound();
 				displayWinner(data.message.winner, data.message.profile_picture)
-				window.addEventListener("resize", displayTournament);
 			}
 		}
 
@@ -1143,7 +1143,6 @@ function game() {
 			(async () => (loadCurrentLang()))();
 			displayTournament(true);
 			setTournamentAriaLabeL();
-			window.addEventListener("resize", displayTournament);
 
 		})()
 	}

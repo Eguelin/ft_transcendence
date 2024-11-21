@@ -1441,27 +1441,29 @@ async function updateUserAriaLabel(key, content){
 
 let ua = navigator.userAgent;
 setInterval(function() {
-  if (navigator.userAgent !== ua) {	
-	if (isMobile()){
-		document.documentElement.classList.add("mobile");
+	if (navigator.userAgent !== ua) {	
+		if (isMobile()){
+			document.documentElement.classList.add("mobile");
+		}
+		else{
+			document.documentElement.classList.remove("mobile");
+		}
+		ua = navigator.userAgent;
 	}
-	else{
-		document.documentElement.classList.remove("mobile");
+	checkResizeIndex()
+	if (currentPage == "home" || currentPage == "user"){
+		checkMatchResumeSize()
 	}
-	ua = navigator.userAgent;
-  }
-  checkResizeIndex()
-  if (currentPage == "home" || currentPage == "user"){
-	  checkMatchResumeSize()
-  }
-  if (currentPage == "user")
-	  checkUserPageSize();
-  if (currentPage == "game")
-	  checkGameSize();
-  if (currentPage == "game" || currentPage == "tournament")
-	  setTimeout(checkWinnerDisplaySize, 1)
-  if (currentPage == "friends")
-	  checkFriendPageSize()
+	if (currentPage == "user")
+		checkUserPageSize();
+	if (currentPage == "game")
+		checkGameSize();
+	if (currentPage == "tournament")
+		displayTournament();
+	if (currentPage == "game" || currentPage == "tournament")
+		setTimeout(checkWinnerDisplaySize, 1)
+	if (currentPage == "friends")
+		checkFriendPageSize()
 
 
 }, 500);
@@ -1536,6 +1538,8 @@ function resizeEvent(){
 		checkUserPageSize();
 	if (currentPage == "game")
 		checkGameSize();
+	if (currentPage == "tournament")
+		displayTournament();
 	if (currentPage == "game" || currentPage == "tournament")
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "match")
@@ -1552,6 +1556,7 @@ function checkUserPageSize(){
 	
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 4;
 	var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
+	text.style.setProperty("transition", "none")
 	while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
 		text.style.setProperty("font-size", `${currentFontSize}px`)
 		currentFontSize += 1;
@@ -1653,9 +1658,12 @@ const HorizontalInversedkeyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "Ke
 const FullInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
 
 function checkGameSize(){
+	if (document.querySelector("#tournamentContainer").style.getComputedStyle("display") != none){
+		displayTournament();
+	}
 	if (!document.querySelector("#gameContainer").classList.contains("local")){
 		if (window.matchMedia("(orientation: portrait)").matches){
-			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
+			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column-reverse");
@@ -1671,7 +1679,7 @@ function checkGameSize(){
 			}
 		}
 		else {
-			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
+			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "0deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row");
