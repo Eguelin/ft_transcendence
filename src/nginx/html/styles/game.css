@@ -841,6 +841,7 @@ table.landscape{
 		width :calc(50% - 1rem);
 		gap: unset;
 		justify-content: space-around;
+		height: 100%;
 	}
 	
 	.legendContainer {
