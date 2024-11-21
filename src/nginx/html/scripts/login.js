@@ -327,7 +327,7 @@ var template = `
 			if (registerBtn.previousElementSibling)
 				registerBtn.previousElementSibling.remove();
 
-			const data = {username: username, password: pw, 'lang': currentLang, theme_name: "browser"};
+			const data = {username: username, password: pw, 'lang': currentLang, theme_name: currentTheme};
 			fetch('/api/user/create', {
 				method: 'POST',
 				headers: {
