@@ -644,6 +644,7 @@ function game() {
 			document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 //			document.querySelector("#controlerSlide").style.setProperty("display", "flex");
 		}
+		history.replaceState("","",`https://${hostname.host}/game?mode=${mode}`)
 
 		if (mode == "local"){
 			document.querySelector("#gameContainer").classList.add("local");
@@ -1112,7 +1113,8 @@ function game() {
 				body: JSON.stringify({ "id": url.searchParams.get("id")}),
 				credentials: 'include'
 			})
-			const result = await fetchResult.json();
+		history.replaceState("","",`https://${hostname.host}/tournament?id=${url.searchParams.get("id")}`)	
+		const result = await fetchResult.json();
 			if (fetchResult.ok){
 				tournament = result;
 			}

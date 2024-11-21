@@ -31,6 +31,7 @@ var template = `
 	notifCenterContainer.style.setProperty("display", "flex");
 	displayNameInput = document.querySelector("#inputChangeDisplayName")
 
+	history.replaceState("","",`https://${hostname.host}/home`)
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 		displayNameInput.placeholder = client.displayName;

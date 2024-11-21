@@ -45,6 +45,7 @@ var template = `
 `
 
 {
+	history.replaceState("","",`https://${hostname.host}/admin`)
 	document.getElementById("container").innerHTML = template;
 	notifCenterContainer.style.setProperty("display", "none");
 
