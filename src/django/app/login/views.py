@@ -250,15 +250,16 @@ def user_login(request):
 		return HttpResponse("Internal server error", status=500)
 
 def user_logout(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if (request.user.is_authenticated):
-		request.user.profile.is_active = False
-		request.user.save()
-		logout(request)
-		return JsonResponse({'message': 'logged out'}, status=200)
-	else:
-		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
+	if not request.user.is_authenticated:
+		return JsonResponse({'message':  "Client is not logged"}, status=401)
+
+	request.user.profile.is_active = False
+	request.user.save()
+	logout(request)
+
+	return JsonResponse({'message':  'logged out'}, status=200)
 
 def delete_user(request):
 	if request.method != 'POST':
