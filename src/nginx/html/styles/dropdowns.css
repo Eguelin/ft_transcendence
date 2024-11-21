@@ -358,3 +358,20 @@
 		height: 3.5rem;
 	}
 }
+
+	@media screen and (orientation:portrait) {
+		#settingsDropDownContainer{
+			flex-direction: column-reverse;
+			width: 90%;
+
+			#settingsDropDownTheme, #settingsDropDownLang{
+				width: 100%;
+			}
+
+			.dropDownOptionContainer{
+				width: 100%;
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+		}
+	}

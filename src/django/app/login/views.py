@@ -826,8 +826,8 @@ def get_tournament(request):
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["id"] = match.pk
 		return JsonResponse(tournamentJson, status=200)
-#	except gameModels.DoesNotExist:
-#		return JsonResponse({'message': 'Tournament not found'}, status=404)
+	except gameModels.DoesNotExist:
+		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
@@ -887,8 +887,8 @@ def get_match(request):
 		}
 
 		return JsonResponse(match_json, status=200)
-#	except gameModels.DoesNotExist:
-#		return JsonResponse({'message': 'Tournament not found'}, status=404)
+	except gameModels.DoesNotExist:
+		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
