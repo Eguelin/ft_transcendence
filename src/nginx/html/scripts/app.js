@@ -1151,7 +1151,7 @@ function friendUpdate()
 		fetch('/api/user/get_user_id', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ "user": user, }),
+			body: JSON.stringify({ "username": user, }),
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok) {

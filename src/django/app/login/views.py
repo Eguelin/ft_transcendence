@@ -640,24 +640,33 @@ def search_by_username(request):
 def get_user_id(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request method'}, status=405)
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': 'Client is not logged'}, status=401)
 
 	try:
 		data = json.loads(request.body)
-		username = data.get("user")
+		username = data["username"]
 
-		if not username:
-			return JsonResponse({'message': 'Username is required'}, status=400)
+		if not username or not isinstance(username, str):
+			return JsonResponse({'message': 'Invalid username'}, status=400)
+
 		user = User.objects.get(username=username)
 
 		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
 			return JsonResponse({'message': 'User blocked you', 'blocked': True}, status=200)
 		return JsonResponse({'id': user.id, 'self_id' : request.user.id, 'blocked': False}, status=200)
 
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
+
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'User not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+	except Exception:
+		return JsonResponse({'message': 'Internal server error'}, status=500)
 
 def get_tournament(request):
 	if request.method != 'POST':
