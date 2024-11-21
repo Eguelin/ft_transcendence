@@ -99,6 +99,7 @@
 }
 
 #usernameBtn {
+	font-size: 1em;
 	color: var(--main-text-rgb);
 	display: block;
 	text-align: center;
