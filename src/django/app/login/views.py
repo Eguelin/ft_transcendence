@@ -18,8 +18,8 @@ def getClientId(request):
 def fortytwo(request):
 	create_ai()
 	create_nobody()
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 
 	try:
 		data = json.loads(request.body)
@@ -143,7 +143,7 @@ def create_user(request, staff=False):
 	create_nobody()
 
 	if request.method != 'POST' :
-		return HttpResponse("Invalid request", status=405)
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 
 	try:
 		data = json.loads(request.body)
@@ -152,9 +152,9 @@ def create_user(request, staff=False):
 		language = data['lang']
 		theme_name = data['theme_name']
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except KeyError:
-		return HttpResponse("Missing Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 
 	valid, message = check_username(username)
 	if not valid:
@@ -183,9 +183,9 @@ def create_user(request, staff=False):
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
-		return HttpResponse("Database error", status=500)
+		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
-		return HttpResponse("Internal server error", status=500)
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def create_ai():
 	if User.objects.filter(username="AI").exists():
@@ -210,20 +210,20 @@ def create_nobody():
 	return user
 
 def user_login(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 
 	try:
 		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except KeyError:
-		return HttpResponse("Missing Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 
 	if not username or not password or not isinstance(username, str) or not isinstance(password, str):
-		return HttpResponse("Invalid Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
 
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
@@ -245,9 +245,9 @@ def user_login(request):
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except DatabaseError:
-		return HttpResponse("Database error", status=500)
+		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
-		return HttpResponse("Internal server error", status=500)
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def user_logout(request):
 	if request.method != 'POST' :
@@ -304,7 +304,7 @@ def set_pfp(user, pfp):
 
 def profile_update(request):
 	if request.method != 'POST' :
-		return HttpResponse("Invalid request", status=405)
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
@@ -312,7 +312,7 @@ def profile_update(request):
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 
 	user = request.user
 	boolean_fields = ["do_not_disturb", "is_active"]
@@ -579,8 +579,8 @@ def current_user(request):
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
 def get(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
@@ -593,7 +593,7 @@ def get(request):
 
 		if not username or not startDate or not endDate or \
 			not isinstance(username, str) or not isinstance(startDate, str) or not isinstance(endDate, str):
-			return HttpResponse("Invalid Data: " + str(request.body), status=400)
+			return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
 
 		datetime.datetime.strptime(startDate, '%Y-%m-%d')
 		datetime.datetime.strptime(endDate, '%Y-%m-%d')
@@ -606,15 +606,15 @@ def get(request):
 
 		return JsonResponse(response, status=200)
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except (KeyError, ValueError):
-		return HttpResponse("Missing Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 	except User.DoesNotExist:
 		return JsonResponse({'message': "can't find user"}, status=404)
 	except DatabaseError:
-		return HttpResponse("Database error", status=500)
+		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
-		return HttpResponse("Internal server error", status=500)
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def search_by_username(request):
 	if (request.method != 'POST'):
@@ -893,4 +893,3 @@ def get_match(request):
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
-
