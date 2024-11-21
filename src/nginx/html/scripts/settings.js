@@ -135,6 +135,7 @@ var template = `
 
 
 {
+	history.replaceState("","",`https://${hostname.host}/settings`)
 	document.getElementById("container").innerHTML = template;
 
 	deleteAccountBtn = document.getElementById('deleteAccountBtn');

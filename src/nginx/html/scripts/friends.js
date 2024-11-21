@@ -87,6 +87,7 @@ var template = `
 	friendInfo = document.getElementById("friendInfo");
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
+	history.replaceState("","",`https://${hostname.host}/friends`)
 
 	setNotifTabIndexes(16);
 

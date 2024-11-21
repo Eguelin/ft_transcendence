@@ -275,6 +275,7 @@ class Dashboard{
 				})
 				this.clientMatches = await clientMatchesFetch.json();
 				this.clientMatches = this.clientMatches.matches;
+				history.replaceState("","",`https://${hostname.host}/dashboard/${username}`)
 			}
 			catch{
 				var template = `
