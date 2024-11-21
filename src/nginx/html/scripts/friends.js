@@ -261,11 +261,15 @@ document.addEventListener("click", (e) => {
 			document.getElementById("popupBg").style.display = "block";
 			deleteFriendPopup.style.setProperty("display", "flex");
 			deleteFriendPopup.className = e.target.parentElement.id;
+			document.querySelector("#confirmDeleteQuestion").innerText = client.langJson['friends']['confirmDeleteQuestion'].replace("${USERNAME}", e.target.parentElement.id);
+			document.querySelector("#confirmDelete").ariaLabel = client.langJson['friends']['aria#confirmDelete'].replace("${USERNAME}", e.target.parentElement.id);
 		}
 		if (e.target.className == "blockFriendBtn"){
 			document.getElementById("popupBg").style.display = "block"
 			blockFriendPopup.style.setProperty("display", "flex");
 			blockFriendPopup.className = e.target.parentElement.id;
+			document.querySelector("#confirmBlockQuestion").innerText = client.langJson['friends']['confirmBlockQuestion'].replace("${USERNAME}", e.target.parentElement.id);
+			document.querySelector("#confirmBlock").ariaLabel = client.langJson['friends']['aria#confirmBlock'].replace("${USERNAME}", e.target.parentElement.id);
 		}
 		if (e.target.closest(".friendsOptionContainer")){
 			e.target.closest(".friendsOptionContainer").classList.add("activeListSelector");

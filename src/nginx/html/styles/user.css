@@ -40,11 +40,6 @@
 	outline: none;
 }
 
-
-.mobile #recentMatchHistory{
-	flex-direction: column;
-}
-
 .matchDescContainer{
 	background: var(--input-bg-rgb);
 	min-height: min-content;
@@ -433,30 +428,57 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 		flex-direction: column;
 		gap: 1rem;
 	}
+	
+	.mobile{
+		#profileInfoContainer{
+			margin: 0;
+			flex-direction: column;
+			gap: 1rem;
+		}
+	
+		#profilePfpContainer{
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+		#timelineSelectionContainer{
+			flex-direction: column;
+			width: -moz-available;
+			width: -webkit-fill-available;
+			align-items: center;
+			margin: 1rem;
+		}
+		#profileGraphs{
+			flex-direction: column;
+		}
+	
+		#recentMatchHistory{
+			flex-direction: column;
+		}
+		
+		.matchDescContainerScore{
+			top: unset;
+			translate: unset;
+		}
+	}
 }
 
-.mobile{
+@media screen and (orientation:landscape){
 	#profileInfoContainer{
-		margin: 0;
 		flex-direction: column;
 		gap: 1rem;
 	}
-
-	#profilePfpContainer{
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-	}
-	#timelineSelectionContainer{
-		flex-direction: column;
-		width: -moz-available;
-		width: -webkit-fill-available;
-		align-items: center;
-		margin: 1rem;
-	}
-	#profileGraphs{
-		flex-direction: column;
+	
+	.mobile{
+		#recentMatchHistory{
+			animation: unset;
+			min-width: none;
+		}
+		.matchDescContainerResult, .matchDescContainerDate{
+			animation: unset;
+		}
 	}
 }
+
 
 #notPlayedPeriod{
 	color: var(--main-text-rgb);
