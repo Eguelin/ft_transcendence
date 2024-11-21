@@ -301,8 +301,8 @@ def set_pfp(user, pfp):
 	user.profile.profile_picture = pfpName
 
 def profile_update(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.method != 'POST' :
+		return HttpResponse("Invalid request", status=405)
 	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
@@ -310,7 +310,7 @@ def profile_update(request):
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
-		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
 
 	user = request.user
 
