@@ -6,15 +6,10 @@ maxScore = 5;
 
 var gameContainer;
 var tournamentContainer;
-var matchContainer;
 var treeCanva;
 
 var tournament = null;
 var match = null;
-
-var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
-
-var playerOneInfo = [0,0,0], playerTwoInfo = [0,0,0]
 
 var userContainerAnchor = `
 <div class="anchor"></div>
@@ -35,92 +30,38 @@ var lobbyPlayerContainer= `
 
 var gameContainer = `
 <div id="gameContainer">
-	<div class="playerInfoContainer" id="playerOne">
-		<div class="playerPfp">
-			<img id="playerOnePfp">
+	<div id="controlerPlayerOne">
+		<div class="leftBtnContainer" tabindex="14">
+			<button class="leftBtn"></button>
 		</div>
-		<h2 class="playerName"></h2>
-		<h2 class="playerScore">-</h2>
-	</div>
-	<canvas id="game" class="game">
-	</canvas>
-	<div class="playerInfoContainer" id="playerTwo">
-		<div class="playerPfp">
-			<img id="playerTwoPfp">
-		</div>
-		<h2 class="playerName"></h2>
-		<h2 class="playerScore">-</h2>
-	</div>
-</div>`
-
-var matchContainer = `
-<div id="matchContainer">
-	<div id="matchInfo"> 
-		<div id="exchangeContainer">
-			<table class="landscape">
-				<caption class="exchangeTablesCaption"></caption>
-				<tr>
-					<th scope="row" id="totalExchangeTitle"></th>
-					<td id="totalExchange"></td>
-				</tr>
-				<tr>
-					<th scope="row" id="averageExchangeTitle"></th>
-					<td id="averageExchange"></td>
-				</tr>
-				<tr>
-					<th scope="row" id="longestExchangeTitle"></th>						
-					<td id="longestExchange"></td>
-				</tr>
-			</table>
-			<table class="portrait">
-				<caption class="exchangeTablesCaption"></caption>
-				<tr>
-					<th scope="col" id="totalExchangeTitle"></th>
-					<th scope="col" id="averageExchangeTitle"></th>
-					<th scope="col" id="longestExchangeTitle"></th>
-					
-				</tr>
-				<tr>
-					<td id="totalExchange"></td>
-					<td id="averageExchange"></td>
-					<td id="longestExchange"></td>
-				</tr>
-			</table>
-		</div>
-		<div id="matchInfoGraphContainer">
-			<canvas id="matchInfoGraph"></canvas>
+		<div class="rightBtnContainer" tabindex="15">
+			<button class="rightBtn"></button>
 		</div>
 	</div>
-	<div id="matchPlayersInfo">
+	<div id="gameDisplay">
 		<div class="playerInfoContainer" id="playerOne">
-			<div class="playerInfo">
-				<div class="playerPfp">
-					<img id="playerOnePfp">
-				</div>
-				<div class="playerNamesContainer">
-					<a class="playerName"></a>
-					<a class="playerDisplayName"></a>
-				</div>
-				<h2 class="playerScore">-</h2>
+			<div class="playerPfp">
+				<img id="playerOnePfp">
 			</div>
-			<div id="playerInfoGraphContainer">
-				<canvas id="playerOneInfoGraph"></canvas>
-			</div>
+			<h2 class="playerName"></h2>
+			<h2 class="playerScore">-</h2>
 		</div>
+		<canvas id="game" class="game">
+		</canvas>
 		<div class="playerInfoContainer" id="playerTwo">
-			<div class="playerInfo">
-				<div class="playerPfp">
-					<img id="playerTwoPfp">
-				</div>
-				<div class="playerNamesContainer">
-					<a class="playerName"></a>
-					<a class="playerDisplayName"></a>
-				</div>
-				<h2 class="playerScore">-</h2>
+			<div class="playerPfp">
+				<img id="playerTwoPfp">
 			</div>
-			<div id="playerInfoGraphContainer">
-				<canvas id="playerTwoInfoGraph"></canvas>
-			</div>
+			<h2 class="playerName"></h2>
+			<h2 class="playerScore">-</h2>
+		</div>
+	</div>
+	<div id="controlerPlayerTwo">
+		<div class="leftBtnContainer" tabindex="14">
+			<button class="leftBtn"></button>
+		</div>
+		<div class="rightBtnContainer" tabindex="15">
+			<button class="rightBtn"></button>
 		</div>
 	</div>
 </div>`
@@ -173,18 +114,9 @@ var tournamentContainer = `
 
 var template = `
 <div id="pageContentContainer">
-	<div id="controlerPlayerTwo">
-		<div class="leftBtnContainer" tabindex="14">
-			<button class="leftBtn"></button>
-		</div>
-		<div class="rightBtnContainer" tabindex="15">
-			<button class="rightBtn"></button>
-		</div>
-	</div>
 	${gameContainer}
-	${matchContainer}
 	${tournamentContainer}
-	<div id="controler">
+	<div id="controlerSlide">
 		<div class="leftBtnContainer" tabindex="12" aria-label="Switch tournament section">
 			<button class="leftBtn"></button>
 		</div>
@@ -217,10 +149,10 @@ function leftSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#controler .leftBtnContainer").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#controler .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controler .rightBtnContainer").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#controler .rightBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -238,10 +170,10 @@ function leftSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
-			document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
-			document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -267,10 +199,10 @@ function rightSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#controler .leftBtnContainer").removeEventListener("click", leftSlideBtn);
-		document.querySelector("#controler .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controler .rightBtnContainer").removeEventListener("click", rightSlideBtn);
-		document.querySelector("#controler .rightBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
+		document.querySelector("#controlerSlide .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
 		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
@@ -288,10 +220,10 @@ function rightSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
-			document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
-			document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+			document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 		}, 500);
 	}
 }
@@ -424,10 +356,10 @@ function rightBtnKeydownEvent(e){
 		}
 	}
 
-	document.querySelector("#controler .leftBtnContainer").addEventListener("click", leftSlideBtn);
-	document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-	document.querySelector("#controler .rightBtnContainer").addEventListener("click", rightSlideBtn);
-	document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+	document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+	document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+	document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+	document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
 		elem.innerHTML = `
 		<div class="contestUserContainer left">${userContainerAnchor}</div>
@@ -459,7 +391,11 @@ function setTournamentTreeValue(is_finished){
 				if (player != 'id'){
 					if (tournament[round][matchNumber][player]['username']){
 						document.querySelector(`${selector} .username`).classList.remove("waiting");
-						if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])
+						if (tournament[round][matchNumber][player]['username'] == "deleted"){
+							document.querySelector(`${selector} .username`).classList.add("deletedUser");
+							document.querySelector(`${selector} .username`).innerText = client.langJson["index"][".deletedUser"];
+						}
+						else if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])
 							document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
 						else{
 							document.querySelector(`${selector} .username`).classList.add("displayName")
@@ -530,28 +466,25 @@ function displayTournament(is_finished = false){
 			}
 		})
 	})
-	document.querySelector("#controler .leftBtnContainer").onmousedown = function() {};
-	document.querySelector("#controler .leftBtnContainer").onmouseup = function() {};
-	document.querySelector("#controler .rightBtnContainer").onmousedown = function() {};
-	document.querySelector("#controler .rightBtnContainer").onmouseup = function() {};
+	document.querySelector("#controlerSlide .leftBtnContainer").onmousedown = function() {};
+	document.querySelector("#controlerSlide .leftBtnContainer").onmouseup = function() {};
+	document.querySelector("#controlerSlide .rightBtnContainer").onmousedown = function() {};
+	document.querySelector("#controlerSlide .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
 	if (playersCount == 8/* || 1*/){
-		console.log("e")
 
-		document.querySelector("#controler .leftBtnContainer").onclick = leftSlideBtn;
-		document.querySelector("#controler .rightBtnContainer").onclick = rightSlideBtn;
-		document.querySelector("#controler .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-		document.querySelector("#controler .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+		document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
+		document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 
 		document.querySelector("#lobby").style.setProperty("display", "none");
 		document.querySelector("#tournament").style.setProperty("display", "flex");
 		var minFullTreeWidth = 870;
 		gameContainer = document.getElementById("gameContainer");
 		tournamentContainer = document.getElementById("tournamentContainer");
-		matchContainer = document.getElementById("matchContainer");
 
 		gameContainer.style.setProperty("display", "none");
-		matchContainer.style.setProperty("display", "none");
 		tournamentContainer.style.setProperty("display", "flex");
 
 		const contestMatchPlacementMap = {
@@ -601,12 +534,12 @@ function displayTournament(is_finished = false){
 		})
 
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
-			document.querySelector("#controler").classList.add("singleRoundDisplay");
+			document.querySelector("#controlerSlide").classList.add("singleRoundDisplay");
 			tournamentContainer.classList.add("singleRoundDisplay");
 		}
 		else {
 			tournamentContainer.classList.remove("singleRoundDisplay");
-			document.querySelector("#controler").classList.remove("singleRoundDisplay");
+			document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay");
 			tournamentContainer.style.setProperty("left", `0px`)
 			if (document.getElementById("treeCanva"))
 				document.querySelector("#treeCanva").style.setProperty("left", `0px`)
@@ -655,7 +588,7 @@ function displayTournament(is_finished = false){
 	else{
 		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentLobby']} ${playersCount}/8`
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
-		document.querySelector("#controler").classList.remove("singleRoundDisplay")
+		document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay")
 		document.querySelector("#tournamentContainer").classList.remove("singleRoundDisplay")
 		if (document.getElementById("treeCanva"))
 			document.getElementById("treeCanva").remove();
@@ -679,14 +612,13 @@ function displayTournament(is_finished = false){
 		})
 	}
 }
+var playerKeyMap, playerTouchMap;
 
 function game() {
 	const url =  new URL(window.location.href);
 
 	var tournamentContainer = document.getElementById("tournamentContainer");
-	var matchContainer = document.getElementById("matchContainer");
 	var gameContainer = document.getElementById("gameContainer");
-	matchContainer.style.setProperty("display", "none");
 	if (url.pathname.startsWith("/game")){
 		document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
 		const mode = url.searchParams.get("mode");
@@ -704,11 +636,11 @@ function game() {
 		let displayInterval;
 		let oldKeysDown = {};
 		let countdown = "";
-		var playerKeyMap = keyMap;
-		var playerTouchMap = keyMap;
-
-		if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
-			document.querySelector("#controler").style.setProperty("display", "flex");
+		playerKeyMap = keyMap;
+		playerTouchMap = keyMap;
+		if (isMobile()){
+			document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
+//			document.querySelector("#controlerSlide").style.setProperty("display", "flex");
 		}
 
 		if (mode == "local"){
@@ -719,7 +651,7 @@ function game() {
 			document.querySelectorAll("#gameContainer .playerInfoContainer").forEach(function (elem) {
 				elem.style.setProperty("justify-content", "center");
 			});
-			if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+			if (isMobile()){
 				document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
 			}
 		}
@@ -752,9 +684,9 @@ function game() {
 				myPushState(`https://${hostname.host}/home`);
 			}
 			if (data.type === "game_init") {
+				document.querySelector("#game").style.setProperty("display", "block");
 				window.removeEventListener("resize", displayTournament);
 				gameContainer.style.setProperty("display", "flex");
-				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "none");
 				checkGameSize();
 				if (mode == "tournament")
@@ -769,30 +701,29 @@ function game() {
 				var leftBtnInterval, p2leftBtnInterval;
 				var rightBtnInterval, p2rightBtnInterval;
 
-				if (mode=="local" && navigator.userAgent.match(/iphone|android|blackberry/ig)){
+				if ((mode=="local" || client.username == player2.name) && isMobile()){
+					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
+					if (mode != "local"){
+						document.querySelector("#controlerPlayerOne").style.setProperty("display", "none");
+						playerTouchMap = FullInversedKeyMap;
+					}
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = function() {
-						keysDown['ArrowUp'] = true;
+						keysDown[playerTouchMap['ArrowUp']] = true;
 						p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 					};
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = function() {
-						keysDown['ArrowUp'] = false;
+						keysDown[playerTouchMap['ArrowUp']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
 					};
 					
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = function() {
-						keysDown['ArrowDown'] = true;
+						keysDown[playerTouchMap['ArrowDown']] = true;
 						p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 					};
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = function() {
-						keysDown['ArrowDown'] = false;
+						keysDown[playerTouchMap['ArrowDown']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
 					};
-					
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
-					
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
 				}
 				else{
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
@@ -803,40 +734,30 @@ function game() {
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = null;
 				}
 
-				document.querySelector("#controler .leftBtnContainer").onclick = function() {};
-				document.querySelector("#controler .leftBtnContainer").onkeydown = function() {};
-				document.querySelector("#controler .rightBtnContainer").onclick = function() {};
-				document.querySelector("#controler .rightBtnContainer").onkeydown = function() {};
-				document.querySelector("#controler .leftBtnContainer").onpointerdown = function() {
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerdown = function() {
 					keysDown[playerTouchMap['KeyD']] = true;
 					leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
-				document.querySelector("#controler .leftBtnContainer").onpointerup = function() {
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerup = function() {
 					keysDown[playerTouchMap['KeyD']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 				};
 				
 
-				document.querySelector("#controler .rightBtnContainer").onpointerdown = function() {
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerdown = function() {
 					keysDown[playerTouchMap['KeyA']] = true;
 					rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
-				document.querySelector("#controler .rightBtnContainer").onpointerup = function() {
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerup = function() {
 					keysDown[playerTouchMap['KeyA']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 				};
 
-				document.querySelector("#controler .leftBtnContainer").oncontextmenu = function(event) {
-					event.preventDefault();
-					event.stopPropagation();
-					return false;
-				};
-				document.querySelector("#controler .rightBtnContainer").oncontextmenu = function(event) {
-					event.preventDefault();
-					event.stopPropagation();
-					return false;
-				};
-
+				document.querySelectorAll(".leftBtnContainer, .rightBtnContainer").forEach(function (elem){
+					elem.oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
+				})
+				
+				checkGameSize();
 				KeyPressInterval = setInterval(() => KeyPress(), 16);
 				if(document.getElementById("countdownContainer"))
 					document.getElementById("countdownContainer").remove();
@@ -853,12 +774,10 @@ function game() {
 				checkTournementRound();
 				displayTournament();
 				gameContainer.style.setProperty("display", "none");
-				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
 				window.addEventListener("resize", displayTournament);
 			} else if (data.type === "tournament_end") {
 				gameContainer.style.setProperty("display", "none");
-				matchContainer.style.setProperty("display", "none");
 				tournamentContainer.style.setProperty("display", "flex");
 				checkTournementRound();
 				displayWinner(data.message.winner, data.message.profile_picture)
@@ -919,23 +838,13 @@ function game() {
 					document.getElementById("waitingContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
-			console.log(player1)
-			if (getWindowHeight() > getWindowWidth()){
-				if (client.username == player1.name){
-					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
-					document.querySelector("#game").style.setProperty("rotate", "270deg")
-					playerKeyMap = inversedKeyMap;
-				}
-				else if (mode != "local")
-					playerTouchMap = inversedKeyMap;
-			}
-				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
-				addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
-	
-				document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
-				document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
-			
+		
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
 
+			document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
+			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
+		
 			if (mode == "full_ai")
 				document.querySelector("#gameContainer #playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 
@@ -945,6 +854,7 @@ function game() {
 			countdownBg.id = "countdownContainer";
 			countdownBg.innerHTML = `<div id=countdownBlur></div><h1 id="countdownText"></h1>`
 			document.body.appendChild(countdownBg);
+			checkGameSize();
 			gamesend("game_ready");
 		}
 
@@ -955,19 +865,8 @@ function game() {
 				playerTwoScore.innerText = `${message.player2.score}/${maxScore}`;
 			}
 			else{
-			
 				playerOneScore.innerText = message.player1.score;
 				playerTwoScore.innerText = message.player2.score;
-				
-				/*
-				if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
-					playerOneScore.innerText = message.player2.score;
-					playerTwoScore.innerText = message.player1.score;
-				}
-				else{
-					playerOneScore.innerText = message.player1.score;
-					playerTwoScore.innerText = message.player2.score;
-				}*/
 			}
 			player1.x = message.player1.x;
 			player1.y = message.player1.y;
@@ -1085,7 +984,7 @@ function game() {
 
 		function handleKeyDown(event) {
 			if (mapAvailableKeyCode[event.code]){
-					keysDown[playerKeyMap[event.code]] = true;
+				keysDown[playerKeyMap[event.code]] = true;
 			}
 		}
 
@@ -1141,10 +1040,11 @@ function game() {
 			document.querySelectorAll("#gameContainer .playerScore").forEach(function (e){e.innerText = "-";});
 			document.querySelectorAll("#gameContainer .playerName").forEach(function (e){e. innerText = "";});
 
-			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = client.username;
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), client.pfpUrl);
-			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), "");
-			
+			document.querySelector("#gameContainer #playerOne > .playerName").innerText = client.username;
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), client.pfpUrl);
+			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), "");
+			checkGameSize();
+			document.querySelector("#game").style.setProperty("display", "none");
 		}
 		function displayWinner(username, profile_picture){
 			var container = document.createElement("div");
@@ -1217,7 +1117,6 @@ function game() {
 				tournament = result;
 			}
 			gameContainer.style.setProperty("display", "none");
-			matchContainer.style.setProperty("display", "none");
 			tournamentContainer.style.setProperty("display", "flex");
 			tournamentContainer.classList.add("selectable");
 			document.querySelector(".contestMatchResume.quarter.match.one").tabIndex = 12;
@@ -1248,248 +1147,6 @@ function game() {
 
 		})()
 	}
-	else if (url.pathname.startsWith("/match")){
-		document.querySelector("#subtitle").innerText = client.langJson['game']['matchSubtitle'];
-		(async () => {
-			const fetchResult = await fetch('/api/user/get_match', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ "id": url.searchParams.get("id")}),
-				credentials: 'include'
-			})
-			const result = await fetchResult.json();
-			if (fetchResult.ok){
-
-				gameContainer.style.setProperty("display", "none");
-				matchContainer.style.setProperty("display", "flex");
-				tournamentContainer.style.setProperty("display", "none");
-				match = result;
-				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerOnePfp"), match.player_one_profile_picture);
-				addPfpUrlToImgSrc(document.querySelector("#matchContainer #playerTwoPfp"), match.player_two_profile_picture);
-	
-				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = match.player_one;
-				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_one_display_name}`;
-				
-				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
-				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_one}`;
-				
-				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = match.player_two;
-				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_two_display_name}`;
-				
-				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
-				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_two}`;
-				
-				
-				document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
-				document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
-				
-				document.querySelector("#matchContainer .portrait #totalExchange").innerText = match.exchanges;
-				document.querySelector("#matchContainer .portrait #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
-				document.querySelector("#matchContainer .portrait #longestExchange").innerText = match.exchangesMax;
-
-				document.querySelector("#matchContainer .landscape #totalExchange").innerText = match.exchanges;
-				document.querySelector("#matchContainer .landscape #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
-				document.querySelector("#matchContainer .landscape #longestExchange").innerText = match.exchangesMax;
-				playerOneInfo[0] = match.player_one_goals_up;
-				playerOneInfo[1] = match.player_one_goals_mid;
-				playerOneInfo[2] = match.player_one_goals_down;
-				playerTwoInfo[0] = match.player_two_goals_up;
-				playerTwoInfo[1] = match.player_two_goals_mid;
-				playerTwoInfo[2] = match.player_two_goals_down;
-				drawMatchInfoGraph(300)
-				checkMatchSize()
-
-			}
-			
-			setNotifTabIndexes(12);
-			(async () => (loadCurrentLang()))();
-		})()
-	}
-}
-
-
-function drawMatchInfoGraph(size, matchChartSize){
-	if (document.getElementById("matchInfoGraph"))
-		document.getElementById("matchInfoGraph").remove();
-
-	if (document.querySelector("#playerOneInfoGraph"))
-		document.querySelector("#playerOneInfoGraph").remove();
-	if (document.querySelector("#playerTwoInfoGraph"))
-		document.querySelector("#playerTwoInfoGraph").remove();
-
-	matchInfoContainer = document.getElementById("matchInfoGraphContainer");
-
-	playerOneInfoGraphContainer = document.querySelector("#matchContainer #playerOne #playerInfoGraphContainer");
-	playerTwoInfoGraphContainer = document.querySelector("#matchContainer #playerTwo #playerInfoGraphContainer");
-
-	matchInfoGraph = document.createElement("canvas");
-	matchInfoGraph.id = "matchInfoGraph";
-
-	playerOneInfoGraph = document.createElement("canvas");
-	playerOneInfoGraph.id = "playerOneInfoGraph";
-	playerTwoInfoGraph = document.createElement("canvas");
-	playerTwoInfoGraph.id = "playerTwoInfoGraph";
-
-	matchInfoGraph.height= matchChartSize;
-	matchInfoGraph.width = matchInfoGraph.height;
-	playerOneInfoGraph.height = size;
-	playerOneInfoGraph.width = size;
-	playerTwoInfoGraph.height = size;
-	playerTwoInfoGraph.width = size;
-
-
-	matchInfoContainer.appendChild(matchInfoGraph);
-	playerOneInfoGraphContainer.appendChild(playerOneInfoGraph);
-	playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
-
-
-	if (matchInfoChart){
-		if (matchInfoChart instanceof Chart)
-			matchInfoChart.destroy();
-		else
-			matchInfoChart = null;
-	}
-	if (playerOneInfoChart){
-		if (playerOneInfoChart instanceof Chart)
-			playerOneInfoChart.destroy();
-		else
-			playerOneInfoChart = null;
-	}
-	if (playerTwoInfoChart){
-		if (playerTwoInfoChart instanceof Chart)
-			playerTwoInfoChart.destroy();
-		else
-			playerTwoInfoChart = null;
-	}
-
-	function drawPlayerOneInfo(){
-		const options = {
-			plugins: {
-				title: {
-					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-					text: client.langJson["match"]["CVmatchInfoGraph"],
-					font: {
-						family : "pong",
-						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-					},
-					display: true,
-				},
-				legend: {
-					labels: {
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-						},
-					}
-				}
-			},
-		}
-		const data = {
-			datasets: [{
-				data : playerOneInfo,
-				backgroundColor : ['red','purple', 'blue'],
-				borderWidth : 0
-			}],
-			labels : [	
-				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
-			]
-		}
-
-		playerOneInfoChart = new Chart(document.querySelector("#playerOneInfoGraph"), {
-			type: 'pie',
-			data: data,
-			options: options
-		});
-	}
-
-	function drawPlayerTwoInfo(){
-		const options = {
-			plugins: {
-				title: {
-					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-					text: client.langJson["match"]["CVmatchInfoGraph"],
-					font: {
-						family : "pong",
-						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-					},
-					display: true,
-				},
-				legend: {
-					labels: {
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-						},
-					}
-				}
-			},
-		}
-		const data = {
-			datasets: [{
-				data : playerTwoInfo,
-				backgroundColor : ['red','purple', 'blue'],
-				borderWidth : 0
-			}],
-			labels : [	
-				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
-			]
-		}
-
-		playerTwoInfoChart = new Chart(document.querySelector("#playerTwoInfoGraph"), {
-			type: 'pie',
-			data: data,
-			options: options
-		});
-	}
-
-	function drawMatchInfo(){
-		const options = {
-			plugins: {
-				title: {
-					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-					text: client.langJson["match"]["CVmatchInfoGraph"],
-					font: {
-						family : "pong",
-						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-					},
-					display: true,
-				},
-				legend: {
-					labels: {
-						font: {
-							family : "pong",
-							size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-						},
-					}
-				}
-			},
-		}
-
-		const data = {
-			datasets: [{
-				data : [playerOneInfo[0] + playerTwoInfo[0], playerOneInfo[1] + playerTwoInfo[1], playerOneInfo[2] + playerTwoInfo[2]],
-				backgroundColor : ['red','purple', 'blue'],
-				borderWidth : 0
-			}],
-			labels : [	
-				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
-			]
-		}
-
-		matchInfoChart = new Chart(document.getElementById("matchInfoGraph"), {
-			type: 'pie',
-			data: data,
-			options: options
-		});
-	}
-	drawMatchInfo();
-	drawPlayerOneInfo();
-	drawPlayerTwoInfo();
-	matchInfoChart.resize(matchChartSize,matchChartSize);
-	playerOneInfoChart.resize(size,size);
-	playerTwoInfoChart.resize(size,size);
 }
 
 function setTournamentAriaLabeL(){

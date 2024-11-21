@@ -26,7 +26,7 @@ const routes = {
 	"/": `https://${hostname.host}/scripts/home.js`,
 	"/game": `https://${hostname.host}/scripts/game.js`,
 	"/tournament": `https://${hostname.host}/scripts/game.js`,
-	"/match": `https://${hostname.host}/scripts/game.js`,
+	"/match": `https://${hostname.host}/scripts/match.js`,
 	"/settings": `https://${hostname.host}/scripts/settings.js`,
 	"/user": `https://${hostname.host}/scripts/user.js`,
 	"/dashboard": `https://${hostname.host}/scripts/dashboard.js`,
@@ -362,6 +362,7 @@ function load() {
 		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
 		document.body.appendChild(s);
 	}
+	checkResizeWindow();
 }
 
 
@@ -471,7 +472,7 @@ function isMobile(){
 window.addEventListener('load', (e) => {
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
-	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+	if (isMobile()){
 		document.documentElement.classList.add("mobile");
 		document.documentElement.style.setProperty("--is-mobile", 1)
 	}
@@ -820,7 +821,7 @@ function popUpError(error){
 			popupContainer.remove();
 		}, 500)
 	})
-	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+	if (isMobile()){
 		setTimeout(function (container){
 			container.remove()
 		}, 5000, popupContainer);
@@ -1321,7 +1322,7 @@ function setNotifTabIndexes(tabIdx){
 	})
 }
 
-function createMatchResumeContainer(match, username) {
+function createMatchResumeContainer(match, username, displayName) {
 	matchContainer = ft_create_element("a", {"class" : "matchDescContainer"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
@@ -1333,16 +1334,16 @@ function createMatchResumeContainer(match, username) {
 		scoreOpponent = ft_create_element("div", {"class" : "resultScore"});
 
 		scoreUserName = ft_create_element("a", {"class" : `resultScoreName ${
-			match.player_one_display_name == username || match.player_one== username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
-			 "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_display_name : match.player_two_display_name,
+			match.player_one_display_name == displayName || match.player_one== username ? (match.player_one_display_name != match.player_one ? "displayName" : "") : (match.player_two_display_name != match.player_two ? "displayName" : "")}`,
+			 "innerText" : match.player_one_display_name == displayName || match.player_one== username ? match.player_one_display_name : match.player_two_display_name,
 			 "tabIndex" : "-1"});
-		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_one_pts : match.player_two_pts});
+		scoreUserScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one == username ? match.player_one_pts : match.player_two_pts});
 
 		scoreOpponentName = ft_create_element("a", {"class" : `resultScoreName ${
-			match.player_one_display_name == username || match.player_one== username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
-			"innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_display_name : match.player_one_display_name,
+			match.player_one_display_name == displayName || match.player_one== username ? (match.player_two_display_name != match.player_two ? "displayName" : "") : (match.player_one_display_name != match.player_one ? "displayName" : "")}`,
+			"innerText" : match.player_one_display_name == displayName || match.player_one== username ? match.player_two_display_name : match.player_one_display_name,
 			"tabIndex" : "-1"});
-		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == username || match.player_one== username ? match.player_two_pts : match.player_one_pts});
+		scoreOpponentScore = ft_create_element("a", {"class" : "resultScoreScore", "innerText" : match.player_one_display_name == displayName || match.player_one == username ? match.player_two_pts : match.player_one_pts});
 
 		if (scoreUserName.innerText == "deleted"){
 			scoreUserName.classList.add("deletedUser");
@@ -1438,7 +1439,7 @@ async function updateUserAriaLabel(key, content){
 let ua = navigator.userAgent;
 setInterval(function() {
   if (navigator.userAgent !== ua) {	
-	if (navigator.userAgent.match(/iphone|android|blackberry/ig)){
+	if (isMobile()){
 		document.documentElement.classList.add("mobile");
 	}
 	else{
@@ -1448,6 +1449,7 @@ setInterval(function() {
   }
 }, 500);
 
+function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
 function checkResizeWindow(){
 	var tmp = document.querySelector("#inputSearchUserContainer");
@@ -1493,8 +1495,6 @@ function checkResizeWindow(){
 			var currentFontSize = parseInt(window.getComputedStyle(tmp).fontSize)
 			var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 			var anchor = document.querySelector("#quickSettingContainer");
-			console.log(tmp.getBoundingClientRect(), anchor.getBoundingClientRect());
-			console.log(currentFontSize, baseFontSize);
 			while (tmp.getBoundingClientRect().right < anchor.getBoundingClientRect().left && currentFontSize < baseFontSize){
 				tmp.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
@@ -1569,35 +1569,42 @@ function checkMatchResumeSize(){
 	var i = 0;
 	ch = 1
 	if (matches.length > 0){
-		while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
-			i++;
-		if (i == matches.length)
-			return;
-		while (1 && ch <= baseWidth){
-			var width = matches[i].getBoundingClientRect().width;
-			var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
-			
-			if (width * matches.length <= getWindowWidth() && ch < baseWidth){
-				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
-					elem.style.setProperty("width", `${ch + 1}ch`);
-				})
+		if (!(window.matchMedia("(orientation: portrait)").matches && isMobile())){
+			while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
+				i++;
+			if (i == matches.length)
+				return;
+			while (1 && ch <= baseWidth){
 				var width = matches[i].getBoundingClientRect().width;
+				var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
+				
+				if (width * matches.length <= getWindowWidth() && ch < baseWidth){
+					recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+						elem.style.setProperty("width", `${ch + 1}ch`);
+					})
+					var width = matches[i].getBoundingClientRect().width;
+				}
+				else
+					break;
+	
 			}
-			else
-				break;
-
+			while (1 && baseWidth > 1){
+				width = matches[i].getBoundingClientRect().width;
+				if (width * matches.length > getWindowWidth()){
+					baseWidth--;
+					recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+						elem.style.setProperty("width", `${baseWidth}ch`);
+					})
+				}
+				else
+					break
+			}
 		}
-		while (1 && baseWidth > 1){
-			width = matches[i].getBoundingClientRect().width;
-			if (width * matches.length > getWindowWidth()){
-				baseWidth--;
-				recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
-					elem.style.setProperty("width", `${baseWidth}ch`);
-				})
-			}
-			else
-				break
-		}					
+		else{
+			recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+				elem.style.setProperty("width", "16ch");
+			})
+		}
 	}
 	else {
 		var text = document.querySelector("#notPlayedToday");
@@ -1619,56 +1626,75 @@ function checkMatchResumeSize(){
 
 
 const keyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "KeyA", "KeyD" : "KeyD", "ArrowUp" : "ArrowUp", "ArrowDown" : "ArrowDown", "ArrowLeft" : "ArrowLeft", "ArrowRight" : "ArrowRight"};
-const inversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
+const verticalInversedkeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyA", "KeyD" : "KeyD", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowLeft", "ArrowRight" : "ArrowRight"};
+const HorizontalInversedkeyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowUp", "ArrowDown" : "ArrowDown", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
+const FullInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
 
 function checkGameSize(){
 	if (!document.querySelector("#gameContainer").classList.contains("local")){
-		if (!window.matchMedia("(orientation: portrait)").matches){
-			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
-				document.querySelector("#game").style.setProperty("rotate", "0deg");
-				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
-				playerKeyMap = keyMap;
-			}
-			else{
-				document.querySelector("#game").style.setProperty("rotate", "180deg");
-				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row-reverse");
-				playerKeyMap = inversedKeyMap;
-			}
-		}
-		else{
+		if (window.matchMedia("(orientation: portrait)").matches){
 			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
-				playerKeyMap = inversedKeyMap;
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column-reverse");
+				playerKeyMap = FullInversedKeyMap;
+				playerTouchMap = keyMap;
 			}
 			else{
 				document.querySelector("#game").style.setProperty("rotate", "90deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column");
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column");
 				playerKeyMap = keyMap;
+				playerTouchMap = FullInversedKeyMap;
+			}
+		}
+		else {
+			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
+				document.querySelector("#game").style.setProperty("rotate", "0deg");
+				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row");
+				playerKeyMap = HorizontalInversedkeyMap;
+				playerTouchMap = verticalInversedkeyMap;
+				if (isMobile()){
+					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse")
+				}
+			}
+			else{
+				document.querySelector("#game").style.setProperty("rotate", "180deg");
+				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row-reverse");
+				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row-reverse");
+				playerKeyMap = verticalInversedkeyMap;
+				playerTouchMap = verticalInversedkeyMap;
+				if (isMobile()){
+					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column")
+				}
 			}
 		}
 	}
 
-	var container = document.querySelector("#gameContainer")
+	var container = document.querySelector("#gameDisplay")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	while (getElemWidth(container) == anchor.right && currentFontSize < baseFontSize){
+	while (parseInt(getElemWidth(container)) <= parseInt(anchor.right) && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
 		})
 		currentFontSize += 1;
 	}
-	while (getElemWidth(container) > anchor.right && currentFontSize > 1){
+	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 1){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
 		currentFontSize -= 1;
 	}
 }
-
+/*
+setInterval(checkGameSize, 500)
+*/
 function checkMatchSize(){
-	var container = document.querySelector("#matchContainer")
+	var container = document.querySelector("#matchPlayersInfo")
+	var texts = document.querySelectorAll(".playerName, .playerDisplayName");
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 	var graphBaseSize = 300;
 	var graphCurrentSize, graphMatchCurrentSize;
@@ -1682,43 +1708,50 @@ function checkMatchSize(){
 	else
 		graphMatchCurrentSize = 400;
 
-	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
-	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	while (getElemWidth(container) == anchor.right && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
-		if (currentFontSize < baseFontSize){
-			container.querySelectorAll(".playerInfo").forEach(function (elem) {
-				elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
-			})
+	var currentFontSize = parseInt(window.getComputedStyle(container).fontSize);
+	var biggest = texts[0];
+	texts.forEach(function(elem){
+		if (elem.getBoundingClientRect().width > biggest.getBoundingClientRect().width)
+			biggest = elem;
+	})
+	if (window.matchMedia("(orientation: portrait)").matches){
+		var graphSample = container.querySelector(".playerInfoGraphContainer");
+		var anchorSample = document.querySelector(".playerInfoContainer");
+		while (currentFontSize < baseFontSize || (graphSample.getBoundingClientRect().width + 5 <= anchorSample.getBoundingClientRect().width && graphCurrentSize + 5 <= graphBaseSize)){
+			if (currentFontSize < baseFontSize){
+				container.style.setProperty("font-size", `${currentFontSize + 1}px`)
+				currentFontSize += 1;
+			}
+			if (graphSample.getBoundingClientRect().width + 5 <= anchorSample.getBoundingClientRect().width && graphCurrentSize + 5 <= graphBaseSize){
+				graphCurrentSize += 5;
+				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+			}
+		}
+		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8) || 
+			((graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width || document.documentElement.clientHeight - 5 < graphSample.getBoundingClientRect().bottom) && graphCurrentSize > 200)){
+			if (currentFontSize > 8){
+				container.style.setProperty("font-size", `${currentFontSize - 1}px`)
+				currentFontSize -= 1;
+			}
+			if (graphCurrentSize > 200) {
+				graphCurrentSize -= 5;
+				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+			}
+		}
+	}
+	else{
+		anchor = biggest.closest(".playerInfoContainer");
+		infoAnchor = biggest.closest(".playerInfo");
+		graphAnchor = anchor.querySelector(".playerInfoGraphContainer");
+		while ((biggest.getBoundingClientRect().width <= infoAnchor.getBoundingClientRect().width && anchor.getBoundingClientRect().width >= parseInt(graphAnchor.getBoundingClientRect().right)) && currentFontSize <= baseFontSize){
+			container.style.setProperty("font-size", `${currentFontSize + 1}px`);
 			currentFontSize += 1;
 		}
-		if (graphCurrentSize + 5 <= graphBaseSize){
-			graphCurrentSize += 5;
-			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
-		}
-	}
-	while (getElemWidth(container) > anchor.right && (currentFontSize > 8 || graphCurrentSize > 200)){
-		if (currentFontSize > 8){
-			container.querySelectorAll(".playerInfo").forEach(function (elem) {
-				elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
-			})
+		while ((biggest.getBoundingClientRect().width > infoAnchor.getBoundingClientRect().width || anchor.getBoundingClientRect().width < parseInt(graphAnchor.getBoundingClientRect().right)) && currentFontSize > 8){
+			container.style.setProperty("font-size", `${currentFontSize - 1}px`);
 			currentFontSize -= 1;
 		}
-		if (graphCurrentSize > 200) {
-			graphCurrentSize -= 5;
-			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
-		}
 	}
-
-	while (getWindowWidth() <= 715 && getWindowHeight() >= document.querySelector("#matchContainer").getBoundingClientRect().bottom){
-		if (graphMatchCurrentSize > 200) {
-			graphMatchCurrentSize -= 5;
-			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
-		}
-		else{
-			break
-		}
-	}
-
 }
 
 function checkWinnerDisplaySize(){

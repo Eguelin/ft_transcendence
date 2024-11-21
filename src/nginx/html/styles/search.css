@@ -25,19 +25,6 @@
 	border-color: transparent;
 }
 
-.mobile #userSearchContainer input{
-	width: 15ch;
-}
-
-.mobile .userResumeContainer{
-	width: 15ch !important;
-}
-.mobile .userResumePfpContainer{
-	width: 15ch !important;
-	height: 15ch !important;
-}
-
-
 #searchBtn{
 	background: var(--main-text-rgb);
 	mask-size:contain;
@@ -102,4 +89,19 @@
 #userResumeSearch{
 	background: var(--input-bg-rgb);
 	border: 3px solid var(--input-bg-rgb);
+}
+
+@media screen and (orientation:portrait){
+	.mobile {
+		#userSearchContainer input{
+			width: 15ch;
+		}
+		.userResumeContainer{
+			width: 15ch !important;
+		}
+		.userResumePfpContainer{
+			width: 15ch !important;
+			height: 15ch !important;
+		}
+	}
 }
