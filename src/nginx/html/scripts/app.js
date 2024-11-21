@@ -1693,7 +1693,8 @@ function checkGameSize(){
 setInterval(checkGameSize, 500)
 */
 function checkMatchSize(){
-	var container = document.querySelector("#matchContainer")
+	var container = document.querySelector("#matchPlayersInfo")
+	var texts = document.querySelectorAll(".playerName, .playerDisplayName");
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 	var graphBaseSize = 300;
 	var graphCurrentSize, graphMatchCurrentSize;
@@ -1707,33 +1708,48 @@ function checkMatchSize(){
 	else
 		graphMatchCurrentSize = 400;
 
-	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerInfo")).fontSize);
-	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	console.log(getElemWidth(container), parseInt(anchor.right))
-	while (getElemWidth(container) <= parseInt(anchor.right) && (currentFontSize < baseFontSize || graphCurrentSize + 5 <= graphBaseSize)){
-		if (currentFontSize < baseFontSize){
-			console.log("increase",currentFontSize, baseFontSize);
-			container.querySelectorAll(".playerInfo").forEach(function (elem) {
-				elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
-			})
-			currentFontSize += 1;
+	var currentFontSize = parseInt(window.getComputedStyle(container).fontSize);
+	var biggest = texts[0];
+	texts.forEach(function(elem){
+		if (elem.getBoundingClientRect().width > biggest.getBoundingClientRect().width)
+			biggest = elem;
+	})
+	if (window.matchMedia("(orientation: portrait)").matches){
+		var graphSample = container.querySelector(".playerInfoGraphContainer");
+		var anchorSample = document.querySelector(".playerInfoContainer");
+		while (currentFontSize < baseFontSize || (graphSample.getBoundingClientRect().width + 5 <= anchorSample.getBoundingClientRect().width && graphCurrentSize + 5 <= graphBaseSize)){
+			if (currentFontSize < baseFontSize){
+				container.style.setProperty("font-size", `${currentFontSize + 1}px`)
+				currentFontSize += 1;
+			}
+			if (graphSample.getBoundingClientRect().width + 5 <= anchorSample.getBoundingClientRect().width && graphCurrentSize + 5 <= graphBaseSize){
+				graphCurrentSize += 5;
+				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+			}
 		}
-		if (graphCurrentSize + 5 <= graphBaseSize){
-			graphCurrentSize += 5;
-			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8) || (graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && graphCurrentSize > 200)){
+			if (currentFontSize > 8){
+				container.style.setProperty("font-size", `${currentFontSize - 1}px`)
+				currentFontSize -= 1;
+			}
+			if (graphCurrentSize > 200) {
+				graphCurrentSize -= 5;
+				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+			}
 		}
 	}
-	while (getElemWidth(container) > parseInt(anchor.right) && (currentFontSize > 8 || graphCurrentSize > 200)){
-		if (currentFontSize > 8){
-			console.log("decrease",currentFontSize, baseFontSize);
-			container.querySelectorAll(".playerInfo").forEach(function (elem) {
-				elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
-			})
-			currentFontSize -= 1;
+	else{
+	
+		anchor = biggest.closest(".playerInfoContainer");
+		infoAnchor = biggest.closest(".playerInfo");
+		graphAnchor = anchor.querySelector(".playerInfoGraphContainer");
+		while ((biggest.getBoundingClientRect().width <= infoAnchor.getBoundingClientRect().width && anchor.getBoundingClientRect().width >= parseInt(graphAnchor.getBoundingClientRect().right)) && currentFontSize <= baseFontSize){
+			container.style.setProperty("font-size", `${currentFontSize + 1}px`);
+			currentFontSize += 1;
 		}
-		if (graphCurrentSize > 200) {
-			graphCurrentSize -= 5;
-			drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+		while ((biggest.getBoundingClientRect().width > infoAnchor.getBoundingClientRect().width || anchor.getBoundingClientRect().width < parseInt(graphAnchor.getBoundingClientRect().right)) && currentFontSize > 8){
+			container.style.setProperty("font-size", `${currentFontSize - 1}px`);
+			currentFontSize -= 1;
 		}
 	}
 
