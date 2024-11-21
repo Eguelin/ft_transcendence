@@ -279,9 +279,6 @@ def set_pfp(user, pfp):
 	if not pfp or not isinstance(pfp, str):
 		return False, 'Invalid pfp value, should be a string'
 
-	if os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
-		os.remove(user.profile.profile_picture)
-
 	try:
 		image_data = base64.b64decode(pfp)
 		image = Image.open(io.BytesIO(image_data))
@@ -294,7 +291,10 @@ def set_pfp(user, pfp):
 	except:
 		return False, 'Invalid base64 string'
 
-	pfpName = "/images/{0}.jpg".format(user.username)
+	if os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
+		os.remove(user.profile.profile_picture)
+
+	pfpName = f"/images/{user.username}.{image.format.lower()}"
 	with open(pfpName, "wb", opener=file_opener) as f:
 		f.write(image_data)
 
