@@ -3,7 +3,7 @@ var sendFriendRequestBtn;
 var allMatchesButton;
 
 var template = `
-<div id="pageContentContainer">
+<div id="pageContentContainer" class="user">
 	<div id="profileInfoContainer">
 		<div id="profileInfo">
 			<div id="profilePfpContainer">
