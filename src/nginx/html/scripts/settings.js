@@ -367,7 +367,7 @@ confirmDeleteInput.addEventListener("keydown", (e) => {
 function deleteRequest(){
 	if (val == document.getElementById("confirmDeleteDialogVar").innerText){
 		fetch('/api/user/delete_user', {
-			method: 'POST',
+			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
 			},
