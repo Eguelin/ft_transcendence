@@ -12,7 +12,7 @@ from PIL import Image
 def getClientId(request):
 	clientId = os.getenv('API_42_PUBLIC')
 	if not clientId:
-		return JsonResponse({'message': 'Client ID not set'}, status=500)
+		return JsonResponse({'message': 'Client ID not set'}, status=400)
 	return JsonResponse({'clientId': clientId})
 
 def fortytwo(request):
