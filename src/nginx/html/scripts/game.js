@@ -391,7 +391,11 @@ function setTournamentTreeValue(is_finished){
 				if (player != 'id'){
 					if (tournament[round][matchNumber][player]['username']){
 						document.querySelector(`${selector} .username`).classList.remove("waiting");
-						if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])
+						if (tournament[round][matchNumber][player]['username'] == "deleted"){
+							document.querySelector(`${selector} .username`).classList.add("deletedUser");
+							document.querySelector(`${selector} .username`).innerText = client.langJson["index"][".deletedUser"];
+						}
+						else if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])
 							document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
 						else{
 							document.querySelector(`${selector} .username`).classList.add("displayName")
