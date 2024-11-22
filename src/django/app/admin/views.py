@@ -187,44 +187,52 @@ def create_friendship_request(request):
 def create_blocked_friendship(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		if not request.user.is_staff:
-			return JsonResponse({'message': 'user is not admin'}, status=403)
-		try:
-			data = json.loads(request.body)
-		except json.JSONDecodeError:
-			return JsonResponse({'message': 'Invalid JSON'}, status=400)
-
-		if not User.objects.filter(username=data['userOne']).exists():
-			user1 = User.objects.create_user(username=data['userOne'], password="password")
-			user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
-			user1.id42 = 0
-		else:
-			user1 = User.objects.get(username=data['userOne'])
-		if not User.objects.filter(username=data['userTwo']).exists():
-			user2 = User.objects.create_user(username=data['userTwo'], password="password")
-			user2.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
-			user2.id42 = 0
-		else:
-			user2 = User.objects.get(username=data['userTwo'])
-
-		if (user1.profile.friends.filter(pk=user2.pk).exists()):
-			user1.profile.friends.remove(user2)
-		if (user2.profile.friends.filter(pk=user1.pk).exists()):
-			user2.profile.friends.remove(user1)
-
-		if (user1.profile.friends_request.filter(pk=user2.pk).exists()):
-			user1.profile.friends_request.remove(user2)
-		if (user2.profile.friends_request.filter(pk=user1.pk).exists()):
-			user2.profile.friends_request.remove(user1)
-
-		user1.profile.blocked_users.add(user2)
-		user1.save()
-		user2.profile.blocked_users.add(user1)
-		user2.save()
-		return JsonResponse({'message': 'Blocked friendship created'}, status=201)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
+
+	try:
+		data = json.loads(request.body)
+		userOne = data['userOne']
+		userTwo = data['userTwo']
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+	except KeyError:
+		return JsonResponse({'message': 'Missing Data'}, status=400)
+
+	if not userOne or not isinstance(userOne, str) or not userTwo or not isinstance(userTwo, str):
+		return JsonResponse({'message': 'Invalid Data'}, status=400)
+
+	if not User.objects.filter(username=userOne).exists():
+		user1 = User.objects.create_user(username=userOne, password="password")
+		user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+		user1.id42 = 0
+	else:
+		user1 = User.objects.get(username=userOne)
+
+	if not User.objects.filter(username=userTwo).exists():
+		user2 = User.objects.create_user(username=userTwo, password="password")
+		user2.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+		user2.id42 = 0
+	else:
+		user2 = User.objects.get(username=userTwo)
+
+	if (user1.profile.friends.filter(pk=user2.pk).exists()):
+		user1.profile.friends.remove(user2)
+	if (user2.profile.friends.filter(pk=user1.pk).exists()):
+		user2.profile.friends.remove(user1)
+
+	if (user1.profile.friends_request.filter(pk=user2.pk).exists()):
+		user1.profile.friends_request.remove(user2)
+	if (user2.profile.friends_request.filter(pk=user1.pk).exists()):
+		user2.profile.friends_request.remove(user1)
+
+	user1.profile.blocked_users.add(user2)
+	user1.save()
+	user2.profile.blocked_users.add(user1)
+	user2.save()
+	return JsonResponse({'message': 'Blocked friendship created'}, status=201)
 
 def delete_user(request):
 	if request.method != 'POST':
