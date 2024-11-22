@@ -847,32 +847,25 @@ def get_match(request):
 
 	try:
 		data = json.loads(request.body)
-		match = gameModels.Match.objects.get(pk=data.get("id"))
-		try:
-			p1_name = match.player_one.username
-			p1_pfp = match.player_one.profile.profile_picture
-			p1_display_name = match.player_one.profile.display_name
-			if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				p1_name = "deleted"
-				p1_pfp = ""
-				p1_display_name = "deleted"
-		except:
-			p1_name = "deleted"
-			p1_pfp = ""
-			p1_display_name = "deleted"
+		id = data["id"]
 
-		try:
-			p2_name = match.player_two.username
-			p2_pfp = match.player_two.profile.profile_picture
-			p2_display_name = match.player_two.profile.display_name
-			if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				p2_name = "deleted"
-				p2_pfp = ""
-				p2_display_name = "deleted"
-		except:
-			p2_name = "deleted"
-			p2_pfp = ""
-			p2_display_name = "deleted"
+		if not id or not isinstance(id, int):
+			return JsonResponse({'message': 'Invalid id'}, status=400)
+
+		match = gameModels.Match.objects.get(pk=id)
+
+		if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
+			match.player_one = User.objects.get(username="Nobody")
+		p1_name = match.player_one.username
+		p1_pfp = match.player_one.profile.profile_picture
+		p1_display_name = match.player_one.profile.display_name
+
+		if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
+			match.player_two = User.objects.get(username="Nobody")
+		p2_name = match.player_two.username
+		p2_pfp = match.player_two.profile.profile_picture
+		p2_display_name = match.player_two.profile.display_name
+
 
 		match_json = {
 			'player_one' : p1_name,
@@ -896,8 +889,15 @@ def get_match(request):
 		}
 
 		return JsonResponse(match_json, status=200)
-#	except gameModels.DoesNotExist:
-#		return JsonResponse({'message': 'Tournament not found'}, status=404)
+
+	except gameModels.Match.DoesNotExist:
+		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
+
+	except Exception as e:
+		return JsonResponse({'message': str(e)}, status=500)
