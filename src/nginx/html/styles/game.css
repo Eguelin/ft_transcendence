@@ -12,7 +12,7 @@
 #gameDisplay{
 	display: flex;
 	width: fit-content;
-	gap: 1rem;
+	gap: 2rem;
 	align-items: center;
 	height: 100%;
 }
@@ -601,7 +601,7 @@ table.landscape{
 		}
 		
 		#gameContainer{
-			gap: 5rem;
+			gap: 0rem;
 			height: 100%;
 		}
 	
@@ -617,11 +617,6 @@ table.landscape{
 		#replayButton{
 			font-size: 1rem !important;
 		}
-		/*
-		#controlerSlide{
-			display: flex !important;
-		}
-		*/
 
 		#gameDisplay {
 			height: 100%;
@@ -679,7 +674,7 @@ table.landscape{
 		#matchPlayersInfo{
 			flex: .8;
 		}
-		.playerInfoContainer > div{
+		.matchContainer .playerInfoContainer > div{
 			flex: 1;
 		}
 		#matchInfoGraphContainer{
@@ -880,4 +875,23 @@ table.landscape{
 
 #matchContainer{
 	display: flex;
+}
+
+.playerGraphContainer, .matchGraphContainer{
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	height: 100%;
+	.canvaContainer {
+		height: 80%;
+		justify-items: center;
+	}
+}
+
+.graphTitle{
+	font-size: 1rem;
+}
+
+.playerInfoGraphContainer{
+	gap: 1rem;
 }
