@@ -76,19 +76,30 @@ def accept_friend_request(request):
 def reject_friend_request(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if request.user.is_authenticated:
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': 'User not authenticated'}, status=400)
+	try:
 		data = json.loads(request.body)
 		username = data['username']
-		try:
-			new_friend = User.objects.get(username=username)
-			user = request.user
-			user.profile.friends_request.remove(new_friend)
-			user.save()
-			return JsonResponse({'message': 'Succesfully added friend'})
-		except:
-			return JsonResponse({'message': 'Can\'t find user'}, status=400)
-	else:
-		return JsonResponse({'username': None}, status=400)
+	except json.JSONDecodeError:
+		return JsonResponse({'message':  "Invalid JSON"}, status=400)
+	except KeyError:
+		return JsonResponse({'message':  "Missing Data"}, status=400)
+
+	if not username or not isinstance(username, str):
+		return JsonResponse({'message': 'Missing username'}, status=400)
+
+	if (username == request.user.username):
+		return JsonResponse({'message': 'Can\'t reject friend request from yourself'}, status=400)
+
+	try:
+		new_friend = User.objects.get(username=username)
+		user = request.user
+		user.profile.friends_request.remove(new_friend)
+		user.save()
+		return JsonResponse({'message': 'Succesfully added friend'})
+	except User.DoesNotExist:
+		return JsonResponse({'message': 'Can\'t find user'}, status=404)
 
 def remove_friend(request):
 	if request.method != 'POST':
