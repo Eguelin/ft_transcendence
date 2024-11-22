@@ -618,23 +618,36 @@ def get(request):
 def search_by_username(request):
 	if (request.method != 'POST'):
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		users_json = {}
-		try:
-			query_users = User.objects.filter(username__icontains=data['name'])
-			i = 0
-			for user in query_users:
-				if not (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
-					users_json[i] = get_user_preview_json(user)
-				i += 1
-			if i == 0:
-				return JsonResponse({}, status=200)
-			return JsonResponse(users_json, status=200)
-		except Exception as error:
-			return JsonResponse({'message': error}, status=500)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+	users_json = {}
+
+	try:
+		data = json.loads(request.body)
+		name = data['name']
+
+		if not name or not isinstance(name, str):
+			return JsonResponse({'message': 'Invalid name'}, status=400)
+
+		query_users = User.objects.filter(username__icontains=name)
+		if not query_users:
+			return JsonResponse({}, status=200)
+
+		for user in query_users:
+			if not (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				users_json[user.username] = get_user_preview_json(user)
+
+		return JsonResponse(users_json, status=200)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
+
+	except Exception:
+		return JsonResponse({'message': 'Internal server error'}, status=500)
 
 def get_user_id(request):
 	if request.method != 'POST':
