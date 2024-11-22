@@ -897,5 +897,5 @@ def get_match(request):
 	except KeyError:
 		return JsonResponse({'message': 'Missing data'}, status=400)
 
-	except Exception as e:
-		return JsonResponse({'message': str(e)}, status=500)
+	except Exception:
+		return JsonResponse({'message': 'Internal server error'}, status=500)
