@@ -156,6 +156,9 @@ def create_friendship_request(request):
 	except KeyError:
 		return JsonResponse({'message': 'Missing Data'}, status=400)
 
+	if not to or not isinstance(to, str) or not from_ or not isinstance(from_, str):
+		return JsonResponse({'message': 'Invalid Data'}, status=400)
+
 	if not User.objects.filter(username=to).exists():
 		user1 = User.objects.create_user(username=to, password="password")
 		user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
