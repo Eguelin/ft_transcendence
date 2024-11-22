@@ -199,13 +199,13 @@ def create_ai():
 	user.save()
 
 def create_nobody():
-	if User.objects.filter(username="Nobody").exists():
-		return User.objects.get(username="Nobody")
-	username = "Nobody"
+	if User.objects.filter(username="nobody").exists():
+		return User.objects.get(username="nobody")
+	username = "nobody"
 	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
 	user = User.objects.create_user(username=username, password=password)
 	user.profile.profile_picture = "/images/defaults/thisman.jpg"
-	user.profile.display_name = "Nobody"
+	user.profile.display_name = "nobody"
 	user.id42 = 0
 	user.save()
 	return user
@@ -801,13 +801,13 @@ def get_tournament(request):
 		}
 		for match in tournament.matches.all():
 			if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				match.player_one = User.objects.get(username="Nobody")
+				match.player_one = User.objects.get(username="nobody")
 			p1_name = match.player_one.username
 			p1_pfp = match.player_one.profile.profile_picture
 			p1_display_name = match.player_one.profile.display_name
 
 			if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				match.player_two = User.objects.get(username="Nobody")
+				match.player_two = User.objects.get(username="nobody")
 			p2_name = match.player_two.username
 			p2_pfp = match.player_two.profile.profile_picture
 			p2_display_name = match.player_two.profile.display_name
@@ -853,13 +853,13 @@ def get_match(request):
 		match = gameModels.Match.objects.get(pk=id)
 
 		if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-			match.player_one = User.objects.get(username="Nobody")
+			match.player_one = User.objects.get(username="nobody")
 		p1_name = match.player_one.username
 		p1_pfp = match.player_one.profile.profile_picture
 		p1_display_name = match.player_one.profile.display_name
 
 		if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-			match.player_two = User.objects.get(username="Nobody")
+			match.player_two = User.objects.get(username="nobody")
 		p2_name = match.player_two.username
 		p2_pfp = match.player_two.profile.profile_picture
 		p2_display_name = match.player_two.profile.display_name

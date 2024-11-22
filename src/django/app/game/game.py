@@ -289,7 +289,7 @@ class GameRemote(Game):
 	@sync_to_async
 	def checkUser(self, player):
 		if not User.objects.filter(username=player.user.username).exists():
-			player.user = User.objects.get(username="Nobody")
+			player.user = User.objects.get(username="nobody")
 
 	async def end(self):
 		if not self.playerLeft.socket and not self.playerRight.socket:
@@ -510,7 +510,7 @@ class PlayerRemote(Player):
 		super().init(game, side)
 		self.input = {}
 		if not self.user:
-			self.user = User.objects.get(username='Nobody')
+			self.user = User.objects.get(username='nobody')
 		self.profile = self.user.profile
 
 	async def send(self, type, message):
@@ -709,7 +709,7 @@ class Tournament():
 
 	@sync_to_async
 	def setTournament(self):
-		self.model = models.TournamentModel(winner=User.objects.get(username='Nobody'))
+		self.model = models.TournamentModel(winner=User.objects.get(username='nobody'))
 		self.model.save()
 
 	async def moveWinner(self, round, match, side, winner):
