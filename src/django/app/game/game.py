@@ -612,43 +612,49 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.player.socket = None
 
 	async def receive(self, text_data):
-		data = json.loads(text_data)
-		if ("type" in data):
-			if data['type'] == 'remote':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerRemote(self.player)
-				return
+		try:
+			data = json.loads(text_data)
+			type = data['type']
+		except json.JSONDecodeError:
+			await self.send('error', 'Invalid JSON')
+			return
+		except KeyError:
+			await self.send('error', 'Invalid Data')
+			return
 
-			elif data['type'] == 'tournament':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerTournament(self.player)
-				return
+		if type == 'remote':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerRemote(self.player)
+			return
 
-			elif data['type'] == 'ai':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerAI(self.player)
-				return
+		elif type == 'tournament':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerTournament(self.player)
+			return
 
-			elif data['type'] == 'full_ai':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerFullAI(self.player)
-				return
+		elif type == 'ai':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerAI(self.player)
+			return
 
-			elif data['type'] == 'local':
-				self.player = PlayerLocal(self)
-				await Matchmaking().addPlayerLocal(self.player)
-				return
+		elif type == 'full_ai':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerFullAI(self.player)
+			return
 
-			elif self.player:
-				if data['type'] == 'game_keydown':
-					self.player.input = data['message']
-				elif data['type'] == 'game_ready':
-					self.player.isReady = True
+		elif type == 'local':
+			self.player = PlayerLocal(self)
+			await Matchmaking().addPlayerLocal(self.player)
+			return
 
-			else:
-				await self.send('error', 'Game mode unavailable')
+		elif self.player:
+			if type == 'game_keydown':
+				self.player.input = data['message']
+			elif type == 'game_ready':
+				self.player.isReady = True
+
 		else:
-			await self.send('error', 'Invalid data')
+			await self.send('error', 'Game mode unavailable')
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
