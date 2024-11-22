@@ -110,18 +110,19 @@ def create_friendship(request):
 	if not userOne or not isinstance(userOne, str) or not userTwo or not isinstance(userTwo, str):
 		return JsonResponse({'message': 'Invalid Data'}, status=400)
 
-	if not User.objects.filter(username=data['userOne']).exists():
-		user1 = User.objects.create_user(username=data['userOne'], password="password")
+	if not User.objects.filter(username=userOne).exists():
+		user1 = User.objects.create_user(username=userOne, password="password")
 		user1.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user1.id42 = 0
 	else:
-		user1 = User.objects.get(username=data['userOne'])
-	if not User.objects.filter(username=data['userTwo']).exists():
-		user2 = User.objects.create_user(username=data['userTwo'], password="password")
+		user1 = User.objects.get(username=userOne)
+
+	if not User.objects.filter(username=userTwo).exists():
+		user2 = User.objects.create_user(username=userTwo, password="password")
 		user2.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user2.id42 = 0
 	else:
-		user2 = User.objects.get(username=data['userTwo'])
+		user2 = User.objects.get(username=userTwo)
 
 	if (user1.profile.friends_request.filter(pk=user2.pk).exists()):
 		user1.profile.friends_request.remove(user2)
