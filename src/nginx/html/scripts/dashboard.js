@@ -619,7 +619,7 @@ function displayCharts(){
 		x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
 		y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
 
-		if (isMobile() && window.matchMedia("(orientation: portrait)").matches){
+		if (isMobile() && isPortrait()){
 			wLGraph.width = x * 80;
 			wLAbsGraph.width = x * 80;
 			userStatGraph.width = x * 70;
