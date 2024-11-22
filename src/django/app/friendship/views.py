@@ -70,8 +70,8 @@ def accept_friend_request(request):
 		user.profile.friends.add(new_friend)
 		user.save()
 		return JsonResponse({'message': 'Succesfully added friend'}, status=200)
-	except:
-		return JsonResponse({'message': 'Can\'t find user'}, status=400)
+	except User.DoesNotExist:
+		return JsonResponse({'message': 'Can\'t find user'}, status=404)
 
 def reject_friend_request(request):
 	if request.method != 'POST':
