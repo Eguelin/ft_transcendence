@@ -128,7 +128,7 @@ def remove_friend(request):
 		user.profile.friends.remove(friend)
 		user.save()
 		return JsonResponse({'message': 'Succesfully added friend'})
-	except:
+	except User.DoesNotExist:
 		return JsonResponse({'message': 'Can\'t find user'}, status=404)
 
 def block_friend(request):
@@ -159,7 +159,7 @@ def block_friend(request):
 		user.profile.blocked_users.add(ennemy)
 		user.save()
 		return JsonResponse({'message': 'Succesfully blocked user'})
-	except:
+	except User.DoesNotExist:
 		return JsonResponse({'message': 'Can\'t find user'}, status=404)
 
 def unblock_user(request):
@@ -185,5 +185,5 @@ def unblock_user(request):
 		request.user.profile.blocked_users.remove(User.objects.get(username=username))
 		request.user.save()
 		return JsonResponse({'message': 'Succesfully unblocked user'})
-	except:
+	except User.DoesNotExist:
 		return JsonResponse({'message': 'Can\'t find user'}, status=404)
