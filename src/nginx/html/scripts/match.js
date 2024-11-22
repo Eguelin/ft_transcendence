@@ -3,7 +3,7 @@ var playerOneInfo = [0,0,0], playerTwoInfo = [0,0,0]
 var template = `
 <div id="pageContentContainer">
 	<div id="matchContainer">
-		<div id="matchInfo"> 
+		<div id="matchInfo">
 			<div id="exchangeContainer">
 				<table class="landscape">
 					<caption class="exchangeTablesCaption"></caption>
@@ -16,7 +16,7 @@ var template = `
 						<td id="averageExchange"></td>
 					</tr>
 					<tr>
-						<th scope="row" id="longestExchangeTitle"></th>						
+						<th scope="row" id="longestExchangeTitle"></th>
 						<td id="longestExchange"></td>
 					</tr>
 				</table>
@@ -26,7 +26,7 @@ var template = `
 						<th scope="col" id="totalExchangeTitle"></th>
 						<th scope="col" id="averageExchangeTitle"></th>
 						<th scope="col" id="longestExchangeTitle"></th>
-						
+
 					</tr>
 					<tr>
 						<td id="totalExchange"></td>
@@ -86,7 +86,7 @@ var template = `
 	homeBtn.style.setProperty("display", "block");
 	dropDownUserContainer.style.setProperty("display", "flex");
 	notifCenterContainer.style.setProperty("display", "flex");
-	
+
 	document.querySelector("#subtitle").innerText = client.langJson['game']['matchSubtitle'];
 	(async () => {
 		const fetchResult = await fetch('/api/user/get_match', {
@@ -94,7 +94,7 @@ var template = `
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ "id": url.searchParams.get("id")}),
+			body: JSON.stringify({ "id": parseInt(url.searchParams.get("id")) }),
 			credentials: 'include'
 		})
 		const result = await fetchResult.json();
@@ -105,13 +105,13 @@ var template = `
 
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = match.player_one;
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_one_display_name != match.player_one ? match.player_one_display_name : ""}`;
-			
+
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_one}`;
-			
+
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = match.player_two;
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_two_display_name != match.player_two ? match.player_two_display_name : ""}`;
-			
+
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_two}`;
 
@@ -119,15 +119,15 @@ var template = `
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").classList.add("deletedUser");
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".deletedUser"];
 			}
-			
+
 			if (document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText == "deleted"){
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").classList.add("deletedUser");
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".deletedUser"];
 			}
-			
+
 			document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
 			document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
-			
+
 			document.querySelector("#matchContainer .portrait #totalExchange").innerText = match.exchanges;
 			document.querySelector("#matchContainer .portrait #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
 			document.querySelector("#matchContainer .portrait #longestExchange").innerText = match.exchangesMax;
@@ -145,7 +145,7 @@ var template = `
 			checkMatchSize()
 
 		}
-		
+
 		setNotifTabIndexes(12);
 		(async () => (loadCurrentLang()))();
 	})()
@@ -174,7 +174,7 @@ function drawMatchInfoGraph(size, matchChartSize){
 	playerTwoInfoGraph.id = "playerTwoInfoGraph";
 
 	matchInfoGraph.height= matchChartSize;
-	matchInfoGraph.width = matchInfoGraph.height;	
+	matchInfoGraph.width = matchInfoGraph.height;
 	playerOneInfoGraph.height = size;
 	playerOneInfoGraph.width = size;
 	playerTwoInfoGraph.height = size;
@@ -189,14 +189,14 @@ function drawMatchInfoGraph(size, matchChartSize){
 	const getOrCreateLegendList = (chart, id) => {
 		const legendContainer = document.getElementById(id);
 		let listContainer = legendContainer.querySelector('ul');
-	  
+
 		if (!listContainer) {
 		  listContainer = document.createElement('ul');
 		  listContainer.className = "legendContainer"
-	  
+
 		  legendContainer.appendChild(listContainer);
 		}
-	  
+
 		return listContainer;
 	};
 
@@ -204,19 +204,19 @@ function drawMatchInfoGraph(size, matchChartSize){
 		id: 'htmlLegend',
 		afterUpdate(chart, args, options) {
 		  const ul = getOrCreateLegendList(chart, options.containerID);
-	  
+
 		  // Remove old legend items
 		  while (ul.firstChild) {
 			ul.firstChild.remove();
 		  }
-	  
+
 		  // Reuse the built-in legendItems generator
 		  const items = chart.options.plugins.legend.labels.generateLabels(chart);
-	  
+
 		  items.forEach(item => {
 			const li = document.createElement('li');
 			li.className = "legendElementContainer"
-	  
+
 			li.onclick = () => {
 			  const {type} = chart.config;
 			  if (type === 'pie' || type === 'doughnut') {
@@ -227,7 +227,7 @@ function drawMatchInfoGraph(size, matchChartSize){
 			  }
 			  chart.update();
 			};
-	  
+
 			// Color box
 			const boxSpan = document.createElement('span');
 			boxSpan.style.background = item.fillStyle;
@@ -238,15 +238,15 @@ function drawMatchInfoGraph(size, matchChartSize){
 			boxSpan.style.height = '20px';
 			boxSpan.style.marginRight = '10px';
 			boxSpan.style.width = '20px';
-	  
+
 			// Text
 			const textContainer = document.createElement('p');
 			textContainer.className = "legendTextContainer"
 			textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
-	  
+
 			const text = document.createTextNode(item.text);
 			textContainer.appendChild(text);
-	  
+
 			li.appendChild(boxSpan);
 			li.appendChild(textContainer);
 			ul.appendChild(li);
@@ -299,7 +299,7 @@ function drawMatchInfoGraph(size, matchChartSize){
 				backgroundColor : ['red','purple', 'blue'],
 				borderWidth : 0
 			}],
-			labels : [	
+			labels : [
 				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
 			]
 		}
@@ -338,7 +338,7 @@ function drawMatchInfoGraph(size, matchChartSize){
 				backgroundColor : ['red','purple', 'blue'],
 				borderWidth : 0
 			}],
-			labels : [	
+			labels : [
 				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
 			]
 		}
@@ -378,7 +378,7 @@ function drawMatchInfoGraph(size, matchChartSize){
 				backgroundColor : ['red','purple', 'blue'],
 				borderWidth : 0
 			}],
-			labels : [	
+			labels : [
 				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
 			]
 		}
