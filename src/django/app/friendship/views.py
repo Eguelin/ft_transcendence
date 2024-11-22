@@ -165,14 +165,25 @@ def block_friend(request):
 def unblock_user(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if request.user.is_authenticated:
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': 'User not authenticated'}, status=400)
+	try:
 		data = json.loads(request.body)
 		username = data['username']
-		try:
-			request.user.profile.blocked_users.remove(User.objects.get(username=username))
-			request.user.save()
-			return JsonResponse({'message': 'Succesfully unblocked user'})
-		except:
-			return JsonResponse({'message': 'Can\'t find user'}, status=400)
-	else:
-		return JsonResponse({'username': None}, status=400)
+	except json.JSONDecodeError:
+		return JsonResponse({'message':  "Invalid JSON"}, status=400)
+	except KeyError:
+		return JsonResponse({'message':  "Missing Data"}, status=400)
+
+	if not username or not isinstance(username, str):
+		return JsonResponse({'message': 'Missing username'}, status=400)
+
+	if (username == request.user.username):
+		return JsonResponse({'message': 'Can\'t unblock yourself'}, status=400)
+
+	try:
+		request.user.profile.blocked_users.remove(User.objects.get(username=username))
+		request.user.save()
+		return JsonResponse({'message': 'Succesfully unblocked user'})
+	except:
+		return JsonResponse({'message': 'Can\'t find user'}, status=404)
