@@ -57,6 +57,7 @@ var template = `
 `
 
 {
+	history.replaceState("","",`https://${hostname.host}/login`)
 	window.onkeydown = loginKeyDownEvent;
 	document.getElementById("container").innerHTML = template;
 	slideIdx = 0;

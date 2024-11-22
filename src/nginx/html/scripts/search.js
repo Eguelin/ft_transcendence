@@ -33,6 +33,7 @@ var template = `
 			credentials: 'include'
 		}).then(user => {
 			if (user.ok){
+				history.replaceState("","",`https://${hostname.host}/search?query=${url.searchParams.get("query")}`)
 				user.json().then(((user) => {
 					document.querySelector("#userResumeCountContainer").style.setProperty("display", "block")
 					document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
