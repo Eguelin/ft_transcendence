@@ -37,7 +37,12 @@ var template = `
 			</div>
 			<div id="matchInfoGraphContainer">
 				<div id="matchInfoLegendContainer"></div>
-				<canvas id="matchInfoGraph"></canvas>
+				<div class="matchGraphContainer">
+					<div class="graphTitle"></div>
+					<div class="canvaContainer">
+						<canvas id="matchInfoGraph"></canvas>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div id="matchPlayersInfo">
@@ -54,7 +59,12 @@ var template = `
 				</div>
 				<div class="playerInfoGraphContainer">
 					<div class="playerLegendContainer" id="playerOneLegendContainer"></div>
-					<canvas id="playerOneInfoGraph"></canvas>
+					<div class="playerGraphContainer">
+						<div class="graphTitle"></div>
+						<div class="canvaContainer">
+							<canvas id="playerOneInfoGraph"></canvas>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="playerInfoContainer" id="playerTwo">
@@ -70,7 +80,12 @@ var template = `
 				</div>
 				<div class="playerInfoGraphContainer">
 					<div class="playerLegendContainer" id="playerTwoLegendContainer"></div>
-					<canvas id="playerTwoInfoGraph"></canvas>
+					<div class="playerGraphContainer">
+						<div class="graphTitle"></div>
+						<div class="canvaContainer">
+							<canvas id="playerTwoInfoGraph"></canvas>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -136,6 +151,7 @@ var template = `
 			document.querySelector("#matchContainer .landscape #totalExchange").innerText = match.exchanges;
 			document.querySelector("#matchContainer .landscape #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
 			document.querySelector("#matchContainer .landscape #longestExchange").innerText = match.exchangesMax;
+			document.querySelectorAll(".graphTitle").forEach(function(elem){elem.innerText = client.langJson['match']['CVmatchInfoGraph']})
 			playerOneInfo[0] = match.player_one_goals_up;
 			playerOneInfo[1] = match.player_one_goals_mid;
 			playerOneInfo[2] = match.player_one_goals_down;
@@ -152,7 +168,8 @@ var template = `
 	})()
 }
 
-function drawMatchInfoGraph(size, matchChartSize){
+function drawMatchInfoGraph(size = 300, matchChartSize = 400){
+	setLoader();
 	if (document.getElementById("matchInfoGraph"))
 		document.getElementById("matchInfoGraph").remove();
 
@@ -161,10 +178,10 @@ function drawMatchInfoGraph(size, matchChartSize){
 	if (document.querySelector("#playerTwoInfoGraph"))
 		document.querySelector("#playerTwoInfoGraph").remove();
 
-	matchInfoContainer = document.getElementById("matchInfoGraphContainer");
+	matchInfoContainer = document.querySelector("#matchInfoGraphContainer .matchGraphContainer .canvaContainer");
 
-	playerOneInfoGraphContainer = document.querySelector("#matchContainer #playerOne .playerInfoGraphContainer");
-	playerTwoInfoGraphContainer = document.querySelector("#matchContainer #playerTwo .playerInfoGraphContainer");
+	playerOneInfoGraphContainer = document.querySelector("#matchContainer #playerOne .playerInfoGraphContainer .playerGraphContainer .canvaContainer");
+	playerTwoInfoGraphContainer = document.querySelector("#matchContainer #playerTwo .playerInfoGraphContainer .playerGraphContainer .canvaContainer");
 
 	matchInfoGraph = document.createElement("canvas");
 	matchInfoGraph.id = "matchInfoGraph";
@@ -280,15 +297,6 @@ function drawMatchInfoGraph(size, matchChartSize){
 				htmlLegend:{
 					containerID: 'playerOneLegendContainer'
 				},
-				title: {
-					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-					text: client.langJson["match"]["CVmatchInfoGraph"],
-					font: {
-						family : "pong",
-						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-					},
-					display: true,
-				},
 				legend: {
 					display: false,
 				}
@@ -316,15 +324,6 @@ function drawMatchInfoGraph(size, matchChartSize){
 	function drawPlayerTwoInfo(){
 		const options = {
 			plugins: {
-				title: {
-					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-					text: client.langJson["match"]["CVmatchInfoGraph"],
-					font: {
-						family : "pong",
-						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-					},
-					display: true,
-				},
 				legend: {
 					display: false
 				},
@@ -355,15 +354,6 @@ function drawMatchInfoGraph(size, matchChartSize){
 	function drawMatchInfo(){
 		const options = {
 			plugins: {
-				title: {
-					color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-					text: client.langJson["match"]["CVmatchInfoGraph"],
-					font: {
-						family : "pong",
-						size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.25
-					},
-					display: true,
-				},
 				legend: {
 					display: false
 				},
@@ -397,4 +387,5 @@ function drawMatchInfoGraph(size, matchChartSize){
 	matchInfoChart.resize(matchChartSize,matchChartSize);
 	playerOneInfoChart.resize(size,size);
 	playerTwoInfoChart.resize(size,size);
+	unsetLoader()
 }

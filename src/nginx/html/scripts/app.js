@@ -1469,6 +1469,13 @@ setInterval(function() {
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
+function isPortrait(){return window.matchMedia("(orientation: portrait)").matches};
+
+window.matchMedia("(orientation: portrait)").onchange = function(){
+	resizeEvent();
+	drawMatchInfoGraph();
+} ;
+
 function checkResizeIndex(){
 	var tmp = document.querySelector("#inputSearchUserContainer");
 	var fontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
@@ -1488,7 +1495,7 @@ function checkResizeIndex(){
 			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
 		}
 	}
-	if (window.matchMedia("(orientation: portrait)").matches && isMobile()){
+	if (isPortrait() && isMobile()){
 		spareWidth = document.querySelector("#quickSettingContainer").getBoundingClientRect().width - document.querySelector("#dropDownUserContainer").getBoundingClientRect().width;
 	}
 
@@ -1497,7 +1504,7 @@ function checkResizeIndex(){
 		username = document.querySelector("#dropDownUser");
 		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
-		var texts = document.querySelectorAll("#usernameBtm, .dropDownMenuBtn");
+		var texts = document.querySelectorAll("#usernameBtn, .dropDownMenuBtn");
 		var biggest = texts[0];
 		var dropDownUserContainer = document.querySelector("#dropDownUserContainer").getBoundingClientRect().width
 		username.style.fontSize = `${baseFontSize}px`
@@ -1513,7 +1520,7 @@ function checkResizeIndex(){
 				break
 
 			while ((tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left || spareWidth > 0) && currentFontSize < baseFontSize){
-				if (window.matchMedia("(orientation: portrait)").matches && isMobile()){
+				if (isPortrait() && isMobile()){
 					spareWidth = document.querySelector("#quickSettingContainer").getBoundingClientRect().width - document.querySelector("#dropDownUserContainer").getBoundingClientRect().width;
 				}
 				username.style.setProperty("font-size", `${currentFontSize}px`)
@@ -1563,7 +1570,6 @@ function resizeEvent(){
 		checkMatchSize();
 	if (currentPage == "friends")
 		checkFriendPageSize()
-
 }
 
 function checkUserPageSize(){
@@ -1612,7 +1618,7 @@ function checkMatchResumeSize(){
 	var i = 0;
 	ch = 1
 	if (matches.length > 0){
-		if (!(window.matchMedia("(orientation: portrait)").matches && isMobile())){
+		if (!(isPortrait() && isMobile())){
 			while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
 				i++;
 			if (i == matches.length)
@@ -1656,7 +1662,6 @@ function checkMatchResumeSize(){
 
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
 		var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
-		console.log(baseFontSize);
 		while (text.getBoundingClientRect().width < recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize <= baseFontSize){
 			text.style.setProperty("font-size", `${currentFontSize}px`)
 			currentFontSize += 1;
@@ -1673,13 +1678,15 @@ const keyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "KeyA", "KeyD" : "Key
 const verticalInversedkeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyA", "KeyD" : "KeyD", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowLeft", "ArrowRight" : "ArrowRight"};
 const HorizontalInversedkeyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowUp", "ArrowDown" : "ArrowDown", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
 const FullInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
+const WASDInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowUp", "ArrowDown" : "ArrowDown", "ArrowLeft" : "ArrowLeft", "ArrowRight" : "ArrowRight"};
+
 
 function checkGameSize(){
-	if (document.querySelector("#tournamentContainer").style.getComputedStyle("display") != none){
+	if (document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
 	if (!document.querySelector("#gameContainer").classList.contains("local")){
-		if (window.matchMedia("(orientation: portrait)").matches){
+		if (isPortrait()){
 			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
@@ -1716,6 +1723,11 @@ function checkGameSize(){
 					document.querySelector("#gameContainer").style.setProperty("flex-direction", "column")
 				}
 			}
+		}
+	}
+	else{
+		if (isMobile())	{
+			playerKeyMap = WASDInversedKeyMap;
 		}
 	}
 
@@ -1759,7 +1771,7 @@ function checkMatchSize(){
 		if (elem.getBoundingClientRect().width > biggest.getBoundingClientRect().width)
 			biggest = elem;
 	})
-	if (window.matchMedia("(orientation: portrait)").matches){
+	if (isPortrait()){
 		var graphSample = container.querySelector(".playerInfoGraphContainer");
 		var anchorSample = document.querySelector(".playerInfoContainer");
 		while (currentFontSize < baseFontSize || (graphSample.getBoundingClientRect().width + 5 <= anchorSample.getBoundingClientRect().width && graphCurrentSize + 5 <= graphBaseSize)){
@@ -1772,9 +1784,9 @@ function checkMatchSize(){
 				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 			}
 		}
-		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8) ||
+		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8 * client.fontAmplifier) ||
 			((graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width || document.documentElement.clientHeight - 5 < graphSample.getBoundingClientRect().bottom) && graphCurrentSize > 200)){
-			if (currentFontSize > 8){
+			if (biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8 * client.fontAmplifier){
 				container.style.setProperty("font-size", `${currentFontSize - 1}px`)
 				currentFontSize -= 1;
 			}
@@ -1782,6 +1794,10 @@ function checkMatchSize(){
 				graphCurrentSize -= 5;
 				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 			}
+		}
+		if (document.querySelector("#exchangeContainer .portrait .exchangeTablesCaption").getBoundingClientRect().width > document.documentElement.offsetWidth){
+			document.querySelector("#exchangeContainer .portrait").style.setProperty("display", "none");
+			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "block");
 		}
 	}
 	else{
