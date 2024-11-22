@@ -97,6 +97,7 @@ var template = `
 			body: JSON.stringify({ "id": parseInt(url.searchParams.get("id")) }),
 			credentials: 'include'
 		})
+		history.replaceState("","",`https://${hostname.host}/match?id=${url.searchParams.get("id")}`)
 		const result = await fetchResult.json();
 		if (fetchResult.ok){
 			match = result;

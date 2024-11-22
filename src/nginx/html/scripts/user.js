@@ -94,6 +94,8 @@ function updateUserLang(){
     var startDate = new Date();
     startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
 	var tabIdx = 14;
+	history.replaceState("","",`https://${hostname.host}/user/${splitPath[4]}`)
+
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},

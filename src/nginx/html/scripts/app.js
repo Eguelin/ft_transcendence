@@ -275,6 +275,7 @@ class Dashboard{
 				})
 				this.clientMatches = await clientMatchesFetch.json();
 				this.clientMatches = this.clientMatches.matches;
+				history.replaceState("","",`https://${hostname.host}/dashboard/${username}`)
 			}
 			catch{
 				var template = `
@@ -1446,27 +1447,29 @@ async function updateUserAriaLabel(key, content){
 
 let ua = navigator.userAgent;
 setInterval(function() {
-  if (navigator.userAgent !== ua) {
-	if (isMobile()){
-		document.documentElement.classList.add("mobile");
+	if (navigator.userAgent !== ua) {	
+		if (isMobile()){
+			document.documentElement.classList.add("mobile");
+		}
+		else{
+			document.documentElement.classList.remove("mobile");
+		}
+		ua = navigator.userAgent;
 	}
-	else{
-		document.documentElement.classList.remove("mobile");
+	checkResizeIndex()
+	if (currentPage == "home" || currentPage == "user"){
+		checkMatchResumeSize()
 	}
-	ua = navigator.userAgent;
-  }
-  checkResizeIndex()
-  if (currentPage == "home" || currentPage == "user"){
-	  checkMatchResumeSize()
-  }
-  if (currentPage == "user")
-	  checkUserPageSize();
-  if (currentPage == "game")
-	  checkGameSize();
-  if (currentPage == "game" || currentPage == "tournament")
-	  setTimeout(checkWinnerDisplaySize, 1)
-  if (currentPage == "friends")
-	  checkFriendPageSize()
+	if (currentPage == "user")
+		checkUserPageSize();
+	if (currentPage == "game")
+		checkGameSize();
+	if (currentPage == "tournament")
+		displayTournament();
+	if (currentPage == "game" || currentPage == "tournament")
+		setTimeout(checkWinnerDisplaySize, 1)
+	if (currentPage == "friends")
+		checkFriendPageSize()
 
 
 }, 500);
@@ -1476,6 +1479,7 @@ function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry
 function checkResizeIndex(){
 	var tmp = document.querySelector("#inputSearchUserContainer");
 	var fontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize);
+	var spareWidth = 0;
 	document.querySelector("#inputSearchUser").style.setProperty("display", "none");
 	document.querySelector("#mobileSearchBtn").style.setProperty("display", "none");
 	if (window.getComputedStyle(tmp).display != "none") {
@@ -1491,11 +1495,23 @@ function checkResizeIndex(){
 			document.querySelector("#inputSearchUser").style.setProperty("display", "block");
 		}
 	}
+	if (window.matchMedia("(orientation: portrait)").matches && isMobile()){
+		spareWidth = document.querySelector("#quickSettingContainer").getBoundingClientRect().width - document.querySelector("#dropDownUserContainer").getBoundingClientRect().width;
+	}
 
 	if (client){
 		tmp = document.querySelector("#quickSettingContainer");
+		username = document.querySelector("#dropDownUser");
 		var currentFontSize = parseInt(window.getComputedStyle(document.querySelector("#usernameBtn")).fontSize)
 		var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize)
+		var texts = document.querySelectorAll("#usernameBtm, .dropDownMenuBtn");
+		var biggest = texts[0];
+		var dropDownUserContainer = document.querySelector("#dropDownUserContainer").getBoundingClientRect().width
+		username.style.fontSize = `${baseFontSize}px`
+		texts.forEach(function(elem){
+			if (elem.getBoundingClientRect().width > biggest.getBoundingClientRect().width)
+				biggest = elem;
+		})
 
 		for (let i=0; i<tmp.childElementCount;i++){
 			if (tmp.children[i].style.getPropertyValue("display") == "none" || tmp.children[i].style.getPropertyValue("display") == "")
@@ -1503,12 +1519,15 @@ function checkResizeIndex(){
 			if (tmp.children[i].getBoundingClientRect().left == tmp.getBoundingClientRect().left)
 				break
 
-			while (tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left && currentFontSize < baseFontSize){
-				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+			while ((tmp.children[i].getBoundingClientRect().left > tmp.getBoundingClientRect().left || spareWidth > 0) && currentFontSize < baseFontSize){
+				if (window.matchMedia("(orientation: portrait)").matches && isMobile()){
+					spareWidth = document.querySelector("#quickSettingContainer").getBoundingClientRect().width - document.querySelector("#dropDownUserContainer").getBoundingClientRect().width;
+				}
+				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
 			}
-			while (tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left && currentFontSize > 1){
-				document.querySelector("#usernameBtn").style.setProperty("font-size", `${currentFontSize}px`)
+			while ((tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left || biggest.getBoundingClientRect().right > document.documentElement.offsetWidth) && currentFontSize > 1){
+				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize -= 1;
 			}
 		}
@@ -1516,6 +1535,8 @@ function checkResizeIndex(){
 		if (tmp.innerText != ""){
 			var currentFontSize = parseInt(window.getComputedStyle(tmp).fontSize)
 			var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
+			if (currentFontSize > baseFontSize)
+				tmp.style.setProperty("font-size", `${baseFontSize}px`)
 			var anchor = document.querySelector("#quickSettingContainer");
 			while (tmp.getBoundingClientRect().right < anchor.getBoundingClientRect().left && currentFontSize < baseFontSize){
 				tmp.style.setProperty("font-size", `${currentFontSize}px`)
@@ -1541,6 +1562,8 @@ function resizeEvent(){
 		checkUserPageSize();
 	if (currentPage == "game")
 		checkGameSize();
+	if (currentPage == "tournament")
+		displayTournament();
 	if (currentPage == "game" || currentPage == "tournament")
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "match")
@@ -1557,6 +1580,7 @@ function checkUserPageSize(){
 
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 4;
 	var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
+	text.style.setProperty("transition", "none")
 	while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
 		text.style.setProperty("font-size", `${currentFontSize}px`)
 		currentFontSize += 1;
@@ -1658,9 +1682,12 @@ const HorizontalInversedkeyMap = {"KeyS" : "KeyS", "KeyW" : "KeyW", "KeyA" : "Ke
 const FullInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "KeyD" : "KeyA", "ArrowUp" : "ArrowDown", "ArrowDown" : "ArrowUp", "ArrowLeft" : "ArrowRight", "ArrowRight" : "ArrowLeft"};
 
 function checkGameSize(){
+	if (document.querySelector("#tournamentContainer").style.getComputedStyle("display") != none){
+		displayTournament();
+	}
 	if (!document.querySelector("#gameContainer").classList.contains("local")){
 		if (window.matchMedia("(orientation: portrait)").matches){
-			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
+			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column-reverse");
@@ -1676,7 +1703,7 @@ function checkGameSize(){
 			}
 		}
 		else {
-			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText){
+			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "0deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row");
