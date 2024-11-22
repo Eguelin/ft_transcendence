@@ -134,22 +134,33 @@ def remove_friend(request):
 def block_friend(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if request.user.is_authenticated:
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': 'User not authenticated'}, status=400)
+	try:
 		data = json.loads(request.body)
 		username = data['username']
-		try:
-			ennemy = User.objects.get(username=username)
-			user = request.user
-			ennemy.profile.friends.remove(user)
-			ennemy.save()
-			user.profile.friends.remove(ennemy)
-			user.profile.blocked_users.add(ennemy)
-			user.save()
-			return JsonResponse({'message': 'Succesfully blocked user'})
-		except:
-			return JsonResponse({'message': 'Can\'t find user'}, status=400)
-	else:
-		return JsonResponse({'username': None}, status=400)
+	except json.JSONDecodeError:
+		return JsonResponse({'message':  "Invalid JSON"}, status=400)
+	except KeyError:
+		return JsonResponse({'message':  "Missing Data"}, status=400)
+
+	if not username or not isinstance(username, str):
+		return JsonResponse({'message': 'Missing username'}, status=400)
+
+	if (username == request.user.username):
+		return JsonResponse({'message': 'Can\'t block friend from yourself'}, status=400)
+
+	try:
+		ennemy = User.objects.get(username=username)
+		user = request.user
+		ennemy.profile.friends.remove(user)
+		ennemy.save()
+		user.profile.friends.remove(ennemy)
+		user.profile.blocked_users.add(ennemy)
+		user.save()
+		return JsonResponse({'message': 'Succesfully blocked user'})
+	except:
+		return JsonResponse({'message': 'Can\'t find user'}, status=404)
 
 def unblock_user(request):
 	if request.method != 'POST':
