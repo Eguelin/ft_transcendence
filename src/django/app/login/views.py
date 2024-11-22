@@ -23,15 +23,16 @@ def fortytwo(request):
 
 	try:
 		data = json.loads(request.body)
+		code = data['code']
+		hostname = data['hostname']
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
 
-	code = data.get('code')
-	if not code:
-		return JsonResponse({'message': 'Invalid request Code'}, status=400)
-	hostname = data.get('hostname')
-	if not hostname:
-		return JsonResponse({'message': 'Invalid request Hostname'}, status=400)
+	if not code or not hostname or not isinstance(code, str) or not isinstance(hostname, str):
+		return JsonResponse({'message': 'Invalid data'}, status=400)
+
 	client_id = os.getenv('API_42_PUBLIC')
 	client_secret = os.getenv('API_42_SECRET')
 	redirect_uri = 'https://' + hostname + '/'
@@ -50,6 +51,7 @@ def fortytwo(request):
 	access_token = response.json().get('access_token')
 	if not access_token:
 		return JsonResponse({'message': 'Failed to retrieve access token'}, status=500)
+
 	url = 'https://api.intra.42.fr/v2/me'
 	headers = {
 		'Authorization': f'Bearer {access_token}'
@@ -57,9 +59,12 @@ def fortytwo(request):
 	response = requests.get(url, headers=headers)
 	if response.status_code != 200:
 		return JsonResponse(response.json(), status=response.status_code)
+
 	user_json = response.json()
 	user_login = user_json.get('login')
 	pfp_url = user_json.get('image', {}).get('link', '')
+	if not pfp_url:
+		pfp_url = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:8]
@@ -67,6 +72,7 @@ def fortytwo(request):
 	id42 = user_json.get('id')
 	if not user_login or id42 is None:
 		return JsonResponse({'message': 'Failed to retrieve user data'}, status=500)
+
 	try:
 		user = User.objects.get(profile__id42=id42)
 		user = authenticate(request, username=user.username, password=str(id42))
