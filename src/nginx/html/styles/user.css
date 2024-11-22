@@ -498,3 +498,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .matchDescContainer .matchDescContainerResult.tournament:hover, .matchDescContainer .matchDescContainerResult.tournament:focus{
 	text-decoration: underline;
 }
+
+.mobile{
+	@media screen and (orientation:landscape) {
+		#profileGraphs{
+			height: 90%;
+			
+			#lineChartsContainer{
+				height: 100%;
+				div{
+					height: 100%;
+				}
+			}
+		}
+	}
+}

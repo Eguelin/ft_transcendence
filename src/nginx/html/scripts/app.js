@@ -1473,7 +1473,10 @@ function isPortrait(){return window.matchMedia("(orientation: portrait)").matche
 
 window.matchMedia("(orientation: portrait)").onchange = function(){
 	resizeEvent();
-	drawMatchInfoGraph();
+	if (currentPage == "match")
+		drawMatchInfoGraph();
+	if (currentPage == "dashboard")
+		displayCharts()
 } ;
 
 function checkResizeIndex(){

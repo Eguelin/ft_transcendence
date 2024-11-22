@@ -601,7 +601,7 @@ def get(request):
 		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
 			return JsonResponse({'message': "can't find user"}, status=403)
 
-		response = get_user_json(user, startDate, endDate)
+		response = get_user_json(request.user, user, startDate, endDate)
 
 		return JsonResponse(response, status=200)
 	except json.JSONDecodeError:
