@@ -168,16 +168,25 @@
 	flex-direction: column;
 }
 
+#dropDownUser{
+	font-size: 1rem;
+}
+
 #dropDownLang {
 	z-index: 1;
 }
 
 .dropDownUserContent, #dropDownLangContent{
+	font-size: 1em;
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	display: none;
 	background: var(--input-bg-rgb);
+}
+
+.dropDownUserContent *{
+	font-size: 1em;
 }
 
 .activeDropDown{
@@ -210,8 +219,10 @@
 
 .activeDropDown .dropDownUserContent .dropDownMenuBtn{
 	transform-origin: top center;
-	animation: scaleZText 300ms forwards;
-	font-size: 1rem;
+	animation: scaleZText 300ms;
+	font-size: 1em;
+	width: fit-content;
+	justify-self: center;
 }
 
 .inactiveDropDown .dropDownUserContent .dropDownMenuBtn{
@@ -273,10 +284,6 @@
 	color: var(--option-text-rgb);
 	text-decoration: inherit;
 	display: block;
-	font-size: min(2vh, 1vw);
-	min-width: -webkit-fill-available;
-	min-width: -moz-available;
-	width: min-content;
 	margin: 0.5em;
 	padding: 0;
 	border: none;
@@ -329,11 +336,11 @@
 	}
 	
 	80% {
-		font-size: 1.1rem;
+		font-size: 1.1em;
 	}
   
 	100% {
-		font-size: 1rem;
+		font-size: 1em;
 		display: block;
 	}
 }
@@ -351,3 +358,20 @@
 		height: 3.5rem;
 	}
 }
+
+	@media screen and (orientation:portrait) {
+		#settingsDropDownContainer{
+			flex-direction: column-reverse;
+			width: 90%;
+
+			#settingsDropDownTheme, #settingsDropDownLang{
+				width: 100%;
+			}
+
+			.dropDownOptionContainer{
+				width: 100%;
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+		}
+	}
