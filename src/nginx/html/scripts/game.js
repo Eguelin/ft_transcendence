@@ -718,7 +718,7 @@ function game() {
 						keysDown[playerTouchMap['ArrowUp']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
 					};
-					
+
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = function() {
 						keysDown[playerTouchMap['ArrowDown']] = true;
 						p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
@@ -732,7 +732,7 @@ function game() {
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = null;
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = null;
-					
+
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = null;
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = null;
 				}
@@ -745,7 +745,7 @@ function game() {
 					keysDown[playerTouchMap['KeyD']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 				};
-				
+
 
 				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerdown = function() {
 					keysDown[playerTouchMap['KeyA']] = true;
@@ -759,7 +759,7 @@ function game() {
 				document.querySelectorAll(".leftBtnContainer, .rightBtnContainer").forEach(function (elem){
 					elem.oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
 				})
-				
+
 				checkGameSize();
 				KeyPressInterval = setInterval(() => KeyPress(), 16);
 				if(document.getElementById("countdownContainer"))
@@ -839,13 +839,13 @@ function game() {
 					document.getElementById("waitingContainer").remove();
 			}
 			window.removeEventListener("keydown", keydownExitEventListener);
-		
+
 			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerOnePfp"), player1.profile_picture);
 			addPfpUrlToImgSrc(document.querySelector("#gameContainer #playerTwoPfp"), player2.profile_picture);
 
 			document.querySelector("#gameContainer #playerOne > .playerName").innerText = player1.name;
 			document.querySelector("#gameContainer #playerTwo > .playerName").innerText = player2.name;
-		
+
 			if (mode == "full_ai")
 				document.querySelector("#gameContainer #playerOnePfp").style.setProperty("transform", "rotateY(180deg)");
 
@@ -1034,7 +1034,7 @@ function game() {
 			`
 			container.querySelector("#quitWaitBtn").onclick = function(){
 				cleanup()
-				myPushState(`https://${hostname.host}/home`);				
+				myPushState(`https://${hostname.host}/home`);
 			};
 			document.body.appendChild(container);
 			window.addEventListener("keydown", keydownExitEventListener);
@@ -1082,7 +1082,7 @@ function game() {
 					displayWaiting();
 				}
 			})
-		
+
 			confetti({
 				particleCount: 500,
 				spread: 40,
@@ -1090,7 +1090,7 @@ function game() {
 				startVelocity : 100,
 				angle: 45
 			})
-		
+
 			confetti({
 				particleCount: 500,
 				spread: 40,
@@ -1110,10 +1110,10 @@ function game() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ "id": url.searchParams.get("id")}),
+				body: JSON.stringify({ "id": parseInt(url.searchParams.get("id")) }),
 				credentials: 'include'
 			})
-		history.replaceState("","",`https://${hostname.host}/tournament?id=${url.searchParams.get("id")}`)	
+		history.replaceState("","",`https://${hostname.host}/tournament?id=${url.searchParams.get("id")}`)
 		const result = await fetchResult.json();
 			if (fetchResult.ok){
 				tournament = result;
@@ -1154,12 +1154,12 @@ function setTournamentAriaLabeL(){
 	content = client.langJson['tournament'];
 	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
 		try {
-			elem.setAttribute("aria-label", 
+			elem.setAttribute("aria-label",
 				content["matchResume"]
 				.replace("${MATCH_NUMBER}", content[elem.classList[3]])
 				.replace("${ROUND}", content[elem.classList[1]])
 				.replace("${WINNER_USERNAME}", elem.querySelector(".winner .username").innerText)
-				.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))	
+				.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))
 		} catch {
 			popUpError("Error setting aria labels");
 		}

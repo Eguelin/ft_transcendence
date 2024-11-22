@@ -673,7 +673,12 @@ def get_tournament(request):
 
 	try:
 		data = json.loads(request.body)
-		tournament = gameModels.TournamentModel.objects.get(pk=data.get("id"))
+		id = data["id"]
+
+		if not id or not isinstance(id, int):
+			return JsonResponse({'message': 'Invalid id'}, status=400)
+
+		tournament = gameModels.TournamentModel.objects.get(pk=id)
 		tournamentJson = {
 			"round_0" : {
 				"match_0" : {
@@ -795,31 +800,17 @@ def get_tournament(request):
 			}
 		}
 		for match in tournament.matches.all():
-			try:
-				p1_name = match.player_one.username
-				p1_pfp = match.player_one.profile.profile_picture
-				p1_display_name = match.player_one.profile.display_name
-				if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-					p1_name = "deleted"
-					p1_pfp = ""
-					p1_display_name = "deleted"
-			except:
-				p1_name = "deleted"
-				p1_pfp = ""
-				p1_display_name = "deleted"
+			if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				match.player_one = User.objects.get(username="Nobody")
+			p1_name = match.player_one.username
+			p1_pfp = match.player_one.profile.profile_picture
+			p1_display_name = match.player_one.profile.display_name
 
-			try:
-				p2_name = match.player_two.username
-				p2_pfp = match.player_two.profile.profile_picture
-				p2_display_name = match.player_two.profile.display_name
-				if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-					p2_name = "deleted"
-					p2_pfp = ""
-					p2_display_name = "deleted"
-			except:
-				p2_name = "deleted"
-				p2_pfp = ""
-				p2_display_name = "deleted"
+			if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				match.player_two = User.objects.get(username="Nobody")
+			p2_name = match.player_two.username
+			p2_pfp = match.player_two.profile.profile_picture
+			p2_display_name = match.player_two.profile.display_name
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = p1_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["display_name"] = p1_display_name
@@ -835,11 +826,18 @@ def get_tournament(request):
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["id"] = match.pk
 		return JsonResponse(tournamentJson, status=200)
-	except gameModels.DoesNotExist:
+
+	except gameModels.TournamentModel.DoesNotExist:
 		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
+
+	except Exception as e:
+		return JsonResponse({'message': str(e)}, status=500)
 
 def get_match(request):
 	if request.method != 'POST':
