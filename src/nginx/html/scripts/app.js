@@ -557,6 +557,13 @@ const themeMap = {
 }
 
 function switchTheme(theme) {
+	if (theme == "browser") {
+		if (window.matchMedia) {
+			theme = window.matchMedia('(prefers-color-scheme: dark)').matches == 1 ? 'dark' : 'light';
+		}
+		else
+			theme = 'dark';
+	}
 	Object.keys(themeMap[theme]).forEach(function (key) {
 		document.documentElement.style.setProperty(key, themeMap[theme][key])
 	})
