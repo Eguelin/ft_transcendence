@@ -183,10 +183,16 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
 	var totalWin = 0, totalMatch = 0, graphLineWidth = .5, graphPointRadius = 2, lineWidth = 2;
-	if (window.getComputedStyle(document.documentElement).getPropertyValue("--is-mobile") == 1){
-		graphLineWidth = 3;
-		graphPointRadius = 0;
-		lineWidth = 4;
+	if (isMobile()){
+		if (isPortrait()){
+			graphLineWidth = 3;
+			lineWidth = 4;
+		}
+		else{
+			graphLineWidth = 1;
+			lineWidth = 4;
+		}
+		graphPointRadius = 2;
 	}
 
 
@@ -418,11 +424,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 						},
 						x: {
 							ticks: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								font: {
-									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-								},
+								display : false
 							},
 							grid: {
 								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
@@ -536,11 +538,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 						},
 						x: {
 							ticks: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								font: {
-									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
-								},
+								display : false
 							},
 							grid: {
 								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
@@ -631,8 +629,14 @@ function displayCharts(){
 			wLGraph.width = x * 30;
 			wLAbsGraph.width = x * 30;
 			userStatGraph.width = x * 30;
-			wLGraph.height = y * 21;
-			wLAbsGraph.height = y * 21;
+			if (isMobile()){
+				wLGraph.height = document.getElementById("winLossGraphContainer").getBoundingClientRect().height;
+				wLAbsGraph.height = document.getElementById("winLossAbsGraphContainer").getBoundingClientRect().height;
+			}
+			else{
+				wLGraph.height = y * 21;
+				wLAbsGraph.height = y * 21;
+			}
 			userStatGraph.height = y * 21;
 		}
 
