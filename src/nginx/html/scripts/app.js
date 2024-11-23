@@ -1184,6 +1184,74 @@ function getElemWidth(elem){
 	));
 }
 
+const getOrCreateLegendList = (chart, id) => {
+	const legendContainer = document.getElementById(id);
+	let listContainer = legendContainer.querySelector('ul');
+  
+	if (!listContainer) {
+	  listContainer = document.createElement('ul');
+	  listContainer.className = "legendContainer"
+  
+	  legendContainer.appendChild(listContainer);
+	}
+  
+	return listContainer;
+};
+
+const htmlLegendPlugin = {
+	id: 'htmlLegend',
+	afterUpdate(chart, args, options) {
+	  const ul = getOrCreateLegendList(chart, options.containerID);
+  
+	  // Remove old legend items
+	  while (ul.firstChild) {
+		ul.firstChild.remove();
+	  }
+  
+	  // Reuse the built-in legendItems generator
+	  const items = chart.options.plugins.legend.labels.generateLabels(chart);
+  
+	  items.forEach(item => {
+		const li = document.createElement('li');
+		li.className = "legendElementContainer"
+  
+		li.onclick = () => {
+		  const {type} = chart.config;
+		  if (type === 'pie' || type === 'doughnut') {
+			// Pie and doughnut charts only have a single dataset and visibility is per item
+			chart.toggleDataVisibility(item.index);
+		  } else {
+			chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
+		  }
+		  chart.update();
+		};
+  
+		// Color box
+		const boxSpan = document.createElement('span');
+		boxSpan.style.background = item.fillStyle;
+		boxSpan.style.borderColor = item.strokeStyle;
+		boxSpan.style.borderWidth = item.lineWidth + 'px';
+		boxSpan.style.display = 'inline-block';
+		boxSpan.style.flexShrink = 0;
+		boxSpan.style.height = '20px';
+		boxSpan.style.marginRight = '10px';
+		boxSpan.style.width = '20px';
+  
+		// Text
+		const textContainer = document.createElement('p');
+		textContainer.className = "legendTextContainer"
+		textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
+  
+		const text = document.createTextNode(item.text);
+		textContainer.appendChild(text);
+  
+		li.appendChild(boxSpan);
+		li.appendChild(textContainer);
+		ul.appendChild(li);
+	  });
+	}
+  };
+
 /*
 		______ __   __ _   _   ___  ___  ___ _____  _____      ______  _   _  _   _  _____  _____  _____  _____  _   _  _____
 		|  _  \\ \ / /| \ | | / _ \ |  \/  ||_   _|/  __ \     |  ___|| | | || \ | |/  __ \|_   _||_   _||  _  || \ | |/  ___|
@@ -1567,7 +1635,6 @@ function checkResizeIndex(){
 
 function resizeEvent(event, orientationChange = false){
 	checkResizeIndex()
-	console.log(orientationChange)
 	if (orientationChange == false && currentPage == "dashboard")
 		displayCharts();
 	if (currentPage == "home" || currentPage == "user"){
