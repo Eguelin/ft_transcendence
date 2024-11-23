@@ -58,7 +58,6 @@ var template = `
 
 {
 	const url = new URL(window.location.href);
-	console.log(url.hash);
 	if (url.hash == "#register"){
 		history.replaceState("","",`https://${hostname.host}/login#register`)
 		slideIdx = 1;
