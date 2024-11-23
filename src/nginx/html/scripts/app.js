@@ -1471,12 +1471,24 @@ function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry
 
 function isPortrait(){return window.matchMedia("(orientation: portrait)").matches};
 
-window.matchMedia("(orientation: portrait)").onchange = function(){
-	resizeEvent();
+window.matchMedia("(orientation: portrait)").onchange = function(e){
+	resizeEvent(e, true);
 	if (currentPage == "match")
 		drawMatchInfoGraph();
-	if (currentPage == "dashboard")
-		displayCharts()
+	if (currentPage == "dashboard"){
+		if (isMobile()){
+			if (document.getElementById("winLossGraph"))
+				document.getElementById("winLossGraph").remove();
+			if (document.getElementById("winLossAbsGraph"))
+				document.getElementById("winLossAbsGraph").remove();
+			if (document.getElementById("userStatGraph"))
+				document.getElementById("userStatGraph").remove();
+			setTimeout(displayCharts, 500)
+		}
+		else{
+			displayCharts();
+		}
+	}
 } ;
 
 function checkResizeIndex(){
@@ -1553,11 +1565,11 @@ function checkResizeIndex(){
 	}
 }
 
-function resizeEvent(){
+function resizeEvent(event, orientationChange = false){
 	checkResizeIndex()
-	if(currentPage == "dashboard"){
+	console.log(orientationChange)
+	if (orientationChange == false && currentPage == "dashboard")
 		displayCharts();
-	}
 	if (currentPage == "home" || currentPage == "user"){
 		checkMatchResumeSize()
 	}
