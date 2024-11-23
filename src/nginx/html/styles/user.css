@@ -18,21 +18,23 @@
 }
 
 
-#sendFriendRequestBtn {
+#profileFriendsButton > button {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	font-family: "pong";
 	padding: 1.5rem;
 	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 	font-size: 1rem;
 	width: fit-content;
 	height: fit-content;
 	align-self: center;
+	min-width: unset;
+	
 }
 
-#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
+#profileFriendsButton > button:hover, #profileFriendsButton > button:focus {
 	color: var(--page-bg-rgb);
 	border-color: var(--page-bg-rgb);
 	outline: none;
@@ -537,3 +539,12 @@ input[type="date"]{
 	}
 }
 
+@media screen and (orientation:landscape) {
+	#profileFriendsButton{
+		display: flex;
+		flex-direction: row;
+		justify-content: end;
+		gap: 4.2rem;
+		padding-right: 4.2rem;
+	}
+}
