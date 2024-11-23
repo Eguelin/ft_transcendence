@@ -234,12 +234,6 @@
 	}
 }
 
-
-#matchHistoryContainer {
-	position: relative;
-	top: 5rem;
-}
-
 #matchHistoryContainer .matchDescContainer{
 	min-height: 5rem;
 	height: 7rem;
@@ -248,12 +242,38 @@
 
 #profileGraphs {
 	display: flex;
-	gap: 1vw;
+	gap: 1rem;
 	position: relative;
 	left: 50%;
 	translate: -50%;
 	width: fit-content;
 	align-items: center;
+
+	.legendContainer{
+		flex-direction: row;
+	}
+
+	#userStatPieGraphContainer, #winLossGraphContainer, #winLossAbsGraphContainer{
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+		width: 100%;
+	}
+
+	> div{
+		width: calc(50% - .5rem);
+		@media screen and (orientation:portrait){
+			width: 100%;
+			
+		}
+	}
+
+
+	#userStatGraphContainer{
+		height: 85%;
+		justify-items: center;
+	}
 }
 
 
@@ -262,6 +282,7 @@
 	flex-direction: column;
 	align-items: center;
 	width: fit-content;
+	gap: 1rem;
 }
 
 .activeTimeline{
@@ -394,11 +415,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 	width: 7rem;
 }
 
-.dashboard button{
-	min-width: unset;
 
+.dashboard{
+	display: flex;
+	flex-direction: column;
+	gap: 3rem;
+	button{
+		min-width: unset;
+	
+	}
 }
-
 
 @media screen  and (max-width:920px){ 
 	#timelineSelectionContainer{
@@ -506,10 +532,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 			
 			#lineChartsContainer{
 				height: 100%;
-				div{
-					height: 100%;
+				> div{
+					height: 50%;
 				}
 			}
 		}
 	}
 }
+
