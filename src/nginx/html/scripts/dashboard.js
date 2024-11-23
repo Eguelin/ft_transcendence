@@ -569,6 +569,7 @@ function updateDashboardLang(){
 		chartStats.config._config.data.labels[1] = content["CVloss"];
 		chartStats.update();
 	}	
+	document.title = langJson['dashboard'][`dashboard title`].replace("${USERNAME}", splitPath[4]);
 }
 
 var dashboard = null;

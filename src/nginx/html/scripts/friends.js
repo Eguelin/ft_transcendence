@@ -146,6 +146,7 @@ var template = `
 				tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
 				setTabIndexes(friendSlideIdx);
 				history.replaceState("","", `https://${hostname.host}/friends${friendHashMap[friendSlideIdx]}`)
+				document.title = langJson['friends'][`${friendHashMap[friendSlideIdx].replace("#","")} title`];
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -675,6 +676,7 @@ function friendKeyDownEvent(e) {
 		tmp.animate(move, time);
 		tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
 		history.replaceState("","", `https://${hostname.host}/friends${friendHashMap[friendSlideIdx]}`)
+		document.title = langJson['friends'][`${friendHashMap[friendSlideIdx].replace("#","")} title`];
 		setTabIndexes(friendSlideIdx);
 	}
 }
