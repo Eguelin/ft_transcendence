@@ -50,7 +50,7 @@ def fortytwo(request):
 
 	access_token = response.json().get('access_token')
 	if not access_token:
-		return JsonResponse({'message': 'Failed to retrieve access token'}, status=500)
+		return JsonResponse({'message': 'Invalid response from 42 API'}, status=400)
 
 	url = 'https://api.intra.42.fr/v2/me'
 	headers = {
@@ -71,7 +71,7 @@ def fortytwo(request):
 
 	id42 = user_json.get('id')
 	if not user_login or id42 is None:
-		return JsonResponse({'message': 'Failed to retrieve user data'}, status=500)
+		return JsonResponse({'message': 'Invalid response from 42 API'}, status=400)
 
 	try:
 		user = User.objects.get(profile__id42=id42)
