@@ -609,7 +609,7 @@ function checkUpdate(){
 			}
 			else {
 				client = null;
-				myReplaceState(`https://${hostname.host}/login`);
+				myReplaceState(`https://${hostname.host}/login#login`);
 			}
 		})
 	}

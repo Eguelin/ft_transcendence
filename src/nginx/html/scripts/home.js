@@ -147,7 +147,7 @@ var template = `
 		}
 	}
 	else
-		myReplaceState(`https://${hostname.host}/login`);
+		myReplaceState(`https://${hostname.host}/login#login`);
 
 		
 }

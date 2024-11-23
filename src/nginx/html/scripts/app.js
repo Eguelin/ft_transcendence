@@ -301,6 +301,7 @@ window.addEventListener("popstate", (e) => {
 
 function load() {
 	const url = new URL(window.location.href);
+	console.log(url);
 	if (dropDownLang.classList.contains("activeDropDown")) {
 		dropDownLang.classList.remove("activeDropDown");
 		void dropDownLang.offsetWidth;
@@ -329,7 +330,7 @@ function load() {
 			},
 			credentials: 'include'
 		})
-		history.replaceState("", "", `https://${hostname.host}/login`)
+		history.replaceState("", "", `https://${hostname.host}/login#login`)
 	}
 	if (currentPage == "settings") {
 		window.onkeydown = null
@@ -351,7 +352,7 @@ function load() {
 		currentPage = "login";
 		dropDownUserContainer.style.setProperty("display", "none");
 		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
-		history.replaceState("", "", `https://${hostname.host}/login`);
+		history.replaceState("", "", `https://${hostname.host}/login${url.hash}`);
 
 
 		document.getElementById("script").remove();
@@ -394,7 +395,7 @@ function handleToken() {
 								preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 							}
 							if (!client)
-								myReplaceState(`https://${hostname.host}/login`);
+								myReplaceState(`https://${hostname.host}/login${hostname.hash}`);
 							else {
 								friendUpdate();
 								myReplaceState(`https://${hostname.host}/home`);
@@ -409,7 +410,7 @@ function handleToken() {
 					response.json().then(data => {
 						unsetLoader()
 						popUpError(data.message || "Error API 42 Invalid key or API down");
-						myReplaceState(`https://${hostname.host}/login`);
+						myReplaceState(`https://${hostname.host}/login#login`);
 					})
 				}
 			}).catch(error => console.error('Error:', error));
@@ -422,7 +423,7 @@ function handleToken() {
 			try {
 				client = await new Client();
 				if (!client)
-					myReplaceState(`https://${hostname.host}/login`);
+					myReplaceState(`https://${hostname.host}/login${hostname.hash}`);
 				else if (url.pathname == "" || url.pathname == "/") {
 					friendUpdate();
 					myReplaceState(`https://${hostname.host}/home`);
