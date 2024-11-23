@@ -137,7 +137,6 @@ var template = `
 {
 	var slideIdx = 0;
 	const url = new URL(window.location.href);
-	console.log(url.hash)
 	if (url.hash == "#accessibility"){
 		history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
 		slideIdx = 1;
@@ -209,9 +208,11 @@ var template = `
 			}
 			if (slideIdx == 0){
 				history.replaceState("","",`https://${hostname.host}/settings#account`)
+				document.title = langJson['settings'][`account title`];
 			}
 			else {
 				history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
+				document.title = langJson['settings'][`accessibility title`];
 			}
 		})
 		key.onkeydown = (e) => {
@@ -627,9 +628,11 @@ function settingsKeyDownEvent(e) {
 			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
 		}
 		if (slideIdx == 0){
+			document.title = langJson['settings'][`account title`];
 			history.replaceState("","",`https://${hostname.host}/settings#account`)
 		}
 		else {
+			document.title = langJson['settings'][`accessibility title`];
 			history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
 		}
 	}

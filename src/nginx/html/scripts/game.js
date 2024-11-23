@@ -588,6 +588,7 @@ function displayTournament(is_finished = false){
 		})
 	}
 	else{
+		document.title = client.langJson['game'][`lobby title`].replace("${NB}", playersCount);
 		document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentLobby']} ${playersCount}/8`
 		document.querySelector("#tournamentContainer").style.setProperty("left", `0px`)
 		document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay")
@@ -640,6 +641,8 @@ function game() {
 		let countdown = "";
 		playerKeyMap = keyMap;
 		playerTouchMap = keyMap;
+		if (langJson)
+			document.title = langJson['game'][`game title`].replace("${MODE}", mode);
 		if (isMobile()){
 			document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 //			document.querySelector("#controlerSlide").style.setProperty("display", "flex");

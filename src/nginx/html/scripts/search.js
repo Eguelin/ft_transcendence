@@ -23,6 +23,7 @@ var template = `
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
 	inputSearch.focus();
+	document.title = client.langJson['search'][`search title`].replace("${SEARCH}", "");
 	setNotifTabIndexes(15);
 	url = new URL(window.location.href);
 	if (url.searchParams.get("query")) {
@@ -33,6 +34,7 @@ var template = `
 			credentials: 'include'
 		}).then(user => {
 			if (user.ok){
+				document.title = client.langJson['search'][`search title`].replace("${SEARCH}", url.searchParams.get("query"));
 				history.replaceState("","",`https://${hostname.host}/search?query=${url.searchParams.get("query")}`)
 				user.json().then(((user) => {
 					document.querySelector("#userResumeCountContainer").style.setProperty("display", "block")
