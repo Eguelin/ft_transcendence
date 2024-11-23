@@ -59,7 +59,7 @@ var template = `
 			else{
 				if (user.status == 401){
 					popUpError("how dare you >:("); //TODO change popup message
-					myReplaceState(`https://${hostname.host}/login`);
+					myReplaceState(`https://${hostname.host}/login#login`);
 				}
 				else
 					myReplaceState(`https://${hostname.host}/home`);
