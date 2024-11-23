@@ -16,8 +16,6 @@ def getClientId(request):
 	return JsonResponse({'clientId': clientId})
 
 def fortytwo(request):
-	create_ai()
-	create_nobody()
 	if request.method != 'POST' :
 		return JsonResponse({'message':  "Invalid request"}, status=405)
 
@@ -145,9 +143,6 @@ def check_password(password, staff=False):
 	return True, None
 
 def create_user(request, staff=False):
-	create_ai()
-	create_nobody()
-
 	if request.method != 'POST' :
 		return JsonResponse({'message':  "Invalid request"}, status=405)
 
@@ -175,10 +170,7 @@ def create_user(request, staff=False):
 		display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
 
 	try:
-		if (username == "admin"):
-			user = User.objects.create_user(username=username, password=password, is_staff=True)
-		else:
-			user = User.objects.create_user(username=username, password=password)
+		user = User.objects.create_user(username=username, password=password)
 		user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.profile.id42 = 0
 		user.profile.is_active = True
@@ -193,26 +185,26 @@ def create_user(request, staff=False):
 	except Exception:
 		return JsonResponse({'message':  "Internal server error"}, status=500)
 
-def create_ai():
-	if User.objects.filter(username="AI").exists():
-		return
-	username = "AI"
-	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
-	user = User.objects.create_user(username=username, password=password)
-	user.profile.profile_picture = "/images/defaults/defaultAi.gif"
-	user.profile.display_name = "AI"
-	user.id42 = 0
-	user.save()
+def create_deleted_user():
+	return create_nps("deleted", "default0.jpg")
 
-def create_nobody():
-	if User.objects.filter(username="nobody").exists():
-		return User.objects.get(username="nobody")
-	username = "nobody"
-	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
+def create_default_users():
+	create_nps("AI", "defaultAI.gif")
+	create_nps("nobody", "thisman.jpg")
+	create_nps("deleted", "default0.jpg")
+	create_nps(os.getenv('DJANGO_ADMIN_USER'), "default0.jpg", os.getenv('DJANGO_ADMIN_PASSWORD'), True)
+
+def create_nps(name, pfp, password=None, staff=False):
+	if User.objects.filter(username=name).exists():
+		return User.objects.get(username=name)
+	username = name
+	if not password:
+		password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
 	user = User.objects.create_user(username=username, password=password)
-	user.profile.profile_picture = "/images/defaults/thisman.jpg"
-	user.profile.display_name = "nobody"
+	user.profile.profile_picture ="/images/defaults/" + pfp
+	user.profile.display_name = name
 	user.id42 = 0
+	user.is_staff = staff
 	user.save()
 	return user
 
