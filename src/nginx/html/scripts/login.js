@@ -120,9 +120,12 @@ var template = `
 				loginSlideSelector[slideIdx].classList.add('activeSelector');
 				if (slideIdx == 1){
 					history.replaceState("","",`https://${hostname.host}/login#register`);
+					document.title = langJson['login'][`register title`];
 				}
-				else
+				else{
 					history.replaceState("","",`https://${hostname.host}/login#login`);
+					document.title = langJson['login'][`login title`];
+				}
 
 				const time = {
 					duration: 300,
@@ -440,8 +443,11 @@ function loginKeyDownEvent(e) {
 
 		if (slideIdx == 1){
 			history.replaceState("","",`https://${hostname.host}/login#register`);
+			document.title = langJson['login'][`register title`];
 		}
-		else
+		else{
 			history.replaceState("","",`https://${hostname.host}/login#login`);
+			document.title = langJson['login'][`login title`];
+		}
 	}
 }

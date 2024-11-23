@@ -22,6 +22,7 @@ var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
 var client = null;
 var pageName;
 var use_browser_theme = true;
+var langJson = null;
 
 const routes = {
 	"/home": `https://${hostname.host}/scripts/home.js`,
@@ -1273,16 +1274,17 @@ const htmlLegendPlugin = {
 
 
 async function loadCurrentLang(){
-	contentJson = null;
+	const url = new URL(window.location.href);
+	langJson = null;
 	if (client && client.langJson){
-		contentJson = client.langJson;
+		langJson = client.langJson;
 	}
 	else if (currentLang != undefined){
 		const fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
 		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
 		if (fetchResult.ok){
 			try{
-				contentJson = await fetchResult.json()
+				langJson = await fetchResult.json()
 				dropDownLangBtn.style.setProperty("background-image", `url(${svgPath})`);
 			}
 			catch{
@@ -1295,36 +1297,43 @@ async function loadCurrentLang(){
 			const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
 			if (fetchResult.ok){
 				try {
-					contentJson = await fetchResult.json();
+					langJson = await fetchResult.json();
 				}
 				catch {
 					popUpError(`Could not load ${currentLang} language pack`);
 				}
 			}
 			if (client)
-				client.langJson = contentJson;
+				client.langJson = langJson;
 		}
 	}
-	if (contentJson == null) {
+	if (langJson == null) {
 		currentLang = "lang/EN_UK.json";
 		const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
 		if (fetchResult.ok){
 			try {
-				contentJson = await fetchResult.json();
+				langJson = await fetchResult.json();
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
 			}
 			catch {
 				popUpError(`Could not load ${currentLang} language pack`);
 			}
 			if (client)
-				client.langJson = contentJson;
+				client.langJson = langJson;
 		}
 		else{
 			popUpError("Could not load language pack");
 		}
 	}
-	if (contentJson != null && contentJson != undefined){
-		content = contentJson[currentPage];
+	if (langJson != null && langJson != undefined){
+
+		if (url.hash != ""){
+			document.title = langJson[currentPage][`${url.hash.replace("#","")} title`];
+		}
+		else
+			document.title = langJson[currentPage][`${currentPage} title`];
+
+		content = langJson[currentPage];
 		if (content != null && content != undefined) {
 			Object.keys(content).forEach(function (key) {
 				instances = document.querySelectorAll(key);
@@ -1351,8 +1360,13 @@ async function loadCurrentLang(){
 			});
 			if (currentPage == 'user') {updateUserLang();}
 			if (currentPage == 'dashboard') {updateDashboardLang();}
+			if (currentPage == "game") {
+				document.title = langJson['game'][`game title`].replace("${MODE}", url.searchParams.get("mode"));
+			}
+			if (currentPage == "search")
+				document.title = client.langJson['search'][`search title`].replace("${SEARCH}", "");
 		}
-		content = contentJson['index'];
+		content = langJson['index'];
 		if (content != null || content != undefined) {
 			var searchBar = document.querySelector("#inputSearchUser");
 			if (content["#inputSearchUser"].length > 15){
@@ -1774,7 +1788,7 @@ const WASDInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "
 
 
 function checkGameSize(){
-	if (document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
+	if (document.querySelector("#tournamentContainer #tournament").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
 	if (!document.querySelector("#gameContainer").classList.contains("local")){

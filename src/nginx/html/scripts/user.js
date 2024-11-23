@@ -53,6 +53,8 @@ function updateUserLang(){
     var splitPath = window.location.href.split('/');
     if (document.querySelector('#notPlayedToday'))
         document.querySelector('#notPlayedToday').innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
+	document.title = langJson['user'][`user title`].replace("${USERNAME}", splitPath[4]);
+
 }
 
 {
@@ -107,18 +109,19 @@ function updateUserLang(){
 	if (splitPath[4] == client.username){
 		document.querySelector("#profileFriendsButton").remove();
 	}
-
-    if (client.blocked_user[splitPath[4]] || client.friends[splitPath[4]] != null){
-        document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
-    }
-    if (client.blocked_user[splitPath[4]] || client.friends[splitPath[4]] == null){
-        document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
-	}
-	if (!client.blocked_user[splitPath[4]]){
-        document.getElementById("unblockBtn").style.setProperty("display", "none");
-	}
 	else{
-        document.getElementById("blockBtn").style.setProperty("display", "none");
+		if (client.blocked_user[splitPath[4]] || client.friends[splitPath[4]] != null){
+			document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
+		}
+		if (client.blocked_user[splitPath[4]] || client.friends[splitPath[4]] == null){
+			document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+		}
+		if (!client.blocked_user[splitPath[4]]){
+			document.getElementById("unblockBtn").style.setProperty("display", "none");
+		}
+		else{
+			document.getElementById("blockBtn").style.setProperty("display", "none");
+		}
 	}
 
     var startDate = new Date();
