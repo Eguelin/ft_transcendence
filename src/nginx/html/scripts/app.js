@@ -42,6 +42,13 @@ const routes = {
 	"/admin": `https://${hostname.host}/scripts/admin.js`
 }
 
+const friendHashMap = {
+	0 : "#online",
+	1 : "#all",
+	2 : "#pending",
+	3 : "#blocked"
+}
+
 function addPfpUrlToImgSrc(img, path) {
 	if (path != "") {
 		var testImg = new Image();
@@ -301,7 +308,6 @@ window.addEventListener("popstate", (e) => {
 
 function load() {
 	const url = new URL(window.location.href);
-	console.log(url);
 	if (dropDownLang.classList.contains("activeDropDown")) {
 		dropDownLang.classList.remove("activeDropDown");
 		void dropDownLang.offsetWidth;
@@ -559,6 +565,9 @@ const themeMap = {
 }
 
 function switchTheme(theme) {
+	if (theme == "browser"){
+		theme = preferedColorSchemeMedia.matches ? "dark" : "light";
+	}
 	Object.keys(themeMap[theme]).forEach(function (key) {
 		document.documentElement.style.setProperty(key, themeMap[theme][key])
 	})

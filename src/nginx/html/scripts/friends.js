@@ -72,7 +72,6 @@ var template = `
 	</div>
 </div>`
 
-
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -87,11 +86,27 @@ var template = `
 	friendInfo = document.getElementById("friendInfo");
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
-	history.replaceState("","",`https://${hostname.host}/friends`)
+	history.replaceState("","",`https://${hostname.host}/friends${hostname.hash}`)
+	var friendSlideIdx = 0;
+	if (hostname.hash == "#online")
+		friendSlideIdx = 0;
+	else if (hostname.hash == "#all")
+		friendSlideIdx = 1;
+	else if (hostname.hash == "#pending")
+		friendSlideIdx = 2;
+	else if (hostname.hash == "#blocked")
+		friendSlideIdx = 3;
+	else{
+		friendSlideIdx = 0;
+		history.replaceState("","",`https://${hostname.host}/friends#online`)
+	}
+
 
 	setNotifTabIndexes(16);
 
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+	document.getElementById("slideSelectorBg").style.setProperty("left", `${25 * friendSlideIdx}%`);
+	document.getElementById("friendSlides").style.setProperty("left", `-${friendSlideIdx}00vw`);
 
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
@@ -129,6 +144,7 @@ var template = `
 				tmp.animate(move, time);
 				tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
 				setTabIndexes(friendSlideIdx);
+				history.replaceState("","", `https://${hostname.host}/friends${friendHashMap[friendSlideIdx]}`)
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -657,6 +673,7 @@ function friendKeyDownEvent(e) {
 		}
 		tmp.animate(move, time);
 		tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
+		history.replaceState("","", `https://${hostname.host}/friends${friendHashMap[friendSlideIdx]}`)
 		setTabIndexes(friendSlideIdx);
 	}
 }
