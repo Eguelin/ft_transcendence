@@ -353,15 +353,20 @@ def profile_update(request):
 					"lang/FR_FR.json",
 					"lang/IT_IT.json"]
 		language = data['language_pack']
-		if not language or not isinstance(language, str) or language not in languages:
+		if not language or not isinstance(language, str):
 			return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
+		if language not in languages:
+			return JsonResponse({'message': "Invalid language_pack value, should be 'lang/DE_GE.json', 'lang/EN_UK.json', 'lang/FR_FR.json' or 'lang/IT_IT.json"}, status=400)
 		user.profile.language_pack = data['language_pack']
 
 	if ("font_amplifier" in data):
 		valid = True
-		if not isinstance(data['font_amplifier'], (float, int)):
+		size = data['font_amplifier']
+		if not isinstance(size, (float, int)):
 			return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
-		user.profile.font_amplifier = data['font_amplifier']
+		if size < 0.5 or size > 1.5:
+			return JsonResponse({'message': 'Invalid font_amplifier value, should be between 0.5 and 2'}, status=400)
+		user.profile.font_amplifier = size
 
 	if "theme_name" in data:
 		valid = True
