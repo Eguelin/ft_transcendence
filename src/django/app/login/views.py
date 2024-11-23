@@ -553,7 +553,6 @@ def current_user(request):
 		for e in friends_request_list:
 			friend_request_json[e.username] = get_user_preview_json(e)
 		for e in blocked_list:
-
 			blocked_json[e.username] = get_user_preview_json(e)
 		matches = get_user_match_json(
 			request.user,

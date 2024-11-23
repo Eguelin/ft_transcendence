@@ -19,7 +19,7 @@ var template = `
 	document.getElementById("container").innerHTML = template;
 	const inputSearch = document.querySelector("#inputSearch");
 	inputSearchUserContainer.style.setProperty("display", "none");
-	dropDownUserContainer.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
 	inputSearch.focus();

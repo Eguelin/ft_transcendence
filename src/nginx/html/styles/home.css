@@ -31,7 +31,7 @@
 	mask-image: url(../icons/check.svg);
 	background-color: var(--main-text-rgb);
 	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 
 	width: 3rem;
 	height: 3rem;
@@ -48,7 +48,7 @@
 	display: flex;
 	align-items: center;
 	background-color: var(--hover-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 	border: 0.2px solid var(--main-text-rgb);
 	width: unset;
 	margin: 0;

@@ -109,7 +109,7 @@ class Client {
 					this.theme_name = result.theme_name;
 					this.friends = result.friends;
 					this.friend_requests = result.friend_requests;
-					this.blocked_user = result.blocked_user;
+					this.blocked_user = result.blocked_users;
 
 
 					var startDate = new Date();
