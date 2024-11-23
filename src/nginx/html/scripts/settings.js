@@ -135,7 +135,17 @@ var template = `
 
 
 {
-	history.replaceState("","",`https://${hostname.host}/settings`)
+	var slideIdx = 0;
+	const url = new URL(window.location.href);
+	console.log(url.hash)
+	if (url.hash == "#accessibility"){
+		history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
+		slideIdx = 1;
+	}
+	else {
+		history.replaceState("","",`https://${hostname.host}/settings#account`)
+		slideIdx = 0;
+	}
 	document.getElementById("container").innerHTML = template;
 
 	deleteAccountBtn = document.getElementById('deleteAccountBtn');
@@ -158,7 +168,8 @@ var template = `
 	window.onkeydown = settingsKeyDownEvent
 
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .settingsSlideSelector");
-	var slideIdx = 0;
+	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
+	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
 
 	settingsSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
@@ -195,6 +206,12 @@ var template = `
 					document.getElementById("slideSelectorBg").animate(move, time);
 					document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
 				}
+			}
+			if (slideIdx == 0){
+				history.replaceState("","",`https://${hostname.host}/settings#account`)
+			}
+			else {
+				history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
 			}
 		})
 		key.onkeydown = (e) => {
@@ -608,6 +625,12 @@ function settingsKeyDownEvent(e) {
 			];
 			document.getElementById("slideSelectorBg").animate(move, time);
 			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
+		}
+		if (slideIdx == 0){
+			history.replaceState("","",`https://${hostname.host}/settings#account`)
+		}
+		else {
+			history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
 		}
 	}
 }

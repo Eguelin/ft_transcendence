@@ -86,15 +86,16 @@ var template = `
 	friendInfo = document.getElementById("friendInfo");
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
-	history.replaceState("","",`https://${hostname.host}/friends${hostname.hash}`)
+	const url = new URL(window.location.href);
+	history.replaceState("","",`https://${hostname.host}/friends${url.hash}`)
 	var friendSlideIdx = 0;
-	if (hostname.hash == "#online")
+	if (url.hash == "#online")
 		friendSlideIdx = 0;
-	else if (hostname.hash == "#all")
+	else if (url.hash == "#all")
 		friendSlideIdx = 1;
-	else if (hostname.hash == "#pending")
+	else if (url.hash == "#pending")
 		friendSlideIdx = 2;
-	else if (hostname.hash == "#blocked")
+	else if (url.hash == "#blocked")
 		friendSlideIdx = 3;
 	else{
 		friendSlideIdx = 0;
