@@ -630,8 +630,7 @@ function loadUserDashboard(startDate, endDate){
     var splitPath = window.location.href.split('/');
 	(async () => {
 		dashboard = await new Dashboard(startDate, endDate, splitPath[4], client.username);
-		unsetLoader();
-		displayCharts();
+		setTimeout(function(){unsetLoader();displayCharts()}, 500);
 
 		matchObj = dashboard.matches[Object.keys(dashboard.matches)[Object.keys(dashboard.matches).length - 1]] // get matches object of highest date
 
