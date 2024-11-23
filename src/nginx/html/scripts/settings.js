@@ -266,7 +266,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 					try {
 						client = await new Client()
 						if (!client)
-							myReplaceState(`https://${hostname.host}/login`);
+							myReplaceState(`https://${hostname.host}/login#login`);
 					}
 					catch{
 						unsetLoader();
@@ -313,7 +313,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 						try {
 							client = await new Client()
 							if (!client)
-								myReplaceState(`https://${hostname.host}/login`);
+								myReplaceState(`https://${hostname.host}/login#login`);
 						}
 						catch{
 							unsetLoader();
@@ -375,7 +375,7 @@ function deleteRequest(){
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok){
-				myPushState(`https://${hostname.host}/login`);
+				myPushState(`https://${hostname.host}/login#login`);
 			}
 		})
 	}
