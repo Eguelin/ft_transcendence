@@ -47,13 +47,17 @@
 #saveDisplayNameContainer{
 	display: flex;
 	align-items: center;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
-	border: 0.2px solid var(--main-text-rgb);
+	border: 0.2px solid transparent;
 	width: unset;
 	margin: 0;
 }
 
+#saveDisplayNameContainer:focus-within {
+	border-color: var(--main-text-rgb);
+
+}
 #saveDisplayNameContainer .warning, #saveDisplayNameContainer .success{
 	position: absolute;
 }
