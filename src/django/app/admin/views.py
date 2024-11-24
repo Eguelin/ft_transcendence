@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.db import DatabaseError
 import json, os, random
 import login.views

@@ -3,7 +3,7 @@ import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 from transcendence.settings import DEBUG
