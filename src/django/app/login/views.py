@@ -9,6 +9,8 @@ from django.core.exceptions import ValidationError
 from transcendence.settings import DEBUG
 from PIL import Image
 
+NOT_USER = ['nobody', 'deleted', 'blocked']
+
 def getClientId(request):
 	clientId = os.getenv('API_42_PUBLIC')
 	if not clientId:
@@ -191,7 +193,8 @@ def create_deleted_user():
 def create_default_users():
 	create_nps("AI", "defaultAI.gif")
 	create_nps("nobody", "thisman.jpg")
-	create_nps("deleted", "default0.jpg")
+	create_nps("deleted", "defaultDeleted.jpg")
+	create_nps("blocked", "defaultBlocked.jpg")
 	create_nps(os.getenv('DJANGO_ADMIN_USER'), "default0.jpg", os.getenv('DJANGO_ADMIN_PASSWORD'), True)
 
 def create_nps(name, pfp, password=None, staff=False):
@@ -224,6 +227,9 @@ def user_login(request):
 	if not username or not password or not isinstance(username, str) or not isinstance(password, str):
 		return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
 
+	if username in NOT_USER or username == "AI":
+		return JsonResponse({'message': "User not found"}, status=404)
+
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
 
@@ -242,7 +248,7 @@ def user_login(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': 'Invalid credentials'}, status=400)
+		return JsonResponse({'message': "User not found"}, status=404)
 	except DatabaseError:
 		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
@@ -420,26 +426,17 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 			if match.player_one.username == username or match.player_two.username == username:
 				if (max != -1 and total_count >= max):
 					break
-				try:
-					p1_name = match.player_one.username
-					p1_display_name = match.player_one.profile.display_name
-					if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-						p1_name = "deleted"
-						p1_display_name = "deleted"
 
-				except:
-					p1_name = "deleted"
-					p1_display_name = "deleted"
+				if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+					match.player_one = User.objects.get(username="blocked")
+				p1_name = match.player_one.username
+				p1_display_name = match.player_one.profile.display_name
 
-				try:
-					p2_name = match.player_two.username
-					p2_display_name = match.player_two.profile.display_name
-					if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-						p2_name = "deleted"
-						p2_display_name = "deleted"
-				except:
-					p2_name = "deleted"
-					p2_display_name = "deleted"
+				if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+					match.player_two = User.objects.get(username="blocked")
+				p2_name = match.player_two.username
+				p2_display_name = match.player_two.profile.display_name
+
 				date_json[i] = {
 					'type' : 'match',
 					'player_one' : p1_name,
@@ -487,19 +484,15 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 			except:
 				date_json = {}
 			i = 0
-		try:
-			p1_name = match.player_one.username
-			if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-				p1_name = "deleted"
-		except:
-			p1_name = "deleted"
 
-		try:
-			p2_name = match.player_two.username
-			if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-				p2_name = "deleted"
-		except:
-			p2_name = "deleted"
+		if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+			match.player_one = User.objects.get(username="blocked")
+		p1_name = match.player_one.username
+
+		if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+			match.player_two = User.objects.get(username="blocked")
+		p2_name = match.player_two.username
+
 		while (i in date_json):
 			i += 1
 		date_json[i] = {
@@ -606,8 +599,7 @@ def get(request):
 		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
 			return JsonResponse({'message': "can't find user"}, status=403)
 
-		if user.username == "nobody" or \
-			user.username == "deleted":
+		if user.username in NOT_USER:
 			return JsonResponse({'message': "User not found"}, status=404)
 
 		response = get_user_json(request.user, user, startDate, endDate)
@@ -680,6 +672,10 @@ def get_user_id(request):
 
 		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
 			return JsonResponse({'message': 'User blocked you', 'blocked': True}, status=200)
+
+		if user.username in NOT_USER:
+			return JsonResponse({'message': 'User not found'}, status=404)
+
 		return JsonResponse({'id': user.id, 'self_id' : request.user.id, 'blocked': False}, status=200)
 
 	except KeyError:
@@ -828,13 +824,13 @@ def get_tournament(request):
 		}
 		for match in tournament.matches.all():
 			if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				match.player_one = User.objects.get(username="nobody")
+				match.player_one = User.objects.get(username="blocked")
 			p1_name = match.player_one.username
 			p1_pfp = match.player_one.profile.profile_picture
 			p1_display_name = match.player_one.profile.display_name
 
 			if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				match.player_two = User.objects.get(username="nobody")
+				match.player_two = User.objects.get(username="blocked")
 			p2_name = match.player_two.username
 			p2_pfp = match.player_two.profile.profile_picture
 			p2_display_name = match.player_two.profile.display_name
@@ -880,13 +876,13 @@ def get_match(request):
 		match = gameModels.Match.objects.get(pk=id)
 
 		if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-			match.player_one = User.objects.get(username="nobody")
+			match.player_one = User.objects.get(username="blocked")
 		p1_name = match.player_one.username
 		p1_pfp = match.player_one.profile.profile_picture
 		p1_display_name = match.player_one.profile.display_name
 
 		if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-			match.player_two = User.objects.get(username="nobody")
+			match.player_two = User.objects.get(username="blocked")
 		p2_name = match.player_two.username
 		p2_pfp = match.player_two.profile.profile_picture
 		p2_display_name = match.player_two.profile.display_name
