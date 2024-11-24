@@ -11,7 +11,7 @@ var template = `
 	homeBtn404 = document.getElementById("NotFoundBtn");
 
 	homeBtn404.addEventListener("click", (e) => {
-		myPushState(`https://${hostname.host}/home`);
+		myPushState(`https://${hostname.host}/${currentLang}/home`);
 	})
 	homeBtn404.focus();
 	inputSearchUserContainer.style.setProperty("display", "none");
