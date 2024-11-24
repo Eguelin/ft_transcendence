@@ -445,6 +445,10 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 				}
 				loadCurrentLang();
 				document.documentElement.setAttribute("lang", langMap[elem.id]);
+
+				url = new URL(window.location.href);
+				history.replaceState("","",`https://${hostname.host}${url.pathname.replace(currentLang, elem.id)}`);
+				currentLang = elem.id;
 				if (client){
 					fetch('/api/user/update', {
 						method: 'POST',
