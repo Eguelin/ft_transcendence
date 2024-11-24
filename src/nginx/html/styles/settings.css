@@ -160,7 +160,7 @@
 /******** Chrome, Safari, Opera and Edge Chromium styles ********/
 /* slider track */
 #fontSizeRange::-webkit-slider-runnable-track {
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	border-radius: 0.5rem;
 	height: 0.5rem;
 }

@@ -581,6 +581,8 @@ const themeMap = {
 		"--option-hover-text-rgb": "#110026",
 		"--option-text-rgb": "#FDFDFB",
 		"--input-bg-rgb": "#3A3053",
+		"--active-selector-rgb" : "#FDFDFB",
+
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
 	},
@@ -588,9 +590,10 @@ const themeMap = {
 		"--page-bg-rgb": "#222831",
 		"--main-text-rgb": "#00FFF5",
 		"--hover-text-rgb": "#00ADB5",
-		"--option-hover-text-rgb": "#222831",
+		"--option-hover-text-rgb": "#ffbff7",
 		"--option-text-rgb": "#00FFF5",
 		"--input-bg-rgb": "#393E46",
+		"--active-selector-rgb" : "#222831",
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
 	},
@@ -601,6 +604,7 @@ const themeMap = {
 		"--option-hover-text-rgb": "#F5EDED",
 		"--option-text-rgb": "#110026",
 		"--input-bg-rgb": "#FFC6C6",
+		"--active-selector-rgb" : "#110026",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
@@ -608,9 +612,10 @@ const themeMap = {
 		"--page-bg-rgb": "#FFFBF5",
 		"--main-text-rgb": "#7743DB",
 		"--hover-text-rgb": "#C3ACD0",
-		"--option-hover-text-rgb": "#FFFBF5",
+		"--option-hover-text-rgb": "#2E073F",
 		"--option-text-rgb": "#7743DB",
 		"--input-bg-rgb": "#F7EFE5",
+		"--active-selector-rgb" : "#2E073F",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -1893,7 +1898,6 @@ function checkGameSize(){
 			}
 			else{
 				document.querySelector("#game").style.setProperty("rotate", "180deg");
-				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row-reverse");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row-reverse");
 				playerKeyMap = verticalInversedkeyMap;
 				playerTouchMap = verticalInversedkeyMap;
@@ -2012,3 +2016,23 @@ function checkWinnerDisplaySize(){
 }
 
 window.addEventListener("resize", resizeEvent);
+
+
+
+/***
+ *    ______  _____ ______  _   _  _____ 
+ *    |  _  \|  ___|| ___ \| | | ||  __ \
+ *    | | | || |__  | |_/ /| | | || |  \/
+ *    | | | ||  __| | ___ \| | | || | __ 
+ *    | |/ / | |___ | |_/ /| |_| || |_\ \
+ *    |___/  \____/ \____/  \___/  \____/
+ *                                       
+ *                                       
+ */
+
+function rollThemes(timeout = 1000){
+	switchTheme("light");
+	setTimeout(()=>{switchTheme("dark")}, timeout * 1);
+	setTimeout(()=>{switchTheme("high_light")}, timeout * 2);
+	setTimeout(()=>{switchTheme("high_dark")}, timeout * 3);
+}

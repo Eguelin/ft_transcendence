@@ -97,7 +97,7 @@ var template = `
 
 	<div id="settingSlidesContainer">
 		<div id="settingsSlideSelector">
-			<div id="accountSelector" class="settingsSlideSelector activeSelector" tabindex="12">
+			<div id="accountSelector" class="settingsSlideSelector" tabindex="12">
 				<div id="accountSelectorText">Account</div>
 			</div>
 			<div id="accessibilitySelector" class="settingsSlideSelector" tabindex="13">
@@ -169,6 +169,7 @@ var template = `
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .settingsSlideSelector");
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
 	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
+	settingsSlideSelector[slideIdx].classList.add('activeSelector');
 
 	settingsSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
