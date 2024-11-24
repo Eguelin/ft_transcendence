@@ -197,10 +197,10 @@ class Client {
 				document.getElementById("container").innerHTML = template;
 				throw new Error("Error while reaching server");
 			}
+			dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang}.svg)`);
 			if (this.currentLang != currentLang){
 				this.currentLang = currentLang;
 				this.currentLangPack = `lang/${this.currentLang}.json`;
-				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang}.svg)`);
 				fetch('/api/user/update', {
 					method: 'POST',
 					headers: {

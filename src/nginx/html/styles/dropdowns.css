@@ -221,7 +221,7 @@
 	transform-origin: top center;
 	animation: scaleZText 300ms;
 	font-size: 1em;
-	width: fit-content;
+	/*width: fit-content;*/
 	justify-self: center;
 }
 
