@@ -112,7 +112,7 @@ var template = `
 			body: JSON.stringify({ "id": url.searchParams.get("id")}),
 			credentials: 'include'
 		})
-		history.replaceState("","",`https://${hostname.host}/match?id=${url.searchParams.get("id")}`)
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/match?id=${url.searchParams.get("id")}`)
 		const result = await fetchResult.json();
 		if (fetchResult.ok){
 			match = result;
@@ -122,14 +122,14 @@ var template = `
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = match.player_one;
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_one_display_name != match.player_one ? match.player_one_display_name : ""}`;
 			
-			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
-			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_one}`;
+			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_one}`;
+			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_one}`;
 			
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = match.player_two;
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_two_display_name != match.player_two ? match.player_two_display_name : ""}`;
 			
-			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
-			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_two}`;
+			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_two}`;
+			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_two}`;
 
 			if (document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText == "deleted"){
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").classList.add("deletedUser");

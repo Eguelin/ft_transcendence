@@ -138,11 +138,11 @@ var template = `
 	var slideIdx = 0;
 	const url = new URL(window.location.href);
 	if (url.hash == "#accessibility"){
-		history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
 		slideIdx = 1;
 	}
 	else {
-		history.replaceState("","",`https://${hostname.host}/settings#account`)
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
 		slideIdx = 0;
 	}
 	document.getElementById("container").innerHTML = template;
@@ -207,11 +207,11 @@ var template = `
 				}
 			}
 			if (slideIdx == 0){
-				history.replaceState("","",`https://${hostname.host}/settings#account`)
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
 				document.title = langJson['settings'][`account title`];
 			}
 			else {
-				history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
 				document.title = langJson['settings'][`accessibility title`];
 			}
 		})
@@ -284,7 +284,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 					try {
 						client = await new Client()
 						if (!client)
-							myReplaceState(`https://${hostname.host}/login#login`);
+							myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 					}
 					catch{
 						unsetLoader();
@@ -331,7 +331,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 						try {
 							client = await new Client()
 							if (!client)
-								myReplaceState(`https://${hostname.host}/login#login`);
+								myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 						}
 						catch{
 							unsetLoader();
@@ -393,7 +393,7 @@ function deleteRequest(){
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok){
-				myPushState(`https://${hostname.host}/login#login`);
+				myPushState(`https://${hostname.host}/${currentLang}/login#login`);
 			}
 		})
 	}
@@ -435,11 +435,11 @@ document.addEventListener("click", (e) => {
 document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 	elem.addEventListener("click", (e) => {
 		(async() => {
-			currentLang = `lang/${elem.id}.json`;
+			currentLangPack = `lang/${elem.id}.json`;
 			try{
 				if (client){
-					client.currentLang = `lang/${elem.id}.json`;
-					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
+					client.currentLangPack = `lang/${elem.id}.json`;
+					fetchResult = await fetch(`https://${hostname.host}/${currentLangPack}`);
 					content = await fetchResult.json();
 					client.langJson = content;
 				}
@@ -451,7 +451,7 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						body: JSON.stringify({ language_pack: currentLang }),
+						body: JSON.stringify({ language_pack: currentLangPack }),
 						credentials: 'include'
 					})
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
@@ -629,11 +629,11 @@ function settingsKeyDownEvent(e) {
 		}
 		if (slideIdx == 0){
 			document.title = langJson['settings'][`account title`];
-			history.replaceState("","",`https://${hostname.host}/settings#account`)
+			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
 		}
 		else {
 			document.title = langJson['settings'][`accessibility title`];
-			history.replaceState("","",`https://${hostname.host}/settings#accessibility`)
+			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
 		}
 	}
 }

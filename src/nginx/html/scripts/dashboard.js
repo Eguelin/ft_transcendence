@@ -548,7 +548,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 function updateDashboardLang(){
     var splitPath = window.location.href.split('/');
 	if (document.querySelector("#notPlayedPeriod")){
-		document.querySelector("#notPlayedPeriod").innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("${USERNAME}", splitPath[4]);
+		document.querySelector("#notPlayedPeriod").innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("${USERNAME}", splitPath[5]);
 	}
 	
 	if (chartAverage){
@@ -569,7 +569,7 @@ function updateDashboardLang(){
 		chartStats.config._config.data.labels[1] = content["CVloss"];
 		chartStats.update();
 	}	
-	document.title = langJson['dashboard'][`dashboard title`].replace("${USERNAME}", splitPath[4]);
+	document.title = langJson['dashboard'][`dashboard title`].replace("${USERNAME}", splitPath[5]);
 }
 
 var dashboard = null;
@@ -630,7 +630,7 @@ function loadUserDashboard(startDate, endDate){
 
     var splitPath = window.location.href.split('/');
 	(async () => {
-		dashboard = await new Dashboard(startDate, endDate, splitPath[4], client.username);
+		dashboard = await new Dashboard(startDate, endDate, splitPath[5], client.username);
 		setTimeout(function(){unsetLoader();displayCharts()}, 500);
 
 		matchObj = dashboard.matches[Object.keys(dashboard.matches)[Object.keys(dashboard.matches).length - 1]] // get matches object of highest date
@@ -671,7 +671,7 @@ function loadUserDashboard(startDate, endDate){
 		document.querySelectorAll(".resultScoreName").forEach(function (elem){
 			if (!elem.classList.contains("deletedUser")){
 				elem.addEventListener("click", (e) => {
-					myPushState(`https://${hostname.host}/user/${elem.innerHTML}`);	
+					myPushState(`https://${hostname.host}/${currentLang}/user/${elem.innerHTML}`);	
 				})
 				elem.addEventListener("keydown", (e) => {
 					if (e.key == "Enter")

@@ -9,7 +9,7 @@ var template = `
 	document.getElementById("container").innerHTML = template;
 	homeBtn403 = document.getElementById("ForbidenBtn");
 	homeBtn403.addEventListener("click", (e) => {
-		myPushState(`https://${hostname.host}/home`);
+		myPushState(`https://${hostname.host}/${currentLang}/home`);
 	})
 
 	homeBtn403.focus();
