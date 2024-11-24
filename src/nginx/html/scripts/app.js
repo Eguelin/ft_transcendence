@@ -12,7 +12,8 @@ dropDownLangOption = document.querySelectorAll(".dropDownLangOptions");
 notifCenterContainer = document.getElementById("notifCenterContainer")
 
 var currentPage = "";
-var currentLang = "lang/EN_UK.json"
+var currentLangPack = "lang${currentLang}.json";
+var currentLang = "EN_UK";
 var currentTheme = "browser";
 var username = "";
 const hostname = new URL(window.location.href);
@@ -50,6 +51,13 @@ const friendHashMap = {
 	3 : "#blocked"
 }
 
+const availableLang = {
+	"EN_UK" : true,
+	"FR_FR" : true,
+	"IT_IT" : true,
+	"DE_GE" : true,
+}
+
 function addPfpUrlToImgSrc(img, path) {
 	if (path != "") {
 		var testImg = new Image();
@@ -84,7 +92,8 @@ function addPfpUrlToImgSrc(img, path) {
 class Client {
 	username;
 	currentPage;
-	currentLang;
+	currentLangPack;
+	currentLang
 	langJson;
 	pfpUrl;
 	use_browser_theme;
@@ -112,7 +121,8 @@ class Client {
 				const result = await fetchResult.json();
 				if (fetchResult.ok) {
 					this.username = result.username;
-					this.currentLang = result.lang;
+					this.currentLangPack = result.lang;
+					this.currentLang = result.lang.substring(5, 10);
 					this.pfpUrl = result.pfp;
 					this.theme_name = result.theme_name;
 					this.friends = result.friends;
@@ -140,7 +150,7 @@ class Client {
 						notifCenterContainer.classList.add("dnd");
 					document.documentElement.style.setProperty("--font-size-amplifier", this.fontAmplifier);
 
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${result.lang.substring(4, 10)}.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang}.svg)`);
 
 					usernameBtn.innerHTML = result.username;
 
@@ -161,7 +171,7 @@ class Client {
 						body: JSON.stringify({ "is_active": true }),
 						credentials: 'include'
 					})
-					document.querySelector("#myProfileBtn").href = `https://${hostname.host}/user/${this.username}`;
+					document.querySelector("#myProfileBtn").href  = `https://${hostname.host}/${currentLang}/user/${this.username}`;
 				}
 				else if (fetchResult.status == 401)
 					return null
@@ -176,7 +186,20 @@ class Client {
 				document.getElementById("container").innerHTML = template;
 				throw new Error("Error while reaching server");
 			}
-			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLang}`);
+			if (this.currentLang != currentLang){
+				this.currentLang = currentLang;
+				this.currentLangPack = `lang/${this.currentLang}.json`;
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang}.svg)`);
+				fetch('/api/user/update', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({"language_pack": this.currentLangPack }),
+					credentials: 'include'
+				})
+			}
+			const fetchLangResult = await fetch(`https://${hostname.host}/${this.currentLangPack}`);
 			if (fetchLangResult.ok)
 				this.langJson = await fetchLangResult.json()
 			else
@@ -223,7 +246,7 @@ class Client {
 				}
 				else {
 					dropDownUserContainer.style.setProperty("display", "none");
-					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
+					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang}.svg)`);
 
 					currentPage = 'login';
 					search = "/login"
@@ -283,7 +306,7 @@ class Dashboard{
 				})
 				this.clientMatches = await clientMatchesFetch.json();
 				this.clientMatches = this.clientMatches.matches;
-				history.replaceState("","",`https://${hostname.host}/dashboard/${username}`)
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/dashboard/${username}`)
 			}
 			catch{
 				var template = `
@@ -309,6 +332,16 @@ window.addEventListener("popstate", (e) => {
 
 function load() {
 	const url = new URL(window.location.href);
+	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
+	var path = url.pathname.substring(lang.length + 1);
+	if (!availableLang[lang]){
+		currentLangPack = `lang${currentLang}.json`
+		currentLang = "EN_UK";
+	}
+	else{
+		currentLangPack = `lang/${lang}.json`
+		currentLang = lang;
+	}
 	if (dropDownLang.classList.contains("activeDropDown")) {
 		dropDownLang.classList.remove("activeDropDown");
 		void dropDownLang.offsetWidth;
@@ -337,7 +370,7 @@ function load() {
 			},
 			credentials: 'include'
 		})
-		history.replaceState("", "", `https://${hostname.host}/login#login`)
+		history.replaceState(`https://${hostname.host}/${currentLang}/login#login`)
 	}
 	if (currentPage == "settings") {
 		window.onkeydown = null
@@ -353,13 +386,13 @@ function load() {
 	}
 
 	if (client)
-		client.loadPage(url.pathname)
+		client.loadPage(path)
 	else {
 		setLoader();
 		currentPage = "login";
 		dropDownUserContainer.style.setProperty("display", "none");
-		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang.substring(4, 10)}.svg)`);
-		history.replaceState("", "", `https://${hostname.host}/login${url.hash}`);
+		dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${currentLang}.svg)`);
+		history.replaceState("","", `https://${hostname.host}/${currentLang}/login${url.hash}`);
 
 
 		document.getElementById("script").remove();
@@ -402,10 +435,10 @@ function handleToken() {
 								preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 							}
 							if (!client)
-								myReplaceState(`https://${hostname.host}/login${hostname.hash}`);
+								myReplaceState(`https://${hostname.host}/${currentLang}/login${hostname.hash}`);
 							else {
 								friendUpdate();
-								myReplaceState(`https://${hostname.host}/home`);
+								myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 							}
 						}
 						catch {
@@ -417,7 +450,7 @@ function handleToken() {
 					response.json().then(data => {
 						unsetLoader()
 						popUpError(data.message || "Error API 42 Invalid key or API down");
-						myReplaceState(`https://${hostname.host}/login#login`);
+						myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 					})
 				}
 			}).catch(error => console.error('Error:', error));
@@ -430,10 +463,10 @@ function handleToken() {
 			try {
 				client = await new Client();
 				if (!client)
-					myReplaceState(`https://${hostname.host}/login${hostname.hash}`);
+					myReplaceState(`https://${hostname.host}/${currentLang}/login${hostname.hash}`);
 				else if (url.pathname == "" || url.pathname == "/") {
 					friendUpdate();
-					myReplaceState(`https://${hostname.host}/home`);
+					myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 				}
 				else {
 					load();
@@ -446,7 +479,8 @@ function handleToken() {
 					preferedColorSchemeMedia.addEventListener('change', browserThemeEvent);
 				}
 			}
-			catch {
+			catch (error){
+				console.error(error);
 				unsetLoader();
 			}
 		})()
@@ -481,6 +515,16 @@ function isMobile(){
 }
 
 window.addEventListener('load', (e) => {
+	const url = new URL(window.location.href);
+	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
+	if (!availableLang[lang]){
+		currentLangPack = `lang${currentLang}.json`
+		currentLang = "EN_UK";
+	}
+	else{
+		currentLangPack = `lang/${lang}.json`
+		currentLang = lang;
+	}
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
 	if (isMobile()){
@@ -513,7 +557,7 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/home`);
+	myPushState(`https://${hostname.host}/${currentLang}/home`);
 	friendUpdate();
 })
 
@@ -662,7 +706,7 @@ function ft_create_element(element_name, map) {
 inputSearchUser.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
 		query = inputSearchUser.value.trim();
-		myPushState(`https://${hostname.host}/search?query=${query}`);
+		myPushState(`https://${hostname.host}/${currentLang}/search?query=${query}`);
 	}
 })
 
@@ -742,11 +786,11 @@ const langMap = {
 dropDownLangOption.forEach(function (button) {
 	button.addEventListener("click", (e) => {
 		(async () => {
-			currentLang = `lang/${button.id}.json`;
+			currentLangPack = `lang/${button.id}.json`;
 			try {
 				if (client) {
-					client.currentLang = `lang/${button.id}.json`;
-					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
+					client.currentLangPack = `lang/${button.id}.json`;
+					fetchResult = await fetch(`https://${hostname.host}/${currentLangPack}`);
 					content = await fetchResult.json();
 					client.langJson = content;
 				}
@@ -758,7 +802,7 @@ dropDownLangOption.forEach(function (button) {
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						body: JSON.stringify({ language_pack: currentLang }),
+						body: JSON.stringify({ language_pack: currentLangPack }),
 						credentials: 'include'
 					})
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
@@ -853,7 +897,7 @@ function unsetLoader() {
 }
 
 document.querySelector("#mobileSearchBtn").addEventListener("click", function() {
-	myPushState(`https://${hostname.host}/search`);
+	myPushState(`https://${hostname.host}/${currentLang}/search`);
 })
 
 function getWindowWidth() {
@@ -1279,9 +1323,9 @@ async function loadCurrentLang(){
 	if (client && client.langJson){
 		langJson = client.langJson;
 	}
-	else if (currentLang != undefined){
-		const fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
-		const svgPath = `https://${hostname.host}/icons/${currentLang.substring(5, 10)}.svg`;
+	else if (currentLangPack != undefined){
+		const fetchResult = await fetch(`https://${hostname.host}/${currentLangPack}`);
+		const svgPath = `https://${hostname.host}/icons/${currentLang}.svg`;
 		if (fetchResult.ok){
 			try{
 				langJson = await fetchResult.json()
@@ -1293,8 +1337,8 @@ async function loadCurrentLang(){
 		}
 		else {
 			popUpError(`Could not load ${currentLang} language pack`);
-			currentLang = "lang/EN_UK.json";
-			const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
+			currentLangPack = "lang${currentLang}.json";
+			const fetchResult = await fetch(`https://${hostname.host}/lang${currentLang}.json`);
 			if (fetchResult.ok){
 				try {
 					langJson = await fetchResult.json();
@@ -1308,12 +1352,12 @@ async function loadCurrentLang(){
 		}
 	}
 	if (langJson == null) {
-		currentLang = "lang/EN_UK.json";
-		const fetchResult = await fetch(`https://${hostname.host}/lang/EN_UK.json`);
+		currentLangPack = "lang${currentLang}.json";
+		const fetchResult = await fetch(`https://${hostname.host}/lang${currentLang}.json`);
 		if (fetchResult.ok){
 			try {
 				langJson = await fetchResult.json();
-				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/EN_UK.svg)`);
+				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons${currentLang}.svg)`);
 			}
 			catch {
 				popUpError(`Could not load ${currentLang} language pack`);
@@ -1336,35 +1380,47 @@ async function loadCurrentLang(){
 		content = langJson[currentPage];
 		if (content != null && content != undefined) {
 			Object.keys(content).forEach(function (key) {
-				instances = document.querySelectorAll(key);
-				if (key.startsWith('#input')){
-					for (var i=0; i< Object.keys(instances).length; i++)
-						instances[i].placeholder = content[key];
+				try {
+					instances = document.querySelectorAll(key);
+					if (key.startsWith('#input')){
+						for (var i=0; i< Object.keys(instances).length; i++)
+							instances[i].placeholder = content[key];
+					}
+					else if (key.startsWith("aria")){
+						document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+							elem.setAttribute("aria-label", content[key]);
+						})
+						if (currentPage == 'friends')
+							updateFriendsAriaLabel(key.substring(4), content[key]);
+						if (currentPage == 'search')
+							updateSearchAriaLabel(key.substring(4), content[key]);
+						if (currentPage == "user" || currentPage == "home")
+							updateUserAriaLabel(key.substring(4), content[key]);
+					}
+					else{
+						document.querySelectorAll(key).forEach( function (elem) {
+							elem.innerHTML = content[key];
+						})
+					}
 				}
-				else if (key.startsWith("aria")){
-					document.querySelectorAll(key.substring(4)).forEach( function (elem) {
-						elem.setAttribute("aria-label", content[key]);
-					})
-					if (currentPage == 'friends')
-						updateFriendsAriaLabel(key.substring(4), content[key]);
-					if (currentPage == 'search')
-						updateSearchAriaLabel(key.substring(4), content[key]);
-					if (currentPage == "user" || currentPage == "home")
-						updateUserAriaLabel(key.substring(4), content[key]);
-				}
-				else{
-					document.querySelectorAll(key).forEach( function (elem) {
-						elem.innerHTML = content[key];
-					})
-				}
+				catch{}
 			});
-			if (currentPage == 'user') {updateUserLang();}
-			if (currentPage == 'dashboard') {updateDashboardLang();}
-			if (currentPage == "game") {
-				document.title = langJson['game'][`game title`].replace("${MODE}", url.searchParams.get("mode"));
+			try {
+				if (currentPage == 'user') {updateUserLang();}
+				if (currentPage == 'dashboard') {updateDashboardLang();}
+				if (currentPage == "game") {
+					document.title = langJson['game'][`game title`].replace("${MODE}", url.searchParams.get("mode"));
+				}
+				if (currentPage == "search")
+					document.title = client.langJson['search'][`search title`].replace("${SEARCH}", "");
+				if (currentPage == "home"){
+					document.querySelector("#playBtn1v1").href=`https://${hostname.host}/${currentLang}/game?mode=remote`;
+					document.querySelector("#playBtnLocal").href=`https://${hostname.host}/${currentLang}/game?mode=local`;
+					document.querySelector("#playBtnAI").href=`https://${hostname.host}/${currentLang}/game?mode=ai`;
+					document.querySelector("#playTournament").href=`https://${hostname.host}/${currentLang}/game?mode=tournament`;
+				}
 			}
-			if (currentPage == "search")
-				document.title = client.langJson['search'][`search title`].replace("${SEARCH}", "");
+			catch{}
 		}
 		content = langJson['index'];
 		if (content != null || content != undefined) {
@@ -1395,6 +1451,10 @@ async function loadCurrentLang(){
 						instances[i].innerHTML = content[key];
 				}
 			});
+			document.querySelector("#goHomeButton").href = `/${currentLang}/home`;
+			document.querySelector("#friendsBtn").href = `/${currentLang}/friends`;
+			document.querySelector("#settingsBtn").href = `/${currentLang}/settings`;
+			document.querySelector("#logOutBtn").href = `/${currentLang}/login`;
 		}
 	}
 }
@@ -1444,7 +1504,7 @@ function createMatchResumeContainer(match, username, displayName) {
 			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreUserName.href = `https://${hostname.host}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_one : match.player_two}`
+			scoreUserName.href  = `https://${hostname.host}/${currentLang}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_one : match.player_two}`
 			scoreUserName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreUserName.innerText)}`);
 		}
 
@@ -1454,7 +1514,7 @@ function createMatchResumeContainer(match, username, displayName) {
 			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
 		}
 		else{
-			scoreOpponentName.href = `https://${hostname.host}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_two : match.player_one}`
+			scoreOpponentName.href  = `https://${hostname.host}/${currentLang}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_two : match.player_one}`
 			scoreOpponentName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreOpponentName.innerText)}`);
 		}
 
@@ -1480,13 +1540,13 @@ function createMatchResumeContainer(match, username, displayName) {
 
 		matchContainer.appendChild(result);
 		matchContainer.appendChild(scoreContainer);
-		matchContainer.href = `https://${hostname.host}/match?id=${match.id}`;
+		matchContainer.href  = `https://${hostname.host}/${currentLang}/match?id=${match.id}`;
 	}
 	else if (match.type == "tournament"){
 		result.classList.add("tournament");
 		result.innerHTML = client.langJson['user']['.tournament'];
 
-		matchContainer.href = `https://${hostname.host}/tournament?id=${match.id}`;
+		matchContainer.href  = `https://${hostname.host}/${currentLang}/tournament?id=${match.id}`;
 
 		matchContainer.appendChild(result);
 	}
@@ -1719,11 +1779,13 @@ function checkFriendPageSize(){
 
 function checkMatchResumeSize(){
 	var recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
+	if (!recentMatchHistoryContainer)
+		return;
 	var matches = recentMatchHistoryContainer.querySelectorAll(".matchDescContainer");
 	var baseWidth = 16
 	var i = 0;
 	ch = 1
-	if (matches.length > 0){
+	if (matches && matches.length > 0){
 		if (!(isPortrait() && isMobile())){
 			while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
 				i++;
@@ -1788,7 +1850,7 @@ const WASDInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "
 
 
 function checkGameSize(){
-	if (document.querySelector("#tournamentContainer #tournament").style.getPropertyValue("display") != "none"){
+	if (document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
 	if (!document.querySelector("#gameContainer").classList.contains("local")){

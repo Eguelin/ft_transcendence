@@ -402,7 +402,7 @@ function setTournamentTreeValue(is_finished){
 							document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['display_name'];
 						}
 						if (is_finished)
-							document.querySelector(`${selector} .username`).href = `https://${hostname.host}/user/${tournament[round][matchNumber][player]['username']}`;
+							document.querySelector(`${selector} .username`).href  = `https://${hostname.host}/${currentLang}/user/${tournament[round][matchNumber][player]['username']}`;
 						if (tournament[round][matchNumber][player]['score'] != null){
 							document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
 							document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
@@ -417,7 +417,7 @@ function setTournamentTreeValue(is_finished){
 					}
 				}
 				else{
-					document.querySelector(`${positionMap[round]}${positionMap[matchNumber]}`).href = `https://${hostname.host}/match?id=${tournament[round][matchNumber][player]}`;
+					document.querySelector(`${positionMap[round]}${positionMap[matchNumber]}`).href  = `https://${hostname.host}/${currentLang}/match?id=${tournament[round][matchNumber][player]}`;
 
 				}
 			})
@@ -622,7 +622,7 @@ function game() {
 
 	var tournamentContainer = document.getElementById("tournamentContainer");
 	var gameContainer = document.getElementById("gameContainer");
-	if (url.pathname.startsWith("/game")){
+	if (currentPage == "game"){
 		document.querySelector("#subtitle").innerText = client.langJson['game'][url.searchParams.get("mode")];
 		const mode = url.searchParams.get("mode");
 		const socket = new WebSocket("/ws/game/");
@@ -647,7 +647,7 @@ function game() {
 			document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 //			document.querySelector("#controlerSlide").style.setProperty("display", "flex");
 		}
-		history.replaceState("","",`https://${hostname.host}/game?mode=${mode}`)
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/game?mode=${mode}`)
 
 		if (mode == "local"){
 			document.querySelector("#gameContainer").classList.add("local");
@@ -687,7 +687,7 @@ function game() {
 			if (data.type === "error"){
 				popUpError(data.message);
 				cleanup();
-				myPushState(`https://${hostname.host}/home`);
+				myPushState(`https://${hostname.host}/${currentLang}/home`);
 			}
 			if (data.type === "game_init") {
 				document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay");
@@ -1009,7 +1009,7 @@ function game() {
 		function keydownExitEventListener(event){
 			if (event.key == "Escape"){
 				cleanup();
-				myPushState(`https://${hostname.host}/home`);
+				myPushState(`https://${hostname.host}/${currentLang}/home`);
 				document.querySelectorAll("#winContainer, #waitingContainer").forEach(function (elem){
 					elem.remove();
 				})
@@ -1019,7 +1019,7 @@ function game() {
 		function clickExitEventListener(event){
 			if (event.target.id == "winBlur"){
 				cleanup();
-				myPushState(`https://${hostname.host}/home`);
+				myPushState(`https://${hostname.host}/${currentLang}/home`);
 				document.querySelectorAll("#winContainer, #waitingContainer").forEach(function (elem){
 					elem.remove();
 				})
@@ -1037,7 +1037,7 @@ function game() {
 			`
 			container.querySelector("#quitWaitBtn").onclick = function(){
 				cleanup()
-				myPushState(`https://${hostname.host}/home`);				
+				myPushState(`https://${hostname.host}/${currentLang}/home`);				
 			};
 			document.body.appendChild(container);
 			window.addEventListener("keydown", keydownExitEventListener);
@@ -1105,7 +1105,7 @@ function game() {
 			window.addEventListener("click", clickExitEventListener);
 		}
 	}
-	else if (url.pathname.startsWith("/tournament")){
+	else if (currentPage == "tournament"){
 		document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentSubtitle'];
 		(async () => {
 			const fetchResult = await fetch('/api/user/get_tournament', {
@@ -1116,7 +1116,7 @@ function game() {
 				body: JSON.stringify({ "id": url.searchParams.get("id")}),
 				credentials: 'include'
 			})
-		history.replaceState("","",`https://${hostname.host}/tournament?id=${url.searchParams.get("id")}`)	
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/tournament?id=${url.searchParams.get("id")}`)	
 		const result = await fetchResult.json();
 			if (fetchResult.ok){
 				tournament = result;
