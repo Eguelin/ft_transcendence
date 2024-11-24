@@ -606,6 +606,10 @@ def get(request):
 		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
 			return JsonResponse({'message': "can't find user"}, status=403)
 
+		if user.username == "nobody" or \
+			user.username == "deleted":
+			return JsonResponse({'message': "User not found"}, status=404)
+
 		response = get_user_json(request.user, user, startDate, endDate)
 
 		return JsonResponse(response, status=200)
@@ -614,7 +618,7 @@ def get(request):
 	except (KeyError, ValueError):
 		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': "can't find user"}, status=404)
+		return JsonResponse({'message': "User not found"}, status=404)
 	except DatabaseError:
 		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
@@ -640,8 +644,13 @@ def search_by_username(request):
 			return JsonResponse({}, status=200)
 
 		for user in query_users:
-			if not (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				users_json[user.username] = get_user_preview_json(user)
+			if user.profile.blocked_users.filter(pk=request.user.pk).exists() or \
+				user.username == request.user.username or \
+				user.username == "nobody" or \
+				user.username == "deleted":
+				continue
+
+			users_json[user.username] = get_user_preview_json(user)
 
 		return JsonResponse(users_json, status=200)
 
