@@ -172,6 +172,17 @@ class Client {
 						credentials: 'include'
 					})
 					document.querySelector("#myProfileBtn").href  = `https://${hostname.host}/${currentLang}/user/${this.username}`;
+
+					const url = new URL(window.location.href);
+					var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
+					if (!availableLang[lang]){
+						currentLangPack = `lang${currentLang}.json`
+						currentLang = this.currentLang;
+					}
+					else{
+						currentLangPack = `lang/${lang}.json`
+						currentLang = lang;
+					}
 				}
 				else if (fetchResult.status == 401)
 					return null
@@ -335,8 +346,14 @@ function load() {
 	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
 	var path = url.pathname.substring(lang.length + 1);
 	if (!availableLang[lang]){
-		currentLangPack = `lang${currentLang}.json`
-		currentLang = "EN_UK";
+		if (!client){
+			currentLangPack = `lang/EN_UK.json`
+			currentLang = "EN_UK";
+		}
+		else{
+			currentLangPack = client.currentLangPack
+			currentLang = client.currentLang;
+		}
 	}
 	else{
 		currentLangPack = `lang/${lang}.json`
@@ -515,16 +532,6 @@ function isMobile(){
 }
 
 window.addEventListener('load', (e) => {
-	const url = new URL(window.location.href);
-	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
-	if (!availableLang[lang]){
-		currentLangPack = `lang${currentLang}.json`
-		currentLang = "EN_UK";
-	}
-	else{
-		currentLangPack = `lang/${lang}.json`
-		currentLang = lang;
-	}
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
 	if (isMobile()){
