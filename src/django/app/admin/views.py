@@ -5,6 +5,8 @@ import json, os, random
 import login.views
 import game.models as customModels
 
+NOT_USER = ['nobody', 'AI', 'deleted', 'blocked']
+
 def generate_unique_username(base_username):
 	username = base_username
 	counter = 1
@@ -36,6 +38,9 @@ def remove_user(request):
 
 		if not username or not isinstance(username, str):
 			return JsonResponse({'message': 'Invalid Data'}, status=400)
+
+		if username in NOT_USER:
+			return JsonResponse({'message': 'Cannot delete this user'}, status=400)
 
 		User.objects.get(username=username).delete()
 
