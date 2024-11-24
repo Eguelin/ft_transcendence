@@ -796,6 +796,9 @@ dropDownLangOption.forEach(function (button) {
 				}
 				loadCurrentLang();
 				document.documentElement.setAttribute("lang", langMap[button.id]);
+				url = new URL(window.location.href);
+				history.replaceState("","",`https://${hostname.host}${url.pathname.replace(currentLang, button.id)}`);
+				currentLang = button.id;
 				if (client) {
 					fetch('/api/user/update', {
 						method: 'POST',
