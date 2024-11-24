@@ -157,7 +157,7 @@
 
 #pushNotif{
 	color: var(--main-text-rgb);
-	background: var(--hover-text-rgb);
+	background: var(--input-bg-rgb);
 	width: 1rem;
 	height: 1rem;
 	padding: 1rem;
@@ -369,7 +369,7 @@
 
 #notifCenter{
 	display: none;
-    background: var(--option-hover-text-rgb);
+    background: var(--page-bg-rgb);
 	overflow-y: auto;
 }
 
