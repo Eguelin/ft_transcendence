@@ -258,7 +258,7 @@
 	width: fit-content;
 	padding: 1ch;
 	position: relative;
-	border: .5px solid var(--match-border-rgb);
+	border: .5px solid var(--border-rgb);
 	background-color: var(--contest-match-bg-rgb);
 }
 
@@ -475,7 +475,7 @@
 	font-size: 1em;
 	flex-direction: row;
 	background: var(--match-bg-rgb);
-	border: 2px solid var(--match-border-rgb);
+	border: 2px solid var(--border-rgb);
 	box-sizing: border-box;
 	border-bottom: 0;
 }
