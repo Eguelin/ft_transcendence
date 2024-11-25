@@ -1,5 +1,5 @@
 homeBtn = document.getElementById("goHomeButton");
-swichTheme = document.getElementById("themeButton");
+switchThemeBtn = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
 inputSearchUserContainer = document.getElementById("inputSearchUserContainer");
 usernameBtn = document.getElementById("usernameBtn");
@@ -578,10 +578,14 @@ const themeMap = {
 		"--page-bg-rgb": "#110026",
 		"--main-text-rgb": "#FDFDFB",
 		"--hover-text-rgb": "#3A3053",
-		"--option-hover-text-rgb": "#110026",
+		"--option-hover-rgb": "#110026",
 		"--option-text-rgb": "#FDFDFB",
 		"--input-bg-rgb": "#3A3053",
+		"--input-border-rgb": "#FDFDFB",
+		"--match-bg-rgb": "#3A3053",
+		"--match-border-rgb": "#FDFDFB00",
 		"--active-selector-rgb" : "#FDFDFB",
+		"--notif-center-border-rgb" : "#FDFDFB",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -590,10 +594,14 @@ const themeMap = {
 		"--page-bg-rgb": "#222831",
 		"--main-text-rgb": "#00FFF5",
 		"--hover-text-rgb": "#00ADB5",
-		"--option-hover-text-rgb": "#ffbff7",
+		"--option-hover-rgb": "#ffbff7",
 		"--option-text-rgb": "#00FFF5",
 		"--input-bg-rgb": "#393E46",
+		"--input-border-rgb": "#00FFF5",
+		"--match-bg-rgb": "#393E4600",
+		"--match-border-rgb": "#00FFF5",
 		"--active-selector-rgb" : "#222831",
+		"--notif-center-border-rgb" : "#00FFF5",
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
 	},
@@ -601,10 +609,14 @@ const themeMap = {
 		"--page-bg-rgb": "#F5EDED",
 		"--main-text-rgb": "#110026",
 		"--hover-text-rgb": "#FFC6C6",
-		"--option-hover-text-rgb": "#F5EDED",
+		"--option-hover-rgb": "#F5EDED",
 		"--option-text-rgb": "#110026",
 		"--input-bg-rgb": "#FFC6C6",
+		"--input-border-rgb": "#110026",
+		"--match-bg-rgb": "#FFC6C6",
+		"--match-border-rgb": "#11002600",
 		"--active-selector-rgb" : "#110026",
+		"--notif-center-border-rgb" : "#110026",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
@@ -612,10 +624,14 @@ const themeMap = {
 		"--page-bg-rgb": "#FFFBF5",
 		"--main-text-rgb": "#7743DB",
 		"--hover-text-rgb": "#C3ACD0",
-		"--option-hover-text-rgb": "#2E073F",
+		"--option-hover-rgb": "#2E073F",
 		"--option-text-rgb": "#7743DB",
 		"--input-bg-rgb": "#F7EFE5",
+		"--input-border-rgb": "#7743DB",
+		"--match-bg-rgb": "#F7EFE500",
+		"--match-border-rgb": "#7743DB",
 		"--active-selector-rgb" : "#2E073F",
+		"--notif-center-border-rgb" : "#7743DB",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -631,7 +647,17 @@ function switchTheme(theme) {
 	if (client) {
 		client.mainTextRgb = themeMap[theme]["--main-text-rgb"];
 	}
-
+	if (client) {
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ "theme_name": theme}),
+			credentials: 'include'
+		})
+		client.use_browser_theme = false;
+	}
 	document.documentElement.style.setProperty("--is-dark-theme", themeMap[theme]["is-dark"]);
 	if (document.getElementById("themeButton"))
 		document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}${themeMap[theme]["svg-path"]})`;
@@ -672,34 +698,23 @@ function switchTheme(theme) {
 	}
 }
 
-swichTheme.addEventListener("click", () => {
+switchThemeBtn.addEventListener("click", () => {
 	var theme_name = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? 'light' : 'dark';
 	currentTheme = theme_name;
-	if (client) {
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ theme_name: theme_name }),
-			credentials: 'include'
-		})
-		client.use_browser_theme = false;
-	}
 	use_browser_theme = false;
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent)
 	switchTheme(theme_name);
-	swichTheme.blur();
+	switchThemeBtn.blur();
 })
 
 function browserThemeEvent(event) {
 	switchTheme(event.matches == 1 ? 'dark' : 'light');
 }
 
-swichTheme.addEventListener("keydown", (e) => {
+switchThemeBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
-		swichTheme.click();
-		swichTheme.focus();
+		switchThemeBtn.click();
+		switchThemeBtn.focus();
 	}
 })
 
@@ -1492,7 +1507,7 @@ function setNotifTabIndexes(tabIdx){
 }
 
 function createMatchResumeContainer(match, username, displayName) {
-	matchContainer = ft_create_element("a", {"class" : "matchDescContainer"});
+	matchContainer = ft_create_element("a", {"class" : "matchDescContainer", "tabIndex" : "-1"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
 

@@ -84,7 +84,7 @@
 }
 
 #confirmPfpBtn:hover, #confirmPfpBtn:focus{
-	color: var(--option-hover-text-rgb);
+	color: var(--option-hover-rgb);
 }
 
 
