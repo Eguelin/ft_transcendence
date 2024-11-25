@@ -112,7 +112,7 @@ var template = `
 			body: JSON.stringify({ "id": parseInt(url.searchParams.get("id")) }),
 			credentials: 'include'
 		})
-		history.replaceState("","",`https://${hostname.host}/match?id=${url.searchParams.get("id")}`)
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/match?id=${url.searchParams.get("id")}`)
 		const result = await fetchResult.json();
 		if (fetchResult.ok){
 			match = result;
@@ -122,14 +122,14 @@ var template = `
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = match.player_one;
 			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_one_display_name != match.player_one ? match.player_one_display_name : ""}`;
 
-			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_one}`;
-			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_one}`;
+			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_one}`;
+			document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerDisplayName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_one}`;
 
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = match.player_two;
 			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").innerText = `${match.player_two_display_name != match.player_two ? match.player_two_display_name : ""}`;
 
-			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").href = `https://${hostname.host}/user/${match.player_two}`;
-			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").href = `https://${hostname.host}/user/${match.player_two}`;
+			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_two}`;
+			document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerDisplayName").href  = `https://${hostname.host}/${currentLang}/user/${match.player_two}`;
 
 			if (document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText == "deleted"){
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").classList.add("deletedUser");
@@ -203,74 +203,6 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 	matchInfoContainer.appendChild(matchInfoGraph);
 	playerOneInfoGraphContainer.appendChild(playerOneInfoGraph);
 	playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
-
-	const getOrCreateLegendList = (chart, id) => {
-		const legendContainer = document.getElementById(id);
-		let listContainer = legendContainer.querySelector('ul');
-
-		if (!listContainer) {
-		  listContainer = document.createElement('ul');
-		  listContainer.className = "legendContainer"
-
-		  legendContainer.appendChild(listContainer);
-		}
-
-		return listContainer;
-	};
-
-	const htmlLegendPlugin = {
-		id: 'htmlLegend',
-		afterUpdate(chart, args, options) {
-		  const ul = getOrCreateLegendList(chart, options.containerID);
-
-		  // Remove old legend items
-		  while (ul.firstChild) {
-			ul.firstChild.remove();
-		  }
-
-		  // Reuse the built-in legendItems generator
-		  const items = chart.options.plugins.legend.labels.generateLabels(chart);
-
-		  items.forEach(item => {
-			const li = document.createElement('li');
-			li.className = "legendElementContainer"
-
-			li.onclick = () => {
-			  const {type} = chart.config;
-			  if (type === 'pie' || type === 'doughnut') {
-				// Pie and doughnut charts only have a single dataset and visibility is per item
-				chart.toggleDataVisibility(item.index);
-			  } else {
-				chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
-			  }
-			  chart.update();
-			};
-
-			// Color box
-			const boxSpan = document.createElement('span');
-			boxSpan.style.background = item.fillStyle;
-			boxSpan.style.borderColor = item.strokeStyle;
-			boxSpan.style.borderWidth = item.lineWidth + 'px';
-			boxSpan.style.display = 'inline-block';
-			boxSpan.style.flexShrink = 0;
-			boxSpan.style.height = '20px';
-			boxSpan.style.marginRight = '10px';
-			boxSpan.style.width = '20px';
-
-			// Text
-			const textContainer = document.createElement('p');
-			textContainer.className = "legendTextContainer"
-			textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
-
-			const text = document.createTextNode(item.text);
-			textContainer.appendChild(text);
-
-			li.appendChild(boxSpan);
-			li.appendChild(textContainer);
-			ul.appendChild(li);
-		  });
-		}
-	  };
 
 	if (matchInfoChart){
 		if (matchInfoChart instanceof Chart)

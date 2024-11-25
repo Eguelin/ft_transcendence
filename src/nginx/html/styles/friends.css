@@ -167,7 +167,7 @@
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 	font-size: 2rem;
 }
 

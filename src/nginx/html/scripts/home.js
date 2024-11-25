@@ -31,7 +31,7 @@ var template = `
 	notifCenterContainer.style.setProperty("display", "flex");
 	displayNameInput = document.querySelector("#inputChangeDisplayName")
 
-	history.replaceState("","",`https://${hostname.host}/home`)
+	history.replaceState("","",`https://${hostname.host}/${currentLang}/home`)
 	if (client){
 		recentMatchHistoryContainer = document.getElementById("recentMatchHistory");
 		displayNameInput.placeholder = client.displayName;
@@ -147,7 +147,7 @@ var template = `
 		}
 	}
 	else
-		myReplaceState(`https://${hostname.host}/login`);
+		myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 
 		
 }

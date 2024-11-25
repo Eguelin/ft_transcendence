@@ -347,7 +347,7 @@ def profile_update(request):
 	if ("language_pack" in data):
 		valid = True
 		languages = ["lang/DE_GE.json",
-					"lang/EN_UK.json",
+					"lang${currentLang}.json",
 					"lang/FR_FR.json",
 					"lang/IT_IT.json"]
 		language = data['language_pack']

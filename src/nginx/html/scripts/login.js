@@ -57,10 +57,17 @@ var template = `
 `
 
 {
-	history.replaceState("","",`https://${hostname.host}/login`)
+	const url = new URL(window.location.href);
+	if (url.hash == "#register"){
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`)
+		slideIdx = 1;
+	}
+	else {
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`)
+		slideIdx = 0;
+	}
 	window.onkeydown = loginKeyDownEvent;
 	document.getElementById("container").innerHTML = template;
-	slideIdx = 0;
 
 	if (client){
 		fetch('/api/user/logout', {
@@ -98,6 +105,8 @@ var template = `
 	for (i = 0; i < slides.length; i++)
 		slides[i].style.display = "none";
 	slides[slideIdx].style.display = "flex";
+	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
+
 
 	loginSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
@@ -109,6 +118,14 @@ var template = `
 					slides[i].style.display = "none";
 				slides[slideIdx].style.display = "flex";
 				loginSlideSelector[slideIdx].classList.add('activeSelector');
+				if (slideIdx == 1){
+					history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`);
+					document.title = langJson['login'][`register title`];
+				}
+				else{
+					history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`);
+					document.title = langJson['login'][`login title`];
+				}
 
 				const time = {
 					duration: 300,
@@ -251,12 +268,12 @@ var template = `
 									if (client == null){
 										slideIdx = 0;
 										window.onkeydown = null
-										myReplaceState(`https://${hostname.host}/login`);
+										myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 									}
 									else{
 										slideIdx = 0;
 										window.onkeydown = null
-										myReplaceState(`https://${hostname.host}/home`);
+										myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 										friendUpdate();
 									}
 								}
@@ -328,7 +345,7 @@ var template = `
 			if (registerBtn.previousElementSibling)
 				registerBtn.previousElementSibling.remove();
 
-			const data = {username: username, password: pw, 'lang': currentLang, theme_name: currentTheme};
+			const data = {username: username, password: pw, 'lang': currentLangPack, theme_name: currentTheme};
 			fetch('/api/user/create', {
 				method: 'POST',
 				headers: {
@@ -353,12 +370,12 @@ var template = `
 								if (client == null){
 									slideIdx = 1;
 									window.onkeydown = null
-									myReplaceState(`https://${hostname.host}/login`);
+									myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 								}
 								else{
 									slideIdx = 0;
 									window.onkeydown = null
-									myReplaceState(`https://${hostname.host}/home`);
+									myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 									friendUpdate();
 								}
 							}
@@ -423,5 +440,14 @@ function loginKeyDownEvent(e) {
 		}
 		slides[slideIdx].style.display = "flex";
 		loginSlideSelector[slideIdx].focus();
+
+		if (slideIdx == 1){
+			history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`);
+			document.title = langJson['login'][`register title`];
+		}
+		else{
+			history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`);
+			document.title = langJson['login'][`login title`];
+		}
 	}
 }
