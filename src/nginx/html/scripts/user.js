@@ -105,24 +105,38 @@ function updateUserLang(){
 	notifCenterContainer.style.setProperty("display", "flex");
 
     var splitPath = window.location.href.split('/');
+	fetch('/api/user/current', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	})
+		.then(response => {
+			if (response.ok)
+				return response.json();
+		})
+		.then(result => {
+			if (splitPath[5] == result.username){
+				document.querySelector("#profileFriendsButton").remove();
+			}
+			else{
+				if (result.blocked_users[splitPath[5]] || result.friends[splitPath[5]] != null){
+					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
+				}
+				if (result.blocked_users[splitPath[5]] || result.friends[splitPath[5]] == null){
+					document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+				}
+				if (!result.blocked_users[splitPath[5]]){
+					document.getElementById("unblockBtn").style.setProperty("display", "none");
+				}
+				else{
+					document.getElementById("blockBtn").style.setProperty("display", "none");
+				}
+			}
+		})
 
-	if (splitPath[5] == client.username){
-		document.querySelector("#profileFriendsButton").remove();
-	}
-	else{
-		if (client.blocked_user[splitPath[5]] || client.friends[splitPath[5]] != null){
-			document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
-		}
-		if (client.blocked_user[splitPath[5]] || client.friends[splitPath[5]] == null){
-			document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
-		}
-		if (!client.blocked_user[splitPath[5]]){
-			document.getElementById("unblockBtn").style.setProperty("display", "none");
-		}
-		else{
-			document.getElementById("blockBtn").style.setProperty("display", "none");
-		}
-	}
+
 
     var startDate = new Date();
     startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
@@ -180,7 +194,7 @@ function updateUserLang(){
 						recentMatchHistoryContainer.appendChild(messageContainer);
 					}
                 }
-				checkMatchResumeSize();    
+				checkMatchResumeSize();
 				setNotifTabIndexes(tabIdx);
 				checkUserPageSize();
             })

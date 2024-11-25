@@ -483,7 +483,7 @@ function handleToken() {
 					myReplaceState(`https://${hostname.host}/${currentLang}/login${hostname.hash}`);
 				else if (url.pathname == "" || url.pathname == "/") {
 					friendUpdate();
-					myReplaceState(`https://${hostname.host}/${currentLang}/home`);
+						//myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 				}
 				else {
 					load();
@@ -1185,7 +1185,7 @@ function friendUpdate()
 		}
 		else if (data.status && data.username && currentPage == "user")
 		{
-			if (data.status === "online")
+			if (data.status === "online" && data.username !== client.username)
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "block");
 				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
@@ -1204,7 +1204,7 @@ function friendUpdate()
 				document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 				document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 			}
-			else if (currentPage === "user")
+			else if (currentPage === "user" && data.username !== client.username)
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
 				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
