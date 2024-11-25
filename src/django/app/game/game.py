@@ -465,7 +465,7 @@ class Player():
 			self.x = Paddle.margin + Paddle.width
 		elif self.side == 'right':
 			self.x = Game.width - Paddle.width - Paddle.margin
-		self.y = Game.height / 2
+		self.y = Game.demieHeight
 		self.isReady = False
 
 	def move(self):
@@ -548,26 +548,52 @@ class PlayerAI(Player):
 		self.profile = self.user.profile
 		self.Y = Game.demieHeight
 
-
 	async def run(self):
 		while self.game.running:
-			rand = random.uniform(0, Paddle.height)
 			ball = self.game.ball.copy()
-			if (ball.dx > 0 and self.side == 'right') or (ball.dx < 0 and self.side == 'left'):
-				while time.time() - self.game.timeLastPoint > 2 and ball.x < self.game.playerRight.x and ball.x > self.game.playerLeft.x:
+			pad = self.copy()
+			if (ball.dx > 0 and self.side == 'left') or (ball.dx < 0 and self.side == 'right'):
+				await asyncio.sleep(1)
+				continue
+
+			timeStart = time.time()
+
+			while time.time() - self.game.timeLastPoint > 2 and ball.x < self.game.playerRight.x and ball.x > self.game.playerLeft.x:
+				ball.move()
+				if ball.y <= Ball.demieSize or ball.y + Ball.demieSize >= Game.height:
+					ball.dy = -ball.dy
+
+			listY = [ball.y - Paddle.demieHeight + Paddle.speed / 2,
+					ball.y - Paddle.demieHeight / 2,
+					ball.y,
+					ball.y + Paddle.demieHeight / 2,
+					ball.y + Paddle.demieHeight - Paddle.speed / 2]
+			listDeltaPlayer = []
+			saveBall = ball
+
+			for y in listY:
+				pad.y = y
+				ball = saveBall.copy()
+				target_player = self.game.playerRight if self.side == 'left' else self.game.playerLeft
+
+				ball.paddleCollision(pad)
+				while (ball.x < target_player.x if self.side == 'left' else ball.x > target_player.x):
 					ball.move()
 					if ball.y <= Ball.demieSize or ball.y + Ball.demieSize >= Game.height:
 						ball.dy = -ball.dy
-				if self.y < ball.y:
-					self.Y = ball.y + rand
-				else:
-					self.Y = ball.y - rand
-			await asyncio.sleep(1)
+
+				listDeltaPlayer.append(abs(ball.y - target_player.y))
+
+			self.Y = listY[listDeltaPlayer.index(max(listDeltaPlayer))]
+			timeEnd = time.time()
+
+			if timeEnd - timeStart < 1:
+				await asyncio.sleep(1 - timeEnd + timeStart)
 
 	def move(self):
-		if self.y < Game.height - Paddle.demieHeight and self.Y > self.y + Paddle.demieHeight:
+		if self.y < Game.height - Paddle.demieHeight and self.Y > self.y + Paddle.speed / 2:
 			self.y += Paddle.speed
-		elif self.y > Paddle.demieHeight and self.Y < self.y - Paddle.demieHeight:
+		elif self.y > Paddle.demieHeight and self.Y < self.y - Paddle.speed / 2:
 			self.y -= Paddle.speed
 
 	def getInfo(self, init=False):
@@ -580,6 +606,11 @@ class PlayerAI(Player):
 			}
 
 		return info
+
+	def copy(self):
+		new_player = PlayerAI()
+		new_player.__dict__.update(self.__dict__)
+		return new_player
 
 class PlayerLocal(PlayerRemote):
 
