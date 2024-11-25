@@ -142,7 +142,7 @@
 }
 
 .dropDownContent a:hover, .dropDownContent a:focus, .activeDropDown.settingsDropDown:focus div button{
-	color: var(--option-hover-text-rgb) !important;
+	color: var(--option-hover-rgb) !important;
 }	
 
 
@@ -201,7 +201,7 @@
 
 .activeDropDown #usernameBtn:focus{
 	outline: none;
-	color: var(--option-hover-text-rgb);
+	color: var(--option-hover-rgb);
 }
 
 .activeDropDown .dropDownUserContent, .activeDropDown #dropDownLangContent, .inactiveDropDown .dropDownUserContent, .inactiveDropDown #dropDownLangContent, .inactiveSettingsDropDown.settingsDropDown .dropDownContent{
@@ -292,7 +292,7 @@
 }
 
 .dropDownUserContent a:focus, .dropDownUserContent a:hover{
-	color: var(--option-hover-text-rgb);
+	color: var(--option-hover-rgb);
 	outline: none;
 }
 
@@ -305,9 +305,9 @@
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 50% 50%;
-	background-color: var(--option-hover-text-rgb);
+	background-color: var(--option-hover-rgb);
 
-	border: 1px solid var(--option-hover-text-rgb);
+	border: 1px solid var(--option-hover-rgb);
 	border-radius: 10%;
 
 	top: 50%;

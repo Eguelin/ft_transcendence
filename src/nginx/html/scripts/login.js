@@ -1,5 +1,5 @@
 var loginBtn;
-var swichTheme;
+var switchThemeBtn;
 var fortyTwoLogin;
 var loginSlideSelector;
 
@@ -90,7 +90,7 @@ var template = `
 	notifCenterContainer.style.setProperty("display", "none");
 
 	loginBtn = document.getElementById('loginBtn')
-	swichTheme = document.getElementById("themeButton")
+	switchThemeBtn = document.getElementById("themeButton")
 	fortyTwoLogin = document.getElementById("fortyTwoLogin")
 	loginSlideSelector = document.querySelectorAll(".slideSelector")
 	slides = document.querySelectorAll(".loginSlideContainer")

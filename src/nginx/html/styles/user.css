@@ -41,9 +41,9 @@
 }
 
 .matchDescContainer{
-	background: var(--input-bg-rgb);
+	background: var(--match-bg-rgb);
 	min-height: min-content;
-	border: .5px solid var(--page-bg-rgb);
+	border: .5px solid var(--match-border-rgb);
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -51,6 +51,18 @@
 	color: var(--main-text-rgb);
 	justify-content: space-between;
 	transition: none;
+}
+
+.home{
+	.matchDescContainer:first-child{
+		border-left: 0;
+	}
+	.matchDescContainer:last-child{
+		border-right: 0;
+	}
+	.matchDescContainer{
+		border-bottom: 0;
+	}
 }
 
 .matchDescContainerScore{
@@ -194,7 +206,7 @@
 	.matchDescContainer:focus-within, .contestMatchResume:focus-within{
 		outline: none;
 		animation: matchDescContainerFlash 2s ease-in infinite;
-		border-color: var(--input-bg-rgb);
+		border-color: var(--match-border-rgb);
 	}
 }
 
