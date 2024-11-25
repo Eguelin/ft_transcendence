@@ -32,7 +32,8 @@
 		"aria#recentMatchHistoryContainer" : "User today's matches",
 		"ariaResumeMatch.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
 		"ariaResumeTournament.matchDescContainer" : "Tournament on the ${DATE}",
-		"aria.resultScoreName" : "${USERNAME} profile redirection"
+		"aria.resultScoreName" : "${USERNAME} profile redirection",
+		"home title" : "Home - transcendence"
 	},
 	"login" : {
 		"#title" : "LOGIN",
@@ -54,7 +55,9 @@
 		"aria#fortyTwoLogin" : "Login with 42 account",
 		"aria#inputRegisterUsername" : "Register username",
 		"aria#inputRegisterPassword" : "Register password",
-		"aria#inputRegisterCPassword" : "Confirm register password"
+		"aria#inputRegisterCPassword" : "Confirm register password",
+		"login title" : "Login - transcendence",
+		"register title" : "Register - transcendence"
 	},
 	"settings": {
 		"#title" : "",
@@ -77,7 +80,9 @@
 		"aria#settingsDropDownLang" : "Language dropdown menu",
 		"aria#confirmDeleteInput" : "Type you username, then press enter to confirm deletion",
 		"aria#pfpLabel" : "Change profile picture",
-		"aria#confirmPfpBtn" : "Confirm profile picture"
+		"aria#confirmPfpBtn" : "Confirm profile picture",
+		"account title" : "Account friends - transcendence",
+		"accessibility title" : "Accessibility - transcendence"
 	},
 	"friends":{
 		"#title" : "",
@@ -101,7 +106,11 @@
 		"ariaPending.friendsOptionContainer" : "incoming pending friend request options",
 		"ariaBlocked.friendsOptionContainer" : "blocked user options",
 		"incoming_pending_request" : "Incoming friend request from ${USERNAME}",
-		"error_sending_request" : "Couldn't send friend request."
+		"error_sending_request" : "Couldn't send friend request.",
+		"online title" : "Online friends - transcendence",
+		"all title" : "All friends - transcendence",
+		"pending title" : "Pending friend requests - transcendence",
+		"blocked title" : "Blocked users - transcendence"
 
 	},
 	"user":{
@@ -116,7 +125,8 @@
 		".draw" : "DRAW",
 		".tournament" : "TOURNAMENT",
 		"ariaResume.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
-		"aria.resultScoreName" : "${USERNAME} profile redirection"
+		"aria.resultScoreName" : "${USERNAME} profile redirection",
+		"user title" : "${USERNAME} - transcendence"
 	},
 	"dashboard":{
 		"#title" : "",
@@ -130,8 +140,8 @@
 		"#lastMonthSelection" : "Past month",
 		"#lastYearSelection" : "Past year",
 		"#notPlayedPeriod" : "${USERNAME} has not played any match during this period",
-		"CVwinLossGraph" : "Percent of victories by date",
-		"CVwinLossAbsGraph" : "Number of victories over defeats by date",
+		"CVwinLossGraph" : "Percent of victories",
+		"CVwinLossAbsGraph" : "Number of victories over defeats",
 		"CVuserStatsGraph" : "Number of win and lost game",
 		"CVwinLossGraphClient" : "you",
 		"CVwinLossAbsGraphClient" : "you",
@@ -139,12 +149,14 @@
 		"CVloss" : "loss",
 		"aria#lastWeekSelection" : "Display stats from the last 7 days",
 		"aria#lastMonthSelection" : "Display stats from the last month",
-		"aria#lastYearSelection" : "Display stats from the last year"
+		"aria#lastYearSelection" : "Display stats from the last year",
+		"dashboard title" : "${USERNAME} dashboard - transcendence"
 	},
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Search",
-		"aria.userResume" : "${USERNAME} profile redirection"
+		"aria.userResume" : "${USERNAME} profile redirection",
+		"search title" : "${SEARCH} search - transcendence"
 	},
 	"game":{
 		"#title" : "",
@@ -164,7 +176,9 @@
 		"semi" : "Semi",
 		"final" : "final",
 		"tournamentLobby" : "Lobby",
-		"matchSubtitle" : "Match"
+		"matchSubtitle" : "Match",
+		"game title" : "${MODE} game - transcendence",
+		"lobby title" : "Lobby ${NB}/8  - transcendence"
 	},
 	"tournament":{
 		"#title" : "",
@@ -177,7 +191,8 @@
 		"quarter" : "Quarter finals",
 		"semi" : "Semi finals",
 		"final" : "finals",
-		"profile_redirection" : "${USERNAME} profile redirection"
+		"profile_redirection" : "${USERNAME} profile redirection",
+		"tournament title" : "Tournament - transcendence"
 	},
 	"match" : {
 		"#title" : "",
@@ -194,18 +209,21 @@
 
 		".landscape #totalExchangeTitle" : "Total",
 		".landscape #averageExchangeTitle" : "Average per point",
-		".landscape #longestExchangeTitle" : "Longest"
+		".landscape #longestExchangeTitle" : "Longest",
+		"match title" : "Match - transcendence"
 	},
 	"404":{
 		"#title" : "ERROR 404",
 		"#subtitle" : "",
 		"#NotFoundtitle" : "Ho no, this page does not exist :(",
-		"#NotFoundBtn" : "HOME"
+		"#NotFoundBtn" : "HOME",
+		"404 title" : "404 - transcendence"
 	},
 	"403":{
 		"#title" : "ERROR 403",
 		"#subtitle" : "",
 		"#ForbidenTitle" : "You're not supposed to be here >:(",
-		"#ForbidenBtn" : "HOME"
+		"#ForbidenBtn" : "HOME",
+		"403 title" : "403 - transcendence"
 	}
 }

@@ -19,10 +19,11 @@ var template = `
 	document.getElementById("container").innerHTML = template;
 	const inputSearch = document.querySelector("#inputSearch");
 	inputSearchUserContainer.style.setProperty("display", "none");
-	dropDownUserContainer.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
 	inputSearch.focus();
+	document.title = client.langJson['search'][`search title`].replace("${SEARCH}", "");
 	setNotifTabIndexes(15);
 	url = new URL(window.location.href);
 	if (url.searchParams.get("query")) {
@@ -33,7 +34,8 @@ var template = `
 			credentials: 'include'
 		}).then(user => {
 			if (user.ok){
-				history.replaceState("","",`https://${hostname.host}/search?query=${url.searchParams.get("query")}`)
+				document.title = client.langJson['search'][`search title`].replace("${SEARCH}", url.searchParams.get("query"));
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/search?query=${url.searchParams.get("query")}`)
 				user.json().then(((user) => {
 					document.querySelector("#userResumeCountContainer").style.setProperty("display", "block")
 					document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
@@ -45,12 +47,12 @@ var template = `
 					for (i = 0; i<  userResume.length; i++){
 						userResume[i].addEventListener("click", (e) => {
 							var username = e.target.closest(".userResume").id;
-							myPushState(`https://${hostname.host}/user/${username}`);
+							myPushState(`https://${hostname.host}/${currentLang}/user/${username}`);
 						})
 						userResume[i].addEventListener("keydown", (e) => {
 							if (e.key == "Enter"){
 								var username = e.target.closest(".userResume").id;
-								myPushState(`https://${hostname.host}/user/${username}`);
+								myPushState(`https://${hostname.host}/${currentLang}/user/${username}`);
 							}
 						})
 					}
@@ -59,10 +61,10 @@ var template = `
 			else{
 				if (user.status == 401){
 					popUpError("how dare you >:("); //TODO change popup message
-					myReplaceState(`https://${hostname.host}/login`);
+					myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 				}
 				else
-					myReplaceState(`https://${hostname.host}/home`);
+					myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 			}
 		})
 	}
@@ -70,14 +72,14 @@ var template = `
 		if (inputSearch.value.trim().length == 0)
 			popUpError("Can't search empty query");
 		else
-			myPushState(`https://${hostname.host}/search?query=${inputSearch.value.trim()}`);
+			myPushState(`https://${hostname.host}/${currentLang}/search?query=${inputSearch.value.trim()}`);
 	});
 	inputSearch.onkeydown = function(e){
 		if (e.key == "Enter"){
 			if (inputSearch.value.trim().length == 0)
 				popUpError("Can't search empty query");
 			else
-				myPushState(`https://${hostname.host}/search?query=${inputSearch.value.trim()}`);
+				myPushState(`https://${hostname.host}/${currentLang}/search?query=${inputSearch.value.trim()}`);
 		}
 	};
 
@@ -86,7 +88,7 @@ var template = `
 			if (inputSearch.value.trim().length == 0)
 				popUpError("Can't search empty query");
 			else
-				myPushState(`https://${hostname.host}/search?query=${inputSearch.value.trim()}`);
+				myPushState(`https://${hostname.host}/${currentLang}/search?query=${inputSearch.value.trim()}`);
 		}
 	};
 }

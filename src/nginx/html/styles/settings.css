@@ -29,7 +29,7 @@
 	mask-image: url(../icons/check.svg);
 	background-color: var(--main-text-rgb);
 	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 
 	width: 2rem;
 	height: 2rem;

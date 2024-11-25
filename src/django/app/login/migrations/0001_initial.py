@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('display_name', models.CharField(default='Player', max_length=15)),
                 ('theme_name', models.CharField(default='dark', max_length=10)),
                 ('profile_picture', models.TextField(default='/images/defaults/default0.jpg')),
-                ('language_pack', models.CharField(default='lang/EN_UK.json', max_length=40)),
+                ('language_pack', models.CharField(default='lang${currentLang}.json', max_length=40)),
                 ('is_active', models.BooleanField(default=False)),
                 ('id42', models.IntegerField(default=0)),
                 ('font_amplifier', models.FloatField(default=1, validators=[django.core.validators.MinValueValidator(0.1), django.core.validators.MaxValueValidator(2.0)])),

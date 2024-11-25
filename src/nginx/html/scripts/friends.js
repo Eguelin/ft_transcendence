@@ -72,7 +72,6 @@ var template = `
 	</div>
 </div>`
 
-
 {
 	document.getElementById("container").innerHTML = template;
 
@@ -87,11 +86,28 @@ var template = `
 	friendInfo = document.getElementById("friendInfo");
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
-	history.replaceState("","",`https://${hostname.host}/friends`)
+	const url = new URL(window.location.href);
+	history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${url.hash}`)
+	var friendSlideIdx = 0;
+	if (url.hash == "#online")
+		friendSlideIdx = 0;
+	else if (url.hash == "#all")
+		friendSlideIdx = 1;
+	else if (url.hash == "#pending")
+		friendSlideIdx = 2;
+	else if (url.hash == "#blocked")
+		friendSlideIdx = 3;
+	else{
+		friendSlideIdx = 0;
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/friends#online`)
+	}
+
 
 	setNotifTabIndexes(16);
 
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
+	document.getElementById("slideSelectorBg").style.setProperty("left", `${25 * friendSlideIdx}%`);
+	document.getElementById("friendSlides").style.setProperty("left", `-${friendSlideIdx}00vw`);
 
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
@@ -129,6 +145,8 @@ var template = `
 				tmp.animate(move, time);
 				tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
 				setTabIndexes(friendSlideIdx);
+				history.replaceState(`https://${hostname.host}/${currentLang}/friends${friendHashMap[friendSlideIdx]}`)
+				document.title = langJson['friends'][`${friendHashMap[friendSlideIdx].replace("#","")} title`];
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -582,7 +600,7 @@ function checkUpdate(){
 				(response.json()).then((text) => {
 					baseTabIdx = 15;
 					switchTheme(text.theme_name);
-					currentLang = text.lang;
+					currentLangPack = text.lang;
 					allFriendListContainer.innerText = "";
 					onlineFriendListContainer.innerText = ""
 					pendingFriendRequestListContainer.innerText = ""
@@ -609,7 +627,7 @@ function checkUpdate(){
 			}
 			else {
 				client = null;
-				myReplaceState(`https://${hostname.host}/login`);
+				myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 			}
 		})
 	}
@@ -657,6 +675,8 @@ function friendKeyDownEvent(e) {
 		}
 		tmp.animate(move, time);
 		tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
+		history.replaceState(`https://${hostname.host}/${currentLang}/friends${friendHashMap[friendSlideIdx]}`)
+		document.title = langJson['friends'][`${friendHashMap[friendSlideIdx].replace("#","")} title`];
 		setTabIndexes(friendSlideIdx);
 	}
 }
