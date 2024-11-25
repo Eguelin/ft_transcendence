@@ -18,13 +18,13 @@
 #confirmPfpMask{
 	opacity: .5;
 }
-#inputChangeUsername{
+#inputChangeUsername, #inputChangePassword{
 	width: -webkit-fill-available;
 	width: -moz-available;
 	border: 0.2px solid var(--main-text-rgb);
 }
 
-#saveUsernameBtn{
+#saveUsernameBtn, #savePasswordBtn{
 	text-align: center;
 	mask-image: url(../icons/check.svg);
 	background-color: var(--main-text-rgb);
@@ -41,11 +41,11 @@
 	right: 1ch;
 }
 
-#saveUsernameBtn:hover, #saveUsernameBtn:focus {
+#saveUsernameBtn:hover, #saveUsernameBtn:focus, #savePasswordBtn:hover, #savePasswordBtn:focus {
 	background-color: var(--page-bg-rgb);
 }
 
-#saveUsernameContainer{
+#saveUsernameContainer, #changePasswordContainer{
 	display: flex;
 	align-items: center;
 	background-color: var(--hover-text-rgb);
@@ -330,4 +330,8 @@
 	position: relative;
 	top: 50%;
 	translate: 0 -50%;
+}
+
+#changePasswordBtn, #confirmChangePasswordBtn{
+	font-size: 1rem;
 }
