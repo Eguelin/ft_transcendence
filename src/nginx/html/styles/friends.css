@@ -194,7 +194,7 @@
 
 .friendSlide{
 	display: block;
-	background: var(--hover-text-rgb);
+	background: var(--match-bg-rgb);
 	border: 1px solid var(--main-text-rgb);
 	border-radius: 1rem;
 	overflow: hidden;

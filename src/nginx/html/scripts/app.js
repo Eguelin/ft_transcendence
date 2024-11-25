@@ -341,8 +341,30 @@ window.addEventListener("popstate", (e) => {
 
 function load() {
 	const url = new URL(window.location.href);
-	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
-	var path = url.pathname.substring(lang.length + 1);
+	console.log(url.pathname.indexOf("/", 1));
+	var lang;
+	var path;
+	if (url.pathname.indexOf("/", 1) == -1){
+		lang = url.pathname.substring(1);
+		path = url.pathname;
+		if (langMap[lang] || !routes[url.pathname])
+			path = "/home"
+		else{
+			if (!client){
+				currentLangPack = `lang/EN_UK.json`
+				currentLang = "EN_UK";
+			}
+			else{
+				currentLangPack = client.currentLangPack
+				currentLang = client.currentLang;
+			}
+		}
+	}
+	else{
+		lang = url.pathname.substring(1, url.pathname.indexOf("/", 2));
+		path = url.pathname.substring(lang.length + 1);
+	}
+
 	if (!availableLang[lang]){
 		if (!client){
 			currentLangPack = `lang/EN_UK.json`
