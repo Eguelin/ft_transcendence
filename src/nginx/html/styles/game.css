@@ -334,7 +334,7 @@
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	background: var(--hover-text-rgb);
+	background: var(--match-bg-rgb);
 	width: 100vw;
 	align-items: center;
 	justify-content: space-around;
@@ -373,7 +373,7 @@
 #controlerSlide .leftBtnContainer:focus .leftBtn, #controlerSlide .rightBtnContainer:focus .rightBtn, #controlerSlide .leftBtnContainer:hover .leftBtn, #controlerSlide .rightBtnContainer:hover .rightBtn,
 #controlerPlayerOne .leftBtnContainer:focus .leftBtn, #controlerPlayerOne .rightBtnContainer:focus .rightBtn, #controlerPlayerOne .leftBtnContainer:hover .leftBtn, #controlerPlayerOne .rightBtnContainer:hover .rightBtn,
 #controlerPlayerTwo .leftBtnContainer:focus .leftBtn, #controlerPlayerTwo .rightBtnContainer:focus .rightBtn, #controlerPlayerTwo .leftBtnContainer:hover .leftBtn, #controlerPlayerTwo .rightBtnContainer:hover .rightBtn{
-	background: var(--page-bg-rgb);
+	background: var(--option-hover-rgb);
 }
 
 #lobby{
@@ -810,6 +810,7 @@ table.landscape{
 				height: 100%;
 				width: 50%;
 				align-content: center;
+				overflow: hidden;
 			}
 
 			.leftBtn, .rightBtn{
