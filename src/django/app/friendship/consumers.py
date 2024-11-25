@@ -36,19 +36,33 @@ class friend(AsyncWebsocketConsumer):
 			await self.send_friend_request_notif(data.get('target_user_id'), data.get('sender_username'))
 
 	async def send_friend_request_notif(self, user_id, sender_name):
-		channel_layer = get_channel_layer()
-		await channel_layer.group_send(
-			f"user_{user_id}",
-			{
-				'type': 'send_friend_request',
-				'new_requestt': True,
-				'sender_name' : sender_name
-			}
-		)
+		try:
+				if not isinstance(user_id, int) or user_id <= 0:
+						raise ValueError("'user_id' doit être un entier positif.")
+
+				if not isinstance(sender_name, str) or len(sender_name.strip()) == 0:
+						raise ValueError("'sender_name' doit être une chaîne non vide.")
+
+				channel_layer = get_channel_layer()
+
+				await channel_layer.group_send(
+						f"user_{user_id}",
+						{
+								'type': 'send_friend_request',
+								'new_request': True,
+								'sender_name': sender_name
+						}
+				)
+		except ValueError as e:
+			await self.send(text_data=json.dumps({
+			'type': 'error',
+			'message': str(e)
+		}))
+
 
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
-			'new_request': event['new_requestt'],
+			'new_request': event['new_request'],
 			'sender_name' : event['sender_name']
 
 		}))
