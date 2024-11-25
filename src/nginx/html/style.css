@@ -172,10 +172,22 @@ input{
 	width: 18vw;
 }
 
+
+input::placeholder, input::-webkit-input-placeholder{
+	color: var(--main-text-rgb);
+	opacity: .9;
+}
+
+input::-moz-placeholder{
+	color: var(--main-text-rgb);
+	opacity: .9;
+}
+
 input:focus{
 	outline: none;
 	border-color: var(--main-text-rgb);
 }
+
 
 .forms {
 	text-align: center;
