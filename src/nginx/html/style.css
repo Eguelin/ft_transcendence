@@ -10,9 +10,8 @@
 	--option-hover-rgb :  #110026;
 	--option-text-rgb :  #FDFDFB;
 	--input-bg-rgb : #3A3053;
-	--input-border-rgb : #FDFDFB;
 	--match-bg-rgb : #3A3053;
-	--match-border-rgb : #FDFDFB;
+	--border-rgb : #FDFDFB;
 	--active-selector-rgb : #FDFDFB;
 	--notif-center-border-rgb : #FDFDFB;
 	--contest-match-bg-rgb : #3A3053;
@@ -119,7 +118,7 @@ button{
 	padding: .5rem;
 	width: fit-content;
 	min-width: 20vw;
-	border: 0.2px solid var(--match-border-rgb);
+	border: 0.2px solid var(--border-rgb);
 	border-radius: 1rem;
 	background-color: var(--input-bg-rgb);
 	outline: none;
@@ -163,7 +162,7 @@ button:focus, button:hover{
 
 input{
 	font-family:'pong';
-	border: 0.2px solid var(--match-border-rgb);
+	border: 0.2px solid var(--border-rgb);
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;

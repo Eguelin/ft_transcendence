@@ -21,7 +21,7 @@
 #inputChangeUsername, #inputChangePassword, #pfpLabel{
 	width: -webkit-fill-available;
 	width: -moz-available;
-	border: 0.2px solid var(--match-border-rgb);
+	border: 0.2px solid var(--border-rgb);
 }
 
 #inputChangeUsername:focus, #inputChangePassword:focus, #pfpLabel:focus, #inputChangeUsername:hover, #inputChangePassword:hover, #pfpLabel:hover{
