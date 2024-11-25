@@ -162,7 +162,7 @@
 	height: 1rem;
 	padding: 1rem;
 	border-radius: 2rem 0 0 2rem;
-	border: .1rem solid var(--match-border-rgb);
+	border: .1rem solid var(--border-rgb);
     border-right: 0 !important;
 	overflow: hidden;
 }
