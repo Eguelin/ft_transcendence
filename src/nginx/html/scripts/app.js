@@ -174,7 +174,7 @@ class Client {
 					const url = new URL(window.location.href);
 					var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
 					if (!availableLang[lang]){
-						currentLangPack = `lang${currentLang}.json`
+						currentLangPack = this.currentLangPack
 						currentLang = this.currentLang;
 					}
 					else{
@@ -478,7 +478,8 @@ function handleToken() {
 								myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 							}
 						}
-						catch {
+						catch (e){
+							console.error(e);
 							unsetLoader();
 						}
 					})()
@@ -1259,7 +1260,7 @@ function friendUpdate()
 		fetch('/api/user/get_user_id', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ "username": user, }),
+			body: JSON.stringify({ "user": user, }),
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok) {
@@ -1294,14 +1295,14 @@ function getElemWidth(elem){
 const getOrCreateLegendList = (chart, id) => {
 	const legendContainer = document.getElementById(id);
 	let listContainer = legendContainer.querySelector('ul');
-
+  
 	if (!listContainer) {
 	  listContainer = document.createElement('ul');
 	  listContainer.className = "legendContainer"
-
+  
 	  legendContainer.appendChild(listContainer);
 	}
-
+  
 	return listContainer;
 };
 
@@ -1309,19 +1310,19 @@ const htmlLegendPlugin = {
 	id: 'htmlLegend',
 	afterUpdate(chart, args, options) {
 	  const ul = getOrCreateLegendList(chart, options.containerID);
-
+  
 	  // Remove old legend items
 	  while (ul.firstChild) {
 		ul.firstChild.remove();
 	  }
-
+  
 	  // Reuse the built-in legendItems generator
 	  const items = chart.options.plugins.legend.labels.generateLabels(chart);
-
+  
 	  items.forEach(item => {
 		const li = document.createElement('li');
 		li.className = "legendElementContainer"
-
+  
 		li.onclick = () => {
 		  const {type} = chart.config;
 		  if (type === 'pie' || type === 'doughnut') {
@@ -1332,7 +1333,7 @@ const htmlLegendPlugin = {
 		  }
 		  chart.update();
 		};
-
+  
 		// Color box
 		const boxSpan = document.createElement('span');
 		boxSpan.style.background = item.fillStyle;
@@ -1343,15 +1344,15 @@ const htmlLegendPlugin = {
 		boxSpan.style.height = '20px';
 		boxSpan.style.marginRight = '10px';
 		boxSpan.style.width = '20px';
-
+  
 		// Text
 		const textContainer = document.createElement('p');
 		textContainer.className = "legendTextContainer"
 		textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
-
+  
 		const text = document.createTextNode(item.text);
 		textContainer.appendChild(text);
-
+  
 		li.appendChild(boxSpan);
 		li.appendChild(textContainer);
 		ul.appendChild(li);
@@ -1644,7 +1645,7 @@ async function updateUserAriaLabel(key, content){
 
 let ua = navigator.userAgent;
 setInterval(function() {
-	if (navigator.userAgent !== ua) {
+	if (navigator.userAgent !== ua) {	
 		if (isMobile()){
 			document.documentElement.classList.add("mobile");
 		}
