@@ -119,9 +119,9 @@ button{
 	padding: .5rem;
 	width: fit-content;
 	min-width: 20vw;
-	border: 0.2px solid transparent;
+	border: 0.2px solid var(--match-border-rgb);
 	border-radius: 1rem;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	outline: none;
 }
 
@@ -163,7 +163,7 @@ button:focus, button:hover{
 
 input{
 	font-family:'pong';
-	border: 0.2px solid var(--input-border-rgb);
+	border: 0.2px solid var(--match-border-rgb);
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
