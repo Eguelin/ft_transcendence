@@ -347,7 +347,7 @@ def profile_update(request):
 	if ("language_pack" in data):
 		valid = True
 		languages = ["lang/DE_GE.json",
-					"lang${currentLang}.json",
+					"lang/EN_UK.json",
 					"lang/FR_FR.json",
 					"lang/IT_IT.json"]
 		language = data['language_pack']
@@ -572,7 +572,8 @@ def current_user(request):
 		'is_admin' : request.user.is_staff,
 		'font_amplifier' : request.user.profile.font_amplifier,
 		'do_not_disturb' : request.user.profile.do_not_disturb,
-		'display_name': request.user.profile.display_name
+		'display_name': request.user.profile.display_name,
+		'remote_auth' : 1 if request.user.profile.id42 is not 0 else 0
 	})
 
 def get(request):

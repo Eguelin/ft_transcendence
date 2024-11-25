@@ -221,7 +221,9 @@ var template = `
 				key.click();
 		}
 	})
-
+	if (client.isRemote){
+		document.querySelector("#saveUsernameContainer").remove();
+	}
 	setNotifTabIndexes(26);
 }
 

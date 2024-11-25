@@ -106,6 +106,7 @@ class Client {
 	fontAmplifier;
 	doNotDisturb;
 	displayName;
+	isRemote;
 
 	constructor() {
 		return (async () => {
@@ -127,6 +128,7 @@ class Client {
 					this.friends = result.friends;
 					this.friend_requests = result.friend_requests;
 					this.blocked_user = result.blocked_users;
+					this.isRemote = result.remote_auth;
 
 
 					var startDate = new Date();
@@ -341,7 +343,6 @@ window.addEventListener("popstate", (e) => {
 
 function load() {
 	const url = new URL(window.location.href);
-	console.log(url.pathname.indexOf("/", 1));
 	var lang;
 	var path;
 	if (url.pathname.indexOf("/", 1) == -1){

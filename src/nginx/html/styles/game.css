@@ -117,7 +117,7 @@
     left: 50%;
     top: 50%;
     translate: -50% -50%;
-    background: var(--hover-text-rgb);
+    background: var(--input-bg-rgb);
 	z-index: 11;
 	align-content: center;
 	border-radius: 1rem;

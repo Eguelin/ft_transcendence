@@ -189,23 +189,16 @@ input:focus{
 	position: relative;
 }
 
-.saveBtn, .deleteBtn {
+.deleteBtn {
 	text-align: center;
-	color: var(--main-text-rgb);
+	color: var(--page-bg-rgb);
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
 	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1rem;
-}
-
-.saveBtn{
-	background-color: limegreen;
-}
-
-.deleteBtn{
 	background-color: red;
+	border: 0.2px solid transparent;
+	border-radius: 1rem;
 }
 
 a {
@@ -324,7 +317,7 @@ a {
 
 #popupErrorContainer, #popupErrorContainerClose{
     background: red;
-    color: var(--main-text-rgb);
+    color: var(--page-bg-rgb);
     width: fit-content;
     padding: 1vw;
     border-radius: 1rem;
