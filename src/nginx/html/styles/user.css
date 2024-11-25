@@ -18,21 +18,23 @@
 }
 
 
-#sendFriendRequestBtn {
+#profileFriendsButton > button {
 	text-align: center;
 	background-color: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	font-family: "pong";
 	padding: 1.5rem;
 	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 	font-size: 1rem;
 	width: fit-content;
 	height: fit-content;
 	align-self: center;
+	min-width: unset;
+	
 }
 
-#sendFriendRequestBtn:hover, #sendFriendRequestBtn:focus {
+#profileFriendsButton > button:hover, #profileFriendsButton > button:focus {
 	color: var(--page-bg-rgb);
 	border-color: var(--page-bg-rgb);
 	outline: none;
@@ -234,12 +236,6 @@
 	}
 }
 
-
-#matchHistoryContainer {
-	position: relative;
-	top: 5rem;
-}
-
 #matchHistoryContainer .matchDescContainer{
 	min-height: 5rem;
 	height: 7rem;
@@ -248,12 +244,38 @@
 
 #profileGraphs {
 	display: flex;
-	gap: 1vw;
+	gap: 1rem;
 	position: relative;
 	left: 50%;
 	translate: -50%;
 	width: fit-content;
 	align-items: center;
+
+	.legendContainer{
+		flex-direction: row;
+	}
+
+	#userStatPieGraphContainer, #winLossGraphContainer, #winLossAbsGraphContainer{
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+		width: 100%;
+	}
+
+	> div{
+		width: calc(50% - .5rem);
+		@media screen and (orientation:portrait){
+			width: 100%;
+			
+		}
+	}
+
+
+	#userStatGraphContainer{
+		height: 85%;
+		justify-items: center;
+	}
 }
 
 
@@ -262,6 +284,7 @@
 	flex-direction: column;
 	align-items: center;
 	width: fit-content;
+	gap: 1rem;
 }
 
 .activeTimeline{
@@ -272,8 +295,9 @@
 	color: var(--main-text-rgb);
 	display: flex;
 	gap: 1ch;
-	width: fit-content;
+	width: 100%;
 	flex-wrap: wrap;
+	flex-direction: column;
 }
 
 #timelineSelectionText{
@@ -287,6 +311,7 @@
 	gap: 1ch;
 	flex-wrap: wrap;
 	width: fit-content;
+	align-self: center;
 }
 
 #customPeriod{
@@ -314,12 +339,6 @@
 input[type="date"]{
 	width: fit-content;
 }
-/*
-input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-}*/
 
 .active#customPeriodSelectionContainer{
 	display: flex;
@@ -370,6 +389,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #customPeriodSelectionContainer{
 	display: none;
 	gap: 1ch;
+	flex-wrap: wrap;
 }
 
 #customPeriodSelectionContainer input{
@@ -394,11 +414,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 	width: 7rem;
 }
 
-.dashboard button{
-	min-width: unset;
 
+.dashboard{
+	display: flex;
+	flex-direction: column;
+	gap: 3rem;
+	button{
+		min-width: unset;
+	}
+	transition: none;
 }
-
 
 @media screen  and (max-width:920px){ 
 	#timelineSelectionContainer{
@@ -497,4 +522,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .matchDescContainer .matchDescContainerResult.tournament:hover, .matchDescContainer .matchDescContainerResult.tournament:focus{
 	text-decoration: underline;
+}
+
+.mobile{
+	@media screen and (orientation:landscape) {
+		#profileGraphs{
+			height: 90%;
+			
+			#lineChartsContainer{
+				height: 100%;
+				> div{
+					height: 50%;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (orientation:landscape) {
+	#profileFriendsButton{
+		display: flex;
+		flex-direction: row;
+		justify-content: end;
+		gap: 4.2rem;
+		padding-right: 4.2rem;
+	}
 }

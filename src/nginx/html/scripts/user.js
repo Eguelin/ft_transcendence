@@ -2,6 +2,15 @@ var pointAppearanceDelay = 25; // default is 50 (higher the delay, slower the po
 var sendFriendRequestBtn;
 var allMatchesButton;
 
+var profileFriendsButton = `
+		<div id="profileFriendsButton">
+			<button tabindex="12" id="sendFriendRequestBtn">Send friend request</button>
+			<button tabindex="12" id="deleteFriendBtn">Remove friend</button>
+			<button tabindex="13" id="blockBtn">Block</button>
+			<button tabindex="13" id="unblockBtn">Unblock</button>
+		</div>
+`
+
 var template = `
 <div id="pageContentContainer" class="user">
 	<div id="profileInfoContainer">
@@ -13,20 +22,28 @@ var template = `
 				<h1 id="profileName">Default</h1>
 			</div>
 		</div>
-		<div id="profileFriendsButton">
-			<button tabindex="12" id="sendFriendRequestBtn">Send friend request</button>
-			<button tabindex="12" id="deleteFriendBtn">Remove friend</button>
-		</div>
+		${profileFriendsButton}
 	</div>
 
-	<div id="recentMatchHistoryContainer" tabindex="14" aria-label="User today's matches">
+	<div id="recentMatchHistoryContainer" tabindex="15" aria-label="User today's matches">
 		<div id="MatchHistoryTextContainer">
 			<div id="recentMatchHistoryText">Recent matches</div>
 			<a> | </a>
-			<div tabindex="13" id="allMatchesHistoryBtn">All matches</div>
+			<div tabindex="14" id="allMatchesHistoryBtn">All matches</div>
 		</div>
 		<div id="recentMatchHistory">
 
+		</div>
+	</div>
+	<div style="z-index: 100; position:relative;">
+		<div id="popupBg" style="display: none;"></div>
+		<div id="deleteFriendPopup">
+			<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
+			<button id="confirmDelete" aria-label="Are you sure you want to remove this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
+		</div>
+		<div id="blockFriendPopup">
+			<a id="confirmBlockQuestion">Are you sure you want to block this user</a>
+			<button id="confirmBlock" aria-label="Are you sure you want to block this friend, press enter for 'yes', escape for 'no'">I'm sure</button>
 		</div>
 	</div>
 </div>
@@ -35,7 +52,9 @@ var template = `
 function updateUserLang(){
     var splitPath = window.location.href.split('/');
     if (document.querySelector('#notPlayedToday'))
-        document.querySelector('#notPlayedToday').innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
+        document.querySelector('#notPlayedToday').innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[5]);
+	document.title = langJson['user'][`user title`].replace("${USERNAME}", splitPath[5]);
+
 }
 
 {
@@ -53,11 +72,11 @@ function updateUserLang(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({'username': splitPath[4]}),
+                body: JSON.stringify({'username': splitPath[5]}),
                 credentials: 'include'
             }).then(response => {
                 if (response.ok){
-                    sendFriendRequest(splitPath[4]);
+                    sendFriendRequest(splitPath[5]);
                 }
             })
         })
@@ -71,9 +90,11 @@ function updateUserLang(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({'username': splitPath[4]}),
+                body: JSON.stringify({'username': splitPath[5]}),
                 credentials: 'include'
             })
+			document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+			document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
         })
     }
 
@@ -85,21 +106,33 @@ function updateUserLang(){
 
     var splitPath = window.location.href.split('/');
 
-    if (splitPath[4] == client.username || client.friends[splitPath[4]] != null) {
-        document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
-    }
-    if (splitPath[4] == client.username || client.friends[splitPath[4]] == null)
-        document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+	if (splitPath[5] == client.username){
+		document.querySelector("#profileFriendsButton").remove();
+	}
+	else{
+		if (client.blocked_user[splitPath[5]] || client.friends[splitPath[5]] != null){
+			document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
+		}
+		if (client.blocked_user[splitPath[5]] || client.friends[splitPath[5]] == null){
+			document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+		}
+		if (!client.blocked_user[splitPath[5]]){
+			document.getElementById("unblockBtn").style.setProperty("display", "none");
+		}
+		else{
+			document.getElementById("blockBtn").style.setProperty("display", "none");
+		}
+	}
 
     var startDate = new Date();
     startDateStr = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`
-	var tabIdx = 14;
-	history.replaceState("","",`https://${hostname.host}/user/${splitPath[4]}`)
+	var tabIdx = 15;
+	history.replaceState("","",`https://${hostname.host}/${currentLang}/user/${splitPath[5]}`)
 
     fetch('/api/user/get', {
         method: 'POST', //GET forbid the use of body :(
         headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify({"name" : splitPath[4], "startDate" : startDateStr, "endDate" : startDateStr}),
+        body: JSON.stringify({"name" : splitPath[5], "startDate" : startDateStr, "endDate" : startDateStr}),
         credentials: 'include'
     }).then(user => {
         if (user.ok){
@@ -142,7 +175,7 @@ function updateUserLang(){
 						recentMatchHistoryContainer.style.setProperty("justify-content", "center");
 						messageContainer.id = "notPlayedTodayContainer";
 						message.id="notPlayedToday";
-						message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[4]);
+						message.innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[5]);
 						messageContainer.appendChild(message);
 						recentMatchHistoryContainer.appendChild(messageContainer);
 					}
@@ -161,10 +194,85 @@ function updateUserLang(){
 }
 
 allMatchesButton.addEventListener("click", (e) => {
-    myPushState(`https://${hostname.host}/dashboard/${splitPath[4]}`);
+    myPushState(`https://${hostname.host}/${currentLang}/dashboard/${splitPath[5]}`);
 })
 
 allMatchesButton.addEventListener("keydown", (e) => {
     if (e.key == "Enter")
-        myPushState(`https://${hostname.host}/dashboard/${splitPath[4]}`);
+        myPushState(`https://${hostname.host}/${currentLang}/dashboard/${splitPath[5]}`);
+})
+
+document.addEventListener("click", (e) => {
+	if (currentPage == "user"){
+		var splitPath = window.location.href.split('/');
+		if (e.target.parentElement == null || e.target.id == "popupBg"){
+			deleteFriendPopup.style.setProperty("display", "none");
+			blockFriendPopup.style.setProperty("display", "none");
+			document.getElementById("popupBg").style.display = "none";
+		}
+		if (e.target.id == "confirmDelete"){
+			const data = {username: e.target.parentElement.className};
+			fetch('/api/user/remove_friend', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			document.getElementById("unblockBtn").style.setProperty("display", "none");
+			document.getElementById("blockBtn").style.setProperty("display", "block");
+        	document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+
+
+			deleteFriendPopup.style.setProperty("display", "none");
+			document.getElementById("popupBg").style.display = "none";
+		}
+		if (e.target.id == "confirmBlock"){
+			const data = {username: e.target.parentElement.className};
+			fetch('/api/user/block_friend', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			document.getElementById("unblockBtn").style.setProperty("display", "block");
+			document.getElementById("blockBtn").style.setProperty("display", "none");
+        	document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
+			blockFriendPopup.style.setProperty("display", "none");
+			document.getElementById("popupBg").style.display = "none";
+		}
+
+		if (e.target.id == "deleteFriendBtn"){
+			document.getElementById("popupBg").style.display = "block";
+			deleteFriendPopup.style.setProperty("display", "flex");
+			deleteFriendPopup.className = splitPath[5];
+			document.querySelector("#confirmDeleteQuestion").innerText = client.langJson['friends']['confirmDeleteQuestion'].replace("${USERNAME}", splitPath[5]);
+			document.querySelector("#confirmDelete").ariaLabel = client.langJson['friends']['aria#confirmDelete'].replace("${USERNAME}", splitPath[5]);
+		}
+		if (e.target.id == "blockBtn"){
+			document.getElementById("popupBg").style.display = "block"
+			blockFriendPopup.style.setProperty("display", "flex");
+			blockFriendPopup.className = splitPath[5];
+			document.querySelector("#confirmBlockQuestion").innerText = client.langJson['friends']['confirmBlockQuestion'].replace("${USERNAME}", splitPath[5]);
+			document.querySelector("#confirmBlock").ariaLabel = client.langJson['friends']['aria#confirmBlock'].replace("${USERNAME}", splitPath[5]);
+		}
+		if (e.target.id == "unblockBtn"){
+			const data = {username: splitPath[5]};
+			fetch('/api/user/unblock_user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+				credentials: 'include'
+			})
+			document.getElementById("unblockBtn").style.setProperty("display", "none");
+			document.getElementById("blockBtn").style.setProperty("display", "block");
+        	document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+
+		}
+	}
 })

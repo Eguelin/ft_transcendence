@@ -114,7 +114,7 @@ button{
 	width: fit-content;
 	min-width: 20vw;
 	border: 0.2px solid transparent;
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 	background-color: var(--hover-text-rgb);
 	outline: none;
 }
@@ -191,7 +191,7 @@ input:focus{
 	padding: 1vh 0;
 	width: 20vw;
 	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1.5vw;
+	border-radius: 1rem;
 }
 
 .saveBtn{
@@ -322,7 +322,7 @@ a {
     color: var(--main-text-rgb);
     width: fit-content;
     padding: 1vw;
-    border-radius: 25vw;
+    border-radius: 1rem;
     position: fixed;
     top: 5vh;
     left: 50%;

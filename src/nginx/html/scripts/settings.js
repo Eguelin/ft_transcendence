@@ -135,7 +135,16 @@ var template = `
 
 
 {
-	history.replaceState("","",`https://${hostname.host}/settings`)
+	var slideIdx = 0;
+	const url = new URL(window.location.href);
+	if (url.hash == "#accessibility"){
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
+		slideIdx = 1;
+	}
+	else {
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
+		slideIdx = 0;
+	}
 	document.getElementById("container").innerHTML = template;
 
 	deleteAccountBtn = document.getElementById('deleteAccountBtn');
@@ -158,7 +167,8 @@ var template = `
 	window.onkeydown = settingsKeyDownEvent
 
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .settingsSlideSelector");
-	var slideIdx = 0;
+	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
+	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
 
 	settingsSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
@@ -195,6 +205,14 @@ var template = `
 					document.getElementById("slideSelectorBg").animate(move, time);
 					document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
 				}
+			}
+			if (slideIdx == 0){
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
+				document.title = langJson['settings'][`account title`];
+			}
+			else {
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
+				document.title = langJson['settings'][`accessibility title`];
 			}
 		})
 		key.onkeydown = (e) => {
@@ -266,7 +284,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 					try {
 						client = await new Client()
 						if (!client)
-							myReplaceState(`https://${hostname.host}/login`);
+							myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 					}
 					catch{
 						unsetLoader();
@@ -313,7 +331,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 						try {
 							client = await new Client()
 							if (!client)
-								myReplaceState(`https://${hostname.host}/login`);
+								myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 						}
 						catch{
 							unsetLoader();
@@ -375,7 +393,7 @@ function deleteRequest(){
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok){
-				myPushState(`https://${hostname.host}/login`);
+				myPushState(`https://${hostname.host}/${currentLang}/login#login`);
 			}
 		})
 	}
@@ -417,23 +435,27 @@ document.addEventListener("click", (e) => {
 document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 	elem.addEventListener("click", (e) => {
 		(async() => {
-			currentLang = `lang/${elem.id}.json`;
+			currentLangPack = `lang/${elem.id}.json`;
 			try{
 				if (client){
-					client.currentLang = `lang/${elem.id}.json`;
-					fetchResult = await fetch(`https://${hostname.host}/${currentLang}`);
+					client.currentLangPack = `lang/${elem.id}.json`;
+					fetchResult = await fetch(`https://${hostname.host}/${currentLangPack}`);
 					content = await fetchResult.json();
 					client.langJson = content;
 				}
 				loadCurrentLang();
 				document.documentElement.setAttribute("lang", langMap[elem.id]);
+
+				url = new URL(window.location.href);
+				history.replaceState("","",`https://${hostname.host}${url.pathname.replace(currentLang, elem.id)}`);
+				currentLang = elem.id;
 				if (client){
 					fetch('/api/user/update', {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						body: JSON.stringify({ language_pack: currentLang }),
+						body: JSON.stringify({ language_pack: currentLangPack }),
 						credentials: 'include'
 					})
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
@@ -608,6 +630,14 @@ function settingsKeyDownEvent(e) {
 			];
 			document.getElementById("slideSelectorBg").animate(move, time);
 			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
+		}
+		if (slideIdx == 0){
+			document.title = langJson['settings'][`account title`];
+			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
+		}
+		else {
+			document.title = langJson['settings'][`accessibility title`];
+			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
 		}
 	}
 }
