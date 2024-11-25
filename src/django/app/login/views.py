@@ -191,7 +191,7 @@ def create_deleted_user():
 	return create_nps("deleted", "default0.jpg")
 
 def create_default_users():
-	create_nps("AI", "defaultAI.gif")
+	create_nps("AI", "defaultAi.gif")
 	create_nps("nobody", "thisman.jpg")
 	create_nps("deleted", "defaultDeleted.jpg")
 	create_nps("blocked", "defaultBlocked.jpg")
