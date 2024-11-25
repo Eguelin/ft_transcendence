@@ -249,7 +249,6 @@
 }
 
 .quarter.match, .semi.match, .final.match{
-	background-color: var(--hover-text-rgb);
 	display: flex;
 	flex-direction: column;
 	gap: 1ch;
@@ -259,7 +258,8 @@
 	width: fit-content;
 	padding: 1ch;
 	position: relative;
-	border: .5px solid var(--page-bg-rgb);
+	border: .5px solid var(--match-border-rgb);
+	background-color: var(--contest-match-bg-rgb);
 }
 
 .contestUserContainer{
@@ -388,7 +388,7 @@
 }
 
 .lobbyPlayer{
-	background: var(--hover-text-rgb);
+	background: var(--input-bg-rgb);
 	display: flex;
 	flex-direction: column;
 	gap: 1ch;

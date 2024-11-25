@@ -103,7 +103,6 @@ class Client {
 	blocked_user;
 	recentMatches;
 	#is_admin;
-	mainTextRgb;
 	fontAmplifier;
 	doNotDisturb;
 	displayName;
@@ -139,7 +138,6 @@ class Client {
 					}
 
 					this.#is_admin = result.is_admin;
-					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 					this.fontAmplifier = result.font_amplifier;
 					this.use_browser_theme = this.theme_name === "browser" ? true : false;
 					this.doNotDisturb = result.do_not_disturb;
@@ -586,6 +584,7 @@ const themeMap = {
 		"--match-border-rgb": "#FDFDFB00",
 		"--active-selector-rgb" : "#FDFDFB",
 		"--notif-center-border-rgb" : "#FDFDFB",
+		"--contest-match-bg-rgb" : "#3A3053",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -602,6 +601,8 @@ const themeMap = {
 		"--match-border-rgb": "#00FFF5",
 		"--active-selector-rgb" : "#222831",
 		"--notif-center-border-rgb" : "#00FFF5",
+		"--contest-match-bg-rgb" : "#222831",
+
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
 	},
@@ -617,6 +618,7 @@ const themeMap = {
 		"--match-border-rgb": "#11002600",
 		"--active-selector-rgb" : "#110026",
 		"--notif-center-border-rgb" : "#110026",
+		"--contest-match-bg-rgb" : "#FFC6C6",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
@@ -632,6 +634,7 @@ const themeMap = {
 		"--match-border-rgb": "#7743DB",
 		"--active-selector-rgb" : "#2E073F",
 		"--notif-center-border-rgb" : "#7743DB",
+		"--contest-match-bg-rgb" : "#FFFBF5",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -644,9 +647,6 @@ function switchTheme(theme) {
 	Object.keys(themeMap[theme]).forEach(function (key) {
 		document.documentElement.style.setProperty(key, themeMap[theme][key])
 	})
-	if (client) {
-		client.mainTextRgb = themeMap[theme]["--main-text-rgb"];
-	}
 	if (client) {
 		fetch('/api/user/update', {
 			method: 'POST',
@@ -693,7 +693,7 @@ function switchTheme(theme) {
 		playerTwoInfoChart.update();
 
 	}
-	if (currentPage == "game") {
+	if (currentPage == "game" && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none") {
 		displayTournament();
 	}
 }
