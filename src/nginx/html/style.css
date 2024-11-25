@@ -215,12 +215,11 @@ a {
 
 .warning, .success {
 	font-size: .9rem;
-	position: absolute;
-	top: -2vh;
+	position: fixed;
+	top: calc(anchor(top) - 2vh);
 	text-align: left;
 	display: block;
 	height: 0;
-	left: 1vw;
 }
 
 .warning{
