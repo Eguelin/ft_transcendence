@@ -474,12 +474,19 @@
 #matchContainer .playerInfoContainer{
 	font-size: 1em;
 	flex-direction: row;
-	background: var(--hover-text-rgb);
+	background: var(--match-bg-rgb);
+	border: 2px solid var(--match-border-rgb);
+	box-sizing: border-box;
+	border-bottom: 0;
 }
 
+#matchContainer .playerInfoContainer#playerOne{
+	border-left: 0;
+}
 
 #matchContainer .playerInfoContainer#playerTwo{
 	flex-direction: row-reverse;
+	border-right: 0;
 }
 
 .playerInfo{
@@ -867,7 +874,7 @@ table.landscape{
 }
 
 .legendTextContainer{
-	color: rgb(102, 102, 102);
+	/*color: rgb(102, 102, 102);*/
 	margin: 0px;
 	padding: 0px;
 	font-size: .5rem;

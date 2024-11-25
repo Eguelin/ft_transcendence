@@ -41,7 +41,7 @@
 }
 
 #saveDisplayNameBtn:hover, #saveDisplayNameBtn:focus {
-	background-color: var(--page-bg-rgb);
+	background-color: var(--option-hover-rgb);
 }
 
 #saveDisplayNameContainer{
@@ -49,9 +49,14 @@
 	align-items: center;
 	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
-	border: 0.2px solid transparent;
+	border: 0.2px solid var(--input-border-rgb);
 	width: unset;
 	margin: 0;
+}
+
+
+#inputChangeDisplayName{
+	border-color: transparent;
 }
 
 #saveDisplayNameContainer:focus-within {

@@ -4,13 +4,17 @@
 }
 
 :root {
-	--page-bg-rgb : #110026; /*#FDFDFB*/
-	--main-text-rgb : #FDFDFB; /*#110026*/
+	--page-bg-rgb : #110026;
+	--main-text-rgb : #FDFDFB;
 	--hover-text-rgb :  #3A3053;
-	--option-hover-text-rgb :  #110026;
+	--option-hover-rgb :  #110026;
 	--option-text-rgb :  #FDFDFB;
-	--input-bg-rgb : #3A3053; /*#FFDBDE*/
+	--input-bg-rgb : #3A3053;
+	--input-border-rgb : #FDFDFB;
+	--match-bg-rgb : #3A3053;
+	--match-border-rgb : #FDFDFB;
 	--active-selector-rgb : #FDFDFB;
+	--notif-center-border-rgb : #FDFDFB;
 	--is-dark-theme : 1;
 
 	--font-size-amplifier: 1;
@@ -158,7 +162,7 @@ button:focus, button:hover{
 
 input{
 	font-family:'pong';
-	border: 0.2px solid transparent;
+	border: 0.2px solid var(--input-border-rgb);
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
