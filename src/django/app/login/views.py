@@ -3,35 +3,36 @@ import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 from transcendence.settings import DEBUG
 from PIL import Image
 
+NOT_USER = ['nobody', 'deleted', 'blocked']
+
 def getClientId(request):
 	clientId = os.getenv('API_42_PUBLIC')
 	if not clientId:
-		return JsonResponse({'message': 'Client ID not set'}, status=500)
+		return JsonResponse({'message': 'Client ID not set'}, status=400)
 	return JsonResponse({'clientId': clientId})
 
 def fortytwo(request):
-	create_ai()
-	create_nobody()
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 
 	try:
 		data = json.loads(request.body)
+		code = data['code']
+		hostname = data['hostname']
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
 
-	code = data.get('code')
-	if not code:
-		return JsonResponse({'message': 'Invalid request Code'}, status=400)
-	hostname = data.get('hostname')
-	if not hostname:
-		return JsonResponse({'message': 'Invalid request Hostname'}, status=400)
+	if not code or not hostname or not isinstance(code, str) or not isinstance(hostname, str):
+		return JsonResponse({'message': 'Invalid data'}, status=400)
+
 	client_id = os.getenv('API_42_PUBLIC')
 	client_secret = os.getenv('API_42_SECRET')
 	redirect_uri = 'https://' + hostname + '/'
@@ -49,7 +50,8 @@ def fortytwo(request):
 
 	access_token = response.json().get('access_token')
 	if not access_token:
-		return JsonResponse({'message': 'Failed to retrieve access token'}, status=500)
+		return JsonResponse({'message': 'Invalid response from 42 API'}, status=400)
+
 	url = 'https://api.intra.42.fr/v2/me'
 	headers = {
 		'Authorization': f'Bearer {access_token}'
@@ -57,16 +59,20 @@ def fortytwo(request):
 	response = requests.get(url, headers=headers)
 	if response.status_code != 200:
 		return JsonResponse(response.json(), status=response.status_code)
+
 	user_json = response.json()
 	user_login = user_json.get('login')
 	pfp_url = user_json.get('image', {}).get('link', '')
+	if not pfp_url:
+		pfp_url = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:8]
 
 	id42 = user_json.get('id')
 	if not user_login or id42 is None:
-		return JsonResponse({'message': 'Failed to retrieve user data'}, status=500)
+		return JsonResponse({'message': 'Invalid response from 42 API'}, status=400)
+
 	try:
 		user = User.objects.get(profile__id42=id42)
 		user = authenticate(request, username=user.username, password=str(id42))
@@ -139,11 +145,8 @@ def check_password(password, staff=False):
 	return True, None
 
 def create_user(request, staff=False):
-	create_ai()
-	create_nobody()
-
 	if request.method != 'POST' :
-		return HttpResponse("Invalid request", status=405)
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 
 	try:
 		data = json.loads(request.body)
@@ -152,9 +155,9 @@ def create_user(request, staff=False):
 		language = data['lang']
 		theme_name = data['theme_name']
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except KeyError:
-		return HttpResponse("Missing Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 
 	valid, message = check_username(username)
 	if not valid:
@@ -169,10 +172,7 @@ def create_user(request, staff=False):
 		display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
 
 	try:
-		if (username == "admin"):
-			user = User.objects.create_user(username=username, password=password, is_staff=True)
-		else:
-			user = User.objects.create_user(username=username, password=password)
+		user = User.objects.create_user(username=username, password=password)
 		user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.profile.id42 = 0
 		user.profile.is_active = True
@@ -183,47 +183,52 @@ def create_user(request, staff=False):
 		user = authenticate(request, username=username, password=password)
 		return JsonResponse({'message': 'User created'}, status=201)
 	except DatabaseError:
-		return HttpResponse("Database error", status=500)
+		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
-		return HttpResponse("Internal server error", status=500)
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
-def create_ai():
-	if User.objects.filter(username="AI").exists():
-		return
-	username = "AI"
-	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
-	user = User.objects.create_user(username=username, password=password)
-	user.profile.profile_picture = "/images/defaults/defaultAi.gif"
-	user.profile.display_name = "AI"
-	user.id42 = 0
-	user.save()
+def create_deleted_user():
+	return create_nps("deleted", "default0.jpg")
 
-def create_nobody():
-	if User.objects.filter(username="Nobody").exists():
-		return User.objects.get(username="Nobody")
-	username = "Nobody"
-	password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
+def create_default_users():
+	create_nps("AI", "defaultAI.gif")
+	create_nps("nobody", "thisman.jpg")
+	create_nps("deleted", "defaultDeleted.jpg")
+	create_nps("blocked", "defaultBlocked.jpg")
+	create_nps(os.getenv('DJANGO_ADMIN_USER'), "default0.jpg", os.getenv('DJANGO_ADMIN_PASSWORD'), True)
+
+def create_nps(name, pfp, password=None, staff=False):
+	if User.objects.filter(username=name).exists():
+		return User.objects.get(username=name)
+	username = name
+	if not password:
+		password = ''.join(random.choices(string.ascii_lowercase + string.digits, k=200))
 	user = User.objects.create_user(username=username, password=password)
-	user.profile.profile_picture = "/images/defaults/thisman.jpg"
+	user.profile.profile_picture ="/images/defaults/" + pfp
+	user.profile.display_name = name
 	user.id42 = 0
+	user.is_staff = staff
 	user.save()
 	return user
 
 def user_login(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 
 	try:
 		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except KeyError:
-		return HttpResponse("Missing Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 
 	if not username or not password or not isinstance(username, str) or not isinstance(password, str):
-		return HttpResponse("Invalid Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
+
+	if username in NOT_USER or username == "AI":
+		return JsonResponse({'message': "User not found"}, status=404)
 
 	if len(password) > 128:
 		return JsonResponse({'message': 'Password too long'}, status=400)
@@ -243,34 +248,34 @@ def user_login(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': 'Invalid credentials'}, status=400)
+		return JsonResponse({'message': "User not found"}, status=404)
 	except DatabaseError:
-		return HttpResponse("Database error", status=500)
+		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
-		return HttpResponse("Internal server error", status=500)
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def user_logout(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if (request.user.is_authenticated):
-		request.user.profile.is_active = False
-		request.user.save()
-		logout(request)
-		return JsonResponse({'message': 'logged out'}, status=200)
-	else:
-		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
+	if not request.user.is_authenticated:
+		return JsonResponse({'message':  "Client is not logged"}, status=401)
+
+	request.user.profile.is_active = False
+	request.user.save()
+	logout(request)
+
+	return JsonResponse({'message':  'logged out'}, status=200)
 
 def delete_user(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=400)
-	if (request.user.is_authenticated):
-		try:
-			request.user.delete()
-			return JsonResponse({'message': 'User deleted'}, status=200)
-		except Exception as e:
-			return JsonResponse({'message': e}, status=500)
-	else:
+	if request.method != 'GET':
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+	try:
+		request.user.delete()
+		return JsonResponse({'message': 'User deleted'}, status=200)
+	except Exception:
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def file_opener(path, flags):
 	return os.open(path, flags, 0o777)
@@ -303,7 +308,7 @@ def set_pfp(user, pfp):
 
 def profile_update(request):
 	if request.method != 'POST' :
-		return HttpResponse("Invalid request", status=405)
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
@@ -311,7 +316,7 @@ def profile_update(request):
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 
 	user = request.user
 	boolean_fields = ["do_not_disturb", "is_active"]
@@ -346,15 +351,20 @@ def profile_update(request):
 					"lang/FR_FR.json",
 					"lang/IT_IT.json"]
 		language = data['language_pack']
-		if not language or not isinstance(language, str) or language not in languages:
+		if not language or not isinstance(language, str):
 			return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
+		if language not in languages:
+			return JsonResponse({'message': "Invalid language_pack value, should be 'lang/DE_GE.json', 'lang/EN_UK.json', 'lang/FR_FR.json' or 'lang/IT_IT.json"}, status=400)
 		user.profile.language_pack = data['language_pack']
 
 	if ("font_amplifier" in data):
 		valid = True
-		if not isinstance(data['font_amplifier'], (float, int)):
+		size = data['font_amplifier']
+		if not isinstance(size, (float, int)):
 			return JsonResponse({'message': 'Invalid font_amplifier value, should be a float'}, status=400)
-		user.profile.font_amplifier = data['font_amplifier']
+		if size < 0.5 or size > 1.5:
+			return JsonResponse({'message': 'Invalid font_amplifier value, should be between 0.5 and 2'}, status=400)
+		user.profile.font_amplifier = size
 
 	if "theme_name" in data:
 		valid = True
@@ -416,26 +426,17 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 			if match.player_one.username == username or match.player_two.username == username:
 				if (max != -1 and total_count >= max):
 					break
-				try:
-					p1_name = match.player_one.username
-					p1_display_name = match.player_one.profile.display_name
-					if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-						p1_name = "deleted"
-						p1_display_name = "deleted"
 
-				except:
-					p1_name = "deleted"
-					p1_display_name = "deleted"
+				if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+					match.player_one = User.objects.get(username="blocked")
+				p1_name = match.player_one.username
+				p1_display_name = match.player_one.profile.display_name
 
-				try:
-					p2_name = match.player_two.username
-					p2_display_name = match.player_two.profile.display_name
-					if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-						p2_name = "deleted"
-						p2_display_name = "deleted"
-				except:
-					p2_name = "deleted"
-					p2_display_name = "deleted"
+				if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+					match.player_two = User.objects.get(username="blocked")
+				p2_name = match.player_two.username
+				p2_display_name = match.player_two.profile.display_name
+
 				date_json[i] = {
 					'type' : 'match',
 					'player_one' : p1_name,
@@ -483,19 +484,15 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 			except:
 				date_json = {}
 			i = 0
-		try:
-			p1_name = match.player_one.username
-			if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-				p1_name = "deleted"
-		except:
-			p1_name = "deleted"
 
-		try:
-			p2_name = match.player_two.username
-			if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
-				p2_name = "deleted"
-		except:
-			p2_name = "deleted"
+		if (match.player_one.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+			match.player_one = User.objects.get(username="blocked")
+		p1_name = match.player_one.username
+
+		if (match.player_two.profile.blocked_users.filter(pk=user_origin.pk)).exists():
+			match.player_two = User.objects.get(username="blocked")
+		p2_name = match.player_two.username
+
 		while (i in date_json):
 			i += 1
 		date_json[i] = {
@@ -540,45 +537,47 @@ def get_user_preview_json(user):
 def current_user(request):
 	if request.method != 'GET':
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		friends_list = request.user.profile.friends.all()
-		friends_request_list = request.user.profile.friends_request.all()
-		blocked_list = request.user.profile.blocked_users.all()
-		friend_json = {}
-		friend_request_json = {}
-		blocked_json = {}
-
-		for e in friends_list:
-			friend_json[e.username] = get_user_preview_json(e)
-		for e in friends_request_list:
-			friend_request_json[e.username] = get_user_preview_json(e)
-		for e in blocked_list:
-			blocked_json[e.username] = get_user_preview_json(e)
-		matches = get_user_match_json(
-			request.user,
-			request.user.profile.matches.filter(date=datetime.date.today()),
-			request.user.profile.tournaments.filter(date=datetime.date.today()),
-			request.user.username, 5)
-		return JsonResponse({'username': request.user.username,
-			'theme_name' : request.user.profile.theme_name,
-			'pfp': request.user.profile.profile_picture,
-			'lang': request.user.profile.language_pack,
-			'friends': friend_json,
-			'friend_requests': friend_request_json,
-			'blocked_users': blocked_json,
-			'is_active': request.user.profile.is_active,
-			'matches' : matches,
-			'is_admin' : request.user.is_staff,
-			'font_amplifier' : request.user.profile.font_amplifier,
-			'do_not_disturb' : request.user.profile.do_not_disturb,
-			'display_name': request.user.profile.display_name
-		})
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
+	friends_list = request.user.profile.friends.all()
+	friends_request_list = request.user.profile.friends_request.all()
+	blocked_list = request.user.profile.blocked_users.all()
+	friend_json = {}
+	friend_request_json = {}
+	blocked_json = {}
+
+	for e in friends_list:
+		friend_json[e.username] = get_user_preview_json(e)
+	for e in friends_request_list:
+		friend_request_json[e.username] = get_user_preview_json(e)
+	for e in blocked_list:
+		blocked_json[e.username] = get_user_preview_json(e)
+
+	matches = get_user_match_json(
+		request.user,
+		request.user.profile.matches.filter(date=datetime.date.today()),
+		request.user.profile.tournaments.filter(date=datetime.date.today()),
+		request.user.username, 5)
+
+	return JsonResponse({'username': request.user.username,
+		'theme_name' : request.user.profile.theme_name,
+		'pfp': request.user.profile.profile_picture,
+		'lang': request.user.profile.language_pack,
+		'friends': friend_json,
+		'friend_requests': friend_request_json,
+		'blocked_users': blocked_json,
+		'is_active': request.user.profile.is_active,
+		'matches' : matches,
+		'is_admin' : request.user.is_staff,
+		'font_amplifier' : request.user.profile.font_amplifier,
+		'do_not_disturb' : request.user.profile.do_not_disturb,
+		'display_name': request.user.profile.display_name
+	})
+
 def get(request):
-	if request.method != 'POST':
-		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if request.method != 'POST' :
+		return JsonResponse({'message':  "Invalid request"}, status=405)
 	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
@@ -591,7 +590,7 @@ def get(request):
 
 		if not username or not startDate or not endDate or \
 			not isinstance(username, str) or not isinstance(startDate, str) or not isinstance(endDate, str):
-			return HttpResponse("Invalid Data: " + str(request.body), status=400)
+			return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
 
 		datetime.datetime.strptime(startDate, '%Y-%m-%d')
 		datetime.datetime.strptime(endDate, '%Y-%m-%d')
@@ -600,56 +599,87 @@ def get(request):
 		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
 			return JsonResponse({'message': "can't find user"}, status=403)
 
+		if user.username in NOT_USER:
+			return JsonResponse({'message': "User not found"}, status=404)
+
 		response = get_user_json(request.user, user, startDate, endDate)
 
 		return JsonResponse(response, status=200)
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except (KeyError, ValueError):
-		return HttpResponse("Missing Data: " + str(request.body), status=400)
+		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 	except User.DoesNotExist:
-		return JsonResponse({'message': "can't find user"}, status=404)
+		return JsonResponse({'message': "User not found"}, status=404)
 	except DatabaseError:
-		return HttpResponse("Database error", status=500)
+		return JsonResponse({'message':  "Database error"}, status=500)
 	except Exception:
-		return HttpResponse("Internal server error", status=500)
+		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def search_by_username(request):
 	if (request.method != 'POST'):
 		return JsonResponse({'message': 'Invalid request'}, status=405)
-	if request.user.is_authenticated:
-		data = json.loads(request.body)
-		users_json = {}
-		try:
-			query_users = User.objects.filter(username__icontains=data['name'])
-			i = 0
-			for user in query_users:
-				if not (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
-					users_json[i] = get_user_preview_json(user)
-				i += 1
-			if i == 0:
-				return JsonResponse({}, status=200)
-			return JsonResponse(users_json, status=200)
-		except Exception as error:
-			return JsonResponse({'message': error}, status=500)
-	else:
+	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
+
+	users_json = {}
+
+	try:
+		data = json.loads(request.body)
+		name = data['name']
+
+		if not name or not isinstance(name, str):
+			return JsonResponse({'message': 'Invalid name'}, status=400)
+
+		query_users = User.objects.filter(username__icontains=name)
+		if not query_users:
+			return JsonResponse({}, status=200)
+
+		for user in query_users:
+			if user.profile.blocked_users.filter(pk=request.user.pk).exists() or \
+				user.username == request.user.username or \
+				user.username == "nobody" or \
+				user.username == "deleted":
+				continue
+
+			users_json[user.username] = get_user_preview_json(user)
+
+		return JsonResponse(users_json, status=200)
+
+	except json.JSONDecodeError:
+		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
+
+	except Exception:
+		return JsonResponse({'message': 'Internal server error'}, status=500)
 
 def get_user_id(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request method'}, status=405)
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': 'Client is not logged'}, status=401)
 
 	try:
 		data = json.loads(request.body)
-		username = data.get("user")
+		username = data["username"]
 
-		if not username:
-			return JsonResponse({'message': 'Username is required'}, status=400)
+		if not username or not isinstance(username, str):
+			return JsonResponse({'message': 'Invalid username'}, status=400)
+
 		user = User.objects.get(username=username)
 
 		if (user.profile.blocked_users.filter(pk=request.user.pk)).exists():
 			return JsonResponse({'message': 'User blocked you', 'blocked': True}, status=200)
+
+		if user.username in NOT_USER:
+			return JsonResponse({'message': 'User not found'}, status=404)
+
 		return JsonResponse({'id': user.id, 'self_id' : request.user.id, 'blocked': False}, status=200)
+
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
 
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'User not found'}, status=404)
@@ -657,13 +687,21 @@ def get_user_id(request):
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
+	except Exception:
+		return JsonResponse({'message': 'Internal server error'}, status=500)
+
 def get_tournament(request):
 	if request.method != 'POST':
 		return JsonResponse({'message': 'Invalid request method'}, status=405)
 
 	try:
 		data = json.loads(request.body)
-		tournament = gameModels.TournamentModel.objects.get(pk=data.get("id"))
+		id = data["id"]
+
+		if not id or not isinstance(id, int):
+			return JsonResponse({'message': 'Invalid id'}, status=400)
+
+		tournament = gameModels.TournamentModel.objects.get(pk=id)
 		tournamentJson = {
 			"round_0" : {
 				"match_0" : {
@@ -785,31 +823,17 @@ def get_tournament(request):
 			}
 		}
 		for match in tournament.matches.all():
-			try:
-				p1_name = match.player_one.username
-				p1_pfp = match.player_one.profile.profile_picture
-				p1_display_name = match.player_one.profile.display_name
-				if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-					p1_name = "deleted"
-					p1_pfp = ""
-					p1_display_name = "deleted"
-			except:
-				p1_name = "deleted"
-				p1_pfp = ""
-				p1_display_name = "deleted"
+			if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				match.player_one = User.objects.get(username="blocked")
+			p1_name = match.player_one.username
+			p1_pfp = match.player_one.profile.profile_picture
+			p1_display_name = match.player_one.profile.display_name
 
-			try:
-				p2_name = match.player_two.username
-				p2_pfp = match.player_two.profile.profile_picture
-				p2_display_name = match.player_two.profile.display_name
-				if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-					p2_name = "deleted"
-					p2_pfp = ""
-					p2_display_name = "deleted"
-			except:
-				p2_name = "deleted"
-				p2_pfp = ""
-				p2_display_name = "deleted"
+			if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
+				match.player_two = User.objects.get(username="blocked")
+			p2_name = match.player_two.username
+			p2_pfp = match.player_two.profile.profile_picture
+			p2_display_name = match.player_two.profile.display_name
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = p1_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["display_name"] = p1_display_name
@@ -825,11 +849,18 @@ def get_tournament(request):
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["id"] = match.pk
 		return JsonResponse(tournamentJson, status=200)
-	except gameModels.DoesNotExist:
+
+	except gameModels.TournamentModel.DoesNotExist:
 		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
+
+	except Exception as e:
+		return JsonResponse({'message': str(e)}, status=500)
 
 def get_match(request):
 	if request.method != 'POST':
@@ -837,32 +868,25 @@ def get_match(request):
 
 	try:
 		data = json.loads(request.body)
-		match = gameModels.Match.objects.get(pk=data.get("id"))
-		try:
-			p1_name = match.player_one.username
-			p1_pfp = match.player_one.profile.profile_picture
-			p1_display_name = match.player_one.profile.display_name
-			if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				p1_name = "deleted"
-				p1_pfp = ""
-				p1_display_name = "deleted"
-		except:
-			p1_name = "deleted"
-			p1_pfp = ""
-			p1_display_name = "deleted"
+		id = data["id"]
 
-		try:
-			p2_name = match.player_two.username
-			p2_pfp = match.player_two.profile.profile_picture
-			p2_display_name = match.player_two.profile.display_name
-			if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
-				p2_name = "deleted"
-				p2_pfp = ""
-				p2_display_name = "deleted"
-		except:
-			p2_name = "deleted"
-			p2_pfp = ""
-			p2_display_name = "deleted"
+		if not id or not isinstance(id, int):
+			return JsonResponse({'message': 'Invalid id'}, status=400)
+
+		match = gameModels.Match.objects.get(pk=id)
+
+		if (match.player_one.profile.blocked_users.filter(pk=request.user.pk)).exists():
+			match.player_one = User.objects.get(username="blocked")
+		p1_name = match.player_one.username
+		p1_pfp = match.player_one.profile.profile_picture
+		p1_display_name = match.player_one.profile.display_name
+
+		if (match.player_two.profile.blocked_users.filter(pk=request.user.pk)).exists():
+			match.player_two = User.objects.get(username="blocked")
+		p2_name = match.player_two.username
+		p2_pfp = match.player_two.profile.profile_picture
+		p2_display_name = match.player_two.profile.display_name
+
 
 		match_json = {
 			'player_one' : p1_name,
@@ -886,9 +910,15 @@ def get_match(request):
 		}
 
 		return JsonResponse(match_json, status=200)
-	except gameModels.DoesNotExist:
+
+	except gameModels.Match.DoesNotExist:
 		return JsonResponse({'message': 'Tournament not found'}, status=404)
 
 	except json.JSONDecodeError:
 		return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
+	except KeyError:
+		return JsonResponse({'message': 'Missing data'}, status=400)
+
+	except Exception:
+		return JsonResponse({'message': 'Internal server error'}, status=500)

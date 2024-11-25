@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from login.views import create_nobody
+from login.views import create_deleted_user
 import datetime
 import random
 
@@ -82,9 +82,9 @@ class MatchManager(models.Manager):
 			player_two_goals_down=game.playerRight.goalsDown
 		)
 
-		if game.playerLeft.user.username != "Nobody":
+		if game.playerLeft.user.username != "nobody":
 			game.playerLeft.user.profile.matches.add(match)
-		if game.playerRight.user.username != "Nobody":
+		if game.playerRight.user.username != "nobody":
 			game.playerRight.user.profile.matches.add(match)
 
 	def save(self):
@@ -93,12 +93,12 @@ class MatchManager(models.Manager):
 class Match(models.Model):
 	player_one = models.ForeignKey(
 		User,
-		on_delete=models.SET(create_nobody),
+		on_delete=models.SET(create_deleted_user),
 		related_name="first_player"
 	)
 	player_two = models.ForeignKey(
 		User,
-		on_delete=models.SET(create_nobody),
+		on_delete=models.SET(create_deleted_user),
 		related_name="second_player"
 	)
 	date = models.DateField(auto_now=False, auto_now_add=True)
@@ -106,7 +106,7 @@ class Match(models.Model):
 	player_two_pts = models.IntegerField(default=0)
 	winner = models.ForeignKey(
 		User,
-		on_delete=models.SET(create_nobody),
+		on_delete=models.SET(create_deleted_user),
 		related_name="matches_won"
 	)
 	exchanges = models.IntegerField(default=0)
@@ -152,7 +152,7 @@ class TournamentModel(models.Model):
 	matches = models.ManyToManyField(TournamentMatch, related_name="matches")
 	winner = models.ForeignKey(
 		User,
-		on_delete=models.SET(create_nobody),
+		on_delete=models.SET(create_deleted_user),
 		related_name="tournaments_won"
 	)
 

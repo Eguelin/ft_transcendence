@@ -289,7 +289,7 @@ class GameRemote(Game):
 	@sync_to_async
 	def checkUser(self, player):
 		if not User.objects.filter(username=player.user.username).exists():
-			player.user = User.objects.get(username="Nobody")
+			player.user = User.objects.get(username="nobody")
 
 	async def end(self):
 		if not self.playerLeft.socket and not self.playerRight.socket:
@@ -510,7 +510,7 @@ class PlayerRemote(Player):
 		super().init(game, side)
 		self.input = {}
 		if not self.user:
-			self.user = User.objects.get(username='Nobody')
+			self.user = User.objects.get(username='nobody')
 		self.profile = self.user.profile
 
 	async def send(self, type, message):
@@ -612,43 +612,49 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.player.socket = None
 
 	async def receive(self, text_data):
-		data = json.loads(text_data)
-		if ("type" in data):
-			if data['type'] == 'remote':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerRemote(self.player)
-				return
+		try:
+			data = json.loads(text_data)
+			type = data['type']
+		except json.JSONDecodeError:
+			await self.send('error', 'Invalid JSON')
+			return
+		except KeyError:
+			await self.send('error', 'Invalid Data')
+			return
 
-			elif data['type'] == 'tournament':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerTournament(self.player)
-				return
+		if type == 'remote':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerRemote(self.player)
+			return
 
-			elif data['type'] == 'ai':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerAI(self.player)
-				return
+		elif type == 'tournament':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerTournament(self.player)
+			return
 
-			elif data['type'] == 'full_ai':
-				self.player = PlayerRemote(self)
-				await Matchmaking().addPlayerFullAI(self.player)
-				return
+		elif type == 'ai':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerAI(self.player)
+			return
 
-			elif data['type'] == 'local':
-				self.player = PlayerLocal(self)
-				await Matchmaking().addPlayerLocal(self.player)
-				return
+		elif type == 'full_ai':
+			self.player = PlayerRemote(self)
+			await Matchmaking().addPlayerFullAI(self.player)
+			return
 
-			elif self.player:
-				if data['type'] == 'game_keydown':
-					self.player.input = data['message']
-				elif data['type'] == 'game_ready':
-					self.player.isReady = True
+		elif type == 'local':
+			self.player = PlayerLocal(self)
+			await Matchmaking().addPlayerLocal(self.player)
+			return
 
-			else:
-				await self.send('error', 'Game mode unavailable')
+		elif self.player:
+			if type == 'game_keydown':
+				self.player.input = data['message']
+			elif type == 'game_ready':
+				self.player.isReady = True
+
 		else:
-			await self.send('error', 'Invalid data')
+			await self.send('error', 'Game mode unavailable')
 
 	async def send(self, type, message):
 		await super().send(text_data=json.dumps({
@@ -709,7 +715,7 @@ class Tournament():
 
 	@sync_to_async
 	def setTournament(self):
-		self.model = models.TournamentModel(winner=User.objects.get(username='Nobody'))
+		self.model = models.TournamentModel(winner=User.objects.get(username='nobody'))
 		self.model.save()
 
 	async def moveWinner(self, round, match, side, winner):
