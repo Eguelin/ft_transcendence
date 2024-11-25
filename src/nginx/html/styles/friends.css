@@ -252,7 +252,7 @@
 }
 
 .activeSelector{
-	color: var(--active-selector-rgb) !important;
+	color: var(--main-text-rgb) !important;
 }
 
 

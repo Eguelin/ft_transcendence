@@ -41,11 +41,10 @@
 
 #loginSlideSelector .slideSelector.activeSelector div{
 	background: none !important;
-	color: var(--main-text-rgb) !important;
 }
 
 #slideSelectorBg{
-	background: var(--hover-text-rgb);
+	background: var(--active-selector-rgb);
 	position: absolute;
 	width: 50%;
 	height: 2rem;

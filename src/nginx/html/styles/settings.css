@@ -18,10 +18,15 @@
 #confirmPfpMask{
 	opacity: .5;
 }
-#inputChangeUsername, #inputChangePassword{
+#inputChangeUsername, #inputChangePassword, #pfpLabel{
 	width: -webkit-fill-available;
 	width: -moz-available;
-	border: 0.2px solid var(--main-text-rgb);
+	border: 0.2px solid var(--match-border-rgb);
+}
+
+#inputChangeUsername:focus, #inputChangePassword:focus, #pfpLabel:focus, #inputChangeUsername:hover, #inputChangePassword:hover, #pfpLabel:hover{
+	border-color: var(--main-text-rgb);
+
 }
 
 #saveUsernameBtn, #savePasswordBtn{
@@ -334,4 +339,8 @@
 
 #changePasswordBtn, #confirmChangePasswordBtn{
 	font-size: 1rem;
+}
+
+#changePasswordContainer{
+	background-color: transparent;
 }
