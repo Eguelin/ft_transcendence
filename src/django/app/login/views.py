@@ -637,9 +637,7 @@ def search_by_username(request):
 
 		for user in query_users:
 			if user.profile.blocked_users.filter(pk=request.user.pk).exists() or \
-				user.username == request.user.username or \
-				user.username == "nobody" or \
-				user.username == "deleted":
+				user.username == request.user.username or user.username in NOT_USER:
 				continue
 
 			users_json[user.username] = get_user_preview_json(user)
