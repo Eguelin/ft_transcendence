@@ -622,6 +622,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.send('error', 'Invalid Data')
 			return
 
+		if not type or not isinstance(type, str):
+			await self.send('error', 'Invalid Type')
+			return
+
 		if type == 'remote':
 			self.player = PlayerRemote(self)
 			await Matchmaking().addPlayerRemote(self.player)
