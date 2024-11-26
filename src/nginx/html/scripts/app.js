@@ -609,6 +609,8 @@ const themeMap = {
 		"--notif-center-border-rgb" : "#FDFDFB",
 		"--contest-match-bg-rgb" : "#3A3053",
 		"--input-focus-border" : "#FDFDFB",
+		"--recent-match-container-focus-child": "#00000000",
+		"--recent-match-container-focus-text": "#FDFDFB",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -626,6 +628,8 @@ const themeMap = {
 		"--notif-center-border-rgb" : "#00FFF5",
 		"--contest-match-bg-rgb" : "#222831",
 		"--input-focus-border" : "#FFBFF7",
+		"--recent-match-container-focus-child": "#FFBFF7",
+		"--recent-match-container-focus-text": "#FFBFF7",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -643,6 +647,8 @@ const themeMap = {
 		"--notif-center-border-rgb" : "#110026",
 		"--contest-match-bg-rgb" : "#FFC6C6",
 		"--input-focus-border" : "#110026",
+		"--recent-match-container-focus-child": "#00000000",
+		"--recent-match-container-focus-text": "#110026",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
@@ -659,6 +665,8 @@ const themeMap = {
 		"--notif-center-border-rgb" : "#7743DB",
 		"--contest-match-bg-rgb" : "#FFFBF5",
 		"--input-focus-border" : "#2E073F",
+		"--recent-match-container-focus-child": "#2E073F",
+		"--recent-match-container-focus-text": "#2E073F",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -1033,6 +1041,21 @@ notifBtn.onfocus = function(e) {
 	document.querySelector("#notifCenter").style.borderLeftColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
 	document.querySelector("#notifCenter").style.borderBottomColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
 }
+
+notifBtn.onmouseover = function(e) {
+	document.querySelector("#notifCenter").style.borderLeftColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+	document.querySelector("#notifCenter").style.borderBottomColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+}
+
+
+notifBtn.onmouseout = function(e) {
+	if (document.activeElement.id != "pushNotif"){
+		document.querySelector("#notifCenter").style.borderLeftColor = "unset"
+		document.querySelector("#notifCenter").style.borderBottomColor = "unset"
+	}
+}
+
+
 notifBtn.onblur = function(e) {
 	document.querySelector("#notifCenter").style.borderLeftColor = "unset"
 	document.querySelector("#notifCenter").style.borderBottomColor = "unset"

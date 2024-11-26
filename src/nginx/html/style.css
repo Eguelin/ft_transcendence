@@ -16,7 +16,9 @@
 	--notif-center-border-rgb : #FDFDFB;
 	--contest-match-bg-rgb : #3A3053;
 	--is-dark-theme : 1;
-	--input-focus-border : #FDFDFB,
+	--input-focus-border : #FDFDFB;
+	--recent-match-container-focus-child: #00000000;
+	--recent-match-container-focus-text: #FDFDFB;
 
 	--font-size-amplifier: 1;
 	--is-mobile: 0;
