@@ -586,7 +586,6 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/${currentLang}/home`);
 	friendUpdate();
 })
 
