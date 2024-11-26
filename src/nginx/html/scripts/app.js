@@ -608,6 +608,7 @@ const themeMap = {
 		"--active-selector-rgb" : "#3A3053",
 		"--notif-center-border-rgb" : "#FDFDFB",
 		"--contest-match-bg-rgb" : "#3A3053",
+		"--input-focus-border" : "#FDFDFB",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -615,7 +616,7 @@ const themeMap = {
 	"high_dark": {
 		"--page-bg-rgb": "#222831",
 		"--main-text-rgb": "#00FFF5",
-		"--hover-text-rgb": "#00ADB5",
+		"--hover-text-rgb": "#ffbff7",
 		"--option-hover-rgb": "#ffbff7",
 		"--option-text-rgb": "#00FFF5",
 		"--input-bg-rgb": "#393E46",
@@ -624,6 +625,7 @@ const themeMap = {
 		"--active-selector-rgb" : "#22283100",
 		"--notif-center-border-rgb" : "#00FFF5",
 		"--contest-match-bg-rgb" : "#222831",
+		"--input-focus-border" : "#FFBFF7",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -640,13 +642,14 @@ const themeMap = {
 		"--active-selector-rgb" : "#FFC6C6",
 		"--notif-center-border-rgb" : "#110026",
 		"--contest-match-bg-rgb" : "#FFC6C6",
+		"--input-focus-border" : "#110026",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
 	"high_light": {
 		"--page-bg-rgb": "#FFFBF5",
 		"--main-text-rgb": "#7743DB",
-		"--hover-text-rgb": "#C3ACD0",
+		"--hover-text-rgb": "#2E073F",
 		"--option-hover-rgb": "#2E073F",
 		"--option-text-rgb": "#7743DB",
 		"--input-bg-rgb": "#F7EFE5",
@@ -655,6 +658,7 @@ const themeMap = {
 		"--active-selector-rgb" : "#2E073F00",
 		"--notif-center-border-rgb" : "#7743DB",
 		"--contest-match-bg-rgb" : "#FFFBF5",
+		"--input-focus-border" : "#2E073F",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -677,6 +681,10 @@ function switchTheme(theme) {
 			credentials: 'include'
 		})
 		client.use_browser_theme = false;
+		if (document.querySelector("#notifCenter").style.borderLeftColor != "" && document.querySelector("#notifCenter").style.borderLeftColor != "unset"){
+			document.querySelector("#notifCenter").style.borderLeftColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+			document.querySelector("#notifCenter").style.borderBottomColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+		}
 	}
 	document.documentElement.style.setProperty("--is-dark-theme", themeMap[theme]["is-dark"]);
 	if (document.getElementById("themeButton"))
@@ -1020,6 +1028,15 @@ notifBtn.addEventListener("click", (e) => {
 			notifCenterContainer.classList.remove("pendingNotification");
 	}
 })
+
+notifBtn.onfocus = function(e) {
+	document.querySelector("#notifCenter").style.borderLeftColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+	document.querySelector("#notifCenter").style.borderBottomColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+}
+notifBtn.onblur = function(e) {
+	document.querySelector("#notifCenter").style.borderLeftColor = "unset"
+	document.querySelector("#notifCenter").style.borderBottomColor = "unset"
+}
 
 notifBtn.onkeydown = function (e) {
 	if (e.key == "Enter") {
