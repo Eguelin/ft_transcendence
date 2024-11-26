@@ -669,16 +669,7 @@ function loadUserDashboard(startDate, endDate){
 		setNotifTabIndexes(tabIdx);
 		
 		document.querySelectorAll(".resultScoreName").forEach(function (elem){
-			if (!elem.classList.contains("deletedUser")){
-				elem.addEventListener("click", (e) => {
-					myPushState(`https://${hostname.host}/${currentLang}/user/${elem.innerHTML}`);	
-				})
-				elem.addEventListener("keydown", (e) => {
-					if (e.key == "Enter")
-						elem.click();
-				})
-			}
-			else{
+			if (elem.classList.contains("deletedUser")){
 				elem.innerText = client.langJson["index"][".deletedUser"];
 			}
 		})
