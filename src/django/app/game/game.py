@@ -253,6 +253,7 @@ class Game():
 		if init:
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
+			info['maxScore'] = Game.maxScore
 
 		return info
 
@@ -883,5 +884,6 @@ class GameTournament(GameRemote):
 		if init:
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
+			info['maxScore'] = Game.maxScore
 
 		return info
