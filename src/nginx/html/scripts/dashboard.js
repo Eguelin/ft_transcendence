@@ -112,7 +112,7 @@ document.getElementById("search").addEventListener("click", (e)=>{
 
 lastWeekSelection.addEventListener("click", (e) => {
 	setLoader();
-	
+
     var startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
     loadUserDashboard(startDate, today);
@@ -158,9 +158,9 @@ function getGradient(ctx, chartArea) {
 
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
     if (!(startDate instanceof Date && endDate instanceof Date)){
-        return ;    
+        return ;
     }
-        
+
     if (chartAverage){
 		if (chartAverage instanceof Chart)
         	chartAverage.destroy();
@@ -183,7 +183,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 	if (document.querySelector("#notPlayedPeriod"))
 		document.querySelector("#notPlayedPeriod").remove();
 
-    var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)); 
+    var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
     nbMatch = Object.keys(matches).length;
     const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
@@ -287,7 +287,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 			}
 		  }
 		}
-	
+
 		function drawStats(){
 			document.querySelector("#userStatPieGraphContainer .graphTitle").innerText = client.langJson["dashboard"]["CVuserStatsGraph"];
 			data = {
@@ -329,7 +329,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					borderColor: function(context){
 						const chart = context.chart;
 						const {ctx, chartArea} = chart;
-		
+
 						if (!chartArea)
 							return ;
 						return (getGradient(ctx, chartArea));
@@ -338,7 +338,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					pointBackgroundColor: function(context){
 						const chart = context.chart;
 						const {ctx, chartArea} = chart;
-		
+
 						if (!chartArea)
 							return ;
 						return (getGradient(ctx, chartArea));
@@ -351,7 +351,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					spanGaps: true,
 				}
 			]
-		
+
 			if (username != clientUsername){
 				datasets.push({
 					label: client.langJson["dashboard"]["CVwinLossGraphClient"],
@@ -370,9 +370,9 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					backgroundColor: ['grey'],
 				})
 			}
-		
+
 			document.querySelector("#winLossGraphContainer .graphTitle").innerText = client.langJson["dashboard"]["CVwinLossGraph"];
-		
+
 			chartAverage = new Chart(document.getElementById("winLossGraph"), {
 				type: 'line',
 				data: {
@@ -422,9 +422,9 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				},
 				plugins: [htmlLegendPlugin]
 			});
-		
+
 		}
-	
+
 		function drawAbs(){
 			datasets = [
 				{
@@ -436,7 +436,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					borderColor: function(context){
 						const chart = context.chart;
 						const {ctx, chartArea} = chart;
-		
+
 						if (!chartArea)
 							return ;
 						return (getGradient(ctx, chartArea));
@@ -445,7 +445,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					pointBackgroundColor: function(context){
 						const chart = context.chart;
 						const {ctx, chartArea} = chart;
-		
+
 						if (!chartArea)
 							return ;
 						return (getGradient(ctx, chartArea));
@@ -458,7 +458,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					spanGaps: true
 				}
 			]
-		
+
 			if (username != clientUsername){
 				datasets.push({
 					label: client.langJson["dashboard"]["CVwinLossAbsGraphClient"],
@@ -477,7 +477,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					backgroundColor: ['grey'],
 				})
 			}
-		
+
 			document.querySelector("#winLossAbsGraphContainer .graphTitle").innerText = client.langJson["dashboard"]["CVwinLossAbsGraph"];
 
 			chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
@@ -529,9 +529,9 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				},
 				plugins: [htmlLegendPlugin]
 			});
-		
+
 		}
-	
+
 		drawStats();
 		drawAverage();
 		drawAbs();
@@ -550,7 +550,7 @@ function updateDashboardLang(){
 	if (document.querySelector("#notPlayedPeriod")){
 		document.querySelector("#notPlayedPeriod").innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("${USERNAME}", splitPath[5]);
 	}
-	
+
 	if (chartAverage){
 		chartAverage.titleBlock.options.text = content["CVwinLossGraph"];
 		if (chartAverage.config._config.data.datasets.length > 1)
@@ -568,7 +568,7 @@ function updateDashboardLang(){
 		chartStats.config._config.data.labels[0] = content["CVwin"];
 		chartStats.config._config.data.labels[1] = content["CVloss"];
 		chartStats.update();
-	}	
+	}
 	document.title = langJson['dashboard'][`dashboard title`].replace("${USERNAME}", splitPath[5]);
 }
 
@@ -599,7 +599,7 @@ function displayCharts(){
 		g = d.getElementsByTagName('body')[0],
 		x = (w.innerWidth || e.clientWidth || g.clientWidth) / 100,
 		y = (w.innerHeight|| e.clientHeight|| g.clientHeight) / 100;
-		
+
 		if (isMobile() && isPortrait()){
 			wLGraph.width = x * 80;
 			wLAbsGraph.width = x * 80;
@@ -667,18 +667,9 @@ function loadUserDashboard(startDate, endDate){
 			tabIdx += 3;
 		});
 		setNotifTabIndexes(tabIdx);
-		
+
 		document.querySelectorAll(".resultScoreName").forEach(function (elem){
-			if (!elem.classList.contains("deletedUser")){
-				elem.addEventListener("click", (e) => {
-					myPushState(`https://${hostname.host}/${currentLang}/user/${elem.innerHTML}`);	
-				})
-				elem.addEventListener("keydown", (e) => {
-					if (e.key == "Enter")
-						elem.click();
-				})
-			}
-			else{
+			if (elem.classList.contains("deletedUser")){
 				elem.innerText = client.langJson["index"][".deletedUser"];
 			}
 		})

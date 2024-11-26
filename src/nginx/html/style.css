@@ -12,6 +12,7 @@
 	--input-bg-rgb : #3A3053;
 	--match-bg-rgb : #3A3053;
 	--border-rgb : #FDFDFB;
+	--match-border-rgb : #110026;
 	--active-selector-rgb : #FDFDFB;
 	--notif-center-border-rgb : #FDFDFB;
 	--contest-match-bg-rgb : #3A3053;
@@ -385,11 +386,11 @@ a {
 		font-size: calc(32px * var(--font-size-amplifier));
 		transition: none !important;
 	}
-	
+
 	.mobile *{
 		transition: none !important;
 	}
-	
+
 	.mobile {
 		body{
 			font-size: calc(32px * var(--font-size-amplifier));
@@ -398,7 +399,7 @@ a {
 		button{
 			border-width: 4.2px;
 		}
-	
+
 		input{
 			border-width: 4.2px;
 		}
