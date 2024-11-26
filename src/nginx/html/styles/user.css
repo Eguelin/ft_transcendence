@@ -100,9 +100,16 @@
 }
 
 .resultScoreName{
+	width: fit-content;
+	text-align: left;
+	overflow: hidden;
+}
+
+.resultScoreNameContainer{
 	width: 16ch;
 	text-align: left;
 	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .resultScoreName.displayName{
