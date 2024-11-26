@@ -466,6 +466,15 @@ div#usernameBtn:focus, div#usernameBtn:hover {
 	height: 4.1rem;
 	animation: appearNotif 300ms linear forwards;
 }
+
+.notifContainer:focus{
+	outline: none;
+	color: var(--option-hover-rgb);
+	.notifAccept, .notifReject {
+		background-color: var(--option-hover-rgb);
+	}
+}
+
 .openCenter #notifCenter .notifContainer, .quickOpenCenter #notifCenter .notifContainer{
 	height: 0;
 	font-size: 0;
