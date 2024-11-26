@@ -7,6 +7,20 @@
 	gap: 1vh;
 }
 
+#recentMatchHistoryContainer:focus{
+	outline: none;
+	border-top: .1rem solid var(--input-focus-border);
+	.matchDescContainer{
+		border-color: var(--recent-match-container-focus-child) !important;
+		color: var(--recent-match-container-focus-text) !important;
+	}
+}
+
+.matchDescContainer:focus{
+	border-color: var(--recent-match-container-focus-child) !important;
+	color: var(--recent-match-container-focus-text) !important;
+}
+
 #recentMatchHistory{
 	width: -moz-available;
 	width: -webkit-fill-available;
