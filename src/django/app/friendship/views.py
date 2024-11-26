@@ -152,10 +152,14 @@ def block_friend(request):
 
 	try:
 		ennemy = User.objects.get(username=username)
+		if (ennemy.is_staff):
+			return JsonResponse({'message': 'Can\'t block staff member'}, status=401)
 		user = request.user
-		ennemy.profile.friends.remove(user)
-		ennemy.save()
-		user.profile.friends.remove(ennemy)
+		if (user.profile.friends.filter(pk=ennemy.pk)).exists():
+			ennemy.profile.friends.remove(user)
+			ennemy.save()
+			user.profile.friends.remove(ennemy)
+			user.save()
 		user.profile.blocked_users.add(ennemy)
 		user.save()
 		return JsonResponse({'message': 'Succesfully blocked user'})

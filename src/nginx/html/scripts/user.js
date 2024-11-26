@@ -250,6 +250,14 @@ document.addEventListener("click", (e) => {
 					document.getElementById("blockBtn").style.setProperty("display", "none");
 					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
 					blockFriendPopup.style.setProperty("display", "none");
+				}
+				else
+				{
+					if (response.status == 401)
+					{
+						popUpError(client.langJson['friends']['blockError']);
+					}
+					blockFriendPopup.style.setProperty("display", "none");
 					document.getElementById("popupBg").style.display = "none";
 				}
 			})
