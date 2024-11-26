@@ -505,7 +505,7 @@ function handleToken() {
 					myReplaceState(`https://${hostname.host}/${currentLang}/login${hostname.hash}`);
 				else if (url.pathname == "" || url.pathname == "/") {
 					friendUpdate();
-						//myReplaceState(`https://${hostname.host}/${currentLang}/home`);
+					myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 				}
 				else {
 					load();
@@ -605,6 +605,7 @@ const themeMap = {
 		"--input-bg-rgb": "#3A3053",
 		"--match-bg-rgb": "#3A3053",
 		"--border-rgb": "#FDFDFB00",
+		"--match-border-rgb": "#110026",
 		"--active-selector-rgb" : "#3A3053",
 		"--notif-center-border-rgb" : "#FDFDFB",
 		"--contest-match-bg-rgb" : "#3A3053",
@@ -624,6 +625,7 @@ const themeMap = {
 		"--input-bg-rgb": "#393E46",
 		"--match-bg-rgb": "#393E4600",
 		"--border-rgb": "#00FFF5",
+		"--match-border-rgb": "#00FFF5",
 		"--active-selector-rgb" : "#22283100",
 		"--notif-center-border-rgb" : "#00FFF5",
 		"--contest-match-bg-rgb" : "#222831",
@@ -643,6 +645,7 @@ const themeMap = {
 		"--input-bg-rgb": "#FFC6C6",
 		"--match-bg-rgb": "#FFC6C6",
 		"--border-rgb": "#11002600",
+		"--match-border-rgb": "#F5EDED",
 		"--active-selector-rgb" : "#FFC6C6",
 		"--notif-center-border-rgb" : "#110026",
 		"--contest-match-bg-rgb" : "#FFC6C6",
@@ -661,6 +664,7 @@ const themeMap = {
 		"--input-bg-rgb": "#F7EFE5",
 		"--match-bg-rgb": "#F7EFE500",
 		"--border-rgb": "#7743DB",
+		"--match-border-rgb": "#FF43DB",
 		"--active-selector-rgb" : "#2E073F00",
 		"--notif-center-border-rgb" : "#7743DB",
 		"--contest-match-bg-rgb" : "#FFFBF5",
@@ -1265,7 +1269,7 @@ function friendUpdate()
 		}
 		else if (data.status && data.username && currentPage == "user")
 		{
-			if (data.status === "online" && data.username !== client.username)
+			if (data.status === "online")
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "block");
 				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
@@ -1284,7 +1288,7 @@ function friendUpdate()
 				document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 				document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 			}
-			else if (currentPage === "user" && data.username !== client.username)
+			else if (currentPage === "user")
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
 				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");

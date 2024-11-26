@@ -25,9 +25,11 @@ class Matchmaking():
 		if len(self.waiting_players) > 0:
 			player1 = None
 			for waiting_player in self.waiting_players:
-				if DEBUG or player.user != waiting_player.user:
-					player1 = waiting_player
-					break
+				if (player.user == waiting_player.user or \
+					await self.isBlocked(player.user, waiting_player.user)) and not DEBUG:
+					continue
+				player1 = waiting_player
+				break
 			if player1:
 				self.waiting_players.remove(player1)
 				game = GameRemote(player1, player)
@@ -65,7 +67,13 @@ class Matchmaking():
 	async def removePlayerTournament(self, player):
 		for tournament in self.tournaments:
 			if not await tournament.removePlayers(player):
-				return
+				continue
+
+	@sync_to_async
+	def isBlocked(self, player1, player2):
+		P1Blocked = player1.profile.blocked_users.filter(pk=player2.pk).exists()
+		P2Blocked = player2.profile.blocked_users.filter(pk=player1.pk).exists()
+		return P1Blocked or P2Blocked
 
 class Ball():
 	size = 10
@@ -253,6 +261,7 @@ class Game():
 		if init:
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
+			info['maxScore'] = Game.maxScore
 
 		return info
 
@@ -710,7 +719,7 @@ class Tournament():
 			return False
 		if not DEBUG:
 			for tournamentPlayer in self.players:
-				if player.user == tournamentPlayer.user:
+				if player.user == tournamentPlayer.user or await self.isBlocked(player.user, tournamentPlayer.user):
 					return False
 		for i in range(len(self.matches[0])):
 			if self.matches[0][i].playerLeft and self.matches[0][i].playerRight:
@@ -800,6 +809,12 @@ class Tournament():
 		self.model.winner = winner.user
 		self.model.save()
 
+	@sync_to_async
+	def isBlocked(self, player1, player2):
+		P1Blocked = player1.profile.blocked_users.filter(pk=player2.pk).exists()
+		P2Blocked = player2.profile.blocked_users.filter(pk=player1.pk).exists()
+		return P1Blocked or P2Blocked
+
 class GameTournament(GameRemote):
 	def __init__(self, tournament, match, round):
 		super().__init__(None, None)
@@ -883,5 +898,6 @@ class GameTournament(GameRemote):
 		if init:
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
+			info['maxScore'] = Game.maxScore
 
 		return info
