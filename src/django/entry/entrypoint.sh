@@ -13,12 +13,4 @@ echo "$host is available - executing command"
 python manage.py makemigrations
 python manage.py migrate
 
-if [ "$1" == "dev" ]; then
-  echo "Starting development server"
-elif [ "$1" == "prod" ]; then
-  echo "Starting production server"
-else
-  exit 1
-fi
-
 exec python manage.py runserver 0.0.0.0:8000
