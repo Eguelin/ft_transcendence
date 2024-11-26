@@ -54,6 +54,7 @@ var template = `
 					catch{
 						client.recentMatches = {}
 					}
+					var tabIdx = 19;
 					if (Object.keys(client.recentMatches).length == 0){
 						if (!document.querySelector("#notPlayedToday")){
 							var message = document.createElement("a");
@@ -72,7 +73,6 @@ var template = `
 						for (var i=0; i<Object.keys(client.recentMatches).length && i<5;i++){
 							recentMatchHistoryContainer.appendChild(createMatchResumeContainer(client.recentMatches[i], client.username, client.displayName));
 						}
-						var tabIdx = 19;
 						var container = document.getElementById("recentMatchHistoryContainer");
 						container.addEventListener("keydown", (e) => {
 							if (e.key == "Enter"){

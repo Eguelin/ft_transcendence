@@ -18,13 +18,18 @@
 #confirmPfpMask{
 	opacity: .5;
 }
-#inputChangeUsername{
+#inputChangeUsername, #inputChangePassword, #pfpLabel{
 	width: -webkit-fill-available;
 	width: -moz-available;
-	border: 0.2px solid var(--main-text-rgb);
+	border: 0.2px solid var(--border-rgb);
 }
 
-#saveUsernameBtn{
+#inputChangeUsername:focus, #inputChangePassword:focus, #pfpLabel:focus, #inputChangeUsername:hover, #inputChangePassword:hover, #pfpLabel:hover{
+	border-color: var(--main-text-rgb);
+
+}
+
+#saveUsernameBtn, #savePasswordBtn{
 	text-align: center;
 	mask-image: url(../icons/check.svg);
 	background-color: var(--main-text-rgb);
@@ -41,11 +46,11 @@
 	right: 1ch;
 }
 
-#saveUsernameBtn:hover, #saveUsernameBtn:focus {
+#saveUsernameBtn:hover, #saveUsernameBtn:focus, #savePasswordBtn:hover, #savePasswordBtn:focus {
 	background-color: var(--page-bg-rgb);
 }
 
-#saveUsernameContainer{
+#saveUsernameContainer, #changePasswordContainer{
 	display: flex;
 	align-items: center;
 	background-color: var(--hover-text-rgb);
@@ -84,7 +89,7 @@
 }
 
 #confirmPfpBtn:hover, #confirmPfpBtn:focus{
-	color: var(--option-hover-text-rgb);
+	color: var(--option-hover-rgb);
 }
 
 
@@ -160,7 +165,7 @@
 /******** Chrome, Safari, Opera and Edge Chromium styles ********/
 /* slider track */
 #fontSizeRange::-webkit-slider-runnable-track {
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	border-radius: 0.5rem;
 	height: 0.5rem;
 }
@@ -330,4 +335,12 @@
 	position: relative;
 	top: 50%;
 	translate: 0 -50%;
+}
+
+#changePasswordBtn, #confirmChangePasswordBtn{
+	font-size: 1rem;
+}
+
+#changePasswordContainer{
+	background-color: transparent;
 }

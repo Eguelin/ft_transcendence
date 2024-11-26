@@ -117,7 +117,7 @@
     left: 50%;
     top: 50%;
     translate: -50% -50%;
-    background: var(--hover-text-rgb);
+    background: var(--input-bg-rgb);
 	z-index: 11;
 	align-content: center;
 	border-radius: 1rem;
@@ -249,7 +249,6 @@
 }
 
 .quarter.match, .semi.match, .final.match{
-	background-color: var(--hover-text-rgb);
 	display: flex;
 	flex-direction: column;
 	gap: 1ch;
@@ -259,7 +258,8 @@
 	width: fit-content;
 	padding: 1ch;
 	position: relative;
-	border: .5px solid var(--page-bg-rgb);
+	border: .5px solid var(--border-rgb);
+	background-color: var(--contest-match-bg-rgb);
 }
 
 .contestUserContainer{
@@ -334,7 +334,7 @@
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	background: var(--hover-text-rgb);
+	background: var(--match-bg-rgb);
 	width: 100vw;
 	align-items: center;
 	justify-content: space-around;
@@ -373,7 +373,7 @@
 #controlerSlide .leftBtnContainer:focus .leftBtn, #controlerSlide .rightBtnContainer:focus .rightBtn, #controlerSlide .leftBtnContainer:hover .leftBtn, #controlerSlide .rightBtnContainer:hover .rightBtn,
 #controlerPlayerOne .leftBtnContainer:focus .leftBtn, #controlerPlayerOne .rightBtnContainer:focus .rightBtn, #controlerPlayerOne .leftBtnContainer:hover .leftBtn, #controlerPlayerOne .rightBtnContainer:hover .rightBtn,
 #controlerPlayerTwo .leftBtnContainer:focus .leftBtn, #controlerPlayerTwo .rightBtnContainer:focus .rightBtn, #controlerPlayerTwo .leftBtnContainer:hover .leftBtn, #controlerPlayerTwo .rightBtnContainer:hover .rightBtn{
-	background: var(--page-bg-rgb);
+	background: var(--option-hover-rgb);
 }
 
 #lobby{
@@ -388,7 +388,7 @@
 }
 
 .lobbyPlayer{
-	background: var(--hover-text-rgb);
+	background: var(--input-bg-rgb);
 	display: flex;
 	flex-direction: column;
 	gap: 1ch;
@@ -474,12 +474,19 @@
 #matchContainer .playerInfoContainer{
 	font-size: 1em;
 	flex-direction: row;
-	background: var(--hover-text-rgb);
+	background: var(--match-bg-rgb);
+	border: 2px solid var(--border-rgb);
+	box-sizing: border-box;
+	border-bottom: 0;
 }
 
+#matchContainer .playerInfoContainer#playerOne{
+	border-left: 0;
+}
 
 #matchContainer .playerInfoContainer#playerTwo{
 	flex-direction: row-reverse;
+	border-right: 0;
 }
 
 .playerInfo{
@@ -803,6 +810,7 @@ table.landscape{
 				height: 100%;
 				width: 50%;
 				align-content: center;
+				overflow: hidden;
 			}
 
 			.leftBtn, .rightBtn{
@@ -867,7 +875,7 @@ table.landscape{
 }
 
 .legendTextContainer{
-	color: rgb(102, 102, 102);
+	/*color: rgb(102, 102, 102);*/
 	margin: 0px;
 	padding: 0px;
 	font-size: .5rem;

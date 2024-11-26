@@ -41,11 +41,10 @@
 
 #loginSlideSelector .slideSelector.activeSelector div{
 	background: none !important;
-	color: var(--main-text-rgb) !important;
 }
 
 #slideSelectorBg{
-	background: var(--hover-text-rgb);
+	background: var(--active-selector-rgb);
 	position: absolute;
 	width: 50%;
 	height: 2rem;
@@ -96,6 +95,34 @@
 	border-radius: 1rem;
 	min-width: unset;
 	padding: 1rem;
+}
+
+#registerBtn{
+	anchor-name: --register-btn;
+}
+
+#loginBtn{
+	anchor-name: --login-btn;
+}
+
+#inputUsername{
+	anchor-name: --username-input;
+}
+
+#inputPassword{
+	anchor-name: --password-input;
+}
+
+#inputRegisterUsername{
+	anchor-name: --username-register-input;
+}
+
+#inputRegisterPassword{
+	anchor-name: --password-register-input;
+}
+
+#inputRegisterCPassword{
+	anchor-name: --confirm-password-register-input;
 }
 
 .loginSlideContainer input{

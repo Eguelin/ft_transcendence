@@ -1,5 +1,5 @@
 var loginBtn;
-var swichTheme;
+var switchThemeBtn;
 var fortyTwoLogin;
 var loginSlideSelector;
 
@@ -90,7 +90,7 @@ var template = `
 	notifCenterContainer.style.setProperty("display", "none");
 
 	loginBtn = document.getElementById('loginBtn')
-	swichTheme = document.getElementById("themeButton")
+	switchThemeBtn = document.getElementById("themeButton")
 	fortyTwoLogin = document.getElementById("fortyTwoLogin")
 	loginSlideSelector = document.querySelectorAll(".slideSelector")
 	slides = document.querySelectorAll(".loginSlideContainer")
@@ -236,6 +236,7 @@ var template = `
 		for (i=0;i<inputs.length;i++){
 			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
 				warningTmp = warning.cloneNode(true);
+				warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
 				inputs[i].before(warningTmp);
 			}
 			if (inputs[i].value != "" && inputs[i].previousElementSibling){
@@ -258,6 +259,7 @@ var template = `
 					response.json().then(text => {
 						if (text.logged == 0){
 							warning.text = text.message;
+							warning.style.setProperty("position-anchor", "--login-btn");
 							if (!loginBtn.previousElementSibling)
 								loginBtn.before(warning.cloneNode(true));
 						}
@@ -289,6 +291,7 @@ var template = `
 					unsetLoader();
 					response.json().then(text => {
 						warning.text = text.message;
+						warning.style.setProperty("position-anchor", "--login-btn");
 						if (!loginBtn.previousElementSibling)
 							loginBtn.before(warning.cloneNode(true));
 					})
@@ -314,6 +317,7 @@ var template = `
 				inputs[i].previousElementSibling.remove();
 			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
 				warningTmp = warning.cloneNode(true);
+				warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
 				inputs[i].before(warningTmp);
 				lock = 1;
 			}
@@ -390,6 +394,7 @@ var template = `
 						warning = document.createElement("a");
 						warning.className = "warning";
 						warning.text = response.message;
+						warning.style.setProperty("position-anchor", "--register-btn");
 						if (!registerBtn.previousElementSibling)
 							registerBtn.before(warning);
 					})

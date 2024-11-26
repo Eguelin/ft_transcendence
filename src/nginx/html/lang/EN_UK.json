@@ -64,7 +64,6 @@
 		"#subtitle" : "Settings",
 		"#accountTitle" : "Account",
 		"#accessibilityTitle" : "Accessibility",
-		"#saveBtn" : "SAVE",
 		"#inputChangeUsername" : "Username",
 		"#inputPfp" : "Profile picture",
 		"#pfpLabel" : "Profile picture",
@@ -81,7 +80,7 @@
 		"aria#confirmDeleteInput" : "Type you username, then press enter to confirm deletion",
 		"aria#pfpLabel" : "Change profile picture",
 		"aria#confirmPfpBtn" : "Confirm profile picture",
-		"account title" : "Account friends - transcendence",
+		"account title" : "Account - transcendence",
 		"accessibility title" : "Accessibility - transcendence"
 	},
 	"friends":{
