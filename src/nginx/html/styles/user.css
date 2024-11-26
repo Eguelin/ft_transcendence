@@ -57,7 +57,7 @@
 .matchDescContainer{
 	background: var(--match-bg-rgb);
 	min-height: min-content;
-	border: .5px solid var(--border-rgb);
+	border: .5px solid var(--match-border-rgb);
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -220,7 +220,7 @@
 	.matchDescContainer:focus-within, .contestMatchResume:focus-within{
 		outline: none;
 		animation: matchDescContainerFlash 2s ease-in infinite;
-		border-color: var(--border-rgb);
+		border-color: var(--match-border-rgb);
 	}
 }
 

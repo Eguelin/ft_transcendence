@@ -258,7 +258,7 @@
 	width: fit-content;
 	padding: 1ch;
 	position: relative;
-	border: .5px solid var(--border-rgb);
+	border: .5px solid var(--match-border-rgb);
 	background-color: var(--contest-match-bg-rgb);
 }
 
