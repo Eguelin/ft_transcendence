@@ -1,5 +1,5 @@
 homeBtn = document.getElementById("goHomeButton");
-swichTheme = document.getElementById("themeButton");
+switchThemeBtn = document.getElementById("themeButton");
 inputSearchUser = document.getElementById("inputSearchUser");
 inputSearchUserContainer = document.getElementById("inputSearchUserContainer");
 usernameBtn = document.getElementById("usernameBtn");
@@ -103,10 +103,10 @@ class Client {
 	blocked_user;
 	recentMatches;
 	#is_admin;
-	mainTextRgb;
 	fontAmplifier;
 	doNotDisturb;
 	displayName;
+	isRemote;
 
 	constructor() {
 		return (async () => {
@@ -128,6 +128,7 @@ class Client {
 					this.friends = result.friends;
 					this.friend_requests = result.friend_requests;
 					this.blocked_user = result.blocked_users;
+					this.isRemote = result.remote_auth;
 
 
 					var startDate = new Date();
@@ -139,7 +140,6 @@ class Client {
 					}
 
 					this.#is_admin = result.is_admin;
-					this.mainTextRgb = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 					this.fontAmplifier = result.font_amplifier;
 					this.use_browser_theme = this.theme_name === "browser" ? true : false;
 					this.doNotDisturb = result.do_not_disturb;
@@ -176,7 +176,7 @@ class Client {
 					const url = new URL(window.location.href);
 					var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
 					if (!availableLang[lang]){
-						currentLangPack = `lang${currentLang}.json`
+						currentLangPack = this.currentLangPack
 						currentLang = this.currentLang;
 					}
 					else{
@@ -343,8 +343,29 @@ window.addEventListener("popstate", (e) => {
 
 function load() {
 	const url = new URL(window.location.href);
-	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
-	var path = url.pathname.substring(lang.length + 1);
+	var lang;
+	var path;
+	if (url.pathname.indexOf("/", 1) == -1){
+		lang = url.pathname.substring(1);
+		path = url.pathname;
+		if (langMap[lang] || !routes[url.pathname])
+			path = "/home"
+		else{
+			if (!client){
+				currentLangPack = `lang/EN_UK.json`
+				currentLang = "EN_UK";
+			}
+			else{
+				currentLangPack = client.currentLangPack
+				currentLang = client.currentLang;
+			}
+		}
+	}
+	else{
+		lang = url.pathname.substring(1, url.pathname.indexOf("/", 2));
+		path = url.pathname.substring(lang.length + 1);
+	}
+
 	if (!availableLang[lang]){
 		if (!client){
 			currentLangPack = `lang/EN_UK.json`
@@ -458,7 +479,8 @@ function handleToken() {
 								myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 							}
 						}
-						catch {
+						catch (e){
+							console.error(e);
 							unsetLoader();
 						}
 					})()
@@ -578,19 +600,37 @@ const themeMap = {
 		"--page-bg-rgb": "#110026",
 		"--main-text-rgb": "#FDFDFB",
 		"--hover-text-rgb": "#3A3053",
-		"--option-hover-text-rgb": "#110026",
+		"--option-hover-rgb": "#110026",
 		"--option-text-rgb": "#FDFDFB",
 		"--input-bg-rgb": "#3A3053",
+		"--match-bg-rgb": "#3A3053",
+		"--border-rgb": "#FDFDFB00",
+		"--active-selector-rgb" : "#3A3053",
+		"--notif-center-border-rgb" : "#FDFDFB",
+		"--contest-match-bg-rgb" : "#3A3053",
+		"--input-focus-border" : "#FDFDFB",
+		"--recent-match-container-focus-child": "#00000000",
+		"--recent-match-container-focus-text": "#FDFDFB",
+
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
 	},
 	"high_dark": {
 		"--page-bg-rgb": "#222831",
 		"--main-text-rgb": "#00FFF5",
-		"--hover-text-rgb": "#00ADB5",
-		"--option-hover-text-rgb": "#222831",
+		"--hover-text-rgb": "#ffbff7",
+		"--option-hover-rgb": "#ffbff7",
 		"--option-text-rgb": "#00FFF5",
 		"--input-bg-rgb": "#393E46",
+		"--match-bg-rgb": "#393E4600",
+		"--border-rgb": "#00FFF5",
+		"--active-selector-rgb" : "#22283100",
+		"--notif-center-border-rgb" : "#00FFF5",
+		"--contest-match-bg-rgb" : "#222831",
+		"--input-focus-border" : "#FFBFF7",
+		"--recent-match-container-focus-child": "#FFBFF7",
+		"--recent-match-container-focus-text": "#FFBFF7",
+
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
 	},
@@ -598,19 +638,35 @@ const themeMap = {
 		"--page-bg-rgb": "#F5EDED",
 		"--main-text-rgb": "#110026",
 		"--hover-text-rgb": "#FFC6C6",
-		"--option-hover-text-rgb": "#F5EDED",
+		"--option-hover-rgb": "#F5EDED",
 		"--option-text-rgb": "#110026",
 		"--input-bg-rgb": "#FFC6C6",
+		"--match-bg-rgb": "#FFC6C6",
+		"--border-rgb": "#11002600",
+		"--active-selector-rgb" : "#FFC6C6",
+		"--notif-center-border-rgb" : "#110026",
+		"--contest-match-bg-rgb" : "#FFC6C6",
+		"--input-focus-border" : "#110026",
+		"--recent-match-container-focus-child": "#00000000",
+		"--recent-match-container-focus-text": "#110026",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
 	"high_light": {
 		"--page-bg-rgb": "#FFFBF5",
 		"--main-text-rgb": "#7743DB",
-		"--hover-text-rgb": "#C3ACD0",
-		"--option-hover-text-rgb": "#FFFBF5",
+		"--hover-text-rgb": "#2E073F",
+		"--option-hover-rgb": "#2E073F",
 		"--option-text-rgb": "#7743DB",
 		"--input-bg-rgb": "#F7EFE5",
+		"--match-bg-rgb": "#F7EFE500",
+		"--border-rgb": "#7743DB",
+		"--active-selector-rgb" : "#2E073F00",
+		"--notif-center-border-rgb" : "#7743DB",
+		"--contest-match-bg-rgb" : "#FFFBF5",
+		"--input-focus-border" : "#2E073F",
+		"--recent-match-container-focus-child": "#2E073F",
+		"--recent-match-container-focus-text": "#2E073F",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -624,9 +680,20 @@ function switchTheme(theme) {
 		document.documentElement.style.setProperty(key, themeMap[theme][key])
 	})
 	if (client) {
-		client.mainTextRgb = themeMap[theme]["--main-text-rgb"];
+		fetch('/api/user/update', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ "theme_name": theme}),
+			credentials: 'include'
+		})
+		client.use_browser_theme = false;
+		if (document.querySelector("#notifCenter").style.borderLeftColor != "" && document.querySelector("#notifCenter").style.borderLeftColor != "unset"){
+			document.querySelector("#notifCenter").style.borderLeftColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+			document.querySelector("#notifCenter").style.borderBottomColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+		}
 	}
-
 	document.documentElement.style.setProperty("--is-dark-theme", themeMap[theme]["is-dark"]);
 	if (document.getElementById("themeButton"))
 		document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}${themeMap[theme]["svg-path"]})`;
@@ -662,39 +729,28 @@ function switchTheme(theme) {
 		playerTwoInfoChart.update();
 
 	}
-	if (currentPage == "game") {
+	if (currentPage == "game" && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none") {
 		displayTournament();
 	}
 }
 
-swichTheme.addEventListener("click", () => {
+switchThemeBtn.addEventListener("click", () => {
 	var theme_name = window.getComputedStyle(document.documentElement).getPropertyValue("--is-dark-theme") == 1 ? 'light' : 'dark';
 	currentTheme = theme_name;
-	if (client) {
-		fetch('/api/user/update', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ theme_name: theme_name }),
-			credentials: 'include'
-		})
-		client.use_browser_theme = false;
-	}
 	use_browser_theme = false;
 	preferedColorSchemeMedia.removeEventListener('change', browserThemeEvent)
 	switchTheme(theme_name);
-	swichTheme.blur();
+	switchThemeBtn.blur();
 })
 
 function browserThemeEvent(event) {
 	switchTheme(event.matches == 1 ? 'dark' : 'light');
 }
 
-swichTheme.addEventListener("keydown", (e) => {
+switchThemeBtn.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") {
-		swichTheme.click();
-		swichTheme.focus();
+		switchThemeBtn.click();
+		switchThemeBtn.focus();
 	}
 })
 
@@ -981,6 +1037,30 @@ notifBtn.addEventListener("click", (e) => {
 	}
 })
 
+notifBtn.onfocus = function(e) {
+	document.querySelector("#notifCenter").style.borderLeftColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+	document.querySelector("#notifCenter").style.borderBottomColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+}
+
+notifBtn.onmouseover = function(e) {
+	document.querySelector("#notifCenter").style.borderLeftColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+	document.querySelector("#notifCenter").style.borderBottomColor = `${window.getComputedStyle(document.documentElement).getPropertyValue("--input-focus-border")}`
+}
+
+
+notifBtn.onmouseout = function(e) {
+	if (document.activeElement.id != "pushNotif"){
+		document.querySelector("#notifCenter").style.borderLeftColor = "unset"
+		document.querySelector("#notifCenter").style.borderBottomColor = "unset"
+	}
+}
+
+
+notifBtn.onblur = function(e) {
+	document.querySelector("#notifCenter").style.borderLeftColor = "unset"
+	document.querySelector("#notifCenter").style.borderBottomColor = "unset"
+}
+
 notifBtn.onkeydown = function (e) {
 	if (e.key == "Enter") {
 		if (notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter")){
@@ -1217,7 +1297,7 @@ function friendUpdate()
 		fetch('/api/user/get_user_id', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ "username": user, }),
+			body: JSON.stringify({ "user": user, }),
 			credentials: 'include'
 		}).then(response => {
 			if (response.ok) {
@@ -1252,14 +1332,14 @@ function getElemWidth(elem){
 const getOrCreateLegendList = (chart, id) => {
 	const legendContainer = document.getElementById(id);
 	let listContainer = legendContainer.querySelector('ul');
-
+  
 	if (!listContainer) {
 	  listContainer = document.createElement('ul');
 	  listContainer.className = "legendContainer"
-
+  
 	  legendContainer.appendChild(listContainer);
 	}
-
+  
 	return listContainer;
 };
 
@@ -1267,19 +1347,19 @@ const htmlLegendPlugin = {
 	id: 'htmlLegend',
 	afterUpdate(chart, args, options) {
 	  const ul = getOrCreateLegendList(chart, options.containerID);
-
+  
 	  // Remove old legend items
 	  while (ul.firstChild) {
 		ul.firstChild.remove();
 	  }
-
+  
 	  // Reuse the built-in legendItems generator
 	  const items = chart.options.plugins.legend.labels.generateLabels(chart);
-
+  
 	  items.forEach(item => {
 		const li = document.createElement('li');
 		li.className = "legendElementContainer"
-
+  
 		li.onclick = () => {
 		  const {type} = chart.config;
 		  if (type === 'pie' || type === 'doughnut') {
@@ -1290,7 +1370,7 @@ const htmlLegendPlugin = {
 		  }
 		  chart.update();
 		};
-
+  
 		// Color box
 		const boxSpan = document.createElement('span');
 		boxSpan.style.background = item.fillStyle;
@@ -1301,15 +1381,15 @@ const htmlLegendPlugin = {
 		boxSpan.style.height = '20px';
 		boxSpan.style.marginRight = '10px';
 		boxSpan.style.width = '20px';
-
+  
 		// Text
 		const textContainer = document.createElement('p');
 		textContainer.className = "legendTextContainer"
 		textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
-
+  
 		const text = document.createTextNode(item.text);
 		textContainer.appendChild(text);
-
+  
 		li.appendChild(boxSpan);
 		li.appendChild(textContainer);
 		ul.appendChild(li);
@@ -1487,7 +1567,7 @@ function setNotifTabIndexes(tabIdx){
 }
 
 function createMatchResumeContainer(match, username, displayName) {
-	matchContainer = ft_create_element("a", {"class" : "matchDescContainer"});
+	matchContainer = ft_create_element("a", {"class" : "matchDescContainer", "tabIndex" : "-1"});
 
 	result = ft_create_element("a", {"class" : "matchDescContainerResult"});
 
@@ -1602,7 +1682,7 @@ async function updateUserAriaLabel(key, content){
 
 let ua = navigator.userAgent;
 setInterval(function() {
-	if (navigator.userAgent !== ua) {
+	if (navigator.userAgent !== ua) {	
 		if (isMobile()){
 			document.documentElement.classList.add("mobile");
 		}
@@ -1893,7 +1973,6 @@ function checkGameSize(){
 			}
 			else{
 				document.querySelector("#game").style.setProperty("rotate", "180deg");
-				document.querySelector("#gameContainer").style.setProperty("flex-direction", "row-reverse");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row-reverse");
 				playerKeyMap = verticalInversedkeyMap;
 				playerTouchMap = verticalInversedkeyMap;
@@ -2012,3 +2091,23 @@ function checkWinnerDisplaySize(){
 }
 
 window.addEventListener("resize", resizeEvent);
+
+
+
+/***
+ *    ______  _____ ______  _   _  _____ 
+ *    |  _  \|  ___|| ___ \| | | ||  __ \
+ *    | | | || |__  | |_/ /| | | || |  \/
+ *    | | | ||  __| | ___ \| | | || | __ 
+ *    | |/ / | |___ | |_/ /| |_| || |_\ \
+ *    |___/  \____/ \____/  \___/  \____/
+ *                                       
+ *                                       
+ */
+
+function rollThemes(timeout = 1000){
+	switchTheme("light");
+	setTimeout(()=>{switchTheme("dark")}, timeout * 1);
+	setTimeout(()=>{switchTheme("high_light")}, timeout * 2);
+	setTimeout(()=>{switchTheme("high_dark")}, timeout * 3);
+}

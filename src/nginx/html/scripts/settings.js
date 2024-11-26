@@ -19,14 +19,18 @@ var accoutSlide = `
 	<div tabindex="14" id="saveUsernameBtn"></div>
 </div>
 
+<div id="changePasswordContainer">
+	<button tabindex="15" id="changePasswordBtn" >Change password</button>
+</div>
+
 <div>
-	<label tabindex="15" for="inputPfp" id="pfpLabel" aria-label="Change profile picture">Profile picture</label>
+	<label tabindex="19" for="inputPfp" id="pfpLabel" aria-label="Change profile picture">Profile picture</label>
 	<input style="display: none;" type="file" accept="image/jpg, image/png, image/jpeg, image/gif" id="inputPfp" class="formInput" name="pfp" placeholder="Profile picture"/>
 </div>
 
 
 <div>
-	<button tabindex="17" id="deleteAccountBtn" class="deleteBtn">DELETE ACCOUNT</button>
+	<button tabindex="20" id="deleteAccountBtn" class="deleteBtn">DELETE ACCOUNT</button>
 </div>`
 
 var accessibilitySlide = `
@@ -97,7 +101,7 @@ var template = `
 
 	<div id="settingSlidesContainer">
 		<div id="settingsSlideSelector">
-			<div id="accountSelector" class="settingsSlideSelector activeSelector" tabindex="12">
+			<div id="accountSelector" class="settingsSlideSelector" tabindex="12">
 				<div id="accountSelectorText">Account</div>
 			</div>
 			<div id="accessibilitySelector" class="settingsSlideSelector" tabindex="13">
@@ -130,9 +134,23 @@ var template = `
 		<input tabindex="18" type="text" id="confirmDeleteInput" placeholder="Confirmation" aria-label="Type you username, then press enter to confirm deletion">
 		<button tabindex="19" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
 	</div>
+
+	<div id="confirmPasswordPopup" style="z-index: 2;">
+		<div>
+			<input tabindex="15" type="password" id="inputOldPassword" style="anchor-name: --old-password-input;" class="formInput" name="Old password" placeholder="Old password"/>
+		</div>
+		<div>
+			<input tabindex="16" type="password" id="inputNewPassword" style="anchor-name: --new-password-input;" class="formInput" name="New password" placeholder="New password"/>
+		</div>
+		<div>
+			<input tabindex="17" type="password" id="inputNewCPassword" style="anchor-name: --new-confirm-password-input;" class="formInput" name="Confirm new password" placeholder="Confirm new password"/>
+		</div>
+		<div>
+			<button tabindex="18" id="confirmChangePasswordBtn" style="anchor-name: --confirm-new-password-button;" >Change password</button>
+		</div>
+	</div>
 </div>
 `
-
 
 {
 	var slideIdx = 0;
@@ -169,6 +187,7 @@ var template = `
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .settingsSlideSelector");
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
 	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
+	settingsSlideSelector[slideIdx].classList.add('activeSelector');
 
 	settingsSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
@@ -220,8 +239,101 @@ var template = `
 				key.click();
 		}
 	})
-
+	if (client.isRemote){
+		document.querySelector("#changePasswordContainer").remove();
+	}
 	setNotifTabIndexes(26);
+
+	document.querySelector("#confirmChangePasswordBtn").addEventListener("click", (e) => {
+		var oldPasswordInput = document.querySelector("#inputOldPassword");
+		var newPasswordInput = document.querySelector("#inputNewPassword");
+		var newCPasswordInput = document.querySelector("#inputNewCPassword");
+		var lock = 0;
+		oldPw = oldPasswordInput.value;
+		pw = newPasswordInput.value;
+		cpw = newCPasswordInput.value;
+		inputs = document.querySelectorAll('#inputOldPassword, #inputNewPassword, #inputNewCPassword');
+		warning = document.createElement("a");
+		warning.className = "warning";
+		warning.text = "Field can't be empty";
+		for (i=0;i<inputs.length;i++){
+			if (inputs[i].previousElementSibling)
+				inputs[i].previousElementSibling.remove();
+			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
+				warningTmp = warning.cloneNode(true);
+				warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
+				inputs[i].before(warningTmp);
+				lock = 1;
+			}
+		}
+
+		if (pw != cpw){
+			warning = document.createElement("a");
+			warning.className = "warning";
+			warning.text = "Passwords do not match";
+			if (cpwRegisterInput.previousElementSibling && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
+				cpwRegisterInput.previousElementSibling.remove();
+			if (!cpwRegisterInput.previousElementSibling || cpwRegisterInput.previousElementSibling.text != "Passwords do not match")
+				cpwRegisterInput.before(warning);
+			else if (cpw != "" && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
+				cpwRegisterInput.previousElementSibling.remove();
+		}
+		else if (lock == 0){
+			setLoader()
+			if (e.target.previousElementSibling)
+				e.target.previousElementSibling.remove();
+			fetch('/api/user/update', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({'password': pw, "old_password":oldPw}),
+				credentials: 'include'
+			}).then(response => {
+				if (response.ok){
+					if (e.target.previousElementSibling)
+						e.target.previousElementSibling.remove();
+					success = document.createElement("a");
+					success.className = "success";
+					success.text = "password updated";
+					success.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
+					e.target.before(success);
+
+					(async () => {
+						try {
+							client = await new Client()
+							if (!client)
+								myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
+							unsetLoader();
+						}
+						catch{
+							unsetLoader();
+						}
+					})()
+				}
+				else {
+					response.json().then(response => {
+						warning = document.createElement("a");
+						warning.className = "warning";
+						warning.text = response.message;
+						warning.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
+						e.target.before(warning);
+						unsetLoader();
+					})
+
+				}
+			})
+		}
+	})
+	document.querySelector("#confirmChangePasswordBtn").addEventListener("keydown", (e) => {if (e.key == "Enter"){e.target.click();}});
+
+	document.querySelector("#changePasswordBtn").addEventListener("click", (e) => {
+		window.onkeydown = null
+		document.getElementById("popupBg").style.setProperty("display", "block");
+		document.getElementById("confirmPasswordPopup").style.setProperty("display", "flex");
+		//document.getElementById("confirmDeleteDialogVar").innerText = client.username;
+		//confirmDeleteInput.focus();
+	});
 }
 
 
@@ -405,6 +517,7 @@ document.addEventListener("keydown", (e) => {
 			document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+			document.getElementById("confirmPasswordPopup").style.setProperty("display", "none");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 			window.onkeydown = settingsKeyDownEvent
 		}
@@ -417,6 +530,7 @@ document.addEventListener("click", (e) => {
 			document.getElementById("popupBg").style.setProperty("display", "none");
 			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+			document.getElementById("confirmPasswordPopup").style.setProperty("display", "none");
 		}
 		if (!e.target.closest(".settingsDropDown")){
 			document.querySelectorAll(".settingsDropDown.activeDropDown").forEach(function(elem) {

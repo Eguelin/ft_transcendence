@@ -327,6 +327,26 @@ def profile_update(request):
 				return JsonResponse({'message': 'Invalid {0} value, should be a boolean'.format(field)}, status=400)
 			setattr(user.profile, field, data[field])
 
+	if "password" in data:
+		valid, message = check_password(data['password'])
+		if "old_password" not in data:
+			return JsonResponse({'message': "Old password not provided"}, status=400)
+		if not valid :
+			return JsonResponse({'message': message}, status=400)
+		if user.profile.id42 is not 0:
+			return JsonResponse({'message': "Remote password change forbiden"}, status=403)
+		if (user.check_password(data['old_password'])):
+			user.set_password(data['password'])
+			user = authenticate(request, username=user.username, password=data['password'])
+			if user is not None:
+				user.profile.is_active = True
+				user.save()
+				login(request, user)
+			else:
+				return JsonResponse({'message': 'Error while authenticating'}, status=400)
+		else :
+			return JsonResponse({'message': 'Old password mismatch'}, status=400)
+
 	if "username" in data:
 		valid, message = check_username(data['username'])
 		if not valid:
@@ -347,7 +367,7 @@ def profile_update(request):
 	if ("language_pack" in data):
 		valid = True
 		languages = ["lang/DE_GE.json",
-					"lang${currentLang}.json",
+					"lang/EN_UK.json",
 					"lang/FR_FR.json",
 					"lang/IT_IT.json"]
 		language = data['language_pack']
@@ -572,7 +592,8 @@ def current_user(request):
 		'is_admin' : request.user.is_staff,
 		'font_amplifier' : request.user.profile.font_amplifier,
 		'do_not_disturb' : request.user.profile.do_not_disturb,
-		'display_name': request.user.profile.display_name
+		'display_name': request.user.profile.display_name,
+		'remote_auth' : 1 if request.user.profile.id42 is not 0 else 0
 	})
 
 def get(request):

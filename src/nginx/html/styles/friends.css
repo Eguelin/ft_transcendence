@@ -26,7 +26,7 @@
 	position: relative;
 }
 
-#deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup{
+#deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup, #confirmPasswordPopup{
 	background: var(--input-bg-rgb);
 	color: var(--main-text-rgb);
 	position: fixed;
@@ -194,7 +194,7 @@
 
 .friendSlide{
 	display: block;
-	background: var(--hover-text-rgb);
+	background: var(--match-bg-rgb);
 	border: 1px solid var(--main-text-rgb);
 	border-radius: 1rem;
 	overflow: hidden;

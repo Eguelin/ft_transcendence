@@ -4,13 +4,21 @@
 }
 
 :root {
-	--page-bg-rgb : #110026; /*#FDFDFB*/
-	--main-text-rgb : #FDFDFB; /*#110026*/
+	--page-bg-rgb : #110026;
+	--main-text-rgb : #FDFDFB;
 	--hover-text-rgb :  #3A3053;
-	--option-hover-text-rgb :  #110026;
+	--option-hover-rgb :  #110026;
 	--option-text-rgb :  #FDFDFB;
-	--input-bg-rgb : #3A3053; /*#FFDBDE*/
+	--input-bg-rgb : #3A3053;
+	--match-bg-rgb : #3A3053;
+	--border-rgb : #FDFDFB;
+	--active-selector-rgb : #FDFDFB;
+	--notif-center-border-rgb : #FDFDFB;
+	--contest-match-bg-rgb : #3A3053;
 	--is-dark-theme : 1;
+	--input-focus-border : #FDFDFB;
+	--recent-match-container-focus-child: #00000000;
+	--recent-match-container-focus-text: #FDFDFB;
 
 	--font-size-amplifier: 1;
 	--is-mobile: 0;
@@ -113,9 +121,9 @@ button{
 	padding: .5rem;
 	width: fit-content;
 	min-width: 20vw;
-	border: 0.2px solid transparent;
+	border: 0.2px solid var(--border-rgb);
 	border-radius: 1rem;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	outline: none;
 }
 
@@ -157,7 +165,7 @@ button:focus, button:hover{
 
 input{
 	font-family:'pong';
-	border: 0.2px solid transparent;
+	border: 0.2px solid var(--border-rgb);
 	color: var(--main-text-rgb);
 	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
@@ -166,10 +174,22 @@ input{
 	width: 18vw;
 }
 
+
+input::placeholder, input::-webkit-input-placeholder{
+	color: var(--main-text-rgb);
+	opacity: .9;
+}
+
+input::-moz-placeholder{
+	color: var(--main-text-rgb);
+	opacity: .9;
+}
+
 input:focus{
 	outline: none;
-	border-color: var(--main-text-rgb);
+	border-color: var(--input-focus-border);
 }
+
 
 .forms {
 	text-align: center;
@@ -183,23 +203,16 @@ input:focus{
 	position: relative;
 }
 
-.saveBtn, .deleteBtn {
+.deleteBtn {
 	text-align: center;
-	color: var(--main-text-rgb);
+	color: var(--page-bg-rgb);
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
 	width: 20vw;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1rem;
-}
-
-.saveBtn{
-	background-color: limegreen;
-}
-
-.deleteBtn{
 	background-color: red;
+	border: 0.2px solid transparent;
+	border-radius: 1rem;
 }
 
 a {
@@ -210,12 +223,11 @@ a {
 
 .warning, .success {
 	font-size: .9rem;
-	position: absolute;
-	top: -2vh;
+	position: fixed;
+	top: calc(anchor(top) - 2vh);
 	text-align: left;
 	display: block;
 	height: 0;
-	left: 1vw;
 }
 
 .warning{
@@ -319,7 +331,7 @@ a {
 
 #popupErrorContainer, #popupErrorContainerClose{
     background: red;
-    color: var(--main-text-rgb);
+    color: var(--page-bg-rgb);
     width: fit-content;
     padding: 1vw;
     border-radius: 1rem;

@@ -473,6 +473,7 @@ function displayTournament(is_finished = false){
 	document.querySelector("#controlerSlide .rightBtnContainer").onmousedown = function() {};
 	document.querySelector("#controlerSlide .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
+	document.title = langJson['game'][`game title`].replace("${MODE}", langJson['game']['tournamentSubtitle']);
 	if (playersCount == 8 || is_finished){
 
 		document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
@@ -561,7 +562,7 @@ function displayTournament(is_finished = false){
 		tournamentContainer.appendChild(treeCanva);
 
 		treeCtx = treeCanva.getContext("2d");
-		treeCtx.strokeStyle = client.mainTextRgb;
+		treeCtx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 		treeCtx.lineWidth = 3;
 		var offset = 0;
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
@@ -704,6 +705,7 @@ function game() {
 				countdown = "";
 				updateGame(data.message);
 			} else if (data.type === "game_start") {
+				document.title = client.langJson['game'][`game title`].replace("${MODE}", mode);
 				var leftBtnInterval, p2leftBtnInterval;
 				var rightBtnInterval, p2rightBtnInterval;
 
@@ -891,12 +893,13 @@ function game() {
 		}
 
 		function gameRender() {
-			ctx.fillStyle = client.mainTextRgb;
-			ctx.strokeStyle = client.mainTextRgb;
+			ctx.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+			ctx.strokeStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			if (countdown !== "" && document.getElementById("countdownText"))
+			if (countdown !== "" && document.getElementById("countdownText")){
 				document.getElementById("countdownText").innerText = countdown;
+			}
 			drawMiddleLine();
 			drawBallTrail();
 			drawBall();
@@ -931,7 +934,7 @@ function game() {
 		}
 
 		function drawBallTrail() {
-			const rgb = hexToRgb(client.mainTextRgb);
+			const rgb = hexToRgb(window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"));
 			for (let i = 0; i < ballTrail.length; i++) {
 				const trail = ballTrail[i];
 				const opacity = (i + 1) / ballTrail.length;
@@ -941,7 +944,7 @@ function game() {
 				ctx.fill();
 				ctx.closePath();
 			}
-			ctx.fillStyle = client.mainTextRgb;
+			ctx.fillStyle = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 		}
 
 		function drawPaddles() {
