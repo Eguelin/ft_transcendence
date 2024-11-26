@@ -586,7 +586,6 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	myPushState(`https://${hostname.host}/${currentLang}/home`);
 	friendUpdate();
 })
 
@@ -1614,10 +1613,14 @@ function createMatchResumeContainer(match, username, displayName) {
 
 		scoreOpponentName.innerText += ":"
 		scoreUserName.innerText += ":"
-		scoreUser.appendChild(scoreUserName);
+		scoreUserNameContainer = ft_create_element("div", {"class" : "resultScoreNameContainer"});
+		scoreOpponentNameContainer = ft_create_element("div", {"class" : "resultScoreNameContainer"});
+		scoreUserNameContainer.appendChild(scoreUserName)
+		scoreOpponentNameContainer.appendChild(scoreOpponentName)
+		scoreUser.appendChild(scoreUserNameContainer);
 		scoreUser.appendChild(scoreUserScore);
 
-		scoreOpponent.appendChild(scoreOpponentName);
+		scoreOpponent.appendChild(scoreOpponentNameContainer);
 		scoreOpponent.appendChild(scoreOpponentScore);
 		if (username == match.winner){
 			result.classList.add("victory");
@@ -1881,16 +1884,16 @@ function checkMatchResumeSize(){
 	ch = 1
 	if (matches && matches.length > 0){
 		if (!(isPortrait() && isMobile())){
-			while (i < matches.length && !matches[i].querySelector(".resultScoreName"))
+			while (i < matches.length && !matches[i].querySelector(".resultScoreNameContainer"))
 				i++;
 			if (i == matches.length)
 				return;
 			while (1 && ch <= baseWidth){
 				var width = matches[i].getBoundingClientRect().width;
-				var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreName").style.getPropertyValue("width"))
+				var ch = parseInt(recentMatchHistoryContainer.querySelector(".resultScoreNameContainer").style.getPropertyValue("width"))
 
 				if (width * matches.length <= getWindowWidth() && ch < baseWidth){
-					recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					recentMatchHistoryContainer.querySelectorAll(".resultScoreNameContainer").forEach(function(elem){
 						elem.style.setProperty("width", `${ch + 1}ch`);
 					})
 					var width = matches[i].getBoundingClientRect().width;
@@ -1903,7 +1906,7 @@ function checkMatchResumeSize(){
 				width = matches[i].getBoundingClientRect().width;
 				if (width * matches.length > getWindowWidth()){
 					baseWidth--;
-					recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+					recentMatchHistoryContainer.querySelectorAll(".resultScoreNameContainer").forEach(function(elem){
 						elem.style.setProperty("width", `${baseWidth}ch`);
 					})
 				}
@@ -1912,7 +1915,7 @@ function checkMatchResumeSize(){
 			}
 		}
 		else{
-			recentMatchHistoryContainer.querySelectorAll(".resultScoreName").forEach(function(elem){
+			recentMatchHistoryContainer.querySelectorAll(".resultScoreNameContainer").forEach(function(elem){
 				elem.style.setProperty("width", "16ch");
 			})
 		}
