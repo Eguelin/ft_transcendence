@@ -16,6 +16,7 @@
 	--notif-center-border-rgb : #FDFDFB;
 	--contest-match-bg-rgb : #3A3053;
 	--is-dark-theme : 1;
+	--input-focus-border : #FDFDFB,
 
 	--font-size-amplifier: 1;
 	--is-mobile: 0;
@@ -184,7 +185,7 @@ input::-moz-placeholder{
 
 input:focus{
 	outline: none;
-	border-color: var(--main-text-rgb);
+	border-color: var(--input-focus-border);
 }
 
 

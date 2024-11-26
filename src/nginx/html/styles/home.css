@@ -60,7 +60,7 @@
 }
 
 #saveDisplayNameContainer:focus-within {
-	border-color: var(--main-text-rgb);
+	border-color: var(--input-focus-border);
 
 }
 #saveDisplayNameContainer .warning, #saveDisplayNameContainer .success{
