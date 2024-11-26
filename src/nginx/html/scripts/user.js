@@ -82,26 +82,6 @@ function updateUserLang(){
         })
     }
 
-    if (removeFriendBtn){
-        var splitPath = window.location.href.split('/');
-        removeFriendBtn.addEventListener("click", (e) => {
-            fetch('/api/user/remove_friend', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({'username': splitPath[5]}),
-                credentials: 'include'
-            })
-			.then(response => {
-				if (response.ok){
-					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
-					document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
-				}
-			})
-        })
-    }
-
 	inputSearchUserContainer.style.setProperty("display", "block");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
@@ -245,7 +225,8 @@ document.addEventListener("click", (e) => {
 				credentials: 'include'
 			})
 			.then(response => {
-				if (response.ok){
+				if (response.ok)
+				{
 					document.getElementById("unblockBtn").style.setProperty("display", "block");
 					document.getElementById("blockBtn").style.setProperty("display", "none");
 					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
