@@ -3,3 +3,4 @@ __pycache__
 .ash_history
 *.swp
 .venv
+src/nginx/html/node_modules/
