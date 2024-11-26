@@ -38,10 +38,10 @@ class friend(AsyncWebsocketConsumer):
 	async def send_friend_request_notif(self, user_id, sender_name):
 		try:
 				if not isinstance(user_id, int) or user_id <= 0:
-						raise ValueError("'user_id' doit être un entier positif.")
+						raise ValueError("user id is invalid")
 
-				if not isinstance(sender_name, str) or len(sender_name.strip()) == 0:
-						raise ValueError("'sender_name' doit être une chaîne non vide.")
+				if not sender_name or not isinstance(sender_name, str):
+						raise ValueError("username is invalid")
 
 				channel_layer = get_channel_layer()
 
