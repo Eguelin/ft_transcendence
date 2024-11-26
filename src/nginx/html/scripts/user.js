@@ -93,8 +93,12 @@ function updateUserLang(){
                 body: JSON.stringify({'username': splitPath[5]}),
                 credentials: 'include'
             })
-			document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
-			document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+			.then(response => {
+				if (response.ok){
+					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+					document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+				}
+			})
         })
     }
 
@@ -234,7 +238,6 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-
 			.then(response => {
 				if (response.ok){
 					document.getElementById("unblockBtn").style.setProperty("display", "none");
