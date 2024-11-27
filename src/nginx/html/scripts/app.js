@@ -1624,6 +1624,10 @@ function createMatchResumeContainer(match, username, displayName) {
 			scoreUserName.classList.add("deletedUser");
 			scoreUserName.innerText = client.langJson["index"][".deletedUser"];
 		}
+		else if (scoreUserName.innerText == "blocked"){
+			scoreUserName.classList.add("blockedUser");
+			scoreUserName.innerText = client.langJson["index"][".blockedUser"];
+		}
 		else{
 			scoreUserName.href  = `https://${hostname.host}/${currentLang}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_one : match.player_two}`
 			scoreUserName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreUserName.innerText)}`);
@@ -1633,6 +1637,10 @@ function createMatchResumeContainer(match, username, displayName) {
 		if (scoreOpponentName.innerText == "deleted"){
 			scoreOpponentName.classList.add("deletedUser");
 			scoreOpponentName.innerText = client.langJson["index"][".deletedUser"];
+		}
+		else if (scoreOpponentName.innerText == "blocked"){
+			scoreOpponentName.classList.add("blockedUser");
+			scoreOpponentName.innerText = client.langJson["index"][".blockedUser"];
 		}
 		else{
 			scoreOpponentName.href  = `https://${hostname.host}/${currentLang}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_two : match.player_one}`

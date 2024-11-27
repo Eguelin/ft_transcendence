@@ -188,16 +188,16 @@ def create_user(request, staff=False):
 		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def create_deleted_user():
-	return create_nps("deleted", "default0.jpg")
+	return create_npc("deleted", "default0.jpg")
 
 def create_default_users():
-	create_nps("AI", "defaultAI.gif")
-	create_nps("nobody", "thisman.jpg")
-	create_nps("deleted", "defaultDeleted.jpg")
-	create_nps("blocked", "defaultBlocked.jpg")
-	create_nps(os.getenv('DJANGO_ADMIN_USER'), "default0.jpg", os.getenv('DJANGO_ADMIN_PASSWORD'), True)
+	create_npc("AI", "defaultAI.gif")
+	create_npc("nobody", "thisman.jpg")
+	create_npc("deleted", "defaultDeleted.jpg")
+	create_npc("blocked", "defaultBlocked.jpg")
+	create_npc(os.getenv('DJANGO_ADMIN_USER'), "default0.jpg", os.getenv('DJANGO_ADMIN_PASSWORD'), True)
 
-def create_nps(name, pfp, password=None, staff=False):
+def create_npc(name, pfp, password=None, staff=False):
 	if User.objects.filter(username=name).exists():
 		return User.objects.get(username=name)
 	username = name

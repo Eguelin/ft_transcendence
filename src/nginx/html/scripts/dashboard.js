@@ -672,6 +672,9 @@ function loadUserDashboard(startDate, endDate){
 			if (elem.classList.contains("deletedUser")){
 				elem.innerText = client.langJson["index"][".deletedUser"];
 			}
+			if (elem.classList.contains("blockedUser")){
+				elem.innerText = client.langJson["index"][".blockedUser"];
+			}
 		})
 	})()
 }

@@ -395,14 +395,26 @@ function setTournamentTreeValue(is_finished){
 							document.querySelector(`${selector} .username`).classList.add("deletedUser");
 							document.querySelector(`${selector} .username`).innerText = client.langJson["index"][".deletedUser"];
 						}
-						else if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name'])
+						else if (tournament[round][matchNumber][player]['username'] == "blocked"){
+							document.querySelector(`${selector} .username`).classList.add("blockedUser");
+							document.querySelector(`${selector} .username`).innerText = client.langJson["index"][".blockedUser"];
+						}
+						else if (tournament[round][matchNumber][player]['username'] == "nobody"){
+							document.querySelector(`${selector} .username`).classList.add("nobodyUser");
+							document.querySelector(`${selector} .username`).innerText = client.langJson["index"][".nobodyUser"];
+						}
+						else if (tournament[round][matchNumber][player]['username'] == tournament[round][matchNumber][player]['display_name']){
 							document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['username'];
+							if (is_finished)
+								document.querySelector(`${selector} .username`).href  = `https://${hostname.host}/${currentLang}/user/${tournament[round][matchNumber][player]['username']}`;
+						}
 						else{
 							document.querySelector(`${selector} .username`).classList.add("displayName")
 							document.querySelector(`${selector} .username`).innerText = tournament[round][matchNumber][player]['display_name'];
+							if (is_finished)
+								document.querySelector(`${selector} .username`).href  = `https://${hostname.host}/${currentLang}/user/${tournament[round][matchNumber][player]['username']}`;
 						}
-						if (is_finished)
-							document.querySelector(`${selector} .username`).href  = `https://${hostname.host}/${currentLang}/user/${tournament[round][matchNumber][player]['username']}`;
+						
 						if (tournament[round][matchNumber][player]['score'] != null){
 							document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
 							document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
