@@ -111,8 +111,8 @@
 		"online title" : "Online friends - transcendence",
 		"all title" : "All friends - transcendence",
 		"pending title" : "Pending friend requests - transcendence",
-		"blocked title" : "Blocked users - transcendence"
-
+		"blocked title" : "Blocked users - transcendence",
+		"blockError" : "You can't block this user."
 	},
 	"user":{
 		"#title" : "",

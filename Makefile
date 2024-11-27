@@ -21,7 +21,6 @@ DB_DIR	= ~/goinfre/db/
 all: $(NAME)
 
 $(NAME): $(DB_DIR)
-	npm install --prefix src/nginx/html/
 	$(DC) up --build -d
 
 down:
@@ -37,7 +36,6 @@ clean:
 
 fclean: clean
 	docker system prune --force --all;
-	rm -rf src/nginx/html/node_modules
 
 re: fclean all
 

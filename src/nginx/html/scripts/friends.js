@@ -174,7 +174,6 @@ var template = `
 		});
 	})
 	setTimeout(checkFriendPageSize, 10);
-	
 }
 
 

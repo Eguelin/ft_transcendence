@@ -212,7 +212,7 @@
 		height: fit-content;
 		margin: 0;
 	}
-	
+
 }
 
 #countdownText{
@@ -241,7 +241,7 @@
 .round, .tournament.result{
 	height: 100%;
 	flex: 1;
-	
+
     display: flex;
     flex-flow: column;
     justify-content: space-around;
@@ -284,7 +284,7 @@
 }
 
 .username.waiting{
-	font-style: italic;	
+	font-style: italic;
 }
 
 .exit.anchor, .entry.anchor{
@@ -565,7 +565,7 @@ table.landscape{
 	bottom: unset;
 }
 
-@media screen and (orientation:portrait) {	
+@media screen and (orientation:portrait) {
 	#matchInfo{
 		flex-direction: column;
 	}
@@ -573,7 +573,7 @@ table.landscape{
 	table.portrait{
 		display: block;
 	}
-	
+
 	#exchangeContainer{
 		flex: none;
 	}
@@ -582,14 +582,14 @@ table.landscape{
 		display: none;
 	}
 	.mobile {
-	
+
 		#exchangeContainer th,#exchangeContainer td{
 			padding: 0 .5ch;
 		}
 		.playerScore{
 			width: 5rem;
 		}
-		
+
 		.playerPfp{
 			height: 5rem;
 			width: 5rem;
@@ -597,7 +597,7 @@ table.landscape{
 			border-bottom-left-radius: 0;
 			border-top-left-radius: 0;
 		}
-		
+
 		.playerInfoContainer{
 			gap: 0;
 			width: 100vw;
@@ -606,12 +606,12 @@ table.landscape{
 			width: unset;
 			height: unset;
 		}
-		
+
 		#gameContainer{
 			gap: 0rem;
 			height: 100%;
 		}
-	
+
 		#gameContainer.local {
 			flex-direction: column-reverse;
 			#game {
@@ -632,30 +632,30 @@ table.landscape{
 		.game{
 			rotate: 90deg;
 		}
-		
+
 		#matchContainer {
 			justify-content: space-between;
 			#matchPlayersInfo{
 				height: fit-content;
 			}
-			
+
 			#matchInfo{
 				flex-direction: column;
 			}
-			
+
 			.playerScore{
 				width: fit-content;
 				word-break: keep-all;
 				white-space: nowrap;
 			}
 		}
-		
+
 		#controlerSlide > div, #controlerPlayerOne > div, #controlerPlayerTwo > div{
 			flex: 1;
 			height: 100%;
 			align-content: center;
 		}
-		
+
 		#tournamentContainer, #tournamentContainer *{
 			transition: none;
 		}
@@ -673,11 +673,11 @@ table.landscape{
 		.lobbyPlayerPfpContainer{
 			height: 10ch;
 		}
-		
+
 		#matchInfo, #matchInfo > *{
 			flex: none;
 		}
-		
+
 		#matchPlayersInfo{
 			flex: .8;
 		}
@@ -687,24 +687,24 @@ table.landscape{
 		#matchInfoGraphContainer{
 			height: 30vh;
 		}
-		
+
 		.playerInfoContainer{
 			.playerInfoGraphContainer{
 				justify-items: center;
 				width: 100%;
 			}
-			
+
 			.playerInfo{
 				justify-content: center;
 			}
-			
+
 			.playerName, .playerScore{
 				flex: unset;
 			}
 		}
-		
+
 	}
-	
+
 	#matchInfoGraphContainer{
 		display: flex;
 		flex-direction: row;
@@ -720,7 +720,7 @@ table.landscape{
 		justify-content: space-around;
 		height: 100%;
 	}
-	
+
 	.playerInfoGraphContainer{
 		display: flex;
 		flex-direction: column;
@@ -738,7 +738,7 @@ table.landscape{
 
 
 
-@media screen and (orientation:landscape) {	
+@media screen and (orientation:landscape) {
 	#gameDisplay{
 		position: relative;
 		left: 50%;
@@ -760,10 +760,10 @@ table.landscape{
 			}
 		}
 
-		
+
 		.local{
 			justify-content: unset;
-			
+
 			#playerOne .playerPfp, #playerTwo .playerPfp{
 				rotate: 90deg;
 			}
@@ -776,7 +776,7 @@ table.landscape{
 				width: auto !important;
 				height: auto !important;
 			}*/
-		
+
 			#playerTwo {
 				.playerPfp{
 					rotate: 270deg;
@@ -795,7 +795,7 @@ table.landscape{
 					width: 100%;
 					align-content: center;
 				}
-	
+
 				.leftBtn, .rightBtn{
 					mask-size: 50%;
 				}
@@ -825,7 +825,7 @@ table.landscape{
 		.legendTextContainer{
 			font-size: 1rem;
 		}
-		
+
 	}
 	#matchPlayersInfo, #matchInfo{
 		height: calc(50% - 1rem);
@@ -839,14 +839,14 @@ table.landscape{
 		display: flex;
 		justify-content: center;
 	}
-	
+
 	.playerInfoContainer{
 		width :calc(50% - 1rem);
 		gap: unset;
 		justify-content: space-around;
 		height: 100%;
 	}
-	
+
 	.legendContainer {
 		display: flex;
 		flex-direction: column;
@@ -855,12 +855,12 @@ table.landscape{
 		justify-content: space-around;
 		height: 100%;
 	}
-	
+
 	.playerInfo{
 		width: unset !important;
 		max-width: 15rem;
 	}
-	
+
 	.playerLegendContainer{
 		.legendContainer{
 			flex-direction: row;

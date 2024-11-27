@@ -109,7 +109,8 @@
 		"online title" : "Online-Freunde - Transzendenz",
 		"all title" : "Alle Freunde - Transzendenz",
 		"pending title" : "Ausstehende Freundschaftsanfragen - Transzendenz",
-		"blocked title" : "Blockierte Benutzer - Transzendenz"
+		"blocked title" : "Blockierte Benutzer - Transzendenz",
+		"blockError": "Sie können diesen Benutzer nicht blockieren."
 	},
 	"user":{
 		"#title" : "",

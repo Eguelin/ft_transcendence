@@ -38,7 +38,7 @@
 	font-size: 1rem;
 	width: fit-content;
 	min-width: unset;
-	
+
 }
 
 #profileFriendsButton > button:hover, #profileFriendsButton > button:focus {
@@ -208,7 +208,7 @@
 			scale: 1;
 			opacity: 1;
 		}
-		
+
 	}
 	.matchDescContainerResult, .matchDescContainerDate{
 		animation: appear 500ms forwards;
@@ -232,7 +232,7 @@
 		0%{
 			background: var(--input-bg-rgb);
 		}
-		
+
 		50%{
 			background: var(--page-bg-rgb);
 		}
@@ -261,7 +261,7 @@
 			opacity: 0;
 			display: none;
 		}
-		
+
 	}
 	.matchDescContainerResult, .matchDescContainerDate{
 		animation: disappear 500ms forwards;
@@ -317,7 +317,7 @@
 		width: calc(50% - .5rem);
 		@media screen and (orientation:portrait){
 			width: 100%;
-			
+
 		}
 	}
 
@@ -459,7 +459,7 @@ input[type="date"]{
 
 .active#customPeriodSelectionContainer input, .active#customPeriodSelectionContainer button{
 	width: 0;
-} 
+}
 .inactive#customPeriodSelectionContainer input, .inactive#customPeriodSelectionContainer button{
 	width: 7rem;
 }
@@ -482,7 +482,7 @@ input[type="date"]{
 	}
 }
 
-@media screen  and (max-width:920px){ 
+@media screen  and (max-width:920px){
 	#timelineSelectionContainer{
 		flex-direction: column;
 		width: -moz-available;
@@ -509,7 +509,7 @@ input[type="date"]{
 		flex-direction: column;
 		gap: 1rem;
 	}
-	
+
 	.mobile{
 		#profileInfoContainer{
 			margin: 0;
@@ -526,11 +526,11 @@ input[type="date"]{
 		#profileGraphs{
 			flex-direction: column;
 		}
-	
+
 		#recentMatchHistory{
 			flex-direction: column;
 		}
-		
+
 		.matchDescContainerScore{
 			top: unset;
 			translate: unset;
@@ -543,7 +543,7 @@ input[type="date"]{
 		flex-direction: column;
 		gap: 1rem;
 	}
-	
+
 	.mobile{
 		#recentMatchHistory{
 			animation: unset;
@@ -580,7 +580,7 @@ input[type="date"]{
 	@media screen and (orientation:landscape) {
 		#profileGraphs{
 			height: 90%;
-			
+
 			#lineChartsContainer{
 				height: 100%;
 				> div{
