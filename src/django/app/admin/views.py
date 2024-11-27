@@ -24,6 +24,37 @@ def create_user(request):
 		return JsonResponse({'message': 'user is not admin'}, status=403)
 	return login.views.create_user(request, staff=True)
 
+def set_user_password(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
+	
+	try:
+		data = json.loads(request.body)
+	except json.JSONDecodeError:
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+	
+	if "username" not in data:
+		return JsonResponse({'message': 'username is missing'}, status=400)
+
+	try:
+		user = User.objects.get(username=data['username'])
+	except:
+		return JsonResponse({'message': 'user not found'}, status=404)
+
+	if "password" in data:
+		if user.profile.id42 is not 0:
+			return JsonResponse({'message': "Remote password change forbiden"}, status=403)
+		user.set_password(data['password'])
+		user.save()
+	else:
+		return JsonResponse({'message': 'password is missing'}, status=400)
+	return JsonResponse({'message': 'User password updated'}, status=200)
+
+
 def remove_user(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message': 'Invalid request'}, status=405)
