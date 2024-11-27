@@ -153,17 +153,45 @@ var template = `
 `
 
 {
+	document.getElementById("container").innerHTML = template;
 	var slideIdx = 0;
 	const url = new URL(window.location.href);
+	console.log(langJson)
+	console.log(client)
 	if (url.hash == "#accessibility"){
-		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
+		document.title = client.langJson['settings'][`accessibility title`];
 		slideIdx = 1;
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
+		Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = accessibilitySlideTabIdxMap[key]
+			}
+			catch(e){console.error(e)}
+		})
+		Object.keys(accountSlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = "-1"
+			}
+			catch(e){console.error(e)}
+		})
 	}
 	else {
-		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
 		slideIdx = 0;
+		document.title = client.langJson['settings'][`account title`];
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
+		Object.keys(accountSlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = accountSlideTabIdxMap[key]
+			}
+			catch(e){console.error(e)}
+		})
+		Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = "-1"
+			}
+			catch(e){console.error(e)}
+		})
 	}
-	document.getElementById("container").innerHTML = template;
 
 	deleteAccountBtn = document.getElementById('deleteAccountBtn');
 	confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -226,12 +254,36 @@ var template = `
 				}
 			}
 			if (slideIdx == 0){
-				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
 				document.title = langJson['settings'][`account title`];
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
+				Object.keys(accountSlideTabIdxMap).forEach(function (key){
+					try{
+						document.querySelector(key).tabIndex = accountSlideTabIdxMap[key]
+					}
+					catch{}
+				})
+				Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+					try{
+						document.querySelector(key).tabIndex = "-1"
+					}
+					catch{}
+				})
 			}
 			else {
-				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
 				document.title = langJson['settings'][`accessibility title`];
+				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
+				Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+					try{
+						document.querySelector(key).tabIndex = accessibilitySlideTabIdxMap[key]
+					}
+					catch{}
+				})
+				Object.keys(accountSlideTabIdxMap).forEach(function (key){
+					try{
+						document.querySelector(key).tabIndex = "-1"
+					}
+					catch{}
+				})
 			}
 		})
 		key.onkeydown = (e) => {
@@ -745,10 +797,34 @@ function settingsKeyDownEvent(e) {
 		if (slideIdx == 0){
 			document.title = langJson['settings'][`account title`];
 			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
+			Object.keys(accountSlideTabIdxMap).forEach(function (key){
+				try{
+					document.querySelector(key).tabIndex = accountSlideTabIdxMap[key]
+				}
+				catch{}
+			})
+			Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+				try{
+					document.querySelector(key).tabIndex = "-1"
+				}
+				catch{}
+			})
 		}
 		else {
 			document.title = langJson['settings'][`accessibility title`];
 			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
+			Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+				try{
+					document.querySelector(key).tabIndex = accessibilitySlideTabIdxMap[key]
+				}
+				catch{}
+			})
+			Object.keys(accountSlideTabIdxMap).forEach(function (key){
+				try{
+					document.querySelector(key).tabIndex = "-1"
+				}
+				catch{}
+			})
 		}
 	}
 }

@@ -58,6 +58,30 @@ const availableLang = {
 	"DE_GE" : true,
 }
 
+const accountSlideTabIdxMap = {
+	"#inputChangeUsername" : "13",
+	"#saveUsernameBtn" : "14",
+	"#changePasswordBtn" : "15",
+	"#pfpLabel" : "19",
+	"#deleteAccountBtn" : "20",
+}
+
+const accessibilitySlideTabIdxMap = {
+	"#fontSizeRange" : "13",
+	"#settingsDropDownTheme" : "14",
+	"#settingsThemeLight" : "15",
+	"#settingsThemeDark" : "16",
+	"#settingsThemeHCLight" : "17",
+	"#settingsThemeHCDark" : "18",
+	"#settingsThemeDevice" : "19",
+	"#settingsDropDownLang" : "20",
+	"#EN_UK" : "21",
+	"#FR_FR" : "22",
+	"#DE_GE" : "23",
+	"#IT_IT" : "24",
+	"#AR_GH" : "25",
+}
+
 function addPfpUrlToImgSrc(img, path) {
 	if (path != "") {
 		var testImg = new Image();
