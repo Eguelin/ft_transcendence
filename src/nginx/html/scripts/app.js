@@ -408,7 +408,7 @@ function load() {
 			},
 			credentials: 'include'
 		})
-		history.replaceState(`https://${hostname.host}/${currentLang}/login#login`)
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`)
 	}
 	if (currentPage == "settings") {
 		window.onkeydown = null
