@@ -29,28 +29,21 @@
 	gap: 1px;
 	overflow-y: hidden;
 	overflow-x: hidden;
+	anchor-name: --recent-match-history;
 }
 
 
 #profileFriendsButton > button {
-	text-align: center;
-	background-color: var(--input-bg-rgb);
-	color: var(--main-text-rgb);
-	font-family: "pong";
 	padding: 1.5rem;
-	border: 0.2px solid var(--main-text-rgb);
-	border-radius: 1rem;
 	font-size: 1rem;
 	width: fit-content;
-	height: fit-content;
-	align-self: center;
 	min-width: unset;
 	
 }
 
 #profileFriendsButton > button:hover, #profileFriendsButton > button:focus {
-	color: var(--page-bg-rgb);
-	border-color: var(--page-bg-rgb);
+	color: var(--input-focus-border);
+	border-color: var(--input-focus-border);
 	outline: none;
 }
 
@@ -67,7 +60,7 @@
 	transition: none;
 }
 
-.home{
+.home, .user{
 	.matchDescContainer:first-child{
 		border-left: 0;
 	}
@@ -163,6 +156,24 @@
 	display: flex;
 	gap: 1vmin;
 	width: max-content;
+}
+
+.user #MatchHistoryTextContainer{
+	position: fixed;
+	position-anchor: --recent-match-history;
+	bottom: calc(anchor(top) + 1rem);
+	width: 100%;
+
+	div {
+		width: 50%;
+	}
+	#recentMatchHistoryText{
+		width: fit-content;
+		justify-self: end;
+	}
+	#allMatchesHistoryBtn{
+		width: fit-content;
+	}
 }
 
 #profileName{
