@@ -1843,11 +1843,13 @@ function checkUserPageSize(){
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 4;
 	var currentFontSize = parseInt(window.getComputedStyle(text).fontSize);
 	text.style.setProperty("transition", "none")
+	if (currentFontSize > baseFontSize)
+		text.style.setProperty("font-size", `${baseFontSize}px`)
 	while (text.getBoundingClientRect().width < text.parentElement.getBoundingClientRect().width && currentFontSize <= baseFontSize){
 		text.style.setProperty("font-size", `${currentFontSize}px`)
 		currentFontSize += 1;
 	}
-	while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 1){
+	while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 8){
 		text.style.setProperty("font-size", `${currentFontSize}px`)
 		currentFontSize -= 1;
 	}
@@ -1867,7 +1869,7 @@ function checkFriendPageSize(){
 			ancestor.style.setProperty("font-size", `${currentFontSize}px`)
 			currentFontSize += 1;
 		}
-		while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 1){
+		while (text.getBoundingClientRect().width > text.parentElement.getBoundingClientRect().width && currentFontSize > 8){
 			ancestor.style.setProperty("font-size", `${currentFontSize}px`)
 			currentFontSize -= 1;
 		}
