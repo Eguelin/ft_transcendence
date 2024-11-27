@@ -436,6 +436,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 						usernameInput.previousElementSibling.remove();
 					success = document.createElement("a");
 					success.className = "success";
+					success.style.setProperty("position-anchor", "--input-change-name");
 					success.text = "username successfully updated";
 					usernameInput.before(success);
 
@@ -454,6 +455,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					response.json().then(response => {
 					warning = document.createElement("a");
 					warning.className = "warning";
+					warning.style.setProperty("position-anchor", "--input-change-name");
 					warning.text = response.message;
 					usernameInput.before(warning);
 					})
@@ -463,6 +465,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 	else{
 		warning = document.createElement("a");
 		warning.className = "warning";
+		warning.style.setProperty("position-anchor", "--input-change-name");
 		warning.text = "username can't be empty";
 		usernameInput.before(warning);
 	}

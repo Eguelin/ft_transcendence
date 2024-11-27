@@ -179,7 +179,7 @@
 }
 
 #confirmDelete:hover, #confirmDelete:focus, #confirmBlock:hover, #confirmBlock:focus {
-	color: var(--hover-text-rgb);
+	color: var(--page-bg-rgb);
 	border: 0.2px solid var(--hover-text-rgb);
 }
 
