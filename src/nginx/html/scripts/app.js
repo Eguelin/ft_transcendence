@@ -663,7 +663,7 @@ const themeMap = {
 		"--input-bg-rgb": "#F7EFE5",
 		"--match-bg-rgb": "#F7EFE500",
 		"--border-rgb": "#7743DB",
-		"--match-border-rgb": "#FF43DB",
+		"--match-border-rgb": "#7743DB",
 		"--active-selector-rgb" : "#2E073F00",
 		"--notif-center-border-rgb" : "#7743DB",
 		"--contest-match-bg-rgb" : "#FFFBF5",
