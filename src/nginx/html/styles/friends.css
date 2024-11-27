@@ -81,7 +81,7 @@
 	background:var(--main-text-rgb);
 }
 .acceptRequestBtn{
-	mask-image:url("../icons/check-mark-1.svg");
+	mask-image:url("../icons/check.svg");
 }
 
 .acceptRequestBtn:focus, .acceptRequestBtn:hover, .unblockBtn:hover, .unblockBtn:focus{
@@ -89,7 +89,7 @@
 }
 
 .rejectRequestBtn{
-	mask-image:url("../icons/cross-17.svg");
+	mask-image:url("../icons/cross.svg");
 }
 
 .rejectRequestBtn:focus, .rejectRequestBtn:hover{
@@ -110,6 +110,13 @@
 	height:4rem;
 	width:4rem;
 	mask-image: url("../icons/more-vertical.svg");
+}
+
+.friendsOptionContainer:focus{
+	outline: none;
+	.moreBtn{
+		background: var(--option-hover-rgb);
+	}
 }
 
 .removeFriendBtn{
@@ -255,6 +262,9 @@
 	color: var(--main-text-rgb) !important;
 }
 
+.activeSelector:focus{
+	color: var(--option-hover-rgb) !important;
+}
 
 .pfpContainer{
 	width: 4rem;
