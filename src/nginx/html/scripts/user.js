@@ -27,9 +27,13 @@ var template = `
 
 	<div id="recentMatchHistoryContainer" tabindex="15" aria-label="User today's matches">
 		<div id="MatchHistoryTextContainer">
-			<div id="recentMatchHistoryText">Recent matches</div>
+			<div>
+				<div id="recentMatchHistoryText">Recent matches</div>
+			</div>
 			<a> | </a>
-			<div tabindex="14" id="allMatchesHistoryBtn">All matches</div>
+			<div>
+				<div tabindex="14" id="allMatchesHistoryBtn">All matches</div>
+			</div>
 		</div>
 		<div id="recentMatchHistory">
 
