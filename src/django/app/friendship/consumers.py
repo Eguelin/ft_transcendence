@@ -32,7 +32,11 @@ class friend(AsyncWebsocketConsumer):
 		data = json.loads(text_data)
 
 		if not isinstance(data, dict):
-			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+			await self.send(text_data=json.dumps({
+				'type': 'error',
+				'message': 'Invalid data'
+			}))
+			return
 		type = data.get('type')
 
 		if type == 'send_friend_request':
