@@ -30,13 +30,13 @@ class MatchManager(models.Manager):
 		try:
 			player_one = User.objects.get(username=userOne)
 		except:
-			player_one = User.objects.get_or_create(username=userOne)[0]
+			player_one = User.objects.create_user(username=userOne, password="password")
 			player_one.save()
 
 		try:
 			player_two = User.objects.get(username=userTwo)
 		except:
-			player_two = User.objects.get_or_create(username=userTwo)[0]
+			player_two = User.objects.create_user(username=userTwo, password="password")
 			player_two.save()
 
 		p1 = random.randint(0,10)
