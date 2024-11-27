@@ -19,8 +19,8 @@ var template = `
 			<div id="customPeriod">
 				<button tabindex="15" aria-label="Custom period selection" id="customPeriodSelection">+</button>
 				<div id="customPeriodSelectionContainer">
-					<input tabindex="16" aria-label="Custom start day" id="customStartDay" type="date">
-					<input tabindex="17" aria-label="Custom end day" id="customEndDay" type="date">
+					<input autoclomplete="off" tabindex="16" aria-label="Custom start day" id="customStartDay" type="date">
+					<input autoclomplete="off" tabindex="17" aria-label="Custom end day" id="customEndDay" type="date">
 					<button tabindex="18" aria-label="Search" id="search">Search</button>
 				</div>
 			</div>

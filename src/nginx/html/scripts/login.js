@@ -25,7 +25,7 @@ var template = `
 				<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
 			</div>
 			<div>
-				<input tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
+				<input autoclomplete="off" tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
 			</div>
 			<div>
 				<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
@@ -40,13 +40,13 @@ var template = `
 		<div class="loginOpt" id="createAcc">Create your account</div>
 		<div class=loginSlide>
 			<div>
-				<input tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
+				<input autocomplete="username" tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
 			</div>
 			<div>
-				<input tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
+				<input autoclomplete="off" tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
 			</div>
 			<div>
-				<input tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
+				<input autoclomplete="off" tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
 			</div>
 			<div>
 				<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
