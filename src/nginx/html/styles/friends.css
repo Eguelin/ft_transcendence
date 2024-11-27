@@ -262,7 +262,7 @@
 	color: var(--main-text-rgb) !important;
 }
 
-.activeSelector:focus{
+.settingsSlideSelector:focus, .slideSelector:focus, .settingsSlideSelector:hover, .slideSelector:hover{
 	color: var(--option-hover-rgb) !important;
 }
 

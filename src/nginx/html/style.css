@@ -10,6 +10,7 @@
 	--option-hover-rgb :  #110026;
 	--option-text-rgb :  #FDFDFB;
 	--input-bg-rgb : #3A3053;
+	--popup-input-bg-rgb : #3A3053;
 	--match-bg-rgb : #3A3053;
 	--border-rgb : #FDFDFB;
 	--match-border-rgb : #110026;
@@ -130,7 +131,7 @@ button{
 
 
 button:focus, button:hover{
-	border-color: var(--main-text-rgb);
+	border-color: var(--input-focus-border);
 }
 
 @media screen and (max-width:960px) {
