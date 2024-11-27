@@ -100,7 +100,8 @@
 		"ariaPending.friendsOptionContainer" : "options de demande d'ami en attente",
 		"ariaBlocked.friendsOptionContainer" : "options d'utilisateur bloqué",
 		"incoming_pending_request" : "Demande d'ami entrante de ${USERNAME}",
-		"error_sending_request" : "Impossible d'envoyer la demande d'ami."
+		"error_sending_request" : "Impossible d'envoyer la demande d'ami.",
+		"blockError" : "Vous ne pouvez pas bloquer cet utilisateur."
 	},
 	"user":{
 		"#title" : "",

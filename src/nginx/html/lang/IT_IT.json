@@ -100,7 +100,8 @@
         "ariaPending.friendsOptionContainer" : "opzioni richiesta di amicizia in sospeso",
         "ariaBlocked.friendsOptionContainer" : "opzioni utente bloccato",
         "incoming_pending_request" : "Richiesta di amicizia in arrivo da ${USERNAME}",
-        "error_sending_request" : "Impossibile inviare la richiesta di amicizia."
+        "error_sending_request" : "Impossibile inviare la richiesta di amicizia.",
+        "blockError": "Impossibile bloccare l'utente"
     },
     "user":{
         "#title" : "",

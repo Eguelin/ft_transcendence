@@ -94,22 +94,6 @@ function updateUserLang(){
         })
     }
 
-    if (removeFriendBtn){
-        var splitPath = window.location.href.split('/');
-        removeFriendBtn.addEventListener("click", (e) => {
-            fetch('/api/user/remove_friend', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({'username': splitPath[5]}),
-                credentials: 'include'
-            })
-			document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
-			document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
-        })
-    }
-
 	inputSearchUserContainer.style.setProperty("display", "block");
 	document.getElementById("inputSearchUser").focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
@@ -192,7 +176,7 @@ function updateUserLang(){
 						recentMatchHistoryContainer.appendChild(messageContainer);
 					}
                 }
-				checkMatchResumeSize();    
+				checkMatchResumeSize();
 				setNotifTabIndexes(tabIdx);
 				checkUserPageSize();
             })
@@ -232,13 +216,15 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			document.getElementById("unblockBtn").style.setProperty("display", "none");
-			document.getElementById("blockBtn").style.setProperty("display", "block");
-        	document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
-
-
-			deleteFriendPopup.style.setProperty("display", "none");
-			document.getElementById("popupBg").style.display = "none";
+			.then(response => {
+				if (response.ok){
+					document.getElementById("unblockBtn").style.setProperty("display", "none");
+					document.getElementById("blockBtn").style.setProperty("display", "block");
+					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+					deleteFriendPopup.style.setProperty("display", "none");
+					document.getElementById("popupBg").style.display = "none";
+				}
+			})
 		}
 		if (e.target.id == "confirmBlock"){
 			const data = {username: e.target.parentElement.className};
@@ -250,11 +236,24 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			document.getElementById("unblockBtn").style.setProperty("display", "block");
-			document.getElementById("blockBtn").style.setProperty("display", "none");
-        	document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
-			blockFriendPopup.style.setProperty("display", "none");
-			document.getElementById("popupBg").style.display = "none";
+			.then(response => {
+				if (response.ok)
+				{
+					document.getElementById("unblockBtn").style.setProperty("display", "block");
+					document.getElementById("blockBtn").style.setProperty("display", "none");
+					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
+					blockFriendPopup.style.setProperty("display", "none");
+				}
+				else
+				{
+					if (response.status == 401)
+					{
+						popUpError(client.langJson['friends']['blockError']);
+					}
+					blockFriendPopup.style.setProperty("display", "none");
+					document.getElementById("popupBg").style.display = "none";
+				}
+			})
 		}
 
 		if (e.target.id == "deleteFriendBtn"){
@@ -281,10 +280,13 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			document.getElementById("unblockBtn").style.setProperty("display", "none");
-			document.getElementById("blockBtn").style.setProperty("display", "block");
-        	document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
-
+			.then (response => {
+				if (response.ok){
+					document.getElementById("unblockBtn").style.setProperty("display", "none");
+					document.getElementById("blockBtn").style.setProperty("display", "block");
+					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+				}
+			})
 		}
 	}
 })

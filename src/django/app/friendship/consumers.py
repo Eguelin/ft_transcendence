@@ -30,25 +30,46 @@ class friend(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
+
+		if not isinstance(data, dict):
+			await self.send(text_data=json.dumps({
+				'type': 'error',
+				'message': 'Invalid data'
+			}))
+			return
 		type = data.get('type')
 
 		if type == 'send_friend_request':
 			await self.send_friend_request_notif(data.get('target_user_id'), data.get('sender_username'))
 
 	async def send_friend_request_notif(self, user_id, sender_name):
-		channel_layer = get_channel_layer()
-		await channel_layer.group_send(
-			f"user_{user_id}",
-			{
-				'type': 'send_friend_request',
-				'new_requestt': True,
-				'sender_name' : sender_name
-			}
-		)
+		try:
+				if not isinstance(user_id, int) or user_id <= 0:
+						raise ValueError("user id is invalid")
+
+				if not sender_name or not isinstance(sender_name, str):
+						raise ValueError("username is invalid")
+
+				channel_layer = get_channel_layer()
+
+				await channel_layer.group_send(
+						f"user_{user_id}",
+						{
+								'type': 'send_friend_request',
+								'new_request': True,
+								'sender_name': sender_name
+						}
+				)
+		except ValueError as e:
+			await self.send(text_data=json.dumps({
+			'type': 'error',
+			'message': str(e)
+		}))
+
 
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
-			'new_request': event['new_requestt'],
+			'new_request': event['new_request'],
 			'sender_name' : event['sender_name']
 
 		}))

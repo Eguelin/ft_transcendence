@@ -23,6 +23,8 @@ def fortytwo(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		code = data['code']
 		hostname = data['hostname']
 	except json.JSONDecodeError:
@@ -150,6 +152,8 @@ def create_user(request, staff=False):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 		password = data['password']
 		language = data['lang']
@@ -217,6 +221,8 @@ def user_login(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 		password = data['password']
 	except json.JSONDecodeError:
@@ -315,8 +321,11 @@ def profile_update(request):
 	valid = False
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+
 
 	user = request.user
 	boolean_fields = ["do_not_disturb", "is_active"]
@@ -604,6 +613,9 @@ def get(request):
 
 	try:
 		data = json.loads(request.body)
+		
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 
 		username = data['name']
 		startDate = data['startDate']
@@ -647,6 +659,8 @@ def search_by_username(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		name = data['name']
 
 		if not name or not isinstance(name, str):
@@ -658,9 +672,7 @@ def search_by_username(request):
 
 		for user in query_users:
 			if user.profile.blocked_users.filter(pk=request.user.pk).exists() or \
-				user.username == request.user.username or \
-				user.username == "nobody" or \
-				user.username == "deleted":
+				user.username == request.user.username or user.username in NOT_USER:
 				continue
 
 			users_json[user.username] = get_user_preview_json(user)
@@ -684,7 +696,9 @@ def get_user_id(request):
 
 	try:
 		data = json.loads(request.body)
-		username = data["user"]
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+		username = data["username"]
 
 		if not username or not isinstance(username, str):
 			return JsonResponse({'message': 'Invalid username'}, status=400)
@@ -717,6 +731,8 @@ def get_tournament(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		id = data["id"]
 
 		if not id or not isinstance(id, int):
@@ -889,6 +905,8 @@ def get_match(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		id = data["id"]
 
 		if not id or not isinstance(id, int):

@@ -20,7 +20,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./src/nginx/html:/usr/share/nginx/html
+      - nginx:/usr/share/nginx/html
       - images:/images
     ports:
       - "49300:443"
@@ -38,10 +38,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./src/django/app:/app
+      - django:/app
       - images:/images
-    command: /bin/start dev # start the django server in development mode
-    # command: /bin/start prod # start the django server in production mode
     networks:
       - transcendence
     depends_on:
@@ -68,6 +66,24 @@ volumes:
   images:
     name: images
     driver: local
+
+  # django volume
+  django:
+    name: django
+    driver: local
+    driver_opts:
+      type: none
+      device: ./src/django/app
+      o: bind
+
+  # nginx volume
+  nginx:
+    name: nginx
+    driver: local
+    driver_opts:
+      type: none
+      device: ./src/nginx/html
+      o: bind
 
 networks:
 

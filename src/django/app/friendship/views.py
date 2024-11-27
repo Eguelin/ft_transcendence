@@ -10,6 +10,9 @@ def send_friend_request(request):
 
 	try:
 		data = json.loads(request.body)
+
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -50,6 +53,8 @@ def accept_friend_request(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -80,6 +85,8 @@ def reject_friend_request(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -108,6 +115,8 @@ def remove_friend(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -138,6 +147,8 @@ def block_friend(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -152,10 +163,14 @@ def block_friend(request):
 
 	try:
 		ennemy = User.objects.get(username=username)
+		if (ennemy.is_staff):
+			return JsonResponse({'message': 'Can\'t block staff member'}, status=401)
 		user = request.user
-		ennemy.profile.friends.remove(user)
-		ennemy.save()
-		user.profile.friends.remove(ennemy)
+		if (user.profile.friends.filter(pk=ennemy.pk)).exists():
+			ennemy.profile.friends.remove(user)
+			ennemy.save()
+			user.profile.friends.remove(ennemy)
+			user.save()
 		user.profile.blocked_users.add(ennemy)
 		user.save()
 		return JsonResponse({'message': 'Succesfully blocked user'})

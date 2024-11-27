@@ -387,11 +387,11 @@ a {
 		font-size: calc(32px * var(--font-size-amplifier));
 		transition: none !important;
 	}
-	
+
 	.mobile *{
 		transition: none !important;
 	}
-	
+
 	.mobile {
 		body{
 			font-size: calc(32px * var(--font-size-amplifier));
@@ -400,7 +400,7 @@ a {
 		button{
 			border-width: 4.2px;
 		}
-	
+
 		input{
 			border-width: 4.2px;
 		}

@@ -9,7 +9,7 @@ import random
 import math
 import time
 
-MAX_SCORE = 15
+MAX_SCORE = 5
 
 class Matchmaking():
 	_instance = None
@@ -25,9 +25,11 @@ class Matchmaking():
 		if len(self.waiting_players) > 0:
 			player1 = None
 			for waiting_player in self.waiting_players:
-				if DEBUG or player.user != waiting_player.user:
-					player1 = waiting_player
-					break
+				if (player.user == waiting_player.user or \
+					await self.isBlocked(player.user, waiting_player.user)) and not DEBUG:
+					continue
+				player1 = waiting_player
+				break
 			if player1:
 				self.waiting_players.remove(player1)
 				game = GameRemote(player1, player)
@@ -65,7 +67,13 @@ class Matchmaking():
 	async def removePlayerTournament(self, player):
 		for tournament in self.tournaments:
 			if not await tournament.removePlayers(player):
-				return
+				continue
+
+	@sync_to_async
+	def isBlocked(self, player1, player2):
+		P1Blocked = player1.profile.blocked_users.filter(pk=player2.pk).exists()
+		P2Blocked = player2.profile.blocked_users.filter(pk=player1.pk).exists()
+		return P1Blocked or P2Blocked
 
 class Ball():
 	size = 10
@@ -253,6 +261,7 @@ class Game():
 		if init:
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
+			info['maxScore'] = Game.maxScore
 
 		return info
 
@@ -465,7 +474,7 @@ class Player():
 			self.x = Paddle.margin + Paddle.width
 		elif self.side == 'right':
 			self.x = Game.width - Paddle.width - Paddle.margin
-		self.y = Game.height / 2
+		self.y = Game.demieHeight
 		self.isReady = False
 
 	def move(self):
@@ -548,26 +557,52 @@ class PlayerAI(Player):
 		self.profile = self.user.profile
 		self.Y = Game.demieHeight
 
-
 	async def run(self):
 		while self.game.running:
-			rand = random.uniform(0, Paddle.height)
 			ball = self.game.ball.copy()
-			if (ball.dx > 0 and self.side == 'right') or (ball.dx < 0 and self.side == 'left'):
-				while time.time() - self.game.timeLastPoint > 2 and ball.x < self.game.playerRight.x and ball.x > self.game.playerLeft.x:
+			pad = self.copy()
+			if (ball.dx > 0 and self.side == 'left') or (ball.dx < 0 and self.side == 'right'):
+				await asyncio.sleep(1)
+				continue
+
+			timeStart = time.time()
+
+			while time.time() - self.game.timeLastPoint > 2 and ball.x < self.game.playerRight.x and ball.x > self.game.playerLeft.x:
+				ball.move()
+				if ball.y <= Ball.demieSize or ball.y + Ball.demieSize >= Game.height:
+					ball.dy = -ball.dy
+
+			listY = [ball.y - Paddle.demieHeight + Paddle.speed / 2,
+					ball.y - Paddle.demieHeight / 2,
+					ball.y,
+					ball.y + Paddle.demieHeight / 2,
+					ball.y + Paddle.demieHeight - Paddle.speed / 2]
+			listDeltaPlayer = []
+			saveBall = ball
+
+			for y in listY:
+				pad.y = y
+				ball = saveBall.copy()
+				target_player = self.game.playerRight if self.side == 'left' else self.game.playerLeft
+
+				ball.paddleCollision(pad)
+				while (ball.x < target_player.x if self.side == 'left' else ball.x > target_player.x):
 					ball.move()
 					if ball.y <= Ball.demieSize or ball.y + Ball.demieSize >= Game.height:
 						ball.dy = -ball.dy
-				if self.y < ball.y:
-					self.Y = ball.y + rand
-				else:
-					self.Y = ball.y - rand
-			await asyncio.sleep(1)
+
+				listDeltaPlayer.append(abs(ball.y - target_player.y))
+
+			self.Y = listY[listDeltaPlayer.index(max(listDeltaPlayer))]
+			timeEnd = time.time()
+
+			if timeEnd - timeStart < 1:
+				await asyncio.sleep(1 - timeEnd + timeStart)
 
 	def move(self):
-		if self.y < Game.height - Paddle.demieHeight and self.Y > self.y + Paddle.demieHeight:
+		if self.y < Game.height - Paddle.demieHeight and self.Y > self.y + Paddle.speed / 2:
 			self.y += Paddle.speed
-		elif self.y > Paddle.demieHeight and self.Y < self.y - Paddle.demieHeight:
+		elif self.y > Paddle.demieHeight and self.Y < self.y - Paddle.speed / 2:
 			self.y -= Paddle.speed
 
 	def getInfo(self, init=False):
@@ -580,6 +615,11 @@ class PlayerAI(Player):
 			}
 
 		return info
+
+	def copy(self):
+		new_player = PlayerAI()
+		new_player.__dict__.update(self.__dict__)
+		return new_player
 
 class PlayerLocal(PlayerRemote):
 
@@ -614,12 +654,19 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data):
 		try:
 			data = json.loads(text_data)
+			if not isinstance(data, dict):
+				await self.send('error', 'Invalid Data')
+				return
 			type = data['type']
 		except json.JSONDecodeError:
 			await self.send('error', 'Invalid JSON')
 			return
 		except KeyError:
 			await self.send('error', 'Invalid Data')
+			return
+
+		if not type or not isinstance(type, str):
+			await self.send('error', 'Invalid Type')
 			return
 
 		if type == 'remote':
@@ -675,7 +722,7 @@ class Tournament():
 			return False
 		if not DEBUG:
 			for tournamentPlayer in self.players:
-				if player.user == tournamentPlayer.user:
+				if player.user == tournamentPlayer.user or await self.isBlocked(player.user, tournamentPlayer.user):
 					return False
 		for i in range(len(self.matches[0])):
 			if self.matches[0][i].playerLeft and self.matches[0][i].playerRight:
@@ -765,6 +812,12 @@ class Tournament():
 		self.model.winner = winner.user
 		self.model.save()
 
+	@sync_to_async
+	def isBlocked(self, player1, player2):
+		P1Blocked = player1.profile.blocked_users.filter(pk=player2.pk).exists()
+		P2Blocked = player2.profile.blocked_users.filter(pk=player1.pk).exists()
+		return P1Blocked or P2Blocked
+
 class GameTournament(GameRemote):
 	def __init__(self, tournament, match, round):
 		super().__init__(None, None)
@@ -848,5 +901,6 @@ class GameTournament(GameRemote):
 		if init:
 			info['canvas'] = Game.getSize()
 			info['paddle'] = Paddle.getSize()
+			info['maxScore'] = Game.maxScore
 
 		return info
