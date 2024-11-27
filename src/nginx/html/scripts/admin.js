@@ -2,41 +2,41 @@ var template = `
 <div id="pageContentContainer" class="admin">
     <div style="display: flex; flex-direction: column; gap: 3ch;">
         <div style="display: flex;">
-            <input id="createUserUsername" type="text" placeholder="name">
-            <input id="createUserPassword" type="text" placeholder="password">
+            <input autoclomplete="off" id="createUserUsername" type="text" placeholder="name">
+            <input autoclomplete="off" id="createUserPassword" type="text" placeholder="password">
             <button id="createUserBtn">create user</button>
         </div>
 
         <div style="display: flex;">
-            <input id="deleteUserUsername" type="text" placeholder="name">
+            <input autoclomplete="off" id="deleteUserUsername" type="text" placeholder="name">
             <button id="deleteUserBtn">delete user</button>
         </div>
         
         <div style="display: flex;">
-            <input id="userOne" type="text" placeholder="player one username">
-            <input id="userTwo" type="text" placeholder="player two username">
-            <input id="range" type="number" placeholder="number of matches">
+            <input autoclomplete="off" id="userOne" type="text" placeholder="player one username">
+            <input autoclomplete="off" id="userTwo" type="text" placeholder="player two username">
+            <input autoclomplete="off" id="range" type="number" placeholder="number of matches">
     
             <button id="createMatchesBtn">create matches</button>
         </div>
         
         <div style="display: flex;">
-            <input id="userOneF" type="text" placeholder="player one username">
-            <input id="userTwoF" type="text" placeholder="player two username">
+            <input autoclomplete="off" id="userOneF" type="text" placeholder="player one username">
+            <input autoclomplete="off" id="userTwoF" type="text" placeholder="player two username">
     
             <button id="createFriendshipBtn">create friend</button>
         </div>
 
         <div style="display: flex;">
-            <input id="userOneFr" type="text" placeholder="to">
-            <input id="userTwoFr" type="text" placeholder="from">
+            <input autoclomplete="off" id="userOneFr" type="text" placeholder="to">
+            <input autoclomplete="off" id="userTwoFr" type="text" placeholder="from">
     
             <button id="createFriendshipRequestBtn">create friend request</button>
         </div>
 
         <div style="display: flex;">
-            <input id="userOneBf" type="text" placeholder="player one username">
-            <input id="userTwoBf" type="text" placeholder="player two username">
+            <input autoclomplete="off" id="userOneBf" type="text" placeholder="player one username">
+            <input autoclomplete="off" id="userTwoBf" type="text" placeholder="player two username">
     
             <button id="createblockedFriendshipBtn">create blocked friendship</button>
         </div>

@@ -2,7 +2,7 @@ var template = `
 <div id="pageContentContainer">
 
 	<div id="userSearchContainer">
-		<input tabindex="12" id="inputSearch" placeholder="Search user" aria-label="Search user input field">
+		<input autoclomplete="off" tabindex="12" id="inputSearch" placeholder="Search user" aria-label="Search user input field">
 		<div tabindex="13" id="searchBtn"></div>
 	</div>
 	<div id="resumeContainer">

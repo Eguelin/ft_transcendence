@@ -8,7 +8,7 @@ var template = `
 		<a id="playBtnAI" href="https://${hostname.host}/game?mode=ai" tabindex="14">Play</a>
 		<a id="playTournament" href="https://${hostname.host}/game?mode=tournament" tabindex="15">Play</a>
 		<div class="forms" id="saveDisplayNameContainer">
-			<input tabindex="16" type="text" id="inputChangeDisplayName" class="formInput" name="displayName" placeholder="Display name"/>
+			<input autoclomplete="off" tabindex="16" type="text" id="inputChangeDisplayName" class="formInput" name="displayName" placeholder="Display name"/>
 			<div tabindex="17" id="saveDisplayNameBtn"></div>
 		</div>
 	</div>
