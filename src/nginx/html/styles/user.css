@@ -469,6 +469,13 @@ input[type="date"]{
 		min-width: unset;
 	}
 	transition: none;
+	.matchDescContainer{
+		border-left: 0;
+		border-right: 0;
+	}
+	.matchDescContainer:last-child{
+		border-bottom: 0;
+	}
 }
 
 @media screen  and (max-width:920px){ 
