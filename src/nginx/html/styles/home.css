@@ -57,6 +57,7 @@
 
 #inputChangeDisplayName{
 	border-color: transparent;
+	anchor-name: --save-display-name;
 }
 
 #saveDisplayNameContainer:focus-within {

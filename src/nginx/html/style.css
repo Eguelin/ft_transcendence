@@ -230,6 +230,7 @@ a {
 	text-align: left;
 	display: block;
 	height: 0;
+	width: max-content;
 }
 
 .warning{

@@ -125,6 +125,8 @@ var template = `
 							success = document.createElement("a");
 							success.className = "success";
 							success.text = "Display name successfully updated";
+							success.style.setProperty("position-anchor", "--save-display-name");
+							success.style.setProperty("top", "calc(anchor(top) - 3vh)");
 							displayNameInput.before(success);
 		
 						}
@@ -133,6 +135,8 @@ var template = `
 							warning = document.createElement("a");
 							warning.className = "warning";
 							warning.text = response.message;
+							warning.style.setProperty("position-anchor", "--save-display-name");
+							warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
 							displayNameInput.before(warning);
 							})
 						}
@@ -142,6 +146,8 @@ var template = `
 				warning = document.createElement("a");
 				warning.className = "warning";
 				warning.text = "Display name can't be empty";
+				warning.style.setProperty("position-anchor", "--save-display-name");
+				warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
 				displayNameInput.before(warning);
 			}
 		}
