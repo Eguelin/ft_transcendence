@@ -1161,7 +1161,7 @@ function sendNotif(message, id, type) {
 
 function friendUpdate()
 {
-	if (!client && socket)
+	if (!client)
 		return;
 	var socket = new WebSocket("/ws/friend/");
 
