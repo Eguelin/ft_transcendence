@@ -344,3 +344,7 @@
 #changePasswordContainer{
 	background-color: transparent;
 }
+
+#inputChangeUsername{
+	anchor-name: --input-change-name;
+}
