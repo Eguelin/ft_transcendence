@@ -10,6 +10,9 @@ def send_friend_request(request):
 
 	try:
 		data = json.loads(request.body)
+
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -50,6 +53,8 @@ def accept_friend_request(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -80,6 +85,8 @@ def reject_friend_request(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -108,6 +115,8 @@ def remove_friend(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
@@ -138,6 +147,8 @@ def block_friend(request):
 		return JsonResponse({'message': 'User not authenticated'}, status=400)
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON"}, status=400)
