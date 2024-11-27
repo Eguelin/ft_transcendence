@@ -35,7 +35,7 @@ var template = `
 
 		</div>
 	</div>
-	<div style="z-index: 100; position:relative;">
+	<div style="z-index: 100; position:fixed;">
 		<div id="popupBg" style="display: none;"></div>
 		<div id="deleteFriendPopup">
 			<a id="confirmDeleteQuestion">Are you sure you want to remove this friend</a>
@@ -63,6 +63,14 @@ function updateUserLang(){
     sendFriendRequestBtn = document.getElementById("sendFriendRequestBtn");
     allMatchesButton = document.getElementById("allMatchesHistoryBtn");
     removeFriendBtn = document.getElementById("deleteFriendBtn");
+
+	window.onkeydown = function(e){
+		if (e.key == "Escape" && document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
+			document.getElementById("popupBg").style.setProperty("display", "none");
+			document.getElementById("deleteFriendPopup").style.setProperty("display", "none");
+			document.getElementById("blockFriendPopup").style.setProperty("display", "none")
+		}
+	}
 
     if (sendFriendRequestBtn){
         var splitPath = window.location.href.split('/');

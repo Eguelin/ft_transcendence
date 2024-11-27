@@ -684,7 +684,7 @@ def get_user_id(request):
 
 	try:
 		data = json.loads(request.body)
-		username = data["username"]
+		username = data["user"]
 
 		if not username or not isinstance(username, str):
 			return JsonResponse({'message': 'Invalid username'}, status=400)

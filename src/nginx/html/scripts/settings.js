@@ -511,19 +511,6 @@ function deleteRequest(){
 	}
 }
 
-document.addEventListener("keydown", (e) => {
-	if (currentPage == "settings"){
-		if (e.key == "Escape" &&
-			document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
-			document.getElementById("popupBg").style.setProperty("display", "none");
-			document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
-			document.getElementById("confirmPasswordPopup").style.setProperty("display", "none");
-			document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
-			window.onkeydown = settingsKeyDownEvent
-		}
-	}
-})
-
 document.addEventListener("click", (e) => {
 	if (currentPage == "settings"){
 		if (e.target.parentElement == null || e.target.id == "popupBg"){
@@ -705,6 +692,13 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 })
 
 function settingsKeyDownEvent(e) {
+	if (e.key == "Escape" && document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
+		document.getElementById("popupBg").style.setProperty("display", "none");
+		document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
+		document.getElementById("confirmPasswordPopup").style.setProperty("display", "none");
+		document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
+		window.onkeydown = settingsKeyDownEvent
+	}
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
 		var save = slideIdx;
 		var tmp = document.querySelector("#settingSlides");
