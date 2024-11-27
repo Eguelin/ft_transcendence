@@ -30,6 +30,9 @@ class friend(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		data = json.loads(text_data)
+
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		type = data.get('type')
 
 		if type == 'send_friend_request':

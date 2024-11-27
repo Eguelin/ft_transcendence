@@ -34,6 +34,8 @@ def remove_user(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		username = data['username']
 
 		if not username or not isinstance(username, str):
@@ -68,6 +70,10 @@ def create_match(request):
 
 	try:
 		data = json.loads(request.body)
+
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+
 		nbr = data['range']
 		userOne = data['userOne']
 		userTwo = data['userTwo']
@@ -105,6 +111,8 @@ def create_friendship(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		userOne = data['userOne']
 		userTwo = data['userTwo']
 	except json.JSONDecodeError:
@@ -154,6 +162,8 @@ def create_friendship_request(request):
 
 	try:
 		data = json.loads(request.body)
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 		to = data['to']
 		from_ = data['from']
 	except json.JSONDecodeError:
@@ -202,6 +212,10 @@ def create_blocked_friendship(request):
 
 	try:
 		data = json.loads(request.body)
+
+		if not isinstance(data, dict):
+			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+
 		userOne = data['userOne']
 		userTwo = data['userTwo']
 	except json.JSONDecodeError:
