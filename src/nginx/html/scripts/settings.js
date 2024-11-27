@@ -137,13 +137,13 @@ var template = `
 
 	<div id="confirmPasswordPopup" style="z-index: 2;">
 		<div>
-			<input autoclomplete="off" tabindex="15" type="password" id="inputOldPassword" style="anchor-name: --old-password-input;" class="formInput" name="Old password" placeholder="Old password"/>
+			<input autoclomplete="off" tabindex="15" type="password" id="inputOldPassword" style="anchor-name: --old-password-input;" class="popupInput" name="Old password" placeholder="Old password"/>
 		</div>
 		<div>
-			<input autoclomplete="off" tabindex="16" type="password" id="inputNewPassword" style="anchor-name: --new-password-input;" class="formInput" name="New password" placeholder="New password"/>
+			<input autoclomplete="off" tabindex="16" type="password" id="inputNewPassword" style="anchor-name: --new-password-input;" class="popupInput" name="New password" placeholder="New password"/>
 		</div>
 		<div>
-			<input autoclomplete="off" tabindex="17" type="password" id="inputNewCPassword" style="anchor-name: --new-confirm-password-input;" class="formInput" name="Confirm new password" placeholder="Confirm new password"/>
+			<input autoclomplete="off" tabindex="17" type="password" id="inputNewCPassword" style="anchor-name: --new-confirm-password-input;" class="popupInput" name="Confirm new password" placeholder="Confirm new password"/>
 		</div>
 		<div>
 			<button tabindex="18" id="confirmChangePasswordBtn" style="anchor-name: --confirm-new-password-button;" >Change password</button>
