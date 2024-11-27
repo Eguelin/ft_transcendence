@@ -195,7 +195,7 @@ def create_deleted_user():
 	return create_npc("deleted", "default0.jpg")
 
 def create_default_users():
-	create_npc("AI", "defaultAI.gif")
+	create_npc("AI", "defaultAi.gif")
 	create_npc("nobody", "thisman.jpg")
 	create_npc("deleted", "defaultDeleted.jpg")
 	create_npc("blocked", "defaultBlocked.jpg")

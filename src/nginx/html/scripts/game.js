@@ -2,7 +2,7 @@ var minConnectionWidth = 25;
 var playerOneScore;
 var playerTwoScore;
 var singleRoundDisplayIdx = 0;
-maxScore = 5;
+var maxScore = 5;
 
 var gameContainer;
 var tournamentContainer;
@@ -841,6 +841,7 @@ function game() {
 			ball.size = message.ball.size;
 			ball.x = message.ball.x;
 			ball.y = message.ball.y;
+			maxScore = message.maxScore;
 
 			ctx.lineWidth = paddle.width / 4;
 
