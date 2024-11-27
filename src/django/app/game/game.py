@@ -655,7 +655,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		try:
 			data = json.loads(text_data)
 			if not isinstance(data, dict):
-				return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+				await self.send('error', 'Invalid Data')
+				return
 			type = data['type']
 		except json.JSONDecodeError:
 			await self.send('error', 'Invalid JSON')
