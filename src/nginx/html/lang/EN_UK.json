@@ -6,6 +6,8 @@
 		"#logOutBtn" :  "Log out",
 		"#inputSearchUser" : "Search user",
 		".deletedUser" : "Deleted",
+		".blockedUser" : "Blocked",
+		".nobodyUser" : "Nobody",
 		"aria#goHomeButton" : "Home button",
 		"aria#inputSearchUser" : "Search user input field",
 		"aria#usernameBtn" : "Profile dropdown menu",

@@ -134,11 +134,23 @@ var template = `
 			if (document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText == "deleted"){
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").classList.add("deletedUser");
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".deletedUser"];
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
+			}
+			else if (document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText == "blocked"){
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").classList.add("blockedUser");
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".blockedUser"];
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
 			}
 
 			if (document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText == "deleted"){
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").classList.add("deletedUser");
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".deletedUser"];
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
+			}
+			else if (document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText == "blocked"){
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").classList.add("blockedUser");
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".blockedUser"];
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
 			}
 
 			document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
