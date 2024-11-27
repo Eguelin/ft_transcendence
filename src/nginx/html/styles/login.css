@@ -39,6 +39,15 @@
 	border: none;
 }
 
+
+#loginSlideSelector .slideSelector:focus,#loginSlideSelector .slideSelector:hover{
+	color: var(--hover-text-rgb) !important;
+}
+
+#loginSlideSelector .slideSelector.activeSelector:focus,#loginSlideSelector .slideSelector.activeSelector:hover{
+	color: var(--option-hover-rgb) !important;
+}
+
 #loginSlideSelector .slideSelector.activeSelector div{
 	background: none !important;
 }
