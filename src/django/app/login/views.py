@@ -305,7 +305,7 @@ def set_pfp(user, pfp):
 	if os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
 		os.remove(user.profile.profile_picture)
 
-	pfpName = f"/images/{user.username}.{image.format.lower()}"
+	pfpName = f"/images/{user.username}_{''.join(random.choices(string.ascii_lowercase + string.digits, k=6))}.{image.format.lower()}"
 	with open(pfpName, "wb", opener=file_opener) as f:
 		f.write(image_data)
 
@@ -613,7 +613,7 @@ def get(request):
 
 	try:
 		data = json.loads(request.body)
-		
+
 		if not isinstance(data, dict):
 			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 
