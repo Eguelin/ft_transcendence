@@ -90,7 +90,14 @@
 		"aria#pfpLabel" : "Change profile picture",
 		"aria#confirmPfpBtn" : "Confirm profile picture",
 		"account title" : "Account - transcendence",
-		"accessibility title" : "Accessibility - transcendence"
+		"accessibility title" : "Accessibility - transcendence",
+		".inputOldPasswordCantBeEmpty" : "Old password can't be empty",
+		".inputNewPasswordCantBeEmpty" : "New password can't be empty",
+		".inputNewCPasswordCantBeEmpty" : "Confirm new password can't be empty",
+		".passwordMisMatch" : "New passwords do not match",
+		".passwordUpdated" : "Password successfully updated",
+		".usernameUpdated" : "Username successfully updated",
+		".usernameCantBeEmpty" : "Username can't be empty"
 	},
 	"friends":{
 		"#title" : "",

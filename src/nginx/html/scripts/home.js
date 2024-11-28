@@ -141,26 +141,26 @@ var template = `
 						}
 						else {
 							response.json().then(response => {
-							warning = document.createElement("a");
-							if (errorMap[response.message]){
-								warning.className = `warning ${errorMap}`;
-								if (langJson)
-									warning.text = langJson['home'][errorMap[response.message]];
-								else
+								warning = document.createElement("a");
+								if (errorMap[response.message]){
+									warning.className = `warning ${errorMap[response.message]}`;
+									if (langJson)
+										warning.text = langJson['home'][errorMap[response.message]];
+									else
+										warning.text = response.message;
+								}
+								else{
+									warning.className = `warning ${errorMap[response.message]}`;
 									warning.text = response.message;
-							}
-							else{
-								warning.className = `warning ${errorMap}`;
-								warning.text = response.message;
-							}
-							if (CSS.supports("position-anchor", "--test")){
-								warning.style.setProperty("position-anchor", "--save-display-name");
-								warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
-								displayNameInput.before(warning);
-							}
-							else{
-								popUpError(warning.text)
-							}
+								}
+								if (CSS.supports("position-anchor", "--test")){
+									warning.style.setProperty("position-anchor", "--save-display-name");
+									warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
+									displayNameInput.before(warning);
+								}
+								else{
+									popUpError(warning.text)
+								}
 							})
 						}
 					})
