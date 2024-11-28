@@ -721,73 +721,80 @@ function game() {
 				var leftBtnInterval, p2leftBtnInterval;
 				var rightBtnInterval, p2rightBtnInterval;
 
+				function pointerEvent(key, value, playerId, buttonName){
+					console.log(key, value, playerId, buttonName)
+					keysDown[playerTouchMap[key]] = value;
+					if (playerId == "playerOne"){
+						if (value == true){
+							if (buttonName == "leftBtn")
+								leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+							else if (buttonName == "rightBtn")
+								rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+						}
+						else{
+							if (buttonName == "leftBtn"){
+								gamesend("game_keydown", keysDown);
+								clearInterval(leftBtnInterval);
+							}
+							else if (buttonName == "rightBtn"){
+								gamesend("game_keydown", keysDown);
+								clearInterval(rightBtnInterval);
+							}
+						}
+					}
+					else if (playerId == "playerTwo"){
+						if (value == true){
+							if (buttonName == "leftBtn")
+								p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+							else if (buttonName == "rightBtn")
+								p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+						}
+						else{
+							if (buttonName == "leftBtn"){
+								gamesend("game_keydown", keysDown);
+								clearInterval(p2leftBtnInterval);
+							}
+							else if (buttonName == "rightBtn"){
+								gamesend("game_keydown", keysDown);
+								clearInterval(p2rightBtnInterval);
+							}
+						}
+					}
+				}
+
 				if ((mode=="local" || client.username == player2.name) && isMobile()){
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
 					if (mode != "local"){
 						document.querySelector("#controlerPlayerOne").style.setProperty("display", "none");
 						playerTouchMap = FullInversedKeyMap;
 					}
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = function() {
-						keysDown[playerTouchMap['ArrowUp']] = true;
-						p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
-					};
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = function() {
-						keysDown[playerTouchMap['ArrowUp']] = false;
-						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
-					};
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointercancel = function() {
-						keysDown[playerTouchMap['ArrowUp']] = false;
-						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
-					};
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = (e) => {pointerEvent('ArrowUp', true, "playerTwo", "leftBtn");}
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = (e) => {pointerEvent('ArrowUp', false, "playerTwo", "leftBtn");}
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointercancel = (e) => {pointerEvent('ArrowUp', false, "playerTwo", "leftBtn");}
 
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = function() {
-						keysDown[playerTouchMap['ArrowDown']] = true;
-						p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
-					};
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = function() {
-						keysDown[playerTouchMap['ArrowDown']] = false;
-						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
-					};
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointercancel = function() {
-						keysDown[playerTouchMap['ArrowDown']] = false;
-						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
-					};
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = (e) => {pointerEvent('ArrowDown', true, "playerTwo", "rightBtn");}
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = (e) => {pointerEvent('ArrowDown', false, "playerTwo", "rightBtn");}
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointercancel = (e) => {pointerEvent('ArrowDown', false, "playerTwo", "rightBtn");}
 				}
 				else{
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = null;
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = null;
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointercancel = null;
 
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = null;
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = null;
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointercancel = null;
 				}
 
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerdown = function() {
-					keysDown[playerTouchMap['KeyD']] = true;
-					leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
-				};
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerup = function() {
-					keysDown[playerTouchMap['KeyD']] = false;
-					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
-				};
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointercancel = function() {
-					keysDown[playerTouchMap['KeyD']] = false;
-					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
-				};
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerdown = (e) => {pointerEvent('KeyD', true, "playerOne", "leftBtn");}
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerup = (e) => {pointerEvent('KeyD', false, "playerOne", "leftBtn");}
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointercancel = (e) => {pointerEvent('KeyD', false, "playerOne", "leftBtn");}
 
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerdown = (e) => {pointerEvent('KeyA', true, "playerOne", "rightBtn");}
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerup = (e) => {pointerEvent('KeyA', false, "playerOne", "rightBtn");}
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointercancel = (e) => {pointerEvent('KeyA', false, "playerOne", "rightBtn");}
 
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerdown = function() {
-					keysDown[playerTouchMap['KeyA']] = true;
-					rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
-				};
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerup = function() {
-					keysDown[playerTouchMap['KeyA']] = false;
-					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
-				};
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointercancel = function() {
-					keysDown[playerTouchMap['KeyA']] = false;
-					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
-				};
 
 				document.querySelectorAll(".leftBtnContainer, .rightBtnContainer").forEach(function (elem){
 					elem.oncontextmenu = function(e){e.preventDefault();e.stopPropagation();return false;};
