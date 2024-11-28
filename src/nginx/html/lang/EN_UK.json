@@ -97,7 +97,11 @@
 		".passwordMisMatch" : "New passwords do not match",
 		".passwordUpdated" : "Password successfully updated",
 		".usernameUpdated" : "Username successfully updated",
-		".usernameCantBeEmpty" : "Username can't be empty"
+		".usernameCantBeEmpty" : "Username can't be empty",
+		".invalidValue" : "Invalid pfp value, should be a string",
+		".invalidImgFormat" : "Image format not supported, use JPEG, PNG or GIF",
+		".invalidBase64Value" : "Invalid base64 string",
+		".unexpectedProfileUpdateError" : "An unexpected error occurred during profile update"
 	},
 	"friends":{
 		"#title" : "",
