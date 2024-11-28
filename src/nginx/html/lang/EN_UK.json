@@ -116,7 +116,8 @@
 		".passwordTooWeak" : "Password too weak",
 		".mismatchPassword" : "Passwords do not match",
 		".forbidenChars" : "Username must be alphanumeric",
-		".usernameTooLong" : "Username must be 15 characters or fewer"
+		".usernameTooLong" : "Username must be 15 characters or fewer",
+		".fileTooBig" : "Sent file is too big"
 	},
 	"friends":{
 		"#title" : "",

@@ -1915,6 +1915,7 @@ function checkResizeIndex(){
 }
 
 function resizeEvent(event, orientationChange = false){
+	document.body.offsetWidth;
 	checkResizeIndex()
 	if (orientationChange == false && currentPage == "dashboard")
 		displayCharts();
