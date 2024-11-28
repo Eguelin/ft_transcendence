@@ -589,6 +589,11 @@ input[type="date"]{
 			}
 		}
 	}
+
+	#recentMatchHistory{
+		overflow-y: unset;
+		overflow-x: unset;
+	}
 }
 
 @media screen and (orientation:landscape) {
