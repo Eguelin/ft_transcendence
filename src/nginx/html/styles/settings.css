@@ -14,6 +14,7 @@
 	transition: 500ms;
 	height: fit-content;
 	padding: 1rem;
+	anchor-name: --pfp-label;
 }
 #confirmPfpMask{
 	opacity: .5;

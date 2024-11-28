@@ -84,7 +84,10 @@ const accessibilitySlideTabIdxMap = {
 
 const errorMap = {
 	"Username already taken" : "nameAlreadyTaken",
-	"Invalid username" : "invalidName"
+	"Invalid username" : "invalidName",
+	"Invalid pfp value, should be a string" : "invalidValue",
+	"Image format not supported, use JPEG, PNG or GIF" : "invalidImgFormat",
+	"Invalid base64 string" : "invalidBase64Value"
 }
 
 function addPfpUrlToImgSrc(img, path) {

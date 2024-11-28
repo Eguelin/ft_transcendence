@@ -156,8 +156,6 @@ var template = `
 	document.getElementById("container").innerHTML = template;
 	var slideIdx = 0;
 	const url = new URL(window.location.href);
-	console.log(langJson)
-	console.log(client)
 	if (url.hash == "#accessibility"){
 		document.title = client.langJson['settings'][`accessibility title`];
 		slideIdx = 1;
@@ -455,20 +453,28 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		credentials: 'include'
 	}).then(response => {
 		return response.json().then(data => {
+
+			if (pfpInputLabel.previousElementSibling)
+				pfpInputLabel.previousElementSibling.remove();
 			if (!response.ok)
 			{
 				warning = document.createElement("a");
-				warning.className = "warning";
-				warning.textContent = data.message;
-				if (!pfpInputLabel.previousElementSibling)
+				warning.className = `warning ${errorMap[data.message]}`;
+				if (langJson && langJson['settings'][`.${errorMap[data.message]}`])
+					warning.text = langJson['settings'][`.${errorMap[data.message]}`];
+				else
+					warning.text = data.message;
+				if (CSS.supports("position-anchor", "--test")){
+					warning.style.setProperty("position-anchor", "--pfp-label")
 					pfpInputLabel.before(warning);
+				}
+				else
+					popUpError(warning.text)
 				document.getElementById("popupBg").style.setProperty("display", "none");
 				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
 			}
 			else
 			{
-				if (pfpInputLabel.previousElementSibling)
-					pfpInputLabel.previousElementSibling.remove();
 				document.getElementById("popupBg").style.setProperty("display", "none");
 				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
 				(async () => {
@@ -485,11 +491,24 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		});
 	}).catch(error => {
 		console.error('Error during profile update:', error);
+
+		if (pfpInputLabel.previousElementSibling)
+			pfpInputLabel.previousElementSibling.remove();
+		
 		warning = document.createElement("a");
-		warning.className = "warning";
-		warning.textContent = "An unexpected error occurred.";
-		if (!pfpInputLabel.previousElementSibling)
+
+		warning.className = `warning unexpectedProfileUpdateError`;
+		if (langJson && langJson['settings'][`.unexpectedProfileUpdateError`])
+			warning.text = langJson['settings'][`.unexpectedProfileUpdateError`];
+		else
+			warning.text = "An unexpected error occurred during profile update";
+		if (CSS.supports("position-anchor", "--test")){
+			warning.style.setProperty("position-anchor", "--pfp-label")
 			pfpInputLabel.before(warning);
+		}
+		else
+			popUpError(warning.text)
+
 	});
 
 	window.onkeydown = settingsKeyDownEvent;
