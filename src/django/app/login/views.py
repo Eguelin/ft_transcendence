@@ -312,6 +312,25 @@ def set_pfp(user, pfp):
 	user.profile.profile_picture = pfpName
 	return True, None
 
+def check_language_pack(language):
+	languages = ["lang/DE_GE.json",
+				"lang/EN_UK.json",
+				"lang/FR_FR.json",
+				"lang/IT_IT.json"]
+	if not language or not isinstance(language, str):
+		return False, 'Invalid language_pack value, should be a string'
+	if language not in languages:
+		return False, "Invalid language_pack value, should be 'lang/DE_GE.json', 'lang/EN_UK.json', 'lang/FR_FR.json' or 'lang/IT_IT.json"
+	return True, None
+
+def check_theme_name(theme):
+	themes = ["dark", "light", "high_dark", "high_light", "browser"]
+	if not theme or not isinstance(theme, str):
+		return False, 'Invalid theme_name value, should be a string'
+	if theme not in themes:
+		return False, "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'"
+	return True, None
+
 def profile_update(request):
 	if request.method != 'POST' :
 		return JsonResponse({'message':  "Invalid request"}, status=405)
@@ -325,7 +344,6 @@ def profile_update(request):
 			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
-
 
 	user = request.user
 	boolean_fields = ["do_not_disturb", "is_active"]
@@ -374,16 +392,9 @@ def profile_update(request):
 			return JsonResponse({'message': message}, status=400)
 
 	if ("language_pack" in data):
-		valid = True
-		languages = ["lang/DE_GE.json",
-					"lang/EN_UK.json",
-					"lang/FR_FR.json",
-					"lang/IT_IT.json"]
-		language = data['language_pack']
-		if not language or not isinstance(language, str):
-			return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
-		if language not in languages:
-			return JsonResponse({'message': "Invalid language_pack value, should be 'lang/DE_GE.json', 'lang/EN_UK.json', 'lang/FR_FR.json' or 'lang/IT_IT.json"}, status=400)
+		valid, message = check_language_pack(data['language_pack'])
+		if not valid:
+			return JsonResponse({'message': message}, status=400)
 		user.profile.language_pack = data['language_pack']
 
 	if ("font_amplifier" in data):
@@ -396,15 +407,9 @@ def profile_update(request):
 		user.profile.font_amplifier = size
 
 	if "theme_name" in data:
-		valid = True
-		themes = ["dark", "light", "high_dark", "high_light", "browser"]
-		theme = data['theme_name']
-
-		if not theme or not isinstance(theme, str):
-			return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
-		if theme not in themes:
-			return JsonResponse({'message': "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'"}, status=400)
-
+		valid, message = check_theme_name(data['theme_name'])
+		if not valid:
+			return JsonResponse({'message': message}, status=400)
 		user.profile.theme_name = data['theme_name']
 
 	if (valid == False):
