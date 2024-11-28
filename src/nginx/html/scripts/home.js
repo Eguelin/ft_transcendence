@@ -123,23 +123,36 @@ var template = `
 							if (displayNameInput.previousElementSibling)
 								displayNameInput.previousElementSibling.remove();
 							success = document.createElement("a");
-							success.className = "success";
-							success.text = "Display name successfully updated";
+							success.className = "success displayNameUpdated";
+							if (langJson)
+								success.text = langJson['home']['.displayNameUpdated']
+							else
+								success.text = "Display name successfully updated";
+							
 							if (CSS.supports("position-anchor", "--test")){
 								success.style.setProperty("position-anchor", "--save-display-name");
 								success.style.setProperty("top", "calc(anchor(top) - 3vh)");
 								displayNameInput.before(success);
 							}
 							else{
-								popUpError(warning.text)
+								popUpSuccess(success.text)
 							}
 		
 						}
 						else {
 							response.json().then(response => {
 							warning = document.createElement("a");
-							warning.className = "warning";
-							warning.text = response.message;
+							if (errorMap[response.message]){
+								warning.className = `warning ${errorMap}`;
+								if (langJson)
+									warning.text = langJson['home'][errorMap[response.message]];
+								else
+									warning.text = response.message;
+							}
+							else{
+								warning.className = `warning ${errorMap}`;
+								warning.text = response.message;
+							}
 							if (CSS.supports("position-anchor", "--test")){
 								warning.style.setProperty("position-anchor", "--save-display-name");
 								warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
@@ -154,8 +167,12 @@ var template = `
 			}
 			else{
 				warning = document.createElement("a");
-				warning.className = "warning";
-				warning.text = "Display name can't be empty";
+				warning.className = "warning displayNameCantBeEmpty";
+
+				if (langJson)
+					warning.text = langJson['home']['.displayNameCantBeEmpty']
+				else
+					warning.text = "Display name can't be empty";
 				if (CSS.supports("position-anchor", "--test")){
 					warning.style.setProperty("position-anchor", "--save-display-name");
 					warning.style.setProperty("top", "calc(anchor(top) - 3vh)");

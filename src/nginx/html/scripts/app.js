@@ -82,6 +82,11 @@ const accessibilitySlideTabIdxMap = {
 	"#AR_GH" : "25",
 }
 
+const errorMap = {
+	"Username already taken" : "nameAlreadyTaken",
+	"Invalid username" : "invalidName"
+}
+
 function addPfpUrlToImgSrc(img, path) {
 	if (path != "") {
 		var testImg = new Image();
@@ -973,6 +978,8 @@ window.addEventListener("click", (e) => {
 function popUpError(error){
 	if (document.getElementById("popupErrorContainer"))
 		document.getElementById("popupErrorContainer").remove();
+	if (document.getElementById("popupSuccessContainer"))
+		document.getElementById("popupSuccessContainer").remove();
 	var popupContainer = document.createElement("div");
 	popupContainer.id = "popupErrorContainer";
 	var popupText = document.createElement("a")
@@ -991,6 +998,31 @@ function popUpError(error){
 	}
 	document.body.appendChild(popupContainer);
 }
+
+function popUpSuccess(error){
+	if (document.getElementById("popupErrorContainer"))
+		document.getElementById("popupErrorContainer").remove();
+	if (document.getElementById("popupSuccessContainer"))
+		document.getElementById("popupSuccessContainer").remove();
+	var popupContainer = document.createElement("div");
+	popupContainer.id = "popupSuccessContainer";
+	var popupText = document.createElement("a")
+	popupText.innerText = error;
+	popupContainer.appendChild(popupText);
+	popupContainer.addEventListener("mouseleave", (e) => {
+		popupContainer.id = "popupSuccessContainerClose"
+		setTimeout(() => {
+			popupContainer.remove();
+		}, 500)
+	})
+	if (isMobile()){
+		setTimeout(function (container){
+			container.remove()
+		}, 5000, popupContainer);
+	}
+	document.body.appendChild(popupContainer);
+}
+
 
 function setLoader() {
 	document.getElementById("loaderBg").style.setProperty("display", "block");
