@@ -67,6 +67,7 @@
 		".inputRegisterUsernameCantBeEmpty" : "Username can't be empty",
 		".inputRegisterPasswordCantBeEmpty" : "Password can't be empty",
 		".inputRegisterCPasswordCantBeEmpty" : "Confirm password can't be empty",
+		".mismatchPassword" : "Passwords do not match",
 		".forbidenChars" : "Username must be alphanumeric",
 		".usernameTooLong" : "Username must be 15 characters or fewer"
 	},
@@ -111,6 +112,7 @@
 		".passwordTooLong" : "Password too long",
 		".passwordTooShort" : "Password too short",
 		".passwordTooWeak" : "Password too weak",
+		".mismatchPassword" : "Passwords do not match",
 		".forbidenChars" : "Username must be alphanumeric",
 		".usernameTooLong" : "Username must be 15 characters or fewer"
 	},
