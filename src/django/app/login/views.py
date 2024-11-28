@@ -1,4 +1,4 @@
-import json, os, requests, base64, random, string, datetime,zxcvbn, re, io
+import json, os, requests, base64, random, string, datetime, re, io
 import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
@@ -137,12 +137,20 @@ def check_password(password, staff=False):
 
 	if len(password) > 128:
 		return False, 'Password too long'
-	if len(password) == 0:
+	if len(password) < 8:
 		return False, 'Password too short'
 
-	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and not DEBUG:
-		return False, 'Password too weak'
+	if DEBUG:
+		return True, None
+
+	if not any(c.isupper() for c in password):
+		return False, 'Password must contain at least one uppercase letter'
+	if not any(c.islower() for c in password):
+		return False, 'Password must contain at least one lowercase letter'
+	if not any(c.isdigit() for c in password):
+		return False, 'Password must contain at least one digit'
+	if not any(c in string.punctuation for c in password):
+		return False, 'Password must contain at least one special character'
 
 	return True, None
 
