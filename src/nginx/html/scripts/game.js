@@ -735,12 +735,20 @@ function game() {
 						keysDown[playerTouchMap['ArrowUp']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
 					};
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointercancel = function() {
+						keysDown[playerTouchMap['ArrowUp']] = false;
+						gamesend("game_keydown", keysDown); clearInterval(p2leftBtnInterval);
+					};
 
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = function() {
 						keysDown[playerTouchMap['ArrowDown']] = true;
 						p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 					};
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = function() {
+						keysDown[playerTouchMap['ArrowDown']] = false;
+						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
+					};
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointercancel = function() {
 						keysDown[playerTouchMap['ArrowDown']] = false;
 						gamesend("game_keydown", keysDown); clearInterval(p2rightBtnInterval);
 					};
@@ -762,6 +770,10 @@ function game() {
 					keysDown[playerTouchMap['KeyD']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
 				};
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointercancel = function() {
+					keysDown[playerTouchMap['KeyD']] = false;
+					gamesend("game_keydown", keysDown); clearInterval(leftBtnInterval);
+				};
 
 
 				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerdown = function() {
@@ -769,6 +781,10 @@ function game() {
 					rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
 				};
 				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerup = function() {
+					keysDown[playerTouchMap['KeyA']] = false;
+					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
+				};
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointercancel = function() {
 					keysDown[playerTouchMap['KeyA']] = false;
 					gamesend("game_keydown", keysDown); clearInterval(rightBtnInterval);
 				};
