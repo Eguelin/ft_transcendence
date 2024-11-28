@@ -144,13 +144,13 @@ var template = `
 								warning = document.createElement("a");
 								if (errorMap[response.message]){
 									warning.className = `warning ${errorMap[response.message]}`;
-									if (langJson)
+									if (langJson && langJson['home'][errorMap[response.message]])
 										warning.text = langJson['home'][errorMap[response.message]];
 									else
 										warning.text = response.message;
 								}
 								else{
-									warning.className = `warning ${errorMap[response.message]}`;
+									warning.className = `warning ${errorMap[response.message] ? errorMap[response.message] : ""}`;
 									warning.text = response.message;
 								}
 								if (CSS.supports("position-anchor", "--test")){
