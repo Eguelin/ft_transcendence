@@ -228,26 +228,15 @@ var template = `
 		username = document.getElementById('inputUsername').value;
 		pw = document.getElementById('inputPassword').value;
 		inputs = document.getElementsByClassName('formInput');
-		warning = document.createElement("a");
-		warning.className = "warning";
-		warning.text = "Field can't be empty";
 		if (loginBtn.previousElementSibling)
 			loginBtn.previousElementSibling.remove();
 		for (i=0;i<inputs.length;i++){
-			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
-				warningTmp = warning.cloneNode(true);
-				if (langJson)
-					warningTmp.text = langJson['login'][`.${inputs[i].id}CantBeEmpty`];
-				if (CSS.supports("position-anchor", "--test")){
-					warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
-					inputs[i].before(warningTmp);
-				}
+			if (inputs[i].value == ""){
+				if (langJson && langJson['login'][`.${inputs[i].id}CantBeEmpty`])
+					popUpError(langJson['login'][`.${inputs[i].id}CantBeEmpty`]);
 				else{
-					popUpError(warningTmp.text)
+					popUpError("Field can't be empty")
 				}
-			}
-			if (inputs[i].value != "" && inputs[i].previousElementSibling && CSS.supports("position-anchor", "--test")){
-				inputs[i].previousElementSibling.remove();
 			}
 		}
 		if (username != "" && pw != ""){
@@ -263,12 +252,12 @@ var template = `
 			})
 			.then(response => {
 				if (response.ok) {
-					response.json().then(text => {
-						if (text.logged == 0){
-							warning.text = text.message;
-							warning.style.setProperty("position-anchor", "--login-btn");
-							if (!loginBtn.previousElementSibling)
-								loginBtn.before(warning.cloneNode(true));
+					response.json().then(response => {
+						if (response.logged == 0){
+							if (errorMap[response.message] && langJson && langJson['login'][`.${errorMap[response.message]}`])
+								popUpError(langJson['login'][`.${errorMap[response.message]}`]);
+							else
+								popUpError(response.message);
 						}
 						else{
 							(async () => {
@@ -295,24 +284,10 @@ var template = `
 				{
 					unsetLoader();
 					response.json().then(response => {
-						if (errorMap[response.message]){
-							warning.className = `warning ${errorMap[response.message]}`;
-							if (langJson && langJson['login'][errorMap[response.message]])
-								warning.text = langJson['login'][errorMap[response.message]];
-							else
-								warning.text = response.message;
-						}
-						else{
-							warning.className = `warning ${errorMap[response.message] ? errorMap[response.message] : ""}`;
-							warning.text = response.message;
-						}
-						if (CSS.supports("position-anchor", "--test")){
-							warning.style.setProperty("position-anchor", "--login-btn");
-							loginBtn.before(warning);
-						}
-						else{
-							popUpError(warning.text)
-						}
+						if (errorMap[response.message] && langJson && langJson['login'][`.${errorMap[response.message]}`])
+							popUpError(langJson['login'][`.${errorMap[response.message]}`]);
+						else
+							popUpError(response.message);
 					})
 				}
 			})
@@ -328,52 +303,32 @@ var template = `
 		pw = pwRegisterInput.value;
 		cpw = cpwRegisterInput.value;
 		inputs = document.getElementsByClassName('registerFormInput');
-		warning = document.createElement("a");
-		warning.className = "warning";
-		warning.text = "Field can't be empty";
 		for (i=0;i<inputs.length;i++){
-			if (inputs[i].previousElementSibling)
-				inputs[i].previousElementSibling.remove();
 			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
-				warningTmp = warning.cloneNode(true);
-				if (langJson)
-					warningTmp.text = langJson['login'][`.${inputs[i].id}CantBeEmpty`];
-				if (CSS.supports("position-anchor", "--test")){
-					warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
-					inputs[i].before(warningTmp);
-				}
+				if (langJson && langJson['login'][`.${inputs[i].id}CantBeEmpty`])
+					popUpError(langJson['login'][`.${inputs[i].id}CantBeEmpty`]);
 				else{
-					popUpError(warningTmp.text)
+					popUpError("Field can't be empty")
 				}
 				lock = 1;
 			}
 		}
 
 		if (username.length > 15){
-			warning = document.createElement("a");
-			warning.className = "warning";
-			warning.text = "username name must not exceed 15 characters";
-			if (!usernameRegisterInput.previousElementSibling)
-				usernameRegisterInput.before(warning);
+			if (langJson && langJson['login'][`.usernameTooLong`])
+				popUpError(langJson['login'][`.usernameTooLong`]);
+			else
+				popUpError("Username must be 15 characters or fewer");
 			lock = 1;
 		}
-		else if (username != "" && usernameRegisterInput.previousElementSibling)
-				usernameRegisterInput.previousElementSibling.remove();
 		if (pw != cpw){
-			warning = document.createElement("a");
-			warning.className = "warning";
-			warning.text = "Passwords do not match";
-			if (cpwRegisterInput.previousElementSibling && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
-				cpwRegisterInput.previousElementSibling.remove();
-			if (!cpwRegisterInput.previousElementSibling || cpwRegisterInput.previousElementSibling.text != "Passwords do not match")
-				cpwRegisterInput.before(warning);
-			else if (cpw != "" && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
-				cpwRegisterInput.previousElementSibling.remove();
+			if (langJson && langJson['login'][`.mismatchPassword`])
+				popUpError(langJson['login'][`.mismatchPassword`]);
+			else
+				popUpError("Passwords do not match");
 		}
 		else if (lock == 0){
 			setLoader()
-			if (registerBtn.previousElementSibling)
-				registerBtn.previousElementSibling.remove();
 
 			const data = {username: username, password: pw, 'lang': currentLangPack, theme_name: currentTheme};
 			fetch('/api/user/create', {
@@ -417,31 +372,10 @@ var template = `
 				} else {
 					response.json().then(response => {
 						unsetLoader()
-						if (errorMap[response.message]){
-							warning.className = `warning ${errorMap[response.message]}`;
-							if (langJson && langJson['login'][errorMap[response.message]])
-								warning.text = langJson['login'][errorMap[response.message]];
-							else
-								warning.text = response.message;
-						}
-						else{
-							warning.className = `warning ${errorMap[response.message] ? errorMap[response.message] : ""}`;
-							warning.text = response.message;
-						}
-						if (CSS.supports("position-anchor", "--test")){
-							warning.style.setProperty("position-anchor", "--register-btn");
-							registerBtn.before(warning);
-						}
-						else{
-							popUpError(warning.text)
-						}
-/*
-						warning = document.createElement("a");
-						warning.className = "warning";
-						warning.text = response.message;
-						warning.style.setProperty("position-anchor", "--register-btn");
-						if (!registerBtn.previousElementSibling)
-							registerBtn.before(warning);*/
+						if (errorMap[response.message] && langJson && langJson['login'][`.${errorMap[response.message]}`])
+							popUpError(langJson['login'][`.${errorMap[response.message]}`]);
+						else
+							popUpError(response.message);
 					})
 
 				}

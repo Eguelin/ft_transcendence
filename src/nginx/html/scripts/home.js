@@ -120,66 +120,30 @@ var template = `
 						credentials: 'include'
 					}).then(response => {
 						if (response.ok){
-							if (displayNameInput.previousElementSibling)
-								displayNameInput.previousElementSibling.remove();
-							success = document.createElement("a");
-							success.className = "success displayNameUpdated";
-							if (langJson)
-								success.text = langJson['home']['.displayNameUpdated']
+							if (langJson && langJson['home']['.displayNameUpdated'])
+								popUpSuccess(langJson['home']['.displayNameUpdated'])
 							else
-								success.text = "Display name successfully updated";
-							
-							if (CSS.supports("position-anchor", "--test")){
-								success.style.setProperty("position-anchor", "--save-display-name");
-								success.style.setProperty("top", "calc(anchor(top) - 3vh)");
-								displayNameInput.before(success);
-							}
-							else{
-								popUpSuccess(success.text)
-							}
+								popUpSuccess("Display name successfully updated")
 		
 						}
 						else {
 							response.json().then(response => {
-								warning = document.createElement("a");
-								if (errorMap[response.message]){
-									warning.className = `warning ${errorMap[response.message]}`;
-									if (langJson && langJson['home'][errorMap[response.message]])
-										warning.text = langJson['home'][errorMap[response.message]];
-									else
-										warning.text = response.message;
+								if (errorMap[response.message] && langJson && langJson['home'][errorMap[response.message]]){
+									popUpError(langJson['home'][errorMap[response.message]]);
 								}
 								else{
-									warning.className = `warning ${errorMap[response.message] ? errorMap[response.message] : ""}`;
-									warning.text = response.message;
-								}
-								if (CSS.supports("position-anchor", "--test")){
-									warning.style.setProperty("position-anchor", "--save-display-name");
-									warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
-									displayNameInput.before(warning);
-								}
-								else{
-									popUpError(warning.text)
-								}
+									popUpError(response.message)
+								}	
 							})
 						}
 					})
 			}
 			else{
-				warning = document.createElement("a");
-				warning.className = "warning displayNameCantBeEmpty";
-
-				if (langJson)
-					warning.text = langJson['home']['.displayNameCantBeEmpty']
-				else
-					warning.text = "Display name can't be empty";
-				if (CSS.supports("position-anchor", "--test")){
-					warning.style.setProperty("position-anchor", "--save-display-name");
-					warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
-					displayNameInput.before(warning);
+				if (langJson && langJson['home'][`.${displayNameCantBeEmpty}`]){
+					popUpError(langJson['home'][errorMap[response.message]]);
 				}
 				else{
-					popUpError(warning.text);
+					popUpError("Display name can't be empty")
 				}
 			}
 		}

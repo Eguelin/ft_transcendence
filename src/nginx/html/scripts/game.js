@@ -1177,7 +1177,10 @@ function game() {
 							elem.querySelector(".winner .username").tabIndex = elem.tabIndex + 1;
 							elem.querySelector(".loser .username").tabIndex = elem.tabIndex + 2;
 						}catch {
-							popUpError("Error tab indexes on user redirection");
+							if (langJson && langJson['game']['.errorTabIndexUserRedirection'])
+								popUpError(langJson['game']['.errorTabIndexUserRedirection']);
+							else
+								popUpError("Error tab indexes on user redirection");
 						}
 					}
 				}
@@ -1202,7 +1205,10 @@ function setTournamentAriaLabeL(){
 				.replace("${WINNER_USERNAME}", elem.querySelector(".winner .username").innerText)
 				.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))
 		} catch {
-			popUpError("Error setting aria labels");
+			if (langJson && langJson['tournament']['.errorSettingAriaLabels'])
+				popUpError(langJson['tournament']['.errorSettingAriaLabels']);
+			else
+				popUpError("Error setting tournament aria labels");
 		}
 	})
 	document.querySelectorAll(".contestMatchResume .username").forEach(function (elem){

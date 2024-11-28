@@ -18,7 +18,9 @@
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italiano",
 		"error_reaching_server" : "Error reaching server",
-		".notifMessage.friend_request" : "Incoming friend request from ${USERNAME}"
+		".notifMessage.friend_request" : "Incoming friend request from ${USERNAME}",
+		".errorLoadLangPack" : "Could not load ${LANG} language pack",
+		".error401" : "how dare you >:("
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -66,7 +68,10 @@
 		".inputPasswordCantBeEmpty" : "Password can't be empty",
 		".inputRegisterUsernameCantBeEmpty" : "Username can't be empty",
 		".inputRegisterPasswordCantBeEmpty" : "Password can't be empty",
-		".inputRegisterCPasswordCantBeEmpty" : "Confirm password can't be empty"
+		".inputRegisterCPasswordCantBeEmpty" : "Confirm password can't be empty",
+		".mismatchPassword" : "Passwords do not match",
+		".forbidenChars" : "Username must be alphanumeric",
+		".usernameTooLong" : "Username must be 15 characters or fewer"
 	},
 	"settings": {
 		"#title" : "",
@@ -97,7 +102,22 @@
 		".passwordMisMatch" : "New passwords do not match",
 		".passwordUpdated" : "Password successfully updated",
 		".usernameUpdated" : "Username successfully updated",
-		".usernameCantBeEmpty" : "Username can't be empty"
+		".usernameCantBeEmpty" : "Username can't be empty",
+		".invalidValue" : "Invalid pfp value, should be a string",
+		".invalidImgFormat" : "Image format not supported, use JPEG, PNG or GIF",
+		".invalidBase64Value" : "Invalid base64 string",
+		".unexpectedProfileUpdateError" : "An unexpected error occurred during profile update",
+		".remotePasswordChangeForbiden" : "Remote password change forbiden",
+		".authenticationError" : "Error while authenticating",
+		".incorectOldPassword" : "Old password mismatch",
+		".invalidPassword" : "Invalid password",
+		".passwordTooLong" : "Password too long",
+		".passwordTooShort" : "Password too short",
+		".passwordTooWeak" : "Password too weak",
+		".mismatchPassword" : "Passwords do not match",
+		".forbidenChars" : "Username must be alphanumeric",
+		".usernameTooLong" : "Username must be 15 characters or fewer",
+		".fileTooBig" : "Sent file is too big"
 	},
 	"friends":{
 		"#title" : "",
@@ -165,13 +185,15 @@
 		"aria#lastWeekSelection" : "Display stats from the last 7 days",
 		"aria#lastMonthSelection" : "Display stats from the last month",
 		"aria#lastYearSelection" : "Display stats from the last year",
-		"dashboard title" : "${USERNAME} dashboard - transcendence"
+		"dashboard title" : "${USERNAME} dashboard - transcendence",
+		".invalidDate" : "Invalid date"
 	},
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Search",
 		"aria.userResume" : "${USERNAME} profile redirection",
-		"search title" : "${SEARCH} search - transcendence"
+		"search title" : "${SEARCH} search - transcendence",
+		".emptySearchError" : "Can't search empty query"
 	},
 	"game":{
 		"#title" : "",
@@ -193,7 +215,8 @@
 		"tournamentLobby" : "Lobby",
 		"matchSubtitle" : "Match",
 		"game title" : "${MODE} game - transcendence",
-		"lobby title" : "Lobby ${NB}/8  - transcendence"
+		"lobby title" : "Lobby ${NB}/8  - transcendence",
+		".errorTabIndexUserRedirection" : "Error tab indexes on user redirection"
 	},
 	"tournament":{
 		"#title" : "",
@@ -207,7 +230,8 @@
 		"semi" : "Semi finals",
 		"final" : "finals",
 		"profile_redirection" : "${USERNAME} profile redirection",
-		"tournament title" : "Tournament - transcendence"
+		"tournament title" : "Tournament - transcendence",
+		".errorSettingAriaLabels" : "Error setting tournament aria labels"
 	},
 	"match" : {
 		"#title" : "",
