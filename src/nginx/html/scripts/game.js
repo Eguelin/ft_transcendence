@@ -722,7 +722,6 @@ function game() {
 				var rightBtnInterval, p2rightBtnInterval;
 
 				function pointerEvent(key, value, playerId, buttonName){
-					console.log(key, value, playerId, buttonName)
 					keysDown[playerTouchMap[key]] = value;
 					if (playerId == "playerOne"){
 						if (value == true){
