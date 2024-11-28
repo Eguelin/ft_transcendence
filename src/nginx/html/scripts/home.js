@@ -125,9 +125,14 @@ var template = `
 							success = document.createElement("a");
 							success.className = "success";
 							success.text = "Display name successfully updated";
-							success.style.setProperty("position-anchor", "--save-display-name");
-							success.style.setProperty("top", "calc(anchor(top) - 3vh)");
-							displayNameInput.before(success);
+							if (CSS.supports("position-anchor", "--test")){
+								success.style.setProperty("position-anchor", "--save-display-name");
+								success.style.setProperty("top", "calc(anchor(top) - 3vh)");
+								displayNameInput.before(success);
+							}
+							else{
+								popUpError(warning.text)
+							}
 		
 						}
 						else {
@@ -135,9 +140,14 @@ var template = `
 							warning = document.createElement("a");
 							warning.className = "warning";
 							warning.text = response.message;
-							warning.style.setProperty("position-anchor", "--save-display-name");
-							warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
-							displayNameInput.before(warning);
+							if (CSS.supports("position-anchor", "--test")){
+								warning.style.setProperty("position-anchor", "--save-display-name");
+								warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
+								displayNameInput.before(warning);
+							}
+							else{
+								popUpError(warning.text)
+							}
 							})
 						}
 					})
@@ -146,9 +156,14 @@ var template = `
 				warning = document.createElement("a");
 				warning.className = "warning";
 				warning.text = "Display name can't be empty";
-				warning.style.setProperty("position-anchor", "--save-display-name");
-				warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
-				displayNameInput.before(warning);
+				if (CSS.supports("position-anchor", "--test")){
+					warning.style.setProperty("position-anchor", "--save-display-name");
+					warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
+					displayNameInput.before(warning);
+				}
+				else{
+					popUpError(warning.text);
+				}
 			}
 		}
 	}
