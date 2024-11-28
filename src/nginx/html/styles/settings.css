@@ -8,7 +8,7 @@
 	color: var(--main-text-rgb);
 	font-size: 1rem;
 	align-content: center;
-	border: 0.2px solid var(--main-text-rgb);
+	border: 0.2px solid var(--border-rgb);
 	border-radius: 1rem;
 	display: block;
 	transition: 500ms;

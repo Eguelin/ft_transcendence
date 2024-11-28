@@ -408,32 +408,41 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		},
 		body: JSON.stringify({'pfp': buf}),
 		credentials: 'include'
-	}).then(response => {response.json().then(data => {
-			if (!response.ok)
-			{
-				if (errorMap[data.message] && langJson && langJson['settings'][`.${errorMap[data.message]}`])
-					popUpError(langJson['settings'][`.${errorMap[data.message]}`]);
+	}).then(response => {
+		document.getElementById("popupBg").style.setProperty("display", "none");
+		document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
+		if (!response.ok){
+			if (response.status == 413){
+				if (langJson && langJson['settings'][`.fileTooBig`])
+					popUpError(langJson['settings'][`.fileTooBig`]);
 				else
-					popUpError(data.message);
+					popUpError("Sent file is too big");
 			}
-			else
-			{
-				document.getElementById("popupBg").style.setProperty("display", "none");
-				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
-				(async () => {
-					try {
-						client = await new Client()
-						if (!client)
-							myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
-					}
-					catch{
-						unsetLoader();
-					}
-				})()
+			else{
+				response.json().then(data => {
+					if (errorMap[data.message] && langJson && langJson['settings'][`.${errorMap[data.message]}`])
+						popUpError(langJson['settings'][`.${errorMap[data.message]}`]);
+					else
+						popUpError(data.message);
+				})
 			}
-		});
+		}
+		else{
+			(async () => {
+				try {
+					client = await new Client()
+					if (!client)
+						myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
+				}
+				catch{
+					unsetLoader();
+				}
+			})()
+		}
 	}).catch(error => {
 		console.error('Error during profile update:', error);
+		document.getElementById("popupBg").style.setProperty("display", "none");
+		document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
 		if (errorMap[data.message] && langJson && langJson['settings'][`.unexpectedProfileUpdateError`])
 			popUpError(langJson['settings'][`.unexpectedProfileUpdateError`]);
 		else
