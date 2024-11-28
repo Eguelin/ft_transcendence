@@ -18,7 +18,9 @@
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italiano",
 		"error_reaching_server" : "Error reaching server",
-		".notifMessage.friend_request" : "Incoming friend request from ${USERNAME}"
+		".notifMessage.friend_request" : "Incoming friend request from ${USERNAME}",
+		".errorLoadLangPack" : "Could not load ${LANG} language pack",
+		".error401" : "how dare you >:("
 	},
 	"home" : {
 		"#title" : "PONG",
@@ -182,13 +184,15 @@
 		"aria#lastWeekSelection" : "Display stats from the last 7 days",
 		"aria#lastMonthSelection" : "Display stats from the last month",
 		"aria#lastYearSelection" : "Display stats from the last year",
-		"dashboard title" : "${USERNAME} dashboard - transcendence"
+		"dashboard title" : "${USERNAME} dashboard - transcendence",
+		".invalidDate" : "Invalid date"
 	},
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Search",
 		"aria.userResume" : "${USERNAME} profile redirection",
-		"search title" : "${SEARCH} search - transcendence"
+		"search title" : "${SEARCH} search - transcendence",
+		".emptySearchError" : "Can't search empty query"
 	},
 	"game":{
 		"#title" : "",
@@ -210,7 +214,8 @@
 		"tournamentLobby" : "Lobby",
 		"matchSubtitle" : "Match",
 		"game title" : "${MODE} game - transcendence",
-		"lobby title" : "Lobby ${NB}/8  - transcendence"
+		"lobby title" : "Lobby ${NB}/8  - transcendence",
+		".errorTabIndexUserRedirection" : "Error tab indexes on user redirection"
 	},
 	"tournament":{
 		"#title" : "",
@@ -224,7 +229,8 @@
 		"semi" : "Semi finals",
 		"final" : "finals",
 		"profile_redirection" : "${USERNAME} profile redirection",
-		"tournament title" : "Tournament - transcendence"
+		"tournament title" : "Tournament - transcendence",
+		".errorSettingAriaLabels" : "Error setting tournament aria labels"
 	},
 	"match" : {
 		"#title" : "",

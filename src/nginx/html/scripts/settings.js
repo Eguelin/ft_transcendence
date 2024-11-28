@@ -590,7 +590,10 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 			}
 			catch (error){
 				console.error(error);
-				popUpError(`Could not load ${elem.id} language pack`);
+				if (langJson && langJson['index']['.errorLoadLangPack'])
+					popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", elem.id));
+				else
+					popUpError(`Could not load ${elem.id} language pack`);
 			}
 		})();
 	})

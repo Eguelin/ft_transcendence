@@ -934,7 +934,10 @@ dropDownLangOption.forEach(function (button) {
 				}
 			}
 			catch {
-				popUpError(`Could not load ${button.id} language pack`);
+				if (langJson && langJson['index']['.errorLoadLangPack'])
+					popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", button.id));
+				else
+					popUpError(`Could not load ${button.id} language pack`);
 			}
 		})();
 	})
@@ -1385,7 +1388,10 @@ function friendUpdate()
 						socket.send(message);
 					}
 					else {
-						popUpError(client.langJson['friends']['error_sending_request'])
+						if (langJson && langJson['friends']['error_sending_request'])
+							popUpError(langJson['friends']['error_sending_request'])
+						else
+							popUpError("Couldn't send friend request")
 					}
 				});
 			}
@@ -1496,11 +1502,17 @@ async function loadCurrentLang(){
 				dropDownLangBtn.style.setProperty("background-image", `url(${svgPath})`);
 			}
 			catch{
-				popUpError(`Could not load ${currentLang} language pack`);
+				if (langJson && langJson['index']['.errorLoadLangPack'])
+					popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", currentLang));
+				else
+					popUpError(`Could not load ${currentLang} language pack`);
 			}
 		}
 		else {
-			popUpError(`Could not load ${currentLang} language pack`);
+			if (langJson && langJson['index']['.errorLoadLangPack'])
+				popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", currentLang));
+			else
+				popUpError(`Could not load ${currentLang} language pack`);
 			currentLangPack = "lang${currentLang}.json";
 			const fetchResult = await fetch(`https://${hostname.host}/lang${currentLang}.json`);
 			if (fetchResult.ok){
@@ -1508,7 +1520,10 @@ async function loadCurrentLang(){
 					langJson = await fetchResult.json();
 				}
 				catch {
-					popUpError(`Could not load ${currentLang} language pack`);
+					if (langJson && langJson['index']['.errorLoadLangPack'])
+						popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", currentLang));
+					else
+						popUpError(`Could not load ${currentLang} language pack`);
 				}
 			}
 			if (client)
@@ -1524,13 +1539,19 @@ async function loadCurrentLang(){
 				dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons${currentLang}.svg)`);
 			}
 			catch {
-				popUpError(`Could not load ${currentLang} language pack`);
+				if (langJson && langJson['index']['.errorLoadLangPack'])
+					popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", currentLang));
+				else
+					popUpError(`Could not load ${currentLang} language pack`);
 			}
 			if (client)
 				client.langJson = langJson;
 		}
 		else{
-			popUpError("Could not load language pack");
+			if (langJson && langJson['index']['.errorLoadLangPack'])
+				popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", currentLang));
+			else
+				popUpError(`Could not load ${currentLang} language pack`);
 		}
 	}
 	if (langJson != null && langJson != undefined){
