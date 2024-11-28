@@ -257,7 +257,7 @@
 	outline: none;
 	color: var(--hover-text-rgb);
 }
-
+/*
 .activeSelector{
 	color: var(--main-text-rgb) !important;
 }
@@ -265,6 +265,15 @@
 .settingsSlideSelector:focus, .slideSelector:focus, .settingsSlideSelector:hover, .slideSelector:hover{
 	color: var(--option-hover-rgb) !important;
 }
+*/
+.slideSelector:focus, .slideSelector:hover{
+	color: var(--hover-text-rgb) !important;
+}
+
+.slideSelector.activeSelector:focus, .slideSelector.activeSelector:hover{
+	color: var(--option-hover-rgb) !important;
+}
+
 
 .pfpContainer{
 	width: 4rem;

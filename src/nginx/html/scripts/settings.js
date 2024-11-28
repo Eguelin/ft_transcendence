@@ -101,10 +101,10 @@ var template = `
 
 	<div id="settingSlidesContainer">
 		<div id="settingsSlideSelector">
-			<div id="accountSelector" class="settingsSlideSelector" tabindex="12">
+			<div id="accountSelector" class="slideSelector" tabindex="12">
 				<div id="accountSelectorText">Account</div>
 			</div>
-			<div id="accessibilitySelector" class="settingsSlideSelector" tabindex="13">
+			<div id="accessibilitySelector" class="slideSelector" tabindex="13">
 				<div id="accessibilitySelectorText">Accessibility</div>
 			</div>
 			<div id="slideSelectorBg"></div>
@@ -212,7 +212,7 @@ var template = `
 	notifCenterContainer.style.setProperty("display", "flex");
 	window.onkeydown = settingsKeyDownEvent
 
-	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .settingsSlideSelector");
+	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector");
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
 	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
 	settingsSlideSelector[slideIdx].classList.add('activeSelector');
@@ -220,7 +220,7 @@ var template = `
 	settingsSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
 			save = slideIdx;
-			slideIdx = Array.from(e.target.closest(".settingsSlideSelector").parentElement.children).indexOf(e.target.closest(".settingsSlideSelector"));
+			slideIdx = Array.from(e.target.closest(".slideSelector").parentElement.children).indexOf(e.target.closest(".slideSelector"));
 			if (save != slideIdx){
 				settingsSlideSelector[save].classList.remove("activeSelector");
 				settingsSlideSelector[slideIdx].classList.add('activeSelector');
@@ -312,8 +312,16 @@ var template = `
 					inputs[i].previousElementSibling.remove();
 				if (inputs[i].value == "" && !inputs[i].previousElementSibling){
 					warningTmp = warning.cloneNode(true);
-					warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
-					inputs[i].before(warningTmp);
+
+					if (langJson)
+						warningTmp.text = langJson['settings'][`.${inputs[i].id}CantBeEmpty`];
+					if (CSS.supports("position-anchor", "--test")){
+						warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
+						inputs[i].before(warningTmp);
+					}
+					else{
+						popUpError(warningTmp.text)
+					}
 					lock = 1;
 				}
 			}
@@ -322,12 +330,19 @@ var template = `
 				warning = document.createElement("a");
 				warning.className = "warning";
 				warning.text = "Passwords do not match";
-				if (cpwRegisterInput.previousElementSibling && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
-					cpwRegisterInput.previousElementSibling.remove();
-				if (!cpwRegisterInput.previousElementSibling || cpwRegisterInput.previousElementSibling.text != "Passwords do not match")
-					cpwRegisterInput.before(warning);
-				else if (cpw != "" && cpwRegisterInput.previousElementSibling.text == "Field can't be empty")
-					cpwRegisterInput.previousElementSibling.remove();
+				if (langJson)
+					warningTmp.text = langJson['settings'][`.passwordMisMatch`];
+				if (CSS.supports("position-anchor", "--test")){
+					if (cpwRegisterInput.previousElementSibling && cpwRegisterInput.previousElementSibling.text == langJson['settings']['.inputNewCPasswordCantBeEmpty'])
+						cpwRegisterInput.previousElementSibling.remove();
+					if (!cpwRegisterInput.previousElementSibling || cpwRegisterInput.previousElementSibling.text != langJson['settings'][`.passwordMisMatch`])
+						cpwRegisterInput.before(warning);
+					else if (cpw != "" && cpwRegisterInput.previousElementSibling.text == langJson['settings']['.inputNewCPasswordCantBeEmpty'])
+						cpwRegisterInput.previousElementSibling.remove();
+				}
+				else{
+					popUpError(warningTmp.text)
+				}
 			}
 			else if (lock == 0){
 				setLoader()
@@ -347,9 +362,15 @@ var template = `
 						success = document.createElement("a");
 						success.className = "success";
 						success.text = "password updated";
-						success.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
-						e.target.before(success);
-	
+						if (langJson)
+							success.text = langJson['settings']['.passwordUpdated']
+						if (CSS.supports("position-anchor", "--test")){
+							success.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
+							e.target.before(success);
+						}
+						else{
+							popUpSuccess(success.text);
+						}
 						(async () => {
 							try {
 								client = await new Client()
@@ -367,8 +388,14 @@ var template = `
 							warning = document.createElement("a");
 							warning.className = "warning";
 							warning.text = response.message;
-							warning.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
-							e.target.before(warning);
+							if (langJson && langJson['settings'][errorMap[response.message]])
+								warning.text = langJson['settings'][errorMap[response.message]]
+							if (CSS.supports("position-anchor", "--test")){
+								warning.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
+								e.target.before(warning);
+							}
+							else
+								popUpError(warning.text);
 							unsetLoader();
 						})
 	
@@ -487,10 +514,17 @@ saveUsernameBtn.addEventListener("click", (e) => {
 					if (usernameInput.previousElementSibling)
 						usernameInput.previousElementSibling.remove();
 					success = document.createElement("a");
-					success.className = "success";
-					success.style.setProperty("position-anchor", "--input-change-name");
-					success.text = "username successfully updated";
-					usernameInput.before(success);
+					success.className = "success userNameUpdated";
+					if (langJson)
+						success.text = langJson['settings']['.usernameUpdated']
+					else
+						success.text = "username successfully updated";
+					if (CSS.supports("position-anchor", "--test")){
+						success.style.setProperty("position-anchor", "--input-change-name");
+						usernameInput.before(success);
+					}
+					else
+						popUpSuccess(success.text);
 
 					(async () => {
 						try {
@@ -498,28 +532,54 @@ saveUsernameBtn.addEventListener("click", (e) => {
 							if (!client)
 								myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 						}
-						catch{
+						catch (e){
+							console.error(e);
 							unsetLoader();
 						}
 					})()
 				}
 				else {
 					response.json().then(response => {
-					warning = document.createElement("a");
-					warning.className = "warning";
-					warning.style.setProperty("position-anchor", "--input-change-name");
-					warning.text = response.message;
-					usernameInput.before(warning);
+						warning = document.createElement("a");
+						if (errorMap[response.message]){
+							warning.className = `warning ${errorMap[response.message]}`;
+							if (langJson && langJson['settings'][errorMap[response.message]])
+								warning.text = langJson['settings'][errorMap[response.message]];
+							else
+								warning.text = response.message;
+						}
+						else{
+							warning.className = `warning ${errorMap[response.message]}`;
+							warning.text = response.message;
+						}
+						if (CSS.supports("position-anchor", "--test")){
+							warning.style.setProperty("position-anchor", "--input-change-name");
+							warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
+							usernameInput.before(warning);
+						}
+						else{
+							popUpError(warning.text)
+						}
 					})
 				}
 			})
 	}
 	else{
 		warning = document.createElement("a");
-		warning.className = "warning";
-		warning.style.setProperty("position-anchor", "--input-change-name");
-		warning.text = "username can't be empty";
-		usernameInput.before(warning);
+		warning.className = "warning usernameCantBeEmpty";
+
+		if (langJson)
+			warning.text = langJson['settings']['.usernameCantBeEmpty']
+		else
+			warning.text = "Username name can't be empty";
+		if (CSS.supports("position-anchor", "--test")){
+			warning.style.setProperty("position-anchor", "--input-change-name");
+			warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
+			usernameInput.before(warning);
+		}
+		else{
+			popUpError(warning.text);
+		}
 	}
 })
 

@@ -18,7 +18,7 @@
 #confirmPfpMask{
 	opacity: .5;
 }
-#inputChangeUsername, #inputChangePassword, #pfpLabel{
+#inputChangeUsername, #inputChangePassword, #pfpLabel, #changePasswordBtn{
 	width: -webkit-fill-available;
 	width: -moz-available;
 }
@@ -227,6 +227,15 @@
 	height: 2rem;
 }
 
+
+#settingsSlideSelector .slideSelector:focus,#settingsSlideSelector .slideSelector:hover{
+	color: var(--hover-text-rgb) !important;
+}
+
+#settingsSlideSelector .slideSelector.activeSelector:focus,#settingsSlideSelector .slideSelector.activeSelector:hover{
+	color: var(--option-hover-rgb) !important;
+}
+
 #settingsSlideSelector > div{
 	width: 50%;
 	outline: none;
@@ -339,7 +348,7 @@
 	}
 }
 
-.settingsSlideSelector > div {
+.slideSelector > div {
 	position: relative;
 	top: 50%;
 	translate: 0 -50%;
