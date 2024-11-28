@@ -171,6 +171,14 @@ def create_user(request, staff=False):
 	if not valid:
 		return JsonResponse({'message': message}, status=400)
 
+	valid, message = check_language_pack(language)
+	if not valid:
+		return JsonResponse({'message': message}, status=400)
+
+	valid, message = check_theme_name(theme_name)
+	if not valid:
+		return JsonResponse({'message': message}, status=400)
+
 	display_name = username
 	while User.objects.filter(profile__display_name=display_name).exists():
 		display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
