@@ -236,10 +236,17 @@ var template = `
 		for (i=0;i<inputs.length;i++){
 			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
 				warningTmp = warning.cloneNode(true);
-				warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
-				inputs[i].before(warningTmp);
+				if (langJson)
+					warningTmp.text = langJson['login'][`.${inputs[i].id}CantBeEmpty`];
+				if (CSS.supports("position-anchor", "--test")){
+					warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
+					inputs[i].before(warningTmp);
+				}
+				else{
+					popUpError(warningTmp.text)
+				}
 			}
-			if (inputs[i].value != "" && inputs[i].previousElementSibling){
+			if (inputs[i].value != "" && inputs[i].previousElementSibling && CSS.supports("position-anchor", "--test")){
 				inputs[i].previousElementSibling.remove();
 			}
 		}
@@ -317,8 +324,15 @@ var template = `
 				inputs[i].previousElementSibling.remove();
 			if (inputs[i].value == "" && !inputs[i].previousElementSibling){
 				warningTmp = warning.cloneNode(true);
-				warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
-				inputs[i].before(warningTmp);
+				if (langJson)
+					warningTmp.text = langJson['login'][`.${inputs[i].id}CantBeEmpty`];
+				if (CSS.supports("position-anchor", "--test")){
+					warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
+					inputs[i].before(warningTmp);
+				}
+				else{
+					popUpError(warningTmp.text)
+				}
 				lock = 1;
 			}
 		}

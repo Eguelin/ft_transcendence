@@ -61,7 +61,12 @@
 		"aria#inputRegisterPassword" : "Register password",
 		"aria#inputRegisterCPassword" : "Confirm register password",
 		"login title" : "Login - transcendence",
-		"register title" : "Register - transcendence"
+		"register title" : "Register - transcendence",
+		".inputUsernameCantBeEmpty" : "Username can't be empty",
+		".inputPasswordCantBeEmpty" : "Password can't be empty",
+		".inputRegisterUsernameCantBeEmpty" : "Username can't be empty",
+		".inputRegisterPasswordCantBeEmpty" : "Password can't be empty",
+		".inputRegisterCPasswordCantBeEmpty" : "Confirm password can't be empty"
 	},
 	"settings": {
 		"#title" : "",
