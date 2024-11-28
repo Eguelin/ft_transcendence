@@ -35,7 +35,9 @@
 		"ariaResumeMatch.matchDescContainer" : "match against ${USERNAME} on the ${DATE}",
 		"ariaResumeTournament.matchDescContainer" : "Tournament on the ${DATE}",
 		"aria.resultScoreName" : "${USERNAME} profile redirection",
-		"home title" : "Home - transcendence"
+		"home title" : "Home - transcendence",
+		".displayNameUpdated" : "Display name successfully updated",
+		".displayNameCantBeEmpty" : "Display name can't be empty"
 	},
 	"login" : {
 		"#title" : "LOGIN",
