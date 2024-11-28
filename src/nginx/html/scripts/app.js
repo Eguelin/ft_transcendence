@@ -504,7 +504,7 @@ function handleToken() {
 							if (!client)
 								myReplaceState(`https://${hostname.host}/${currentLang}/login${hostname.hash}`);
 							else {
-								friendUpdate();
+								//friendUpdate();
 								myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 							}
 						}
@@ -537,8 +537,8 @@ function handleToken() {
 					myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 				}
 				else {
-					load();
 					friendUpdate();
+					load();
 				}
 				if (use_browser_theme) {
 					if (window.matchMedia) {
@@ -600,6 +600,7 @@ window.addEventListener('load', (e) => {
 	}
 	else
 		document.documentElement.style.setProperty("--is-mobile", 0)
+
 });
 
 function myReplaceState(url) {
@@ -624,7 +625,7 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	friendUpdate();
+	//friendUpdate();
 })
 
 homeBtn.addEventListener("keydown", (e) => {
@@ -976,51 +977,39 @@ window.addEventListener("click", (e) => {
 })
 
 function popUpError(error){
-	if (document.getElementById("popupErrorContainer"))
-		document.getElementById("popupErrorContainer").remove();
-	if (document.getElementById("popupSuccessContainer"))
-		document.getElementById("popupSuccessContainer").remove();
 	var popupContainer = document.createElement("div");
-	popupContainer.id = "popupErrorContainer";
+	popupContainer.className = "popupErrorContainer";
 	var popupText = document.createElement("a")
 	popupText.innerText = error;
 	popupContainer.appendChild(popupText);
 	popupContainer.addEventListener("mouseleave", (e) => {
-		popupContainer.id = "popupErrorContainerClose"
+		popupContainer.className = "popupErrorContainerClose"
 		setTimeout(() => {
 			popupContainer.remove();
 		}, 500)
 	})
-	if (isMobile()){
-		setTimeout(function (container){
-			container.remove()
-		}, 5000, popupContainer);
-	}
-	document.body.appendChild(popupContainer);
+	setTimeout(function (container){
+		container.remove()
+	}, 5000, popupContainer);
+	document.getElementById("popupContainer").insertBefore(popupContainer, document.getElementById("popupContainer").firstChild);
 }
 
 function popUpSuccess(error){
-	if (document.getElementById("popupErrorContainer"))
-		document.getElementById("popupErrorContainer").remove();
-	if (document.getElementById("popupSuccessContainer"))
-		document.getElementById("popupSuccessContainer").remove();
 	var popupContainer = document.createElement("div");
-	popupContainer.id = "popupSuccessContainer";
+	popupContainer.className = "popupSuccessContainer";
 	var popupText = document.createElement("a")
 	popupText.innerText = error;
 	popupContainer.appendChild(popupText);
 	popupContainer.addEventListener("mouseleave", (e) => {
-		popupContainer.id = "popupSuccessContainerClose"
+		popupContainer.className = "popupSuccessContainerClose"
 		setTimeout(() => {
 			popupContainer.remove();
 		}, 500)
 	})
-	if (isMobile()){
-		setTimeout(function (container){
-			container.remove()
-		}, 5000, popupContainer);
-	}
-	document.body.appendChild(popupContainer);
+	setTimeout(function (container){
+		container.remove()
+	}, 5000, popupContainer);
+	document.getElementById("popupContainer").insertBefore(popupContainer, document.getElementById("popupContainer").firstChild);
 }
 
 
