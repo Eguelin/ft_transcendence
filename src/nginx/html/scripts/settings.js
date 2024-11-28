@@ -302,50 +302,23 @@ var template = `
 			pw = newPasswordInput.value;
 			cpw = newCPasswordInput.value;
 			inputs = document.querySelectorAll('#inputOldPassword, #inputNewPassword, #inputNewCPassword');
-			warning = document.createElement("a");
-			warning.className = "warning";
-			warning.text = "Field can't be empty";
 			for (i=0;i<inputs.length;i++){
-				if (inputs[i].previousElementSibling)
-					inputs[i].previousElementSibling.remove();
-				if (inputs[i].value == "" && !inputs[i].previousElementSibling){
-					warningTmp = warning.cloneNode(true);
-
-					if (langJson)
-						warningTmp.text = langJson['settings'][`.${inputs[i].id}CantBeEmpty`];
-					if (CSS.supports("position-anchor", "--test")){
-						warningTmp.style.setProperty("position-anchor", window.getComputedStyle(inputs[i]).anchorName);
-						inputs[i].before(warningTmp);
-					}
-					else{
-						popUpError(warningTmp.text)
-					}
+				if (inputs[i].value == ""){
+					if (langJson && langJson['settings'][`.${inputs[i].id}CantBeEmpty`])
+						popUpError(langJson['settings'][`.${inputs[i].id}CantBeEmpty`]);
+					else
+						popUpError("Field can't be empty")
 					lock = 1;
 				}
 			}
-	
 			if (pw != cpw){
-				warning = document.createElement("a");
-				warning.className = "warning";
-				warning.text = "Passwords do not match";
-				if (langJson)
-					warningTmp.text = langJson['settings'][`.passwordMisMatch`];
-				if (CSS.supports("position-anchor", "--test")){
-					if (cpwRegisterInput.previousElementSibling && cpwRegisterInput.previousElementSibling.text == langJson['settings']['.inputNewCPasswordCantBeEmpty'])
-						cpwRegisterInput.previousElementSibling.remove();
-					if (!cpwRegisterInput.previousElementSibling || cpwRegisterInput.previousElementSibling.text != langJson['settings'][`.passwordMisMatch`])
-						cpwRegisterInput.before(warning);
-					else if (cpw != "" && cpwRegisterInput.previousElementSibling.text == langJson['settings']['.inputNewCPasswordCantBeEmpty'])
-						cpwRegisterInput.previousElementSibling.remove();
-				}
-				else{
-					popUpError(warningTmp.text)
-				}
+				if (langJson && langJson['settings'][`.mismatchPassword`])
+					popUpError(langJson['settings'][`.mismatchPassword`]);
+				else
+					popUpError("Passwords do not match");
 			}
 			else if (lock == 0){
 				setLoader()
-				if (e.target.previousElementSibling)
-					e.target.previousElementSibling.remove();
 				fetch('/api/user/update', {
 					method: 'POST',
 					headers: {
@@ -355,20 +328,10 @@ var template = `
 					credentials: 'include'
 				}).then(response => {
 					if (response.ok){
-						if (e.target.previousElementSibling)
-							e.target.previousElementSibling.remove();
-						success = document.createElement("a");
-						success.className = "success";
-						success.text = "password updated";
-						if (langJson)
-							success.text = langJson['settings']['.passwordUpdated']
-						if (CSS.supports("position-anchor", "--test")){
-							success.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
-							e.target.before(success);
-						}
-						else{
-							popUpSuccess(success.text);
-						}
+						if (langJson && langJson['settings']['.passwordUpdated'])
+							popUpSuccess(langJson['settings']['.passwordUpdated']);
+						else
+							popUpSuccess("Password successfully updated");
 						(async () => {
 							try {
 								client = await new Client()
@@ -383,17 +346,11 @@ var template = `
 					}
 					else {
 						response.json().then(response => {
-							warning = document.createElement("a");
-							warning.className = `warning ${errorMap[response.message]}`;
-							warning.text = response.message;
-							if (langJson && langJson['settings'][`.${errorMap[response.message]}`])
-								warning.text = langJson['settings'][`.${errorMap[response.message]}`]
-							if (CSS.supports("position-anchor", "--test")){
-								warning.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
-								e.target.before(warning);
-							}
+
+							if (errorMap[response.message] && langJson && langJson['settings'][`.${errorMap[response.message]}`])
+								popUpError(langJson['settings'][`.${errorMap[response.message]}`]);
 							else
-								popUpError(warning.text);
+								popUpError(response.message);
 							unsetLoader();
 						})
 	
@@ -451,27 +408,13 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		},
 		body: JSON.stringify({'pfp': buf}),
 		credentials: 'include'
-	}).then(response => {
-		return response.json().then(data => {
-
-			if (pfpInputLabel.previousElementSibling)
-				pfpInputLabel.previousElementSibling.remove();
+	}).then(response => {response.json().then(data => {
 			if (!response.ok)
 			{
-				warning = document.createElement("a");
-				warning.className = `warning ${errorMap[data.message]}`;
-				if (langJson && langJson['settings'][`.${errorMap[data.message]}`])
-					warning.text = langJson['settings'][`.${errorMap[data.message]}`];
+				if (errorMap[data.message] && langJson && langJson['settings'][`.${errorMap[data.message]}`])
+					popUpError(langJson['settings'][`.${errorMap[data.message]}`]);
 				else
-					warning.text = data.message;
-				if (CSS.supports("position-anchor", "--test")){
-					warning.style.setProperty("position-anchor", "--pfp-label")
-					pfpInputLabel.before(warning);
-				}
-				else
-					popUpError(warning.text)
-				document.getElementById("popupBg").style.setProperty("display", "none");
-				document.getElementById("confirmPfpContainer").style.setProperty("display", "none");
+					popUpError(data.message);
 			}
 			else
 			{
@@ -491,24 +434,10 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		});
 	}).catch(error => {
 		console.error('Error during profile update:', error);
-
-		if (pfpInputLabel.previousElementSibling)
-			pfpInputLabel.previousElementSibling.remove();
-		
-		warning = document.createElement("a");
-
-		warning.className = `warning unexpectedProfileUpdateError`;
-		if (langJson && langJson['settings'][`.unexpectedProfileUpdateError`])
-			warning.text = langJson['settings'][`.unexpectedProfileUpdateError`];
+		if (errorMap[data.message] && langJson && langJson['settings'][`.unexpectedProfileUpdateError`])
+			popUpError(langJson['settings'][`.unexpectedProfileUpdateError`]);
 		else
-			warning.text = "An unexpected error occurred during profile update";
-		if (CSS.supports("position-anchor", "--test")){
-			warning.style.setProperty("position-anchor", "--pfp-label")
-			pfpInputLabel.before(warning);
-		}
-		else
-			popUpError(warning.text)
-
+			popUpError("An unexpected error occurred during profile update");
 	});
 
 	window.onkeydown = settingsKeyDownEvent;
@@ -530,20 +459,10 @@ saveUsernameBtn.addEventListener("click", (e) => {
 				credentials: 'include'
 			}).then(response => {
 				if (response.ok){
-					if (usernameInput.previousElementSibling)
-						usernameInput.previousElementSibling.remove();
-					success = document.createElement("a");
-					success.className = "success userNameUpdated";
-					if (langJson)
-						success.text = langJson['settings']['.usernameUpdated']
+					if (errorMap[data.message] && langJson && langJson['settings'][`.usernameUpdated`])
+						postMessage(langJson['settings'][`.usernameUpdated`]);
 					else
-						success.text = "username successfully updated";
-					if (CSS.supports("position-anchor", "--test")){
-						success.style.setProperty("position-anchor", "--input-change-name");
-						usernameInput.before(success);
-					}
-					else
-						popUpSuccess(success.text);
+						postMessage(data.message);
 
 					(async () => {
 						try {
@@ -559,46 +478,19 @@ saveUsernameBtn.addEventListener("click", (e) => {
 				}
 				else {
 					response.json().then(response => {
-						warning = document.createElement("a");
-						if (errorMap[response.message]){
-							warning.className = `warning ${errorMap[response.message]}`;
-							if (langJson && langJson['settings'][errorMap[response.message]])
-								warning.text = langJson['settings'][errorMap[response.message]];
-							else
-								warning.text = response.message;
-						}
-						else{
-							warning.className = `warning ${errorMap[response.message]}`;
-							warning.text = response.message;
-						}
-						if (CSS.supports("position-anchor", "--test")){
-							warning.style.setProperty("position-anchor", "--input-change-name");
-							warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
-							usernameInput.before(warning);
-						}
-						else{
-							popUpError(warning.text)
-						}
+						if (errorMap[response.message] && langJson && langJson['settings'][`.${errorMap[response.message]}`])
+							popUpError(langJson['settings'][`.${errorMap[response.message]}`]);
+						else
+							popUpError(response.message);
 					})
 				}
 			})
 	}
 	else{
-		warning = document.createElement("a");
-		warning.className = "warning usernameCantBeEmpty";
-
-		if (langJson)
-			warning.text = langJson['settings']['.usernameCantBeEmpty']
+		if (langJson && langJson['settings'][`.usernameCantBeEmpty`])
+			popUpError(langJson['settings'][`.usernameCantBeEmpty`]);
 		else
-			warning.text = "Username name can't be empty";
-		if (CSS.supports("position-anchor", "--test")){
-			warning.style.setProperty("position-anchor", "--input-change-name");
-			warning.style.setProperty("top", "calc(anchor(top) - 3vh)");
-			usernameInput.before(warning);
-		}
-		else{
-			popUpError(warning.text);
-		}
+			popUpError("Username name can't be empty");
 	}
 })
 
