@@ -350,11 +350,18 @@ var template = `
 		}
 
 		if (username.length > 15){
-			warning = document.createElement("a");
-			warning.className = "warning";
-			warning.text = "username name must not exceed 15 characters";
-			if (!usernameRegisterInput.previousElementSibling)
-				usernameRegisterInput.before(warning);
+			warning.className = `warning usernameTooLong`;
+			if (langJson && langJson['login'][`.usernameTooLong`])
+				warning.text = langJson['login'][`.usernameTooLong`];
+			else
+				warning.text = "Username must be 15 characters or fewer";
+			if (CSS.supports("position-anchor", "--test")){
+				warning.style.setProperty("position-anchor", "--register-btn");
+				registerBtn.before(warning);
+			}
+			else{
+				popUpError(warning.text)
+			}
 			lock = 1;
 		}
 		else if (username != "" && usernameRegisterInput.previousElementSibling)
@@ -419,13 +426,13 @@ var template = `
 						unsetLoader()
 						if (errorMap[response.message]){
 							warning.className = `warning ${errorMap[response.message]}`;
-							if (langJson && langJson['login'][errorMap[response.message]])
-								warning.text = langJson['login'][errorMap[response.message]];
+							if (langJson && langJson['login'][`.${errorMap[response.message]}`])
+								warning.text = langJson['login'][`.${errorMap[response.message]}`];
 							else
 								warning.text = response.message;
 						}
 						else{
-							warning.className = `warning ${errorMap[response.message] ? errorMap[response.message] : ""}`;
+							warning.className = `warning`;
 							warning.text = response.message;
 						}
 						if (CSS.supports("position-anchor", "--test")){
@@ -435,13 +442,6 @@ var template = `
 						else{
 							popUpError(warning.text)
 						}
-/*
-						warning = document.createElement("a");
-						warning.className = "warning";
-						warning.text = response.message;
-						warning.style.setProperty("position-anchor", "--register-btn");
-						if (!registerBtn.previousElementSibling)
-							registerBtn.before(warning);*/
 					})
 
 				}

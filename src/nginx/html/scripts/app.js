@@ -85,6 +85,8 @@ const accessibilitySlideTabIdxMap = {
 const errorMap = {
 	"Username already taken" : "nameAlreadyTaken",
 	"Invalid username" : "invalidName",
+	"Username must be alphanumeric" : "forbidenChars",
+	"Username must be 15 characters or fewer" : "usernameTooLong",
 	"Invalid pfp value, should be a string" : "invalidValue",
 	"Image format not supported, use JPEG, PNG or GIF" : "invalidImgFormat",
 	"Invalid base64 string" : "invalidBase64Value",
