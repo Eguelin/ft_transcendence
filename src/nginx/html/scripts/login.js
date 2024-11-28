@@ -274,14 +274,12 @@ var template = `
 							(async () => {
 								try {
 									client = await new Client()
+									slideIdx = 0;
+									window.onkeydown = null
 									if (client == null){
-										slideIdx = 0;
-										window.onkeydown = null
 										myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 									}
 									else{
-										slideIdx = 0;
-										window.onkeydown = null
 										myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 										friendUpdate();
 									}
@@ -296,11 +294,25 @@ var template = `
 				else
 				{
 					unsetLoader();
-					response.json().then(text => {
-						warning.text = text.message;
-						warning.style.setProperty("position-anchor", "--login-btn");
-						if (!loginBtn.previousElementSibling)
-							loginBtn.before(warning.cloneNode(true));
+					response.json().then(response => {
+						if (errorMap[response.message]){
+							warning.className = `warning ${errorMap[response.message]}`;
+							if (langJson && langJson['login'][errorMap[response.message]])
+								warning.text = langJson['login'][errorMap[response.message]];
+							else
+								warning.text = response.message;
+						}
+						else{
+							warning.className = `warning ${errorMap[response.message] ? errorMap[response.message] : ""}`;
+							warning.text = response.message;
+						}
+						if (CSS.supports("position-anchor", "--test")){
+							warning.style.setProperty("position-anchor", "--login-btn");
+							loginBtn.before(warning);
+						}
+						else{
+							popUpError(warning.text)
+						}
 					})
 				}
 			})
@@ -405,12 +417,31 @@ var template = `
 				} else {
 					response.json().then(response => {
 						unsetLoader()
+						if (errorMap[response.message]){
+							warning.className = `warning ${errorMap[response.message]}`;
+							if (langJson && langJson['login'][errorMap[response.message]])
+								warning.text = langJson['login'][errorMap[response.message]];
+							else
+								warning.text = response.message;
+						}
+						else{
+							warning.className = `warning ${errorMap[response.message] ? errorMap[response.message] : ""}`;
+							warning.text = response.message;
+						}
+						if (CSS.supports("position-anchor", "--test")){
+							warning.style.setProperty("position-anchor", "--register-btn");
+							registerBtn.before(warning);
+						}
+						else{
+							popUpError(warning.text)
+						}
+/*
 						warning = document.createElement("a");
 						warning.className = "warning";
 						warning.text = response.message;
 						warning.style.setProperty("position-anchor", "--register-btn");
 						if (!registerBtn.previousElementSibling)
-							registerBtn.before(warning);
+							registerBtn.before(warning);*/
 					})
 
 				}
