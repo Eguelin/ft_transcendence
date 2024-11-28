@@ -87,7 +87,15 @@ const errorMap = {
 	"Invalid username" : "invalidName",
 	"Invalid pfp value, should be a string" : "invalidValue",
 	"Image format not supported, use JPEG, PNG or GIF" : "invalidImgFormat",
-	"Invalid base64 string" : "invalidBase64Value"
+	"Invalid base64 string" : "invalidBase64Value",
+	"Old password not provided" : "missingOldPassword",
+	"Remote password change forbiden" : "remotePasswordChangeForbiden",
+	"Error while authenticating" : "authenticationError",
+	"Old password mismatch" : "incorectOldPassword",
+	"Invalid password" : "invalidPassword",
+	"Password too long" : "passwordTooLong",
+	"Password too short" : "passwordTooShort",
+	"Password too weak" : "passwordTooWeak",
 }
 
 function addPfpUrlToImgSrc(img, path) {

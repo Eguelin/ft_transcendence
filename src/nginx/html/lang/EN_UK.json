@@ -101,7 +101,14 @@
 		".invalidValue" : "Invalid pfp value, should be a string",
 		".invalidImgFormat" : "Image format not supported, use JPEG, PNG or GIF",
 		".invalidBase64Value" : "Invalid base64 string",
-		".unexpectedProfileUpdateError" : "An unexpected error occurred during profile update"
+		".unexpectedProfileUpdateError" : "An unexpected error occurred during profile update",
+		"remotePasswordChangeForbiden" : "Remote password change forbiden",
+		"authenticationError" : "Error while authenticating",
+		"incorectOldPassword" : "Old password mismatch",
+		"invalidPassword" : "Invalid password",
+		"passwordTooLong" : "Password too long",
+		"passwordTooShort" : "Password too short",
+		"passwordTooWea" : "Password too weakk"
 	},
 	"friends":{
 		"#title" : "",

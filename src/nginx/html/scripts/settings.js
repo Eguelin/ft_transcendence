@@ -384,10 +384,10 @@ var template = `
 					else {
 						response.json().then(response => {
 							warning = document.createElement("a");
-							warning.className = "warning";
+							warning.className = `warning ${errorMap[response.message]}`;
 							warning.text = response.message;
-							if (langJson && langJson['settings'][errorMap[response.message]])
-								warning.text = langJson['settings'][errorMap[response.message]]
+							if (langJson && langJson['settings'][`.${errorMap[response.message]}`])
+								warning.text = langJson['settings'][`.${errorMap[response.message]}`]
 							if (CSS.supports("position-anchor", "--test")){
 								warning.style.setProperty("position-anchor", window.getComputedStyle(e.target).anchorName);
 								e.target.before(warning);
