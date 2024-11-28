@@ -91,7 +91,10 @@ document.getElementById("customPeriodSelection").addEventListener("click", (e) =
 
 document.getElementById("search").addEventListener("click", (e)=>{
     if (isNaN(Date.parse(customStartDayInput.value)) || isNaN(Date.parse(customEndDayInput.value))){
-        popUpError("Invalid date");
+		if (langJson && langJson['dashboard']['.invalidDate'])
+			popUpError(langJson['dashboard']['.invalidDate']);
+		else
+        	popUpError("Invalid date");
         return;
     }
     setLoader();

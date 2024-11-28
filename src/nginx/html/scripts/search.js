@@ -60,7 +60,10 @@ var template = `
 			}
 			else{
 				if (user.status == 401){
-					popUpError("how dare you >:("); //TODO change popup message
+					if (langJson && langJson['index']['.error401'])
+						popUpError(langJson['index']['.error401']);
+					else
+						popUpError("how dare you >:("); //TODO change popup message
 					myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 				}
 				else
@@ -69,15 +72,23 @@ var template = `
 		})
 	}
 	document.querySelector("#searchBtn").addEventListener("click", function(){
-		if (inputSearch.value.trim().length == 0)
-			popUpError("Can't search empty query");
+		if (inputSearch.value.trim().length == 0){
+			if (langJson && langJson['search']['.emptySearchError'])
+				popUpError(langJson['search']['.emptySearchError']);
+			else
+				popUpError("Can't search empty query");
+		}
 		else
 			myPushState(`https://${hostname.host}/${currentLang}/search?query=${inputSearch.value.trim()}`);
 	});
 	inputSearch.onkeydown = function(e){
 		if (e.key == "Enter"){
-			if (inputSearch.value.trim().length == 0)
-				popUpError("Can't search empty query");
+			if (inputSearch.value.trim().length == 0){
+				if (langJson && langJson['search']['.emptySearchError'])
+					popUpError(langJson['search']['.emptySearchError']);
+				else
+					popUpError("Can't search empty query");
+			}
 			else
 				myPushState(`https://${hostname.host}/${currentLang}/search?query=${inputSearch.value.trim()}`);
 		}
@@ -85,8 +96,12 @@ var template = `
 
 	document.querySelector("#searchBtn").onkeydown = function(e){
 		if (e.key == "Enter"){
-			if (inputSearch.value.trim().length == 0)
-				popUpError("Can't search empty query");
+			if (inputSearch.value.trim().length == 0){
+				if (langJson && langJson['search']['.emptySearchError'])
+					popUpError(langJson['search']['.emptySearchError']);
+				else
+					popUpError("Can't search empty query");
+			}
 			else
 				myPushState(`https://${hostname.host}/${currentLang}/search?query=${inputSearch.value.trim()}`);
 		}
