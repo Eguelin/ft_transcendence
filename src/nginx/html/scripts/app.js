@@ -577,6 +577,15 @@ function isMobile(){
 	return(hasTouchScreen);
 }
 
+function browser(){
+	if (navigator.userAgent.includes("Chrome")){
+		console.log("Chrome")
+	}
+	else if (navigator.userAgent.includes("Mozilla")){
+		console.log("Mozilla")
+	}
+}
+
 window.addEventListener('load', (e) => {
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
