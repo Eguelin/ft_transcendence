@@ -12,8 +12,8 @@ dropDownLangOption = document.querySelectorAll(".dropDownLangOptions");
 notifCenterContainer = document.getElementById("notifCenterContainer")
 
 var currentPage = "";
-var currentLangPack = "lang${currentLang}.json";
 var currentLang = "EN_UK";
+var currentLangPack = `lang/${currentLang}.json`;
 var currentTheme = "browser";
 var username = "";
 const hostname = new URL(window.location.href);
@@ -163,8 +163,8 @@ class Client {
 				const result = await fetchResult.json();
 				if (fetchResult.ok) {
 					this.username = result.username;
-					this.currentLangPack = result.lang;
-					this.currentLang = result.lang.substring(5, 10);
+					this.currentLang = result.lang
+					this.currentLangPack = `lang/${this.currentLang}.json`;
 					this.pfpUrl = result.pfp;
 					this.theme_name = result.theme_name;
 					this.friends = result.friends;
