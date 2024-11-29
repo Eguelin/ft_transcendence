@@ -329,14 +329,11 @@ def set_pfp(user, pfp):
 	return True, None
 
 def check_language_pack(language):
-	languages = ["lang/DE_GE.json",
-				"lang/EN_UK.json",
-				"lang/FR_FR.json",
-				"lang/IT_IT.json"]
+	languages = ["DE_GE", "EN_UK", "FR_FR", "IT_IT"]
 	if not language or not isinstance(language, str):
 		return False, 'Invalid language_pack value, should be a string'
 	if language not in languages:
-		return False, "Invalid language_pack value, should be 'lang/DE_GE.json', 'lang/EN_UK.json', 'lang/FR_FR.json' or 'lang/IT_IT.json"
+		return False, "Invalid language_pack value, should be 'DE_GE', 'EN_UK', 'FR_FR' or 'IT_IT"
 	return True, None
 
 def check_theme_name(theme):

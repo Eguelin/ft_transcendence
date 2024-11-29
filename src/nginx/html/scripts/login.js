@@ -330,7 +330,7 @@ var template = `
 		else if (lock == 0){
 			setLoader()
 
-			const data = {username: username, password: pw, 'lang': currentLangPack, theme_name: currentTheme};
+			const data = {username: username, password: pw, 'lang': currentLang, theme_name: currentTheme};
 			fetch('/api/user/create', {
 				method: 'POST',
 				headers: {
