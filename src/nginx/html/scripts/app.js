@@ -1005,6 +1005,7 @@ function popUpError(error){
 	var popupText = document.createElement("a")
 	popupText.innerText = error;
 	popupContainer.appendChild(popupText);
+	popupContainer.setAttribute("role", "alert");
 	popupContainer.addEventListener("mouseleave", (e) => {
 		popupContainer.className = "popupErrorContainerClose"
 		setTimeout(() => {
