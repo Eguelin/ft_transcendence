@@ -130,7 +130,8 @@
 		".fileTooBig" : "Gesendete Datei ist zu groß",
 		"invalidValue" : "Ungültiger Wert",
 		"invalidLanguagePack" : "Ungültiger Sprachpaketwert, sollte 'DE_GE', 'EN_UK', 'FR_FR' oder 'IT_IT' sein",
-		"invalidThemeName" : "Ungültiger Themennamewert, sollte 'dark', 'light', 'high_dark', 'high_light' oder 'browser' sein"
+		"invalidThemeName" : "Ungültiger Themennamewert, sollte 'dark', 'light', 'high_dark', 'high_light' oder 'browser' sein",
+		".errorReadingFile" : "Beim Lesen der Datei ist ein Fehler aufgetreten"
 	},
 	"friends":{
 		"#title" : "",
