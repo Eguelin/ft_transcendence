@@ -130,7 +130,8 @@
 		".fileTooBig" : "Le fichier envoyé est trop volumineux",
 		"invalidValue" : "Valeur invalide",
 		"invalidLanguagePack" : "Nom du dictionnaire non valide, doit être 'DE_GE', 'EN_UK', 'FR_FR' ou 'IT_IT",
-		"invalidThemeName" : "Nom de thème non valide, doit être 'dark', 'light', 'high_dark', 'high_light' ou 'browser'"
+		"invalidThemeName" : "Nom de thème non valide, doit être 'dark', 'light', 'high_dark', 'high_light' ou 'browser'",
+		".errorReadingFile" : "Une erreur s'est produite lors de la lecture du fichier"
 	},
 	"friends":{
 		"#title" : "",

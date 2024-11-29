@@ -367,7 +367,6 @@ var template = `
 
 }
 
-
 var buf = "";
 
 document.querySelectorAll("#pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
@@ -386,13 +385,20 @@ pfpInput.addEventListener("change", (e) => {
 
 		reader.readAsDataURL(blob);
 		reader.onloadend = function(){
-			buf = reader.result;
-			buf = buf.substr(buf.indexOf(',') + 1);
+			try{
+				buf = reader.result.match(/^data:.+;base64,(.+)$/)[1];
+			}
+			catch{
+				if (langJson && langJson['settings'][`.errorReadingFile`])
+					popUpError(langJson['settings'][`.errorReadingFile`]);
+				else
+					popUpError("An error occurred while reading the file");
+				return;
+			}
 			window.onkeydown = null
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
-			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/jpg;base64,${buf}`);
-
+			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/;base64,${buf}`);
 		}
 	}
 })
