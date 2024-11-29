@@ -71,7 +71,11 @@
 		".inputRegisterCPasswordCantBeEmpty" : "Passwortbestätigung darf nicht leer sein",
 		".mismatchPassword" : "Passwörter stimmen nicht überein",
 		".forbidenChars" : "Benutzername muss alphanumerisch sein",
-		".usernameTooLong" : "Benutzername darf höchstens 15 Zeichen lang sein"
+		".usernameTooLong" : "Benutzername darf höchstens 15 Zeichen lang sein",
+		".passwordMissingLowerCase" : "Das Passwort muss mindestens einen Großbuchstaben enthalten",
+		".passwordMissingUpperCase" : "Das Passwort muss mindestens einen Kleinbuchstaben enthalten",
+		".passwordMissingDigit" : "Das Passwort muss mindestens eine Ziffer enthalten",
+		".passwordMissingSpec" : "Das Passwort muss mindestens ein Sonderzeichen enthalten"
 	},
 	"settings": {
 		"#title" : "",
@@ -117,7 +121,10 @@
 		".mismatchPassword" : "Passwörter stimmen nicht überein",
 		".forbidenChars" : "Benutzername muss alphanumerisch sein",
 		".usernameTooLong" : "Benutzername darf höchstens 15 Zeichen lang sein",
-		".fileTooBig" : "Gesendete Datei ist zu groß"
+		".fileTooBig" : "Gesendete Datei ist zu groß",
+		"invalidValue" : "Ungültiger Wert",
+		"invalidLanguagePack" : "Ungültiger Sprachpaketwert, sollte 'DE_GE', 'EN_UK', 'FR_FR' oder 'IT_IT' sein",
+		"invalidThemeName" : "Ungültiger Themennamewert, sollte 'dark', 'light', 'high_dark', 'high_light' oder 'browser' sein"
 	},
 	"friends":{
 		"#title" : "",

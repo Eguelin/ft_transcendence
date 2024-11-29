@@ -98,6 +98,14 @@ const errorMap = {
 	"Password too long" : "passwordTooLong",
 	"Password too short" : "passwordTooShort",
 	"Password too weak" : "passwordTooWeak",
+	"Password must contain at least one uppercase letter" : "passwordMissingLowerCase",
+	"Password must contain at least one lowercase letter" : "passwordMissingUpperCase",
+	"Password must contain at least one digit" : "passwordMissingDigit",
+	"Password must contain at least one special character" : "passwordMissingSpec",
+	"Invalid language_pack value, should be a string" : "invalidValue",
+	"Invalid language_pack value, should be 'DE_GE', 'EN_UK', 'FR_FR' or 'IT_IT" : "invalidLanguagePack",
+	"Invalid theme_name value, should be a string" : "invalidValue",
+	"Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'" : "invalidThemeName",
 }
 
 function addPfpUrlToImgSrc(img, path) {
