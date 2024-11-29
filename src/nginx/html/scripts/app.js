@@ -1838,7 +1838,29 @@ window.matchMedia("(orientation: portrait)").onchange = function(e){
 			displayCharts();
 		}
 	}
-} ;
+};
+
+function resizeEvent(event, orientationChange = false){
+	document.body.offsetWidth;
+	checkResizeIndex()
+	if (orientationChange == false && currentPage == "dashboard")
+		displayCharts();
+	if (currentPage == "home" || currentPage == "user"){
+		checkMatchResumeSize()
+	}
+	if (currentPage == "user")
+		checkUserPageSize();
+	if (currentPage == "game")
+		checkGameSize();
+	if (currentPage == "tournament")
+		displayTournament();
+	if (currentPage == "game" || currentPage == "tournament")
+		setTimeout(checkWinnerDisplaySize, 1)
+	if (currentPage == "match")
+		checkMatchSize();
+	if (currentPage == "friends")
+		checkFriendPageSize()
+}
 
 function checkResizeIndex(){
 	var tmp = document.querySelector("#inputSearchUserContainer");
@@ -1890,7 +1912,7 @@ function checkResizeIndex(){
 				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
 			}
-			while ((tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left || biggest.getBoundingClientRect().right > document.documentElement.offsetWidth) && currentFontSize > 1){
+			while ((tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left || biggest.getBoundingClientRect().right > document.documentElement.offsetWidth) && currentFontSize > 8){
 				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize -= 1;
 			}
@@ -1906,34 +1928,12 @@ function checkResizeIndex(){
 				tmp.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
 			}
-			while (tmp.getBoundingClientRect().right > anchor.getBoundingClientRect().left && currentFontSize > 1){
+			while (tmp.getBoundingClientRect().right > anchor.getBoundingClientRect().left && currentFontSize > 8){
 				tmp.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize -= 1;
 			}
 		}
 	}
-}
-
-function resizeEvent(event, orientationChange = false){
-	document.body.offsetWidth;
-	checkResizeIndex()
-	if (orientationChange == false && currentPage == "dashboard")
-		displayCharts();
-	if (currentPage == "home" || currentPage == "user"){
-		checkMatchResumeSize()
-	}
-	if (currentPage == "user")
-		checkUserPageSize();
-	if (currentPage == "game")
-		checkGameSize();
-	if (currentPage == "tournament")
-		displayTournament();
-	if (currentPage == "game" || currentPage == "tournament")
-		setTimeout(checkWinnerDisplaySize, 1)
-	if (currentPage == "match")
-		checkMatchSize();
-	if (currentPage == "friends")
-		checkFriendPageSize()
 }
 
 function checkUserPageSize(){
@@ -2034,7 +2034,7 @@ function checkMatchResumeSize(){
 			text.style.setProperty("font-size", `${currentFontSize}px`)
 			currentFontSize += 1;
 		}
-		while (text.getBoundingClientRect().width > recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize > 1){
+		while (text.getBoundingClientRect().width > recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize > 8){
 			text.style.setProperty("font-size", `${currentFontSize}px`)
 			currentFontSize -= 1;
 		}
@@ -2050,10 +2050,10 @@ const WASDInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "
 
 
 function checkGameSize(){
-	if (document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
+	if (document.querySelector("#tournamentContainer") && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
-	if (!document.querySelector("#gameContainer").classList.contains("local")){
+	if (!document.querySelector("#gameContainer") && !document.querySelector("#gameContainer").classList.contains("local")){
 		if (isPortrait()){
 			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
@@ -2108,7 +2108,7 @@ function checkGameSize(){
 		})
 		currentFontSize += 1;
 	}
-	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 1){
+	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 8){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
@@ -2194,7 +2194,7 @@ function checkWinnerDisplaySize(){
 		text.style.setProperty("font-size", `${parseInt(window.getComputedStyle(text).fontSize) + 1}px`)
 		currentFontSize += 1;
 	}
-	while (container.getBoundingClientRect().width < document.querySelector("#winName").getBoundingClientRect().width && currentFontSize > 1){
+	while (container.getBoundingClientRect().width < document.querySelector("#winName").getBoundingClientRect().width && currentFontSize > 8){
 		document.querySelector("#winName").style.setProperty("font-size", `${currentFontSize}px`)
 		currentFontSize -= 1;
 	}
