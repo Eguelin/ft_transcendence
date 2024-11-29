@@ -17,6 +17,10 @@
 		"aria#FR_FR" : "Francese",
 		"aria#DE_GE" : "Tedesco",
 		"aria#IT_IT" : "Italiano",
+		"aria#pushNotif" : "Pulsante apri/chiudi centro notifiche",
+		"aria.notifContainer" : "Messaggio di notifica: ${MESSAGE}. Premi INVIO per aprire le opzioni accetta/rifiuta",
+		"aria.notifAccept" : "Accetta richiesta",
+		"aria.notifReject" : "Rifiuta richiesta",
 		"error_reaching_server" : "Errore di connessione al server",
 		".notifMessage.friend_request" : "Richiesta di amicizia in arrivo da ${USERNAME}",
 		".errorLoadLangPack" : "Impossibile caricare il pacchetto di lingua ${LANG}",
@@ -33,6 +37,8 @@
 		".victory" : "VITTORIA",
 		".loss" : "PERSO",
 		".draw" : "PAREGGIO",
+		"aria#inputChangeDisplayName" : "Cambia il campo di input del nome visualizzato dell'utente",
+		"aria#saveDisplayNameBtn" : "Pulsante Salva nome visualizzato",
 		"aria#recentMatchHistoryContainer" : "Partite di oggi dell'utente",
 		"ariaResumeMatch.matchDescContainer" : "partita contro ${USERNAME} il ${DATE}",
 		"ariaResumeTournament.matchDescContainer" : "Torneo il ${DATE}",
@@ -71,7 +77,11 @@
 		".inputRegisterCPasswordCantBeEmpty" : "La conferma della password non può essere vuota",
 		".mismatchPassword" : "Le password non corrispondono",
 		".forbidenChars" : "Il nome utente deve essere alfanumerico",
-		".usernameTooLong" : "Il nome utente deve essere di 15 caratteri o meno"
+		".usernameTooLong" : "Il nome utente deve essere di 15 caratteri o meno",
+		".passwordMissingLowerCase" : "La password deve contenere almeno una lettera maiuscola",
+		".passwordMissingUpperCase" : "La password deve contenere almeno una lettera minuscola",
+		".passwordMissingDigit" : "La password deve contenere almeno una cifra",
+		".passwordMissingSpec" : "La password deve contenere almeno un carattere speciale"
 	},
 	"settings": {
 		"#title" : "",
@@ -117,7 +127,10 @@
 		".mismatchPassword" : "Le password non corrispondono",
 		".forbidenChars" : "Il nome utente deve essere alfanumerico",
 		".usernameTooLong" : "Il nome utente deve essere di 15 caratteri o meno",
-		".fileTooBig" : "Il file inviato è troppo grande"
+		".fileTooBig" : "Il file inviato è troppo grande",
+		"invalidValue" : "Valore non valido",
+		"invalidLanguagePack" : "Valore language_pack non valido, dovrebbe essere 'DE_GE', 'EN_UK', 'FR_FR' o 'IT_IT'",
+		"invalidThemeName" : "Valore theme_name non valido, dovrebbe essere 'dark', 'light', 'high_dark', 'high_light' o 'browser'"
 	},
 	"friends":{
 		"#title" : "",

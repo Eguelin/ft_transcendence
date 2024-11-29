@@ -54,13 +54,13 @@ html{
 		font-size: calc(24px * var(--font-size-amplifier));
 	}
 	input{
-		font-size: .5rem !important;
+		font-size: .5rem;
 	}
 }
 
 @media screen and (orientation:portrait){
 	input{
-		font-size: .7rem !important;
+		font-size: .7rem;
 	}
 }
 
@@ -424,4 +424,10 @@ a {
 		}
 	}
 
+}
+
+.mobile{
+	input{
+		font-size: max(1rem, 16px) !important;
+	}
 }
