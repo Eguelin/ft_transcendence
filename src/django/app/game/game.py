@@ -562,6 +562,7 @@ class PlayerAI(Player):
 			ball = self.game.ball.copy()
 			pad = self.copy()
 			if (ball.dx > 0 and self.side == 'left') or (ball.dx < 0 and self.side == 'right'):
+				self.Y = Game.demieHeight
 				await asyncio.sleep(1)
 				continue
 
