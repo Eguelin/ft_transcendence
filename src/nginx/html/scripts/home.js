@@ -46,7 +46,7 @@ var template = `
 				})
 				const result = await fetchResult.json();
 				if (fetchResult.ok) {
-				
+
 					var startDate = new Date();
 					try {
 						client.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
@@ -111,7 +111,7 @@ var template = `
 
 			if (displayNameInput.previousElementSibling)
 				displayNameInput.previousElementSibling.remove();
-		
+
 			if (displayName != ""){
 					fetch('/api/user/update', {
 						method: 'POST',
@@ -126,7 +126,7 @@ var template = `
 								popUpSuccess(langJson['home']['.displayNameUpdated'])
 							else
 								popUpSuccess("Display name successfully updated")
-		
+
 						}
 						else {
 							response.json().then(response => {
@@ -135,14 +135,14 @@ var template = `
 								}
 								else{
 									popUpError(response.message)
-								}	
+								}
 							})
 						}
 					})
 			}
 			else{
-				if (langJson && langJson['home'][`.${displayNameCantBeEmpty}`]){
-					popUpError(langJson['home'][errorMap[response.message]]);
+				if (langJson && langJson['home'][`.displayNameCantBeEmpty`]){
+					popUpError(langJson['home'][`.displayNameCantBeEmpty`])
 				}
 				else{
 					popUpError("Display name can't be empty")
@@ -153,5 +153,5 @@ var template = `
 	else
 		myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 
-		
+
 }
