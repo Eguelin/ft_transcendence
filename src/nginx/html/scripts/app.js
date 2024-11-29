@@ -2077,7 +2077,7 @@ function checkGameSize(){
 	if (document.querySelector("#tournamentContainer") && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
-	if (!document.querySelector("#gameContainer") && !document.querySelector("#gameContainer").classList.contains("local")){
+	if (document.querySelector("#gameContainer") && !document.querySelector("#gameContainer").classList.contains("local")){
 		if (isPortrait()){
 			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
@@ -2090,6 +2090,7 @@ function checkGameSize(){
 				document.querySelector("#game").style.setProperty("rotate", "90deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column");
+
 				playerKeyMap = keyMap;
 				playerTouchMap = FullInversedKeyMap;
 			}
