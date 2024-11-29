@@ -39,7 +39,7 @@ var template = `
 				user.json().then(((user) => {
 					document.querySelector("#userResumeCountContainer").style.setProperty("display", "block")
 					document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-					document.getElementById("userResumeSearch").innerHTML = url.searchParams.get("query");
+					document.getElementById("userResumeSearch").innerText = url.searchParams.get("query");
 					Object.keys(user).forEach(function (key) {
 						createUserResumeContainer(user[key]);
 					})
