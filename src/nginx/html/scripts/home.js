@@ -105,6 +105,8 @@ var template = `
 		document.querySelector("#saveDisplayNameBtn").onkeydown = function(e){if (e.key == "Enter"){e.target.click();}};
 
 		document.querySelector("#saveDisplayNameBtn").onclick = function (){
+			//TODO replace #saveDisplayNameBtn aria-label with error or success message before replacing to it's normal label
+
 			displayName = displayNameInput.value;
 
 			if (displayNameInput.previousElementSibling)

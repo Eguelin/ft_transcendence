@@ -17,6 +17,10 @@
 		"aria#FR_FR" : "Französisch",
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italienisch",
+		"aria#pushNotif" : "Schaltfläche zum Öffnen/Schließen des Benachrichtigungscenters",
+		"aria.notifContainer" : "Benachrichtigungsnachricht: ${MESSAGE}. Drücken Sie die Eingabetaste, um die Optionen zum Akzeptieren/Ablehnen zu öffnen",
+		"aria.notifAccept" : "Anfrage akzeptieren",
+		"aria.notifReject" : "Anfrage ablehnen",
 		"error_reaching_server" : "Fehler beim Erreichen des Servers",
 		".notifMessage.friend_request" : "Eingehende Freundschaftsanfrage von ${USERNAME}",
 		".errorLoadLangPack" : "Konnte das Sprachpaket ${LANG} nicht laden",
@@ -33,6 +37,8 @@
 		".victory" : "SIEG",
 		".loss" : "VERLOREN",
 		".draw" : "UNENTSCHIEDEN",
+		"aria#inputChangeDisplayName" : "Eingabefeld zum Ändern des Anzeigenamens des Benutzers",
+		"aria#saveDisplayNameBtn" : "Schaltfläche zum Speichern des Anzeigenamens",
 		"aria#recentMatchHistoryContainer" : "Heutige Spiele des Benutzers",
 		"ariaResumeMatch.matchDescContainer" : "Spiel gegen ${USERNAME} am ${DATE}",
 		"ariaResumeTournament.matchDescContainer" : "Turnier am ${DATE}",
@@ -71,7 +77,11 @@
 		".inputRegisterCPasswordCantBeEmpty" : "Passwortbestätigung darf nicht leer sein",
 		".mismatchPassword" : "Passwörter stimmen nicht überein",
 		".forbidenChars" : "Benutzername muss alphanumerisch sein",
-		".usernameTooLong" : "Benutzername darf höchstens 15 Zeichen lang sein"
+		".usernameTooLong" : "Benutzername darf höchstens 15 Zeichen lang sein",
+		".passwordMissingLowerCase" : "Das Passwort muss mindestens einen Großbuchstaben enthalten",
+		".passwordMissingUpperCase" : "Das Passwort muss mindestens einen Kleinbuchstaben enthalten",
+		".passwordMissingDigit" : "Das Passwort muss mindestens eine Ziffer enthalten",
+		".passwordMissingSpec" : "Das Passwort muss mindestens ein Sonderzeichen enthalten"
 	},
 	"settings": {
 		"#title" : "",
@@ -117,7 +127,10 @@
 		".mismatchPassword" : "Passwörter stimmen nicht überein",
 		".forbidenChars" : "Benutzername muss alphanumerisch sein",
 		".usernameTooLong" : "Benutzername darf höchstens 15 Zeichen lang sein",
-		".fileTooBig" : "Gesendete Datei ist zu groß"
+		".fileTooBig" : "Gesendete Datei ist zu groß",
+		"invalidValue" : "Ungültiger Wert",
+		"invalidLanguagePack" : "Ungültiger Sprachpaketwert, sollte 'DE_GE', 'EN_UK', 'FR_FR' oder 'IT_IT' sein",
+		"invalidThemeName" : "Ungültiger Themennamewert, sollte 'dark', 'light', 'high_dark', 'high_light' oder 'browser' sein"
 	},
 	"friends":{
 		"#title" : "",

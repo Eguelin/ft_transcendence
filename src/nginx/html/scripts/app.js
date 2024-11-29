@@ -79,7 +79,6 @@ const accessibilitySlideTabIdxMap = {
 	"#FR_FR" : "22",
 	"#DE_GE" : "23",
 	"#IT_IT" : "24",
-	"#AR_GH" : "25",
 }
 
 const errorMap = {
@@ -98,6 +97,14 @@ const errorMap = {
 	"Password too long" : "passwordTooLong",
 	"Password too short" : "passwordTooShort",
 	"Password too weak" : "passwordTooWeak",
+	"Password must contain at least one uppercase letter" : "passwordMissingLowerCase",
+	"Password must contain at least one lowercase letter" : "passwordMissingUpperCase",
+	"Password must contain at least one digit" : "passwordMissingDigit",
+	"Password must contain at least one special character" : "passwordMissingSpec",
+	"Invalid language_pack value, should be a string" : "invalidValue",
+	"Invalid language_pack value, should be 'DE_GE', 'EN_UK', 'FR_FR' or 'IT_IT" : "invalidLanguagePack",
+	"Invalid theme_name value, should be a string" : "invalidValue",
+	"Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'" : "invalidThemeName",
 }
 
 function addPfpUrlToImgSrc(img, path) {
@@ -248,7 +255,7 @@ class Client {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({"language_pack": this.currentLangPack }),
+					body: JSON.stringify({"language_pack": this.currentLang }),
 					credentials: 'include'
 				})
 			}
@@ -1181,10 +1188,23 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	}
 })
 
+function updateNotifAriaLabel(){
+	document.querySelectorAll(".notifContainer").forEach(function(elem){
+		elem.setAttribute("aria-label", `${langJson['index']['aria.notifContainer'].replace("${MESSAGE}", elem.innerText)}`);
+	})
+	document.querySelectorAll(".notifAccept").forEach(function (elem){
+		elem.setAttribute("aria-label", langJson['index']['aria.notifAccept']);
+	})
+	document.querySelectorAll(".notifReject").forEach(function (elem){
+		elem.setAttribute("aria-label", langJson['index']['aria.notifReject']);
+	})
+}
+
 function sendNotif(message, id, type) {
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
+	notifContainer.setAttribute("aria-label", `${langJson['index']['aria.notifContainer'].replace("${MESSAGE}", message)}`);
 	notifContainer.innerHTML = `
 	<a class="notifMessage ${type}">${message}</a>
 	<div style="display:none !important" id="notifId"></div>
@@ -1224,6 +1244,8 @@ function sendNotif(message, id, type) {
 	}
 	notifContainer.querySelector(".notifAccept").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
 	notifContainer.querySelector(".notifReject").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
+	notifContainer.querySelector(".notifAccept").setAttribute("aria-label", langJson['index']['aria.notifAccept']);
+	notifContainer.querySelector(".notifReject").setAttribute("aria-label", langJson['index']['aria.notifReject']);
 
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))) {
@@ -1610,6 +1632,7 @@ async function loadCurrentLang(){
 		content = langJson['index'];
 		if (content != null || content != undefined) {
 			var searchBar = document.querySelector("#inputSearchUser");
+			updateNotifAriaLabel();
 			if (content["#inputSearchUser"].length > 15){
 				searchBar.style.setProperty("width", `${content["#inputSearchUser"].length}ch`)
 			}
@@ -1838,7 +1861,29 @@ window.matchMedia("(orientation: portrait)").onchange = function(e){
 			displayCharts();
 		}
 	}
-} ;
+};
+
+function resizeEvent(event, orientationChange = false){
+	document.body.offsetWidth;
+	checkResizeIndex()
+	if (orientationChange == false && currentPage == "dashboard")
+		displayCharts();
+	if (currentPage == "home" || currentPage == "user"){
+		checkMatchResumeSize()
+	}
+	if (currentPage == "user")
+		checkUserPageSize();
+	if (currentPage == "game")
+		checkGameSize();
+	if (currentPage == "tournament")
+		displayTournament();
+	if (currentPage == "game" || currentPage == "tournament")
+		setTimeout(checkWinnerDisplaySize, 1)
+	if (currentPage == "match")
+		checkMatchSize();
+	if (currentPage == "friends")
+		checkFriendPageSize()
+}
 
 function checkResizeIndex(){
 	var tmp = document.querySelector("#inputSearchUserContainer");
@@ -1890,7 +1935,7 @@ function checkResizeIndex(){
 				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
 			}
-			while ((tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left || biggest.getBoundingClientRect().right > document.documentElement.offsetWidth) && currentFontSize > 1){
+			while ((tmp.children[i].getBoundingClientRect().left < tmp.getBoundingClientRect().left || biggest.getBoundingClientRect().right > document.documentElement.offsetWidth) && currentFontSize > 8){
 				username.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize -= 1;
 			}
@@ -1906,34 +1951,12 @@ function checkResizeIndex(){
 				tmp.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize += 1;
 			}
-			while (tmp.getBoundingClientRect().right > anchor.getBoundingClientRect().left && currentFontSize > 1){
+			while (tmp.getBoundingClientRect().right > anchor.getBoundingClientRect().left && currentFontSize > 8){
 				tmp.style.setProperty("font-size", `${currentFontSize}px`)
 				currentFontSize -= 1;
 			}
 		}
 	}
-}
-
-function resizeEvent(event, orientationChange = false){
-	document.body.offsetWidth;
-	checkResizeIndex()
-	if (orientationChange == false && currentPage == "dashboard")
-		displayCharts();
-	if (currentPage == "home" || currentPage == "user"){
-		checkMatchResumeSize()
-	}
-	if (currentPage == "user")
-		checkUserPageSize();
-	if (currentPage == "game")
-		checkGameSize();
-	if (currentPage == "tournament")
-		displayTournament();
-	if (currentPage == "game" || currentPage == "tournament")
-		setTimeout(checkWinnerDisplaySize, 1)
-	if (currentPage == "match")
-		checkMatchSize();
-	if (currentPage == "friends")
-		checkFriendPageSize()
 }
 
 function checkUserPageSize(){
@@ -2034,7 +2057,7 @@ function checkMatchResumeSize(){
 			text.style.setProperty("font-size", `${currentFontSize}px`)
 			currentFontSize += 1;
 		}
-		while (text.getBoundingClientRect().width > recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize > 1){
+		while (text.getBoundingClientRect().width > recentMatchHistoryContainer.getBoundingClientRect().width && currentFontSize > 8){
 			text.style.setProperty("font-size", `${currentFontSize}px`)
 			currentFontSize -= 1;
 		}
@@ -2050,10 +2073,10 @@ const WASDInversedKeyMap = {"KeyS" : "KeyW", "KeyW" : "KeyS", "KeyA" : "KeyD", "
 
 
 function checkGameSize(){
-	if (document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
+	if (document.querySelector("#tournamentContainer") && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
-	if (!document.querySelector("#gameContainer").classList.contains("local")){
+	if (!document.querySelector("#gameContainer") && !document.querySelector("#gameContainer").classList.contains("local")){
 		if (isPortrait()){
 			if (client.username == document.querySelector("#gameContainer #playerOne > .playerName").innerText || (client.displayName == document.querySelector("#gameContainer #playerOne > .playerName").innerText) ){
 				document.querySelector("#game").style.setProperty("rotate", "270deg");
@@ -2108,7 +2131,7 @@ function checkGameSize(){
 		})
 		currentFontSize += 1;
 	}
-	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 1){
+	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 8){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
@@ -2194,7 +2217,7 @@ function checkWinnerDisplaySize(){
 		text.style.setProperty("font-size", `${parseInt(window.getComputedStyle(text).fontSize) + 1}px`)
 		currentFontSize += 1;
 	}
-	while (container.getBoundingClientRect().width < document.querySelector("#winName").getBoundingClientRect().width && currentFontSize > 1){
+	while (container.getBoundingClientRect().width < document.querySelector("#winName").getBoundingClientRect().width && currentFontSize > 8){
 		document.querySelector("#winName").style.setProperty("font-size", `${currentFontSize}px`)
 		currentFontSize -= 1;
 	}
@@ -2221,3 +2244,9 @@ function rollThemes(timeout = 1000){
 	setTimeout(()=>{switchTheme("high_light")}, timeout * 2);
 	setTimeout(()=>{switchTheme("high_dark")}, timeout * 3);
 }
+
+window.addEventListener("keyup", (e) => {	//to check screen reader accessibility
+	if (e.key == "Tab"){
+		console.log(e.target, e.target.innerText, e.target.getAttribute("aria-label"));
+	}
+})
