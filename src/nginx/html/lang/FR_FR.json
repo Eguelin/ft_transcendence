@@ -6,6 +6,8 @@
 		"#logOutBtn" :  "Déconnexion",
 		"#inputSearchUser" : "Rechercher un utilisateur",
 		".deletedUser" : "Supprimé",
+		".blockedUser" : "Bloqué",
+		".nobodyUser" : "Personne",
 		"aria#goHomeButton" : "Bouton d'accueil",
 		"aria#inputSearchUser" : "Champ de recherche d'utilisateur",
 		"aria#usernameBtn" : "Menu déroulant du profil",
@@ -16,14 +18,16 @@
 		"aria#DE_GE" : "Allemand",
 		"aria#IT_IT" : "Italien",
 		"error_reaching_server" : "Erreur de connexion au serveur",
-		".notifMessage.friend_request" : "Demande d'ami entrante de ${USERNAME}"
+		".notifMessage.friend_request" : "Demande d'ami entrante de ${USERNAME}",
+		".errorLoadLangPack" : "Impossible de charger le pack de langue ${LANG}",
+		".error401" : "comment osez-vous >:("
 	},
 	"home" : {
 		"#title" : "PONG",
 		"#subtitle" : "",
 		"#playBtn1v1" : "Jouer 1v1",
-		"#playBtnLocal" : "Jouer local",
-		"#playBtnAI" : "Jouer contre IA",
+		"#playBtnLocal" : "Jouer en local",
+		"#playBtnAI" : "Jouer contre l'IA",
 		"#playTournament" : "Tournoi",
 		"#notPlayedToday" : "Vous n'avez joué aucun match aujourd'hui",
 		".victory" : "VICTOIRE",
@@ -32,7 +36,10 @@
 		"aria#recentMatchHistoryContainer" : "Matchs du jour de l'utilisateur",
 		"ariaResumeMatch.matchDescContainer" : "match contre ${USERNAME} le ${DATE}",
 		"ariaResumeTournament.matchDescContainer" : "Tournoi le ${DATE}",
-		"aria.resultScoreName" : "redirection_profil"
+		"aria.resultScoreName" : "Redirection vers le profil de ${USERNAME}",
+		"home title" : "Accueil - transcendence",
+		".displayNameUpdated" : "Nom d'affichage mis à jour avec succès",
+		".displayNameCantBeEmpty" : "Le nom d'affichage ne peut pas être vide"
 	},
 	"login" : {
 		"#title" : "CONNEXION",
@@ -54,7 +61,17 @@
 		"aria#fortyTwoLogin" : "Connexion avec le compte 42",
 		"aria#inputRegisterUsername" : "Nom d'utilisateur pour l'inscription",
 		"aria#inputRegisterPassword" : "Mot de passe pour l'inscription",
-		"aria#inputRegisterCPassword" : "Confirmer le mot de passe pour l'inscription"
+		"aria#inputRegisterCPassword" : "Confirmer le mot de passe pour l'inscription",
+		"login title" : "Connexion - transcendence",
+		"register title" : "Inscription - transcendence",
+		".inputUsernameCantBeEmpty" : "Le nom d'utilisateur ne peut pas être vide",
+		".inputPasswordCantBeEmpty" : "Le mot de passe ne peut pas être vide",
+		".inputRegisterUsernameCantBeEmpty" : "Le nom d'utilisateur ne peut pas être vide",
+		".inputRegisterPasswordCantBeEmpty" : "Le mot de passe ne peut pas être vide",
+		".inputRegisterCPasswordCantBeEmpty" : "La confirmation du mot de passe ne peut pas être vide",
+		".mismatchPassword" : "Les mots de passe ne correspondent pas",
+		".forbidenChars" : "Le nom d'utilisateur doit être alphanumérique",
+		".usernameTooLong" : "Le nom d'utilisateur doit comporter 15 caractères ou moins"
 	},
 	"settings": {
 		"#title" : "",
@@ -76,31 +93,59 @@
 		"aria#settingsDropDownLang" : "Menu déroulant des langues",
 		"aria#confirmDeleteInput" : "Tapez votre nom d'utilisateur, puis appuyez sur Entrée pour confirmer la suppression",
 		"aria#pfpLabel" : "Changer la photo de profil",
-		"aria#confirmPfpBtn" : "Confirmer la photo de profil"
+		"aria#confirmPfpBtn" : "Confirmer la photo de profil",
+		"account title" : "Compte - transcendence",
+		"accessibility title" : "Accessibilité - transcendence",
+		".inputOldPasswordCantBeEmpty" : "L'ancien mot de passe ne peut pas être vide",
+		".inputNewPasswordCantBeEmpty" : "Le nouveau mot de passe ne peut pas être vide",
+		".inputNewCPasswordCantBeEmpty" : "La confirmation du nouveau mot de passe ne peut pas être vide",
+		".passwordMisMatch" : "Les nouveaux mots de passe ne correspondent pas",
+		".passwordUpdated" : "Mot de passe mis à jour avec succès",
+		".usernameUpdated" : "Nom d'utilisateur mis à jour avec succès",
+		".usernameCantBeEmpty" : "Le nom d'utilisateur ne peut pas être vide",
+		".invalidValue" : "Valeur de photo de profil invalide, doit être une chaîne de caractères",
+		".invalidImgFormat" : "Format d'image non supporté, utilisez JPEG, PNG ou GIF",
+		".invalidBase64Value" : "Chaîne base64 invalide",
+		".unexpectedProfileUpdateError" : "Une erreur inattendue s'est produite lors de la mise à jour du profil",
+		".remotePasswordChangeForbiden" : "Changement de mot de passe à distance interdit",
+		".authenticationError" : "Erreur lors de l'authentification",
+		".incorectOldPassword" : "Ancien mot de passe incorrect",
+		".invalidPassword" : "Mot de passe invalide",
+		".passwordTooLong" : "Mot de passe trop long",
+		".passwordTooShort" : "Mot de passe trop court",
+		".passwordTooWeak" : "Mot de passe trop faible",
+		".mismatchPassword" : "Les mots de passe ne correspondent pas",
+		".forbidenChars" : "Le nom d'utilisateur doit être alphanumérique",
+		".usernameTooLong" : "Le nom d'utilisateur doit comporter 15 caractères ou moins",
+		".fileTooBig" : "Le fichier envoyé est trop volumineux"
 	},
 	"friends":{
 		"#title" : "",
 		"#subtitle" : "Amis",
-		"#confirmDeleteQuestion" : "Êtes-vous sûr de vouloir supprimer cet ami ?",
-		"#confirmBlockQuestion" : "Êtes-vous sûr de vouloir bloquer cet ami ?",
+		"confirmDeleteQuestion" : "Êtes-vous sûr de vouloir supprimer ${USERNAME}?",
+		"confirmBlockQuestion" : "Êtes-vous sûr de vouloir bloquer ${USERNAME}?",
 		"#confirmDelete" : "Je suis sûr",
 		"#confirmBlock" : "Je suis sûr",
 		"#onlineFriendSelectorText": "En ligne",
 		"#allFriendSelectorText": "Tous",
 		"#pendingFriendRequestSelectorText": "En attente",
 		"#blockedSelectorText": "Bloqués",
-		"aria#confirmDelete" : "Êtes-vous sûr de vouloir supprimer cet ami, appuyez sur Entrée pour 'oui', Échap pour 'non'",
-		"aria#confirmBlock" : "Êtes-vous sûr de vouloir bloquer cet ami, appuyez sur Entrée pour 'oui', Échap pour 'non'",
-		"aria.removeFriendBtn" : "Bouton supprimer ami",
-		"aria.blockFriendBtn" : "Bouton bloquer ami",
-		"aria.acceptFriendBtn" : "Bouton accepter ami",
-		"aria.rejectFriendBtn" : "Bouton refuser ami",
+		"aria#confirmDelete" : "Êtes-vous sûr de vouloir supprimer ${USERNAME}, appuyez sur Entrée pour 'oui', Échap pour 'non'",
+		"aria#confirmBlock" : "Êtes-vous sûr de vouloir bloquer ${USERNAME}, appuyez sur Entrée pour 'oui', Échap pour 'non'",
+		"aria.removeFriendBtn" : "Bouton de suppression d'ami",
+		"aria.blockFriendBtn" : "Bouton de blocage d'ami",
+		"aria.acceptFriendBtn" : "Bouton d'acceptation d'ami",
+		"aria.rejectFriendBtn" : "Bouton de rejet d'ami",
 		"aria.unblockBtn" : "Débloquer l'utilisateur",
 		"ariaAll.friendsOptionContainer" : "options d'amis",
 		"ariaPending.friendsOptionContainer" : "options de demande d'ami en attente",
 		"ariaBlocked.friendsOptionContainer" : "options d'utilisateur bloqué",
 		"incoming_pending_request" : "Demande d'ami entrante de ${USERNAME}",
 		"error_sending_request" : "Impossible d'envoyer la demande d'ami.",
+		"online title" : "Amis en ligne - transcendence",
+		"all title" : "Tous les amis - transcendence",
+		"pending title" : "Demandes d'amis en attente - transcendence",
+		"blocked title" : "Utilisateurs bloqués - transcendence",
 		"blockError" : "Vous ne pouvez pas bloquer cet utilisateur."
 	},
 	"user":{
@@ -115,7 +160,8 @@
 		".draw" : "ÉGALITÉ",
 		".tournament" : "TOURNOI",
 		"ariaResume.matchDescContainer" : "match contre ${USERNAME} le ${DATE}",
-		"aria.resultScoreName" : "redirection_profil"
+		"aria.resultScoreName" : "Redirection vers le profil de ${USERNAME}",
+		"user title" : "${USERNAME} - transcendence"
 	},
 	"dashboard":{
 		"#title" : "",
@@ -129,8 +175,8 @@
 		"#lastMonthSelection" : "Mois dernier",
 		"#lastYearSelection" : "Année dernière",
 		"#notPlayedPeriod" : "${USERNAME} n'a joué aucun match pendant cette période",
-		"CVwinLossGraph" : "Pourcentage de victoires par date",
-		"CVwinLossAbsGraph" : "Nombre de victoires sur défaites par date",
+		"CVwinLossGraph" : "Pourcentage de victoires",
+		"CVwinLossAbsGraph" : "Nombre de victoires sur les défaites",
 		"CVuserStatsGraph" : "Nombre de matchs gagnés et perdus",
 		"CVwinLossGraphClient" : "vous",
 		"CVwinLossAbsGraphClient" : "vous",
@@ -138,12 +184,16 @@
 		"CVloss" : "défaite",
 		"aria#lastWeekSelection" : "Afficher les statistiques des 7 derniers jours",
 		"aria#lastMonthSelection" : "Afficher les statistiques du mois dernier",
-		"aria#lastYearSelection" : "Afficher les statistiques de l'année dernière"
+		"aria#lastYearSelection" : "Afficher les statistiques de l'année dernière",
+		"dashboard title" : "Tableau de bord de ${USERNAME} - transcendence",
+		".invalidDate" : "Date invalide"
 	},
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Recherche",
-		"aria.userResume" : "redirection_profil"
+		"aria.userResume" : "Redirection vers le profil de ${USERNAME}",
+		"search title" : "Recherche ${SEARCH} - transcendence",
+		".emptySearchError" : "Impossible de rechercher une requête vide"
 	},
 	"game":{
 		"#title" : "",
@@ -153,9 +203,9 @@
 		"ai" : "IA",
 		"playerOne" : "Joueur un",
 		"playerTwo" : "Joueur deux",
-		"winnedText" : "gagné !!",
+		"winnedText" : "a gagné !!",
 		"replay" : "Rejouer",
-		"wait" : "En attente d'un autre joueur...",
+		"wait" : "En attente de l'arrivée d'un autre joueur...",
 		"quit" : "Quitter",
 		"waiting" : "En attente",
 		"tournamentSubtitle" : "Tournoi",
@@ -163,7 +213,10 @@
 		"semi" : "Demi",
 		"final" : "finale",
 		"tournamentLobby" : "Lobby",
-		"matchSubtitle" : "Match"
+		"matchSubtitle" : "Match",
+		"game title" : "Jeu ${MODE} - transcendence",
+		"lobby title" : "Lobby ${NB}/8  - transcendence",
+		".errorTabIndexUserRedirection" : "Erreur d'indexation des onglets lors de la redirection de l'utilisateur"
 	},
 	"tournament":{
 		"#title" : "",
@@ -176,7 +229,9 @@
 		"quarter" : "Quarts de finale",
 		"semi" : "Demi-finales",
 		"final" : "finales",
-		"profile_redirection" : "redirection_profil de ${USERNAME}"
+		"profile_redirection" : "Redirection vers le profil de ${USERNAME}",
+		"tournament title" : "Tournoi - transcendence",
+		".errorSettingAriaLabels" : "Erreur lors de la définition des étiquettes aria du tournoi"
 	},
 	"match" : {
 		"#title" : "",
@@ -193,18 +248,21 @@
 
 		".landscape #totalExchangeTitle" : "Total",
 		".landscape #averageExchangeTitle" : "Moyenne par point",
-		".landscape #longestExchangeTitle" : "Le plus long"
+		".landscape #longestExchangeTitle" : "Le plus long",
+		"match title" : "Match - transcendence"
 	},
 	"404":{
 		"#title" : "ERREUR 404",
 		"#subtitle" : "",
 		"#NotFoundtitle" : "Oh non, cette page n'existe pas :(",
-		"#NotFoundBtn" : "ACCUEIL"
+		"#NotFoundBtn" : "ACCUEIL",
+		"404 title" : "404 - transcendence"
 	},
 	"403":{
 		"#title" : "ERREUR 403",
 		"#subtitle" : "",
 		"#ForbidenTitle" : "Vous n'êtes pas censé être ici >:(",
-		"#ForbidenBtn" : "ACCUEIL"
+		"#ForbidenBtn" : "ACCUEIL",
+		"403 title" : "403 - transcendence"
 	}
 }

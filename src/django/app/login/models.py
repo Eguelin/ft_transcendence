@@ -10,7 +10,7 @@ class Profile(models.Model):
 	display_name = models.CharField(max_length=15, default="Player")
 	theme_name = models.CharField(max_length=10, default="dark")
 	profile_picture = models.TextField(default="/images/defaults/default0.jpg")
-	language_pack = models.CharField(max_length=40, default="lang/EN_UK.json")
+	language_pack = models.CharField(max_length=5, default="EN_UK")
 	friends = models.ManyToManyField(User, related_name="friends_list")
 	friends_request = models.ManyToManyField(User, related_name="friends_request_list")
 	is_active = models.BooleanField(default=False)
