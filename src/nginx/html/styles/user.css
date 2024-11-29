@@ -291,6 +291,10 @@
 	height: 7rem;
 }
 
+.matchResumeWinner{
+	display: none !important;
+}
+
 
 #profileGraphs {
 	display: flex;
