@@ -211,11 +211,11 @@ def create_deleted_user():
 	return create_npc("deleted", "default0.jpg")
 
 def create_default_users():
-	create_npc("AI", "defaultAi.gif")
-	create_npc("nobody", "thisman.jpg")
-	create_npc("deleted", "defaultDeleted.jpg")
-	create_npc("blocked", "defaultBlocked.jpg")
-	create_npc(os.getenv('DJANGO_ADMIN_USER'), "default0.jpg", os.getenv('DJANGO_ADMIN_PASSWORD'), True)
+	create_npc("AI", "ai.gif")
+	create_npc("nobody", "nobody.jpg")
+	create_npc("deleted", "deleted.jpg")
+	create_npc("blocked", "blocked.jpg")
+	create_npc(os.getenv('DJANGO_ADMIN_USER'), "admin.jpg", os.getenv('DJANGO_ADMIN_PASSWORD'), True)
 
 def create_npc(name, pfp, password=None, staff=False):
 	if User.objects.filter(username=name).exists():
