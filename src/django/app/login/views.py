@@ -64,9 +64,17 @@ def fortytwo(request):
 
 	user_json = response.json()
 	user_login = user_json.get('login')
-	pfp_url = user_json.get('image', {}).get('link', '')
-	if not pfp_url:
-		pfp_url = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', "/images/defaults/default{0}.jpg".format(random.randint(0, 2)))
+	lang = user_json.get('languages_users', [{}])[0].get('language_id', 2)
+
+	if lang == 1:
+		lang = 'FR_FR'
+	elif lang == 2:
+		lang = 'EN_UK'
+	elif lang == 16:
+		lang = 'IT_IT'
+	elif lang == 21:
+		lang = 'DE_GE'
 
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:8]
@@ -96,13 +104,13 @@ def fortytwo(request):
 			display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
 
 		user.set_password(str(id42))
-		user.save()
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
 		user.profile.is_active = True
 		user.profile.display_name = display_name
+		user.profile.language_pack = lang
+		user.save()
 
-		user.profile.save()
 		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			login(request, user)
