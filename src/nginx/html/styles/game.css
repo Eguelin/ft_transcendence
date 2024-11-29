@@ -19,8 +19,14 @@
 
 .game{
 	width: 50vw;
-	height: 37.5vw;
 	border: var(--main-text-rgb) 5px solid;
+}
+
+@media screen and (orientation:portrait) {
+	.game{
+		width: 50vh;
+	}
+	
 }
 
 .playerInfoContainer{
@@ -730,8 +736,8 @@ table.landscape{
 		flex-direction: row;
 		flex-wrap: wrap;
 	}
-	.playerInfoContainer{
-		width: calc(50% - 1rem);
+	.playerInfoContainer{/*
+		width: calc(50% - 1rem);*/
 	}
 }
 

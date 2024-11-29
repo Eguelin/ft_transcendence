@@ -2090,6 +2090,7 @@ function checkGameSize(){
 				document.querySelector("#game").style.setProperty("rotate", "90deg");
 				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column");
 				document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column");
+
 				playerKeyMap = keyMap;
 				playerTouchMap = FullInversedKeyMap;
 			}
