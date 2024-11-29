@@ -517,7 +517,7 @@ function handleToken() {
 							if (!client)
 								myReplaceState(`https://${hostname.host}/${currentLang}/login${hostname.hash}`);
 							else {
-								//friendUpdate();
+								friendUpdate();
 								myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 							}
 						}
@@ -638,7 +638,7 @@ window.addEventListener("beforeunload", (e) => {
 })
 
 homeBtn.addEventListener("click", (e) => {
-	//friendUpdate();
+	friendUpdate();
 })
 
 homeBtn.addEventListener("keydown", (e) => {
