@@ -1,4 +1,4 @@
-import json, os, requests, base64, random, string, datetime,zxcvbn, re, io
+import json, os, requests, base64, random, string, datetime, re, io
 import game.models as gameModels
 from django.contrib.auth import login, authenticate, logout
 from django.db import DatabaseError
@@ -137,12 +137,20 @@ def check_password(password, staff=False):
 
 	if len(password) > 128:
 		return False, 'Password too long'
-	if len(password) == 0:
+	if len(password) < 8:
 		return False, 'Password too short'
 
-	result = zxcvbn.zxcvbn(password)
-	if result['score'] < 4 and not DEBUG:
-		return False, 'Password too weak'
+	if DEBUG:
+		return True, None
+
+	if not any(c.isupper() for c in password):
+		return False, 'Password must contain at least one uppercase letter'
+	if not any(c.islower() for c in password):
+		return False, 'Password must contain at least one lowercase letter'
+	if not any(c.isdigit() for c in password):
+		return False, 'Password must contain at least one digit'
+	if not any(c in string.punctuation for c in password):
+		return False, 'Password must contain at least one special character'
 
 	return True, None
 
@@ -168,6 +176,14 @@ def create_user(request, staff=False):
 		return JsonResponse({'message': message}, status=400)
 
 	valid, message = check_password(password, staff)
+	if not valid:
+		return JsonResponse({'message': message}, status=400)
+
+	valid, message = check_language_pack(language)
+	if not valid:
+		return JsonResponse({'message': message}, status=400)
+
+	valid, message = check_theme_name(theme_name)
 	if not valid:
 		return JsonResponse({'message': message}, status=400)
 
@@ -305,11 +321,27 @@ def set_pfp(user, pfp):
 	if os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
 		os.remove(user.profile.profile_picture)
 
-	pfpName = f"/images/{user.username}.{image.format.lower()}"
+	pfpName = f"/images/{user.username}_{''.join(random.choices(string.ascii_lowercase + string.digits, k=6))}.{image.format.lower()}"
 	with open(pfpName, "wb", opener=file_opener) as f:
 		f.write(image_data)
 
 	user.profile.profile_picture = pfpName
+	return True, None
+
+def check_language_pack(language):
+	languages = ["DE_GE", "EN_UK", "FR_FR", "IT_IT"]
+	if not language or not isinstance(language, str):
+		return False, 'Invalid language_pack value, should be a string'
+	if language not in languages:
+		return False, "Invalid language_pack value, should be 'DE_GE', 'EN_UK', 'FR_FR' or 'IT_IT"
+	return True, None
+
+def check_theme_name(theme):
+	themes = ["dark", "light", "high_dark", "high_light", "browser"]
+	if not theme or not isinstance(theme, str):
+		return False, 'Invalid theme_name value, should be a string'
+	if theme not in themes:
+		return False, "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'"
 	return True, None
 
 def profile_update(request):
@@ -325,7 +357,6 @@ def profile_update(request):
 			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
-
 
 	user = request.user
 	boolean_fields = ["do_not_disturb", "is_active"]
@@ -374,16 +405,9 @@ def profile_update(request):
 			return JsonResponse({'message': message}, status=400)
 
 	if ("language_pack" in data):
-		valid = True
-		languages = ["lang/DE_GE.json",
-					"lang/EN_UK.json",
-					"lang/FR_FR.json",
-					"lang/IT_IT.json"]
-		language = data['language_pack']
-		if not language or not isinstance(language, str):
-			return JsonResponse({'message': 'Invalid language_pack value, should be a string'}, status=400)
-		if language not in languages:
-			return JsonResponse({'message': "Invalid language_pack value, should be 'lang/DE_GE.json', 'lang/EN_UK.json', 'lang/FR_FR.json' or 'lang/IT_IT.json"}, status=400)
+		valid, message = check_language_pack(data['language_pack'])
+		if not valid:
+			return JsonResponse({'message': message}, status=400)
 		user.profile.language_pack = data['language_pack']
 
 	if ("font_amplifier" in data):
@@ -396,15 +420,9 @@ def profile_update(request):
 		user.profile.font_amplifier = size
 
 	if "theme_name" in data:
-		valid = True
-		themes = ["dark", "light", "high_dark", "high_light", "browser"]
-		theme = data['theme_name']
-
-		if not theme or not isinstance(theme, str):
-			return JsonResponse({'message': 'Invalid theme_name value, should be a string'}, status=400)
-		if theme not in themes:
-			return JsonResponse({'message': "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'"}, status=400)
-
+		valid, message = check_theme_name(data['theme_name'])
+		if not valid:
+			return JsonResponse({'message': message}, status=400)
 		user.profile.theme_name = data['theme_name']
 
 	if (valid == False):
@@ -613,7 +631,7 @@ def get(request):
 
 	try:
 		data = json.loads(request.body)
-		
+
 		if not isinstance(data, dict):
 			return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 

@@ -89,9 +89,6 @@ var accessibilitySlide = `
 			<li>
 				<a id="IT_IT" lang="it" tabindex="24" class="settingsLangDropDown">Italiano</a>
 			</li>
-			<li>
-				<a id="AR_GH" lang="" tabindex="25" class="settingsLangDropDown">Pirate</a>
-			</li>
 		</ul>
 	</div>
 </div>`
@@ -353,13 +350,13 @@ var template = `
 								popUpError(response.message);
 							unsetLoader();
 						})
-	
+
 					}
 				})
 			}
 		})
 		document.querySelector("#confirmChangePasswordBtn").addEventListener("keydown", (e) => {if (e.key == "Enter"){e.target.click();}});
-	
+
 		document.querySelector("#changePasswordBtn").addEventListener("click", (e) => {
 			window.onkeydown = null
 			document.getElementById("popupBg").style.setProperty("display", "block");
