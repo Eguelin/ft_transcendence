@@ -79,7 +79,6 @@ const accessibilitySlideTabIdxMap = {
 	"#FR_FR" : "22",
 	"#DE_GE" : "23",
 	"#IT_IT" : "24",
-	"#AR_GH" : "25",
 }
 
 const errorMap = {
@@ -256,7 +255,7 @@ class Client {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({"language_pack": this.currentLangPack }),
+					body: JSON.stringify({"language_pack": this.currentLang }),
 					credentials: 'include'
 				})
 			}
@@ -1189,10 +1188,23 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	}
 })
 
+function updateNotifAriaLabel(){
+	document.querySelectorAll(".notifContainer").forEach(function(elem){
+		elem.setAttribute("aria-label", `${langJson['index']['aria.notifContainer'].replace("${MESSAGE}", elem.innerText)}`);
+	})
+	document.querySelectorAll(".notifAccept").forEach(function (elem){
+		elem.setAttribute("aria-label", langJson['index']['aria.notifAccept']);
+	})
+	document.querySelectorAll(".notifReject").forEach(function (elem){
+		elem.setAttribute("aria-label", langJson['index']['aria.notifReject']);
+	})
+}
+
 function sendNotif(message, id, type) {
 	var notifContainer = document.createElement("div");
 	var notifCenter = document.getElementById("notifCenter");
 	notifContainer.classList.add("notifContainer");
+	notifContainer.setAttribute("aria-label", `${langJson['index']['aria.notifContainer'].replace("${MESSAGE}", message)}`);
 	notifContainer.innerHTML = `
 	<a class="notifMessage ${type}">${message}</a>
 	<div style="display:none !important" id="notifId"></div>
@@ -1232,6 +1244,8 @@ function sendNotif(message, id, type) {
 	}
 	notifContainer.querySelector(".notifAccept").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
 	notifContainer.querySelector(".notifReject").onkeydown = function(e){if (e.key == "Enter") {e.target.click();}};
+	notifContainer.querySelector(".notifAccept").setAttribute("aria-label", langJson['index']['aria.notifAccept']);
+	notifContainer.querySelector(".notifReject").setAttribute("aria-label", langJson['index']['aria.notifReject']);
 
 	notifCenter.insertBefore(notifContainer, notifCenter.firstChild);
 	if (!(notifCenterContainer.classList.contains("openCenter") || notifCenterContainer.classList.contains("quickOpenCenter"))) {
@@ -1618,6 +1632,7 @@ async function loadCurrentLang(){
 		content = langJson['index'];
 		if (content != null || content != undefined) {
 			var searchBar = document.querySelector("#inputSearchUser");
+			updateNotifAriaLabel();
 			if (content["#inputSearchUser"].length > 15){
 				searchBar.style.setProperty("width", `${content["#inputSearchUser"].length}ch`)
 			}
@@ -2229,3 +2244,9 @@ function rollThemes(timeout = 1000){
 	setTimeout(()=>{switchTheme("high_light")}, timeout * 2);
 	setTimeout(()=>{switchTheme("high_dark")}, timeout * 3);
 }
+
+window.addEventListener("keyup", (e) => {	//to check screen reader accessibility
+	if (e.key == "Tab"){
+		console.log(e.target, e.target.innerText, e.target.getAttribute("aria-label"));
+	}
+})
