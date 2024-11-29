@@ -71,7 +71,11 @@
 		".inputRegisterCPasswordCantBeEmpty" : "La confirmation du mot de passe ne peut pas être vide",
 		".mismatchPassword" : "Les mots de passe ne correspondent pas",
 		".forbidenChars" : "Le nom d'utilisateur doit être alphanumérique",
-		".usernameTooLong" : "Le nom d'utilisateur doit comporter 15 caractères ou moins"
+		".usernameTooLong" : "Le nom d'utilisateur doit comporter 15 caractères ou moins",
+		".passwordMissingLowerCase" : "Le mot de passe doit contenir au moins une lettre majuscule",
+		".passwordMissingUpperCase" : "Le mot de passe doit contenir au moins une lettre minuscule",
+		".passwordMissingDigit" : "Le mot de passe doit contenir au moins un chiffre",
+		".passwordMissingSpec" : "Le mot de passe doit contenir au moins un caractère spécial"
 	},
 	"settings": {
 		"#title" : "",
@@ -117,7 +121,10 @@
 		".mismatchPassword" : "Les mots de passe ne correspondent pas",
 		".forbidenChars" : "Le nom d'utilisateur doit être alphanumérique",
 		".usernameTooLong" : "Le nom d'utilisateur doit comporter 15 caractères ou moins",
-		".fileTooBig" : "Le fichier envoyé est trop volumineux"
+		".fileTooBig" : "Le fichier envoyé est trop volumineux",
+		"invalidValue" : "Valeur invalide",
+		"invalidLanguagePack" : "Nom du dictionnaire non valide, doit être 'DE_GE', 'EN_UK', 'FR_FR' ou 'IT_IT",
+		"invalidThemeName" : "Nom de thème non valide, doit être 'dark', 'light', 'high_dark', 'high_light' ou 'browser'"
 	},
 	"friends":{
 		"#title" : "",

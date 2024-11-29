@@ -71,7 +71,12 @@
 		".inputRegisterCPasswordCantBeEmpty" : "Confirm password can't be empty",
 		".mismatchPassword" : "Passwords do not match",
 		".forbidenChars" : "Username must be alphanumeric",
-		".usernameTooLong" : "Username must be 15 characters or fewer"
+		".usernameTooLong" : "Username must be 15 characters or fewer",
+		".passwordMissingLowerCase" : "Password must contain at least one uppercase letter",
+		".passwordMissingUpperCase" : "Password must contain at least one lowercase letter",
+		".passwordMissingDigit" : "Password must contain at least one digit",
+		".passwordMissingSpec" : "Password must contain at least one special character"
+	
 	},
 	"settings": {
 		"#title" : "",
@@ -117,7 +122,10 @@
 		".mismatchPassword" : "Passwords do not match",
 		".forbidenChars" : "Username must be alphanumeric",
 		".usernameTooLong" : "Username must be 15 characters or fewer",
-		".fileTooBig" : "Sent file is too big"
+		".fileTooBig" : "Sent file is too big",
+		"invalidValue" : "Invalid value",
+		"invalidLanguagePack" : "Invalid language_pack value, should be 'DE_GE', 'EN_UK', 'FR_FR' or 'IT_IT",
+		"invalidThemeName" : "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'"
 	},
 	"friends":{
 		"#title" : "",
