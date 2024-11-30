@@ -1811,34 +1811,36 @@ async function updateUserAriaLabel(dict){
  */
 
 let ua = navigator.userAgent;
-setInterval(function() {
-	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-	if (navigator.userAgent !== ua) {
-		if (isMobile()){
-			document.documentElement.classList.add("mobile");
+if (!isMobile()){
+	setInterval(function() {
+		document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+		if (navigator.userAgent !== ua) {
+			if (isMobile()){
+				document.documentElement.classList.add("mobile");
+			}
+			else{
+				document.documentElement.classList.remove("mobile");
+			}
+			ua = navigator.userAgent;
 		}
-		else{
-			document.documentElement.classList.remove("mobile");
+		checkResizeIndex()
+		if (currentPage == "home" || currentPage == "user"){
+			checkMatchResumeSize()
 		}
-		ua = navigator.userAgent;
-	}
-	checkResizeIndex()
-	if (currentPage == "home" || currentPage == "user"){
-		checkMatchResumeSize()
-	}
-	if (currentPage == "user")
-		checkUserPageSize();
-	if (currentPage == "game")
-		checkGameSize();
-	if (currentPage == "tournament")
-		displayTournament();
-	if (currentPage == "game" || currentPage == "tournament")
-		setTimeout(checkWinnerDisplaySize, 1)
-	if (currentPage == "friends")
-		checkFriendPageSize()
-
-
-}, 500);
+		if (currentPage == "user")
+			checkUserPageSize();
+		if (currentPage == "game")
+			checkGameSize();
+		if (currentPage == "tournament")
+			displayTournament();
+		if (currentPage == "game" || currentPage == "tournament")
+			setTimeout(checkWinnerDisplaySize, 1)
+		if (currentPage == "friends")
+			checkFriendPageSize()
+	
+	
+	}, 500);
+}
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
@@ -2122,18 +2124,17 @@ function checkGameSize(){
 			playerKeyMap = WASDInversedKeyMap;
 		}
 	}
-
 	var container = document.querySelector("#gameDisplay")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	while (parseInt(getElemWidth(container)) <= parseInt(anchor.right) && currentFontSize < baseFontSize){
+	while (getElemWidth(container).toFixed(0) <= anchor.right.toFixed(0) && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
 		})
 		currentFontSize += 1;
 	}
-	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 8){
+	while (getElemWidth(container).toFixed(0) > anchor.right.toFixed(0) && currentFontSize > 8){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
