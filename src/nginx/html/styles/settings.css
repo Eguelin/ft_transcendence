@@ -355,6 +355,12 @@
 	translate: 0 -50%;
 }
 
+#friendSlideSelector .slideSelector > div{
+	position: unset;
+	top: unset;
+	translate: unset;
+}
+
 #changePasswordBtn, #confirmChangePasswordBtn{
 	font-size: 1rem;
 }
