@@ -64,9 +64,17 @@ def fortytwo(request):
 
 	user_json = response.json()
 	user_login = user_json.get('login')
-	pfp_url = user_json.get('image', {}).get('link', '')
-	if not pfp_url:
-		pfp_url = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
+	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', "/images/defaults/default{0}.jpg".format(random.randint(0, 2)))
+	lang = user_json.get('languages_users', [{}])[0].get('language_id', 2)
+
+	if lang == 1:
+		lang = 'FR_FR'
+	elif lang == 2:
+		lang = 'EN_UK'
+	elif lang == 16:
+		lang = 'IT_IT'
+	elif lang == 21:
+		lang = 'DE_GE'
 
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:8]
@@ -88,21 +96,21 @@ def fortytwo(request):
 	except User.DoesNotExist:
 		username = user_login
 		while User.objects.filter(username=username).exists():
-			username = user_login + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+			username = user_login + "_" + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
 		user = User.objects.create_user(username=username)
 
 		display_name = username
 		while User.objects.filter(profile__display_name=display_name).exists():
-			display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+			display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
 
 		user.set_password(str(id42))
-		user.save()
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
 		user.profile.is_active = True
 		user.profile.display_name = display_name
+		user.profile.language_pack = lang
+		user.save()
 
-		user.profile.save()
 		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
 			login(request, user)
@@ -132,16 +140,16 @@ def check_password(password, staff=False):
 	if not password or not isinstance(password, str):
 		return False, 'Invalid password'
 
-	if staff:
-		return True, None
-
 	if len(password) > 128:
-		return False, 'Password too long'
-	if len(password) < 8:
-		return False, 'Password too short'
+		return False, 'Password too long (max 128 characters)'
+	if len(password) == 0:
+		return False, 'empty password'
 
-	if DEBUG:
+	if DEBUG or staff:
 		return True, None
+
+	if len(password) < 8:
+		return False, 'Password too short (min 8 characters)'
 
 	if not any(c.isupper() for c in password):
 		return False, 'Password must contain at least one uppercase letter'
@@ -188,8 +196,12 @@ def create_user(request, staff=False):
 		return JsonResponse({'message': message}, status=400)
 
 	display_name = username
-	while User.objects.filter(profile__display_name=display_name).exists():
-		display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+	for i in range(100):
+		if not User.objects.filter(profile__display_name=display_name).exists():
+			break
+		display_name = username[:8] + '_' + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
+	if User.objects.filter(profile__display_name=display_name).exists():
+		return JsonResponse({'message': 'Too many users with the same display name'}, status=400)
 
 	try:
 		user = User.objects.create_user(username=username, password=password)
@@ -321,7 +333,7 @@ def set_pfp(user, pfp):
 	if os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
 		os.remove(user.profile.profile_picture)
 
-	pfpName = f"/images/{user.username}_{''.join(random.choices(string.ascii_lowercase + string.digits, k=6))}.{image.format.lower()}"
+	pfpName = f"/images/{user.username}_{''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))}.{image.format.lower()}"
 	with open(pfpName, "wb", opener=file_opener) as f:
 		f.write(image_data)
 
