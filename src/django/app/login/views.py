@@ -96,12 +96,12 @@ def fortytwo(request):
 	except User.DoesNotExist:
 		username = user_login
 		while User.objects.filter(username=username).exists():
-			username = user_login + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+			username = user_login + "_" + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
 		user = User.objects.create_user(username=username)
 
 		display_name = username
 		while User.objects.filter(profile__display_name=display_name).exists():
-			display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+			display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
 
 		user.set_password(str(id42))
 		user.profile.profile_picture = pfp_url
@@ -196,8 +196,12 @@ def create_user(request, staff=False):
 		return JsonResponse({'message': message}, status=400)
 
 	display_name = username
-	while User.objects.filter(profile__display_name=display_name).exists():
-		display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+	for i in range(100):
+		if not User.objects.filter(profile__display_name=display_name).exists():
+			break
+		display_name = username[:8] + '_' + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
+	if User.objects.filter(profile__display_name=display_name).exists():
+		return JsonResponse({'message': 'Too many users with the same display name'}, status=400)
 
 	try:
 		user = User.objects.create_user(username=username, password=password)
@@ -329,7 +333,7 @@ def set_pfp(user, pfp):
 	if os.path.exists(user.profile.profile_picture) and user.profile.profile_picture.find("/defaults/") == -1:
 		os.remove(user.profile.profile_picture)
 
-	pfpName = f"/images/{user.username}_{''.join(random.choices(string.ascii_lowercase + string.digits, k=6))}.{image.format.lower()}"
+	pfpName = f"/images/{user.username}_{''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))}.{image.format.lower()}"
 	with open(pfpName, "wb", opener=file_opener) as f:
 		f.write(image_data)
 
