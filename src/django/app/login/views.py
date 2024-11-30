@@ -140,16 +140,16 @@ def check_password(password, staff=False):
 	if not password or not isinstance(password, str):
 		return False, 'Invalid password'
 
-	if staff:
-		return True, None
-
 	if len(password) > 128:
-		return False, 'Password too long'
-	if len(password) < 8:
-		return False, 'Password too short'
+		return False, 'Password too long (max 128 characters)'
+	if len(password) == 0:
+		return False, 'empty password'
 
-	if DEBUG:
+	if DEBUG or staff:
 		return True, None
+
+	if len(password) < 8:
+		return False, 'Password too short (min 8 characters)'
 
 	if not any(c.isupper() for c in password):
 		return False, 'Password must contain at least one uppercase letter'
