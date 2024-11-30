@@ -40,7 +40,7 @@
 		"aria#inputChangeDisplayName" : "Cambia il campo di input del nome visualizzato dell'utente",
 		"aria#saveDisplayNameBtn" : "Pulsante Salva nome visualizzato",
 		"aria#recentMatchHistoryContainer" : "Partite di oggi dell'utente",
-		"ariaResumeMatch.matchDescContainer" : "partita contro ${USERNAME} il ${DATE}",
+		"ariaResume.matchDescContainer": "Partita tra ${USER_ONE} e ${USER_TWO} il ${DATE}, il vincitore è ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Torneo il ${DATE}",
 		"aria.resultScoreName" : "Reindirizzamento al profilo di ${USERNAME}",
 		"home title" : "Home - transcendence",
@@ -173,7 +173,8 @@
 		".loss" : "PERSO",
 		".draw" : "PAREGGIO",
 		".tournament" : "TORNEO",
-		"ariaResume.matchDescContainer" : "partita contro ${USERNAME} il ${DATE}",
+		"ariaResume.matchDescContainer": "Partita tra ${USER_ONE} e ${USER_TWO} il ${DATE}, il vincitore è ${WINNER}",
+		"ariaResumeTournament.matchDescContainer" : "Torneo il ${DATE}",
 		"aria.resultScoreName" : "Reindirizzamento al profilo di ${USERNAME}",
 		"user title" : "${USERNAME} - transcendence"
 	},
