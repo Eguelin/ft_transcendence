@@ -1602,8 +1602,6 @@ async function loadCurrentLang(){
 							updateFriendsAriaLabel(key.substring(4), content[key]);
 						if (currentPage == 'search')
 							updateSearchAriaLabel(key.substring(4), content[key]);
-						if (currentPage == "user" || currentPage == "home")
-							updateUserAriaLabel(key.substring(4), content[key]);
 					}
 					else{
 						document.querySelectorAll(key).forEach( function (elem) {
@@ -1614,6 +1612,9 @@ async function loadCurrentLang(){
 				catch{}
 			});
 			try {
+
+				if (currentPage == "user" || currentPage == "home")
+					updateUserAriaLabel(content);
 				if (currentPage == 'user') {updateUserLang();}
 				if (currentPage == 'dashboard') {updateDashboardLang();}
 				if (currentPage == "game") {
@@ -1734,7 +1735,9 @@ function createMatchResumeContainer(match, username, displayName) {
 			scoreOpponentName.href  = `https://${hostname.host}/${currentLang}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_two : match.player_one}`
 			scoreOpponentName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreOpponentName.innerText)}`);
 		}
-
+		winnerName = ft_create_element("div", {"class" : "matchResumeWinner", "innerText" : match.winner == match.player_one ? match.player_one == match.player_one_display_name ? match.player_one : match.player_one_display_name : match.player_two == match.player_two_display_name ? match.player_two : match.player_two_display_name});
+		matchContainer.appendChild(winnerName);
+		matchContainer.setAttribute("aria-label", client.langJson['user']['ariaResume.matchDescContainer'].replace("${USER_ONE}", scoreUserName.innerText).replace("${USER_TWO}", scoreOpponentName.innerText).replace("${DATE}", match.date).replace("${WINNER}", winnerName.innerText))
 		scoreOpponentName.innerText += ":"
 		scoreUserName.innerText += ":"
 		scoreUserNameContainer = ft_create_element("div", {"class" : "resultScoreNameContainer"});
@@ -1746,6 +1749,9 @@ function createMatchResumeContainer(match, username, displayName) {
 
 		scoreOpponent.appendChild(scoreOpponentNameContainer);
 		scoreOpponent.appendChild(scoreOpponentScore);
+		
+
+
 		if (username == match.winner){
 			result.classList.add("victory");
 			result.innerHTML = client.langJson['user']['.victory'];
@@ -1754,8 +1760,6 @@ function createMatchResumeContainer(match, username, displayName) {
 			result.classList.add("loss");
 			result.innerHTML = client.langJson['user']['.loss'];
 		}
-		//matchContainer.setAttribute("aria-label", `${result.innerText} ${client.langJson['user']['ariaP1.matchDescContainer']} ${scoreOpponentName.innerText} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date.innerText}`);
-
 		scoreContainer.appendChild(scoreUser);
 		scoreContainer.appendChild(scoreOpponent);
 
@@ -1777,30 +1781,23 @@ function createMatchResumeContainer(match, username, displayName) {
 	return (matchContainer);
 }
 
-async function updateUserAriaLabel(key, content){
-	if (key.startsWith("P1")){
-		document.querySelectorAll(key.substring(2)).forEach(function (elem) {
-			var status = elem.querySelectorAll(".matchDescContainerResult")[0];
-			if (!status.classList.contains("tournament")){
-				if (status.classList.contains("victory"))
-					status = client.langJson['user']['.victory'];
-				else if (status.classList.contains("loss"))
-					status = client.langJson['user']['.loss'];
-				else
-					status = client.langJson['user']['.draw'];
-				var opponentName = elem.querySelectorAll(".resultScoreName")[1].innerText;
-				var date = elem.querySelectorAll(".matchDescContainerDate")[0].innerText;
-				elem.setAttribute("aria-label", `${status} ${client.langJson['user']['ariaP1.matchDescContainer']} ${opponentName} ${client.langJson['user']['ariaP2.matchDescContainer']} ${date}`);
-			}
-		})
-	}
-	else{
-		document.querySelectorAll(key).forEach(function (elem){
-			if (elem.classList.contains("resultScoreName")){
-				elem.setAttribute("aria-label", `${elem.innerText} ${content}`);
-			}
-		})
-	}
+async function updateUserAriaLabel(dict){
+	document.querySelectorAll(".matchDescContainer").forEach(function (elem){
+		var status = elem.querySelectorAll(".matchDescContainerResult")[0];
+		var date = elem.querySelector(".matchDescContainerDate").innerText;
+		if (!status.classList.contains("tournament")){
+			var player_one = elem.querySelectorAll(".resultScoreName")[0].innerText.replace(":","");
+			var player_two = elem.querySelectorAll(".resultScoreName")[1].innerText.replace(":","");
+			var winner = elem.querySelector(".matchResumeWinner").innerText
+			elem.setAttribute("aria-label", dict['ariaResume.matchDescContainer'].replace("${USER_ONE}", player_one).replace("${USER_TWO}", player_two).replace("${DATE}", date).replace("${WINNER}", winner));
+		}
+		else{
+			elem.setAttribute("aria-label", dict['ariaResumeTournament.matchDescContainer'].replace("${DATE}", date));
+		}
+	})
+	document.querySelectorAll(".resultScoreName").forEach(function (elem){
+		elem.setAttribute("aria-label", dict['aria.resultScoreName'].replace("${USERNAME}", elem.innerText));
+	})
 }
 
 /*	______  _____  _____  _____  ______ _____

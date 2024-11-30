@@ -40,7 +40,7 @@
 		"aria#inputChangeDisplayName" : "Modifier le champ de saisie du nom d'affichage de l'utilisateur",
 		"aria#saveDisplayNameBtn" : "Bouton Enregistrer le nom d'affichage",
 		"aria#recentMatchHistoryContainer" : "Matchs du jour de l'utilisateur",
-		"ariaResumeMatch.matchDescContainer" : "match contre ${USERNAME} le ${DATE}",
+		"ariaResume.matchDescContainer" : "Match entre ${USER_ONE} et ${USER_TWO} le ${DATE}, le gagnant est ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Tournoi le ${DATE}",
 		"aria.resultScoreName" : "Redirection vers le profil de ${USERNAME}",
 		"home title" : "Accueil - transcendence",
@@ -173,7 +173,8 @@
 		".loss" : "PERDU",
 		".draw" : "ÉGALITÉ",
 		".tournament" : "TOURNOI",
-		"ariaResume.matchDescContainer" : "match contre ${USERNAME} le ${DATE}",
+		"ariaResume.matchDescContainer" : "Match entre ${USER_ONE} et ${USER_TWO} le ${DATE}, le gagnant est ${WINNER}",
+		"ariaResumeTournament.matchDescContainer" : "Tournoi le ${DATE}",
 		"aria.resultScoreName" : "Redirection vers le profil de ${USERNAME}",
 		"user title" : "${USERNAME} - transcendence"
 	},
