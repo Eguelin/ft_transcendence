@@ -1811,42 +1811,41 @@ async function updateUserAriaLabel(dict){
  */
 
 let ua = navigator.userAgent;
-if (!isMobile()){
-	setInterval(function() {
-		document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-		if (navigator.userAgent !== ua) {
-			if (isMobile()){
-				document.documentElement.classList.add("mobile");
-			}
-			else{
-				document.documentElement.classList.remove("mobile");
-			}
-			ua = navigator.userAgent;
+setInterval(function() {
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+	if (navigator.userAgent !== ua) {
+		if (isMobile()){
+			document.documentElement.classList.add("mobile");
 		}
-		checkResizeIndex()
-		if (currentPage == "home" || currentPage == "user"){
-			checkMatchResumeSize()
+		else{
+			document.documentElement.classList.remove("mobile");
 		}
-		if (currentPage == "user")
-			checkUserPageSize();
-		if (currentPage == "game")
-			checkGameSize();
-		if (currentPage == "tournament")
-			displayTournament();
-		if (currentPage == "game" || currentPage == "tournament")
-			setTimeout(checkWinnerDisplaySize, 1)
-		if (currentPage == "friends")
-			checkFriendPageSize()
-	
-	
-	}, 500);
-}
+		ua = navigator.userAgent;
+	}
+	checkResizeIndex()
+	if (currentPage == "home" || currentPage == "user"){
+		checkMatchResumeSize()
+	}
+	if (currentPage == "user")
+		checkUserPageSize();
+	if (currentPage == "game")
+		checkGameSize();
+	if (currentPage == "tournament")
+		displayTournament();
+	if (currentPage == "game" || currentPage == "tournament")
+		setTimeout(checkWinnerDisplaySize, 1)
+	if (currentPage == "friends")
+		checkFriendPageSize()
+
+
+}, 500);
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
 function isPortrait(){return window.matchMedia("(orientation: portrait)").matches};
 
 window.matchMedia("(orientation: portrait)").onchange = function(e){
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	resizeEvent(e, true);
 	if (currentPage == "match")
 		drawMatchInfoGraph();
