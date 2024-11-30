@@ -471,7 +471,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 				credentials: 'include'
 			}).then(response => {
 				if (response.ok){
-					if (errorMap[data.message] && langJson && langJson['settings'][`.usernameUpdated`])
+					if (langJson && langJson['settings'][`.usernameUpdated`])
 						postMessage(langJson['settings'][`.usernameUpdated`]);
 					else
 						postMessage(data.message);
