@@ -593,7 +593,8 @@ table.landscape{
 			padding: 0 .5ch;
 		}
 		.playerScore{
-			width: 5rem;
+			width: fit-content;
+			min-width: 5rem;
 		}
 
 		.playerPfp{
