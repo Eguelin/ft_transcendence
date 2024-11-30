@@ -463,7 +463,7 @@ function createFriendContainer(user){
 	})
 	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaAll.friendsOptionContainer']}`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['aria #allFriendList .friendsOptionContainer']}`);
 
 	if (user.is_active == true){
 		var clone = friendContainer.cloneNode(true);
@@ -516,7 +516,7 @@ function createFriendRequestContainer(user){
 		elem.remove();
 	})
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaPending.friendsOptionContainer']}`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['aria #pendingFriendRequestList .friendsOptionContainer']}`);
 	pendingFriendRequestListContainer.appendChild(friendContainer);
 }
 
@@ -529,7 +529,7 @@ function createBlockedUserContainer(user){
 
 	var friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['ariaBlocked.friendsOptionContainer']}`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['aria #blockedList .friendsOptionContainer']}`);
 
 	blockedListContainer.appendChild(friendContainer);
 	document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
@@ -683,12 +683,7 @@ function friendKeyDownEvent(e) {
 window.onkeydown = friendKeyDownEvent;
 
 async function updateFriendsAriaLabel(key, content){
-	if (key.startsWith("All"))
-		document.querySelectorAll(key.substring(3)).forEach(function (elem) {
-			elem.setAttribute("aria-label", `${elem.parentElement.id} ${content}`);
-	})
-	if (key.startsWith("Pending") || key.startsWith("Blocked"))
-		document.querySelectorAll(key.substring(7)).forEach(function (elem) {
-			elem.setAttribute("aria-label", `${elem.parentElement.id} ${content}`);
+	document.querySelectorAll(key).forEach(function (elem) {
+		elem.setAttribute("aria-label", `${elem.parentElement.id} ${content}`);
 	})
 }
