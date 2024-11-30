@@ -159,6 +159,7 @@ class Client {
 
 	constructor() {
 		return (async () => {
+	//		popUpError(window.getComputedStyle(document.body).height);
 			try {
 				const fetchResult = await fetch('/api/user/current', {
 					method: 'GET',
@@ -612,6 +613,7 @@ function browser(){
 }
 
 window.addEventListener('load', (e) => {
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
 	if (isMobile()){
@@ -1011,10 +1013,10 @@ function popUpError(error){
 		setTimeout(() => {
 			popupContainer.remove();
 		}, 500)
-	})
+	})/*
 	setTimeout(function (container){
 		container.remove()
-	}, 5000, popupContainer);
+	}, 5000, popupContainer);*/
 	document.getElementById("popupContainer").insertBefore(popupContainer, document.getElementById("popupContainer").firstChild);
 }
 
@@ -1810,6 +1812,7 @@ async function updateUserAriaLabel(dict){
 
 let ua = navigator.userAgent;
 setInterval(function() {
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	if (navigator.userAgent !== ua) {
 		if (isMobile()){
 			document.documentElement.classList.add("mobile");
@@ -1862,7 +1865,7 @@ window.matchMedia("(orientation: portrait)").onchange = function(e){
 };
 
 function resizeEvent(event, orientationChange = false){
-	document.body.offsetWidth;
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	checkResizeIndex()
 	if (orientationChange == false && currentPage == "dashboard")
 		displayCharts();
