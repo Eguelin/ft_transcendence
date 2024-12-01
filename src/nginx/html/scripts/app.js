@@ -95,9 +95,8 @@ const errorMap = {
 	"Error while authenticating" : "authenticationError",
 	"Old password mismatch" : "incorectOldPassword",
 	"Invalid password" : "invalidPassword",
-	"Password too long" : "passwordTooLong",
-	"Password too short" : "passwordTooShort",
-	"Password too weak" : "passwordTooWeak",
+	"Password too long (max 128 characters)" : "passwordTooLong",
+	"Password too short (min 8 characters)" : "passwordTooShort",
 	"Password must contain at least one uppercase letter" : "passwordMissingLowerCase",
 	"Password must contain at least one lowercase letter" : "passwordMissingUpperCase",
 	"Password must contain at least one digit" : "passwordMissingDigit",
@@ -106,6 +105,7 @@ const errorMap = {
 	"Invalid language_pack value, should be 'DE_GE', 'EN_UK', 'FR_FR' or 'IT_IT" : "invalidLanguagePack",
 	"Invalid theme_name value, should be a string" : "invalidValue",
 	"Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'" : "invalidThemeName",
+	"Invalid response from 42 API, try again later" : "invalidResponse",
 }
 
 function addPfpUrlToImgSrc(img, path) {
@@ -1773,7 +1773,7 @@ function createMatchResumeContainer(match, username, displayName) {
 
 		scoreOpponent.appendChild(scoreOpponentNameContainer);
 		scoreOpponent.appendChild(scoreOpponentScore);
-		
+
 
 
 		if (username == match.winner){
