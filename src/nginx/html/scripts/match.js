@@ -331,5 +331,19 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 	matchInfoChart.resize(matchChartSize,matchChartSize);
 	playerOneInfoChart.resize(size,size);
 	playerTwoInfoChart.resize(size,size);
-	unsetLoader()
+	setMatchAriaLabels();
+	unsetLoader();
 }
+
+async function setMatchAriaLabels() {
+	if (!langJson)
+		return
+	document.querySelector("#matchInfoGraph").setAttribute("aria-label", langJson['match']["aria#matchInfoGraph"].replace("${TOP}", playerOneInfo[0] + playerTwoInfo[0]).replace("${CENTER}", playerOneInfo[1] + playerTwoInfo[1]).replace("${BOTTOM}", playerOneInfo[2] + playerTwoInfo[2]));
+	document.querySelector("#playerOneInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerOneInfoGraph"].replace("${USERNAME}", document.querySelector("#playerOne .playerName").innerText).replace("${TOP}", playerOneInfo[0]).replace("${CENTER}", playerOneInfo[1]).replace("${BOTTOM}", playerOneInfo[2]));
+	document.querySelector("#playerTwoInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerTwoInfoGraph"].replace("${USERNAME}", document.querySelector("#playerTwo .playerName").innerText).replace("${TOP}", playerTwoInfo[0]).replace("${CENTER}", playerTwoInfo[1]).replace("${BOTTOM}", playerTwoInfo[2]))
+
+}
+
+//"aria#matchInfoGraph" : "Global match hit zone pie chart, top : ${TOP}, middle : ${MIDDLE}, bottom : ${BOTTOM}",
+//"aria#playerOneInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, middle : ${MIDDLE}, bottom : ${BOTTOM}",
+//"aria#playerTwoInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, middle : ${MIDDLE}, bottom : ${BOTTOM}"

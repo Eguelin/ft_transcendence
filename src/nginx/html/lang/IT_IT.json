@@ -274,7 +274,10 @@
 		".landscape #totalExchangeTitle" : "Totale",
 		".landscape #averageExchangeTitle" : "Media per punto",
 		".landscape #longestExchangeTitle" : "Più lungo",
-		"match title" : "Partita - transcendence"
+		"match title" : "Partita - transcendence",
+		"aria#matchInfoGraph" : "Grafico a torta delle zone di hit della corrispondenza globale, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
+		"aria#playerOneInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
+		"aria#playerTwoInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}"
 	},
 	"404":{
 		"#title" : "ERRORE 404",

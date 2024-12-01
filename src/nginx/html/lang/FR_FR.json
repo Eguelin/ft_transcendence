@@ -256,7 +256,10 @@
 		"final" : "finales",
 		"profile_redirection" : "Redirection vers le profil de ${USERNAME}",
 		"tournament title" : "Tournoi - transcendence",
-		".errorSettingAriaLabels" : "Erreur lors de la définition des étiquettes aria du tournoi"
+		".errorSettingAriaLabels" : "Erreur lors de la définition des étiquettes aria du tournoi",
+		"aria#matchInfoGraph" : "Graphique à secteurs des zones de correspondance globales, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
+		"aria#playerOneInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
+		"aria#playerTwoInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}"
 	},
 	"match" : {
 		"#title" : "",
