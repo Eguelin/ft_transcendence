@@ -1679,6 +1679,10 @@ async function loadCurrentLang(){
 		}
 		if (currentPage == "friends")
 			updateFriendPageSize();
+		if (currentPage == "login")
+			updateLoginPageSize();
+		if (currentPage == "settings")
+			updateSettingsPageSize();
 	}
 }
 
@@ -1899,9 +1903,11 @@ function resizeEvent(event, orientationChange = false){
 			checkMatchSize();
 		if (currentPage == "friends")
 			checkFriendPageSize()
+		if (currentPage == "settings")
+			updateSettingsPageSize();
 	}
-	catch {
-
+	catch (e){
+		console.error(e);
 	}
 }
 
