@@ -918,9 +918,9 @@ usernameBtn.addEventListener("keydown", (e) => {
 
 const langMap = {
 	"EN_UK" : "en-UK",
-	"FR_FR" : "fr",
-	"DE_GE" : "de",
-	"IT_IT" : "it",
+	"FR_FR" : "fr-FR",
+	"DE_GE" : "de-GE",
+	"IT_IT" : "it-IT",
 }
 
 dropDownLangOption.forEach(function (button) {
@@ -1683,6 +1683,7 @@ async function loadCurrentLang(){
 			updateLoginPageSize();
 		if (currentPage == "settings")
 			updateSettingsPageSize();
+		document.documentElement.setAttribute("lang", langMap[currentLang]);
 	}
 }
 
