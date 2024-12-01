@@ -65,11 +65,12 @@ def fortytwo(request):
 	user_json = response.json()
 	try:
 		user_login = user_json['login']
-		pfp_url = user_json['image']['versions']['small']
-		lang = user_json['languages_users'][0]['language_id']
 		id42 = user_json['id']
 	except KeyError:
 		return JsonResponse({'message': "Invalid response from 42 API, try again later"}, status=400)
+
+	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', '/images/defaults/default{0}.jpg'.format(random.randint(0, 2)))
+	lang = user_json.get('languages_users', [{}])[0].get('language_id', 2)
 
 	if lang == 1:
 		lang = 'FR_FR'
