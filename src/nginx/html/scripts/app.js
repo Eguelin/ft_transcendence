@@ -1868,25 +1868,32 @@ window.matchMedia("(orientation: portrait)").onchange = function(e){
 };
 
 function resizeEvent(event, orientationChange = false){
-	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-	checkResizeIndex()
-	if (orientationChange == false && currentPage == "dashboard")
-		displayCharts();
-	if (currentPage == "home" || currentPage == "user"){
-		checkMatchResumeSize()
+	try {
+		document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+		checkResizeIndex()
+		if (currentPage == "login")
+			updateLoginPageSize();
+		if (orientationChange == false && currentPage == "dashboard")
+			displayCharts();
+		if (currentPage == "home" || currentPage == "user"){
+			checkMatchResumeSize()
+		}
+		if (currentPage == "user")
+			checkUserPageSize();
+		if (currentPage == "game")
+			checkGameSize();
+		if (currentPage == "tournament")
+			displayTournament();
+		if (currentPage == "game" || currentPage == "tournament")
+			setTimeout(checkWinnerDisplaySize, 1)
+		if (currentPage == "match")
+			checkMatchSize();
+		if (currentPage == "friends")
+			checkFriendPageSize()
 	}
-	if (currentPage == "user")
-		checkUserPageSize();
-	if (currentPage == "game")
-		checkGameSize();
-	if (currentPage == "tournament")
-		displayTournament();
-	if (currentPage == "game" || currentPage == "tournament")
-		setTimeout(checkWinnerDisplaySize, 1)
-	if (currentPage == "match")
-		checkMatchSize();
-	if (currentPage == "friends")
-		checkFriendPageSize()
+	catch {
+		
+	}
 }
 
 function checkResizeIndex(){
