@@ -278,7 +278,20 @@
 		"match title" : "Match - transcendence",
 		"aria#matchInfoGraph" : "Global match hit zone pie chart, top : ${TOP}, center : ${CENTER}, bottom : ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, center : ${CENTER}, bottom : ${BOTTOM}",
-		"aria#playerTwoInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, center : ${CENTER}, bottom : ${BOTTOM}"
+		"aria#playerTwoInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, center : ${CENTER}, bottom : ${BOTTOM}",
+
+		"aria.portrait #totalExchangeTitle" : "Total : ${VALUE}",
+		"aria.portrait #totalExchange" : "Total : ${VALUE}",
+		"aria.portrait #averageExchangeTitle" : "Average per point : ${VALUE}",
+		"aria.portrait #averageExchange" : "Average per point : ${VALUE}",
+		"aria.portrait #longestExchangeTitle" : "Longest : ${VALUE}",
+		"aria.portrait #longestExchange" : "Longest : ${VALUE}",
+		"aria.landscape #totalExchangeTitle" : "Total : ${VALUE}",
+		"aria.landscape #totalExchange" : "Total : ${VALUE}",
+		"aria.landscape #averageExchangeTitle" : "Average per point : ${VALUE}",
+		"aria.landscape #averageExchange" : "Average per point : ${VALUE}",
+		"aria.landscape #longestExchangeTitle" : "Longest : ${VALUE}",
+		"aria.landscape #longestExchange" : "Longest : ${VALUE}"
 	},
 	"404":{
 		"#title" : "ERROR 404",

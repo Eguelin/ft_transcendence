@@ -259,7 +259,19 @@
 		".errorSettingAriaLabels" : "Erreur lors de la définition des étiquettes aria du tournoi",
 		"aria#matchInfoGraph" : "Graphique à secteurs des zones de correspondance globales, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
-		"aria#playerTwoInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}"
+		"aria#playerTwoInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
+		"aria.portrait #totalExchangeTitle" : "Total : ${VALUE}",
+		"aria.portrait #totalExchange" : "Total : ${VALUE}",
+		"aria.portrait #averageExchangeTitle" : "Moyenne par point : ${VALUE}",
+		"aria.portrait #averageExchange" : "Moyenne par point : ${VALUE}",
+		"aria.portrait #longestExchangeTitle" : "Le plus long : ${VALUE}",
+		"aria.portrait #longestExchange" : "Le plus long : ${VALUE}",
+		"aria.landscape #totalExchangeTitle" : "Total : ${VALUE}",
+		"aria.landscape #totalExchange" : "Total : ${VALUE}",
+		"aria.landscape #averageExchangeTitle" : "Moyenne par point : ${VALUE}",
+		"aria.landscape #averageExchange" : "Moyenne par point : ${VALUE}",
+		"aria.landscape #longestExchangeTitle" : "Le plus long : ${VALUE}",
+		"aria.landscape #longestExchange" : "Le plus long : ${VALUE}"
 	},
 	"match" : {
 		"#title" : "",

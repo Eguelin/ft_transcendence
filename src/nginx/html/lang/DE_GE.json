@@ -277,7 +277,19 @@
 		"match title" : "Spiel - transcendence",
 		"aria#matchInfoGraph" : "Kreisdiagramm der globalen Trefferzone, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
-		"aria#playerTwoInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}"
+		"aria#playerTwoInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
+		"aria.portrait #totalExchangeTitle" : "Gesamt: ${VALUE}",
+		"aria.portrait #totalExchange" : "Gesamt: ${VALUE}",
+		"aria.portrait #averageExchangeTitle" : "Durchschnitt pro Punkt: ${VALUE}",
+		"aria.portrait #averageExchange" : "Durchschnitt pro Punkt: ${VALUE}",
+		"aria.portrait #longestExchangeTitle" : "Längste: ${VALUE}",
+		"aria.portrait #longestExchange" : "Längste: ${VALUE}",
+		"aria.landscape #totalExchangeTitle" : "Gesamt: ${VALUE}",
+		"aria.landscape #totalExchange" : "Gesamt: ${VALUE}",
+		"aria.landscape #averageExchangeTitle" : "Durchschnitt pro Punkt: ${VALUE}",
+		"aria.landscape #averageExchange" : "Durchschnitt pro Punkt: ${VALUE}",
+		"aria.landscape #longestExchangeTitle" : "Längste: ${VALUE}",
+		"aria.landscape #longestExchange" : "Längste: ${VALUE}"
 	},
 	"404":{
 		"#title" : "FEHLER 404",

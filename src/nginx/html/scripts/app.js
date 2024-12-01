@@ -951,7 +951,7 @@ dropDownLangOption.forEach(function (button) {
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						body: JSON.stringify({ language_pack: currentLangPack }),
+						body: JSON.stringify({ language_pack: button.id }),
 						credentials: 'include'
 					})
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
