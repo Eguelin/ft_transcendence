@@ -937,7 +937,12 @@ dropDownLangOption.forEach(function (button) {
 				loadCurrentLang();
 				document.documentElement.setAttribute("lang", langMap[button.id]);
 				url = new URL(window.location.href);
-				history.replaceState("","",`https://${hostname.host}${url.pathname.replace(currentLang, button.id)}`);
+				history.replaceState("","",url.href.replace(currentLang, button.id));
+				document.querySelectorAll("a").forEach(function(elem){
+					if (elem.getAttribute("href"))
+						elem.setAttribute("href", elem.getAttribute("href").replace(currentLang, button.id))
+				})
+
 				currentLang = button.id;
 				if (client) {
 					fetch('/api/user/update', {
@@ -951,7 +956,7 @@ dropDownLangOption.forEach(function (button) {
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
 				}
 			}
-			catch {
+			catch (e){
 				if (langJson && langJson['index']['.errorLoadLangPack'])
 					popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", button.id));
 				else
