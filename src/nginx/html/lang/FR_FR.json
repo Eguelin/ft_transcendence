@@ -271,7 +271,9 @@
 		"aria.landscape #averageExchangeTitle" : "Moyenne par point : ${VALUE}",
 		"aria.landscape #averageExchange" : "Moyenne par point : ${VALUE}",
 		"aria.landscape #longestExchangeTitle" : "Le plus long : ${VALUE}",
-		"aria.landscape #longestExchange" : "Le plus long : ${VALUE}"
+		"aria.landscape #longestExchange" : "Le plus long : ${VALUE}",
+		"aria#playerOnePfp" : "Photo de profil ${USERNAME}",
+		"aria#playerTwoPfp" : "Photo de profil ${USERNAME}"
 	},
 	"match" : {
 		"#title" : "",

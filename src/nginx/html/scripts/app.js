@@ -1013,7 +1013,6 @@ window.addEventListener("click", (e) => {
 		myPushState(`${e.target.href}`);
 
 	}
-
 })
 
 function popUpError(error){
@@ -1690,7 +1689,7 @@ async function loadCurrentLang(){
 		if (currentPage == "settings")
 			updateSettingsPageSize();
 		if (currentPage == "match")
-			setMatchAriaLabels();
+			drawMatchInfoGraph();
 		document.documentElement.setAttribute("lang", langMap[currentLang]);
 	}
 }
@@ -1862,8 +1861,6 @@ setInterval(function() {
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "friends")
 		checkFriendPageSize()
-
-
 }, 500);
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};

@@ -331,11 +331,11 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 	matchInfoChart.resize(matchChartSize,matchChartSize);
 	playerOneInfoChart.resize(size,size);
 	playerTwoInfoChart.resize(size,size);
-	setMatchAriaLabels();
+	updateMatchVariableText();
 	unsetLoader();
 }
 
-async function setMatchAriaLabels() {
+async function updateMatchVariableText() {
 	if (!langJson)
 		return
 	document.querySelector("#matchInfoGraph").setAttribute("aria-label", langJson['match']["aria#matchInfoGraph"].replace("${TOP}", playerOneInfo[0] + playerTwoInfo[0]).replace("${CENTER}", playerOneInfo[1] + playerTwoInfo[1]).replace("${BOTTOM}", playerOneInfo[2] + playerTwoInfo[2]));
@@ -354,4 +354,7 @@ async function setMatchAriaLabels() {
 	document.querySelector(".landscape #averageExchange").setAttribute("aria-label", langJson['match']['aria.landscape #averageExchange'].replace("${VALUE}", document.querySelector(".landscape #averageExchange").innerText));
 	document.querySelector(".landscape #longestExchangeTitle").setAttribute("aria-label", langJson['match']['aria.landscape #longestExchangeTitle'].replace("${VALUE}", document.querySelector(".landscape #longestExchange").innerText));
 	document.querySelector(".landscape #longestExchange").setAttribute("aria-label", langJson['match']['aria.landscape #longestExchange'].replace("${VALUE}", document.querySelector(".landscape #longestExchange").innerText));
+
+	document.querySelector("#playerOnePfp").setAttribute("aria-label", langJson['match']["aria#playerOnePfp"].replace("${USERNAME}",document.querySelector("#playerOne .playerName").innerText))
+	document.querySelector("#playerTwoPfp").setAttribute("aria-label", langJson['match']["aria#playerTwoPfp"].replace("${USERNAME}",document.querySelector("#playerTwo .playerName").innerText))
 }
