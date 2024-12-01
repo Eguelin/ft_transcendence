@@ -247,7 +247,7 @@
 		"#title" : "",
 		"tournamentSubtitle" : "Tournoi",
 		"matchResume" : "${MATCH_NUMBER} de ${ROUND}, le gagnant est ${WINNER_USERNAME} et le perdant est ${LOSER_USERNAME}",
-		"one" : "Premier",
+		"one" : "Premiere",
 		"two" : "Deuxième",
 		"three" : "Troisième",
 		"four" : "Quatrième",
