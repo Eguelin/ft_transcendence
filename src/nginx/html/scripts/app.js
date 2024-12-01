@@ -1689,6 +1689,8 @@ async function loadCurrentLang(){
 			updateLoginPageSize();
 		if (currentPage == "settings")
 			updateSettingsPageSize();
+		if (currentPage == "match")
+			setMatchAriaLabels();
 		document.documentElement.setAttribute("lang", langMap[currentLang]);
 	}
 }
