@@ -10,7 +10,7 @@ var friendSlides;
 var slideSelector;
 var friendSlideIdx = 0;
 var slides;
-
+var slideSelectorBg
 var baseTabIdx = 15;
 
 var template = `
@@ -86,6 +86,7 @@ var template = `
 	friendInfo = document.getElementById("friendInfo");
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
+	slideSelectorBg = document.querySelector("#slideSelectorBg");
 	const url = new URL(window.location.href);
 	history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${url.hash}`)
 	var friendSlideIdx = 0;
@@ -106,7 +107,9 @@ var template = `
 	setNotifTabIndexes(16);
 
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
-	document.getElementById("slideSelectorBg").style.setProperty("left", `${25 * friendSlideIdx}%`);
+	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`)
 	document.getElementById("friendSlides").style.setProperty("left", `-${friendSlideIdx}00vw`);
 
 	slideSelector.forEach(function(key) {
@@ -120,33 +123,8 @@ var template = `
 					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
 				}
 				slideSelector[friendSlideIdx].classList.add("activeSelector");
-				var tmp = document.querySelector("#friendSlides");
-				var left = tmp.getBoundingClientRect().left;
-				var move = [
-					{ left: `${left}px`},
-					{ left: `-${friendSlideIdx}00vw`}
-				];
-				var time = {
-					duration: 500,
-					iterations: 1,
-				}
-				tmp.animate(move, time);
-				tmp.style.setProperty("left", `-${friendSlideIdx}00vw`)
+				settingsSlide(save, friendSlideIdx);
 
-				tmp = document.querySelector("#slideSelectorBg");
-				move = [
-					{ left: `${save * 25}%`},
-					{ left: `${friendSlideIdx * 25}%`}
-				];
-				time = {
-					duration: 500,
-					iterations: 1,
-				}
-				tmp.animate(move, time);
-				tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
-				setTabIndexes(friendSlideIdx);
-				history.replaceState("", "", `https://${hostname.host}/${currentLang}/friends${friendHashMap[friendSlideIdx]}`)
-				document.title = langJson['friends'][`${friendHashMap[friendSlideIdx].replace("#","")} title`];
 			})
 			key.addEventListener("keydown", (e) => {
 				if (e.key == "Enter"){
@@ -348,10 +326,10 @@ function createUserContainer(user){
 	blockFriendBtn.setAttribute("aria-label", client.langJson['friends']['aria.blockFriendBtn']);
 
 	acceptBtn.className = "acceptRequestBtn";
-	acceptBtn.setAttribute("aria-label", client.langJson['friends']['aria.acceptFriendBtn']);
+	acceptBtn.setAttribute("aria-label", client.langJson['friends']['aria.acceptRequestBtn']);
 
 	rejectBtn.className = "rejectRequestBtn";
-	rejectBtn.setAttribute("aria-label", client.langJson['friends']['aria.rejectFriendBtn']);
+	rejectBtn.setAttribute("aria-label", client.langJson['friends']['aria.rejectRequestBtn']);
 
 	unblockBtn.className = "unblockBtn";
 	unblockBtn.setAttribute("aria-label", client.langJson['friends']['aria.unblockBtn']);
@@ -649,41 +627,55 @@ function friendKeyDownEvent(e) {
 			friendSlideIdx = friendSlides.length - 1;
 		slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
 		slideSelector[friendSlideIdx].focus();
-
-		var tmp = document.querySelector("#friendSlides");
-		var left = tmp.getBoundingClientRect().left;
-		var move = [
-			{ left: `${left}px`},
-			{ left: `-${friendSlideIdx}00%`}
-		];
-		var time = {
-			duration: 500,
-			iterations: 1,
-		}
-		tmp.animate(move, time);
-		tmp.style.setProperty("left", `-${friendSlideIdx}00%`)
-
-		tmp = document.querySelector("#slideSelectorBg");
-		move = [
-			{ left: `${save * 25}%`},
-			{ left: `${friendSlideIdx * 25}%`}
-		];
-		time = {
-			duration: 500,
-			iterations: 1,
-		}
-		tmp.animate(move, time);
-		tmp.style.setProperty("left", `${friendSlideIdx * 25}%`)
-		history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${friendHashMap[friendSlideIdx]}`)
-		document.title = langJson['friends'][`${friendHashMap[friendSlideIdx].replace("#","")} title`];
-		setTabIndexes(friendSlideIdx);
+		settingsSlide(save, friendSlideIdx)
 	}
 }
 
 window.onkeydown = friendKeyDownEvent;
 
 async function updateFriendsAriaLabel(key, content){
+	console.log(key);
 	document.querySelectorAll(key).forEach(function (elem) {
 		elem.setAttribute("aria-label", `${elem.parentElement.id} ${content}`);
 	})
+}
+
+function settingsSlide(formerIdx, newerIdx){
+	
+	var tmp = document.querySelector("#friendSlides");
+	var left = tmp.getBoundingClientRect().left;
+	var move = [
+		{ left: `${left}px`},
+		{ left: `-${friendSlideIdx}00%`}
+	];
+	var time = {
+		duration: 500,
+		iterations: 1,
+	}
+	tmp.animate(move, time);
+	tmp.style.setProperty("left", `-${friendSlideIdx}00%`)
+
+	var prevSelectorElem = slideSelector[formerIdx];
+	var newSelectorElem = slideSelector[newerIdx];
+	move = [
+		{ left: `${prevSelectorElem.getBoundingClientRect().left}px`, width: `${prevSelectorElem.getBoundingClientRect().width}px`, height: `${prevSelectorElem.getBoundingClientRect().height}px`},
+		{ left: `${newSelectorElem.getBoundingClientRect().left}px`, width: `${newSelectorElem.getBoundingClientRect().width}px`, height: `${newSelectorElem.getBoundingClientRect().height}px`},
+	];
+	time = {
+		duration: 500,
+		iterations: 1,
+	}
+	slideSelectorBg.animate(move, time);
+	slideSelectorBg.style.setProperty("left", `${newSelectorElem.getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${newSelectorElem.getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${newSelectorElem.getBoundingClientRect().height}px`)
+	history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${friendHashMap[newerIdx]}`)
+	document.title = langJson['friends'][`${friendHashMap[newerIdx].replace("#","")} title`];
+	setTabIndexes(friendSlideIdx);
+}
+
+function updateFriendPageSize(){
+	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`)
 }

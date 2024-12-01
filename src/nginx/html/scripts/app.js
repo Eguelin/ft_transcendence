@@ -1668,6 +1668,8 @@ async function loadCurrentLang(){
 			document.querySelector("#settingsBtn").href = `/${currentLang}/settings`;
 			document.querySelector("#logOutBtn").href = `/${currentLang}/login`;
 		}
+		if (currentPage == "friends")
+			updateFriendPageSize();
 	}
 }
 
@@ -1982,7 +1984,7 @@ function checkUserPageSize(){
 }
 
 function checkFriendPageSize(){
-
+	updateFriendPageSize();
 	var texts = document.querySelectorAll("#friendInfo .slideSelector .slideSelectorText");
 	var ancestor = document.querySelector("#friendSlideSelector");
 	if (texts.length == 0 || !ancestor)

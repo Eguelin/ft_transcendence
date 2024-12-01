@@ -190,6 +190,7 @@
 	width: fit-content;
 	min-width: 50vw;
 	height: 3rem;
+	min-height: fit-content;
 	position: relative;
 }
 #friendSlideSelector .slideSelector{
