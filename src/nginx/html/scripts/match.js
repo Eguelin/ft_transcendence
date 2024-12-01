@@ -153,8 +153,8 @@ var template = `
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
 			}
 
-			document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_one_pts);
-			document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['points'].replace("${POINTS}", match.player_two_pts);
+			document.querySelector("#matchContainer #playerOne .playerInfo > .playerScore").innerText = client.langJson['match']['.playerScore'].replace("${POINTS}", match.player_one_pts);
+			document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['.playerScore'].replace("${POINTS}", match.player_two_pts);
 
 			document.querySelector("#matchContainer .portrait #totalExchange").innerText = match.exchanges;
 			document.querySelector("#matchContainer .portrait #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
@@ -357,4 +357,8 @@ async function updateMatchVariableText() {
 
 	document.querySelector("#playerOnePfp").setAttribute("aria-label", langJson['match']["aria#playerOnePfp"].replace("${USERNAME}",document.querySelector("#playerOne .playerName").innerText))
 	document.querySelector("#playerTwoPfp").setAttribute("aria-label", langJson['match']["aria#playerTwoPfp"].replace("${USERNAME}",document.querySelector("#playerTwo .playerName").innerText))
+
+	document.querySelector("#playerOne .playerScore").innerText = client.langJson['match']['.playerScore'].replace("${POINTS}", playerOneInfo[0] + playerOneInfo[1] + playerOneInfo[2]);
+	document.querySelector("#playerTwo .playerScore").innerText = client.langJson['match']['.playerScore'].replace("${POINTS}", playerTwoInfo[0] + playerTwoInfo[1] + playerTwoInfo[2]);
+
 }

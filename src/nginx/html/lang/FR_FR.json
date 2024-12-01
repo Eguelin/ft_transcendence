@@ -256,7 +256,26 @@
 		"final" : "finales",
 		"profile_redirection" : "Redirection vers le profil de ${USERNAME}",
 		"tournament title" : "Tournoi - transcendence",
-		".errorSettingAriaLabels" : "Erreur lors de la définition des étiquettes aria du tournoi",
+		".errorSettingAriaLabels" : "Erreur lors de la définition des étiquettes aria du tournoi"
+	},
+	"match" : {
+		"#title" : "",
+		"exchange stats" : "Nombre total d'échanges : ${NUMBER_OF_EXCHANGE}\nNombre moyen d'échanges par point : ${AVERAGE_EXCHANGE}\nÉchange le plus long : ${LONGEST}",
+		"up": "Coin supérieur",
+		"mid": "Centre",
+		"down": "Coin inférieur",
+		"CVmatchInfoGraph": "Zone la plus touchée",
+		".graphTitle": "Zone la plus touchée",
+		".playerScore" : "${POINTS} points",
+		".exchangeTablesCaption" : "Statistiques des échanges",
+		".portrait #totalExchangeTitle" : "Total",
+		".portrait #averageExchangeTitle" : "Moyenne par point",
+		".portrait #longestExchangeTitle" : "Le plus long",
+
+		".landscape #totalExchangeTitle" : "Total",
+		".landscape #averageExchangeTitle" : "Moyenne par point",
+		".landscape #longestExchangeTitle" : "Le plus long",
+		"match title" : "Match - transcendence",
 		"aria#matchInfoGraph" : "Graphique à secteurs des zones de correspondance globales, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
@@ -274,24 +293,6 @@
 		"aria.landscape #longestExchange" : "Le plus long : ${VALUE}",
 		"aria#playerOnePfp" : "Photo de profil ${USERNAME}",
 		"aria#playerTwoPfp" : "Photo de profil ${USERNAME}"
-	},
-	"match" : {
-		"#title" : "",
-		"exchange stats" : "Nombre total d'échanges : ${NUMBER_OF_EXCHANGE}\nNombre moyen d'échanges par point : ${AVERAGE_EXCHANGE}\nÉchange le plus long : ${LONGEST}",
-		"up": "Coin supérieur",
-		"mid": "Centre",
-		"down": "Coin inférieur",
-		"CVmatchInfoGraph": "Zone la plus touchée",
-		"points" : "${POINTS} points",
-		".exchangeTablesCaption" : "Statistiques des échanges",
-		".portrait #totalExchangeTitle" : "Total",
-		".portrait #averageExchangeTitle" : "Moyenne par point",
-		".portrait #longestExchangeTitle" : "Le plus long",
-
-		".landscape #totalExchangeTitle" : "Total",
-		".landscape #averageExchangeTitle" : "Moyenne par point",
-		".landscape #longestExchangeTitle" : "Le plus long",
-		"match title" : "Match - transcendence"
 	},
 	"404":{
 		"#title" : "ERREUR 404",
