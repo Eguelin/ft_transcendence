@@ -2220,6 +2220,21 @@ function checkMatchSize(){
 				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 			}
 		}
+		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8 * client.fontAmplifier) ||
+			((graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width || document.documentElement.clientHeight - 5 < graphSample.getBoundingClientRect().bottom) && graphCurrentSize > 200)){
+			if (biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8 * client.fontAmplifier){
+				container.style.setProperty("font-size", `${currentFontSize - 1}px`)
+				currentFontSize -= 1;
+			}
+			if (graphCurrentSize > 200) {
+				graphCurrentSize -= 5;
+				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+			}
+		}
+		while (document.body.scrollWidth > document.body.offsetWidth && currentFontSize > 8 * client.fontAmplifier){
+			container.style.setProperty("font-size", `${currentFontSize - 1}px`)
+			currentFontSize -= 1;
+		}
 		if (document.querySelector("#exchangeContainer .portrait .exchangeTablesCaption").getBoundingClientRect().width > document.documentElement.offsetWidth){
 			document.querySelector("#exchangeContainer .portrait").style.setProperty("display", "none");
 			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "block");

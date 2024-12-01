@@ -882,10 +882,15 @@ table.landscape{
 }
 
 .legendTextContainer{
-	/*color: rgb(102, 102, 102);*/
 	margin: 0px;
 	padding: 0px;
 	font-size: .5rem;
+}
+
+@media screen and (orientation:portrait) {	
+	.legendTextContainer{
+		font-size: 1rem;
+	}
 }
 
 #matchContainer{
@@ -909,4 +914,5 @@ table.landscape{
 
 .playerInfoGraphContainer{
 	gap: 1rem;
+	height: 100%;
 }
