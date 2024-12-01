@@ -16,6 +16,7 @@ var currentLang = "EN_UK";
 var currentLangPack = `lang/${currentLang}.json`;
 var currentTheme = "browser";
 var username = "";
+var blockResizeInterval = 0;
 const hostname = new URL(window.location.href);
 const preferedColorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
@@ -1027,10 +1028,10 @@ function popUpError(error){
 		setTimeout(() => {
 			popupContainer.remove();
 		}, 500)
-	})/*
+	})
 	setTimeout(function (container){
 		container.remove()
-	}, 5000, popupContainer);*/
+	}, 5000, popupContainer);
 	document.getElementById("popupContainer").insertBefore(popupContainer, document.getElementById("popupContainer").firstChild);
 }
 
@@ -1833,6 +1834,8 @@ async function updateUserAriaLabel(dict){
 
 let ua = navigator.userAgent;
 setInterval(function() {
+	if (blockResizeInterval)
+		return;
 	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	if (navigator.userAgent !== ua) {
 		if (isMobile()){
