@@ -289,7 +289,9 @@
 		"aria.landscape #averageExchangeTitle" : "Media per punto : ${VALUE}",
 		"aria.landscape #averageExchange" : "Media per punto : ${VALUE}",
 		"aria.landscape #longestExchangeTitle" : "Più lungo : ${VALUE}",
-		"aria.landscape #longestExchange" : "Più lungo : ${VALUE}"
+		"aria.landscape #longestExchange" : "Più lungo : ${VALUE}",
+		"aria#playerOnePfp" : "Immagine del profilo di ${USERNAME}",
+		"aria#playerTwoPfp" : "Immagine del profilo di ${USERNAME}"
 	},
 	"404":{
 		"#title" : "ERRORE 404",

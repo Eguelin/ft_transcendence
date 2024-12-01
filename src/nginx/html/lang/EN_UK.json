@@ -291,7 +291,9 @@
 		"aria.landscape #averageExchangeTitle" : "Average per point : ${VALUE}",
 		"aria.landscape #averageExchange" : "Average per point : ${VALUE}",
 		"aria.landscape #longestExchangeTitle" : "Longest : ${VALUE}",
-		"aria.landscape #longestExchange" : "Longest : ${VALUE}"
+		"aria.landscape #longestExchange" : "Longest : ${VALUE}",
+		"aria#playerOnePfp" : "${USERNAME} profile picture",
+		"aria#playerTwoPfp" : "${USERNAME} profile picture"
 	},
 	"404":{
 		"#title" : "ERROR 404",
