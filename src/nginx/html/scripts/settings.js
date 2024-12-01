@@ -598,7 +598,11 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 				document.documentElement.setAttribute("lang", langMap[elem.id]);
 
 				url = new URL(window.location.href);
-				history.replaceState("","",`https://${hostname.host}${url.pathname.replace(currentLang, elem.id)}`);
+				history.replaceState("","",url.href.replace(currentLang, elem.id));
+				document.querySelectorAll("a").forEach(function(e){
+					if (e.getAttribute("href"))
+						e.setAttribute("href", e.getAttribute("href").replace(currentLang, elem.id))
+				})
 				currentLang = elem.id;
 				if (client){
 					fetch('/api/user/update', {
