@@ -16,6 +16,7 @@ var currentLang = "EN_UK";
 var currentLangPack = `lang/${currentLang}.json`;
 var currentTheme = "browser";
 var username = "";
+var blockResizeInterval = 0;
 const hostname = new URL(window.location.href);
 const preferedColorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 var matchInfoChart = null, playerOneInfoChart = null, playerTwoInfoChart = null;
@@ -918,9 +919,9 @@ usernameBtn.addEventListener("keydown", (e) => {
 
 const langMap = {
 	"EN_UK" : "en-UK",
-	"FR_FR" : "fr",
-	"DE_GE" : "de",
-	"IT_IT" : "it",
+	"FR_FR" : "fr-FR",
+	"DE_GE" : "de-GE",
+	"IT_IT" : "it-IT",
 }
 
 dropDownLangOption.forEach(function (button) {
@@ -937,7 +938,12 @@ dropDownLangOption.forEach(function (button) {
 				loadCurrentLang();
 				document.documentElement.setAttribute("lang", langMap[button.id]);
 				url = new URL(window.location.href);
-				history.replaceState("","",`https://${hostname.host}${url.pathname.replace(currentLang, button.id)}`);
+				history.replaceState("","",url.href.replace(currentLang, button.id));
+				document.querySelectorAll("a").forEach(function(elem){
+					if (elem.getAttribute("href"))
+						elem.setAttribute("href", elem.getAttribute("href").replace(currentLang, button.id))
+				})
+
 				currentLang = button.id;
 				if (client) {
 					fetch('/api/user/update', {
@@ -951,7 +957,7 @@ dropDownLangOption.forEach(function (button) {
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
 				}
 			}
-			catch {
+			catch (e){
 				if (langJson && langJson['index']['.errorLoadLangPack'])
 					popUpError(langJson['index']['.errorLoadLangPack'].replace("${LANG}", button.id));
 				else
@@ -1022,10 +1028,10 @@ function popUpError(error){
 		setTimeout(() => {
 			popupContainer.remove();
 		}, 500)
-	})/*
+	})
 	setTimeout(function (container){
 		container.remove()
-	}, 5000, popupContainer);*/
+	}, 5000, popupContainer);
 	document.getElementById("popupContainer").insertBefore(popupContainer, document.getElementById("popupContainer").firstChild);
 }
 
@@ -1679,6 +1685,11 @@ async function loadCurrentLang(){
 		}
 		if (currentPage == "friends")
 			updateFriendPageSize();
+		if (currentPage == "login")
+			updateLoginPageSize();
+		if (currentPage == "settings")
+			updateSettingsPageSize();
+		document.documentElement.setAttribute("lang", langMap[currentLang]);
 	}
 }
 
@@ -1823,6 +1834,8 @@ async function updateUserAriaLabel(dict){
 
 let ua = navigator.userAgent;
 setInterval(function() {
+	if (blockResizeInterval)
+		return;
 	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	if (navigator.userAgent !== ua) {
 		if (isMobile()){
@@ -1899,9 +1912,11 @@ function resizeEvent(event, orientationChange = false){
 			checkMatchSize();
 		if (currentPage == "friends")
 			checkFriendPageSize()
+		if (currentPage == "settings")
+			updateSettingsPageSize();
 	}
-	catch {
-
+	catch (e){
+		console.error(e);
 	}
 }
 
