@@ -1,3 +1,7 @@
+#loginPage{
+	width: fit-content;
+	justify-self: center;
+}
 
 .loginOpt{
 	text-align: center;
@@ -54,7 +58,7 @@
 
 #slideSelectorBg{
 	background: var(--active-selector-rgb);
-	position: absolute;
+	position: fixed;
 	width: 50%;
 	height: 2rem;
 	border-bottom: 1px solid var(--main-text-rgb);

@@ -612,6 +612,17 @@ function browser(){
 }
 
 window.addEventListener('load', (e) => {
+	const url = new URL(window.location.href);
+	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
+	if (!availableLang[lang]){
+		currentLangPack = "lang/EN_UK.json";
+		currentLang = "EN_UK";
+	}
+	else{
+		currentLangPack = `lang/${lang}.json`
+		currentLang = lang;
+	}
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
 	if (isMobile()){
@@ -1011,10 +1022,10 @@ function popUpError(error){
 		setTimeout(() => {
 			popupContainer.remove();
 		}, 500)
-	})
+	})/*
 	setTimeout(function (container){
 		container.remove()
-	}, 5000, popupContainer);
+	}, 5000, popupContainer);*/
 	document.getElementById("popupContainer").insertBefore(popupContainer, document.getElementById("popupContainer").firstChild);
 }
 
@@ -1666,6 +1677,8 @@ async function loadCurrentLang(){
 			document.querySelector("#settingsBtn").href = `/${currentLang}/settings`;
 			document.querySelector("#logOutBtn").href = `/${currentLang}/login`;
 		}
+		if (currentPage == "friends")
+			updateFriendPageSize();
 	}
 }
 
@@ -1810,6 +1823,7 @@ async function updateUserAriaLabel(dict){
 
 let ua = navigator.userAgent;
 setInterval(function() {
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	if (navigator.userAgent !== ua) {
 		if (isMobile()){
 			document.documentElement.classList.add("mobile");
@@ -1842,6 +1856,7 @@ function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry
 function isPortrait(){return window.matchMedia("(orientation: portrait)").matches};
 
 window.matchMedia("(orientation: portrait)").onchange = function(e){
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	resizeEvent(e, true);
 	if (currentPage == "match")
 		drawMatchInfoGraph();
@@ -1862,25 +1877,32 @@ window.matchMedia("(orientation: portrait)").onchange = function(e){
 };
 
 function resizeEvent(event, orientationChange = false){
-	document.body.offsetWidth;
-	checkResizeIndex()
-	if (orientationChange == false && currentPage == "dashboard")
-		displayCharts();
-	if (currentPage == "home" || currentPage == "user"){
-		checkMatchResumeSize()
+	try {
+		document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+		checkResizeIndex()
+		if (currentPage == "login")
+			updateLoginPageSize();
+		if (orientationChange == false && currentPage == "dashboard")
+			displayCharts();
+		if (currentPage == "home" || currentPage == "user"){
+			checkMatchResumeSize()
+		}
+		if (currentPage == "user")
+			checkUserPageSize();
+		if (currentPage == "game")
+			checkGameSize();
+		if (currentPage == "tournament")
+			displayTournament();
+		if (currentPage == "game" || currentPage == "tournament")
+			setTimeout(checkWinnerDisplaySize, 1)
+		if (currentPage == "match")
+			checkMatchSize();
+		if (currentPage == "friends")
+			checkFriendPageSize()
 	}
-	if (currentPage == "user")
-		checkUserPageSize();
-	if (currentPage == "game")
-		checkGameSize();
-	if (currentPage == "tournament")
-		displayTournament();
-	if (currentPage == "game" || currentPage == "tournament")
-		setTimeout(checkWinnerDisplaySize, 1)
-	if (currentPage == "match")
-		checkMatchSize();
-	if (currentPage == "friends")
-		checkFriendPageSize()
+	catch {
+
+	}
 }
 
 function checkResizeIndex(){
@@ -1978,7 +2000,7 @@ function checkUserPageSize(){
 }
 
 function checkFriendPageSize(){
-
+	updateFriendPageSize();
 	var texts = document.querySelectorAll("#friendInfo .slideSelector .slideSelectorText");
 	var ancestor = document.querySelector("#friendSlideSelector");
 	if (texts.length == 0 || !ancestor)
@@ -2119,18 +2141,17 @@ function checkGameSize(){
 			playerKeyMap = WASDInversedKeyMap;
 		}
 	}
-
 	var container = document.querySelector("#gameDisplay")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
 	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	while (parseInt(getElemWidth(container)) <= parseInt(anchor.right) && currentFontSize < baseFontSize){
+	while (getElemWidth(container).toFixed(0) <= anchor.right.toFixed(0) && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
 		})
 		currentFontSize += 1;
 	}
-	while (parseInt(getElemWidth(container)) > parseInt(anchor.right) && currentFontSize > 8){
+	while (getElemWidth(container).toFixed(0) > anchor.right.toFixed(0) && currentFontSize > 8){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
