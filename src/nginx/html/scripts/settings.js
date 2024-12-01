@@ -11,7 +11,7 @@ var rightSlideBtn;
 var leftSlideBtn;
 var confirmDeleteInput;
 var confirmPfpBtn;
-
+var slideSelectorBg;
 
 var accoutSlide = `
 <div id="saveUsernameContainer">
@@ -94,60 +94,132 @@ var accessibilitySlide = `
 </div>`
 
 var template = `
-<div style="height: fit-content; text-align: center; display: flex;">
-
-	<div id="settingSlidesContainer">
-		<div id="settingsSlideSelector">
-			<div id="accountSelector" class="slideSelector" tabindex="12">
-				<div id="accountSelectorText">Account</div>
+<div id="pageContentContainer">
+	<div id="settingsPage">
+		<div id="settingSlidesContainer">
+			<div id="settingsSlideSelector">
+				<div id="accountSelector" class="slideSelector" tabindex="12">
+					<div id="accountSelectorText">Account</div>
+				</div>
+				<div id="accessibilitySelector" class="slideSelector" tabindex="13">
+					<div id="accessibilitySelectorText">Accessibility</div>
+				</div>
+				<div id="slideSelectorBg"></div>
 			</div>
-			<div id="accessibilitySelector" class="slideSelector" tabindex="13">
-				<div id="accessibilitySelectorText">Accessibility</div>
-			</div>
-			<div id="slideSelectorBg"></div>
-		</div>
-		<div style="position: relative;">
-			<div id="settingSlides">
-				<div class="settingSlide" id="accoutSlide">${accoutSlide}</div>
-				<div class="settingSlide" id="accessibilitySlide">${accessibilitySlide}</div>
+			<div style="position: relative;">
+				<div id="settingSlides">
+					<div class="settingSlide" id="accoutSlide">${accoutSlide}</div>
+					<div class="settingSlide" id="accessibilitySlide">${accessibilitySlide}</div>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div id="popupBg" style="z-index: 1;">
-	</div>
+		<div id="popupBg" style="z-index: 1;">
+		</div>
 
-	<div id="confirmPfpContainer" style="z-index: 2;">
-		<div style="position: relative;">
-			<img id="confirmPfpImg">
-			<div class="pfpMask" id="confirmPfpMask"></div>
+		<div id="confirmPfpContainer" style="z-index: 2;">
+			<div style="position: relative;">
+				<img id="confirmPfpImg">
+				<div class="pfpMask" id="confirmPfpMask"></div>
+			</div>
+			<button tabindex="16" id="confirmPfpBtn" aria-label="Confirm profile picture">Save</button>
 		</div>
-		<button tabindex="16" id="confirmPfpBtn" aria-label="Confirm profile picture">Save</button>
-	</div>
 
-	<div id="confirmDeletePopup" style="z-index: 2;">
-		<a id="confirmDeleteDialog">To confirm you want to delete your account, please enter </a>
-		<a id="confirmDeleteDialogVar" style="background: var(--page-bg-rgb);padding: .3ch;"></a>
-		<input autoclomplete="off" tabindex="18" type="text" id="confirmDeleteInput" placeholder="Confirmation" aria-label="Type you username, then press enter to confirm deletion">
-		<button tabindex="19" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
-	</div>
+		<div id="confirmDeletePopup" style="z-index: 2;">
+			<a id="confirmDeleteDialog">To confirm you want to delete your account, please enter </a>
+			<a id="confirmDeleteDialogVar" style="background: var(--page-bg-rgb);padding: .3ch;"></a>
+			<input autoclomplete="off" tabindex="18" type="text" id="confirmDeleteInput" placeholder="Confirmation" aria-label="Type you username, then press enter to confirm deletion">
+			<button tabindex="19" id="confirmDeleteBtn" class="deleteBtn">Confirm delete</button>
+		</div>
 
-	<div id="confirmPasswordPopup" style="z-index: 2;">
-		<div>
-			<input autoclomplete="off" tabindex="15" type="password" id="inputOldPassword" style="anchor-name: --old-password-input;" class="popupInput" name="Old password" placeholder="Old password"/>
-		</div>
-		<div>
-			<input autoclomplete="off" tabindex="16" type="password" id="inputNewPassword" style="anchor-name: --new-password-input;" class="popupInput" name="New password" placeholder="New password"/>
-		</div>
-		<div>
-			<input autoclomplete="off" tabindex="17" type="password" id="inputNewCPassword" style="anchor-name: --new-confirm-password-input;" class="popupInput" name="Confirm new password" placeholder="Confirm new password"/>
-		</div>
-		<div>
-			<button tabindex="18" id="confirmChangePasswordBtn" style="anchor-name: --confirm-new-password-button;" >Change password</button>
+		<div id="confirmPasswordPopup" style="z-index: 2;">
+			<div>
+				<input autoclomplete="off" tabindex="15" type="password" id="inputOldPassword" style="anchor-name: --old-password-input;" class="popupInput" name="Old password" placeholder="Old password"/>
+			</div>
+			<div>
+				<input autoclomplete="off" tabindex="16" type="password" id="inputNewPassword" style="anchor-name: --new-password-input;" class="popupInput" name="New password" placeholder="New password"/>
+			</div>
+			<div>
+				<input autoclomplete="off" tabindex="17" type="password" id="inputNewCPassword" style="anchor-name: --new-confirm-password-input;" class="popupInput" name="Confirm new password" placeholder="Confirm new password"/>
+			</div>
+			<div>
+				<button tabindex="18" id="confirmChangePasswordBtn" style="anchor-name: --confirm-new-password-button;" >Change password</button>
+			</div>
 		</div>
 	</div>
 </div>
 `
+
+
+function settingsSlide(formerIdx, newerIdx){
+	
+	var tmp = document.querySelector("#settingSlides");
+	var left = tmp.getBoundingClientRect().left;
+	var move = [
+		{ left: `${left}px`},
+		{ left: `-${slideIdx}00vw`}
+	];
+	var time = {
+		duration: 500,
+		iterations: 1,
+	}
+	tmp.animate(move, time);
+	tmp.style.setProperty("left", `-${slideIdx}00vw`)
+
+	var prevSelectorElem = settingsSlideSelector[formerIdx];
+	var newSelectorElem = settingsSlideSelector[newerIdx];
+	move = [
+		{ left: `${prevSelectorElem.getBoundingClientRect().left}px`, width: `${prevSelectorElem.getBoundingClientRect().width}px`, height: `${prevSelectorElem.getBoundingClientRect().height}px`},
+		{ left: `${newSelectorElem.getBoundingClientRect().left}px`, width: `${newSelectorElem.getBoundingClientRect().width}px`, height: `${newSelectorElem.getBoundingClientRect().height}px`},
+	];
+	time = {
+		duration: 500,
+		iterations: 1,
+	}
+	slideSelectorBg.animate(move, time);
+	slideSelectorBg.style.setProperty("left", `${newSelectorElem.getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${newSelectorElem.getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${newSelectorElem.getBoundingClientRect().height}px`)
+	if (newerIdx == 0){
+		try{
+			document.title = langJson['settings'][`account title`];
+		}
+		catch{}
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
+		Object.keys(accountSlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = accountSlideTabIdxMap[key]
+			}
+			catch{}
+		})
+		Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = "-1"
+			}
+			catch{}
+		})
+	}
+	else {
+		try{
+			document.title = langJson['settings'][`accessibility title`];
+		}
+		catch{}
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
+		Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = accessibilitySlideTabIdxMap[key]
+			}
+			catch{}
+		})
+		Object.keys(accountSlideTabIdxMap).forEach(function (key){
+			try{
+				document.querySelector(key).tabIndex = "-1"
+			}
+			catch{}
+		})
+	}
+}
+
 
 {
 	document.getElementById("container").innerHTML = template;
@@ -199,6 +271,7 @@ var template = `
 	settingsSlides = document.querySelectorAll(".settingSlide");
 	confirmDeleteInput = document.getElementById("confirmDeleteInput");
 	confirmPfpBtn = document.getElementById("confirmPfpBtn");
+	slideSelectorBg = document.querySelector("#slideSelectorBg");
 
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
@@ -207,79 +280,18 @@ var template = `
 	notifCenterContainer.style.setProperty("display", "flex");
 	window.onkeydown = settingsKeyDownEvent
 
-	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector");
+	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector")
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
-	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
+	settingsSlide(slideIdx, slideIdx);
 	settingsSlideSelector[slideIdx].classList.add('activeSelector');
 
 	settingsSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
 			save = slideIdx;
 			slideIdx = Array.from(e.target.closest(".slideSelector").parentElement.children).indexOf(e.target.closest(".slideSelector"));
-			if (save != slideIdx){
-				settingsSlideSelector[save].classList.remove("activeSelector");
-				settingsSlideSelector[slideIdx].classList.add('activeSelector');
-				var tmp = document.querySelector("#settingSlides");
-				var left = tmp.getBoundingClientRect().left;
-				var move = [
-					{ left: `${left}px`},
-					{ left: `-${slideIdx}00vw`}
-				];
-				var time = {
-					duration: 500,
-					iterations: 1,
-				}
-				tmp.animate(move, time);
-				tmp.style.setProperty("left", `-${slideIdx}00vw`)
-				if (slideIdx == 0){
-					move = [
-						{ left: `50%`},
-						{ left: `0%`}
-					];
-					document.getElementById("slideSelectorBg").animate(move, time);
-					document.getElementById("slideSelectorBg").style.setProperty("left", "0");
-				}
-				else{
-					move = [
-						{ left: `0%`},
-						{ left: `50%`}
-					];
-					document.getElementById("slideSelectorBg").animate(move, time);
-					document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
-				}
-			}
-			if (slideIdx == 0){
-				document.title = langJson['settings'][`account title`];
-				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
-				Object.keys(accountSlideTabIdxMap).forEach(function (key){
-					try{
-						document.querySelector(key).tabIndex = accountSlideTabIdxMap[key]
-					}
-					catch{}
-				})
-				Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
-					try{
-						document.querySelector(key).tabIndex = "-1"
-					}
-					catch{}
-				})
-			}
-			else {
-				document.title = langJson['settings'][`accessibility title`];
-				history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
-				Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
-					try{
-						document.querySelector(key).tabIndex = accessibilitySlideTabIdxMap[key]
-					}
-					catch{}
-				})
-				Object.keys(accountSlideTabIdxMap).forEach(function (key){
-					try{
-						document.querySelector(key).tabIndex = "-1"
-					}
-					catch{}
-				})
-			}
+			settingsSlide(save, slideIdx);
+			settingsSlideSelector[save].classList.remove("activeSelector");
+			settingsSlideSelector[slideIdx].classList.add('activeSelector');
 		})
 		key.onkeydown = (e) => {
 			if (e.key == "Enter")
@@ -586,7 +598,11 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 				document.documentElement.setAttribute("lang", langMap[elem.id]);
 
 				url = new URL(window.location.href);
-				history.replaceState("","",`https://${hostname.host}${url.pathname.replace(currentLang, elem.id)}`);
+				history.replaceState("","",url.href.replace(currentLang, elem.id));
+				document.querySelectorAll("a").forEach(function(e){
+					if (e.getAttribute("href"))
+						e.setAttribute("href", e.getAttribute("href").replace(currentLang, elem.id))
+				})
 				currentLang = elem.id;
 				if (client){
 					fetch('/api/user/update', {
@@ -594,7 +610,7 @@ document.querySelectorAll(".settingsLangDropDown").forEach(function(elem){
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						body: JSON.stringify({ language_pack: currentLangPack }),
+						body: JSON.stringify({ language_pack: currentLang}),
 						credentials: 'include'
 					})
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${elem.id}.svg)`);
@@ -753,65 +769,7 @@ function settingsKeyDownEvent(e) {
 			slideIdx = 1;
 		settingsSlideSelector[save].classList.remove("activeSelector");
 		settingsSlideSelector[slideIdx].classList.add('activeSelector');
-		var left = tmp.getBoundingClientRect().left;
-		var move = [
-			{ left: `${left}px`},
-			{ left: `-${slideIdx}00vw`}
-		];
-		var time = {
-			duration: 500,
-			iterations: 1,
-		}
-		tmp.animate(move, time);
-		tmp.style.setProperty("left", `-${slideIdx}00vw`)
-		if (slideIdx == 0){
-			move = [
-				{ left: `50%`},
-				{ left: `0%`}
-			];
-			document.getElementById("slideSelectorBg").animate(move, time);
-			document.getElementById("slideSelectorBg").style.setProperty("left", "0");
-		}
-		else{
-			move = [
-				{ left: `0%`},
-				{ left: `50%`}
-			];
-			document.getElementById("slideSelectorBg").animate(move, time);
-			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
-		}
-		if (slideIdx == 0){
-			document.title = langJson['settings'][`account title`];
-			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#account`)
-			Object.keys(accountSlideTabIdxMap).forEach(function (key){
-				try{
-					document.querySelector(key).tabIndex = accountSlideTabIdxMap[key]
-				}
-				catch{}
-			})
-			Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
-				try{
-					document.querySelector(key).tabIndex = "-1"
-				}
-				catch{}
-			})
-		}
-		else {
-			document.title = langJson['settings'][`accessibility title`];
-			history.replaceState("","",`https://${hostname.host}/${currentLang}/settings#accessibility`)
-			Object.keys(accessibilitySlideTabIdxMap).forEach(function (key){
-				try{
-					document.querySelector(key).tabIndex = accessibilitySlideTabIdxMap[key]
-				}
-				catch{}
-			})
-			Object.keys(accountSlideTabIdxMap).forEach(function (key){
-				try{
-					document.querySelector(key).tabIndex = "-1"
-				}
-				catch{}
-			})
-		}
+		settingsSlide(save, slideIdx);
 	}
 }
 
@@ -843,3 +801,10 @@ usernameInput.addEventListener("focus", (e) => {
 usernameInput.addEventListener("focusout", (e) => {
 	window.onkeydown = settingsKeyDownEvent
 })
+
+function updateSettingsPageSize(){
+	slideSelectorBg = document.querySelector("#slideSelectorBg");
+	slideSelectorBg.style.setProperty("left", `${settingsSlideSelector[slideIdx].getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${settingsSlideSelector[slideIdx].getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${settingsSlideSelector[slideIdx].getBoundingClientRect().height}px`)
+}

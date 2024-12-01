@@ -1,3 +1,8 @@
+#settingsPage{
+	width: fit-content;
+	justify-self: center;
+}
+
 #pfpLabel {
 	overflow: hidden;
 	width: -webkit-fill-available;
@@ -223,9 +228,8 @@
 	min-width: 40vw;
 	display: flex;
 	position: relative;
-	left: 50%;
-	translate: -50%;
 	height: 2rem;
+	align-self: center;
 }
 
 
@@ -243,10 +247,6 @@
 }
 
 #settingSlidesContainer{
-	width: 100vw;
-
-	min-width: -webkit-fill-available;
-	min-width: -moz-available;
 	display: flex;
 	flex-direction: column;
 	gap: 5ch;

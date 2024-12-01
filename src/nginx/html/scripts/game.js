@@ -128,6 +128,7 @@ var template = `
 `
 
 function leftSlideBtn(){
+	blockResizeInterval = true;
 	var contest = document.querySelector(".singleRoundDisplay#tournamentContainer");
 	if (!contest)
 		return
@@ -149,9 +150,9 @@ function leftSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#controlerSlide .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controlerSlide .leftBtnContainer").onclick = null;
 		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controlerSlide .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controlerSlide .rightBtnContainer").onclick = null;
 		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
@@ -170,15 +171,17 @@ function leftSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
 			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
 			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			blockResizeInterval = false;
 		}, 500);
 	}
 }
 
 function rightSlideBtn(){
+	blockResizeInterval = true;
 	var contest = document.querySelector(".singleRoundDisplay#tournamentContainer");
 	if (!contest)
 		return
@@ -199,9 +202,9 @@ function rightSlideBtn(){
 		}
 		contest.animate(move, time);
 
-		document.querySelector("#controlerSlide .leftBtnContainer").removeEventListener("click", leftSlideBtn);
+		document.querySelector("#controlerSlide .leftBtnContainer").onclick = null;
 		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controlerSlide .rightBtnContainer").removeEventListener("click", rightSlideBtn);
+		document.querySelector("#controlerSlide .rightBtnContainer").onclick = null;
 		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
 
 		document.querySelector("#treeCanva").animate(move, time);
@@ -220,10 +223,11 @@ function rightSlideBtn(){
 					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
 					break ;
 			}
-			document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+			document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
 			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+			document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
 			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+			blockResizeInterval = false;
 		}, 500);
 	}
 }
@@ -249,116 +253,9 @@ function rightBtnKeydownEvent(e){
 	playerOneScore = document.querySelector("#playerOne > .playerScore");
 	playerTwoScore = document.querySelector("#playerTwo > .playerScore");
 
-	tmp_contest = {
-		"round_0": {
-			"match_0": {
-				"playerLeft": {
-					"username": "elise",
-					"profile_picture": "/images/defaults/default1.jpg",
-					"winner": "left",
-					"score": 2
-				},
-				"playerRight": {
-					"username": "test",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": null,
-					"score": 0
-				}
-			},
-			"match_1": {
-				"playerLeft": {
-					"username": "test1",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": null,
-					"score": 1
-				},
-				"playerRight": {
-					"username": "test2",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": 'right',
-					"score": 2
-				}
-			},
-			"match_2": {
-				"playerLeft": {
-					"username": "test3",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": 'left',
-					"score": 1
-				},
-				"playerRight": {
-					"username": "test4",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": null,
-					"score": 0
-				}
-			},
-			"match_3": {
-				"playerLeft": {
-					"username": "test5",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": null,
-					"score": 3
-				},
-				"playerRight": {
-					"username": "test6",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": 'right',
-					"score": 4
-				}
-			}
-		},
-		"round_1": {
-			"match_0": {
-				"playerLeft": {
-					"username": "elise",
-					"profile_picture": "/images/defaults/default1.jpg",
-					"winner": "left",
-					"score": 4
-				},
-				"playerRight": {
-					"username": "test2",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": null,
-					"score": 2
-				}
-			},
-			"match_1": {
-				"playerLeft": {
-					"username": "test3",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": null,
-					"score": 1
-				},
-				"playerRight": {
-					"username": "test6",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": 'right',
-					"score": 4
-				}
-			}
-		},
-		"round_2": {
-			"match_0": {
-				"playerLeft": {
-					"username": "elise",
-					"profile_picture": "/images/defaults/default1.jpg",
-					"winner": "left",
-					"score": 5
-				},
-				"playerRight": {
-					"username": "test6",
-					"profile_picture": "/images/defaults/defaultAi.gif",
-					"winner": null,
-					"score": 4
-				}
-			}
-		}
-	}
-
-	document.querySelector("#controlerSlide .leftBtnContainer").addEventListener("click", leftSlideBtn);
+	document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
 	document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-	document.querySelector("#controlerSlide .rightBtnContainer").addEventListener("click", rightSlideBtn);
+	document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
 	document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
 		elem.innerHTML = `
@@ -480,10 +377,6 @@ function displayTournament(is_finished = false){
 			}
 		})
 	})
-	document.querySelector("#controlerSlide .leftBtnContainer").onmousedown = function() {};
-	document.querySelector("#controlerSlide .leftBtnContainer").onmouseup = function() {};
-	document.querySelector("#controlerSlide .rightBtnContainer").onmousedown = function() {};
-	document.querySelector("#controlerSlide .rightBtnContainer").onmouseup = function() {};
 	setTournamentTreeValue(is_finished);
 	document.title = langJson['game'][`game title`].replace("${MODE}", langJson['game']['tournamentSubtitle']);
 	if (playersCount == 8 || is_finished){
@@ -812,7 +705,6 @@ function game() {
 					displayWinner(player2.name, player2.profile_picture)
 			} else if (data.type === "tournament") {
 				tournament = data.message;
-				// tournament = tmp_contest;
 				checkTournementRound();
 				displayTournament();
 				gameContainer.style.setProperty("display", "none");
@@ -1204,7 +1096,7 @@ function setTournamentAriaLabeL(){
 				.replace("${ROUND}", content[elem.classList[1]])
 				.replace("${WINNER_USERNAME}", elem.querySelector(".winner .username").innerText)
 				.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))
-		} catch {
+		} catch (e){
 			if (langJson && langJson['tournament']['.errorSettingAriaLabels'])
 				popUpError(langJson['tournament']['.errorSettingAriaLabels']);
 			else
