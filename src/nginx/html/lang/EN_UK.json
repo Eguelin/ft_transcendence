@@ -81,8 +81,10 @@
 		".passwordMissingLowerCase" : "Password must contain at least one uppercase letter",
 		".passwordMissingUpperCase" : "Password must contain at least one lowercase letter",
 		".passwordMissingDigit" : "Password must contain at least one digit",
-		".passwordMissingSpec" : "Password must contain at least one special character"
-
+		".passwordMissingSpec" : "Password must contain at least one special character",
+		".invalidResponse" : "Invalid response from 42 API, try again later",
+		".passwordTooLong" : "Password too long (max 128 characters)",
+		".passwordTooShort" : "Password too short (min 8 characters)"
 	},
 	"settings": {
 		"#title" : "",
@@ -131,9 +133,8 @@
 		".authenticationError" : "Error while authenticating",
 		".incorectOldPassword" : "Old password mismatch",
 		".invalidPassword" : "Invalid password",
-		".passwordTooLong" : "Password too long",
-		".passwordTooShort" : "Password too short",
-		".passwordTooWeak" : "Password too weak",
+		".passwordTooLong" : "Password too long (max 128 characters)",
+		".passwordTooShort" : "Password too short (min 8 characters)",
 		".mismatchPassword" : "Passwords do not match",
 		".forbidenChars" : "Username must be alphanumeric",
 		".usernameTooLong" : "Username must be 15 characters or fewer",
@@ -271,7 +272,6 @@
 		".portrait #totalExchangeTitle" : "Total",
 		".portrait #averageExchangeTitle" : "Average per point",
 		".portrait #longestExchangeTitle" : "Longest",
-
 		".landscape #totalExchangeTitle" : "Total",
 		".landscape #averageExchangeTitle" : "Average per point",
 		".landscape #longestExchangeTitle" : "Longest",

@@ -81,7 +81,10 @@
 		".passwordMissingLowerCase" : "La password deve contenere almeno una lettera maiuscola",
 		".passwordMissingUpperCase" : "La password deve contenere almeno una lettera minuscola",
 		".passwordMissingDigit" : "La password deve contenere almeno una cifra",
-		".passwordMissingSpec" : "La password deve contenere almeno un carattere speciale"
+		".passwordMissingSpec" : "La password deve contenere almeno un carattere speciale",
+		".invalidResponse": "Risposta non valida dall'API 42, riprova più tardi",
+		".passwordTooLong" : "Password troppo lunga (max 128 caratteri)",
+		".passwordTooShort" : "Password troppo lunga (max 128 caratteri)"
 	},
 	"settings": {
 		"#title" : "",
@@ -130,9 +133,8 @@
 		".authenticationError" : "Errore durante l'autenticazione",
 		".incorectOldPassword" : "Vecchia password non corrispondente",
 		".invalidPassword" : "Password non valida",
-		".passwordTooLong" : "Password troppo lunga",
-		".passwordTooShort" : "Password troppo corta",
-		".passwordTooWeak" : "Password troppo debole",
+		".passwordTooLong" : "Password troppo lunga (max 128 caratteri)",
+		".passwordTooShort" : "Password troppo lunga (max 128 caratteri)",
 		".mismatchPassword" : "Le password non corrispondono",
 		".forbidenChars" : "Il nome utente deve essere alfanumerico",
 		".usernameTooLong" : "Il nome utente deve essere di 15 caratteri o meno",
