@@ -276,7 +276,7 @@ def user_login(request):
 		return JsonResponse({'message': "User not found"}, status=404)
 
 	if len(password) > 128:
-		return JsonResponse({'message': 'Password too long'}, status=400)
+		return JsonResponse({'message': 'Password too long (max 128 characters)'}, status=400)
 
 	try:
 		user = User.objects.get(username=username)
