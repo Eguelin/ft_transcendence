@@ -118,7 +118,7 @@ def fortytwo(request):
 		else:
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 
-def check_username(username):
+def check_username(username, display_name=False):
 	if not username or not isinstance(username, str):
 		return False, 'Invalid username'
 
@@ -131,8 +131,10 @@ def check_username(username):
 	except ValidationError as e:
 		return False, e.message
 
-	if User.objects.filter(username=username).exists():
+	if not display_name and User.objects.filter(username=username).exists():
 		return False, 'Username already taken'
+	elif display_name and User.objects.filter(profile__display_name=username).exists():
+		return False, 'Display name already taken'
 
 	return True, None
 
@@ -201,7 +203,7 @@ def create_user(request, staff=False):
 			break
 		display_name = username[:8] + '_' + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
 	if User.objects.filter(profile__display_name=display_name).exists():
-		return JsonResponse({'message': 'Too many users with the same display name'}, status=400)
+		return JsonResponse({'message': 'Too many users with the same display name, try again later'}, status=400)
 
 	try:
 		user = User.objects.create_user(username=username, password=password)
