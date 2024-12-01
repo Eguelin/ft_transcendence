@@ -48,11 +48,11 @@ def fortytwo(request):
 	}
 	response = requests.post(url, data=payload)
 	if response.status_code != 200:
-		return JsonResponse(response.json(), status=response.status_code)
+		return JsonResponse({'message': "Invalid response from 42 API, try again later"}, status=400)
 
-	access_token = response.json().get('access_token')
+	access_token = response.json().get('access_token', None)
 	if not access_token:
-		return JsonResponse({'message': 'Invalid response from 42 API'}, status=400)
+		return JsonResponse({'message': "Invalid response from 42 API, try again later"}, status=400)
 
 	url = 'https://api.intra.42.fr/v2/me'
 	headers = {
@@ -63,9 +63,13 @@ def fortytwo(request):
 		return JsonResponse(response.json(), status=response.status_code)
 
 	user_json = response.json()
-	user_login = user_json.get('login')
-	pfp_url = user_json.get('image', {}).get('versions', {}).get('small', "/images/defaults/default{0}.jpg".format(random.randint(0, 2)))
-	lang = user_json.get('languages_users', [{}])[0].get('language_id', 2)
+	try:
+		user_login = user_json['login']
+		pfp_url = user_json['image']['versions']['small']
+		lang = user_json['languages_users'][0]['language_id']
+		id42 = user_json['id']
+	except KeyError:
+		return JsonResponse({'message': "Invalid response from 42 API, try again later"}, status=400)
 
 	if lang == 1:
 		lang = 'FR_FR'
@@ -79,10 +83,6 @@ def fortytwo(request):
 	username = re.sub(r'\W+', '', user_login)
 	user_login = username[:8]
 
-	id42 = user_json.get('id')
-	if not user_login or id42 is None:
-		return JsonResponse({'message': 'Invalid response from 42 API'}, status=400)
-
 	try:
 		user = User.objects.get(profile__id42=id42)
 		user = authenticate(request, username=user.username, password=str(id42))
@@ -95,13 +95,22 @@ def fortytwo(request):
 			return JsonResponse({'message': 'Invalid credentials'}, status=401)
 	except User.DoesNotExist:
 		username = user_login
-		while User.objects.filter(username=username).exists():
-			username = user_login + "_" + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
+		for i in range(100):
+			if not User.objects.filter(username=username).exists():
+				break
+			username = user_login[:8] + '_' + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
+		if User.objects.filter(username=username).exists():
+			return JsonResponse({'message': 'Too many users with the same username, try again later'}, status=400)
+
 		user = User.objects.create_user(username=username)
 
 		display_name = username
-		while User.objects.filter(profile__display_name=display_name).exists():
-			display_name = "Player_" + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
+		for i in range(100):
+			if not User.objects.filter(profile__display_name=display_name).exists():
+				break
+			display_name = username[:8] + '_' + ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
+		if User.objects.filter(profile__display_name=display_name).exists():
+			return JsonResponse({'message': 'Too many users with the same display name, try again later'}, status=400)
 
 		user.set_password(str(id42))
 		user.profile.profile_picture = pfp_url
@@ -408,7 +417,7 @@ def profile_update(request):
 		user.username = data['username']
 
 	if "display_name" in data:
-		valid, message = check_username(data['display_name'])
+		valid, message = check_username(data['display_name'], True)
 		if not valid:
 			return JsonResponse({'message': message}, status=400)
 		user.profile.display_name = data['display_name']
