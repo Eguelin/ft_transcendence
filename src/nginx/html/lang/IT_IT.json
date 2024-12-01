@@ -277,7 +277,19 @@
 		"match title" : "Partita - transcendence",
 		"aria#matchInfoGraph" : "Grafico a torta delle zone di hit della corrispondenza globale, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
-		"aria#playerTwoInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}"
+		"aria#playerTwoInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
+		"aria.portrait #totalExchangeTitle" : "Totale : ${VALUE}",
+		"aria.portrait #totalExchange" : "Totale : ${VALUE}",
+		"aria.portrait #averageExchangeTitle" : "Media per punto : ${VALUE}",
+		"aria.portrait #averageExchange" : "Media per punto : ${VALUE}",
+		"aria.portrait #longestExchangeTitle" : "Più lungo : ${VALUE}",
+		"aria.portrait #longestExchange" : "Più lungo : ${VALUE}",
+		"aria.landscape #totalExchangeTitle" : "Totale : ${VALUE}",
+		"aria.landscape #totalExchange" : "Totale : ${VALUE}",
+		"aria.landscape #averageExchangeTitle" : "Media per punto : ${VALUE}",
+		"aria.landscape #averageExchange" : "Media per punto : ${VALUE}",
+		"aria.landscape #longestExchangeTitle" : "Più lungo : ${VALUE}",
+		"aria.landscape #longestExchange" : "Più lungo : ${VALUE}"
 	},
 	"404":{
 		"#title" : "ERRORE 404",
