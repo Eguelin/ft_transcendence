@@ -159,7 +159,6 @@ class Client {
 
 	constructor() {
 		return (async () => {
-	//		popUpError(window.getComputedStyle(document.body).height);
 			try {
 				const fetchResult = await fetch('/api/user/current', {
 					method: 'GET',
@@ -613,6 +612,16 @@ function browser(){
 }
 
 window.addEventListener('load', (e) => {
+	const url = new URL(window.location.href);
+	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
+	if (!availableLang[lang]){
+		currentLangPack = "lang/EN_UK.json";
+		currentLang = "EN_UK";
+	}
+	else{
+		currentLangPack = `lang/${lang}.json`
+		currentLang = lang;
+	}
 	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	handleToken();
 	document.querySelector("#titleFlexContainer").style.setProperty("display", "flex");
@@ -1892,7 +1901,7 @@ function resizeEvent(event, orientationChange = false){
 			checkFriendPageSize()
 	}
 	catch {
-		
+
 	}
 }
 
