@@ -2,54 +2,57 @@ var loginBtn;
 var switchThemeBtn;
 var fortyTwoLogin;
 var loginSlideSelector;
+var slideSelectorBg;
 
 var slides;
 var slideIdx;
 
 var template = `
-<div id="pageContentContainer" style="width: fit-content;left: 50%;position: relative;translate: -50%;min-width: 40vw;">
-	<div id="loginSlideSelector">
-		<div tabindex="12" id="loginSelector" class="slideSelector activeSelector">
-			<div id="loginSelectorText">Login</div>
+<div id="pageContentContainer">
+	<div id="loginPage">
+		<div id="loginSlideSelector">
+			<div tabindex="12" id="loginSelector" class="slideSelector activeSelector">
+				<div id="loginSelectorText">Login</div>
+			</div>
+			<div tabindex="13" id="registerSelector" class="slideSelector">
+				<div id="registerSelectorText">Register</div>
+			</div>
+			<div id="slideSelectorBg"></div>
 		</div>
-		<div tabindex="13" id="registerSelector" class="slideSelector">
-			<div id="registerSelectorText">Register</div>
-		</div>
-		<div id="slideSelectorBg"></div>
-	</div>
 
-	<div class="loginSlideContainer">
-		<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
-		<div class="loginSlide">
-			<div>
-				<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
+		<div class="loginSlideContainer">
+			<div class="loginOpt" id="internalLoginOpt">Login with credentials</div>
+			<div class="loginSlide">
+				<div>
+					<input autocomplete="username" tabindex="14" type="text" id="inputUsername" class="formInput" name="username" placeholder="Username" aria-label="Login username"/>
+				</div>
+				<div>
+					<input autoclomplete="off" tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
+				</div>
+				<div>
+					<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
+				</div>
 			</div>
-			<div>
-				<input autoclomplete="off" tabindex="15" type="password" id="inputPassword" class="formInput" name="password" placeholder="Password" aria-label="Login password"/>
-			</div>
-			<div>
-				<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
+			<div class="loginOpt" id="externalLoginOpt">Other login options</div>
+			<div id="externalLogin">
+				<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
 			</div>
 		</div>
-		<div class="loginOpt" id="externalLoginOpt">Other login options</div>
-		<div id="externalLogin">
-			<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
-		</div>
-	</div>
-	<div class="loginSlideContainer">
-		<div class="loginOpt" id="createAcc">Create your account</div>
-		<div class=loginSlide>
-			<div>
-				<input autocomplete="username" tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
-			</div>
-			<div>
-				<input autoclomplete="off" tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
-			</div>
-			<div>
-				<input autoclomplete="off" tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
-			</div>
-			<div>
-				<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
+		<div class="loginSlideContainer">
+			<div class="loginOpt" id="createAcc">Create your account</div>
+			<div class=loginSlide>
+				<div>
+					<input autocomplete="username" tabindex="14" type="text" id="inputRegisterUsername" name="username" class="registerFormInput" placeholder="Username" aria-label="Register username"/>
+				</div>
+				<div>
+					<input autoclomplete="off" tabindex="15" type="password" id="inputRegisterPassword" name="password" class="registerFormInput" placeholder="Password" aria-label="Register password"/>
+				</div>
+				<div>
+					<input autoclomplete="off" tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
+				</div>
+				<div>
+					<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -100,12 +103,15 @@ var template = `
 	usernameRegisterInput = document.getElementById('inputRegisterUsername');
 	pwRegisterInput = document.getElementById('inputRegisterPassword');
 	cpwRegisterInput = document.getElementById('inputRegisterCPassword');
+	slideSelectorBg = document.querySelector("#slideSelectorBg");
 
 
 	for (i = 0; i < slides.length; i++)
 		slides[i].style.display = "none";
 	slides[slideIdx].style.display = "flex";
-	document.getElementById("slideSelectorBg").style.setProperty("left", `${50 * slideIdx}%`);
+	slideSelectorBg.style.setProperty("left", `${loginSlideSelector[slideIdx].getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${loginSlideSelector[slideIdx].getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${loginSlideSelector[slideIdx].getBoundingClientRect().height}px`)
 
 
 	loginSlideSelector.forEach(function(key) {
@@ -118,35 +124,7 @@ var template = `
 					slides[i].style.display = "none";
 				slides[slideIdx].style.display = "flex";
 				loginSlideSelector[slideIdx].classList.add('activeSelector');
-				if (slideIdx == 1){
-					history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`);
-					document.title = langJson['login'][`register title`];
-				}
-				else{
-					history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`);
-					document.title = langJson['login'][`login title`];
-				}
-
-				const time = {
-					duration: 300,
-					iterations: 1,
-				}
-				if (loginSlideSelector[slideIdx].id == "loginSelector"){
-					move = [
-						{ left: `50%`},
-						{ left: `0%`}
-					];
-					document.getElementById("slideSelectorBg").animate(move, time);
-					document.getElementById("slideSelectorBg").style.setProperty("left", "0");
-				}
-				else{
-					move = [
-						{ left: `0%`},
-						{ left: `50%`}
-					];
-					document.getElementById("slideSelectorBg").animate(move, time);
-					document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
-				}
+				loginSlide(save, slideIdx)
 			}
 		})
 		key.onkeydown = (e) => {
@@ -389,6 +367,7 @@ var template = `
 
 function loginKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+		save = slideIdx;
 		loginSlideSelector[slideIdx].classList.remove('activeSelector');
 		if (e.key == "ArrowLeft")
 			slideIdx -= 1;
@@ -401,37 +380,44 @@ function loginKeyDownEvent(e) {
 		for (let i = 0; i < slides.length; i++)
 			slides[i].style.display = "none";
 		loginSlideSelector[slideIdx].classList.add('activeSelector');
-
-		const time = {
-			duration: 300,
-			iterations: 1,
-		}
-		if (loginSlideSelector[slideIdx].id == "loginSelector"){
-			const move = [
-				{ left: `50%`},
-				{ left: `0%`}
-			];
-			document.getElementById("slideSelectorBg").animate(move, time);
-			document.getElementById("slideSelectorBg").style.setProperty("left", "0");
-		}
-		else{
-			const move = [
-				{ left: `0%`},
-				{ left: `50%`}
-			];
-			document.getElementById("slideSelectorBg").animate(move, time);
-			document.getElementById("slideSelectorBg").style.setProperty("left", "50%");
-		}
 		slides[slideIdx].style.display = "flex";
 		loginSlideSelector[slideIdx].focus();
-
-		if (slideIdx == 1){
-			history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`);
-			document.title = langJson['login'][`register title`];
-		}
-		else{
-			history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`);
-			document.title = langJson['login'][`login title`];
-		}
+		loginSlide(save, slideIdx);
 	}
+}
+
+var prevSelectorElem;
+
+
+var newSelectorElem;
+
+function loginSlide(formerIdx, newerIdx){
+	prevSelectorElem = loginSlideSelector[formerIdx];
+	newSelectorElem = loginSlideSelector[newerIdx];
+	move = [
+		{ left: `${prevSelectorElem.getBoundingClientRect().left}px`, width: `${prevSelectorElem.getBoundingClientRect().width}px`, height: `${prevSelectorElem.getBoundingClientRect().height}px`},
+		{ left: `${newSelectorElem.getBoundingClientRect().left}px`, width: `${newSelectorElem.getBoundingClientRect().width}px`, height: `${newSelectorElem.getBoundingClientRect().height}px`},
+	];
+	time = {
+		duration: 500,
+		iterations: 1,
+	}
+	slideSelectorBg.animate(move, time);
+	slideSelectorBg.style.setProperty("left", `${newSelectorElem.getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${newSelectorElem.getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${newSelectorElem.getBoundingClientRect().height}px`)
+	if (slideIdx == 1){
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`);
+		document.title = langJson['login'][`register title`];
+	}
+	else{
+		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`);
+		document.title = langJson['login'][`login title`];
+	}
+}
+
+function updateLoginPageSize(){
+	slideSelectorBg.style.setProperty("left", `${loginSlideSelector[slideIdx].getBoundingClientRect().left}px`)
+	slideSelectorBg.style.setProperty("width", `${loginSlideSelector[slideIdx].getBoundingClientRect().width}px`)
+	slideSelectorBg.style.setProperty("height", `${loginSlideSelector[slideIdx].getBoundingClientRect().height}px`)
 }

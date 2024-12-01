@@ -31,6 +31,7 @@ body{
 	font-size: calc(16px * var(--font-size-amplifier));
 	background-color: var(--page-bg-rgb);
 	height: 100vh;
+	height: calc(var(--vh) * 100);
 	margin: 0;
 	user-select: none;
 	color : var(--main-text-rgb);
@@ -146,11 +147,11 @@ button:focus, button:hover{
 #container{
 	display: flex;
 	flex-flow: column;
-	height: calc(100vh - 10rem);
+	height: calc(calc(var(--vh) * 100) - 10rem);
 }
 
 #pageContentContainer {
-	height: 100%;
+	height: calc(calc(var(--vh) * 100) - 10rem);
 	text-align: center;
 	width: -webkit-fill-available;
 	width: -moz-available;
@@ -352,8 +353,8 @@ a {
     background: red;
     color: var(--page-bg-rgb);
     width: fit-content;
-	max-width: 20vw;
-	word-break: break-all;
+	max-width: 50vw;
+	word-break: break-word;
 	position: relative;
     padding: 1vw;
     border-radius: 1rem;
@@ -421,6 +422,9 @@ a {
 
 		input{
 			border-width: 4.2px;
+		}
+		.popupErrorContainer, .popupErrorContainerClose, .popupSuccessContainer, .popupSuccessContainerClose{
+			max-width: 70vw;
 		}
 	}
 
