@@ -82,7 +82,10 @@
 		".passwordMissingLowerCase" : "Das Passwort muss mindestens einen Großbuchstaben enthalten",
 		".passwordMissingUpperCase" : "Das Passwort muss mindestens einen Kleinbuchstaben enthalten",
 		".passwordMissingDigit" : "Das Passwort muss mindestens eine Ziffer enthalten",
-		".passwordMissingSpec" : "Das Passwort muss mindestens ein Sonderzeichen enthalten"
+		".passwordMissingSpec" : "Das Passwort muss mindestens ein Sonderzeichen enthalten",
+		".invalidResponse": "Ungültige Antwort von der 42 API, bitte später erneut versuchen",
+		".passwordTooLong": "Passwort zu lang (maximal 128 Zeichen)",
+		".passwordTooShort" : "Passwort zu kurz (mindestens 8 Zeichen)"
 	},
 	"settings": {
 		"#title" : "",
@@ -131,9 +134,8 @@
 		".authenticationError" : "Fehler bei der Authentifizierung",
 		".incorectOldPassword" : "Altes Passwort stimmt nicht überein",
 		".invalidPassword" : "Ungültiges Passwort",
-		".passwordTooLong" : "Passwort zu lang",
-		".passwordTooShort" : "Passwort zu kurz",
-		".passwordTooWeak" : "Passwort zu schwach",
+		".passwordTooLong": "Passwort zu lang (maximal 128 Zeichen)",
+		".passwordTooShort" : "Passwort zu kurz (mindestens 8 Zeichen)",
 		".mismatchPassword" : "Passwörter stimmen nicht überein",
 		".forbidenChars" : "Benutzername muss alphanumerisch sein",
 		".usernameTooLong" : "Benutzername darf höchstens 15 Zeichen lang sein",
