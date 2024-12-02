@@ -1087,15 +1087,25 @@ function game() {
 }
 
 function setTournamentAriaLabeL(){
-	content = client.langJson['tournament'];
+	content = langJson['tournament'];
 	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
 		try {
-			elem.setAttribute("aria-label",
-				content["matchResume"]
-				.replace("${MATCH_NUMBER}", content[elem.classList[3]])
-				.replace("${ROUND}", content[elem.classList[1]])
-				.replace("${WINNER_USERNAME}", elem.querySelector(".winner .username").innerText)
-				.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))
+			if (elem.querySelector(".winner")){
+				elem.setAttribute("aria-label",
+					content["matchResume"]
+					.replace("${MATCH_NUMBER}", content[elem.classList[3]])
+					.replace("${ROUND}", content[elem.classList[1]])
+					.replace("${WINNER_USERNAME}", elem.querySelector(".winner .username").innerText)
+					.replace("${LOSER_USERNAME}", elem.querySelector(".loser .username").innerText))
+			}
+			else{
+				elem.setAttribute("aria-label",
+					content["matchResumeNoWinner"]
+					.replace("${MATCH_NUMBER}", content[elem.classList[3]])
+					.replace("${ROUND}", content[elem.classList[1]])
+					.replace("${USER_ONE}", elem.querySelector(".left .username").innerText)
+					.replace("${USER_TWO}", elem.querySelector(".right .username").innerText))
+			}
 		} catch (e){
 			if (langJson && langJson['tournament']['.errorSettingAriaLabels'])
 				popUpError(langJson['tournament']['.errorSettingAriaLabels']);

@@ -254,7 +254,9 @@
 	"tournament":{
 		"#title" : "",
 		"tournamentSubtitle" : "Torneo",
+		"#subtitle" : "Torneo",
 		"matchResume" : "${MATCH_NUMBER} di ${ROUND}, il vincitore è ${WINNER_USERNAME} e il perdente è ${LOSER_USERNAME}",
+		"matchResumeNoWinner": "${MATCH_NUMBER} di ${ROUND}, tra ${USER_ONE} e ${USER_TWO}, non c'è un vincitore",
 		"one" : "Primo",
 		"two" : "Secondo",
 		"three" : "Terzo",
