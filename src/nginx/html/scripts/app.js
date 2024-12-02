@@ -2163,14 +2163,14 @@ function checkGameSize(){
 	var container = document.querySelector("#gameDisplay")
 	var baseFontSize = parseInt(window.getComputedStyle(document.documentElement).fontSize) * 1.5;
 	var currentFontSize = parseInt(window.getComputedStyle(container.querySelector(".playerName")).fontSize);
-	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect()
-	while (getElemWidth(container).toFixed(0) <= anchor.right.toFixed(0) && currentFontSize < baseFontSize){
+	var anchor = document.querySelector("#notifCenterContainer").getBoundingClientRect();
+	while (parseInt(getElemWidth(container).toFixed(0)) <= parseInt(anchor.right.toFixed(0)) && currentFontSize < baseFontSize){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize + 1}px`)
 		})
 		currentFontSize += 1;
 	}
-	while (getElemWidth(container).toFixed(0) > anchor.right.toFixed(0) && currentFontSize > 8){
+	while (parseInt(getElemWidth(container).toFixed(0)) > parseInt(anchor.right.toFixed(0)) && currentFontSize > 8){
 		container.querySelectorAll(".playerName").forEach(function (elem) {
 			elem.style.setProperty("font-size", `${currentFontSize - 1}px`)
 		})
