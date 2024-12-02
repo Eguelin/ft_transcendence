@@ -951,7 +951,7 @@ dropDownLangOption.forEach(function (button) {
 						headers: {
 							'Content-Type': 'application/json',
 						},
-						body: JSON.stringify({ language_pack: currentLangPack }),
+						body: JSON.stringify({ language_pack: button.id }),
 						credentials: 'include'
 					})
 					dropDownLangBtn.style.setProperty("background-image", `url(https://${hostname.host}/icons/${button.id}.svg)`);
@@ -1013,7 +1013,6 @@ window.addEventListener("click", (e) => {
 		myPushState(`${e.target.href}`);
 
 	}
-
 })
 
 function popUpError(error){
@@ -1206,7 +1205,7 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	}
 })
 
-function updateNotifAriaLabel(){
+function updateIndexAriaLabel(){
 	document.querySelectorAll(".notifContainer").forEach(function(elem){
 		elem.setAttribute("aria-label", `${langJson['index']['aria.notifContainer'].replace("${MESSAGE}", elem.innerText)}`);
 	})
@@ -1216,6 +1215,8 @@ function updateNotifAriaLabel(){
 	document.querySelectorAll(".notifReject").forEach(function (elem){
 		elem.setAttribute("aria-label", langJson['index']['aria.notifReject']);
 	})
+	if (document.querySelector("#pfp") && langJson && client)
+		document.querySelector("#pfp").setAttribute("aria-label", langJson['index']['aria#pfp'].replace("${USERNAME}", client.username))
 }
 
 function sendNotif(message, id, type) {
@@ -1633,7 +1634,6 @@ async function loadCurrentLang(){
 				if (currentPage == "user" || currentPage == "home")
 					updateUserAriaLabel(content);
 				if (currentPage == 'user') {updateUserLang();}
-				if (currentPage == 'dashboard') {updateDashboardLang();}
 				if (currentPage == "game") {
 					document.title = langJson['game'][`game title`].replace("${MODE}", url.searchParams.get("mode"));
 				}
@@ -1651,7 +1651,6 @@ async function loadCurrentLang(){
 		content = langJson['index'];
 		if (content != null || content != undefined) {
 			var searchBar = document.querySelector("#inputSearchUser");
-			updateNotifAriaLabel();
 			if (content["#inputSearchUser"].length > 15){
 				searchBar.style.setProperty("width", `${content["#inputSearchUser"].length}ch`)
 			}
@@ -1683,12 +1682,17 @@ async function loadCurrentLang(){
 			document.querySelector("#settingsBtn").href = `/${currentLang}/settings`;
 			document.querySelector("#logOutBtn").href = `/${currentLang}/login`;
 		}
+		updateIndexAriaLabel();
+		if (currentPage == 'dashboard') 
+			updateDashboardLang();
 		if (currentPage == "friends")
 			updateFriendPageSize();
 		if (currentPage == "login")
 			updateLoginPageSize();
 		if (currentPage == "settings")
 			updateSettingsPageSize();
+		if (currentPage == "match")
+			drawMatchInfoGraph();
 		document.documentElement.setAttribute("lang", langMap[currentLang]);
 	}
 }
@@ -1860,8 +1864,6 @@ setInterval(function() {
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "friends")
 		checkFriendPageSize()
-
-
 }, 500);
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
@@ -2219,6 +2221,21 @@ function checkMatchSize(){
 				graphCurrentSize -= 5;
 				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
 			}
+		}
+		while ((biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8 * client.fontAmplifier) ||
+			((graphSample.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width || document.documentElement.clientHeight - 5 < graphSample.getBoundingClientRect().bottom) && graphCurrentSize > 200)){
+			if (biggest.getBoundingClientRect().width > anchorSample.getBoundingClientRect().width && currentFontSize > 8 * client.fontAmplifier){
+				container.style.setProperty("font-size", `${currentFontSize - 1}px`)
+				currentFontSize -= 1;
+			}
+			if (graphCurrentSize > 200) {
+				graphCurrentSize -= 5;
+				drawMatchInfoGraph(graphCurrentSize, graphMatchCurrentSize);
+			}
+		}
+		while (document.body.scrollWidth > document.body.offsetWidth && currentFontSize > 8 * client.fontAmplifier){
+			container.style.setProperty("font-size", `${currentFontSize - 1}px`)
+			currentFontSize -= 1;
 		}
 		if (document.querySelector("#exchangeContainer .portrait .exchangeTablesCaption").getBoundingClientRect().width > document.documentElement.offsetWidth){
 			document.querySelector("#exchangeContainer .portrait").style.setProperty("display", "none");
