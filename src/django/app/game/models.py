@@ -124,6 +124,7 @@ class Match(models.Model):
 class TournamentMatch(Match):
 	round = models.IntegerField(default=0)
 	match = models.IntegerField(default=0)
+	winnerSide = models.CharField(max_length=10, default="None")
 
 	def createMatchFromGame(self, game):
 		match = self.objects.create(
@@ -133,6 +134,7 @@ class TournamentMatch(Match):
 			player_two_pts=game.playerRight.score,
 			date=datetime.datetime.now(),
 			winner=game.winner.user,
+			winnerSide=game.winnerSide,
 			exchanges=game.exchanges,
 			exchangesMax=game.exchangesMax,
 			player_one_goals_up=game.playerLeft.goalsUp,
