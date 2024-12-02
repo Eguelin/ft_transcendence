@@ -282,6 +282,7 @@
 		".landscape #averageExchangeTitle" : "Moyenne par point",
 		".landscape #longestExchangeTitle" : "Le plus long",
 		"match title" : "Match - transcendence",
+		".noZoneHitted" : "Aucune zone touchée",
 		"aria#matchInfoGraph" : "Graphique à secteurs des zones de correspondance globales, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",

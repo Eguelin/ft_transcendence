@@ -157,11 +157,11 @@ var template = `
 			document.querySelector("#matchContainer #playerTwo .playerInfo > .playerScore").innerText = client.langJson['match']['.playerScore'].replace("${POINTS}", match.player_two_pts);
 
 			document.querySelector("#matchContainer .portrait #totalExchange").innerText = match.exchanges;
-			document.querySelector("#matchContainer .portrait #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
+			document.querySelector("#matchContainer .portrait #averageExchange").innerText = isNaN((match.exchanges / (match.player_one_pts + match.player_two_pts))) ? "0" : (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
 			document.querySelector("#matchContainer .portrait #longestExchange").innerText = match.exchangesMax;
 
 			document.querySelector("#matchContainer .landscape #totalExchange").innerText = match.exchanges;
-			document.querySelector("#matchContainer .landscape #averageExchange").innerText = (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
+			document.querySelector("#matchContainer .landscape #averageExchange").innerText = isNaN((match.exchanges / (match.player_one_pts + match.player_two_pts))) ? "0" : (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
 			document.querySelector("#matchContainer .landscape #longestExchange").innerText = match.exchangesMax;
 			document.querySelectorAll(".graphTitle").forEach(function(elem){elem.innerText = client.langJson['match']['CVmatchInfoGraph']})
 			playerOneInfo[0] = match.player_one_goals_up;
@@ -212,9 +212,12 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 
 
 
-	matchInfoContainer.appendChild(matchInfoGraph);
-	playerOneInfoGraphContainer.appendChild(playerOneInfoGraph);
-	playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
+	if (matchInfoContainer)
+		matchInfoContainer.appendChild(matchInfoGraph);
+	if (playerOneInfoGraphContainer)
+		playerOneInfoGraphContainer.appendChild(playerOneInfoGraph);
+	if (playerTwoInfoGraphContainer)
+		playerTwoInfoGraphContainer.appendChild(playerTwoInfoGraph);
 
 	if (matchInfoChart){
 		if (matchInfoChart instanceof Chart)
@@ -256,13 +259,30 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 				client.langJson["match"]["up"], client.langJson["match"]["mid"], client.langJson["match"]["down"]
 			]
 		}
-
-		playerOneInfoChart = new Chart(document.querySelector("#playerOneInfoGraph"), {
-			type: 'pie',
-			data: data,
-			options: options,
-			plugins: [htmlLegendPlugin]
-		});
+		let i =0;
+		for (;i<playerOneInfo.length; i++){
+			if (playerOneInfo[i] > 0){
+				playerOneInfoChart = new Chart(document.querySelector("#playerOneInfoGraph"), {
+					type: 'pie',
+					data: data,
+					options: options,
+					plugins: [htmlLegendPlugin]
+				});
+				break;
+			}
+		}
+		if (i == playerOneInfo.length){
+			if (document.querySelector("#playerOneInfoGraph"))
+				document.querySelector("#playerOneInfoGraph").remove();
+			if (!document.querySelector("#playerOne .noZoneHitted")){
+				var message = document.createElement("a");
+				message.className="noZoneHitted";
+				message.innerText = client.langJson['match']['.noZoneHitted'];
+				document.querySelector("#playerOne .canvaContainer").remove();
+				document.querySelector("#playerOne .playerGraphContainer").appendChild(message);
+				document.querySelector("#playerOne .playerGraphContainer").classList.add("noZoneHittedContainer");
+			}
+		}
 	}
 
 	function drawPlayerTwoInfo(){
@@ -287,12 +307,30 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 			]
 		}
 
-		playerTwoInfoChart = new Chart(document.querySelector("#playerTwoInfoGraph"), {
-			type: 'pie',
-			data: data,
-			options: options,
-			plugins: [htmlLegendPlugin]
-		});
+		let i =0;
+		for (;i<playerTwoInfo.length; i++){
+			if (playerTwoInfo[i] > 0){
+				playerTwoInfoChart = new Chart(document.querySelector("#playerTwoInfoGraph"), {
+					type: 'pie',
+					data: data,
+					options: options,
+					plugins: [htmlLegendPlugin]
+				});
+				break;
+			}
+		}
+		if (i == playerTwoInfo.length){
+			if (document.querySelector("#playerTwoInfoGraph"))
+				document.querySelector("#playerTwoInfoGraph").remove();
+			if (!document.querySelector("#playerTwo .noZoneHitted")){
+				var message = document.createElement("a");
+				message.className="noZoneHitted";
+				message.innerText = client.langJson['match']['.noZoneHitted'];
+				document.querySelector("#playerTwo .canvaContainer").remove();
+				document.querySelector("#playerTwo .playerGraphContainer").appendChild(message);
+				document.querySelector("#playerTwo .playerGraphContainer").classList.add("noZoneHittedContainer");
+			}
+		}
 	}
 
 	function drawMatchInfo(){
@@ -318,19 +356,41 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 			]
 		}
 
-		matchInfoChart = new Chart(document.getElementById("matchInfoGraph"), {
-			type: 'pie',
-			data: data,
-			options: options,
-			plugins: [htmlLegendPlugin]
-		});
+
+		let i =0;
+		for (;i<playerOneInfo.length; i++){
+			if (playerOneInfo[i] > 0 || playerTwoInfo[i] > 0){
+				matchInfoChart = new Chart(document.getElementById("matchInfoGraph"), {
+					type: 'pie',
+					data: data,
+					options: options,
+					plugins: [htmlLegendPlugin]
+				});
+				break;
+			}
+		}
+		if (i == playerOneInfo.length){
+			if (document.querySelector("#matchInfoGraph"))
+				document.querySelector("#matchInfoGraph").remove();
+			if (!document.querySelector("#matchInfoGraphContainer .noZoneHitted")){
+				var message = document.createElement("a");
+				message.className="noZoneHitted";
+				message.innerText = client.langJson['match']['.noZoneHitted'];
+				document.querySelector("#matchInfoGraphContainer .canvaContainer").remove();
+				document.querySelector("#matchInfoGraphContainer .matchGraphContainer").appendChild(message);
+				document.querySelector("#matchInfoGraphContainer .matchGraphContainer").classList.add("noZoneHittedContainer");
+			}
+		}
 	}
 	drawMatchInfo();
 	drawPlayerOneInfo();
 	drawPlayerTwoInfo();
-	matchInfoChart.resize(matchChartSize,matchChartSize);
-	playerOneInfoChart.resize(size,size);
-	playerTwoInfoChart.resize(size,size);
+	if (matchInfoChart)
+		matchInfoChart.resize(matchChartSize,matchChartSize);
+	if (playerOneInfoChart)
+		playerOneInfoChart.resize(size,size);
+	if (playerTwoInfoChart)
+		playerTwoInfoChart.resize(size,size);
 	updateMatchVariableText();
 	unsetLoader();
 }
@@ -338,9 +398,12 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 async function updateMatchVariableText() {
 	if (!langJson)
 		return
-	document.querySelector("#matchInfoGraph").setAttribute("aria-label", langJson['match']["aria#matchInfoGraph"].replace("${TOP}", playerOneInfo[0] + playerTwoInfo[0]).replace("${CENTER}", playerOneInfo[1] + playerTwoInfo[1]).replace("${BOTTOM}", playerOneInfo[2] + playerTwoInfo[2]));
-	document.querySelector("#playerOneInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerOneInfoGraph"].replace("${USERNAME}", document.querySelector("#playerOne .playerName").innerText).replace("${TOP}", playerOneInfo[0]).replace("${CENTER}", playerOneInfo[1]).replace("${BOTTOM}", playerOneInfo[2]));
-	document.querySelector("#playerTwoInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerTwoInfoGraph"].replace("${USERNAME}", document.querySelector("#playerTwo .playerName").innerText).replace("${TOP}", playerTwoInfo[0]).replace("${CENTER}", playerTwoInfo[1]).replace("${BOTTOM}", playerTwoInfo[2]))
+	if (document.querySelector("#matchInfoGraph"))
+		document.querySelector("#matchInfoGraph").setAttribute("aria-label", langJson['match']["aria#matchInfoGraph"].replace("${TOP}", playerOneInfo[0] + playerTwoInfo[0]).replace("${CENTER}", playerOneInfo[1] + playerTwoInfo[1]).replace("${BOTTOM}", playerOneInfo[2] + playerTwoInfo[2]));
+	if (document.querySelector("#playerOneInfoGraph"))
+		document.querySelector("#playerOneInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerOneInfoGraph"].replace("${USERNAME}", document.querySelector("#playerOne .playerName").innerText).replace("${TOP}", playerOneInfo[0]).replace("${CENTER}", playerOneInfo[1]).replace("${BOTTOM}", playerOneInfo[2]));
+	if (document.querySelector("#playerTwoInfoGraph"))
+		document.querySelector("#playerTwoInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerTwoInfoGraph"].replace("${USERNAME}", document.querySelector("#playerTwo .playerName").innerText).replace("${TOP}", playerTwoInfo[0]).replace("${CENTER}", playerTwoInfo[1]).replace("${BOTTOM}", playerTwoInfo[2]))
 
 	document.querySelector("#playerOnePfp").setAttribute("aria-label", langJson['match']["aria#playerOnePfp"].replace("${USERNAME}",document.querySelector("#playerOne .playerName").innerText))
 	document.querySelector("#playerTwoPfp").setAttribute("aria-label", langJson['match']["aria#playerTwoPfp"].replace("${USERNAME}",document.querySelector("#playerTwo .playerName").innerText))
