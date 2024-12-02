@@ -662,7 +662,7 @@ function game() {
 						}
 					}
 				}
-
+				
 				if ((mode=="local" || client.username == player2.name) && isMobile()){
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
 					if (mode != "local"){
@@ -678,6 +678,8 @@ function game() {
 					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointercancel = (e) => {pointerEvent('ArrowDown', false, "playerTwo", "rightBtn");}
 				}
 				else{
+					if (isMobile())
+						document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = null;
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = null;
