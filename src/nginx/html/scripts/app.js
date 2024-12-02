@@ -1628,7 +1628,7 @@ async function loadCurrentLang(){
 						})
 					}
 				}
-				catch{}
+				catch (e){console.error(e)}
 			});
 			try {
 
@@ -1694,6 +1694,8 @@ async function loadCurrentLang(){
 			updateSettingsPageSize();
 		if (currentPage == "match")
 			drawMatchInfoGraph();
+		if (currentPage == "tournament")
+			setTournamentAriaLabeL();
 		document.documentElement.setAttribute("lang", langMap[currentLang]);
 	}
 }

@@ -253,8 +253,10 @@
 	},
 	"tournament":{
 		"#title" : "",
+		"#subtitle" : "Tournament",
 		"tournamentSubtitle" : "Tournament",
 		"matchResume" : "${MATCH_NUMBER} of ${ROUND}, winner is ${WINNER_USERNAME} and loser is ${LOSER_USERNAME}",
+		"matchResumeNoWinner" : "${MATCH_NUMBER} of ${ROUND}, between ${USER_ONE} and ${USER_TWO}, there is no winner",
 		"one" : "First",
 		"two" : "Second",
 		"three" : "Third",
