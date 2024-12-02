@@ -1748,6 +1748,10 @@ function createMatchResumeContainer(match, username, displayName) {
 			scoreUserName.classList.add("blockedUser");
 			scoreUserName.innerText = client.langJson["index"][".blockedUser"];
 		}
+		else if (scoreUserName.innerText == "nobody"){
+			scoreUserName.classList.add("nobodyUser");
+			scoreUserName.innerText = client.langJson["index"][".nobodyUser"];
+		}
 		else{
 			scoreUserName.href  = `https://${hostname.host}/${currentLang}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_one : match.player_two}`
 			scoreUserName.setAttribute("aria-label", `${client.langJson['home']['aria.resultScoreName'].replace("${USERNAME}", scoreUserName.innerText)}`);
@@ -1761,6 +1765,10 @@ function createMatchResumeContainer(match, username, displayName) {
 		else if (scoreOpponentName.innerText == "blocked"){
 			scoreOpponentName.classList.add("blockedUser");
 			scoreOpponentName.innerText = client.langJson["index"][".blockedUser"];
+		}
+		else if (scoreOpponentName.innerText == "nobody"){
+			scoreOpponentName.classList.add("nobodyUser");
+			scoreOpponentName.innerText = client.langJson["index"][".nobodyUser"];
 		}
 		else{
 			scoreOpponentName.href  = `https://${hostname.host}/${currentLang}/user/${match.player_one_display_name == username || match.player_one== username ? match.player_two : match.player_one}`

@@ -448,6 +448,7 @@
 #exchangeContainer{
 	text-align: left;
 	padding: 1rem;
+	height: 100%;
 }
 
 #matchContainer{
@@ -586,6 +587,9 @@ table.landscape{
 
 	table.landscape{
 		display: none;
+	}
+	#matchTextInfo{
+		flex: auto !important;
 	}
 	.mobile {
 
@@ -915,4 +919,17 @@ table.landscape{
 .playerInfoGraphContainer{
 	gap: 1rem;
 	height: 100%;
+}
+
+#matchTextInfo{
+	display: flex;
+	flex-direction: column;
+}
+
+#matchWinnerContainer{
+	font-size: 2rem;
+}
+
+#matchWinner{
+	font-weight: bold;
 }

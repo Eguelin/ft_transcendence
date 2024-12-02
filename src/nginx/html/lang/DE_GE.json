@@ -219,6 +219,7 @@
 		"aria#winLossAbsGraph" : "Absolute Anzahl der Siege nach Datum:",
 		"aria_winLossGraphBis" : "${VALUE} am ${DATE}, ",
 		"dashboard title" : "${USERNAME} Dashboard - transcendence",
+		".notEnoughData" : "Nicht genügend Daten verfügbar, um das Diagramm für diesen Zeitraum anzuzeigen. Die einzigen verfügbaren Daten sind: ${VALUE} am ${DATE}",
 		".invalidDate" : "Ungültiges Datum"
 	},
 	"search": {
@@ -270,6 +271,7 @@
 	},
 	"match" : {
 		"#title" : "",
+		"#subtitle" : "",
 		"exchange stats" : "Gesamtzahl der Austausche: ${NUMBER_OF_EXCHANGE}\nDurchschnittliche Anzahl der Austausche pro Punkt: ${AVERAGE_EXCHANGE}\nLängster Austausch: ${LONGEST}",
 		"up": "Obere Ecke",
 		"mid": "Mitte",
@@ -292,7 +294,9 @@
 		"aria#playerTwoInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		
 		"aria#playerOnePfp" : "${USERNAME} Profilbild",
-		"aria#playerTwoPfp" : "${USERNAME} Profilbild"
+		"aria#playerTwoPfp" : "${USERNAME} Profilbild",
+		"#matchWinnerText": "Gewinner : ",
+		"#matchWinnerText.noWinner": "Kein Gewinner"
 	},
 	"404":{
 		"#title" : "FEHLER 404",
