@@ -282,6 +282,7 @@
 		".landscape #averageExchangeTitle" : "Durchschnitt pro Punkt",
 		".landscape #longestExchangeTitle" : "Längster",
 		"match title" : "Spiel - transcendence",
+		".noZoneHitted": "Keine Zone getroffen",
 		"aria#matchInfoGraph" : "Kreisdiagramm der globalen Trefferzone, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
