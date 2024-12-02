@@ -319,6 +319,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				},
 				plugins: [htmlLegendPlugin]
 			});
+			document.querySelector("#userStatGraph").innerText = client.langJson["dashboard"]["aria#userStatGraph"].replace("${NB_VICTORIES}", totalWin).replace("${NB_DEFEATS}", totalMatch - totalWin);
 		};
 
 		function drawAverage(){
@@ -425,7 +426,12 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				},
 				plugins: [htmlLegendPlugin]
 			});
-
+			var aria = client.langJson["dashboard"]["aria#winLossGraph"];
+			Object.keys(mapAverage).forEach(function(key){
+				if (!isNaN(mapAverage[key]['result']))
+					aria += client.langJson["dashboard"]["aria_winLossGraphBis"].replace("${VALUE}", mapAverage[key]['result']).replace("${DATE}", mapAverage[key]['date'])
+			})
+			document.querySelector("#winLossGraph").setAttribute("aria-label", aria);
 		}
 
 		function drawAbs(){
@@ -532,6 +538,11 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 				},
 				plugins: [htmlLegendPlugin]
 			});
+			var aria = client.langJson["dashboard"]["aria#winLossAbsGraph"];
+			Object.keys(mapAbs).forEach(function(key){
+				aria += client.langJson["dashboard"]["aria_winLossGraphBis"].replace("${VALUE}", mapAbs[key]['result']).replace("${DATE}", mapAbs[key]['date'])
+			})
+			document.querySelector("#winLossAbsGraph").setAttribute("aria-label", aria);
 
 		}
 
@@ -553,25 +564,7 @@ function updateDashboardLang(){
 	if (document.querySelector("#notPlayedPeriod")){
 		document.querySelector("#notPlayedPeriod").innerText = client.langJson['dashboard']['#notPlayedPeriod'].replace("${USERNAME}", splitPath[5]);
 	}
-
-	if (chartAverage){
-		chartAverage.titleBlock.options.text = content["CVwinLossGraph"];
-		if (chartAverage.config._config.data.datasets.length > 1)
-			chartAverage.config._config.data.datasets[1].label = content["CVwinLossGraphClient"];
-		chartAverage.update();
-	}
-	if (chartAbs){
-		chartAbs.titleBlock.options.text = content["CVwinLossAbsGraph"];
-		if (chartAverage.config._config.data.datasets.length > 1)
-			chartAbs.config._config.data.datasets[1].label = content["CVwinLossAbsGraphClient"];
-		chartAbs.update();
-	}
-	if (chartStats){
-		chartStats.titleBlock.options.text = content["CVuserStatsGraph"];
-		chartStats.config._config.data.labels[0] = content["CVwin"];
-		chartStats.config._config.data.labels[1] = content["CVloss"];
-		chartStats.update();
-	}
+	displayCharts();
 	document.title = langJson['dashboard'][`dashboard title`].replace("${USERNAME}", splitPath[5]);
 }
 

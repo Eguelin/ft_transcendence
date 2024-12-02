@@ -18,6 +18,7 @@
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italienisch",
 		"aria#pushNotif" : "Schaltfläche zum Öffnen/Schließen des Benachrichtigungscenters",
+		"aria#pfp" : "${USERNAME} Profilbild",
 		"aria.notifContainer" : "Benachrichtigungsnachricht: ${MESSAGE}. Drücken Sie die Eingabetaste, um die Optionen zum Akzeptieren/Ablehnen zu öffnen",
 		"aria.notifAccept" : "Anfrage akzeptieren",
 		"aria.notifReject" : "Anfrage ablehnen",
@@ -188,6 +189,7 @@
 		"ariaResume.matchDescContainer" : "Match zwischen ${USER_ONE} und ${USER_TWO} am ${DATE}, Gewinner ist ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Turnier am ${DATE}",
 		"aria.resultScoreName" : "Profilweiterleitung von ${USERNAME}",
+		"aria#profilePfp" : "${USERNAME} Profilbild",
 		"user title" : "${USERNAME} - transcendence"
 	},
 	"dashboard":{
@@ -212,6 +214,10 @@
 		"aria#lastWeekSelection" : "Statistiken der letzten 7 Tage anzeigen",
 		"aria#lastMonthSelection" : "Statistiken des letzten Monats anzeigen",
 		"aria#lastYearSelection" : "Statistiken des letzten Jahres anzeigen",
+		"aria#userStatGraph" : "Gesamtzahl der Siege: ${NB_VICTORIES},Gesamtzahl der Niederlagen: ${NB_DEFEATS}",
+		"aria#winLossGraph" : "Durchschnittliche Anzahl der Siege nach Datum:",
+		"aria#winLossAbsGraph" : "Absolute Anzahl der Siege nach Datum:",
+		"aria_winLossGraphBis" : "${VALUE} am ${DATE}, ",
 		"dashboard title" : "${USERNAME} Dashboard - transcendence",
 		".invalidDate" : "Ungültiges Datum"
 	},
@@ -267,7 +273,8 @@
 		"mid": "Mitte",
 		"down": "Untere Ecke",
 		"CVmatchInfoGraph": "Meist getroffene Zone",
-		"points" : "${POINTS} Punkte",
+		".graphTitle": "Meist getroffene Zone",
+		".playerScore" : "${POINTS} Punkte",
 		".exchangeTablesCaption" : "Austauschstatistiken",
 		".portrait #totalExchangeTitle" : "Gesamt",
 		".portrait #averageExchangeTitle" : "Durchschnitt pro Punkt",
@@ -276,7 +283,14 @@
 		".landscape #totalExchangeTitle" : "Gesamt",
 		".landscape #averageExchangeTitle" : "Durchschnitt pro Punkt",
 		".landscape #longestExchangeTitle" : "Längster",
-		"match title" : "Spiel - transcendence"
+		"match title" : "Spiel - transcendence",
+		".noZoneHitted": "Keine Zone getroffen",
+		"aria#matchInfoGraph" : "Kreisdiagramm der globalen Trefferzone, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
+		"aria#playerOneInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
+		"aria#playerTwoInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
+		
+		"aria#playerOnePfp" : "${USERNAME} Profilbild",
+		"aria#playerTwoPfp" : "${USERNAME} Profilbild"
 	},
 	"404":{
 		"#title" : "FEHLER 404",

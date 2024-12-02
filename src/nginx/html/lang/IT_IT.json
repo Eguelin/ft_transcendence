@@ -18,6 +18,7 @@
 		"aria#DE_GE" : "Tedesco",
 		"aria#IT_IT" : "Italiano",
 		"aria#pushNotif" : "Pulsante apri/chiudi centro notifiche",
+		"aria#pfp": "Immagine del profilo ${USERNAME}",
 		"aria.notifContainer" : "Messaggio di notifica: ${MESSAGE}. Premi INVIO per aprire le opzioni accetta/rifiuta",
 		"aria.notifAccept" : "Accetta richiesta",
 		"aria.notifReject" : "Rifiuta richiesta",
@@ -188,6 +189,7 @@
 		"ariaResume.matchDescContainer": "Partita tra ${USER_ONE} e ${USER_TWO} il ${DATE}, il vincitore è ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Torneo il ${DATE}",
 		"aria.resultScoreName" : "Reindirizzamento al profilo di ${USERNAME}",
+		"aria#profilePfp": "Immagine del profilo ${USERNAME}",
 		"user title" : "${USERNAME} - transcendence"
 	},
 	"dashboard":{
@@ -212,6 +214,10 @@
 		"aria#lastWeekSelection" : "Visualizza statistiche degli ultimi 7 giorni",
 		"aria#lastMonthSelection" : "Visualizza statistiche dell'ultimo mese",
 		"aria#lastYearSelection" : "Visualizza statistiche dell'ultimo anno",
+		"aria#userStatGraph" : "Numero totale di vittorie: ${NB_VICTORIES},Numero totale di sconfitte: ${NB_DEFEATS}",
+		"aria#winLossGraph" : "Numero medio di vittorie per data:",
+		"aria#winLossAbsGraph" : "Numero assoluto di vittorie per data:",
+		"aria_winLossGraphBis" : "${VALUE} il ${DATE}, ",
 		"dashboard title" : "Dashboard di ${USERNAME} - transcendence",
 		".invalidDate" : "Data non valida"
 	},
@@ -267,7 +273,8 @@
 		"mid": "Centro",
 		"down": "Angolo inferiore",
 		"CVmatchInfoGraph": "Zona più colpita",
-		"points" : "${POINTS} punti",
+		".graphTitle": "Zona più colpita",
+		".playerScore" : "${POINTS} punti",
 		".exchangeTablesCaption" : "Statistiche degli scambi",
 		".portrait #totalExchangeTitle" : "Totale",
 		".portrait #averageExchangeTitle" : "Media per punto",
@@ -276,7 +283,14 @@
 		".landscape #totalExchangeTitle" : "Totale",
 		".landscape #averageExchangeTitle" : "Media per punto",
 		".landscape #longestExchangeTitle" : "Più lungo",
-		"match title" : "Partita - transcendence"
+		"match title" : "Partita - transcendence",
+		".noZoneHitted": "Nessuna zona colpita",
+		"aria#matchInfoGraph" : "Grafico a torta delle zone di hit della corrispondenza globale, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
+		"aria#playerOneInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
+		"aria#playerTwoInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
+		
+		"aria#playerOnePfp" : "Immagine del profilo di ${USERNAME}",
+		"aria#playerTwoPfp" : "Immagine del profilo di ${USERNAME}"
 	},
 	"404":{
 		"#title" : "ERRORE 404",
