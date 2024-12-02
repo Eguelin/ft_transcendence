@@ -1,4 +1,4 @@
-var playerOneInfo = [0,0,0], playerTwoInfo = [0,0,0]
+var playerOneInfo = [-1,-1,-1], playerTwoInfo = [-1,-1,-1]
 
 var template = `
 <div id="pageContentContainer">
@@ -239,6 +239,8 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 	}
 
 	function drawPlayerOneInfo(){
+		if (playerOneInfo[0] == -1)
+			return;
 		const options = {
 			plugins: {
 				htmlLegend:{
@@ -286,6 +288,8 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 	}
 
 	function drawPlayerTwoInfo(){
+		if (playerTwoInfo[0] == -1)
+			return
 		const options = {
 			plugins: {
 				legend: {
@@ -334,6 +338,8 @@ function drawMatchInfoGraph(size = 300, matchChartSize = 400){
 	}
 
 	function drawMatchInfo(){
+		if (playerOneInfo[0] == -1)
+			return;
 		const options = {
 			plugins: {
 				legend: {
