@@ -57,6 +57,8 @@ function updateUserLang(){
     var splitPath = window.location.href.split('/');
     if (document.querySelector('#notPlayedToday'))
         document.querySelector('#notPlayedToday').innerText = client.langJson['user']['#notPlayedToday'].replace("${USERNAME}", splitPath[5]);
+	if (document.querySelector("#profilePfp"))
+		document.querySelector("#profilePfp").setAttribute("aria-label", langJson['user']['aria#profilePfp'].replace("${USERNAME}", splitPath[5]));
 	document.title = langJson['user'][`user title`].replace("${USERNAME}", splitPath[5]);
 
 }

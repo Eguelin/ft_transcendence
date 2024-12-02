@@ -18,6 +18,7 @@
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italiano",
 		"aria#pushNotif" : "Notif center open/close button",
+		"aria#pfp" : "${USERNAME} profile picture",
 		"aria.notifContainer" : "Notification message : ${MESSAGE}. press ENTER to open accept/reject options",
 		"aria.notifAccept" : "Accept request",
 		"aria.notifReject" : "Reject request",
@@ -187,6 +188,7 @@
 		"ariaResume.matchDescContainer" : "Match between ${USER_ONE} and ${USER_TWO} on the ${DATE}, winner is ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Tournament on the ${DATE}",
 		"aria.resultScoreName" : "${USERNAME} profile redirection",
+		"aria#profilePfp" : "${USERNAME} profile picture",
 		"user title" : "${USERNAME} - transcendence"
 	},
 	"dashboard":{
@@ -211,6 +213,10 @@
 		"aria#lastWeekSelection" : "Display stats from the last 7 days",
 		"aria#lastMonthSelection" : "Display stats from the last month",
 		"aria#lastYearSelection" : "Display stats from the last year",
+		"aria#userStatGraph" : "Total number of victory : ${NB_VICTORIES},Total number of defeats : ${NB_DEFEATS}",
+		"aria#winLossGraph" : "Average number of wins by date :",
+		"aria#winLossAbsGraph" : "Absolute number of wins by date :",
+		"aria_winLossGraphBis" : "${VALUE} on ${DATE}, ",
 		"dashboard title" : "${USERNAME} dashboard - transcendence",
 		".invalidDate" : "Invalid date"
 	},
@@ -281,18 +287,6 @@
 		"aria#playerOneInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, center : ${CENTER}, bottom : ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, center : ${CENTER}, bottom : ${BOTTOM}",
 
-		"aria.portrait #totalExchangeTitle" : "Total : ${VALUE}",
-		"aria.portrait #totalExchange" : "Total : ${VALUE}",
-		"aria.portrait #averageExchangeTitle" : "Average per point : ${VALUE}",
-		"aria.portrait #averageExchange" : "Average per point : ${VALUE}",
-		"aria.portrait #longestExchangeTitle" : "Longest : ${VALUE}",
-		"aria.portrait #longestExchange" : "Longest : ${VALUE}",
-		"aria.landscape #totalExchangeTitle" : "Total : ${VALUE}",
-		"aria.landscape #totalExchange" : "Total : ${VALUE}",
-		"aria.landscape #averageExchangeTitle" : "Average per point : ${VALUE}",
-		"aria.landscape #averageExchange" : "Average per point : ${VALUE}",
-		"aria.landscape #longestExchangeTitle" : "Longest : ${VALUE}",
-		"aria.landscape #longestExchange" : "Longest : ${VALUE}",
 		"aria#playerOnePfp" : "${USERNAME} profile picture",
 		"aria#playerTwoPfp" : "${USERNAME} profile picture"
 	},
