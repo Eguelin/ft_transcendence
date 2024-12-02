@@ -917,13 +917,13 @@ def get_tournament(request):
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["username"] = p1_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["display_name"] = p1_display_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["profile_picture"] = p1_pfp
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winner.username == match.player_one.username else None
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["winner"] = "left" if match.winnerSide == "left" else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerLeft"]["score"] = match.player_one_pts
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["username"] = p2_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["display_name"] = p2_display_name
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["profile_picture"] = p2_pfp
-			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winner.username == match.player_two.username else None
+			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["winner"] = "right" if match.winnerSide == "right" else None
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["playerRight"]["score"] = match.player_two_pts
 
 			tournamentJson["round_{0}".format(match.round)]["match_{0}".format(match.match)]["id"] = match.pk
