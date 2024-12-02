@@ -159,6 +159,7 @@ function getGradient(ctx, chartArea) {
 }
 
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
+	document.querySelector("#profileGraphs").style.display = "none";
     if (!(startDate instanceof Date && endDate instanceof Date)){
         return ;
     }
@@ -257,7 +258,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
         startDate.setDate(startDate.getDate() + 1);
     }
 	if (totalMatch){
-
+		document.querySelector("#profileGraphs").style.display = "flex";
 		const totalDuration = (500 / LastXDaysDisplayed);
 		const delayBetweenPoints = totalDuration / nbMatch;
 		const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
