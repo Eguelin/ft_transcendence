@@ -613,3 +613,14 @@ input[type="date"]{
 .noZoneHittedContainer > *{
 	flex: 1;
 }
+
+.notEnoughDataContainer{
+	width: 100% !important;
+	height: 100%;
+	justify-content: space-around;
+	padding: 1rem;
+	box-sizing: border-box;
+	div{
+		height: unset !important;
+	}
+}

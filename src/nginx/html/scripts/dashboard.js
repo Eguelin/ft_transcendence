@@ -7,6 +7,7 @@ var customEndDayInput;
 var lastWeekSelection;
 var lastMonthSelection;
 var lastYearSelection;
+var mapAverage = [], mapAbs = [];
 
 var template = `
 <div id="pageContentContainer" class="dashboard">
@@ -157,8 +158,6 @@ function getGradient(ctx, chartArea) {
   return gradient;
 }
 
-
-
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
     if (!(startDate instanceof Date && endDate instanceof Date)){
         return ;
@@ -188,7 +187,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 
     var LastXDaysDisplayed = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
     nbMatch = Object.keys(matches).length;
-    const mapAverage = [], mapAbs = [], clientMapAverage = [], clientMapAbs = [];
+    const clientMapAverage = [], clientMapAbs = [];
     var startedPlaying = false;
 	var totalWin = 0, totalMatch = 0, graphLineWidth = .5, graphPointRadius = 2, lineWidth = 2;
 	if (isMobile()){
@@ -377,61 +376,80 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 
 			document.querySelector("#winLossGraphContainer .graphTitle").innerText = client.langJson["dashboard"]["CVwinLossGraph"];
 
-			chartAverage = new Chart(document.getElementById("winLossGraph"), {
-				type: 'line',
-				data: {
-					datasets: datasets
-				},
-				options:{
-					animation,
-					parsing: {
-						xAxisKey: 'date',
-						yAxisKey: 'result'
+
+			if (mapAverage.length <= 1){
+				if (document.querySelector("#winLossGraph"))
+					document.querySelector("#winLossGraph").remove();
+				if (document.querySelector("#winLossGraphContainer .graphLegendContainer"))
+					document.querySelector("#winLossGraphContainer .graphLegendContainer").remove();
+				if (!document.querySelector("#winLossGraphContainer .notEnoughData")){
+					var message = document.createElement("a");
+					message.className="notEnoughData";
+					message.innerText = client.langJson['dashboard']['.notEnoughData'].replace("${VALUE}", mapAverage[0]['result']).replace("${DATE}", mapAverage[0]['date']);
+					document.querySelector("#winLossGraphContainer").appendChild(message);
+					document.querySelector("#lineChartsContainer").classList.add("notEnoughDataContainer");
+				}
+			}
+			else if (document.getElementById("winLossGraph")){
+				chartAverage = new Chart(document.getElementById("winLossGraph"), {
+					type: 'line',
+					data: {
+						datasets: datasets
 					},
-					plugins: {
-						legend: {
-							display: false,
+					options:{
+						animation,
+						parsing: {
+							xAxisKey: 'date',
+							yAxisKey: 'result'
 						},
-						htmlLegend:{
-							containerID: 'averageLegend'
-						}
-					},
-					scales: {
-						y: {
-							ticks: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								font: {
-									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						plugins: {
+							legend: {
+								display: false,
+							},
+							htmlLegend:{
+								containerID: 'averageLegend'
+							}
+						},
+						scales: {
+							y: {
+								ticks: {
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									font: {
+										family : "pong",
+										size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+									},
 								},
+								grid: {
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									lineWidth:graphLineWidth,
+									drawTicks: false,
+								},
+								min: 0,
+								max: 100,
 							},
-							grid: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								lineWidth:graphLineWidth,
-								drawTicks: false,
-							},
-							min: 0,
-							max: 100,
-						},
-						x: {
-							ticks: {
-								display : false
-							},
-							grid: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								lineWidth:graphLineWidth,
+							x: {
+								ticks: {
+									display : false
+								},
+								grid: {
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									lineWidth:graphLineWidth,
+								}
 							}
 						}
-					}
-				},
-				plugins: [htmlLegendPlugin]
-			});
+					},
+					plugins: [htmlLegendPlugin]
+				});
+			}
 			var aria = client.langJson["dashboard"]["aria#winLossGraph"];
 			Object.keys(mapAverage).forEach(function(key){
 				if (!isNaN(mapAverage[key]['result']))
 					aria += client.langJson["dashboard"]["aria_winLossGraphBis"].replace("${VALUE}", mapAverage[key]['result']).replace("${DATE}", mapAverage[key]['date'])
 			})
-			document.querySelector("#winLossGraph").setAttribute("aria-label", aria);
+			if (document.querySelector("#winLossGraph"))
+				document.querySelector("#winLossGraph").setAttribute("aria-label", aria);
+			else if (document.querySelector("#winLossGraphContainer .notEnoughData"))
+				document.querySelector("#winLossGraphContainer .notEnoughData").setAttribute("aria-label", aria);
 		}
 
 		function drawAbs(){
@@ -489,60 +507,78 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 
 			document.querySelector("#winLossAbsGraphContainer .graphTitle").innerText = client.langJson["dashboard"]["CVwinLossAbsGraph"];
 
-			chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
-				type: 'line',
-				data: {
-					datasets: datasets
-				},
-				options:{
-					animation,
-					parsing: {
-						xAxisKey: 'date',
-						yAxisKey: 'result'
+			if (mapAbs.length <= 1){
+				if (document.querySelector("#winLossAbsGraph"))
+					document.querySelector("#winLossAbsGraph").remove();
+				if (document.querySelector("#winLossAbsGraphContainer .graphLegendContainer"))
+					document.querySelector("#winLossAbsGraphContainer .graphLegendContainer").remove();
+				if (!document.querySelector("#winLossAbsGraphContainer .notEnoughData")){
+					var message = document.createElement("a");
+					message.className="notEnoughData";
+					message.innerText = client.langJson['dashboard']['.notEnoughData'].replace("${VALUE}", mapAbs[0]['result']).replace("${DATE}", mapAbs[0]['date']);
+					document.querySelector("#winLossAbsGraphContainer").appendChild(message);
+					document.querySelector("#lineChartsContainer").classList.add("notEnoughDataContainer");
+				}
+			}
+			else{
+				chartAbs = new Chart(document.getElementById("winLossAbsGraph"), {
+					type: 'line',
+					data: {
+						datasets: datasets
 					},
-					plugins: {
-						legend: {
-							display: false,
+					options:{
+						animation,
+						parsing: {
+							xAxisKey: 'date',
+							yAxisKey: 'result'
 						},
-						htmlLegend:{
-							containerID: 'absLegend'
-						}
-					},
-					scales: {
-						y: {
-							ticks: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								font: {
-									family : "pong",
-									size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+						plugins: {
+							legend: {
+								display: false,
+							},
+							htmlLegend:{
+								containerID: 'absLegend'
+							}
+						},
+						scales: {
+							y: {
+								ticks: {
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									font: {
+										family : "pong",
+										size : window.getComputedStyle(document.documentElement).fontSize.replace("px", "") / 1.5
+									},
 								},
+								grid: {
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									lineWidth:graphLineWidth,
+									drawTicks: false,
+								},
+								min: Math.abs(minAbs) > Math.abs(maxAbs) ? minAbs : -maxAbs,
+								max: Math.abs(minAbs) > Math.abs(maxAbs) ? -minAbs : maxAbs
 							},
-							grid: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								lineWidth:graphLineWidth,
-								drawTicks: false,
-							},
-							min: Math.abs(minAbs) > Math.abs(maxAbs) ? minAbs : -maxAbs,
-							max: Math.abs(minAbs) > Math.abs(maxAbs) ? -minAbs : maxAbs
-						},
-						x: {
-							ticks: {
-								display : false
-							},
-							grid: {
-								color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
-								lineWidth:graphLineWidth,
+							x: {
+								ticks: {
+									display : false
+								},
+								grid: {
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									lineWidth:graphLineWidth,
+								}
 							}
 						}
-					}
-				},
-				plugins: [htmlLegendPlugin]
-			});
+					},
+					plugins: [htmlLegendPlugin]
+				});
+			}
 			var aria = client.langJson["dashboard"]["aria#winLossAbsGraph"];
 			Object.keys(mapAbs).forEach(function(key){
 				aria += client.langJson["dashboard"]["aria_winLossGraphBis"].replace("${VALUE}", mapAbs[key]['result']).replace("${DATE}", mapAbs[key]['date'])
 			})
-			document.querySelector("#winLossAbsGraph").setAttribute("aria-label", aria);
+			if (document.querySelector("#winLossAbsGraph"))
+				document.querySelector("#winLossAbsGraph").setAttribute("aria-label", aria);
+			else if (document.querySelector("#winLossAbsGraphContainer .notEnoughData"))
+				document.querySelector("#winLossAbsGraphContainer .notEnoughData").setAttribute("aria-label", aria);
 
 		}
 
@@ -566,6 +602,17 @@ function updateDashboardLang(){
 	}
 	displayCharts();
 	document.title = langJson['dashboard'][`dashboard title`].replace("${USERNAME}", splitPath[5]);
+	
+	if (mapAverage.length <= 1){
+		if (document.querySelector("#winLossGraphContainer .notEnoughData")){
+			document.querySelector("#winLossGraphContainer .notEnoughData").innerText = client.langJson['dashboard']['.notEnoughData'].replace("${VALUE}", mapAverage[0]['result']).replace("${DATE}", mapAverage[0]['date']);
+		}
+	}
+	if (mapAbs.length <= 1){
+		if (document.querySelector("#winLossAbsGraphContainer .notEnoughData")){
+			document.querySelector("#winLossAbsGraphContainer .notEnoughData").innerText = client.langJson['dashboard']['.notEnoughData'].replace("${VALUE}", mapAbs[0]['result']).replace("${DATE}", mapAbs[0]['date']);
+		}
+	}
 }
 
 var dashboard = null;
@@ -575,6 +622,8 @@ var dashboard = null;
 function displayCharts(){
 	if (dashboard && dashboard instanceof Dashboard)
 	{
+		mapAverage = [];
+		mapAbs = [];
 		if (document.getElementById("winLossGraph"))
 			document.getElementById("winLossGraph").remove();
 		if (document.getElementById("winLossAbsGraph"))
