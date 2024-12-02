@@ -494,7 +494,7 @@ function load() {
 		s.setAttribute('src', `https://${hostname.host}/scripts/login.js`);
 		document.body.appendChild(s);
 	}
-	resizeEvent();
+	window.onresize = resizeEvent;
 }
 
 
@@ -503,6 +503,7 @@ function handleToken() {
 		disconnectSocket();
 	const code = window.location.href.split("code=")[1];
 	if (code) {
+		window.onresize = null;
 		fetch('/api/user/fortyTwo/login', {
 			method: 'POST',
 			headers: {
@@ -1899,9 +1900,8 @@ function resizeEvent(event, orientationChange = false){
 			updateLoginPageSize();
 		if (orientationChange == false && currentPage == "dashboard")
 			displayCharts();
-		if (currentPage == "home" || currentPage == "user"){
+		if (currentPage == "home" || currentPage == "user")
 			checkMatchResumeSize()
-		}
 		if (currentPage == "user")
 			checkUserPageSize();
 		if (currentPage == "game")
@@ -2274,9 +2274,6 @@ function checkWinnerDisplaySize(){
 		currentFontSize -= 1;
 	}
 }
-
-window.addEventListener("resize", resizeEvent);
-
 
 
 /***
