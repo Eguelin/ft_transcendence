@@ -342,19 +342,6 @@ async function updateMatchVariableText() {
 	document.querySelector("#playerOneInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerOneInfoGraph"].replace("${USERNAME}", document.querySelector("#playerOne .playerName").innerText).replace("${TOP}", playerOneInfo[0]).replace("${CENTER}", playerOneInfo[1]).replace("${BOTTOM}", playerOneInfo[2]));
 	document.querySelector("#playerTwoInfoGraph").setAttribute("aria-label", langJson['match']["aria#playerTwoInfoGraph"].replace("${USERNAME}", document.querySelector("#playerTwo .playerName").innerText).replace("${TOP}", playerTwoInfo[0]).replace("${CENTER}", playerTwoInfo[1]).replace("${BOTTOM}", playerTwoInfo[2]))
 
-	document.querySelector(".portrait #totalExchangeTitle").setAttribute("aria-label", langJson['match']['aria.portrait #totalExchangeTitle'].replace("${VALUE}", document.querySelector(".portrait #totalExchange").innerText));
-	document.querySelector(".portrait #totalExchange").setAttribute("aria-label", langJson['match']['aria.portrait #totalExchange'].replace("${VALUE}", document.querySelector(".portrait #totalExchange").innerText));
-	document.querySelector(".portrait #averageExchangeTitle").setAttribute("aria-label", langJson['match']['aria.portrait #averageExchangeTitle'].replace("${VALUE}", document.querySelector(".portrait #averageExchange").innerText));
-	document.querySelector(".portrait #averageExchange").setAttribute("aria-label", langJson['match']['aria.portrait #averageExchange'].replace("${VALUE}", document.querySelector(".portrait #averageExchange").innerText));
-	document.querySelector(".portrait #longestExchangeTitle").setAttribute("aria-label", langJson['match']['aria.portrait #longestExchangeTitle'].replace("${VALUE}", document.querySelector(".portrait #longestExchange").innerText));
-	document.querySelector(".portrait #longestExchange").setAttribute("aria-label", langJson['match']['aria.portrait #longestExchange'].replace("${VALUE}", document.querySelector(".portrait #longestExchange").innerText));
-	document.querySelector(".landscape #totalExchangeTitle").setAttribute("aria-label", langJson['match']['aria.landscape #totalExchangeTitle'].replace("${VALUE}", document.querySelector(".landscape #totalExchange").innerText));
-	document.querySelector(".landscape #totalExchange").setAttribute("aria-label", langJson['match']['aria.landscape #totalExchange'].replace("${VALUE}", document.querySelector(".landscape #totalExchange").innerText));
-	document.querySelector(".landscape #averageExchangeTitle").setAttribute("aria-label", langJson['match']['aria.landscape #averageExchangeTitle'].replace("${VALUE}", document.querySelector(".landscape #averageExchange").innerText));
-	document.querySelector(".landscape #averageExchange").setAttribute("aria-label", langJson['match']['aria.landscape #averageExchange'].replace("${VALUE}", document.querySelector(".landscape #averageExchange").innerText));
-	document.querySelector(".landscape #longestExchangeTitle").setAttribute("aria-label", langJson['match']['aria.landscape #longestExchangeTitle'].replace("${VALUE}", document.querySelector(".landscape #longestExchange").innerText));
-	document.querySelector(".landscape #longestExchange").setAttribute("aria-label", langJson['match']['aria.landscape #longestExchange'].replace("${VALUE}", document.querySelector(".landscape #longestExchange").innerText));
-
 	document.querySelector("#playerOnePfp").setAttribute("aria-label", langJson['match']["aria#playerOnePfp"].replace("${USERNAME}",document.querySelector("#playerOne .playerName").innerText))
 	document.querySelector("#playerTwoPfp").setAttribute("aria-label", langJson['match']["aria#playerTwoPfp"].replace("${USERNAME}",document.querySelector("#playerTwo .playerName").innerText))
 

@@ -1205,7 +1205,7 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 	}
 })
 
-function updateNotifAriaLabel(){
+function updateIndexAriaLabel(){
 	document.querySelectorAll(".notifContainer").forEach(function(elem){
 		elem.setAttribute("aria-label", `${langJson['index']['aria.notifContainer'].replace("${MESSAGE}", elem.innerText)}`);
 	})
@@ -1215,6 +1215,8 @@ function updateNotifAriaLabel(){
 	document.querySelectorAll(".notifReject").forEach(function (elem){
 		elem.setAttribute("aria-label", langJson['index']['aria.notifReject']);
 	})
+	if (document.querySelector("#pfp") && langJson && client)
+		document.querySelector("#pfp").setAttribute("aria-label", langJson['index']['aria#pfp'].replace("${USERNAME}", client.username))
 }
 
 function sendNotif(message, id, type) {
@@ -1632,7 +1634,6 @@ async function loadCurrentLang(){
 				if (currentPage == "user" || currentPage == "home")
 					updateUserAriaLabel(content);
 				if (currentPage == 'user') {updateUserLang();}
-				if (currentPage == 'dashboard') {updateDashboardLang();}
 				if (currentPage == "game") {
 					document.title = langJson['game'][`game title`].replace("${MODE}", url.searchParams.get("mode"));
 				}
@@ -1650,7 +1651,6 @@ async function loadCurrentLang(){
 		content = langJson['index'];
 		if (content != null || content != undefined) {
 			var searchBar = document.querySelector("#inputSearchUser");
-			updateNotifAriaLabel();
 			if (content["#inputSearchUser"].length > 15){
 				searchBar.style.setProperty("width", `${content["#inputSearchUser"].length}ch`)
 			}
@@ -1682,6 +1682,9 @@ async function loadCurrentLang(){
 			document.querySelector("#settingsBtn").href = `/${currentLang}/settings`;
 			document.querySelector("#logOutBtn").href = `/${currentLang}/login`;
 		}
+		updateIndexAriaLabel();
+		if (currentPage == 'dashboard') 
+			updateDashboardLang();
 		if (currentPage == "friends")
 			updateFriendPageSize();
 		if (currentPage == "login")

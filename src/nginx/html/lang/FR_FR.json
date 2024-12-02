@@ -18,6 +18,7 @@
 		"aria#DE_GE" : "Allemand",
 		"aria#IT_IT" : "Italien",
 		"aria#pushNotif" : "Bouton d'ouverture/fermeture du centre de notification",
+		"aria#pfp" : "Photo de profil de ${USERNAME}",
 		"aria.notifContainer" : "Message de notification : ${MESSAGE}. appuyez sur ENTRÉE pour ouvrir les options d'acceptation/rejet",
 		"aria.notifAccept" : "Accepter la demande",
 		"aria.notifReject" : "Rejeter la demande",
@@ -186,6 +187,7 @@
 		"ariaResume.matchDescContainer" : "Match entre ${USER_ONE} et ${USER_TWO} le ${DATE}, le gagnant est ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Tournoi le ${DATE}",
 		"aria.resultScoreName" : "Redirection vers le profil de ${USERNAME}",
+		"aria#profilePfp" : "Photo de profil de ${USERNAME}",
 		"user title" : "${USERNAME} - transcendence"
 	},
 	"dashboard":{
@@ -210,6 +212,10 @@
 		"aria#lastWeekSelection" : "Afficher les statistiques des 7 derniers jours",
 		"aria#lastMonthSelection" : "Afficher les statistiques du mois dernier",
 		"aria#lastYearSelection" : "Afficher les statistiques de l'année dernière",
+		"aria#userStatGraph" : "Nombre total de victoires : ${NB_VICTORIES},Nombre total de défaites : ${NB_DEFEATS}",
+		"aria#winLossGraph" : "Nombre moyen de victoires par date :",
+		"aria#winLossAbsGraph" : "Nombre absolu de victoires par date :",
+		"aria_winLossGraphBis" : "${VALUE} le ${DATE}, ",
 		"dashboard title" : "Tableau de bord de ${USERNAME} - transcendence",
 		".invalidDate" : "Date invalide"
 	},
@@ -279,18 +285,7 @@
 		"aria#matchInfoGraph" : "Graphique à secteurs des zones de correspondance globales, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
-		"aria.portrait #totalExchangeTitle" : "Total : ${VALUE}",
-		"aria.portrait #totalExchange" : "Total : ${VALUE}",
-		"aria.portrait #averageExchangeTitle" : "Moyenne par point : ${VALUE}",
-		"aria.portrait #averageExchange" : "Moyenne par point : ${VALUE}",
-		"aria.portrait #longestExchangeTitle" : "Le plus long : ${VALUE}",
-		"aria.portrait #longestExchange" : "Le plus long : ${VALUE}",
-		"aria.landscape #totalExchangeTitle" : "Total : ${VALUE}",
-		"aria.landscape #totalExchange" : "Total : ${VALUE}",
-		"aria.landscape #averageExchangeTitle" : "Moyenne par point : ${VALUE}",
-		"aria.landscape #averageExchange" : "Moyenne par point : ${VALUE}",
-		"aria.landscape #longestExchangeTitle" : "Le plus long : ${VALUE}",
-		"aria.landscape #longestExchange" : "Le plus long : ${VALUE}",
+		
 		"aria#playerOnePfp" : "Photo de profil ${USERNAME}",
 		"aria#playerTwoPfp" : "Photo de profil ${USERNAME}"
 	},

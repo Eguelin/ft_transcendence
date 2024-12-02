@@ -18,6 +18,7 @@
 		"aria#DE_GE" : "Deutsch",
 		"aria#IT_IT" : "Italienisch",
 		"aria#pushNotif" : "Schaltfläche zum Öffnen/Schließen des Benachrichtigungscenters",
+		"aria#pfp" : "${USERNAME} Profilbild",
 		"aria.notifContainer" : "Benachrichtigungsnachricht: ${MESSAGE}. Drücken Sie die Eingabetaste, um die Optionen zum Akzeptieren/Ablehnen zu öffnen",
 		"aria.notifAccept" : "Anfrage akzeptieren",
 		"aria.notifReject" : "Anfrage ablehnen",
@@ -186,6 +187,7 @@
 		"ariaResume.matchDescContainer" : "Match zwischen ${USER_ONE} und ${USER_TWO} am ${DATE}, Gewinner ist ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Turnier am ${DATE}",
 		"aria.resultScoreName" : "Profilweiterleitung von ${USERNAME}",
+		"aria#profilePfp" : "${USERNAME} Profilbild",
 		"user title" : "${USERNAME} - transcendence"
 	},
 	"dashboard":{
@@ -210,6 +212,10 @@
 		"aria#lastWeekSelection" : "Statistiken der letzten 7 Tage anzeigen",
 		"aria#lastMonthSelection" : "Statistiken des letzten Monats anzeigen",
 		"aria#lastYearSelection" : "Statistiken des letzten Jahres anzeigen",
+		"aria#userStatGraph" : "Gesamtzahl der Siege: ${NB_VICTORIES},Gesamtzahl der Niederlagen: ${NB_DEFEATS}",
+		"aria#winLossGraph" : "Durchschnittliche Anzahl der Siege nach Datum:",
+		"aria#winLossAbsGraph" : "Absolute Anzahl der Siege nach Datum:",
+		"aria_winLossGraphBis" : "${VALUE} am ${DATE}, ",
 		"dashboard title" : "${USERNAME} Dashboard - transcendence",
 		".invalidDate" : "Ungültiges Datum"
 	},
@@ -279,18 +285,7 @@
 		"aria#matchInfoGraph" : "Kreisdiagramm der globalen Trefferzone, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
-		"aria.portrait #totalExchangeTitle" : "Gesamt: ${VALUE}",
-		"aria.portrait #totalExchange" : "Gesamt: ${VALUE}",
-		"aria.portrait #averageExchangeTitle" : "Durchschnitt pro Punkt: ${VALUE}",
-		"aria.portrait #averageExchange" : "Durchschnitt pro Punkt: ${VALUE}",
-		"aria.portrait #longestExchangeTitle" : "Längste: ${VALUE}",
-		"aria.portrait #longestExchange" : "Längste: ${VALUE}",
-		"aria.landscape #totalExchangeTitle" : "Gesamt: ${VALUE}",
-		"aria.landscape #totalExchange" : "Gesamt: ${VALUE}",
-		"aria.landscape #averageExchangeTitle" : "Durchschnitt pro Punkt: ${VALUE}",
-		"aria.landscape #averageExchange" : "Durchschnitt pro Punkt: ${VALUE}",
-		"aria.landscape #longestExchangeTitle" : "Längste: ${VALUE}",
-		"aria.landscape #longestExchange" : "Längste: ${VALUE}",
+		
 		"aria#playerOnePfp" : "${USERNAME} Profilbild",
 		"aria#playerTwoPfp" : "${USERNAME} Profilbild"
 	},
