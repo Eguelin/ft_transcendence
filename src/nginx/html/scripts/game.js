@@ -134,50 +134,46 @@ function leftSlideBtn(){
 		return
 	var left = contest.getBoundingClientRect().left;
 
-
 	if (singleRoundDisplayIdx <= 0)
 		return;
 
-	if (contest.getBoundingClientRect().left + getWindowWidth() <= 0){
-		singleRoundDisplayIdx -= 1;
-		const move = [
-			{ left: `${left}px`},
-			{ left: `-${getWindowWidth() * singleRoundDisplayIdx}px`}
-		];
-		const time = {
-			duration: 500,
-			iterations: 1,
-		}
-		contest.animate(move, time);
-
-		document.querySelector("#controlerSlide .leftBtnContainer").onclick = null;
-		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controlerSlide .rightBtnContainer").onclick = null;
-		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
-
-		document.querySelector("#treeCanva").animate(move, time);
-		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
-		/*document.querySelector("#treeCanva").style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)		*/
-		setTimeout(()=>{
-
-			switch (singleRoundDisplayIdx){
-				case 0:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
-					break ;
-				case 1:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
-					break ;
-				case 2:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
-					break ;
-			}
-			document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
-			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
-			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
-			blockResizeInterval = false;
-		}, 500);
+	singleRoundDisplayIdx -= 1;
+	const move = [
+		{ left: `${left}px`},
+		{ left: `-${getWindowWidth() * singleRoundDisplayIdx}px`}
+	];
+	const time = {
+		duration: 500,
+		iterations: 1,
 	}
+	contest.animate(move, time);
+
+	document.querySelector("#controlerSlide .leftBtnContainer").onpointerdown = null;
+	document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
+	document.querySelector("#controlerSlide .rightBtnContainer").onpointerdown = null;
+	document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
+
+	document.querySelector("#treeCanva").animate(move, time);
+	contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
+	setTimeout(()=>{
+
+		switch (singleRoundDisplayIdx){
+			case 0:
+				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+				break ;
+			case 1:
+				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
+				break ;
+			case 2:
+				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
+				break ;
+		}
+		document.querySelector("#controlerSlide .leftBtnContainer").onpointerdown = leftSlideBtn;
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+		document.querySelector("#controlerSlide .rightBtnContainer").onpointerdown = rightSlideBtn;
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+		blockResizeInterval = false;
+	}, 500);
 }
 
 function rightSlideBtn(){
@@ -190,46 +186,44 @@ function rightSlideBtn(){
 	if (singleRoundDisplayIdx >= 2)
 		return;
 
-	if (contest.getBoundingClientRect().left > -(getWindowWidth() * 2)){
-		singleRoundDisplayIdx += 1;
-		const move = [
-			{ left: `${left}px`},
-			{ left: `-${getWindowWidth() * singleRoundDisplayIdx}px`}
-		];
-		const time = {
-			duration: 500,
-			iterations: 1,
-		}
-		contest.animate(move, time);
-
-		document.querySelector("#controlerSlide .leftBtnContainer").onclick = null;
-		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
-		document.querySelector("#controlerSlide .rightBtnContainer").onclick = null;
-		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
-
-		document.querySelector("#treeCanva").animate(move, time);
-		contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
-
-		setTimeout(()=>{
-
-			switch (singleRoundDisplayIdx){
-				case 0:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
-					break ;
-				case 1:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
-					break ;
-				case 2:
-					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
-					break ;
-			}
-			document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
-			document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-			document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
-			document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
-			blockResizeInterval = false;
-		}, 500);
+	singleRoundDisplayIdx += 1;
+	const move = [
+		{ left: `${left}px`},
+		{ left: `-${getWindowWidth() * singleRoundDisplayIdx}px`}
+	];
+	const time = {
+		duration: 500,
+		iterations: 1,
 	}
+	contest.animate(move, time);
+
+	document.querySelector("#controlerSlide .leftBtnContainer").onpointerdown = null;
+	document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = null;
+	document.querySelector("#controlerSlide .rightBtnContainer").onpointerdown = null;
+	document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = null;
+
+	document.querySelector("#treeCanva").animate(move, time);
+	contest.style.setProperty("left", `-${getWindowWidth() * singleRoundDisplayIdx}px`)
+
+	setTimeout(()=>{
+
+		switch (singleRoundDisplayIdx){
+			case 0:
+				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+				break ;
+			case 1:
+				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
+				break ;
+			case 2:
+				document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
+				break ;
+		}
+		document.querySelector("#controlerSlide .leftBtnContainer").onpointerdown = leftSlideBtn;
+		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
+		document.querySelector("#controlerSlide .rightBtnContainer").onpointerdown = rightSlideBtn;
+		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
+		blockResizeInterval = false;
+	}, 500);
 }
 
 function leftBtnKeydownEvent(e){
@@ -253,9 +247,9 @@ function rightBtnKeydownEvent(e){
 	playerOneScore = document.querySelector("#playerOne > .playerScore");
 	playerTwoScore = document.querySelector("#playerTwo > .playerScore");
 
-	document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
+	document.querySelector("#controlerSlide .leftBtnContainer").onpointerdown = leftSlideBtn;
 	document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
-	document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
+	document.querySelector("#controlerSlide .rightBtnContainer").onpointerdown = rightSlideBtn;
 	document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 	document.querySelectorAll(".contestMatchResume").forEach(function (elem){
 		elem.innerHTML = `
@@ -378,11 +372,14 @@ function displayTournament(is_finished = false){
 		})
 	})
 	setTournamentTreeValue(is_finished);
-	document.title = langJson['game'][`game title`].replace("${MODE}", langJson['game']['tournamentSubtitle']);
+	if (!is_finished)
+		document.title = langJson['game'][`game title`].replace("${MODE}", langJson['game']['tournamentSubtitle']);
+	else
+		document.title = langJson['tournament'][`tournament title`];
 	if (playersCount == 8 || is_finished){
 
-		document.querySelector("#controlerSlide .leftBtnContainer").onclick = leftSlideBtn;
-		document.querySelector("#controlerSlide .rightBtnContainer").onclick = rightSlideBtn;
+		document.querySelector("#controlerSlide .leftBtnContainer").onpointerdown = leftSlideBtn;
+		document.querySelector("#controlerSlide .rightBtnContainer").onpointerdown = rightSlideBtn;
 		document.querySelector("#controlerSlide .leftBtnContainer").onkeydown = leftBtnKeydownEvent;
 		document.querySelector("#controlerSlide .rightBtnContainer").onkeydown = rightBtnKeydownEvent;
 
@@ -444,10 +441,22 @@ function displayTournament(is_finished = false){
 		if (getWindowWidth() < minSemiTreeWidth || screen.availWidth < minSemiTreeWidth){
 			document.querySelector("#controlerSlide").classList.add("singleRoundDisplay");
 			tournamentContainer.classList.add("singleRoundDisplay");
+			switch (singleRoundDisplayIdx){
+				case 0:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['quarter']}`
+					break ;
+				case 1:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['semi']}`
+					break ;
+				case 2:
+					document.querySelector("#subtitle").innerText = `${client.langJson['game']['tournamentSubtitle']} ${client.langJson['game']['final']}`
+					break ;
+			}
 		}
 		else {
 			tournamentContainer.classList.remove("singleRoundDisplay");
 			document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay");
+			document.querySelector("#subtitle").innerText = client.langJson['game']['tournamentSubtitle'];
 			tournamentContainer.style.setProperty("left", `0px`)
 			if (document.getElementById("treeCanva"))
 				document.querySelector("#treeCanva").style.setProperty("left", `0px`)

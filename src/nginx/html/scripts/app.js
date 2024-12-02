@@ -1870,7 +1870,7 @@ setInterval(function() {
 	if (currentPage == "game")
 		checkGameSize();
 	if (currentPage == "tournament")
-		displayTournament();
+		displayTournament(true);
 	if (currentPage == "game" || currentPage == "tournament")
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "friends")
@@ -1917,7 +1917,7 @@ function resizeEvent(event, orientationChange = false){
 		if (currentPage == "game")
 			checkGameSize();
 		if (currentPage == "tournament")
-			displayTournament();
+			displayTournament(true);
 		if (currentPage == "game" || currentPage == "tournament")
 			setTimeout(checkWinnerDisplaySize, 1)
 		if (currentPage == "match")
