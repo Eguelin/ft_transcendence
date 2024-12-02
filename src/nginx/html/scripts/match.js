@@ -4,36 +4,42 @@ var template = `
 <div id="pageContentContainer">
 	<div id="matchContainer">
 		<div id="matchInfo">
-			<div id="exchangeContainer">
-				<table class="landscape">
-					<caption class="exchangeTablesCaption"></caption>
-					<tr>
-						<th scope="row" id="totalExchangeTitle"></th>
-						<td id="totalExchange"></td>
-					</tr>
-					<tr>
-						<th scope="row" id="averageExchangeTitle"></th>
-						<td id="averageExchange"></td>
-					</tr>
-					<tr>
-						<th scope="row" id="longestExchangeTitle"></th>
-						<td id="longestExchange"></td>
-					</tr>
-				</table>
-				<table class="portrait">
-					<caption class="exchangeTablesCaption"></caption>
-					<tr>
-						<th scope="col" id="totalExchangeTitle"></th>
-						<th scope="col" id="averageExchangeTitle"></th>
-						<th scope="col" id="longestExchangeTitle"></th>
+			<div id="matchTextInfo">
+				<div id="matchWinnerContainer">
+					<span id="matchWinnerText">Winner : </span>
+					<a id="matchWinner">test</a>
+				</div>
+				<div id="exchangeContainer">
+					<table class="landscape">
+						<caption class="exchangeTablesCaption"></caption>
+						<tr>
+							<th scope="row" id="totalExchangeTitle"></th>
+							<td id="totalExchange"></td>
+						</tr>
+						<tr>
+							<th scope="row" id="averageExchangeTitle"></th>
+							<td id="averageExchange"></td>
+						</tr>
+						<tr>
+							<th scope="row" id="longestExchangeTitle"></th>
+							<td id="longestExchange"></td>
+						</tr>
+					</table>
+					<table class="portrait">
+						<caption class="exchangeTablesCaption"></caption>
+						<tr>
+							<th scope="col" id="totalExchangeTitle"></th>
+							<th scope="col" id="averageExchangeTitle"></th>
+							<th scope="col" id="longestExchangeTitle"></th>
 
-					</tr>
-					<tr>
-						<td id="totalExchange"></td>
-						<td id="averageExchange"></td>
-						<td id="longestExchange"></td>
-					</tr>
-				</table>
+						</tr>
+						<tr>
+							<td id="totalExchange"></td>
+							<td id="averageExchange"></td>
+							<td id="longestExchange"></td>
+						</tr>
+					</table>
+				</div>
 			</div>
 			<div id="matchInfoGraphContainer">
 				<div id="matchInfoLegendContainer"></div>
@@ -141,6 +147,11 @@ var template = `
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".blockedUser"];
 				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
 			}
+			else if (document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText == "nobody"){
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").classList.add("nobodyUser");
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".nobodyUser"];
+				document.querySelector("#matchContainer #playerOne .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
+			}
 
 			if (document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText == "deleted"){
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").classList.add("deletedUser");
@@ -150,6 +161,11 @@ var template = `
 			else if (document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText == "blocked"){
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").classList.add("blockedUser");
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".blockedUser"];
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
+			}
+			else if (document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText == "nobody"){
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").classList.add("nobodyUser");
+				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").innerText = client.langJson["index"][".nobodyUser"];
 				document.querySelector("#matchContainer #playerTwo .playerInfo .playerNamesContainer > .playerName").removeAttribute("href")
 			}
 
@@ -163,6 +179,32 @@ var template = `
 			document.querySelector("#matchContainer .landscape #totalExchange").innerText = match.exchanges;
 			document.querySelector("#matchContainer .landscape #averageExchange").innerText = isNaN((match.exchanges / (match.player_one_pts + match.player_two_pts))) ? "0" : (match.exchanges / (match.player_one_pts + match.player_two_pts)).toFixed(2);
 			document.querySelector("#matchContainer .landscape #longestExchange").innerText = match.exchangesMax;
+			
+			if (match.winner){
+				document.querySelector("#matchWinner").innerText = match.winner;
+				document.querySelector("#matchWinner").href  = `https://${hostname.host}/${currentLang}/user/${match.winner}`;
+				if (document.querySelector("#matchWinner").innerText == "deleted"){
+					document.querySelector("#matchWinner").classList.add("deletedUser");
+					document.querySelector("#matchWinner").innerText = client.langJson["index"][".deletedUser"];
+					document.querySelector("#matchWinner").removeAttribute("href")
+				}
+				else if (document.querySelector("#matchWinner").innerText == "blocked"){
+					document.querySelector("#matchWinner").classList.add("blockedUser");
+					document.querySelector("#matchWinner").innerText = client.langJson["index"][".blockedUser"];
+					document.querySelector("#matchWinner").removeAttribute("href")
+				}
+				else if (document.querySelector("#matchWinner").innerText == "nobody"){
+					document.querySelector("#matchWinner").classList.add("nobodyUser");
+					document.querySelector("#matchWinner").innerText = client.langJson["index"][".nobodyUser"];
+					document.querySelector("#matchWinner").removeAttribute("href")
+				}
+			}
+			else{
+				document.querySelector("#matchWinner").remove()
+				document.querySelector("#matchWinnerText").innerText = langJson['match'][".noWinner"];
+				document.querySelector("#matchWinnerText").classList.add("noWinner");
+			}
+			
 			document.querySelectorAll(".graphTitle").forEach(function(elem){elem.innerText = client.langJson['match']['CVmatchInfoGraph']})
 			playerOneInfo[0] = match.player_one_goals_up;
 			playerOneInfo[1] = match.player_one_goals_mid;
