@@ -1329,8 +1329,12 @@ function friendUpdate()
 						friendRequest = Object.values(text.friend_requests).find(request => request.username === data.sender_name);
 						if (friendRequest)
 						{
-							createFriendRequestContainer(friendRequest);
-							document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+							if (!document.querySelector(`#pendingFriendRequestList #${data.sender_name}`))
+							{
+								createFriendRequestContainer(friendRequest);
+								document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+							}
+
 						}
 						});
 					}
@@ -1411,36 +1415,6 @@ function friendUpdate()
 			}
 		}
 	}
-
-	window.sendFriendRequest = function (user) {
-		fetch('/api/user/get_user_id', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ "username": user, }),
-			credentials: 'include'
-		}).then(response => {
-			if (response.ok) {
-				response.json().then((user) => {
-					if (!user.blocked) {
-						const message = JSON.stringify({
-							type: 'send_friend_request',
-							target_user_id: user.id,
-							sender_username: client.username
-						});
-						socket.send(message);
-					}
-					else {
-						if (langJson && langJson['friends']['error_sending_request'])
-							popUpError(langJson['friends']['error_sending_request'])
-						else
-							popUpError("Couldn't send friend request")
-					}
-				});
-			}
-			else
-				console.log("Error: ", response);
-		});
-	};
 }
 
 function getElemWidth(elem){
