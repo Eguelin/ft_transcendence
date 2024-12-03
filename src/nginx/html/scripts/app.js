@@ -554,7 +554,7 @@ function handleToken() {
 				client = await new Client();
 				if (!client)
 					myReplaceState(`https://${hostname.host}/${currentLang}/login${hostname.hash}`);
-				else if (url.pathname == "" || url.pathname == "/") {
+				else if (url.pathname == `${currentLang}` || url.pathname == `${currentLang}/`) {
 					friendUpdate();
 					myReplaceState(`https://${hostname.host}/${currentLang}/home`);
 				}
@@ -684,6 +684,7 @@ const themeMap = {
 		"--recent-match-container-focus-child": "#00000000",
 		"--recent-match-container-focus-text": "#FDFDFB",
 		"--popup-input-bg-rgb" : "#110026",
+		"--alert-text-rgb" : "#FDFDFB",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -705,6 +706,7 @@ const themeMap = {
 		"--recent-match-container-focus-child": "#FFBFF7",
 		"--recent-match-container-focus-text": "#FFBFF7",
 		"--popup-input-bg-rgb" : "#393E46",
+		"--alert-text-rgb" : "#FDFDFB",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -726,6 +728,7 @@ const themeMap = {
 		"--recent-match-container-focus-child": "#00000000",
 		"--recent-match-container-focus-text": "#110026",
 		"--popup-input-bg-rgb" : "#F5EDED",
+		"--alert-text-rgb" : "#110026",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
@@ -746,6 +749,7 @@ const themeMap = {
 		"--recent-match-container-focus-child": "#2E073F",
 		"--recent-match-container-focus-text": "#2E073F",
 		"--popup-input-bg-rgb" : "#F7EFE5",
+		"--alert-text-rgb" : "#110026",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -778,23 +782,7 @@ function switchTheme(theme) {
 		document.getElementById("themeButton").style.maskImage = `url(https://${hostname.host}${themeMap[theme]["svg-path"]})`;
 
 	if (currentPage == "dashboard") {
-		chartAverage.options.scales.x._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
-		chartAverage.options.scales.y._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
-		chartAverage.options.scales.x._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
-		chartAverage.options.scales.y._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
-		chartAverage._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
-		chartAverage.update();
-
-		chartAbs.options.scales.x._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
-		chartAbs.options.scales.y._proxy.ticks.color = themeMap[theme]["--main-text-rgb"];
-		chartAbs.options.scales.x._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
-		chartAbs.options.scales.y._proxy.grid.color = themeMap[theme]["--main-text-rgb"];
-		chartAbs._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
-		chartAbs.update();
-
-
-		chartStats._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
-		chartStats.update();
+		displayCharts();
 	}
 	if (currentPage == "match"){
 		matchInfoChart._plugins._cache[5].options.color = themeMap[theme]["--main-text-rgb"];
@@ -1849,6 +1837,18 @@ setInterval(function() {
 		setTimeout(checkWinnerDisplaySize, 1)
 	if (currentPage == "friends")
 		checkFriendPageSize()
+	if (currentPage == "match"){
+		if (document.body.offsetWidth < document.body.scrollWidth)
+			checkMatchSize();
+		if (isPortrait()){
+			document.querySelector("#exchangeContainer .portrait").style.setProperty("display", "block");
+			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "none");
+		}
+		else{
+			document.querySelector("#exchangeContainer .portrait").style.setProperty("display", "none");
+			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "block");
+		}
+	}
 }, 500);
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
@@ -2097,12 +2097,24 @@ function checkGameSize(){
 	if (document.querySelector("#tournamentContainer") && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
-	if (document.querySelector("#gameContainer").classList.contains("local") && isPortrait()){
-		document.querySelector("#game").style.setProperty("rotate", "270deg");
-		document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
-		document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column-reverse");
-		playerKeyMap = FullInversedKeyMap;
-		playerTouchMap = keyMap;
+	if (document.querySelector("#gameContainer").classList.contains("local")){
+		if (isPortrait()){
+			document.querySelector("#game").style.setProperty("rotate", "270deg");
+			document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");
+			document.querySelector("#gameDisplay").style.setProperty("flex-direction", "column-reverse");
+			playerKeyMap = FullInversedKeyMap;
+			playerTouchMap = keyMap;
+		}
+		else{
+			document.querySelector("#game").style.setProperty("rotate", "0deg");
+			document.querySelector("#gameContainer").style.setProperty("flex-direction", "row");
+			document.querySelector("#gameDisplay").style.setProperty("flex-direction", "row");
+			playerKeyMap = HorizontalInversedkeyMap;
+			playerTouchMap = verticalInversedkeyMap;
+			if (isMobile()){
+				document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse")
+			}
+		}
 	}
 	if (document.querySelector("#gameContainer") && !document.querySelector("#gameContainer").classList.contains("local")){
 		if (isPortrait()){
@@ -2265,28 +2277,3 @@ function checkWinnerDisplaySize(){
 		currentFontSize -= 1;
 	}
 }
-
-
-/***
- *    ______  _____ ______  _   _  _____
- *    |  _  \|  ___|| ___ \| | | ||  __ \
- *    | | | || |__  | |_/ /| | | || |  \/
- *    | | | ||  __| | ___ \| | | || | __
- *    | |/ / | |___ | |_/ /| |_| || |_\ \
- *    |___/  \____/ \____/  \___/  \____/
- *
- *
- */
-
-function rollThemes(timeout = 1000){
-	switchTheme("light");
-	setTimeout(()=>{switchTheme("dark")}, timeout * 1);
-	setTimeout(()=>{switchTheme("high_light")}, timeout * 2);
-	setTimeout(()=>{switchTheme("high_dark")}, timeout * 3);
-}
-
-window.addEventListener("keyup", (e) => {	//to check screen reader accessibility
-	if (e.key == "Tab"){
-		console.log(e.target, e.target.innerText, e.target.getAttribute("aria-label"));
-	}
-})

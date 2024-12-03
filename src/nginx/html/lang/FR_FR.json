@@ -44,6 +44,7 @@
 		"ariaResume.matchDescContainer" : "Match entre ${USER_ONE} et ${USER_TWO} le ${DATE}, le gagnant est ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Tournoi le ${DATE}",
 		"aria.resultScoreName" : "Redirection vers le profil de ${USERNAME}",
+		"#inputChangeDisplayName" : "Nom d'affichage du tournoi",
 		"home title" : "Accueil - transcendence",
 		".displayNameUpdated" : "Nom d'affichage mis à jour avec succès",
 		".displayNameCantBeEmpty" : "Le nom d'affichage ne peut pas être vide"
