@@ -226,6 +226,9 @@
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Search",
+		"#userResumeCount" : "${VALUE} results matched ${SEARCH}",
+		"#inputSearch" : "Search user",
+		"aria#inputSearch" : "Search user input field",
 		"aria.userResume" : "${USERNAME} profile redirection",
 		"search title" : "${SEARCH} search - transcendence",
 		".emptySearchError" : "Can't search empty query"

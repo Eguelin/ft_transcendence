@@ -1581,8 +1581,6 @@ async function loadCurrentLang(){
 						})
 						if (currentPage == 'friends')
 							updateFriendsAriaLabel(key.substring(4), content[key]);
-						if (currentPage == 'search')
-							updateSearchAriaLabel(key.substring(4), content[key]);
 					}
 					else{
 						document.querySelectorAll(key).forEach( function (elem) {
@@ -1658,6 +1656,8 @@ async function loadCurrentLang(){
 			drawMatchInfoGraph();
 		if (currentPage == "tournament")
 			setTournamentAriaLabeL();
+		if (currentPage == 'search')
+			updateSearchLang();
 		document.documentElement.setAttribute("lang", langMap[currentLang]);
 	}
 }

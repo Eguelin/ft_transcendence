@@ -8,8 +8,6 @@ var template = `
 	<div id="resumeContainer">
 		<div id="userResumeCountContainer">
 			<a id="userResumeCount"></a>
-			<a id="userResumeCountText">results matched</a>
-			<a id="userResumeSearch"></a>
 		</div>
 	</div>
 
@@ -38,8 +36,7 @@ var template = `
 				history.replaceState("","",`https://${hostname.host}/${currentLang}/search?query=${url.searchParams.get("query")}`)
 				user.json().then(((user) => {
 					document.querySelector("#userResumeCountContainer").style.setProperty("display", "block")
-					document.getElementById("userResumeCount").innerHTML = Object.keys(user).length;
-					document.getElementById("userResumeSearch").innerText = url.searchParams.get("query");
+					document.getElementById("userResumeCount").innerHTML = langJson['search']['#userResumeCount'].replace("${VALUE}", Object.keys(user).length).replace("${SEARCH}", url.searchParams.get("query"));
 					Object.keys(user).forEach(function (key) {
 						createUserResumeContainer(user[key]);
 					})
@@ -63,7 +60,7 @@ var template = `
 					if (langJson && langJson['index']['.error401'])
 						popUpError(langJson['index']['.error401']);
 					else
-						popUpError("how dare you >:("); //TODO change popup message
+						popUpError("how dare you >:(");
 					myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
 				}
 				else
@@ -108,9 +105,12 @@ var template = `
 	};
 }
 
-async function updateSearchAriaLabel(key, content){
-	document.querySelectorAll(key).forEach(function (elem) {
-		elem.setAttribute("aria-label", `${elem.id} ${content}`);
+async function updateSearchLang(){
+	url = new URL(window.location.href);
+	var nb = document.querySelectorAll(".userResume").length
+	document.querySelector("#userResumeCount").innerText = langJson['search']["#userResumeCount"].replace("${VALUE}",nb).replace("${SEARCH}", url.searchParams.get("query"))
+	document.querySelectorAll(".userResume").forEach(function (elem) {
+		elem.setAttribute("aria-label", langJson['search']["aria.userResume"].replace("${USERNAME}", elem.id));
 	})
 }
 
