@@ -226,6 +226,9 @@
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Cerca",
+		"#userResumeCount": "${VALUE} risultati corrispondono a ${SEARCH}",
+		"#inputSearch": "Cerca utente",
+		"aria#inputSearch": "Cerca campo di input utente",
 		"aria.userResume" : "Reindirizzamento al profilo di ${USERNAME}",
 		"search title" : "Ricerca ${SEARCH} - transcendence",
 		".emptySearchError" : "Impossibile cercare una query vuota"

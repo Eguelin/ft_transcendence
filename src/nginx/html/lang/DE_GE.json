@@ -226,6 +226,9 @@
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Suche",
+		"#userResumeCount" : "${VALUE} Ergebnisse stimmten mit ${SEARCH} überein",
+		"#inputSearch" : "Benutzer suchen",
+		"aria#inputSearch" : "Benutzereingabefeld suchen",
 		"aria.userResume" : "Profilweiterleitung von ${USERNAME}",
 		"search title" : "Suche ${SEARCH} - transcendence",
 		".emptySearchError" : "Leere Abfrage kann nicht durchsucht werden"

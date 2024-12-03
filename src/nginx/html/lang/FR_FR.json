@@ -226,6 +226,9 @@
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Recherche",
+		"#userResumeCount" : "${VALUE} résultats correspondent à ${SEARCH}",
+		"#inputSearch" : "Rechercher un utilisateur",
+		"aria#inputSearch" : "Champ de saisie de l'utilisateur de recherche",
 		"aria.userResume" : "Redirection vers le profil de ${USERNAME}",
 		"search title" : "Recherche ${SEARCH} - transcendence",
 		".emptySearchError" : "Impossible de rechercher une requête vide"
