@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from login.models import Profile
@@ -17,6 +17,7 @@ class friend(AsyncWebsocketConsumer):
 				self.channel_name
 			)
 			await self.accept()
+			await self.update_activity(True)
 		else:
 			await self.close()
 
@@ -27,6 +28,7 @@ class friend(AsyncWebsocketConsumer):
 				self.group_name,
 				self.channel_name
 			)
+			await self.update_activity(False)
 
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
@@ -45,6 +47,11 @@ class friend(AsyncWebsocketConsumer):
 		'type': 'friend_removed',
 		'username': event['message']['username'],
 	}))
+
+	@sync_to_async
+	def update_activity(self, bool):
+		self.user.profile.is_active = bool
+		self.user.profile.save()
 
 @receiver(m2m_changed, sender=Profile.friends_request.through)
 def notify_friend_request_changed(sender, instance, action, pk_set, **kwargs):

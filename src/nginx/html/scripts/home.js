@@ -3,10 +3,10 @@ var playBtn;
 var template = `
 <div id="pageContentContainer" class="home">
 	<div id="homeButtonsContainer">
-		<a id="playBtn1v1" href="https://${hostname.host}/game?mode=remote" tabindex="12">Play</a>
-		<a id="playBtnLocal" href="https://${hostname.host}/game?mode=local" tabindex="13">Play</a>
-		<a id="playBtnAI" href="https://${hostname.host}/game?mode=ai" tabindex="14">Play</a>
-		<a id="playTournament" href="https://${hostname.host}/game?mode=tournament" tabindex="15">Play</a>
+		<a id="playBtn1v1" href="https://${hostname.host}/game?mode=remote" tabindex="12">Play 1v1</a>
+		<a id="playBtnLocal" href="https://${hostname.host}/game?mode=local" tabindex="13">Play local</a>
+		<a id="playBtnAI" href="https://${hostname.host}/game?mode=ai" tabindex="14">Play AI</a>
+		<a id="playTournament" href="https://${hostname.host}/game?mode=tournament" tabindex="15">Tournament</a>
 		<div class="forms" id="saveDisplayNameContainer">
 			<input autoclomplete="off" tabindex="16" type="text" id="inputChangeDisplayName" class="formInput" name="displayName" placeholder="Display name"/>
 			<div tabindex="17" id="saveDisplayNameBtn"></div>
