@@ -174,7 +174,8 @@
 		"all title" : "All friends - transcendence",
 		"pending title" : "Pending friend requests - transcendence",
 		"blocked title" : "Blocked users - transcendence",
-		"blockError" : "You can't block this user."
+		"blockError" : "You can't block this user.",
+		"requestSend" : "Friend request sent to ${USERNAME}"
 	},
 	"user":{
 		"#title" : "",
@@ -297,7 +298,7 @@
 		"aria#playerTwoInfoGraph" : "${USERNAME} hitted zone pie chart, top : ${TOP}, center : ${CENTER}, bottom : ${BOTTOM}",
 		"aria#playerOnePfp" : "${USERNAME} profile picture",
 		"aria#playerTwoPfp" : "${USERNAME} profile picture",
-		
+
 		"#matchWinnerText" : "Winner : ",
 		"#matchWinnerText.noWinner" : "No winner"
 	},

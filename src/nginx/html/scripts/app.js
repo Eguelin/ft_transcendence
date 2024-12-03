@@ -213,14 +213,6 @@ class Client {
 
 					addPfpUrlToImgSrc(userPfp, result.pfp)
 
-					fetch('/api/user/update', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({ "is_active": true }),
-						credentials: 'include'
-					})
 					document.querySelector("#myProfileBtn").href  = `https://${hostname.host}/${currentLang}/user/${this.username}`;
 
 					const url = new URL(window.location.href);
@@ -651,17 +643,6 @@ function myPushState(url) {
 	history.pushState("", "", url);
 	load();
 }
-
-window.addEventListener("beforeunload", (e) => {
-	fetch('/api/user/update', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ "is_active": false }),
-		credentials: 'include'
-	})
-})
 
 homeBtn.addEventListener("click", (e) => {
 	friendUpdate();

@@ -9,7 +9,7 @@ import random
 import math
 import time
 
-MAX_SCORE = 50
+MAX_SCORE = 5
 
 class Matchmaking():
 	_instance = None
@@ -644,6 +644,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		if not self.scope['user'].is_authenticated:
 			await self.close()
+			return
 		await self.accept()
 
 	async def disconnect(self, close_code):
@@ -653,6 +654,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.player.socket = None
 
 	async def receive(self, text_data):
+		if not await self.userIsAuthenticated():
+			await self.send('error', 'Socket closed')
+			await self.disconnect(1000)
+			await self.close()
+			return
+
 		try:
 			data = json.loads(text_data)
 			if not isinstance(data, dict):
@@ -709,6 +716,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 			'type': type,
 			'message': message
 		}))
+
+	@sync_to_async
+	def userIsAuthenticated(self):
+		try:
+			user = User.objects.get(username=self.scope['user'].username)
+		except User.DoesNotExist:
+			return False
+		return user.is_authenticated
 
 class Tournament():
 	_instance = None
