@@ -361,7 +361,7 @@
 #controlerSlide .leftBtn, #controlerSlide .rightBtn, #controlerPlayerOne .leftBtn, #controlerPlayerOne .rightBtn, #controlerPlayerTwo .leftBtn, #controlerPlayerTwo .rightBtn{
 	background:var(--main-text-rgb);
 	height:5rem;
-	width:5rem;
+	width:100%;
 	mask-size:4rem 4rem;
 	mask-position:center;
 	mask-repeat:no-repeat;
