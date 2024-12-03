@@ -174,7 +174,8 @@
 		"all title" : "Alle Freunde - transcendence",
 		"pending title" : "Ausstehende Freundschaftsanfragen - transcendence",
 		"blocked title" : "Blockierte Benutzer - transcendence",
-		"blockError" : "Sie können diesen Benutzer nicht blockieren."
+		"blockError" : "Sie können diesen Benutzer nicht blockieren.",
+		"requestSend" : "Freundschaftsanfrage gesendet an ${USERNAME}"
 	},
 	"user":{
 		"#title" : "",
@@ -296,7 +297,7 @@
 		"aria#matchInfoGraph" : "Kreisdiagramm der globalen Trefferzone, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
-		
+
 		"aria#playerOnePfp" : "${USERNAME} Profilbild",
 		"aria#playerTwoPfp" : "${USERNAME} Profilbild",
 		"#matchWinnerText": "Gewinner : ",

@@ -29,7 +29,9 @@ def send_friend_request(request):
 		new_friend = User.objects.get(username=username)
 		user = request.user
 		if (new_friend.profile.blocked_users.filter(pk=user.pk)).exists():
-			return JsonResponse({'message': 'User blocked you'})
+			return JsonResponse({'message': 'The user blocked you'}, status=403)
+		if (user.profile.blocked_users.filter(pk=new_friend.pk)).exists():
+			return JsonResponse({'message': 'You blocked the user'}, stauts=403)
 		if (user.profile.friends_request.filter(pk=new_friend.pk)).exists():
 			new_friend.profile.friends.add(user)
 			new_friend.save()

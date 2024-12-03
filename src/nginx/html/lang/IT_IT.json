@@ -174,7 +174,8 @@
 		"all title" : "Tutti gli amici - transcendence",
 		"pending title" : "Richieste di amicizia in attesa - transcendence",
 		"blocked title" : "Utenti bloccati - transcendence",
-		"blockError" : "Non puoi bloccare questo utente."
+		"blockError" : "Non puoi bloccare questo utente.",
+		"requestSend" : "Richiesta di amicizia inviata a ${USERNAME}"
 	},
 	"user":{
 		"#title" : "",
@@ -296,10 +297,10 @@
 		"aria#matchInfoGraph" : "Grafico a torta delle zone di hit della corrispondenza globale, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Grafico a torta delle zone di hit di ${USERNAME}, in alto: ${TOP}, al centro: ${CENTER}, in basso: ${BOTTOM}",
-		
+
 		"aria#playerOnePfp" : "Immagine del profilo di ${USERNAME}",
 		"aria#playerTwoPfp" : "Immagine del profilo di ${USERNAME}",
-		
+
 		"#matchWinnerText": "Vincitore : ",
 		"#matchWinnerText.noWinner": "Nessun vincitore"
 	},
