@@ -217,8 +217,8 @@ document.addEventListener("click", (e) => {
 			.then(response => {
 				if (response.ok){
 					document.getElementById("unblockBtn").style.setProperty("display", "none");
-					document.getElementById("blockBtn").style.setProperty("display", "block");
-					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+					document.getElementById("blockBtn").style.setProperty("display", "inline");
+					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "inline");
 					deleteFriendPopup.style.setProperty("display", "none");
 					document.getElementById("popupBg").style.display = "none";
 				}
@@ -237,10 +237,11 @@ document.addEventListener("click", (e) => {
 			.then(response => {
 				if (response.ok)
 				{
-					document.getElementById("unblockBtn").style.setProperty("display", "block");
+					document.getElementById("unblockBtn").style.setProperty("display", "inline");
 					document.getElementById("blockBtn").style.setProperty("display", "none");
 					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
 					blockFriendPopup.style.setProperty("display", "none");
+					document.getElementById("popupBg").style.display = "none";
 				}
 				else
 				{
@@ -281,8 +282,8 @@ document.addEventListener("click", (e) => {
 			.then (response => {
 				if (response.ok){
 					document.getElementById("unblockBtn").style.setProperty("display", "none");
-					document.getElementById("blockBtn").style.setProperty("display", "block");
-					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+					document.getElementById("blockBtn").style.setProperty("display", "inline");
+					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "inline");
 				}
 			})
 		}

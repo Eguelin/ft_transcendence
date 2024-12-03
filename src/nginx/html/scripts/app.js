@@ -1390,7 +1390,7 @@ function friendUpdate()
 		{
 			if (data.status === "online")
 			{
-				document.getElementById("deleteFriendBtn").style.setProperty("display", "block");
+				document.getElementById("deleteFriendBtn").style.setProperty("display", "inline");
 				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
 			}
 		}
@@ -1410,7 +1410,7 @@ function friendUpdate()
 			else if (currentPage === "user")
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
-				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "inline");
 
 			}
 		}
