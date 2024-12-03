@@ -28,9 +28,6 @@ class friend(AsyncWebsocketConsumer):
 				self.channel_name
 			)
 
-	async def receive(self):
-		pass
-
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
 			'new_request': event['new_request'],
