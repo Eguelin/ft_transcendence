@@ -19,6 +19,11 @@ var template = `
 		</div>
 		
 		<div style="display: flex;">
+			<input autoclomplete="off" id="inputToggleStaffUsername" type="text" placeholder="name">
+			<button id="toggleStaffBtn">Toggle staff on user</button>
+		</div>
+
+		<div style="display: flex;">
 			<input autoclomplete="off" id="userOne" type="text" placeholder="player one username">
 			<input autoclomplete="off" id="userTwo" type="text" placeholder="player two username">
 			<input autoclomplete="off" id="range" type="number" placeholder="number of matches">
@@ -179,4 +184,17 @@ var template = `
             unsetLoader()
         })
     })
+	document.querySelector("#toggleStaffBtn").addEventListener("click", (e) => {
+		setLoader()
+        fetch('/api/admin/toggle_staff', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({username: document.getElementById("inputToggleStaffUsername").value})
+        }).then(() => {
+            unsetLoader()
+        })
+	})
 }
