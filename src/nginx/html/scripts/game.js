@@ -517,7 +517,11 @@ function displayTournament(is_finished = false){
 		Object.keys(tournament["round_0"]).forEach(function(matchNumber){
 			Object.keys(tournament["round_0"][matchNumber]).forEach(function(player){
 				if (tournament["round_0"][matchNumber][player]['username']){
-					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_0"][matchNumber][player]['username'];
+					if (tournament["round_0"][matchNumber][player]['username'] == tournament["round_0"][matchNumber][player]['display_name'])
+						lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_0"][matchNumber][player]['username'];
+					else{
+						lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_0"][matchNumber][player]['display_name'];
+					}
 					if (lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp").src != `https://${hostname.host}${tournament["round_0"][matchNumber][player]['profile_picture']}`)
 						addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament["round_0"][matchNumber][player]['profile_picture']);
 				}
@@ -717,7 +721,7 @@ function game() {
 					displayWinner(player1.name, player1.profile_picture)
 				else
 					displayWinner(player2.name, player2.profile_picture)
-				if (!client.doNotDisturb){
+				if (!client.doNotDisturb && document.querySelector("notifCenterContainer")){
 					document.querySelector("notifCenterContainer").classList.remove("dnd");
 				}
 			} else if (data.type === "tournament") {

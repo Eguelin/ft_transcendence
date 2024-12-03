@@ -422,3 +422,7 @@
 		min-width: 80vw;
 	}
 }
+
+.friendName:hover{
+	text-decoration: underline;
+}
