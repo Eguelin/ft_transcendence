@@ -397,7 +397,7 @@ def profile_update(request):
 			return JsonResponse({'message': "Old password not provided"}, status=400)
 		if not valid :
 			return JsonResponse({'message': message}, status=400)
-		if user.profile.id42 is not 0:
+		if user.profile.id42 != 0:
 			return JsonResponse({'message': "Remote password change forbiden"}, status=403)
 		if (user.check_password(data['old_password'])):
 			user.set_password(data['password'])
@@ -467,19 +467,34 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 	i = 0
 	total_count = 0
 
+
 	for tournament in tournaments:
 		if (max != -1 and total_count >= max):
 			break
 		if (dateObj != tournament.date):
 			if (year != ""):
-				if (year != tournament.date.year):
-					matches_json["{0}".format(year)] = year_json
-					year_json = {}
-				if (month != tournament.date.month):
+				if (year != match.date.year and month != match.date.month and day != match.date.day):
+					month_json["{0}".format(day)] = date_json
+					date_json = {}
 					year_json["{0}".format(month)] = month_json
 					month_json = {}
-				if (day != tournament.date.day):
+					matches_json["{0}".format(year)] = year_json
+					year_json = {}
+				elif (month != match.date.month and day != match.date.day):
 					month_json["{0}".format(day)] = date_json
+					date_json = {}
+					year_json["{0}".format(month)] = month_json
+					month_json = {}
+				else:
+					if (year != match.date.year):
+						matches_json["{0}".format(year)] = year_json
+						year_json = {}
+					if (month != match.date.month):
+						year_json["{0}".format(month)] = month_json
+						month_json = {}
+					if (day != match.date.day):
+						month_json["{0}".format(day)] = date_json
+						date_json = {}
 			dateObj = tournament.date
 			year = dateObj.year
 			month = dateObj.month
@@ -523,7 +538,6 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 				i += 1
 				total_count += 1
 	i = 0
-
 	if (dateObj != ""):
 		month_json["{0}".format(day)] = date_json
 		year_json["{0}".format(month)] = month_json
@@ -538,14 +552,28 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 			break
 		if (dateObj != match.date):
 			if (year != ""):
-				if (year != match.date.year):
-					matches_json["{0}".format(year)] = year_json
-					#year_json = {}
-				if (month != match.date.month):
-					year_json["{0}".format(month)] = month_json
-					#month_json = {}
-				if (day != match.date.day):
+				if (year != match.date.year and month != match.date.month and day != match.date.day):
 					month_json["{0}".format(day)] = date_json
+					date_json = {}
+					year_json["{0}".format(month)] = month_json
+					month_json = {}
+					matches_json["{0}".format(year)] = year_json
+					year_json = {}
+				elif (month != match.date.month and day != match.date.day):
+					month_json["{0}".format(day)] = date_json
+					date_json = {}
+					year_json["{0}".format(month)] = month_json
+					month_json = {}
+				else:
+					if (year != match.date.year):
+						matches_json["{0}".format(year)] = year_json
+						year_json = {}
+					if (month != match.date.month):
+						year_json["{0}".format(month)] = month_json
+						month_json = {}
+					if (day != match.date.day):
+						month_json["{0}".format(day)] = date_json
+						date_json = {}
 			dateObj = match.date
 			year = dateObj.year
 			month = dateObj.month
@@ -644,7 +672,7 @@ def current_user(request):
 		'font_amplifier' : request.user.profile.font_amplifier,
 		'do_not_disturb' : request.user.profile.do_not_disturb,
 		'display_name': request.user.profile.display_name,
-		'remote_auth' : 1 if request.user.profile.id42 is not 0 else 0
+		'remote_auth' : 1 if request.user.profile.id42 != 0 else 0
 	})
 
 def get(request):
@@ -676,7 +704,6 @@ def get(request):
 
 		if user.username in NOT_USER:
 			return JsonResponse({'message': "User not found"}, status=404)
-
 		response = get_user_json(request.user, user, startDate, endDate)
 
 		return JsonResponse(response, status=200)
