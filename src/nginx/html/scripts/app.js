@@ -1002,7 +1002,10 @@ window.addEventListener("click", (e) => {
 	}
 	if (e.target.id == "logOutBtn")
 		disconnectSocket();
-
+	if (e.target.closest(".dropDownMenuBtn")){
+		if (currentPage == "game" || currentPage == "tournament")
+			cleanup();
+	}
 	if (e.target.href != "" && e.target.href != undefined){
 		e.preventDefault();
 		myPushState(`${e.target.href}`);
