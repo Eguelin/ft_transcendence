@@ -605,6 +605,7 @@ function game() {
 				myPushState(`https://${hostname.host}/${currentLang}/home`);
 			}
 			if (data.type === "game_init") {
+				document.querySelector('meta[name="viewport"]').setAttribute('user-scalable', 'no');
 				document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay");
 				document.querySelector("#game").style.setProperty("display", "block");
 				gameContainer.style.setProperty("display", "flex");
@@ -668,6 +669,9 @@ function game() {
 					if (mode != "local"){
 						document.querySelector("#controlerPlayerOne").style.setProperty("display", "none");
 						playerTouchMap = FullInversedKeyMap;
+					}
+					else{
+						document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 					}
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = (e) => {pointerEvent('ArrowUp', true, "playerTwo", "leftBtn");}
 					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = (e) => {pointerEvent('ArrowUp', false, "playerTwo", "leftBtn");}
@@ -901,6 +905,7 @@ function game() {
 		}
 
 		function cleanup() {
+			document.querySelector('meta[name="viewport"]').removeAttribute('user-scalable');
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 			document.getElementById('goHomeButton').removeEventListener('click', handleGoHomeButton);
 			window.removeEventListener('popstate', handlePopState);
