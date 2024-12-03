@@ -46,6 +46,7 @@
 		"aria.resultScoreName" : "Profilweiterleitung von ${USERNAME}",
 		"home title" : "Startseite - transcendence",
 		".displayNameUpdated" : "Anzeigename erfolgreich aktualisiert",
+		"#inputChangeDisplayName" : "Anzeigename des Turniers",
 		".displayNameCantBeEmpty" : "Anzeigename darf nicht leer sein"
 	},
 	"login" : {

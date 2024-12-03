@@ -45,6 +45,7 @@
 		"ariaResumeTournament.matchDescContainer" : "Torneo il ${DATE}",
 		"aria.resultScoreName" : "Reindirizzamento al profilo di ${USERNAME}",
 		"home title" : "Home - transcendence",
+		"#inputChangeDisplayName": "Nome visualizzato del torneo",
 		".displayNameUpdated" : "Nome visualizzato aggiornato con successo",
 		".displayNameCantBeEmpty" : "Il nome visualizzato non può essere vuoto"
 	},

@@ -46,6 +46,7 @@
 		"aria.resultScoreName" : "${USERNAME} profile redirection",
 		"home title" : "Home - transcendence",
 		".displayNameUpdated" : "Display name successfully updated",
+		"#inputChangeDisplayName" : "Tournament display name",
 		".displayNameCantBeEmpty" : "Display name can't be empty"
 	},
 	"login" : {
