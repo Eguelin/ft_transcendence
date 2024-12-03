@@ -169,7 +169,7 @@
 #confirmDelete, #confirmBlock {
 	text-align: center;
 	background-color: red;
-	color: var(--main-text-rgb);
+	color: var(--alert-text-rgb);
 	font-family: "pong";
 	padding: 1vh 0;
 	width: 20vw;
@@ -189,7 +189,7 @@
 	margin-top: 2vmin;
 	width: fit-content;
 	min-width: 50vw;
-	height: 3rem;
+	height: 4rem;
 	min-height: fit-content;
 	position: relative;
 }

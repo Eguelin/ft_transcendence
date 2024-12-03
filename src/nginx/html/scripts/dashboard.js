@@ -142,22 +142,6 @@ lastYearSelection.addEventListener("click", (e) => {
     lastYearSelection.classList.add("activeTimeline");
 })
 
-
-function getGradient(ctx, chartArea) {
-  const chartWidth = chartArea.right - chartArea.left;
-  const chartHeight = chartArea.bottom - chartArea.top;
-  if (!gradient || width !== chartWidth || height !== chartHeight) {
-    width = chartWidth;
-    height = chartHeight;
-    gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-    gradient.addColorStop(0, "red");
-    gradient.addColorStop(0.5, "orange");
-    gradient.addColorStop(1, "green");
-  }
-
-  return gradient;
-}
-
 function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, clientUsername){
 	document.querySelector("#profileGraphs").style.display = "none";
     if (!(startDate instanceof Date && endDate instanceof Date)){
@@ -262,34 +246,6 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 		const totalDuration = (500 / LastXDaysDisplayed);
 		const delayBetweenPoints = totalDuration / nbMatch;
 		const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['result'], true).y;
-		const animation = {
-		  x: {
-			type: 'number',
-			easing: 'linear',
-			duration: delayBetweenPoints,
-			from: NaN, // the point is initially skipped
-			delay(ctx) {
-			  if (ctx.type !== 'data' || ctx.xStarted) {
-				return 0;
-			  }
-			  ctx.xStarted = true;
-			  return ctx.index * delayBetweenPoints;
-			}
-		  },
-		  y: {
-			type: 'number',
-			easing: 'linear',
-			duration: delayBetweenPoints,
-			from: previousY,
-			delay(ctx) {
-			  if (ctx.type !== 'data' || ctx.yStarted) {
-				return 0;
-			  }
-			  ctx.yStarted = true;
-			  return ctx.index * delayBetweenPoints;
-			}
-		  }
-		}
 
 		function drawStats(){
 			document.querySelector("#userStatPieGraphContainer .graphTitle").innerText = client.langJson["dashboard"]["CVuserStatsGraph"];
@@ -329,24 +285,10 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					data: mapAverage,
 					fill: false,
 					tension: 0,
-					backgroundColor: ['green'],
-					borderColor: function(context){
-						const chart = context.chart;
-						const {ctx, chartArea} = chart;
-
-						if (!chartArea)
-							return ;
-						return (getGradient(ctx, chartArea));
-					},
+					backgroundColor: document.documentElement.style.getPropertyValue("--is-dark-theme") == '1' ? ['green'] : ['red'] ,
+					borderColor: document.documentElement.style.getPropertyValue("--is-dark-theme") == '1' ? 'green' : 'red' ,
 					borderWidth: lineWidth,
-					pointBackgroundColor: function(context){
-						const chart = context.chart;
-						const {ctx, chartArea} = chart;
-
-						if (!chartArea)
-							return ;
-						return (getGradient(ctx, chartArea));
-					},
+					pointBackgroundColor: document.documentElement.style.getPropertyValue("--is-dark-theme") == '1' ? 'green' : 'red' ,
 					pointBorderWidth: 0,
 					pointhitRadius: 4,
 					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
@@ -398,7 +340,6 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 						datasets: datasets
 					},
 					options:{
-						animation,
 						parsing: {
 							xAxisKey: 'date',
 							yAxisKey: 'result'
@@ -421,7 +362,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 									},
 								},
 								grid: {
-									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--hover-text-rgb"),
 									lineWidth:graphLineWidth,
 									drawTicks: false,
 								},
@@ -433,7 +374,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 									display : false
 								},
 								grid: {
-									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--hover-text-rgb"),
 									lineWidth:graphLineWidth,
 								}
 							}
@@ -460,24 +401,10 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 					data: mapAbs,
 					fill: false,
 					tension: 0,
-					backgroundColor: ['green'],
-					borderColor: function(context){
-						const chart = context.chart;
-						const {ctx, chartArea} = chart;
-
-						if (!chartArea)
-							return ;
-						return (getGradient(ctx, chartArea));
-					},
+					backgroundColor: document.documentElement.style.getPropertyValue("--is-dark-theme") == '1' ? ['green'] : ['red'] ,
+					borderColor: document.documentElement.style.getPropertyValue("--is-dark-theme") == '1' ? 'green' : 'red' ,
 					borderWidth: lineWidth,
-					pointBackgroundColor: function(context){
-						const chart = context.chart;
-						const {ctx, chartArea} = chart;
-
-						if (!chartArea)
-							return ;
-						return (getGradient(ctx, chartArea));
-					},
+					pointBackgroundColor: document.documentElement.style.getPropertyValue("--is-dark-theme") == '1' ? 'green' : 'red' ,
 					pointBorderWidth: 0,
 					pointhitRadius: 4,
 					pointRadius: LastXDaysDisplayed < 100 ? graphPointRadius : 0,
@@ -528,7 +455,6 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 						datasets: datasets
 					},
 					options:{
-						animation,
 						parsing: {
 							xAxisKey: 'date',
 							yAxisKey: 'result'
@@ -551,7 +477,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 									},
 								},
 								grid: {
-									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--hover-text-rgb"),
 									lineWidth:graphLineWidth,
 									drawTicks: false,
 								},
@@ -563,7 +489,7 @@ function drawWinLossGraph(matches, username, startDate, endDate, clientMatches, 
 									display : false
 								},
 								grid: {
-									color: window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb"),
+									color: window.getComputedStyle(document.documentElement).getPropertyValue("--hover-text-rgb"),
 									lineWidth:graphLineWidth,
 								}
 							}
