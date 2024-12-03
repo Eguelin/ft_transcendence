@@ -43,5 +43,6 @@ urlpatterns = [
 	path('user/get_tournament', login.views.get_tournament),
 	path('user/get_match', login.views.get_match),
     path('admin/remove_user', admin.views.remove_user),
-	path('admin/set_user_password', admin.views.set_user_password)
+	path('admin/set_user_password', admin.views.set_user_password),
+	path('admin/toggle_staff', admin.views.toggle_staff_on_user)
 ]

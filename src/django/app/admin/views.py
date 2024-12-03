@@ -300,75 +300,29 @@ def delete_user(request):
 	else:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 
-def file_opener(path, flags):
-	return os.open(path, flags, 0o777)
+def toggle_staff_on_user(request):
+	if request.method != 'POST' :
+		return JsonResponse({'message': 'Invalid request'}, status=405)
+	if not request.user.is_authenticated:
+		return JsonResponse({'message': "Client is not logged"}, status=401)
+	if not request.user.is_staff:
+		return JsonResponse({'message': 'user is not admin'}, status=403)
+	
+	try:
+		data = json.loads(request.body)
+	except json.JSONDecodeError:
+		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
+	
+	if "username" not in data:
+		return JsonResponse({'message': 'username is missing'}, status=400)
 
-def get_all_user_match_json(matches):
-	matches_json = {}
-	year_json = {}
-	month_json = {}
-	date_json = {}
-	dateObj = ""
-	year = ""
-	month = ""
-	day = ""
-	i = 0
-	for match in matches:
-		if (dateObj != match.date):
-			if (year != ""):
-				if (year != match.date.year):
-					matches_json["{0}".format(year)] = year_json
-					year_json = {}
-				if (month != match.date.month):
-					year_json["{0}".format(month)] = month_json
-					month_json = {}
-				if (day != match.date.day):
-					month_json["{0}".format(day)] = date_json
-			dateObj = match.date
-			year = dateObj.year
-			month = dateObj.month
-			day = dateObj.day
-			date_json = {}
-			i = 0
-		date_json[i] = {
-			'player_one' : match.player_one.username,
-			'player_two' : match.player_two.username,
-			'player_one_pts' : match.player_one_pts,
-			'player_two_pts' : match.player_two_pts,
-			'date' : match.date,
-		}
-		i += 1
-	if (dateObj != ""):
-		month_json["{0}".format(day)] = date_json
-		year_json["{0}".format(month)] = month_json
-		matches_json["{0}".format(year)] = year_json
-	return matches_json
-
-def get_user_match(matches):
-	matches_json = {}
-	date = ""
-	i = 0
-	for match in matches:
-		matches_json[i] = {
-			'player_one' : match.player_one.username,
-			'player_two' : match.player_two.username,
-			'player_one_pts' : match.player_one_pts,
-			'player_two_pts' : match.player_two_pts,
-			'date' : match.date,
-		}
-		i += 1
-	return matches_json
-
-def get_user_json(user, startDate, endDate):
-	matches = get_all_user_match_json(user.profile.matches.order_by("date").filter(date__range=(startDate, endDate)))
-	return {'username' : user.username,
-		'pfp' : user.profile.profile_picture,
-		'is_active' : user.profile.is_active,
-		'matches' : matches
-	}
-
-def get_user_preview_json(user):
-	return {'username' : user.username,
-		'pfp' : user.profile.profile_picture,
-		'is_active' : user.profile.is_active,
-	}
+	try:
+		user = User.objects.get(username=data['username'])
+	except:
+		return JsonResponse({'message': 'user not found'}, status=404)
+	if (user.is_staff):
+		user.is_staff = False
+	else:
+		user.is_staff = True
+	user.save();
+	return JsonResponse({'message': 'User staff status = {0}'.format(user.is_staff)}, status=200)
