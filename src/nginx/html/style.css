@@ -173,6 +173,7 @@ input{
 	font-size: .5rem;
 	padding: 1rem;
 	width: 18vw;
+	text-overflow: ellipsis;
 }
 
 

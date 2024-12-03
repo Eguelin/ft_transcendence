@@ -511,6 +511,7 @@
 
 .playerNamesContainer{
 	justify-items: center;
+	display: grid;
 }
 
 .playerNamesContainer .playerName{
