@@ -2279,28 +2279,3 @@ function checkWinnerDisplaySize(){
 		currentFontSize -= 1;
 	}
 }
-
-
-/***
- *    ______  _____ ______  _   _  _____
- *    |  _  \|  ___|| ___ \| | | ||  __ \
- *    | | | || |__  | |_/ /| | | || |  \/
- *    | | | ||  __| | ___ \| | | || | __
- *    | |/ / | |___ | |_/ /| |_| || |_\ \
- *    |___/  \____/ \____/  \___/  \____/
- *
- *
- */
-
-function rollThemes(timeout = 1000){
-	switchTheme("light");
-	setTimeout(()=>{switchTheme("dark")}, timeout * 1);
-	setTimeout(()=>{switchTheme("high_light")}, timeout * 2);
-	setTimeout(()=>{switchTheme("high_dark")}, timeout * 3);
-}
-
-window.addEventListener("keyup", (e) => {	//to check screen reader accessibility
-	if (e.key == "Tab"){
-		console.log(e.target, e.target.innerText, e.target.getAttribute("aria-label"));
-	}
-})
