@@ -27,7 +27,7 @@ var template = `
 
 	<div id="recentMatchHistoryContainer" tabindex="15" aria-label="User today's matches">
 		<div id="MatchHistoryTextContainer">
-			<div>
+			<div style="display:grid;">
 				<div id="recentMatchHistoryText">Recent matches</div>
 			</div>
 			<a> | </a>
