@@ -174,7 +174,9 @@
 		"all title" : "Tous les amis - transcendence",
 		"pending title" : "Demandes d'amis en attente - transcendence",
 		"blocked title" : "Utilisateurs bloqués - transcendence",
-		"blockError" : "Vous ne pouvez pas bloquer cet utilisateur."
+		"blockError" : "Vous ne pouvez pas bloquer cet utilisateur.",
+		"requestSend" : "Demande d'ami envoyée à ${USERNAME}"
+
 	},
 	"user":{
 		"#title" : "",
@@ -293,10 +295,10 @@
 		"aria#matchInfoGraph" : "Graphique à secteurs des zones de correspondance globales, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
 		"aria#playerTwoInfoGraph" : "Graphique à secteurs des zones de correspondance ${USERNAME}, haut : ${TOP}, centre : ${CENTER}, bas : ${BOTTOM}",
-		
+
 		"aria#playerOnePfp" : "Photo de profil ${USERNAME}",
 		"aria#playerTwoPfp" : "Photo de profil ${USERNAME}",
-		
+
 		"#matchWinnerText" : "Gagnant : ",
 		"#matchWinnerText.noWinner" : "Aucun gagnant"
 	},

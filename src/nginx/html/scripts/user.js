@@ -88,7 +88,12 @@ function updateUserLang(){
                 },
                 body: JSON.stringify({'username': splitPath[5]}),
                 credentials: 'include'
-            })
+            }).then(response => {
+				if (response.ok)
+				{
+					popUpSuccess(client.langJson['friends']['requestSend'].replace("${USERNAME}", splitPath[5]));
+				}
+			})
         })
     }
 
