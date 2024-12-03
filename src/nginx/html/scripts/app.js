@@ -1191,6 +1191,7 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 				credentials: 'include'
 			})
 			notifCenterContainer.classList.remove("dnd");
+			client.doNotDisturb = false;
 		}
 		else {
 			fetch('/api/user/update', {
@@ -1201,6 +1202,7 @@ document.getElementById("pushNotifIcon").addEventListener("click", (e) => {
 				body: JSON.stringify({ "do_not_disturb": true }),
 				credentials: 'include'
 			})
+			client.doNotDisturb = true;
 			notifCenterContainer.classList.add("dnd");
 		}
 	}

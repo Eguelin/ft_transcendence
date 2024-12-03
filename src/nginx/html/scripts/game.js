@@ -605,7 +605,7 @@ function game() {
 				myPushState(`https://${hostname.host}/${currentLang}/home`);
 			}
 			if (data.type === "game_init") {
-				document.querySelector('meta[name="viewport"]').setAttribute('user-scalable', 'no');
+				document.querySelector("#notifCenterContainer").classList.add("dnd");
 				document.querySelector("#controlerSlide").classList.remove("singleRoundDisplay");
 				document.querySelector("#game").style.setProperty("display", "block");
 				gameContainer.style.setProperty("display", "flex");
@@ -718,6 +718,9 @@ function game() {
 					displayWinner(player1.name, player1.profile_picture)
 				else
 					displayWinner(player2.name, player2.profile_picture)
+				if (!client.doNotDisturb){
+					document.querySelector("notifCenterContainer").classList.remove("dnd");
+				}
 			} else if (data.type === "tournament") {
 				tournament = data.message;
 				checkTournementRound();
@@ -905,7 +908,8 @@ function game() {
 		}
 
 		function cleanup() {
-			document.querySelector('meta[name="viewport"]').removeAttribute('user-scalable');
+			if (!client.doNotDisturb)
+				document.querySelector("#notifCenterContainer").classList.remove("dnd");
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 			document.getElementById('goHomeButton').removeEventListener('click', handleGoHomeButton);
 			window.removeEventListener('popstate', handlePopState);
