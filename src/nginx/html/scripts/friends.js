@@ -634,7 +634,6 @@ function friendKeyDownEvent(e) {
 window.onkeydown = friendKeyDownEvent;
 
 async function updateFriendsAriaLabel(key, content){
-	console.log(key);
 	document.querySelectorAll(key).forEach(function (elem) {
 		elem.setAttribute("aria-label", `${elem.parentElement.id} ${content}`);
 	})
