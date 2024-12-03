@@ -356,18 +356,24 @@ class Dashboard{
 					body: JSON.stringify({"name" : username, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
 					credentials: 'include'
 				})
-				this.matches = await matchesFetch.json();
-				this.matches = this.matches.matches;
-
-				const clientMatchesFetch = await fetch('/api/user/get', {
-					method: 'POST', //GET forbid the use of body :(
-					headers: {'Content-Type': 'application/json',},
-					body: JSON.stringify({"name" : this.clientUsername, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
-					credentials: 'include'
-				})
-				this.clientMatches = await clientMatchesFetch.json();
-				this.clientMatches = this.clientMatches.matches;
-				history.replaceState("","",`https://${hostname.host}/${currentLang}/dashboard/${username}`)
+				if (matchesFetch.status != 200){
+					client.loadPage("/404");
+					return (null);
+				}
+				else{
+					this.matches = await matchesFetch.json();
+					this.matches = this.matches.matches;
+	
+					const clientMatchesFetch = await fetch('/api/user/get', {
+						method: 'POST', //GET forbid the use of body :(
+						headers: {'Content-Type': 'application/json',},
+						body: JSON.stringify({"name" : this.clientUsername, "startDate" : this.startDateStr, "endDate" : this.endDateStr}),
+						credentials: 'include'
+					})
+					this.clientMatches = await clientMatchesFetch.json();
+					this.clientMatches = this.clientMatches.matches;
+					history.replaceState("","",`https://${hostname.host}/${currentLang}/dashboard/${username}`)
+				}
 			}
 			catch{
 				var template = `
@@ -1570,22 +1576,27 @@ async function loadCurrentLang(){
 		if (content != null && content != undefined) {
 			Object.keys(content).forEach(function (key) {
 				try {
-					instances = document.querySelectorAll(key);
-					if (key.startsWith('#input')){
-						for (var i=0; i< Object.keys(instances).length; i++)
-							instances[i].placeholder = content[key];
-					}
-					else if (key.startsWith("aria")){
-						document.querySelectorAll(key.substring(4)).forEach( function (elem) {
-							elem.setAttribute("aria-label", content[key]);
-						})
-						if (currentPage == 'friends')
-							updateFriendsAriaLabel(key.substring(4), content[key]);
+					if (!key.startsWith('4')){ //prevent wrong queryselector error on page 400
+						instances = document.querySelectorAll(key);
+						if (key.startsWith('#input')){
+							for (var i=0; i< Object.keys(instances).length; i++)
+								instances[i].placeholder = content[key];
+						}
+						else if (key.startsWith("aria")){
+							document.querySelectorAll(key.substring(4)).forEach( function (elem) {
+								elem.setAttribute("aria-label", content[key]);
+							})
+							if (currentPage == 'friends')
+								updateFriendsAriaLabel(key.substring(4), content[key]);
+						}
+						else{
+							document.querySelectorAll(key).forEach( function (elem) {
+								elem.innerHTML = content[key];
+							})
+						}
 					}
 					else{
-						document.querySelectorAll(key).forEach( function (elem) {
-							elem.innerHTML = content[key];
-						})
+						document.title = content[`${currentPage} title`];
 					}
 				}
 				catch (e){console.error(e)}
