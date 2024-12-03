@@ -717,7 +717,7 @@ function game() {
 					displayWinner(player1.name, player1.profile_picture)
 				else
 					displayWinner(player2.name, player2.profile_picture)
-				if (!client.doNotDisturb){
+				if (!client.doNotDisturb && document.querySelector("notifCenterContainer")){
 					document.querySelector("notifCenterContainer").classList.remove("dnd");
 				}
 			} else if (data.type === "tournament") {
