@@ -306,6 +306,9 @@ function createUserContainer(user){
 	friendContainer.className = "friendContainer"
 	friendContainer.id = user.username;
 
+	friendName.className = "friendName";
+	friendName.href = (`https://${hostname.host}/${currentLang}/user/${user.username}`);
+
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
 	addPfpUrlToImgSrc(pfp, user.pfp);
