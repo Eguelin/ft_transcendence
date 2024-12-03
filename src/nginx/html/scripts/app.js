@@ -1284,11 +1284,9 @@ function friendUpdate()
 	var socket = new WebSocket("/ws/friend/");
 
 	socket.onopen = function () {
-		console.log("Connection established");
 	}
 
 	socket.onclose = function () {
-		console.log("Connection closed");
 	}
 
 	window.addEventListener('beforeunload', function () {
@@ -1660,7 +1658,7 @@ async function loadCurrentLang(){
 			document.querySelector("#logOutBtn").href = `/${currentLang}/login`;
 		}
 		updateIndexAriaLabel();
-		if (currentPage == 'dashboard') 
+		if (currentPage == 'dashboard')
 			updateDashboardLang();
 		if (currentPage == "friends")
 			updateFriendPageSize();

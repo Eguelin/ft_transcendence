@@ -305,7 +305,7 @@ function setTournamentTreeValue(is_finished){
 							if (is_finished)
 								document.querySelector(`${selector} .username`).href  = `https://${hostname.host}/${currentLang}/user/${tournament[round][matchNumber][player]['username']}`;
 						}
-						
+
 						if (tournament[round][matchNumber][player]['score'] != null){
 							document.querySelector(`${selector} .score`).innerText = tournament[round][matchNumber][player]['score'];
 							document.querySelector(selector).classList.add(tournament[round][matchNumber][player]['winner'] ? "winner" : "loser");
@@ -589,7 +589,6 @@ function game() {
 		document.addEventListener("keyup", handleKeyUp);
 
 		socket.onopen = function() {
-			console.log("Connection established");
 			gamesend(mode, url.searchParams.get("room"));
 			if (mode == "remote"){
 				displayWaiting();
@@ -663,7 +662,7 @@ function game() {
 						}
 					}
 				}
-				
+
 				if ((mode=="local" || client.username == player2.name) && isMobile()){
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "flex");
 					if (mode != "local"){
@@ -736,7 +735,6 @@ function game() {
 		}
 
 		socket.onclose = function() {
-			console.log("Connection closed");
 		}
 
 		socket.onerror = function(error) {
@@ -754,7 +752,7 @@ function game() {
 		function gameInit(message) {
 			document.querySelector("#controlerPlayerOne").style.setProperty("display", "none");
 			document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
-		
+
 			canvas.width = message.canvas.width;
 			canvas.height = message.canvas.height;
 
