@@ -66,7 +66,7 @@ var template = `
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify({username: username, password: password})
+            body: JSON.stringify({username: username, password: password, lang: "EN_UK", theme_name: "dark"})
         })
     })
 
