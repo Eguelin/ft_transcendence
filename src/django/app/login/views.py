@@ -88,7 +88,6 @@ def fortytwo(request):
 		user = User.objects.get(profile__id42=id42)
 		user = authenticate(request, username=user.username, password=str(id42))
 		if user is not None:
-			user.profile.is_active = True
 			user.save()
 			login(request, user)
 			return JsonResponse({'message': 'User logged in', 'content': pfp_url}, status=200)
@@ -116,7 +115,6 @@ def fortytwo(request):
 		user.set_password(str(id42))
 		user.profile.profile_picture = pfp_url
 		user.profile.id42 = id42
-		user.profile.is_active = True
 		user.profile.display_name = display_name
 		user.profile.language_pack = lang
 		user.save()
@@ -219,7 +217,6 @@ def create_user(request, staff=False):
 		user = User.objects.create_user(username=username, password=password)
 		user.profile.profile_picture = "/images/defaults/default{0}.jpg".format(random.randint(0, 2))
 		user.profile.id42 = 0
-		user.profile.is_active = True
 		user.profile.display_name = display_name
 		user.profile.language_pack = language
 		user.profile.theme_name = theme_name
@@ -287,7 +284,6 @@ def user_login(request):
 
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
-			user.profile.is_active = True
 			user.save()
 			login(request, user)
 			return JsonResponse({'message': 'User logged in'}, status=200)
@@ -306,7 +302,6 @@ def user_logout(request):
 	if not request.user.is_authenticated:
 		return JsonResponse({'message':  "Client is not logged"}, status=401)
 
-	request.user.profile.is_active = False
 	request.user.save()
 	logout(request)
 
@@ -383,33 +378,36 @@ def profile_update(request):
 		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
 
 	user = request.user
-	boolean_fields = ["do_not_disturb", "is_active"]
-	for field in boolean_fields:
-		if field in data:
-			valid = True
-			if not isinstance(data[field], (bool)):
-				return JsonResponse({'message': 'Invalid {0} value, should be a boolean'.format(field)}, status=400)
-			setattr(user.profile, field, data[field])
+
+	if "do_not_disturb" in data:
+		valid = True
+		if not isinstance(data["do_not_disturb"], (bool)):
+			return JsonResponse({'message': 'Invalid {0} value, should be a boolean'.format("do_not_disturb")}, status=400)
+		setattr(user.profile, "do_not_disturb", data["do_not_disturb"])
 
 	if "password" in data:
-		valid, message = check_password(data['password'])
 		if "old_password" not in data:
 			return JsonResponse({'message': "Old password not provided"}, status=400)
-		if not valid :
-			return JsonResponse({'message': message}, status=400)
+
+		password = data['password']
+		old_password = data['old_password']
+
+		if not password or not old_password or not isinstance(password, str) or not isinstance(old_password, str):
+			return JsonResponse({'message': 'Invalid data'}, status=400)
+
 		if user.profile.id42 != 0:
 			return JsonResponse({'message': "Remote password change forbiden"}, status=403)
-		if (user.check_password(data['old_password'])):
-			user.set_password(data['password'])
-			user = authenticate(request, username=user.username, password=data['password'])
-			if user is not None:
-				user.profile.is_active = True
-				user.save()
-				login(request, user)
-			else:
-				return JsonResponse({'message': 'Error while authenticating'}, status=400)
-		else :
+
+		valid, message = check_password(password)
+		if not valid :
+			return JsonResponse({'message': message}, status=400)
+
+		if not user.check_password(old_password):
 			return JsonResponse({'message': 'Old password mismatch'}, status=400)
+
+		user.set_password(password)
+		user.save()
+		login(request, user)
 
 	if "username" in data:
 		valid, message = check_username(data['username'])

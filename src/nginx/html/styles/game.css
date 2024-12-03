@@ -511,6 +511,7 @@
 
 .playerNamesContainer{
 	justify-items: center;
+	display: grid;
 }
 
 .playerNamesContainer .playerName{
@@ -561,6 +562,10 @@ table.landscape, table.portrait{
 	justify-content: space-around;
 	white-space: nowrap;
 	justify-items: center;
+}
+
+table.portrait{
+	width: fit-content;
 }
 
 table.landscape{
@@ -726,6 +731,8 @@ table.landscape{
 		flex: auto;
 		height: 30vh;
 		align-self: center;
+		width: 80%;
+		justify-content: center;
 	}
 	.legendContainer {
 		display: flex;
@@ -745,8 +752,9 @@ table.landscape{
 		flex-direction: row;
 		flex-wrap: wrap;
 	}
-	.playerInfoContainer{/*
-		width: calc(50% - 1rem);*/
+	.matchGraphContainer{
+		width: 50%;
+		justify-content: center;
 	}
 }
 
@@ -784,13 +792,8 @@ table.landscape{
 			}
 
 			.playerName, .playerScore{
-				writing-mode: vertical-lr;
 				width: 1ch;
-			}/*
-			.game{
-				width: auto !important;
-				height: auto !important;
-			}*/
+			}
 
 			#playerTwo {
 				.playerPfp{
@@ -801,18 +804,24 @@ table.landscape{
 				}
 			}
 			#controlerPlayerOne,#controlerPlayerTwo{
-				flex-direction: column;
-				width: 15rem;
-				height: auto;
+				flex-direction: row;
+				width: unset;
+				height: 10rem;
 
 				.leftBtnContainer, .rightBtnContainer{
-					height: 50%;
+					height: 100%;
 					width: 100%;
 					align-content: center;
 				}
 
 				.leftBtn, .rightBtn{
 					mask-size: 50%;
+					width: 10rem;
+				}
+			}
+			#controlerPlayerTwo{
+				.leftBtn, .rightBtn{
+					rotate: 270deg;
 				}
 			}
 		}
@@ -848,6 +857,7 @@ table.landscape{
 			height: 80%;
 			flex-direction: column;
 			align-items: center;
+			width: 60%;
 		}
 	}
 	#matchInfoGraphContainer, .playerInfoGraphContainer{
@@ -881,7 +891,19 @@ table.landscape{
 			flex-direction: row;
 		}
 	}
+	.matchGraphContainer{
+		width: -webkit-fill-available;
+	}
 
+	.playerGraphContainer, .matchGraphContainer{
+		justify-content: center;
+		.canvaContainer {
+			display: grid;
+		}
+	}
+	.playerGraphContainer{
+		width: 80%;
+	}
 }
 
 
@@ -913,6 +935,7 @@ table.landscape{
 	.canvaContainer {
 		height: 80%;
 		justify-items: center;
+		display: grid;
 	}
 }
 

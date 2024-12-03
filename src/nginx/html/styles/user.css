@@ -329,6 +329,7 @@
 	#userStatGraphContainer{
 		height: 85%;
 		justify-items: center;
+		display: grid;
 	}
 }
 

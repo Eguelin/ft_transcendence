@@ -1,6 +1,8 @@
 #loginPage{
 	width: fit-content;
 	justify-self: center;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .loginOpt{
@@ -20,8 +22,8 @@
 #fortyTwoLogin{
 	mask-image:url("../icons/42.svg");
 	background:var(--main-text-rgb);
-	height:10vh;
-	width:5vw;
+	height:10rem;
+	width:5rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
