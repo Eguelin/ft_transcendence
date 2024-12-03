@@ -21,6 +21,7 @@
 	--input-focus-border : #FDFDFB;
 	--recent-match-container-focus-child: #00000000;
 	--recent-match-container-focus-text: #FDFDFB;
+	--alert-text-rgb : #FDFDFB;
 
 	--font-size-amplifier: 1;
 	--is-mobile: 0;
@@ -45,7 +46,7 @@ html{
 
 
 
-@media screen and (orientation:landscape){
+@media screen and (orientation:landscape) and (min-width:960px){
 	body{
 		font-size: calc(24px * var(--font-size-amplifier));
 		transition: 500ms;
@@ -59,12 +60,6 @@ html{
 	}
 }
 
-@media screen and (orientation:portrait){
-	input{
-		font-size: .7rem;
-	}
-}
-
 @media screen and (orientation:landscape) and (max-height:1080px){
 	body{
 		font-size: calc(16px * var(--font-size-amplifier));
@@ -75,13 +70,16 @@ html{
 	}
 }
 
-@media screen and (orientation:portrait), (max-height:590px){
+@media screen and (orientation:portrait) and (max-width:960px) and (max-height:1080px), (max-height:590px){
 	body{
 		font-size: calc(12px * var(--font-size-amplifier));
 		/*transition: 500ms;*/
 	}
 	html{
 		font-size: calc(12px * var(--font-size-amplifier));
+	}
+	input{
+		font-size: .7rem;
 	}
 }
 
@@ -175,6 +173,7 @@ input{
 	font-size: .5rem;
 	padding: 1rem;
 	width: 18vw;
+	text-overflow: ellipsis;
 }
 
 
@@ -208,7 +207,7 @@ input:focus{
 
 .deleteBtn {
 	text-align: center;
-	color: var(--page-bg-rgb);
+	color: var(--alert-text-rgb);
 	font-family: "pong";
 	font-size: min(4vh, 2vw);
 	padding: 1vh 0;
@@ -351,7 +350,7 @@ a {
 
 .popupErrorContainer, .popupErrorContainerClose, .popupSuccessContainer, .popupSuccessContainerClose{
     background: red;
-    color: var(--page-bg-rgb);
+    color: var(--alert-text-rgb);
     width: fit-content;
 	max-width: 50vw;
 	word-break: break-word;
