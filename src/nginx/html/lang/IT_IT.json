@@ -50,7 +50,7 @@
 		".displayNameCantBeEmpty" : "Il nome visualizzato non può essere vuoto"
 	},
 	"login" : {
-		"#title" : "LOGIN",
+		"#title" : "ACCEDI",
 		"#subtitle" : "",
 		"#internalLoginOpt" : "Accedi con credenziali",
 		"#loginBtn" : "ACCEDI",
