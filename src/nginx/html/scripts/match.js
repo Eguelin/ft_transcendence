@@ -215,10 +215,13 @@ var template = `
 			drawMatchInfoGraph(300)
 			checkMatchSize()
 
+			setNotifTabIndexes(12);
+			(async () => (loadCurrentLang()))();
+		}
+		else{
+			client.loadPage("/404");
 		}
 
-		setNotifTabIndexes(12);
-		(async () => (loadCurrentLang()))();
 	})()
 }
 
