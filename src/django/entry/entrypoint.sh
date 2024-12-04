@@ -13,4 +13,8 @@ echo "$host is available - executing command"
 python manage.py makemigrations
 python manage.py migrate
 
-exec python manage.py runserver 0.0.0.0:8000
+if [ "$DJANGO_DEBUG" = "True" ]; then
+  exec python manage.py runserver 0.0.0.0:8000
+else
+  exec daphne -b 0.0.0.0 -p 8000 transcendence.asgi:application
+fi
