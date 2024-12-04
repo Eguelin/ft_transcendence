@@ -363,6 +363,7 @@ var template = `
 			});
 		}
 	}
+	setTimeout(updateLoginPageSize, 500)
 }
 
 function loginKeyDownEvent(e) {
