@@ -5,6 +5,7 @@ from asgiref.sync import async_to_sync, sync_to_async
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from login.models import Profile
+from django.contrib.auth.models import User
 
 class friend(AsyncWebsocketConsumer):
 	async def connect(self):
@@ -49,6 +50,7 @@ class friend(AsyncWebsocketConsumer):
 
 	@sync_to_async
 	def update_activity(self, bool):
+		self.user = USER.objects.get(username=self.user.username)
 		self.user.profile.is_active = bool
 		self.user.profile.save()
 
