@@ -152,6 +152,7 @@ var template = `
 		});
 	})
 	setTimeout(checkFriendPageSize, 10);
+	setTimeout(updateFriendPageSize, 500);
 }
 
 
