@@ -11,7 +11,7 @@ class friend(AsyncWebsocketConsumer):
 	async def connect(self):
 		self.user = self.scope['user']
 
-		if self.user.is_authenticated:
+		if await self.userIsAuthenticated():
 			self.group_name = f"user_{self.user.id}"
 			await self.channel_layer.group_add(
 				self.group_name,
@@ -23,7 +23,7 @@ class friend(AsyncWebsocketConsumer):
 			await self.close()
 
 	async def disconnect(self, close_code):
-		if self.user.is_authenticated:
+		if await self.userIsAuthenticated():
 			await self.channel_layer.group_discard(
 				self.group_name,
 				self.channel_name
@@ -50,9 +50,20 @@ class friend(AsyncWebsocketConsumer):
 
 	@sync_to_async
 	def update_activity(self, bool):
-		self.user = USER.objects.get(username=self.user.username)
-		self.user.profile.is_active = bool
-		self.user.profile.save()
+		try:
+			self.user = User.objects.get(username=self.user.username)
+			self.user.profile.is_active = bool
+			self.user.profile.save()
+		except User.DoesNotExist:
+			pass
+
+	@sync_to_async
+	def userIsAuthenticated(self):
+		try:
+			user = User.objects.get(username=self.scope['user'].username)
+		except User.DoesNotExist:
+			return False
+		return user.is_authenticated
 
 @receiver(m2m_changed, sender=Profile.friends_request.through)
 def notify_friend_request_changed(sender, instance, action, pk_set, **kwargs):
