@@ -330,8 +330,6 @@ def set_pfp(user, pfp):
 		image = Image.open(io.BytesIO(image_data))
 		image.verify()
 
-		image = Image.open(io.BytesIO(image_data))
-
 		if image.format not in ['JPEG', 'PNG', 'GIF']:
 			return False, 'Image format not supported, use JPEG, PNG or GIF'
 	except:
@@ -381,9 +379,10 @@ def profile_update(request):
 
 	if "do_not_disturb" in data:
 		valid = True
-		if not isinstance(data["do_not_disturb"], (bool)):
-			return JsonResponse({'message': 'Invalid {0} value, should be a boolean'.format("do_not_disturb")}, status=400)
-		setattr(user.profile, "do_not_disturb", data["do_not_disturb"])
+		do_not_disturb = data["do_not_disturb"]
+		if not isinstance(do_not_disturb, bool):
+			return JsonResponse({'message': 'Invalid do_not_disturb value, should be a boolean'}, status=400)
+		user.profile.do_not_disturb = do_not_disturb
 
 	if "password" in data:
 		if "old_password" not in data:
