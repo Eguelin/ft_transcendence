@@ -38,7 +38,7 @@ def send_friend_request(request):
 			user.profile.friends_request.remove(new_friend)
 			user.profile.friends.add(new_friend)
 			user.save()
-			return JsonResponse({'message': 'Succesfully added friend'})
+			return JsonResponse({'message': 'Succesfully send request friend'})
 		elif not ((new_friend.profile.friends_request.filter(pk=user.pk)).exists()):
 			new_friend.profile.friends_request.add(user)
 			new_friend.save()
@@ -106,7 +106,7 @@ def reject_friend_request(request):
 		user = request.user
 		user.profile.friends_request.remove(new_friend)
 		user.save()
-		return JsonResponse({'message': 'Succesfully added friend'})
+		return JsonResponse({'message': 'Succesfully rejected friend request'})
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'Can\'t find user'}, status=404)
 
@@ -138,7 +138,7 @@ def remove_friend(request):
 		friend.save()
 		user.profile.friends.remove(friend)
 		user.save()
-		return JsonResponse({'message': 'Succesfully added friend'})
+		return JsonResponse({'message': 'Succesfully removed friend'})
 	except User.DoesNotExist:
 		return JsonResponse({'message': 'Can\'t find user'}, status=404)
 
