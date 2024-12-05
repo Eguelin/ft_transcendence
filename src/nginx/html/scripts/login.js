@@ -427,4 +427,5 @@ function updateLoginPageSize(){
 	slideSelectorBg.style.setProperty("left", `${loginSlideSelector[slideIdx].getBoundingClientRect().left}px`)
 	slideSelectorBg.style.setProperty("width", `${loginSlideSelector[slideIdx].getBoundingClientRect().width}px`)
 	slideSelectorBg.style.setProperty("height", `${loginSlideSelector[slideIdx].getBoundingClientRect().height}px`)
+	slideSelectorBg.style.setProperty("top", `${loginSlideSelector[slideIdx].getBoundingClientRect().top}px`)
 }
