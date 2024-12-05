@@ -439,7 +439,7 @@
 	text-decoration: underline;
 }
 
-#replayButton:hover,#replayButton:focus{
+#replayButton:hover,#replayButton:focus, #quitBtn:hover,#quitBtn:focus{
 	color: var(--page-bg-rgb);
 	border-color: transparent;
 }
@@ -641,7 +641,7 @@ table.landscape{
 				flex-direction: column-reverse;
 			}
 		}
-		#replayButton{
+		#replayButton, #quitBtn{
 			font-size: 1rem !important;
 		}
 
