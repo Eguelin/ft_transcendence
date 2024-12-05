@@ -67,6 +67,7 @@
 		"aria#inputUsername" : "Nome utente per l'accesso",
 		"aria#inputPassword" : "Password per l'accesso",
 		"aria#fortyTwoLoginContainer" : "Accedi con account 42",
+		"#fortyTwoLoginText" : "Accedi con account 42",
 		"aria#inputRegisterUsername" : "Nome utente per la registrazione",
 		"aria#inputRegisterPassword" : "Password per la registrazione",
 		"aria#inputRegisterCPassword" : "Conferma password per la registrazione",

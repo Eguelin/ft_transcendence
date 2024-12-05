@@ -67,6 +67,7 @@
 		"aria#inputUsername" : "Anmeldebenutzername",
 		"aria#inputPassword" : "Anmeldepasswort",
 		"aria#fortyTwoLoginContainer" : "Mit 42-Konto anmelden",
+		"#fortyTwoLoginText" : "Mit 42-Konto anmelden",
 		"aria#inputRegisterUsername" : "Registrierungsbenutzername",
 		"aria#inputRegisterPassword" : "Registrierungspasswort",
 		"aria#inputRegisterCPassword" : "Registrierungspasswort bestätigen",
