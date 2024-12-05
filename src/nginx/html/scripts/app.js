@@ -1830,7 +1830,7 @@ async function updateUserAriaLabel(dict){
 
 let ua = navigator.userAgent;
 setInterval(function() {
-	if (blockResizeInterval)
+	if (blockResizeInterval || (currentPage == "game" && isMobile()))
 		return;
 	document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 	if (navigator.userAgent !== ua) {
