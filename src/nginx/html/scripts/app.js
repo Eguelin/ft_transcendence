@@ -1872,6 +1872,15 @@ setInterval(function() {
 		updateLoginPageSize();
 }, 500);
 
+window.onscroll = function(){
+	if (currentPage == "login")
+		updateLoginPageSize();
+	if (currentPage == "settings")
+		updateSettingsPageSize();
+	if (currentPage == "friends")
+		updateFriendPageSize();
+}
+
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
 function isPortrait(){return window.matchMedia("(orientation: portrait)").matches};

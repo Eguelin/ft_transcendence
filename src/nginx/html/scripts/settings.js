@@ -808,4 +808,5 @@ function updateSettingsPageSize(){
 	slideSelectorBg.style.setProperty("left", `${settingsSlideSelector[slideIdx].getBoundingClientRect().left}px`)
 	slideSelectorBg.style.setProperty("width", `${settingsSlideSelector[slideIdx].getBoundingClientRect().width}px`)
 	slideSelectorBg.style.setProperty("height", `${settingsSlideSelector[slideIdx].getBoundingClientRect().height}px`)
+	slideSelectorBg.style.setProperty("top", `${settingsSlideSelector[slideIdx].getBoundingClientRect().top}px`)
 }
