@@ -1016,8 +1016,14 @@ function game() {
 					</div>
 					<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
 					<button id="replayButton">${client.langJson['game']['replay']}</button>
+					<button id="quitBtn">${client.langJson['game']['quit']}</button>
 				</div>
 			</div>`;
+			
+			container.querySelector("#quitBtn").onclick = function(){
+				cleanup()
+				myPushState(`https://${hostname.host}/${currentLang}/home`);
+			};
 			if (mode == "local")
 				container.querySelector("#winPfpContainer").remove();
 			else
@@ -1025,8 +1031,16 @@ function game() {
 			document.body.appendChild(container);
 			document.querySelector("#replayButton").focus();
 			document.querySelector("#replayButton").onkeydown = function(e){
-				if (e.key == "Tab")
+				if (e.key == "Tab"){
 					e.preventDefault();
+					document.querySelector("#quitBtn").focus()
+				}
+			}
+			document.querySelector("#quitBtn").onkeydown = function(e){
+				if (e.key == "Tab"){
+					e.preventDefault();
+					document.querySelector("#replayButton").focus()
+				}
 			}
 			checkWinnerDisplaySize();
 			container.querySelector("#replayButton").addEventListener("click", (e) => {
