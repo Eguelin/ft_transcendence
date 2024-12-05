@@ -672,6 +672,11 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#FDFDFB",
 		"--popup-input-bg-rgb" : "#110026",
 		"--alert-text-rgb" : "#FDFDFB",
+		"--forty-two-border-rgb" : "#00000000",
+		"--forty-two-bg" : "black",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "white",
+		"--forty-two-hover-text" : "white",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -694,6 +699,11 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#FFBFF7",
 		"--popup-input-bg-rgb" : "#393E46",
 		"--alert-text-rgb" : "#FDFDFB",
+		"--forty-two-border-rgb" : "#00000000",
+		"--forty-two-bg" : "black",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "white",
+		"--forty-two-hover-text" : "white",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -716,6 +726,11 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#110026",
 		"--popup-input-bg-rgb" : "#F5EDED",
 		"--alert-text-rgb" : "#110026",
+		"--forty-two-border-rgb" : "black",
+		"--forty-two-bg" : "#00000000",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "black",
+		"--forty-two-hover-text" : "white",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
@@ -737,6 +752,11 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#2E073F",
 		"--popup-input-bg-rgb" : "#F7EFE5",
 		"--alert-text-rgb" : "#110026",
+		"--forty-two-border-rgb" : "black",
+		"--forty-two-bg" : "#00000000",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "black",
+		"--forty-two-hover-text" : "white",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -2092,7 +2112,7 @@ function checkGameSize(){
 	if (document.querySelector("#tournamentContainer") && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
-	if (document.querySelector("#gameContainer").classList.contains("local")){
+	if (document.querySelector("#gameContainer") && document.querySelector("#gameContainer").classList.contains("local")){
 		if (isPortrait()){
 			document.querySelector("#game").style.setProperty("rotate", "270deg");
 			document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");

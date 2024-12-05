@@ -22,6 +22,12 @@
 	--recent-match-container-focus-child: #00000000;
 	--recent-match-container-focus-text: #FDFDFB;
 	--alert-text-rgb : #FDFDFB;
+	--forty-two-border-rgb : #00000000;
+	--forty-two-bg : black;
+	--forty-two-hover-bg : black;
+	--forty-two-text : white;
+	--forty-two-hover-text : white;
+	
 
 	--font-size-amplifier: 1;
 	--is-mobile: 0;

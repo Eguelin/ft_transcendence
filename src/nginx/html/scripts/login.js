@@ -33,9 +33,9 @@ var template = `
 					<button tabindex="16" id="loginBtn" class="loginBtn">LOGIN</button>
 				</div>
 			</div>
-			<div class="loginOpt" id="externalLoginOpt">Other login options</div>
-			<div id="externalLogin">
-				<div tabindex="17" id="fortyTwoLogin" aria-label="Login with 42 account"></div>
+			<div tabindex="17" aria-label="Login with 42 account" id="fortyTwoLoginContainer">
+				<span id="fortyTwoLoginText">Login with 42 account</span>
+				<div id="fortyTwoLogin"></div>
 			</div>
 		</div>
 		<div class="loginSlideContainer">
@@ -94,7 +94,7 @@ var template = `
 
 	loginBtn = document.getElementById('loginBtn')
 	switchThemeBtn = document.getElementById("themeButton")
-	fortyTwoLogin = document.getElementById("fortyTwoLogin")
+	fortyTwoLogin = document.getElementById("fortyTwoLoginContainer")
 	loginSlideSelector = document.querySelectorAll(".slideSelector")
 	slides = document.querySelectorAll(".loginSlideContainer")
 
@@ -156,10 +156,14 @@ var template = `
 
 	usernameLogin.addEventListener("keydown", (e) => {
 		usernameRegisterInput.value = usernameLogin.value;
+		if (e.key == "Enter")
+			login();
 	})
 
 	usernameRegisterInput.addEventListener("keydown", (e) => {
 		usernameLogin.value = usernameRegisterInput.value;
+		if (e.key == "Enter")
+			register();
 	})
 
 
@@ -173,6 +177,8 @@ var template = `
 
 	pwRegisterInput.addEventListener("keydown", (e) => {
 		pwLogin.value = pwRegisterInput.value;
+		if (e.key == "Enter")
+			register();
 	})
 
 
