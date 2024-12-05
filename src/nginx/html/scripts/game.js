@@ -676,28 +676,34 @@ function game() {
 					else{
 						document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 					}
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").ontouchstart = (e) => {pointerEvent('ArrowUp', true, "playerTwo", "leftBtn");}
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").ontouchend = (e) => {pointerEvent('ArrowUp', false, "playerTwo", "leftBtn");}
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = (e) => {pointerEvent('ArrowUp', true, "playerTwo", "leftBtn");}
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = (e) => {pointerEvent('ArrowUp', false, "playerTwo", "leftBtn");}
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointercancel = (e) => {pointerEvent('ArrowUp', false, "playerTwo", "leftBtn");}
 
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").ontouchstart = (e) => {pointerEvent('ArrowDown', true, "playerTwo", "rightBtn");}
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").ontouchend = (e) => {pointerEvent('ArrowDown', false, "playerTwo", "rightBtn");}
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = (e) => {pointerEvent('ArrowDown', true, "playerTwo", "rightBtn");}
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = (e) => {pointerEvent('ArrowDown', false, "playerTwo", "rightBtn");}
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointercancel = (e) => {pointerEvent('ArrowDown', false, "playerTwo", "rightBtn");}
 				}
 				else{
 					if (isMobile())
 						document.querySelector("#controlerPlayerOne").style.setProperty("display", "flex");
 					document.querySelector("#controlerPlayerTwo").style.setProperty("display", "none");
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").ontouchstart = null;
-					document.querySelector("#controlerPlayerTwo .leftBtnContainer").ontouchend = null;
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerdown = null;
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointerup = null;
+					document.querySelector("#controlerPlayerTwo .leftBtnContainer").onpointercancel = null;
 
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").ontouchstart = null;
-					document.querySelector("#controlerPlayerTwo .rightBtnContainer").ontouchend = null;
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerdown = null;
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointerup = null;
+					document.querySelector("#controlerPlayerTwo .rightBtnContainer").onpointercancel = null;
 				}
 
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").ontouchstart = (e) => {pointerEvent('KeyD', true, "playerOne", "leftBtn");}
-				document.querySelector("#controlerPlayerOne .leftBtnContainer").ontouchend = (e) => {pointerEvent('KeyD', false, "playerOne", "leftBtn");}
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerdown = (e) => {pointerEvent('KeyD', true, "playerOne", "leftBtn");}
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointerup = (e) => {pointerEvent('KeyD', false, "playerOne", "leftBtn");}
+				document.querySelector("#controlerPlayerOne .leftBtnContainer").onpointercancel = (e) => {pointerEvent('KeyD', false, "playerOne", "leftBtn");}
 
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").ontouchstart = (e) => {pointerEvent('KeyA', true, "playerOne", "rightBtn");}
-				document.querySelector("#controlerPlayerOne .rightBtnContainer").ontouchend = (e) => {pointerEvent('KeyA', false, "playerOne", "rightBtn");}
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerdown = (e) => {pointerEvent('KeyA', true, "playerOne", "rightBtn");}
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointerup = (e) => {pointerEvent('KeyA', false, "playerOne", "rightBtn");}
+				document.querySelector("#controlerPlayerOne .rightBtnContainer").onpointercancel = (e) => {pointerEvent('KeyA', false, "playerOne", "rightBtn");}
 
 
 				document.querySelectorAll(".leftBtnContainer, .rightBtnContainer").forEach(function (elem){
@@ -705,8 +711,7 @@ function game() {
 				})
 
 				checkGameSize();
-				if (!isMobile())
-					KeyPressInterval = setInterval(() => KeyPress(), 16);
+				KeyPressInterval = setInterval(() => KeyPress(), 16);
 				if(document.getElementById("countdownContainer"))
 					document.getElementById("countdownContainer").remove();
 			} else if (data.type === "game_end") {
