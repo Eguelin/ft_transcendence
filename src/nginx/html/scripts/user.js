@@ -182,8 +182,8 @@ function updateUserLang(){
 				checkMatchResumeSize();
 				setNotifTabIndexes(tabIdx);
 				checkUserPageSize();
-            })
-        }
+			})
+		}
 		else if (user.status == 403)
             client.loadPage("/403");
         else{

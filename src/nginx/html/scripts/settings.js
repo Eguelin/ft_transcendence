@@ -376,6 +376,7 @@ function settingsSlide(formerIdx, newerIdx){
 		});
 	}
 	setNotifTabIndexes(26);
+	setTimeout(updateSettingsPageSize, 500)
 
 }
 
