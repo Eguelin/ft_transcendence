@@ -673,6 +673,7 @@ const themeMap = {
 		"--popup-input-bg-rgb" : "#110026",
 		"--alert-text-rgb" : "#FDFDFB",
 		"--forty-two-border-rgb" : "#00000000",
+		"--forty-two-hover-border-rgb" : "white",
 		"--forty-two-bg" : "black",
 		"--forty-two-hover-bg" : "black",
 		"--forty-two-text" : "white",
@@ -700,6 +701,7 @@ const themeMap = {
 		"--popup-input-bg-rgb" : "#393E46",
 		"--alert-text-rgb" : "#FDFDFB",
 		"--forty-two-border-rgb" : "#00000000",
+		"--forty-two-hover-border-rgb" : "white",
 		"--forty-two-bg" : "black",
 		"--forty-two-hover-bg" : "black",
 		"--forty-two-text" : "white",
@@ -727,6 +729,7 @@ const themeMap = {
 		"--popup-input-bg-rgb" : "#F5EDED",
 		"--alert-text-rgb" : "#110026",
 		"--forty-two-border-rgb" : "black",
+		"--forty-two-hover-border-rgb" : "black",
 		"--forty-two-bg" : "#00000000",
 		"--forty-two-hover-bg" : "black",
 		"--forty-two-text" : "black",
@@ -753,6 +756,7 @@ const themeMap = {
 		"--popup-input-bg-rgb" : "#F7EFE5",
 		"--alert-text-rgb" : "#110026",
 		"--forty-two-border-rgb" : "black",
+		"--forty-two-hover-border-rgb" : "black",
 		"--forty-two-bg" : "#00000000",
 		"--forty-two-hover-bg" : "black",
 		"--forty-two-text" : "black",
@@ -1864,6 +1868,8 @@ setInterval(function() {
 			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "block");
 		}
 	}
+	if (currentPage == "login")
+		updateLoginPageSize();
 }, 500);
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};

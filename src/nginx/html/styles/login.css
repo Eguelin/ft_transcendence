@@ -27,14 +27,17 @@
     padding: 1rem;
     border-radius: 1rem;
 	border: 0.2px solid var(--forty-two-border-rgb);
+	transition: 500ms;
 }
 
 #fortyTwoLoginContainer:hover, #fortyTwoLoginContainer:focus{
-	animation: forty-two-hover 500ms forwards;
+	background: var(--forty-two-hover-bg);
+	color: var(--forty-two-hover-text);
+	border: 0.2px solid var(--forty-two-hover-border-rgb);
 }
 
 #fortyTwoLoginContainer:hover #fortyTwoLogin, #fortyTwoLoginContainer:focus #fortyTwoLogin{
-	animation: forty-two-logo-hover 500ms forwards;
+	background: var(--forty-two-hover-text);
 }
 
 #fortyTwoLogin{
@@ -47,27 +50,7 @@
 	mask-repeat:no-repeat;
 	flex: 1;
 	outline: none;
-}
-
-@keyframes forty-two-hover {
-	0%{
-		background: var(--forty-two-bg);
-		color: var(--forty-two-text);
-	}
-	100%{
-		background: var(--forty-two-hover-bg);
-		color: var(--forty-two-hover-text);
-	}
-	
-}
-
-@keyframes forty-two-logo-hover {
-	0%{
-		background: var(--forty-two-text);
-	}
-	100%{
-		background: var(--forty-two-hover-text);
-	}
+	transition: 500ms;
 	
 }
 
@@ -185,6 +168,11 @@
 	.mobile .loginSlideContainer button{
 		font-size: 1rem;
 		border-radius: 1rem;
+	}
+	
+	.mobile #fortyTwoLoginContainer{
+		width: 100%;
+		box-sizing: border-box;
 	}
 }
 
