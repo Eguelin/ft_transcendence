@@ -152,7 +152,7 @@ var template = `
 
 
 function settingsSlide(formerIdx, newerIdx){
-	
+
 	var tmp = document.querySelector("#settingSlides");
 	var left = tmp.getBoundingClientRect().left;
 	var move = [
@@ -548,6 +548,7 @@ confirmDeleteInput.addEventListener("keydown", (e) => {
 
 function deleteRequest(){
 	if (val == document.getElementById("confirmDeleteDialogVar").innerText){
+		disconnectSocket();
 		fetch('/api/user/delete_user', {
 			method: 'GET',
 			headers: {
@@ -808,4 +809,5 @@ function updateSettingsPageSize(){
 	slideSelectorBg.style.setProperty("left", `${settingsSlideSelector[slideIdx].getBoundingClientRect().left}px`)
 	slideSelectorBg.style.setProperty("width", `${settingsSlideSelector[slideIdx].getBoundingClientRect().width}px`)
 	slideSelectorBg.style.setProperty("height", `${settingsSlideSelector[slideIdx].getBoundingClientRect().height}px`)
+	slideSelectorBg.style.setProperty("top", `${settingsSlideSelector[slideIdx].getBoundingClientRect().top}px`)
 }

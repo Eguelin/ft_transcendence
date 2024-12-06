@@ -19,20 +19,39 @@
 	display: flex;
 }
 
+#fortyTwoLoginContainer{
+    display: flex;
+    gap: 1rem;
+    background: var(--forty-two-bg);
+    color: var(--forty-two-text);
+    padding: 1rem;
+    border-radius: 1rem;
+	border: 0.2px solid var(--forty-two-border-rgb);
+	transition: 500ms;
+}
+
+#fortyTwoLoginContainer:hover, #fortyTwoLoginContainer:focus{
+	background: var(--forty-two-hover-bg);
+	color: var(--forty-two-hover-text);
+	border: 0.2px solid var(--forty-two-hover-border-rgb);
+}
+
+#fortyTwoLoginContainer:hover #fortyTwoLogin, #fortyTwoLoginContainer:focus #fortyTwoLogin{
+	background: var(--forty-two-hover-text);
+}
+
 #fortyTwoLogin{
 	mask-image:url("../icons/42.svg");
-	background:var(--main-text-rgb);
-	height:10rem;
-	width:5rem;
+	background:var(--forty-two-text);
+	height:2rem;
+	width:2rem;
 	mask-size:contain;
 	mask-position:center;
 	mask-repeat:no-repeat;
 	flex: 1;
 	outline: none;
-}
-
-#fortyTwoLogin:hover, #fortyTwoLogin:focus{
-	background: var(--hover-text-rgb);
+	transition: 500ms;
+	
 }
 
 #loginSlideSelector{
@@ -149,6 +168,11 @@
 	.mobile .loginSlideContainer button{
 		font-size: 1rem;
 		border-radius: 1rem;
+	}
+	
+	.mobile #fortyTwoLoginContainer{
+		width: 100%;
+		box-sizing: border-box;
 	}
 }
 

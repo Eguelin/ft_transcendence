@@ -355,7 +355,7 @@ class Dashboard{
 				else{
 					this.matches = await matchesFetch.json();
 					this.matches = this.matches.matches;
-	
+
 					const clientMatchesFetch = await fetch('/api/user/get', {
 						method: 'POST', //GET forbid the use of body :(
 						headers: {'Content-Type': 'application/json',},
@@ -672,6 +672,12 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#FDFDFB",
 		"--popup-input-bg-rgb" : "#110026",
 		"--alert-text-rgb" : "#FDFDFB",
+		"--forty-two-border-rgb" : "#00000000",
+		"--forty-two-hover-border-rgb" : "white",
+		"--forty-two-bg" : "black",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "white",
+		"--forty-two-hover-text" : "white",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -694,6 +700,12 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#FFBFF7",
 		"--popup-input-bg-rgb" : "#393E46",
 		"--alert-text-rgb" : "#FDFDFB",
+		"--forty-two-border-rgb" : "#00000000",
+		"--forty-two-hover-border-rgb" : "white",
+		"--forty-two-bg" : "black",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "white",
+		"--forty-two-hover-text" : "white",
 
 		"is-dark": 1,
 		"svg-path": "/icons/moon.svg"
@@ -716,6 +728,12 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#110026",
 		"--popup-input-bg-rgb" : "#F5EDED",
 		"--alert-text-rgb" : "#110026",
+		"--forty-two-border-rgb" : "black",
+		"--forty-two-hover-border-rgb" : "black",
+		"--forty-two-bg" : "#00000000",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "black",
+		"--forty-two-hover-text" : "white",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	},
@@ -737,6 +755,12 @@ const themeMap = {
 		"--recent-match-container-focus-text": "#2E073F",
 		"--popup-input-bg-rgb" : "#F7EFE5",
 		"--alert-text-rgb" : "#110026",
+		"--forty-two-border-rgb" : "black",
+		"--forty-two-hover-border-rgb" : "black",
+		"--forty-two-bg" : "#00000000",
+		"--forty-two-hover-bg" : "black",
+		"--forty-two-text" : "black",
+		"--forty-two-hover-text" : "white",
 		"is-dark": 0,
 		"svg-path": "/icons/sun.svg"
 	}
@@ -1288,7 +1312,7 @@ function friendUpdate()
 	socket.onmessage = function (event)
 	{
 		const data = JSON.parse(event.data);
-		if (data.new_request)
+		if (data.type === "friend_request")
 		{
 			sendNotif(`${client.langJson.friends['incoming_pending_request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
 			if (currentPage === "friends" && !document.getElementById(data.sender_name))
@@ -1357,9 +1381,9 @@ function friendUpdate()
 			}
 			else if (data.status === "offline")
 			{
-				if (document.getElementById(data.username))
+				if (document.querySelector(`#onlineFriendList #${data.username}`))
 				{
-					document.getElementById(data.username).remove();
+					document.querySelector(`#onlineFriendList #${data.username}`).remove();
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 				}
 			}
@@ -1844,7 +1868,18 @@ setInterval(function() {
 			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "block");
 		}
 	}
+	if (currentPage == "login")
+		updateLoginPageSize();
 }, 500);
+
+window.onscroll = function(){
+	if (currentPage == "login")
+		updateLoginPageSize();
+	if (currentPage == "settings")
+		updateSettingsPageSize();
+	if (currentPage == "friends")
+		updateFriendPageSize();
+}
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
@@ -2092,7 +2127,7 @@ function checkGameSize(){
 	if (document.querySelector("#tournamentContainer") && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none"){
 		displayTournament();
 	}
-	if (document.querySelector("#gameContainer").classList.contains("local")){
+	if (document.querySelector("#gameContainer") && document.querySelector("#gameContainer").classList.contains("local")){
 		if (isPortrait()){
 			document.querySelector("#game").style.setProperty("rotate", "270deg");
 			document.querySelector("#gameContainer").style.setProperty("flex-direction", "column-reverse");

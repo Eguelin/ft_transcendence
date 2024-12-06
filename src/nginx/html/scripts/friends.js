@@ -678,7 +678,8 @@ function settingsSlide(formerIdx, newerIdx){
 }
 
 function updateFriendPageSize(){
-	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`)
+	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`);
+	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`);
+	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`);
+	slideSelectorBg.style.setProperty("top", `${slideSelector[friendSlideIdx].getBoundingClientRect().top}px`);
 }
