@@ -355,7 +355,7 @@ class Dashboard{
 				else{
 					this.matches = await matchesFetch.json();
 					this.matches = this.matches.matches;
-	
+
 					const clientMatchesFetch = await fetch('/api/user/get', {
 						method: 'POST', //GET forbid the use of body :(
 						headers: {'Content-Type': 'application/json',},
