@@ -9,12 +9,14 @@ var slideIdx;
 var template = `
 <div id="pageContentContainer">
 	<div id="loginPage">
-		<div id="loginSlideSelector">
-			<div tabindex="12" id="loginSelector" class="slideSelector activeSelector">
-				<div id="loginSelectorText">Login</div>
-			</div>
-			<div tabindex="13" id="registerSelector" class="slideSelector">
-				<div id="registerSelectorText">Register</div>
+		<div id="loginSlideSelectorContainer">
+			<div id="loginSlideSelector">
+				<div tabindex="12" id="loginSelector" class="slideSelector activeSelector">
+					<div id="loginSelectorText">Login</div>
+				</div>
+				<div tabindex="13" id="registerSelector" class="slideSelector">
+					<div id="registerSelectorText">Register</div>
+				</div>
 			</div>
 		</div>
 
@@ -107,14 +109,18 @@ var template = `
 		slides[i].style.display = "none";
 	slides[slideIdx].style.display = "flex";
 
-
 	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 	if (slideIdx == 1){
 		document.querySelector("#loginSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${bg} 50%, ${bg} 100%, rgba(0,0,0,0) 100%)`;
+		document.querySelector("#loginSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${underline} 50%, ${underline} 100%, rgba(0,0,0,0) 100%)`;
 	}
-	else
+	else{
 		document.querySelector("#loginSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${bg} 0%, ${bg} 50%, rgba(0,0,0,0) 50%)`;
-
+		document.querySelector("#loginSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${underline} 0%, ${underline} 50%, rgba(0,0,0,0) 50%)`;
+	}
+	
+	
 	loginSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
 			save = slideIdx;
@@ -395,11 +401,13 @@ function loginKeyDownEvent(e) {
 
 function loginSlide(){
 	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
-	var move = [];
+	var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+	var move = [], moveUnderline = [];
 	var increment = slideIdx == 1 ? 1 : -1;
 	let i = slideIdx == 1 ? 0 : 50;
 	for (;i<=50 && i >= 0;i += increment){
 		move.push({ background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
+		moveUnderline.push({ background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${underline} ${i}%, ${underline} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
 	}
 	var time = {
 		duration: 500,
@@ -407,6 +415,8 @@ function loginSlide(){
 	}
 	document.querySelector("#loginSlideSelector").animate(move, time);
 	document.querySelector("#loginSlideSelector").style.background = move[move.length - 1].background;
+	document.querySelector("#loginSlideSelectorContainer").animate(moveUnderline, time);
+	document.querySelector("#loginSlideSelectorContainer").style.background = moveUnderline[move.length - 1].background;
 	
 	if (slideIdx == 1){
 		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`);

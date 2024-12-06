@@ -183,10 +183,13 @@
 	border: 0.2px solid var(--hover-text-rgb);
 }
 
+#friendSlideSelectorContainer{
+	height: 4.1rem;
+}
+
 #friendSlideSelector{
 	color: var(--main-text-rgb);
 	display: flex;
-	margin-top: 2vmin;
 	width: fit-content;
 	min-width: 50vw;
 	height: 4rem;
