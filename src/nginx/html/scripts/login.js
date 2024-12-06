@@ -2,7 +2,6 @@ var loginBtn;
 var switchThemeBtn;
 var fortyTwoLogin;
 var loginSlideSelector;
-var slideSelectorBg;
 
 var slides;
 var slideIdx;
@@ -17,7 +16,6 @@ var template = `
 			<div tabindex="13" id="registerSelector" class="slideSelector">
 				<div id="registerSelectorText">Register</div>
 			</div>
-			<div id="slideSelectorBg"></div>
 		</div>
 
 		<div class="loginSlideContainer">
@@ -103,16 +101,19 @@ var template = `
 	usernameRegisterInput = document.getElementById('inputRegisterUsername');
 	pwRegisterInput = document.getElementById('inputRegisterPassword');
 	cpwRegisterInput = document.getElementById('inputRegisterCPassword');
-	slideSelectorBg = document.querySelector("#slideSelectorBg");
 
 
 	for (i = 0; i < slides.length; i++)
 		slides[i].style.display = "none";
 	slides[slideIdx].style.display = "flex";
-	slideSelectorBg.style.setProperty("left", `${loginSlideSelector[slideIdx].getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${loginSlideSelector[slideIdx].getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${loginSlideSelector[slideIdx].getBoundingClientRect().height}px`)
 
+
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	if (slideIdx == 1){
+		document.querySelector("#loginSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${bg} 50%, ${bg} 100%, rgba(0,0,0,0) 100%)`;
+	}
+	else
+		document.querySelector("#loginSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${bg} 0%, ${bg} 50%, rgba(0,0,0,0) 50%)`;
 
 	loginSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
@@ -369,7 +370,6 @@ var template = `
 			});
 		}
 	}
-	setTimeout(updateLoginPageSize, 500)
 }
 
 function loginKeyDownEvent(e) {
@@ -386,33 +386,28 @@ function loginKeyDownEvent(e) {
 			slideIdx = slides.length - 1;
 		for (let i = 0; i < slides.length; i++)
 			slides[i].style.display = "none";
+		loginSlide();
 		loginSlideSelector[slideIdx].classList.add('activeSelector');
 		slides[slideIdx].style.display = "flex";
 		loginSlideSelector[slideIdx].focus();
-		loginSlide(save, slideIdx);
 	}
 }
 
-var prevSelectorElem;
-
-
-var newSelectorElem;
-
-function loginSlide(formerIdx, newerIdx){
-	prevSelectorElem = loginSlideSelector[formerIdx];
-	newSelectorElem = loginSlideSelector[newerIdx];
-	move = [
-		{ left: `${prevSelectorElem.getBoundingClientRect().left}px`, width: `${prevSelectorElem.getBoundingClientRect().width}px`, height: `${prevSelectorElem.getBoundingClientRect().height}px`},
-		{ left: `${newSelectorElem.getBoundingClientRect().left}px`, width: `${newSelectorElem.getBoundingClientRect().width}px`, height: `${newSelectorElem.getBoundingClientRect().height}px`},
-	];
-	time = {
+function loginSlide(){
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	var move = [];
+	var increment = slideIdx == 1 ? 1 : -1;
+	let i = slideIdx == 1 ? 0 : 50;
+	for (;i<=50 && i >= 0;i += increment){
+		move.push({ background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
+	}
+	var time = {
 		duration: 500,
 		iterations: 1,
 	}
-	slideSelectorBg.animate(move, time);
-	slideSelectorBg.style.setProperty("left", `${newSelectorElem.getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${newSelectorElem.getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${newSelectorElem.getBoundingClientRect().height}px`)
+	document.querySelector("#loginSlideSelector").animate(move, time);
+	document.querySelector("#loginSlideSelector").style.background = move[move.length - 1].background;
+	
 	if (slideIdx == 1){
 		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#register`);
 		document.title = langJson['login'][`register title`];
@@ -421,11 +416,4 @@ function loginSlide(formerIdx, newerIdx){
 		history.replaceState("","",`https://${hostname.host}/${currentLang}/login#login`);
 		document.title = langJson['login'][`login title`];
 	}
-}
-
-function updateLoginPageSize(){
-	slideSelectorBg.style.setProperty("left", `${loginSlideSelector[slideIdx].getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${loginSlideSelector[slideIdx].getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${loginSlideSelector[slideIdx].getBoundingClientRect().height}px`)
-	slideSelectorBg.style.setProperty("top", `${loginSlideSelector[slideIdx].getBoundingClientRect().top}px`)
 }

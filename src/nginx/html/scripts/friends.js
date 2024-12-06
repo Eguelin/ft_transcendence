@@ -10,7 +10,6 @@ var friendSlides;
 var slideSelector;
 var friendSlideIdx = 0;
 var slides;
-var slideSelectorBg
 var baseTabIdx = 15;
 
 var template = `
@@ -32,7 +31,6 @@ var template = `
 			<div id="blockedSelectorText" class="slideSelectorText">Blocked</div>
 			<div id="blockedSelectorCount" class="userSlideCount">(0)</div>
 		</div>
-		<div id="slideSelectorBg"></div>
 	</div>
 
 	<div id="friendSlidesContainer">
@@ -86,7 +84,6 @@ var template = `
 	friendInfo = document.getElementById("friendInfo");
 	friendSlides = document.querySelectorAll(".friendSlide");
 	slideSelector = document.querySelectorAll(".slideSelector");
-	slideSelectorBg = document.querySelector("#slideSelectorBg");
 	const url = new URL(window.location.href);
 	history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${url.hash}`)
 	var friendSlideIdx = 0;
@@ -107,10 +104,9 @@ var template = `
 	setNotifTabIndexes(16);
 
 	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
-	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`)
 	document.getElementById("friendSlides").style.setProperty("left", `-${friendSlideIdx}00vw`);
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	document.querySelector("#friendSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${friendSlideIdx * 25}%, ${bg} ${friendSlideIdx * 25}%, ${bg} ${(friendSlideIdx * 25)+25}%, rgba(0,0,0,0) ${(friendSlideIdx * 25)+25}%)`
 
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
@@ -152,7 +148,6 @@ var template = `
 		});
 	})
 	setTimeout(checkFriendPageSize, 10);
-	setTimeout(updateFriendPageSize, 500);
 }
 
 
@@ -658,28 +653,23 @@ function settingsSlide(formerIdx, newerIdx){
 	tmp.animate(move, time);
 	tmp.style.setProperty("left", `-${friendSlideIdx}00%`)
 
-	var prevSelectorElem = slideSelector[formerIdx];
-	var newSelectorElem = slideSelector[newerIdx];
-	move = [
-		{ left: `${prevSelectorElem.getBoundingClientRect().left}px`, width: `${prevSelectorElem.getBoundingClientRect().width}px`, height: `${prevSelectorElem.getBoundingClientRect().height}px`},
-		{ left: `${newSelectorElem.getBoundingClientRect().left}px`, width: `${newSelectorElem.getBoundingClientRect().width}px`, height: `${newSelectorElem.getBoundingClientRect().height}px`},
-	];
-	time = {
+
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	bg = "red";
+	var move = [];
+	var increment = formerIdx < newerIdx ? 1 : -1;
+	let i = formerIdx * 25	
+	for (let count = 0;count <= 25 ;i += increment, count++){
+		move.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 25}%, rgba(0,0,0,0) ${i + 25}%)`});
+	}
+	var time = {
 		duration: 500,
 		iterations: 1,
 	}
-	slideSelectorBg.animate(move, time);
-	slideSelectorBg.style.setProperty("left", `${newSelectorElem.getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${newSelectorElem.getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${newSelectorElem.getBoundingClientRect().height}px`)
+	document.querySelector("#friendSlideSelector").animate(move, time);
+	document.querySelector("#friendSlideSelector").style.background = move[move.length - 1].background;
+
 	history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${friendHashMap[newerIdx]}`)
 	document.title = langJson['friends'][`${friendHashMap[newerIdx].replace("#","")} title`];
 	setTabIndexes(friendSlideIdx);
-}
-
-function updateFriendPageSize(){
-	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`);
-	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`);
-	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`);
-	slideSelectorBg.style.setProperty("top", `${slideSelector[friendSlideIdx].getBoundingClientRect().top}px`);
 }
