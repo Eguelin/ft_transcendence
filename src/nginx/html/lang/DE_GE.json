@@ -44,7 +44,7 @@
 		"ariaResume.matchDescContainer" : "Match zwischen ${USER_ONE} und ${USER_TWO} am ${DATE}, Gewinner ist ${WINNER}",
 		"ariaResumeTournament.matchDescContainer" : "Turnier am ${DATE}",
 		"aria.resultScoreName" : "Profilweiterleitung von ${USERNAME}",
-		"home title" : "Startseite - transcendence",
+		"home title" : "Startseite - ft_transcendence",
 		".displayNameUpdated" : "Anzeigename erfolgreich aktualisiert",
 		"#inputChangeDisplayName" : "Anzeigename des Turniers",
 		".displayNameCantBeEmpty" : "Anzeigename darf nicht leer sein"
@@ -71,8 +71,8 @@
 		"aria#inputRegisterUsername" : "Registrierungsbenutzername",
 		"aria#inputRegisterPassword" : "Registrierungspasswort",
 		"aria#inputRegisterCPassword" : "Registrierungspasswort bestätigen",
-		"login title" : "Anmelden - transcendence",
-		"register title" : "Registrieren - transcendence",
+		"login title" : "Anmelden - ft_transcendence",
+		"register title" : "Registrieren - ft_transcendence",
 		".inputUsernameCantBeEmpty" : "Benutzername darf nicht leer sein",
 		".inputPasswordCantBeEmpty" : "Passwort darf nicht leer sein",
 		".inputRegisterUsernameCantBeEmpty" : "Benutzername darf nicht leer sein",
@@ -119,8 +119,8 @@
 		"aria#confirmDeleteInput" : "Geben Sie Ihren Benutzernamen ein und drücken Sie die Eingabetaste, um die Löschung zu bestätigen",
 		"aria#pfpLabel" : "Profilbild ändern",
 		"aria#confirmPfpBtn" : "Profilbild bestätigen",
-		"account title" : "Konto - transcendence",
-		"accessibility title" : "Barrierefreiheit - transcendence",
+		"account title" : "Konto - ft_transcendence",
+		"accessibility title" : "Barrierefreiheit - ft_transcendence",
 		".inputOldPasswordCantBeEmpty" : "Altes Passwort darf nicht leer sein",
 		".inputNewPasswordCantBeEmpty" : "Neues Passwort darf nicht leer sein",
 		".inputNewCPasswordCantBeEmpty" : "Neues Passwort bestätigen darf nicht leer sein",
@@ -171,10 +171,10 @@
 		"aria#blockedList .friendsOptionContainer" : "Optionen für blockierte Benutzer",
 		"incoming_pending_request" : "Eingehende Freundschaftsanfrage von ${USERNAME}",
 		"error_sending_request" : "Freundschaftsanfrage konnte nicht gesendet werden.",
-		"online title" : "Online-Freunde - transcendence",
-		"all title" : "Alle Freunde - transcendence",
-		"pending title" : "Ausstehende Freundschaftsanfragen - transcendence",
-		"blocked title" : "Blockierte Benutzer - transcendence",
+		"online title" : "Online-Freunde - ft_transcendence",
+		"all title" : "Alle Freunde - ft_transcendence",
+		"pending title" : "Ausstehende Freundschaftsanfragen - ft_transcendence",
+		"blocked title" : "Blockierte Benutzer - ft_transcendence",
 		"blockError" : "Sie können diesen Benutzer nicht blockieren.",
 		"requestSend" : "Freundschaftsanfrage gesendet an ${USERNAME}"
 	},
@@ -193,7 +193,7 @@
 		"ariaResumeTournament.matchDescContainer" : "Turnier am ${DATE}",
 		"aria.resultScoreName" : "Profilweiterleitung von ${USERNAME}",
 		"aria#profilePfp" : "${USERNAME} Profilbild",
-		"user title" : "${USERNAME} - transcendence"
+		"user title" : "${USERNAME} - ft_transcendence"
 	},
 	"dashboard":{
 		"#title" : "",
@@ -221,7 +221,7 @@
 		"aria#winLossGraph" : "Durchschnittliche Anzahl der Siege nach Datum:",
 		"aria#winLossAbsGraph" : "Absolute Anzahl der Siege nach Datum:",
 		"aria_winLossGraphBis" : "${VALUE} am ${DATE}, ",
-		"dashboard title" : "${USERNAME} Dashboard - transcendence",
+		"dashboard title" : "${USERNAME} Dashboard - ft_transcendence",
 		".notEnoughData" : "Nicht genügend Daten verfügbar, um das Diagramm für diesen Zeitraum anzuzeigen. Die einzigen verfügbaren Daten sind: ${VALUE} am ${DATE}",
 		".invalidDate" : "Ungültiges Datum"
 	},
@@ -232,7 +232,7 @@
 		"#inputSearch" : "Benutzer suchen",
 		"aria#inputSearch" : "Benutzereingabefeld suchen",
 		"aria.userResume" : "Profilweiterleitung von ${USERNAME}",
-		"search title" : "Suche ${SEARCH} - transcendence",
+		"search title" : "Suche ${SEARCH} - ft_transcendence",
 		".emptySearchError" : "Leere Abfrage kann nicht durchsucht werden"
 	},
 	"game":{
@@ -254,8 +254,8 @@
 		"final" : "Finale",
 		"tournamentLobby" : "Lobby",
 		"matchSubtitle" : "Spiel",
-		"game title" : "${MODE} Spiel - transcendence",
-		"lobby title" : "Lobby ${NB}/8  - transcendence",
+		"game title" : "${MODE} Spiel - ft_transcendence",
+		"lobby title" : "Lobby ${NB}/8  - ft_transcendence",
 		".errorTabIndexUserRedirection" : "Fehler bei der Tab-Indexierung bei der Benutzerweiterleitung"
 	},
 	"tournament":{
@@ -272,7 +272,7 @@
 		"semi" : "Halbfinale",
 		"final" : "Finale",
 		"profile_redirection" : "Profilweiterleitung von ${USERNAME}",
-		"tournament title" : "Turnier - transcendence",
+		"tournament title" : "Turnier - ft_transcendence",
 		".errorSettingAriaLabels" : "Fehler beim Festlegen der Turnier-Aria-Labels"
 	},
 	"match" : {
@@ -293,7 +293,7 @@
 		".landscape #totalExchangeTitle" : "Gesamt",
 		".landscape #averageExchangeTitle" : "Durchschnitt pro Punkt",
 		".landscape #longestExchangeTitle" : "Längster",
-		"match title" : "Spiel - transcendence",
+		"match title" : "Spiel - ft_transcendence",
 		".noZoneHitted": "Keine Zone getroffen",
 		"aria#matchInfoGraph" : "Kreisdiagramm der globalen Trefferzone, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
 		"aria#playerOneInfoGraph" : "Kreisdiagramm der Trefferzone von ${USERNAME}, oben: ${TOP}, Mitte: ${CENTER}, unten: ${BOTTOM}",
@@ -309,13 +309,13 @@
 		"#subtitle" : "",
 		"#NotFoundtitle" : "Oh nein, diese Seite existiert nicht :(",
 		"#NotFoundBtn" : "STARTSEITE",
-		"404 title" : "404 - transcendence"
+		"404 title" : "404 - ft_transcendence"
 	},
 	"403":{
 		"#title" : "FEHLER 403",
 		"#subtitle" : "",
 		"#ForbidenTitle" : "Du solltest nicht hier sein >:(",
 		"#ForbidenBtn" : "STARTSEITE",
-		"403 title" : "403 - transcendence"
+		"403 title" : "403 - ft_transcendence"
 	}
 }

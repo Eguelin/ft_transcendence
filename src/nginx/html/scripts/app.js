@@ -1574,11 +1574,16 @@ async function loadCurrentLang(){
 	}
 	if (langJson != null && langJson != undefined){
 
-		if (url.hash != ""){
-			document.title = langJson[currentPage][`${url.hash.replace("#","")} title`];
+		try{
+			if (url.hash != ""){
+				document.title = langJson[currentPage][`${url.hash.replace("#","")} title`];
+			}
+			else
+				document.title = langJson[currentPage][`${currentPage} title`];
 		}
-		else
-			document.title = langJson[currentPage][`${currentPage} title`];
+		catch{
+			document.title = 'ft_transcendence';
+		}
 
 		content = langJson[currentPage];
 		if (content != null && content != undefined) {

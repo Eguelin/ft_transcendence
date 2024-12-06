@@ -784,6 +784,7 @@ document.getElementById("fontSizeRange").addEventListener("input", (e) => {
 		credentials: 'include'
 	})
 	client.fontAmplifier = e.target.value;
+	setTimeout(updateSettingsPageSize, 500);
 	document.documentElement.style.setProperty("--font-size-amplifier", e.target.value);
 })
 
