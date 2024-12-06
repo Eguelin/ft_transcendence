@@ -233,6 +233,7 @@
 }
 
 .slideSelector{
+	z-index: 1;
 	font-size: 1em;
 }
 

@@ -11,7 +11,6 @@ var rightSlideBtn;
 var leftSlideBtn;
 var confirmDeleteInput;
 var confirmPfpBtn;
-var slideSelectorBg;
 
 var accoutSlide = `
 <div id="saveUsernameContainer">
@@ -104,7 +103,6 @@ var template = `
 				<div id="accessibilitySelector" class="slideSelector" tabindex="13">
 					<div id="accessibilitySelectorText">Accessibility</div>
 				</div>
-				<div id="slideSelectorBg"></div>
 			</div>
 			<div style="position: relative;">
 				<div id="settingSlides">
@@ -166,20 +164,20 @@ function settingsSlide(formerIdx, newerIdx){
 	tmp.animate(move, time);
 	tmp.style.setProperty("left", `-${slideIdx}00vw`)
 
-	var prevSelectorElem = settingsSlideSelector[formerIdx];
-	var newSelectorElem = settingsSlideSelector[newerIdx];
-	move = [
-		{ left: `${prevSelectorElem.getBoundingClientRect().left}px`, width: `${prevSelectorElem.getBoundingClientRect().width}px`, height: `${prevSelectorElem.getBoundingClientRect().height}px`},
-		{ left: `${newSelectorElem.getBoundingClientRect().left}px`, width: `${newSelectorElem.getBoundingClientRect().width}px`, height: `${newSelectorElem.getBoundingClientRect().height}px`},
-	];
-	time = {
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	var move = [];
+	var increment = slideIdx == 1 ? 1 : -1;
+	let i = slideIdx == 1 ? 0 : 50;
+	for (;i<=50 && i >= 0;i += increment){
+		move.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
+	}
+	var time = {
 		duration: 500,
 		iterations: 1,
 	}
-	slideSelectorBg.animate(move, time);
-	slideSelectorBg.style.setProperty("left", `${newSelectorElem.getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${newSelectorElem.getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${newSelectorElem.getBoundingClientRect().height}px`)
+	document.querySelector("#settingsSlideSelector").animate(move, time);
+	document.querySelector("#settingsSlideSelector").style.background = move[move.length - 1].background;
+
 	if (newerIdx == 0){
 		try{
 			document.title = langJson['settings'][`account title`];
@@ -271,7 +269,6 @@ function settingsSlide(formerIdx, newerIdx){
 	settingsSlides = document.querySelectorAll(".settingSlide");
 	confirmDeleteInput = document.getElementById("confirmDeleteInput");
 	confirmPfpBtn = document.getElementById("confirmPfpBtn");
-	slideSelectorBg = document.querySelector("#slideSelectorBg");
 
 	inputSearchUserContainer.style.setProperty("display", "none");
 	dropDownUserContainer.style.setProperty("display", "flex");
@@ -282,7 +279,13 @@ function settingsSlide(formerIdx, newerIdx){
 
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector")
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
-	settingsSlide(slideIdx, slideIdx);
+
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	if (slideIdx == 1){
+		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${bg} 50%, ${bg} 100%, rgba(0,0,0,0) 100%)`;
+	}
+	else
+		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${bg} 0%, ${bg} 50%, rgba(0,0,0,0) 50%)`;
 	settingsSlideSelector[slideIdx].classList.add('activeSelector');
 
 	settingsSlideSelector.forEach(function(key) {
@@ -376,7 +379,6 @@ function settingsSlide(formerIdx, newerIdx){
 		});
 	}
 	setNotifTabIndexes(26);
-	setTimeout(updateSettingsPageSize, 500)
 
 }
 
@@ -803,11 +805,3 @@ usernameInput.addEventListener("focus", (e) => {
 usernameInput.addEventListener("focusout", (e) => {
 	window.onkeydown = settingsKeyDownEvent
 })
-
-function updateSettingsPageSize(){
-	slideSelectorBg = document.querySelector("#slideSelectorBg");
-	slideSelectorBg.style.setProperty("left", `${settingsSlideSelector[slideIdx].getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${settingsSlideSelector[slideIdx].getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${settingsSlideSelector[slideIdx].getBoundingClientRect().height}px`)
-	slideSelectorBg.style.setProperty("top", `${settingsSlideSelector[slideIdx].getBoundingClientRect().top}px`)
-}

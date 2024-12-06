@@ -1574,11 +1574,16 @@ async function loadCurrentLang(){
 	}
 	if (langJson != null && langJson != undefined){
 
-		if (url.hash != ""){
-			document.title = langJson[currentPage][`${url.hash.replace("#","")} title`];
+		try{
+			if (url.hash != ""){
+				document.title = langJson[currentPage][`${url.hash.replace("#","")} title`];
+			}
+			else
+				document.title = langJson[currentPage][`${currentPage} title`];
 		}
-		else
-			document.title = langJson[currentPage][`${currentPage} title`];
+		catch{
+			document.title = 'ft_transcendence';
+		}
 
 		content = langJson[currentPage];
 		if (content != null && content != undefined) {
@@ -1665,12 +1670,6 @@ async function loadCurrentLang(){
 		updateIndexAriaLabel();
 		if (currentPage == 'dashboard')
 			updateDashboardLang();
-		if (currentPage == "friends")
-			updateFriendPageSize();
-		if (currentPage == "login")
-			updateLoginPageSize();
-		if (currentPage == "settings")
-			updateSettingsPageSize();
 		if (currentPage == "match")
 			drawMatchInfoGraph();
 		if (currentPage == "tournament")
@@ -1868,18 +1867,7 @@ setInterval(function() {
 			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "block");
 		}
 	}
-	if (currentPage == "login")
-		updateLoginPageSize();
 }, 500);
-
-window.onscroll = function(){
-	if (currentPage == "login")
-		updateLoginPageSize();
-	if (currentPage == "settings")
-		updateSettingsPageSize();
-	if (currentPage == "friends")
-		updateFriendPageSize();
-}
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
@@ -1910,8 +1898,6 @@ function resizeEvent(event, orientationChange = false){
 	try {
 		document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 		checkResizeIndex()
-		if (currentPage == "login")
-			updateLoginPageSize();
 		if (orientationChange == false && currentPage == "dashboard")
 			displayCharts();
 		if (currentPage == "home" || currentPage == "user")
@@ -1928,8 +1914,6 @@ function resizeEvent(event, orientationChange = false){
 			checkMatchSize();
 		if (currentPage == "friends")
 			checkFriendPageSize()
-		if (currentPage == "settings")
-			updateSettingsPageSize();
 	}
 	catch (e){
 		console.error(e);
@@ -2031,7 +2015,6 @@ function checkUserPageSize(){
 }
 
 function checkFriendPageSize(){
-	updateFriendPageSize();
 	var texts = document.querySelectorAll("#friendInfo .slideSelector .slideSelectorText");
 	var ancestor = document.querySelector("#friendSlideSelector");
 	if (texts.length == 0 || !ancestor)
