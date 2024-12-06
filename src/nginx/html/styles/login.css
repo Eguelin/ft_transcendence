@@ -54,10 +54,14 @@
 	
 }
 
+#loginSlideSelectorContainer{
+	height: 2.3rem;
+}
+
 #loginSlideSelector{
 	color: var(--main-text-rgb);
 	display: flex;
-	margin-top: 2vmin;
+	height: 2.2rem;
 }
 
 #loginSlideSelector .slideSelector.activeSelector{
