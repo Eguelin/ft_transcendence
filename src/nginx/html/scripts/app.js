@@ -1672,8 +1672,6 @@ async function loadCurrentLang(){
 			updateDashboardLang();
 		if (currentPage == "friends")
 			updateFriendPageSize();
-		if (currentPage == "login")
-			updateLoginPageSize();
 		if (currentPage == "match")
 			drawMatchInfoGraph();
 		if (currentPage == "tournament")
@@ -1871,16 +1869,7 @@ setInterval(function() {
 			document.querySelector("#exchangeContainer .landscape").style.setProperty("display", "block");
 		}
 	}
-	if (currentPage == "login")
-		updateLoginPageSize();
 }, 500);
-
-window.onscroll = function(){
-	if (currentPage == "login")
-		updateLoginPageSize();
-	if (currentPage == "friends")
-		updateFriendPageSize();
-}
 
 function isMobile(){return (navigator.userAgent.match(/iphone|android|blackberry/ig))};
 
@@ -1911,8 +1900,6 @@ function resizeEvent(event, orientationChange = false){
 	try {
 		document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 		checkResizeIndex()
-		if (currentPage == "login")
-			updateLoginPageSize();
 		if (orientationChange == false && currentPage == "dashboard")
 			displayCharts();
 		if (currentPage == "home" || currentPage == "user")
