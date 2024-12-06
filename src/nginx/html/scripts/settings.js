@@ -548,7 +548,6 @@ confirmDeleteInput.addEventListener("keydown", (e) => {
 
 function deleteRequest(){
 	if (val == document.getElementById("confirmDeleteDialogVar").innerText){
-		disconnectSocket();
 		fetch('/api/user/delete_user', {
 			method: 'GET',
 			headers: {

@@ -644,7 +644,7 @@ async function updateFriendsAriaLabel(key, content){
 }
 
 function settingsSlide(formerIdx, newerIdx){
-	
+
 	var tmp = document.querySelector("#friendSlides");
 	var left = tmp.getBoundingClientRect().left;
 	var move = [
