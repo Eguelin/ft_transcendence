@@ -1670,8 +1670,6 @@ async function loadCurrentLang(){
 		updateIndexAriaLabel();
 		if (currentPage == 'dashboard')
 			updateDashboardLang();
-		if (currentPage == "friends")
-			updateFriendPageSize();
 		if (currentPage == "match")
 			drawMatchInfoGraph();
 		if (currentPage == "tournament")
@@ -2017,7 +2015,6 @@ function checkUserPageSize(){
 }
 
 function checkFriendPageSize(){
-	updateFriendPageSize();
 	var texts = document.querySelectorAll("#friendInfo .slideSelector .slideSelectorText");
 	var ancestor = document.querySelector("#friendSlideSelector");
 	if (texts.length == 0 || !ancestor)
