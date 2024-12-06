@@ -25,7 +25,7 @@ class Matchmaking():
 		if len(self.waiting_players) > 0:
 			player1 = None
 			for waiting_player in self.waiting_players:
-				if (player.user == waiting_player.user or \
+				if (player.user.id == waiting_player.user.id or \
 					await self.isBlocked(player.user, waiting_player.user)) and not DEBUG:
 					continue
 				player1 = waiting_player
@@ -720,7 +720,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 	@sync_to_async
 	def userIsAuthenticated(self):
 		try:
-			user = User.objects.get(username=self.scope['user'].username)
+			user = User.objects.get(id=self.scope['user'].id)
+			self.scope['user'] = user
+			if self.player:
+				self.player.user = user
+				self.player.profile = user.profile
 		except User.DoesNotExist:
 			return False
 		return user.is_authenticated
@@ -738,7 +742,7 @@ class Tournament():
 			return False
 		if not DEBUG:
 			for tournamentPlayer in self.players:
-				if player.user == tournamentPlayer.user or await self.isBlocked(player.user, tournamentPlayer.user):
+				if player.user.id == tournamentPlayer.user.id or await self.isBlocked(player.user, tournamentPlayer.user):
 					return False
 		for i in range(len(self.matches[0])):
 			if self.matches[0][i].playerLeft and self.matches[0][i].playerRight:

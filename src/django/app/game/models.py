@@ -82,10 +82,8 @@ class MatchManager(models.Manager):
 			player_two_goals_down=game.playerRight.goalsDown
 		)
 
-		if game.playerLeft.user.username != "nobody":
-			game.playerLeft.user.profile.matches.add(match)
-		if game.playerRight.user.username != "nobody":
-			game.playerRight.user.profile.matches.add(match)
+		game.playerLeft.user.profile.matches.add(match)
+		game.playerRight.user.profile.matches.add(match)
 
 	def save(self):
 		super().save()
