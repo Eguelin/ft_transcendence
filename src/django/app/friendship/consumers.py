@@ -30,6 +30,9 @@ class friend(AsyncWebsocketConsumer):
 			)
 			await self.update_activity(False)
 
+	async def socket_end(self, event):
+		await self.close()
+
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
 			'type': "friend_request",
@@ -39,7 +42,9 @@ class friend(AsyncWebsocketConsumer):
 	async def friend_status_update(self, event):
 		await self.send(text_data=json.dumps({
 			'username': event['message']['username'],
-			'status': event['message']['status']
+			'status': event['message']['status'],
+			'id': event['message']['id'],
+			'pfp': event['message']['pfp']
 		}))
 
 	async def friend_removed(self, event):
@@ -107,14 +112,18 @@ def notify_friend_status(sender, instance, **kwargs):
 
 	friends = instance.friends.all()
 
+	info = {
+		"username": user.username,
+		"status": status,
+		"id" : user.id,
+		"pfp" : user.profile.profile_picture
+	}
+
 	for friend in friends:
 		async_to_sync(channel_layer.group_send)(
 			f"user_{friend.id}",
 			{
 				"type": "friend_status_update",
-				"message": {
-					"username": user.username,
-					"status": status,
-				},
+				"message": info
 			}
 		)
