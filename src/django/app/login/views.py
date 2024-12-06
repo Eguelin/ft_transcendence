@@ -528,7 +528,7 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 					'player_two_display_name' : p2_display_name,
 					'player_one_pts' : match.player_one_pts,
 					'player_two_pts' : match.player_two_pts,
-					'winner' : match.winner.profile.display_name,
+					'winner' : match.winner.username,
 					'date' : match.date,
 					'id' : match.pk
 				}
@@ -599,7 +599,7 @@ def get_user_match_json(user_origin, matches, tournaments, username, max=-1):
 			'player_two_display_name' : p2_name,
 			'player_one_pts' : match.player_one_pts,
 			'player_two_pts' : match.player_two_pts,
-			'winner' : match.winner.profile.display_name,
+			'winner' : match.winner.username,
 			'date' : match.date,
 			'id' : match.pk
 		}
