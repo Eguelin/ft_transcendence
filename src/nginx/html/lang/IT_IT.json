@@ -50,7 +50,7 @@
 		".displayNameCantBeEmpty" : "Il nome visualizzato non può essere vuoto"
 	},
 	"login" : {
-		"#title" : "LOGIN",
+		"#title" : "ACCEDI",
 		"#subtitle" : "",
 		"#internalLoginOpt" : "Accedi con credenziali",
 		"#loginBtn" : "ACCEDI",
@@ -66,7 +66,8 @@
 		"#inputRegisterCPassword" : "Conferma password",
 		"aria#inputUsername" : "Nome utente per l'accesso",
 		"aria#inputPassword" : "Password per l'accesso",
-		"aria#fortyTwoLogin" : "Accedi con account 42",
+		"aria#fortyTwoLoginContainer" : "Accedi con account 42",
+		"#fortyTwoLoginText" : "Accedi con account 42",
 		"aria#inputRegisterUsername" : "Nome utente per la registrazione",
 		"aria#inputRegisterPassword" : "Password per la registrazione",
 		"aria#inputRegisterCPassword" : "Conferma password per la registrazione",
@@ -227,6 +228,9 @@
 	"search": {
 		"#title" : "",
 		"#subtitle" : "Cerca",
+		"#userResumeCount": "${VALUE} risultati corrispondono a ${SEARCH}",
+		"#inputSearch": "Cerca utente",
+		"aria#inputSearch": "Cerca campo di input utente",
 		"aria.userResume" : "Reindirizzamento al profilo di ${USERNAME}",
 		"search title" : "Ricerca ${SEARCH} - transcendence",
 		".emptySearchError" : "Impossibile cercare una query vuota"

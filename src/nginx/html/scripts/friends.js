@@ -152,6 +152,7 @@ var template = `
 		});
 	})
 	setTimeout(checkFriendPageSize, 10);
+	setTimeout(updateFriendPageSize, 500);
 }
 
 
@@ -305,6 +306,9 @@ function createUserContainer(user){
 
 	friendContainer.className = "friendContainer"
 	friendContainer.id = user.username;
+
+	friendName.className = "friendName";
+	friendName.href = (`https://${hostname.host}/${currentLang}/user/${user.username}`);
 
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
@@ -674,7 +678,8 @@ function settingsSlide(formerIdx, newerIdx){
 }
 
 function updateFriendPageSize(){
-	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`)
-	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`)
-	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`)
+	slideSelectorBg.style.setProperty("left", `${slideSelector[friendSlideIdx].getBoundingClientRect().left}px`);
+	slideSelectorBg.style.setProperty("width", `${slideSelector[friendSlideIdx].getBoundingClientRect().width}px`);
+	slideSelectorBg.style.setProperty("height", `${slideSelector[friendSlideIdx].getBoundingClientRect().height}px`);
+	slideSelectorBg.style.setProperty("top", `${slideSelector[friendSlideIdx].getBoundingClientRect().top}px`);
 }
