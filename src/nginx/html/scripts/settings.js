@@ -279,7 +279,13 @@ function settingsSlide(formerIdx, newerIdx){
 
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector")
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
-	settingsSlide(slideIdx, slideIdx);
+	
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	if (slideIdx == 1){
+		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${bg} 50%, ${bg} 100%, rgba(0,0,0,0) 100%)`;
+	}
+	else
+		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${bg} 0%, ${bg} 50%, rgba(0,0,0,0) 50%)`;
 	settingsSlideSelector[slideIdx].classList.add('activeSelector');
 
 	settingsSlideSelector.forEach(function(key) {
