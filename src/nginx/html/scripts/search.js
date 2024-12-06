@@ -36,7 +36,7 @@ var template = `
 				history.replaceState("","",`https://${hostname.host}/${currentLang}/search?query=${url.searchParams.get("query")}`)
 				user.json().then(((user) => {
 					document.querySelector("#userResumeCountContainer").style.setProperty("display", "block")
-					document.getElementById("userResumeCount").innerHTML = langJson['search']['#userResumeCount'].replace("${VALUE}", Object.keys(user).length).replace("${SEARCH}", url.searchParams.get("query"));
+					document.getElementById("userResumeCount").innerText = langJson['search']['#userResumeCount'].replace("${VALUE}", Object.keys(user).length).replace("${SEARCH}", url.searchParams.get("query"));
 					Object.keys(user).forEach(function (key) {
 						createUserResumeContainer(user[key]);
 					})
@@ -130,7 +130,7 @@ function createUserResumeContainer(user) {
 	addPfpUrlToImgSrc(img, user.pfp);
 	userResumeName = document.createElement("a");
 	userResumeName.className = "userResumeName"
-	userResumeName.innerHTML = user.username;
+	userResumeName.innerText = user.username;
 
 
 	imgContainer.appendChild(img);
