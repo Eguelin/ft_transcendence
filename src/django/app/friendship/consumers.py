@@ -32,7 +32,7 @@ class friend(AsyncWebsocketConsumer):
 
 	async def send_friend_request(self, event):
 		await self.send(text_data=json.dumps({
-			'new_request': event['new_request'],
+			'type': "friend_request",
 			'sender_name' : event['sender_name']
 		}))
 
@@ -77,7 +77,6 @@ def notify_friend_request_changed(sender, instance, action, pk_set, **kwargs):
 				f"user_{user.id}",
 				{
 					"type": "send_friend_request",
-					"new_request": True,
 					"sender_name": new_request.user.username,
 				}
 			)
