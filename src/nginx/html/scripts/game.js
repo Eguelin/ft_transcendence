@@ -517,7 +517,11 @@ function displayTournament(is_finished = false){
 		Object.keys(tournament["round_0"]).forEach(function(matchNumber){
 			Object.keys(tournament["round_0"][matchNumber]).forEach(function(player){
 				if (tournament["round_0"][matchNumber][player]['username']){
-					lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_0"][matchNumber][player]['username'];
+					if (tournament["round_0"][matchNumber][player]['username'] == tournament["round_0"][matchNumber][player]['display_name'])
+						lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_0"][matchNumber][player]['username'];
+					else{
+						lobbyPlayerElem[idx].querySelector(".username").innerText = tournament["round_0"][matchNumber][player]['display_name'];
+					}
 					if (lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp").src != `https://${hostname.host}${tournament["round_0"][matchNumber][player]['profile_picture']}`)
 						addPfpUrlToImgSrc(lobbyPlayerElem[idx].querySelector(".lobbyPlayerPfp"), tournament["round_0"][matchNumber][player]['profile_picture']);
 				}
@@ -628,9 +632,9 @@ function game() {
 					if (playerId == "playerOne"){
 						if (value == true){
 							if (buttonName == "leftBtn")
-								leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+								leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 16);
 							else if (buttonName == "rightBtn")
-								rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+								rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 16);
 						}
 						else{
 							if (buttonName == "leftBtn"){
@@ -646,9 +650,9 @@ function game() {
 					else if (playerId == "playerTwo"){
 						if (value == true){
 							if (buttonName == "leftBtn")
-								p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+								p2leftBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 16);
 							else if (buttonName == "rightBtn")
-								p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 3);
+								p2rightBtnInterval = setInterval(() => gamesend("game_keydown", keysDown), 16);
 						}
 						else{
 							if (buttonName == "leftBtn"){
@@ -717,7 +721,7 @@ function game() {
 					displayWinner(player1.name, player1.profile_picture)
 				else
 					displayWinner(player2.name, player2.profile_picture)
-				if (!client.doNotDisturb){
+				if (!client.doNotDisturb && document.querySelector("notifCenterContainer")){
 					document.querySelector("notifCenterContainer").classList.remove("dnd");
 				}
 			} else if (data.type === "tournament") {
@@ -1012,8 +1016,14 @@ function game() {
 					</div>
 					<h1 id="winName">${username} ${client.langJson['game']['winnedText']}</h1>
 					<button id="replayButton">${client.langJson['game']['replay']}</button>
+					<button id="quitBtn">${client.langJson['game']['quit']}</button>
 				</div>
 			</div>`;
+			
+			container.querySelector("#quitBtn").onclick = function(){
+				cleanup()
+				myPushState(`https://${hostname.host}/${currentLang}/home`);
+			};
 			if (mode == "local")
 				container.querySelector("#winPfpContainer").remove();
 			else
@@ -1021,8 +1031,16 @@ function game() {
 			document.body.appendChild(container);
 			document.querySelector("#replayButton").focus();
 			document.querySelector("#replayButton").onkeydown = function(e){
-				if (e.key == "Tab")
+				if (e.key == "Tab"){
 					e.preventDefault();
+					document.querySelector("#quitBtn").focus()
+				}
+			}
+			document.querySelector("#quitBtn").onkeydown = function(e){
+				if (e.key == "Tab"){
+					e.preventDefault();
+					document.querySelector("#replayButton").focus()
+				}
 			}
 			checkWinnerDisplaySize();
 			container.querySelector("#replayButton").addEventListener("click", (e) => {
@@ -1067,42 +1085,44 @@ function game() {
 				body: JSON.stringify({ "id": parseInt(url.searchParams.get("id")) }),
 				credentials: 'include'
 			})
-		history.replaceState("","",`https://${hostname.host}/${currentLang}/tournament?id=${url.searchParams.get("id")}`)
-		const result = await fetchResult.json();
+			history.replaceState("","",`https://${hostname.host}/${currentLang}/tournament?id=${url.searchParams.get("id")}`)
+			const result = await fetchResult.json();
 			if (fetchResult.ok){
 				tournament = result;
-			}
-			gameContainer.style.setProperty("display", "none");
-			tournamentContainer.style.setProperty("display", "flex");
-			tournamentContainer.classList.add("selectable");
-			document.querySelector(".contestMatchResume.quarter.match.one").tabIndex = 12;
-			document.querySelector(".contestMatchResume.quarter.match.two").tabIndex = 15;
-			document.querySelector(".contestMatchResume.quarter.match.three").tabIndex = 18;
-			document.querySelector(".contestMatchResume.quarter.match.four").tabIndex = 21;
-			document.querySelector(".contestMatchResume.semi.match.one").tabIndex = 24;
-			document.querySelector(".contestMatchResume.semi.match.two").tabIndex = 27;
-			document.querySelector(".contestMatchResume.final.match.one").tabIndex = 30;
-
-			document.querySelectorAll(".contestMatchResume").forEach(function (elem){
-				elem.onkeydown = function (e){
-					if (e.target.classList.contains("contestMatchResume") && e.key == "Enter"){
-						try{
-							elem.querySelector(".winner .username").tabIndex = elem.tabIndex + 1;
-							elem.querySelector(".loser .username").tabIndex = elem.tabIndex + 2;
-						}catch {
-							if (langJson && langJson['game']['.errorTabIndexUserRedirection'])
-								popUpError(langJson['game']['.errorTabIndexUserRedirection']);
-							else
-								popUpError("Error tab indexes on user redirection");
+				gameContainer.style.setProperty("display", "none");
+				tournamentContainer.style.setProperty("display", "flex");
+				tournamentContainer.classList.add("selectable");
+				document.querySelector(".contestMatchResume.quarter.match.one").tabIndex = 12;
+				document.querySelector(".contestMatchResume.quarter.match.two").tabIndex = 15;
+				document.querySelector(".contestMatchResume.quarter.match.three").tabIndex = 18;
+				document.querySelector(".contestMatchResume.quarter.match.four").tabIndex = 21;
+				document.querySelector(".contestMatchResume.semi.match.one").tabIndex = 24;
+				document.querySelector(".contestMatchResume.semi.match.two").tabIndex = 27;
+				document.querySelector(".contestMatchResume.final.match.one").tabIndex = 30;
+	
+				document.querySelectorAll(".contestMatchResume").forEach(function (elem){
+					elem.onkeydown = function (e){
+						if (e.target.classList.contains("contestMatchResume") && e.key == "Enter"){
+							try{
+								elem.querySelector(".winner .username").tabIndex = elem.tabIndex + 1;
+								elem.querySelector(".loser .username").tabIndex = elem.tabIndex + 2;
+							}catch {
+								if (langJson && langJson['game']['.errorTabIndexUserRedirection'])
+									popUpError(langJson['game']['.errorTabIndexUserRedirection']);
+								else
+									popUpError("Error tab indexes on user redirection");
+							}
 						}
 					}
-				}
-			})
-			setNotifTabIndexes(33);
-			(async () => (loadCurrentLang()))();
-			displayTournament(true);
-			setTournamentAriaLabeL();
-
+				})
+				setNotifTabIndexes(33);
+				(async () => (loadCurrentLang()))();
+				displayTournament(true);
+				setTournamentAriaLabeL();
+			}
+			else{
+				client.loadPage("/404");
+			}
 		})()
 	}
 }
