@@ -232,6 +232,7 @@
 	position: relative;
 	height: 2rem;
 	align-self: center;
+	background : linear-gradient(90deg,rgba(0,0,0,0) 0%, var(--active-selector-rgb) 0%, var(--active-selector-rgb) 50%, rgba(0,0,0,0) 50%);
 }
 
 

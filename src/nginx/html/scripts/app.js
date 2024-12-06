@@ -1674,8 +1674,6 @@ async function loadCurrentLang(){
 			updateFriendPageSize();
 		if (currentPage == "login")
 			updateLoginPageSize();
-		if (currentPage == "settings")
-			updateSettingsPageSize();
 		if (currentPage == "match")
 			drawMatchInfoGraph();
 		if (currentPage == "tournament")
@@ -1880,8 +1878,6 @@ setInterval(function() {
 window.onscroll = function(){
 	if (currentPage == "login")
 		updateLoginPageSize();
-	if (currentPage == "settings")
-		updateSettingsPageSize();
 	if (currentPage == "friends")
 		updateFriendPageSize();
 }
@@ -1933,8 +1929,6 @@ function resizeEvent(event, orientationChange = false){
 			checkMatchSize();
 		if (currentPage == "friends")
 			checkFriendPageSize()
-		if (currentPage == "settings")
-			updateSettingsPageSize();
 	}
 	catch (e){
 		console.error(e);
