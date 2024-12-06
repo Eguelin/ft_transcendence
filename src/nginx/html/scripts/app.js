@@ -1279,7 +1279,7 @@ function friendUpdate()
 	socket.onmessage = function (event)
 	{
 		const data = JSON.parse(event.data);
-		if (data.new_request)
+		if (data.type === "friend_request")
 		{
 			sendNotif(`${client.langJson.friends['incoming_pending_request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
 			if (currentPage === "friends" && !document.getElementById(data.sender_name))
@@ -1348,9 +1348,9 @@ function friendUpdate()
 			}
 			else if (data.status === "offline")
 			{
-				if (document.getElementById(data.username))
+				if (document.querySelector(`#onlineFriendList #${data.username}`))
 				{
-					document.getElementById(data.username).remove();
+					document.querySelector(`#onlineFriendList #${data.username}`).remove();
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 				}
 			}
