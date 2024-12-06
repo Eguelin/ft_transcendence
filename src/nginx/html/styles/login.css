@@ -79,7 +79,7 @@
 
 #slideSelectorBg{
 	background: var(--active-selector-rgb);
-	position: fixed;
+	position: absolute;
 	width: 50%;
 	height: 2rem;
 	border-bottom: 1px solid var(--main-text-rgb);
