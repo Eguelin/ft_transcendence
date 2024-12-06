@@ -632,6 +632,7 @@ def get_user_preview_json(user):
 	return {'username' : user.username,
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
+		'id' : user.id,
 	}
 
 def current_user(request):
@@ -673,6 +674,7 @@ def current_user(request):
 		'font_amplifier' : request.user.profile.font_amplifier,
 		'do_not_disturb' : request.user.profile.do_not_disturb,
 		'display_name': request.user.profile.display_name,
+		'id' : request.user.id,
 		'remote_auth' : 1 if request.user.profile.id42 != 0 else 0
 	})
 

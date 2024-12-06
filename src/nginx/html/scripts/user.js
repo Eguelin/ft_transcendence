@@ -219,15 +219,12 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			.then(response => {
-				if (response.ok){
-					document.getElementById("unblockBtn").style.setProperty("display", "none");
-					document.getElementById("blockBtn").style.setProperty("display", "inline");
-					document.getElementById("sendFriendRequestBtn").style.setProperty("display", "inline");
-					deleteFriendPopup.style.setProperty("display", "none");
-					document.getElementById("popupBg").style.display = "none";
-				}
-			})
+			document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
+			document.getElementById("unblockBtn").style.setProperty("display", "none");
+			document.getElementById("blockBtn").style.setProperty("display", "inline");
+			document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
+			deleteFriendPopup.style.setProperty("display", "none");
+			document.getElementById("popupBg").style.display = "none";
 		}
 		if (e.target.id == "confirmBlock"){
 			const data = {username: e.target.parentElement.className};

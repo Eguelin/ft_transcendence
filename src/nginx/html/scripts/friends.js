@@ -165,7 +165,7 @@ document.addEventListener("click", (e) => {
 			document.getElementById("popupBg").style.display = "none";
 		}
 		if (e.target.id == "confirmDelete"){
-			const data = {username: e.target.parentElement.className};
+			const data = {username: document.querySelector('.friendName').textContent};
 			fetch('/api/user/remove_friend', {
 				method: 'POST',
 				headers: {
@@ -174,13 +174,11 @@ document.addEventListener("click", (e) => {
 				body: JSON.stringify(data),
 				credentials: 'include'
 			})
-			var friend = document.getElementById(e.target.parentElement.className);
 			deleteFriendPopup.style.setProperty("display", "none");
 			document.getElementById("popupBg").style.display = "none";
-			friend.remove();
 		}
 		if (e.target.id == "confirmBlock"){
-			const data = {username: e.target.parentElement.className};
+			const data = {username: document.querySelector('.friendName').textContent};
 			fetch('/api/user/block_friend', {
 				method: 'POST',
 				headers: {
@@ -188,11 +186,20 @@ document.addEventListener("click", (e) => {
 				},
 				body: JSON.stringify(data),
 				credentials: 'include'
+			}).then(response => {
+				if (response.ok)
+				{
+					var friend = document.getElementById(e.target.parentElement.className);
+					friend.remove();
+					var friend = document.getElementById(e.target.parentElement.className);
+					friend.remove();
+					document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
+				}
 			})
-			var friend = document.getElementById(e.target.parentElement.className);
 			blockFriendPopup.style.setProperty("display", "none");
 			document.getElementById("popupBg").style.display = "none";
-			friend.remove();
 			fetch('/api/user/current', {
 				method: 'GET',
 				headers: {
@@ -216,7 +223,7 @@ document.addEventListener("click", (e) => {
 		}
 
 		if (e.target.className == "unblockBtn"){
-			const data = {username: e.target.parentElement.id};
+			const data = {username: document.querySelector('.friendName').textContent};
 			fetch('/api/user/unblock_user', {
 				method: 'POST',
 				headers: {
@@ -224,12 +231,16 @@ document.addEventListener("click", (e) => {
 				},
 				body: JSON.stringify(data),
 				credentials: 'include'
+			}).then(response => {
+				if (response.ok)
+				{
+					e.target.closest(".friendContainer").remove();
+					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`
+				}
 			})
-			e.target.closest(".friendContainer").remove();
-			document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`
 		}
 		if (e.target.className == "acceptRequestBtn"){
-			const data = {username: e.target.parentElement.id};
+			const data = {username: document.querySelector('.friendName').textContent};
 			fetch('/api/user/accept_friend_request', {
 				method: 'POST',
 				headers: {
@@ -237,12 +248,16 @@ document.addEventListener("click", (e) => {
 				},
 				body: JSON.stringify(data),
 				credentials: 'include'
+			}).then(response => {
+				if (response.ok)
+				{
+					e.target.closest(".friendContainer").remove();
+					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+				}
 			})
-			e.target.closest(".friendContainer").remove();
-			document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
 		}
 		if (e.target.className == "rejectRequestBtn"){
-			const data = {username: e.target.parentElement.id};
+			const data = {username: document.querySelector('.friendName').textContent};
 			fetch('/api/user/reject_friend_request', {
 				method: 'POST',
 				headers: {
@@ -250,9 +265,13 @@ document.addEventListener("click", (e) => {
 				},
 				body: JSON.stringify(data),
 				credentials: 'include'
+			}).then(response => {
+				if (response.ok)
+				{
+					e.target.closest(".friendContainer").remove();
+					document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+				}
 			})
-			e.target.closest(".friendContainer").remove();
-			document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
 		}
 		if (e.target.className == "removeFriendBtn"){
 			document.getElementById("popupBg").style.display = "block";
@@ -305,7 +324,7 @@ function createUserContainer(user){
 	var userOption = document.createElement("div");
 
 	friendContainer.className = "friendContainer"
-	friendContainer.id = user.username;
+	friendContainer.id = `id${user.id}`;
 
 	friendName.className = "friendName";
 	friendName.href = (`https://${hostname.host}/${currentLang}/user/${user.username}`);
@@ -340,7 +359,7 @@ function createUserContainer(user){
 
 	userOptionContainer.className = "friendsOptionContainer";
 	userOption.className = "friendsOption";
-	userOption.id = user.username;
+	userOption.id = "id" + user.id;
 
 	userOption.appendChild(unblockBtn);
 	userOption.appendChild(acceptBtn);
@@ -445,7 +464,7 @@ function createFriendContainer(user){
 	})
 	friendsOptionContainer = friendContainer.getElementsByClassName("friendsOptionContainer")[0];
 
-	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['aria #allFriendList .friendsOptionContainer']}`);
+	friendsOptionContainer.setAttribute("aria-label", `${user.username} ${client.langJson['friends']['aria#allFriendList .friendsOptionContainer']}`);
 
 	if (user.is_active == true){
 		var clone = friendContainer.cloneNode(true);
@@ -515,55 +534,6 @@ function createBlockedUserContainer(user){
 
 	blockedListContainer.appendChild(friendContainer);
 	document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
-}
-
-function createFriendOnlineContainer(user)
-{
-	friendContainer = createUserContainer(user);
-	var clone = friendContainer.cloneNode(true);
-	var img = clone.querySelector(".profilePicture");
-	addPfpUrlToImgSrc(img, `${img.src}`);
-	clone.querySelectorAll(".friendsOption div").forEach(function (elem)
-	{
-		elem.onfocus = function() {window.onkeydown = null;}
-		elem.onblur = function() {window.onkeydown = friendKeyDownEvent;}
-		elem.onkeydown = function(e) {if (e.key == "Enter") {elem.click()}}
-		elem.onkeyup = function(e)
-		{
-			if (elem.className == "removeFriendBtn"){
-				document.getElementById("confirmDelete").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmDelete").focus();
-			}
-			else if (elem.className == "blockFriendBtn")
-			{
-				document.getElementById("confirmBlock").tabIndex = elem.parentElement.parentElement.tabIndex;
-				document.getElementById("confirmBlock").focus();
-			}
-		}
-	});
-	clone.querySelectorAll(".friendsOptionContainer").forEach(function (elem)
-	{
-		elem.onfocus = function ()
-		{
-			window.onkeydown = null;
-			document.querySelectorAll(".activeListSelector").forEach(function (active){
-				active.classList.remove("activeListSelector");
-			})
-		};
-		elem.onblur = function () {window.onkeydown = friendKeyDownEvent};
-		elem.onkeydown = function (e)
-		{
-			if (e.key == "Enter")
-			{
-				if (e.target.classList.contains("friendsOptionContainer"))
-				{
-					elem.classList.add("activeListSelector");
-					elem.lastChild.firstChild.focus();
-				}
-			}
-		}
-	})
-		onlineFriendListContainer.appendChild(clone);
 }
 
 function checkUpdate(){
