@@ -236,6 +236,10 @@
 }
 
 
+#settingsSlideSelectorContainer{
+	height: 2.1rem;
+}
+
 #settingsSlideSelector .slideSelector:focus,#settingsSlideSelector .slideSelector:hover{
 	color: var(--hover-text-rgb) !important;
 }
