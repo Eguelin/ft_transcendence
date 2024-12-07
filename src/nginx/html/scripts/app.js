@@ -180,7 +180,6 @@ class Client {
 					this.blocked_user = result.blocked_users;
 					this.isRemote = result.remote_auth;
 
-
 					var startDate = new Date();
 					try{
 						this.recentMatches = result.matches[startDate.getFullYear()][startDate.getMonth() + 1][startDate.getDate()];
@@ -447,7 +446,6 @@ function load() {
 	}
 
 	if (client && !(client instanceof Client)) {
-		disconnectSocket();
 		client = null;
 		fetch('/api/user/logout', {
 			method: 'POST',
@@ -497,8 +495,6 @@ function load() {
 
 
 function handleToken() {
-	if (client)
-		disconnectSocket();
 	const code = window.location.href.split("code=")[1];
 	if (code) {
 		window.onresize = null;
@@ -1026,8 +1022,6 @@ window.addEventListener("click", (e) => {
 	if (e.target.closest(".notifReject, .notifAccept")) {
 		e.target.closest(".notifContainer").remove();
 	}
-	if (e.target.id == "logOutBtn")
-		disconnectSocket();
 	if (e.target.closest(".dropDownMenuBtn")){
 		if (currentPage == "game" || currentPage == "tournament")
 			cleanup();
@@ -1333,10 +1327,11 @@ function friendUpdate()
 	socket.onmessage = function (event)
 	{
 		const data = JSON.parse(event.data);
+		console.log(data);
 		if (data.type === "friend_request")
 		{
-			sendNotif(`${client.langJson.friends['incoming_pending_request'].replace("${USERNAME}", data.sender_name)}`, data.sender_name, "friend_request");
-			if (currentPage === "friends" && !document.getElementById(data.sender_name))
+			sendNotif(`${client.langJson.friends['incoming_pending_request'].replace("${USERNAME}", data.username)}`, data.username, "friend_request");
+			if (currentPage === "friends" && !document.getElementById(`id${data.id}`))
 			{
 				fetch('/api/user/current', {
 					method: 'GET',
@@ -1349,69 +1344,57 @@ function friendUpdate()
 					if (response.ok)
 					{
 						(response.json()).then((text) => {
-						friendRequest = Object.values(text.friend_requests).find(request => request.username === data.sender_name);
+						friendRequest = Object.values(text.friend_requests).find(request => request.username === data.username);
 						if (friendRequest)
 						{
-							if (!document.querySelector(`#pendingFriendRequestList #${data.sender_name}`))
+							if (!document.querySelector(`#pendingFriendRequestList #id${data.id}`))
 							{
 								createFriendRequestContainer(friendRequest);
 								document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
 							}
-
 						}
 						});
 					}
 				});
 			}
 		}
-		else if (data.status && data.username && currentPage == "friends")
+		else if (data.username && currentPage == "friends")
 		{
-			if (data.status === "online")
+			if (data.is_active)
 			{
-				fetch('/api/user/current', {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					credentials: 'include'
-				})
-				.then(response => {
-					if (response.ok)
-					{
-						(response.json()).then((text) => {
-						friendRequest = Object.values(text.friends).find(request => request.username === data.username);
-						if (friendRequest && !document.querySelector(`#onlineFriendList #${data.username}`))
-						{
-							if (document.querySelector(`#allFriendList #${data.username}`))
-								createFriendOnlineContainer(friendRequest);
-							else
-							{
-								createFriendContainer(friendRequest);
-								document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
-							}
-								document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
-							if (document.querySelector(`#pendingFriendRequestList #${data.username}`))
-							{
-								document.querySelector(`#pendingFriendRequestList #${data.username}`).remove();
-								document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
-							}
-						}
-						});
-					}
-				});
-			}
-			else if (data.status === "offline")
-			{
-				if (document.querySelector(`#onlineFriendList #${data.username}`))
+				if (!document.querySelector(`#onlineFriendList #id${data.id}`))
 				{
-					document.querySelector(`#onlineFriendList #${data.username}`).remove();
+					if (document.querySelector(`#allFriendList #id${data.id}`))
+					{
+						document.querySelector(`#allFriendList #id${data.id}`).remove();
+						createFriendContainer(data);
+					}
+					else
+					{
+						createFriendContainer(data);
+						document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+					}
+						document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
+					if (document.querySelector(`#pendingFriendRequestList #id${data.id}`))
+					{
+						document.querySelector(`#pendingFriendRequestList #id${data.id}`).remove();
+						document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
+					}
+				}
+			}
+			else if (data.is_active === false)
+			{
+				console.log("yup1")
+				if (document.querySelector(`#onlineFriendList #id${data.id}`))
+				{
+					document.querySelector(`#onlineFriendList #id${data.id}`).remove();
 					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 				}
 			}
 		}
-		else if (data.status && data.username && currentPage == "user")
+		else if (currentPage == "user" && splitPath[5] === data.username)
 		{
-			if (data.status === "online")
+			if (data.is_active)
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "inline");
 				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "none");
@@ -1421,20 +1404,19 @@ function friendUpdate()
 		{
 			if (currentPage === "friends")
 			{
-				if (document.querySelector(`#allFriendList #${data.username}`))
-					document.querySelector(`#allFriendList #${data.username}`).remove();
+				if (document.querySelector(`#allFriendList #id${data.id}`))
+					document.querySelector(`#allFriendList #id${data.id}`).remove();
 
-				if (document.querySelector(`#onlineFriendList #${data.username}`))
-					document.querySelector(`#onlineFriendList #${data.username}`).remove();
+				if (document.querySelector(`#onlineFriendList #id${data.id}`))
+					document.querySelector(`#onlineFriendList #id${data.id}`).remove();
 
 				document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 				document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 			}
-			else if (currentPage === "user")
+			else if (currentPage === "user" && splitPath[6] === data.username)
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
-				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "inline");
-
+				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
 			}
 		}
 	}

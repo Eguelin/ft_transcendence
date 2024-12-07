@@ -8,6 +8,8 @@ from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 from transcendence.settings import DEBUG
 from PIL import Image
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 NOT_USER = ['nobody', 'deleted', 'blocked']
 
@@ -302,6 +304,7 @@ def user_logout(request):
 	if not request.user.is_authenticated:
 		return JsonResponse({'message':  "Client is not logged"}, status=401)
 
+	socket_end(request.user)
 	request.user.save()
 	logout(request)
 
@@ -313,6 +316,7 @@ def delete_user(request):
 	if not request.user.is_authenticated:
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 	try:
+		socket_end(request.user)
 		request.user.delete()
 		return JsonResponse({'message': 'User deleted'}, status=200)
 	except Exception:
@@ -628,6 +632,7 @@ def get_user_preview_json(user):
 	return {'username' : user.username,
 		'pfp' : user.profile.profile_picture,
 		'is_active' : user.profile.is_active,
+		'id' : user.id,
 	}
 
 def current_user(request):
@@ -669,6 +674,7 @@ def current_user(request):
 		'font_amplifier' : request.user.profile.font_amplifier,
 		'do_not_disturb' : request.user.profile.do_not_disturb,
 		'display_name': request.user.profile.display_name,
+		'id' : request.user.id,
 		'remote_auth' : 1 if request.user.profile.id42 != 0 else 0
 	})
 
@@ -1027,3 +1033,13 @@ def get_match(request):
 
 	except Exception:
 		return JsonResponse({'message': 'Internal server error'}, status=500)
+
+def socket_end(user):
+	channel_layer = get_channel_layer()
+	async_to_sync(channel_layer.group_send)(
+		f"user_{user.id}",
+		{
+			"type": "socket_end",
+			"message": "end",
+		}
+	)
