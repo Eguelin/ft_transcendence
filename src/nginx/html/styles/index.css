@@ -337,6 +337,7 @@ div#usernameBtn:focus, div#usernameBtn:hover {
 .openCenter#notifCenterContainer{
 	animation: pushNotifAppear 300ms linear forwards;
 	height: 50%;
+	overflow: hidden;
 }
 
 .quickOpenCenter#notifCenterContainer{
