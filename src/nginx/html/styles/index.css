@@ -141,7 +141,7 @@ div#usernameBtn:focus, div#usernameBtn:hover {
 
 
 .incoming#pushNotif{
-	width: 20rem;
+	width: 18rem;
 	animation: pushNotifAppear 300ms forwards, pushNotifDisappearBg 5s linear 300ms forwards;
 	border: .1rem solid var(--main-text-rgb);
 }
