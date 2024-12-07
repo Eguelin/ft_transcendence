@@ -395,7 +395,7 @@ function loginKeyDownEvent(e) {
 			slideIdx = slides.length - 1;
 		for (let i = 0; i < slides.length; i++)
 			slides[i].style.display = "none";
-		loginSlide();
+		loginSlide(save, slideIdx);
 		loginSlideSelector[slideIdx].classList.add('activeSelector');
 		slides[slideIdx].style.display = "flex";
 	}
