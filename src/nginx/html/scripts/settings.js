@@ -319,6 +319,7 @@ function settingsSlide(formerIdx, newerIdx){
 	}
 	else{
 		document.querySelector("#confirmChangePasswordBtn").addEventListener("click", (e) => {
+			
 			var oldPasswordInput = document.querySelector("#inputOldPassword");
 			var newPasswordInput = document.querySelector("#inputNewPassword");
 			var newCPasswordInput = document.querySelector("#inputNewCPassword");
@@ -383,13 +384,28 @@ function settingsSlide(formerIdx, newerIdx){
 				})
 			}
 		})
-		document.querySelector("#confirmChangePasswordBtn").addEventListener("keydown", (e) => {if (e.key == "Enter"){e.target.click();}});
+		document.querySelector("#confirmChangePasswordBtn").addEventListener("keydown", (e) => {
+			if (e.key == "Enter"){e.target.click();}
+			else if (e.key == 'Tab' && !e.shiftKey){
+				e.preventDefault();
+				document.querySelector("#inputOldPassword").focus();
+			}
+		});
+		document.querySelector("#inputOldPassword").addEventListener("keydown",(e)=>{
+			if (e.key == 'Tab' && e.shiftKey){
+				e.preventDefault();
+				document.querySelector("#confirmChangePasswordBtn").focus();
+			}
+		})
 
 		document.querySelector("#changePasswordBtn").addEventListener("click", (e) => {
-			window.onkeydown = null
+			window.onkeydown = settingsKeyDownEvent;
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPasswordPopup").style.setProperty("display", "flex");
+			document.querySelector("#inputOldPassword").focus();
 		});
+		document.querySelector("#changePasswordBtn").onfocus = null;
+		document.querySelector("#changePasswordBtn").onblur = settingsKeyDownEvent;
 	}
 	setNotifTabIndexes(26);
 
@@ -765,14 +781,14 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 })
 
 function settingsKeyDownEvent(e) {
-	if (e.key == "Escape" && document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
+	if (e.key == "Escape" && window.getComputedStyle(document.getElementById("popupBg")).display != "none"){
 		document.getElementById("popupBg").style.setProperty("display", "none");
 		document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 		document.getElementById("confirmPasswordPopup").style.setProperty("display", "none");
 		document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		window.onkeydown = settingsKeyDownEvent
 	}
-	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+	if ((e.key == "ArrowLeft" || e.key == "ArrowRight") && window.getComputedStyle(document.getElementById("popupBg")).display == "none") {
 		var save = slideIdx;
 		var tmp = document.querySelector("#settingSlides");
 		if (e.key == "ArrowLeft")
@@ -802,18 +818,8 @@ document.getElementById("fontSizeRange").addEventListener("input", (e) => {
 	document.documentElement.style.setProperty("--font-size-amplifier", e.target.value);
 })
 
-document.getElementById("fontSizeRange").addEventListener("focus", (e) =>{
-	window.onkeydown = null
-})
+document.getElementById("fontSizeRange").onfocus = null;
+document.getElementById("fontSizeRange").onblur = settingsKeyDownEvent;
 
-document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
-	window.onkeydown = settingsKeyDownEvent
-})
-
-usernameInput.addEventListener("focus", (e) => {
-	window.onkeydown = null
-})
-
-usernameInput.addEventListener("focusout", (e) => {
-	window.onkeydown = settingsKeyDownEvent
-})
+usernameInput.onfocus = null;
+usernameInput.onblur = settingsKeyDownEvent;
