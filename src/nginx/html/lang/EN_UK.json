@@ -145,6 +145,7 @@
 		"invalidValue" : "Invalid value",
 		"invalidLanguagePack" : "Invalid language_pack value, should be 'DE_GE', 'EN_UK', 'FR_FR' or 'IT_IT",
 		"invalidThemeName" : "Invalid theme_name value, should be 'dark', 'light', 'high_dark', 'high_light' or 'browser'",
+		"profileUpdated": "Profile successfully updated",
 		".errorReadingFile" : "An error occurred while reading the file"
 	},
 	"friends":{

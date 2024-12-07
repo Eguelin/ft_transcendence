@@ -145,6 +145,7 @@
 		"invalidValue" : "Ungültiger Wert",
 		"invalidLanguagePack" : "Ungültiger Sprachpaketwert, sollte 'DE_GE', 'EN_UK', 'FR_FR' oder 'IT_IT' sein",
 		"invalidThemeName" : "Ungültiger Themennamewert, sollte 'dark', 'light', 'high_dark', 'high_light' oder 'browser' sein",
+		"profileUpdated": "Profil erfolgreich aktualisiert",
 		".errorReadingFile" : "Beim Lesen der Datei ist ein Fehler aufgetreten"
 	},
 	"friends":{
