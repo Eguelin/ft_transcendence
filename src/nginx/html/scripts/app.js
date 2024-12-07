@@ -76,10 +76,10 @@ const accessibilitySlideTabIdxMap = {
 	"#settingsThemeHCDark" : "18",
 	"#settingsThemeDevice" : "19",
 	"#settingsDropDownLang" : "20",
-	"#EN_UK" : "21",
-	"#FR_FR" : "22",
-	"#DE_GE" : "23",
-	"#IT_IT" : "24",
+	"#settingsDropDownLang #EN_UK" : "21",
+	"#settingsDropDownLang #FR_FR" : "22",
+	"#settingsDropDownLang #DE_GE" : "23",
+	"#settingsDropDownLang #IT_IT" : "24",
 }
 
 const errorMap = {

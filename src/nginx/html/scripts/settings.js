@@ -384,9 +384,9 @@ function settingsSlide(formerIdx, newerIdx){
 				})
 			}
 		})
+		document.querySelectorAll("#confirmPasswordPopup input").forEach(function(elem){elem.onkeydown = (e) => {if (e.key == "Enter") {document.querySelector("#confirmChangePasswordBtn").click()}}})
 		document.querySelector("#confirmChangePasswordBtn").addEventListener("keydown", (e) => {
-			if (e.key == "Enter"){e.target.click();}
-			else if (e.key == 'Tab' && !e.shiftKey){
+			if (e.key == 'Tab' && !e.shiftKey){
 				e.preventDefault();
 				document.querySelector("#inputOldPassword").focus();
 			}
@@ -413,12 +413,7 @@ function settingsSlide(formerIdx, newerIdx){
 
 var buf = "";
 
-document.querySelectorAll("#pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
-	elem.addEventListener("keydown", (e) => {
-		if (e.key == "Enter")
-			elem.click();
-	})
-})
+document.querySelectorAll("#pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){elem.onkeydown = (e) => { if(e.key == "Enter"){elem.click();}}});
 
 pfpInput.addEventListener("change", (e) => {
 	if (pfpInput.files.length >= 1){
@@ -479,6 +474,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		else{
 			(async () => {
 				try {
+					popUpSuccess(langJson['settings']['profileUpdated']);
 					client = await new Client()
 					if (!client)
 						myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
@@ -532,6 +528,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 							console.error(e);
 							unsetLoader();
 						}
+						popUpSuccess(langJson['settings']['profileUpdated']);
 					})()
 				}
 				else {
@@ -552,8 +549,9 @@ saveUsernameBtn.addEventListener("click", (e) => {
 	}
 })
 
+usernameInput.onkeydown = (e)=> {if(e.key == "Enter"){saveUsernameBtn.click();}}
+
 deleteAccountBtn.addEventListener("click", (e) => {
-	window.onkeydown = null
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 	document.getElementById("confirmDeleteDialogVar").innerText = client.username;

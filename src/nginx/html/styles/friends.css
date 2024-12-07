@@ -236,7 +236,7 @@
 }
 
 .slideSelector{
-	z-index: 1;
+	z-index: 0;
 	font-size: 1em;
 }
 
@@ -315,6 +315,13 @@
 
 @media screen and (orientation:portrait) {
 	.mobile{	
+		#deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup, #confirmPasswordPopup{
+			input, button{
+				width: 70vw;
+			}
+			min-width: 70vw;
+		}
+
 		#friendSlideSelector{
 			width: 100vw;
 			z-index: 20;

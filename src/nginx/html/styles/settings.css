@@ -127,6 +127,7 @@
 	align-content: center;
 	color: var(--main-text-rgb);
 	width: 25vw;
+	word-break: break-word;
 }
 
 #fontSizeRange{
@@ -319,6 +320,12 @@
 
 
 	.mobile{
+		#settingSlidesContainer{
+			gap : 1.2rem;
+		}
+		.settingSlide{
+			gap: 1.2rem;
+		}
 		.settingSlide#accoutSlide > div{
 			width: 60vw;
 		}
@@ -349,6 +356,7 @@
 		}
 	
 		#fontSizeRangeText, #fontSizeRange, #fontSizeList, #fontSizeRangeContainer > div{
+			word-break: break-word;
 			width: inherit;
 		}
 	
