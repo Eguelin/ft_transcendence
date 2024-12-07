@@ -8,28 +8,30 @@ var blockedListContainer;
 var friendInfo;
 var friendSlides;
 var slideSelector;
-var friendSlideIdx = 0;
+var slideIdx = 0;
 var slides;
 var baseTabIdx = 15;
 
 var template = `
 <div id="friendInfo">
-	<div id="friendSlideSelector">
-		<div id="onlineFriendSelector" class="slideSelector" tabindex="12">
-			<div id="onlineFriendSelectorText" class="slideSelectorText">Online</div>
-			<div id="onlineFriendSelectorCount" class="userSlideCount">(0)</div>
-		</div>
-		<div id="allFriendSelector" class="slideSelector" tabindex="13">
-			<div id="allFriendSelectorText" class="slideSelectorText">All</div>
-			<div id="allFriendSelectorCount" class="userSlideCount">(0)</div>
-		</div>
-		<div id="pendingFriendRequestSelector" class="slideSelector" tabindex="14">
-			<div id="pendingFriendRequestSelectorText" class="slideSelectorText">Pending</div>
-			<div id="pendingFriendRequestSelectorCount" class="userSlideCount">(0)</div>
-		</div>
-		<div id="blockedSelector" class="slideSelector" tabindex="15">
-			<div id="blockedSelectorText" class="slideSelectorText">Blocked</div>
-			<div id="blockedSelectorCount" class="userSlideCount">(0)</div>
+	<div id="friendSlideSelectorContainer">
+		<div id="friendSlideSelector">
+			<div id="onlineFriendSelector" class="slideSelector" tabindex="12">
+				<div id="onlineFriendSelectorText" class="slideSelectorText">Online</div>
+				<div id="onlineFriendSelectorCount" class="userSlideCount">(0)</div>
+			</div>
+			<div id="allFriendSelector" class="slideSelector" tabindex="13">
+				<div id="allFriendSelectorText" class="slideSelectorText">All</div>
+				<div id="allFriendSelectorCount" class="userSlideCount">(0)</div>
+			</div>
+			<div id="pendingFriendRequestSelector" class="slideSelector" tabindex="14">
+				<div id="pendingFriendRequestSelectorText" class="slideSelectorText">Pending</div>
+				<div id="pendingFriendRequestSelectorCount" class="userSlideCount">(0)</div>
+			</div>
+			<div id="blockedSelector" class="slideSelector" tabindex="15">
+				<div id="blockedSelectorText" class="slideSelectorText">Blocked</div>
+				<div id="blockedSelectorCount" class="userSlideCount">(0)</div>
+			</div>
 		</div>
 	</div>
 
@@ -86,40 +88,43 @@ var template = `
 	slideSelector = document.querySelectorAll(".slideSelector");
 	const url = new URL(window.location.href);
 	history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${url.hash}`)
-	var friendSlideIdx = 0;
+	var slideIdx = 0;
 	if (url.hash == "#online")
-		friendSlideIdx = 0;
+		slideIdx = 0;
 	else if (url.hash == "#all")
-		friendSlideIdx = 1;
+		slideIdx = 1;
 	else if (url.hash == "#pending")
-		friendSlideIdx = 2;
+		slideIdx = 2;
 	else if (url.hash == "#blocked")
-		friendSlideIdx = 3;
+		slideIdx = 3;
 	else{
-		friendSlideIdx = 0;
+		slideIdx = 0;
 		history.replaceState("","",`https://${hostname.host}/${currentLang}/friends#online`)
 	}
 
 
 	setNotifTabIndexes(16);
 
-	slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
-	document.getElementById("friendSlides").style.setProperty("left", `-${friendSlideIdx}00vw`);
+	slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`
+	document.getElementById("friendSlides").style.setProperty("left", `-${slideIdx}00vw`);
 	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
-	document.querySelector("#friendSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${friendSlideIdx * 25}%, ${bg} ${friendSlideIdx * 25}%, ${bg} ${(friendSlideIdx * 25)+25}%, rgba(0,0,0,0) ${(friendSlideIdx * 25)+25}%)`
+	var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+	
+	document.querySelector("#friendSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${bg} ${slideIdx * 25}%, ${bg} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
+	document.querySelector("#friendSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${underline} ${slideIdx * 25}%, ${underline} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
 
 	slideSelector.forEach(function(key) {
 		if (currentPage == "friends"){
 			key.addEventListener("click", (e) => {
-				unsetTabIndexes(friendSlideIdx);
-				var save = friendSlideIdx;
-				slideSelector[friendSlideIdx].classList.remove("activeSelector");
-				friendSlideIdx = Array.from(slideSelector).indexOf(e.target.closest(".slideSelector"));
-				if (friendSlides[friendSlideIdx].childElementCount > 0){
-					friendSlides[friendSlideIdx].firstChild.lastChild.focus();
+				unsetTabIndexes(slideIdx);
+				var save = slideIdx;
+				slideSelector[slideIdx].classList.remove("activeSelector");
+				slideIdx = Array.from(slideSelector).indexOf(e.target.closest(".slideSelector"));
+				if (friendSlides[slideIdx].childElementCount > 0){
+					friendSlides[slideIdx].firstChild.lastChild.focus();
 				}
-				slideSelector[friendSlideIdx].classList.add("activeSelector");
-				settingsSlide(save, friendSlideIdx);
+				slideSelector[slideIdx].classList.add("activeSelector");
+				settingsSlide(save, slideIdx);
 
 			})
 			key.addEventListener("keydown", (e) => {
@@ -131,7 +136,7 @@ var template = `
 	})
 
 	inputSearchUserContainer.style.setProperty("display", "block");
-	slideSelector[friendSlideIdx].focus();
+	slideSelector[slideIdx].focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
@@ -598,7 +603,7 @@ function checkUpdate(){
 					document.getElementById("blockedSelectorCount").innerHTML = `(${blockedListContainer.childElementCount})`;
 					for (var i=0; i<4;i++)
 						unsetTabIndexes(i)
-					setTabIndexes(friendSlideIdx);
+					setTabIndexes(slideIdx);
 				});
 			}
 			else {
@@ -612,21 +617,21 @@ function checkUpdate(){
 
 function friendKeyDownEvent(e) {
 	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
-		var save = friendSlideIdx;
-		unsetTabIndexes(friendSlideIdx)
-		friendSlides[friendSlideIdx].className = "friendSlide";
-		slideSelector[friendSlideIdx].className = "slideSelector";
+		var save = slideIdx;
+		unsetTabIndexes(slideIdx)
+		friendSlides[slideIdx].className = "friendSlide";
+		slideSelector[slideIdx].className = "slideSelector";
 		if (e.key == "ArrowLeft")
-			friendSlideIdx -= 1;
+			slideIdx -= 1;
 		else
-			friendSlideIdx += 1;
-		if (friendSlideIdx > friendSlides.length - 1)
-			friendSlideIdx = 0;
-		if (friendSlideIdx < 0)
-			friendSlideIdx = friendSlides.length - 1;
-		slideSelector[friendSlideIdx].className = `${slideSelector[friendSlideIdx].className} activeSelector`
-		slideSelector[friendSlideIdx].focus();
-		settingsSlide(save, friendSlideIdx)
+			slideIdx += 1;
+		if (slideIdx > friendSlides.length - 1)
+			slideIdx = 0;
+		if (slideIdx < 0)
+			slideIdx = friendSlides.length - 1;
+		slideSelector[slideIdx].className = `${slideSelector[slideIdx].className} activeSelector`
+		slideSelector[slideIdx].focus();
+		settingsSlide(save, slideIdx)
 	}
 }
 
@@ -644,23 +649,24 @@ function settingsSlide(formerIdx, newerIdx){
 	var left = tmp.getBoundingClientRect().left;
 	var move = [
 		{ left: `${left}px`},
-		{ left: `-${friendSlideIdx}00%`}
+		{ left: `-${slideIdx}00%`}
 	];
 	var time = {
 		duration: 500,
 		iterations: 1,
 	}
 	tmp.animate(move, time);
-	tmp.style.setProperty("left", `-${friendSlideIdx}00%`)
+	tmp.style.setProperty("left", `-${slideIdx}00%`)
 
 
-	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
-	bg = "red";
-	var move = [];
-	var increment = formerIdx < newerIdx ? 1 : -1;
+	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb");
+	var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+	var move = [], moveUnderline = [];
+	var increment = (formerIdx < newerIdx ? 1 : -1) * Math.abs(formerIdx - newerIdx);
 	let i = formerIdx * 25	
 	for (let count = 0;count <= 25 ;i += increment, count++){
 		move.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 25}%, rgba(0,0,0,0) ${i + 25}%)`});
+		moveUnderline.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${underline} ${i}%, ${underline} ${i + 25}%, rgba(0,0,0,0) ${i + 25}%)`});
 	}
 	var time = {
 		duration: 500,
@@ -668,8 +674,11 @@ function settingsSlide(formerIdx, newerIdx){
 	}
 	document.querySelector("#friendSlideSelector").animate(move, time);
 	document.querySelector("#friendSlideSelector").style.background = move[move.length - 1].background;
+	
+	document.querySelector("#friendSlideSelectorContainer").animate(moveUnderline, time);
+	document.querySelector("#friendSlideSelectorContainer").style.background = moveUnderline[moveUnderline.length - 1].background;
 
 	history.replaceState("","",`https://${hostname.host}/${currentLang}/friends${friendHashMap[newerIdx]}`)
 	document.title = langJson['friends'][`${friendHashMap[newerIdx].replace("#","")} title`];
-	setTabIndexes(friendSlideIdx);
+	setTabIndexes(slideIdx);
 }
