@@ -439,10 +439,12 @@ pfpInput.addEventListener("change", (e) => {
 					popUpError("An error occurred while reading the file");
 				return;
 			}
-			window.onkeydown = null
+			window.onkeydown = settingsKeyDownEvent
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
 			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/;base64,${buf}`);
+			confirmPfpBtn.focus();
+			confirmPfpBtn.onkeydown = (e) => {if (e.key == 'Tab'){e.preventDefault()}}
 		}
 	}
 })

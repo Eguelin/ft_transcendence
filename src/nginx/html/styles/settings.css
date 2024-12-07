@@ -80,7 +80,7 @@
 	width: 20vw;
 	background-position: center center;
 	background-repeat: no-repeat;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	overflow: hidden;
 	position: absolute;
 
@@ -103,6 +103,8 @@
 	border-top: 1px solid var(--main-text-rgb);
 	outline: none;
 	align-self: center;
+	font-size: 1rem;
+	width: 100%;
 }
 
 #confirmPfpBtn:hover, #confirmPfpBtn:focus{
