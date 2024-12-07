@@ -11,7 +11,7 @@ var template = `
 	<div id="loginPage">
 		<div id="loginSlideSelectorContainer">
 			<div id="loginSlideSelector">
-				<div tabindex="12" id="loginSelector" class="slideSelector activeSelector">
+				<div tabindex="12" id="loginSelector" class="slideSelector">
 					<div id="loginSelectorText">Login</div>
 				</div>
 				<div tabindex="13" id="registerSelector" class="slideSelector">
@@ -108,6 +108,7 @@ var template = `
 	for (i = 0; i < slides.length; i++)
 		slides[i].style.display = "none";
 	slides[slideIdx].style.display = "flex";
+	loginSlideSelector[slideIdx].classList.add('activeSelector');
 
 	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
 	var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
@@ -124,7 +125,8 @@ var template = `
 	loginSlideSelector.forEach(function(key) {
 		key.addEventListener("click", (e) => {
 			save = slideIdx;
-			slideIdx = Array.from(e.target.parentElement.children).indexOf(e.target);
+			elem = e.target.closest(".slideSelector")
+			slideIdx = Array.from(document.querySelector("#loginSlideSelector").children).indexOf(elem);
 			if (save != slideIdx){
 				loginSlideSelector[save].classList.remove("activeSelector");
 				for (i = 0; i < slides.length; i++)
@@ -133,6 +135,7 @@ var template = `
 				loginSlideSelector[slideIdx].classList.add('activeSelector');
 				loginSlide(save, slideIdx)
 			}
+			loginSlideSelector[slideIdx].blur();
 		})
 		key.onkeydown = (e) => {
 			if (e.key == "Enter")
@@ -395,11 +398,12 @@ function loginKeyDownEvent(e) {
 		loginSlide();
 		loginSlideSelector[slideIdx].classList.add('activeSelector');
 		slides[slideIdx].style.display = "flex";
-		loginSlideSelector[slideIdx].focus();
 	}
 }
 
-function loginSlide(){
+function loginSlide(formerIdx, newerIdx){
+	if (formerIdx == newerIdx)
+		return;
 	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
 	var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 	var move = [], moveUnderline = [];
