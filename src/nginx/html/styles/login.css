@@ -81,15 +81,6 @@
 	background: none !important;
 }
 
-#slideSelectorBg{
-	background: var(--active-selector-rgb);
-	position: absolute;
-	width: 50%;
-	height: 2rem;
-	border-bottom: 1px solid var(--main-text-rgb);
-	z-index: -2;
-}
-
 
 #loginSlideSelector > div{
 	width: 50%;

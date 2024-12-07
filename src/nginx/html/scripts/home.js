@@ -82,12 +82,11 @@ var template = `
 										tabIdx += 1;
 									}
 								});
-								setNotifTabIndexes(tabIdx);
 							}
 						})
 					}
 					checkMatchResumeSize();
-					setNotifTabIndexes(tabIdx);
+					setNotifTabIndexes(40);
 				}
 			}
 			catch (error){
