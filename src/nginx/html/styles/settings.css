@@ -54,8 +54,7 @@
 	mask-position:center;
 	mask-repeat:no-repeat;
 
-	position: absolute;
-	right: 1ch;
+	position: relative;
 }
 
 #saveUsernameBtn:hover, #saveUsernameBtn:focus, #savePasswordBtn:hover, #savePasswordBtn:focus {
@@ -65,7 +64,7 @@
 #saveUsernameContainer, #changePasswordContainer{
 	display: flex;
 	align-items: center;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
 	transition: 500ms;
 }
@@ -381,6 +380,7 @@
 
 #inputChangeUsername{
 	anchor-name: --input-change-name;
+	width: calc(100% - 5rem);
 }
 
 .popupInput{
