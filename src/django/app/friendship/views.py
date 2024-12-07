@@ -30,8 +30,10 @@ def send_friend_request(request):
 		user = request.user
 		if (new_friend.profile.blocked_users.filter(pk=user.pk)).exists():
 			return JsonResponse({'message': 'The user blocked you'}, status=403)
+
 		if (user.profile.blocked_users.filter(pk=new_friend.pk)).exists():
 			return JsonResponse({'message': 'You blocked the user'}, stauts=403)
+
 		if (user.profile.friends_request.filter(pk=new_friend.pk)).exists():
 			new_friend.profile.friends.add(user)
 			new_friend.save()
@@ -39,10 +41,12 @@ def send_friend_request(request):
 			user.profile.friends.add(new_friend)
 			user.save()
 			return JsonResponse({'message': 'Succesfully send request friend'})
+
 		elif not ((new_friend.profile.friends_request.filter(pk=user.pk)).exists()):
 			new_friend.profile.friends_request.add(user)
 			new_friend.save()
 			return JsonResponse({'message': 'Request succesfully sent'})
+
 		else :
 			return JsonResponse({'message': 'Request already sent'})
 	except User.DoesNotExist:
@@ -71,6 +75,14 @@ def accept_friend_request(request):
 	try:
 		new_friend = User.objects.get(username=username)
 		user = request.user
+
+		if not (user.profile.friends_request.filter(pk=new_friend.pk)).exists():
+			return JsonResponse({'message': 'No friend request from this user'}, status=400)
+		if (user.profile.blocked_users.filter(pk=new_friend.pk)).exists():
+			return JsonResponse({'message': 'You blocked the user'}, status=403)
+		if (new_friend.profile.blocked_users.filter(pk=user.pk)).exists():
+			return JsonResponse({'message': 'The user blocked you'}, status=403)
+
 		new_friend.profile.friends.add(user)
 		new_friend.save()
 		user.profile.friends_request.remove(new_friend)
@@ -104,6 +116,8 @@ def reject_friend_request(request):
 	try:
 		new_friend = User.objects.get(username=username)
 		user = request.user
+		if not (user.profile.friends_request.filter(pk=new_friend.pk)).exists():
+			return JsonResponse({'message': 'No friend request from this user'}, status=400)
 		user.profile.friends_request.remove(new_friend)
 		user.save()
 		return JsonResponse({'message': 'Succesfully rejected friend request'})
@@ -134,6 +148,8 @@ def remove_friend(request):
 	try:
 		friend = User.objects.get(username=username)
 		user = request.user
+		if not (user.profile.friends.filter(pk=friend.pk)).exists():
+			return JsonResponse({'message': 'No friend with this user'}, status=400)
 		friend.profile.friends.remove(user)
 		friend.save()
 		user.profile.friends.remove(friend)
@@ -168,11 +184,21 @@ def block_friend(request):
 		if (ennemy.is_staff):
 			return JsonResponse({'message': 'Can\'t block staff member'}, status=401)
 		user = request.user
+
 		if (user.profile.friends.filter(pk=ennemy.pk)).exists():
 			ennemy.profile.friends.remove(user)
 			ennemy.save()
 			user.profile.friends.remove(ennemy)
 			user.save()
+
+		if (user.profile.friends_request.filter(pk=ennemy.pk)).exists():
+			user.profile.friends_request.remove(ennemy)
+			user.save()
+
+		if (ennemy.profile.friends_request.filter(pk=user.pk)).exists():
+			ennemy.profile.friends_request.remove(user)
+			ennemy.save()
+
 		user.profile.blocked_users.add(ennemy)
 		user.save()
 		return JsonResponse({'message': 'Succesfully blocked user'})
@@ -199,6 +225,8 @@ def unblock_user(request):
 		return JsonResponse({'message': 'Can\'t unblock yourself'}, status=400)
 
 	try:
+		if not (request.user.profile.blocked_users.filter(username=username)).exists():
+			return JsonResponse({'message': 'User not blocked'}, status=400)
 		request.user.profile.blocked_users.remove(User.objects.get(username=username))
 		request.user.save()
 		return JsonResponse({'message': 'Succesfully unblocked user'})
