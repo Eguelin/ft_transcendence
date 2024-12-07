@@ -33,4 +33,3 @@ urllib3==2.2.3
 uvloop==0.21.0
 wheel==0.43.0
 zope.interface==7.2
-zxcvbn-python==4.4.24
