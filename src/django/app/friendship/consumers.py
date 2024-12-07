@@ -58,7 +58,7 @@ class friend(AsyncWebsocketConsumer):
 	@sync_to_async
 	def update_activity(self, bool):
 		try:
-			self.user = User.objects.get(username=self.user.username)
+			self.user = User.objects.get(id=self.user.id)
 			self.user.profile.is_active = bool
 			self.user.profile.save()
 		except User.DoesNotExist:
@@ -67,10 +67,10 @@ class friend(AsyncWebsocketConsumer):
 	@sync_to_async
 	def userIsAuthenticated(self):
 		try:
-			user = User.objects.get(username=self.scope['user'].username)
+			self.user = User.objects.get(id=self.user.id)
 		except User.DoesNotExist:
 			return False
-		return user.is_authenticated
+		return self.user.is_authenticated
 
 @receiver(m2m_changed, sender=Profile.friends_request.through)
 def notify_friend_request_changed(sender, instance, action, pk_set, **kwargs):
