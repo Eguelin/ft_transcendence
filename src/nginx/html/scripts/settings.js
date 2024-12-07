@@ -96,12 +96,14 @@ var template = `
 <div id="pageContentContainer">
 	<div id="settingsPage">
 		<div id="settingSlidesContainer">
-			<div id="settingsSlideSelector">
-				<div id="accountSelector" class="slideSelector" tabindex="12">
-					<div id="accountSelectorText">Account</div>
-				</div>
-				<div id="accessibilitySelector" class="slideSelector" tabindex="13">
-					<div id="accessibilitySelectorText">Accessibility</div>
+			<div id="settingsSlideSelectorContainer">
+				<div id="settingsSlideSelector">
+					<div id="accountSelector" class="slideSelector" tabindex="12">
+						<div id="accountSelectorText">Account</div>
+					</div>
+					<div id="accessibilitySelector" class="slideSelector" tabindex="13">
+						<div id="accessibilitySelectorText">Accessibility</div>
+					</div>
 				</div>
 			</div>
 			<div style="position: relative;">
@@ -150,6 +152,8 @@ var template = `
 
 
 function settingsSlide(formerIdx, newerIdx){
+	if (formerIdx == newerIdx)
+		return;
 	
 	var tmp = document.querySelector("#settingSlides");
 	var left = tmp.getBoundingClientRect().left;
@@ -164,12 +168,14 @@ function settingsSlide(formerIdx, newerIdx){
 	tmp.animate(move, time);
 	tmp.style.setProperty("left", `-${slideIdx}00vw`)
 
-	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
-	var move = [];
+	const bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	const underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+	var move = [], moveUnderline = [];
 	var increment = slideIdx == 1 ? 1 : -1;
 	let i = slideIdx == 1 ? 0 : 50;
 	for (;i<=50 && i >= 0;i += increment){
 		move.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
+		moveUnderline.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${underline} ${i}%, ${underline} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
 	}
 	var time = {
 		duration: 500,
@@ -177,6 +183,8 @@ function settingsSlide(formerIdx, newerIdx){
 	}
 	document.querySelector("#settingsSlideSelector").animate(move, time);
 	document.querySelector("#settingsSlideSelector").style.background = move[move.length - 1].background;
+	document.querySelector("#settingsSlideSelectorContainer").animate(moveUnderline, time);
+	document.querySelector("#settingsSlideSelectorContainer").style.background = moveUnderline[moveUnderline.length - 1].background;
 	
 	if (newerIdx == 0){
 		try{
@@ -280,12 +288,16 @@ function settingsSlide(formerIdx, newerIdx){
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector")
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
 	
-	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	const bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	const underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 	if (slideIdx == 1){
 		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${bg} 50%, ${bg} 100%, rgba(0,0,0,0) 100%)`;
+		document.querySelector("#settingsSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${underline} 50%, ${underline} 100%, rgba(0,0,0,0) 100%)`;
 	}
-	else
+	else{
 		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${bg} 0%, ${bg} 50%, rgba(0,0,0,0) 50%)`;
+		document.querySelector("#settingsSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${underline} 0%, ${underline} 50%, rgba(0,0,0,0) 50%)`;
+	}
 	settingsSlideSelector[slideIdx].classList.add('activeSelector');
 
 	settingsSlideSelector.forEach(function(key) {
@@ -295,6 +307,7 @@ function settingsSlide(formerIdx, newerIdx){
 			settingsSlide(save, slideIdx);
 			settingsSlideSelector[save].classList.remove("activeSelector");
 			settingsSlideSelector[slideIdx].classList.add('activeSelector');
+			settingsSlideSelector[slideIdx].blur();
 		})
 		key.onkeydown = (e) => {
 			if (e.key == "Enter")
