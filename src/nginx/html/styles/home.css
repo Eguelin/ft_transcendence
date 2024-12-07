@@ -52,6 +52,7 @@
 	border: 0.2px solid var(--border-rgb);
 	width: unset;
 	margin: 0;
+	transition: 500ms;
 }
 
 

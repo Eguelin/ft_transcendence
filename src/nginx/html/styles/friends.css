@@ -309,13 +309,6 @@
 	background: green;
 }
 
-#friendInfo #slideSelectorBg{
-	width: 25%;
-	height: inherit;
-	border-bottom: 2px solid var(--main-text-rgb) !important;
-	left: 0;
-}
-
 .gradient{
 	display: none;
 }

@@ -170,6 +170,7 @@ div#usernameBtn:focus, div#usernameBtn:hover {
 	border: .1rem solid var(--border-rgb);
     border-right: 0 !important;
 	overflow: hidden;
+	transition: 500ms;
 }
 
 .openCenter #pushNotif, .quickOpenCenter #pushNotif, .closeCenter #pushNotif{
