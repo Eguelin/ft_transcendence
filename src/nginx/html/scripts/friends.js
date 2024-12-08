@@ -159,13 +159,14 @@ var template = `
 
 document.addEventListener("click", (e) => {
 	if (currentPage == "friends"){
+
 		if (e.target.parentElement == null || e.target.id == "popupBg"){
 			deleteFriendPopup.style.setProperty("display", "none");
 			blockFriendPopup.style.setProperty("display", "none");
 			document.getElementById("popupBg").style.display = "none";
 		}
 		if (e.target.id == "confirmDelete"){
-			const data = {username: document.querySelector('.friendName').textContent};
+			const data = {username: document.getElementById(`a${e.target.parentElement.className}`).textContent};
 			fetch('/api/user/remove_friend', {
 				method: 'POST',
 				headers: {
@@ -178,7 +179,7 @@ document.addEventListener("click", (e) => {
 			document.getElementById("popupBg").style.display = "none";
 		}
 		if (e.target.id == "confirmBlock"){
-			const data = {username: document.querySelector('.friendName').textContent};
+			const data = {username: document.getElementById(`a${e.target.parentElement.className}`).textContent};
 			fetch('/api/user/block_friend', {
 				method: 'POST',
 				headers: {
@@ -223,7 +224,7 @@ document.addEventListener("click", (e) => {
 		}
 
 		if (e.target.className == "unblockBtn"){
-			const data = {username: document.querySelector('.friendName').textContent};
+			const data = {username: document.getElementById(`a${e.target.parentElement.id}`).textContent};
 			fetch('/api/user/unblock_user', {
 				method: 'POST',
 				headers: {
@@ -240,7 +241,7 @@ document.addEventListener("click", (e) => {
 			})
 		}
 		if (e.target.className == "acceptRequestBtn"){
-			const data = {username: document.querySelector('.friendName').textContent};
+			const data = {username: document.getElementById(`a${e.target.parentElement.id}`).textContent};
 			fetch('/api/user/accept_friend_request', {
 				method: 'POST',
 				headers: {
@@ -257,7 +258,7 @@ document.addEventListener("click", (e) => {
 			})
 		}
 		if (e.target.className == "rejectRequestBtn"){
-			const data = {username: document.querySelector('.friendName').textContent};
+			const data = {username: document.getElementById(`a${e.target.parentElement.id}`).textContent};
 			fetch('/api/user/reject_friend_request', {
 				method: 'POST',
 				headers: {
@@ -277,15 +278,15 @@ document.addEventListener("click", (e) => {
 			document.getElementById("popupBg").style.display = "block";
 			deleteFriendPopup.style.setProperty("display", "flex");
 			deleteFriendPopup.className = e.target.parentElement.id;
-			document.querySelector("#confirmDeleteQuestion").innerText = client.langJson['friends']['confirmDeleteQuestion'].replace("${USERNAME}", e.target.parentElement.id);
-			document.querySelector("#confirmDelete").ariaLabel = client.langJson['friends']['aria#confirmDelete'].replace("${USERNAME}", e.target.parentElement.id);
+			document.querySelector("#confirmDeleteQuestion").innerText = client.langJson['friends']['confirmDeleteQuestion'].replace("${USERNAME}", document.getElementById(`a${e.target.parentElement.id}`).textContent)
+			document.querySelector("#confirmDelete").ariaLabel = client.langJson['friends']['aria#confirmDelete'].replace("${USERNAME}", document.getElementById(`a${e.target.parentElement.id}`).textContent);
 		}
 		if (e.target.className == "blockFriendBtn"){
 			document.getElementById("popupBg").style.display = "block"
 			blockFriendPopup.style.setProperty("display", "flex");
 			blockFriendPopup.className = e.target.parentElement.id;
-			document.querySelector("#confirmBlockQuestion").innerText = client.langJson['friends']['confirmBlockQuestion'].replace("${USERNAME}", e.target.parentElement.id);
-			document.querySelector("#confirmBlock").ariaLabel = client.langJson['friends']['aria#confirmBlock'].replace("${USERNAME}", e.target.parentElement.id);
+			document.querySelector("#confirmBlockQuestion").innerText = client.langJson['friends']['confirmBlockQuestion'].replace("${USERNAME}", document.getElementById(`a${e.target.parentElement.id}`).textContent);
+			document.querySelector("#confirmBlock").ariaLabel = client.langJson['friends']['aria#confirmBlock'].replace("${USERNAME}", document.getElementById(`a${e.target.parentElement.id}`).textContent);
 		}
 		if (e.target.closest(".friendsOptionContainer")){
 			e.target.closest(".friendsOptionContainer").classList.add("activeListSelector");
@@ -328,6 +329,7 @@ function createUserContainer(user){
 
 	friendName.className = "friendName";
 	friendName.href = (`https://${hostname.host}/${currentLang}/user/${user.username}`);
+	friendName.id = `aid${user.id}`;
 
 	pfpContainer.className = "pfpContainer";
 	pfp.className = "profilePicture";
