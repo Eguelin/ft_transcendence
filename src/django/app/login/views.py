@@ -231,7 +231,7 @@ def create_user(request, staff=False):
 		return JsonResponse({'message':  "Internal server error"}, status=500)
 
 def create_deleted_user():
-	return create_npc("deleted", "default0.jpg")
+	return create_npc("deleted", "deleted.jpg")
 
 def create_default_users():
 	create_npc("AI", "ai.gif")
