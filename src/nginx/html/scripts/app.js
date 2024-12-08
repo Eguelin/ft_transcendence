@@ -1301,9 +1301,11 @@ function friendUpdate()
 	var socket = new WebSocket("/ws/friend/");
 
 	socket.onopen = function () {
+		console.log("Connected to friend websocket");
 	}
 
 	socket.onclose = function () {
+		console.log("Disconnected from friend websocket");
 	}
 
 	window.addEventListener('beforeunload', function () {
@@ -1311,10 +1313,6 @@ function friendUpdate()
 	});
 
 	document.getElementById('goHomeButton').addEventListener('click', function () {
-		socket.close();
-	});
-
-	window.addEventListener('popstate', function () {
 		socket.close();
 	});
 
@@ -1339,36 +1337,13 @@ function friendUpdate()
 		}
 		else if (currentPage == "friends" && data.type === "friend_status_update")
 		{
-			if (data.is_active)
-			{
-				if (!document.querySelector(`#onlineFriendList #id${data.id}`))
-				{
-					if (document.querySelector(`#allFriendList #id${data.id}`))
-					{
-						document.querySelector(`#allFriendList #id${data.id}`).remove();
-						createFriendContainer(data);
-					}
-					else
-					{
-						createFriendContainer(data);
-						document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
-					}
-						document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
-					if (document.querySelector(`#pendingFriendRequestList #id${data.id}`))
-					{
-						document.querySelector(`#pendingFriendRequestList #id${data.id}`).remove();
-						document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
-					}
-				}
-			}
-			else if (data.is_active === false)
-			{
-				if (document.querySelector(`#onlineFriendList #id${data.id}`))
-				{
+			if (document.querySelector(`#onlineFriendList #id${data.id}`))
 					document.querySelector(`#onlineFriendList #id${data.id}`).remove();
-					document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
-				}
-			}
+			if (document.querySelector(`#allFriendList #id${data.id}`))
+					document.querySelector(`#allFriendList #id${data.id}`).remove();
+			createFriendContainer(data);
+			document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
+			document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 		}
 		else if (currentPage == "user" && splitPath[5] === data.username && data.type === "friend_status_update")
 		{
