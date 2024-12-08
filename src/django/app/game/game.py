@@ -656,7 +656,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data):
 		if not await self.userIsAuthenticated():
 			await self.send('error', 'Socket closed')
-			await self.disconnect(1000)
 			await self.close()
 			return
 
@@ -726,6 +725,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 				self.player.user = user
 				self.player.profile = user.profile
 		except User.DoesNotExist:
+			user = User.objects.get(username='deleted')
+			if self.player:
+				self.player.user = user
+				self.player.profile = user.profile
 			return False
 		return user.is_authenticated
 
