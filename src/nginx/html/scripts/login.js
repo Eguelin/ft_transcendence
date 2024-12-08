@@ -50,7 +50,8 @@ var template = `
 				<div>
 					<input autoclomplete="off" tabindex="16" type="password" id="inputRegisterCPassword" name="cPassword" class="registerFormInput" placeholder="Confirm password" aria-label="Confirm register password"/>
 				</div>
-				<div>
+				<div id="registerBtnContainer">
+					<span id="registerPasswordStrengh" class="inputRegisterUsernameCantBeEmpty"></span>
 					<button tabindex="17" id="registerBtn" class="loginBtn">REGISTER</button>
 				</div>
 			</div>
@@ -58,6 +59,42 @@ var template = `
 	</div>
 </div>
 `
+
+function checkUsername(username){
+	const pattern = /^[\w-]+$/;
+	if (username == "")
+		return (".inputRegisterUsernameCantBeEmpty")
+	if (!pattern.test(username))
+		return (".forbidenChars")
+	if (username.length > 15)
+		return (".usernameTooLong")
+	return ("")
+}
+
+function checkPassword(password){
+	let upper = 0, lower = 0, digit = 0, spec = 0;
+	if (password == "")
+		return (".inputRegisterPasswordCantBeEmpty")
+	if (password.length > 128)
+		return (".passwordTooLong")
+	if (password.length < 8)
+		return (".passwordTooShort")
+	for (let i =0; i < password.length; i++){
+		if (password[i] >= 'a' && password[i] <= 'z')
+			lower = 1;
+		if (password[i] >= 'A' && password[i] <= 'Z')
+			upper = 1;
+		if (password[i] >= '0' && password[i] <= '9')
+			digit = 1;
+		if (password[i] >= ' ' && !(password[i] >= '0' && password[i] <= '9') && !(password[i] >= 'a' && password[i] <= 'z') && !(password[i] >= 'A' && password[i] <= 'Z'))
+			spec = 1;
+	}
+	if (!lower){return (".passwordMissingLowerCase")}
+	if (!upper){return (".passwordMissingUpperCase")}
+	if (!digit){return (".passwordMissingDigit")}
+	if (!spec){return (".passwordMissingSpec")}
+	return ("");
+}
 
 {
 	const url = new URL(window.location.href);
@@ -109,6 +146,28 @@ var template = `
 		slides[i].style.display = "none";
 	slides[slideIdx].style.display = "flex";
 	loginSlideSelector[slideIdx].classList.add('activeSelector');
+
+	try {
+		document.querySelector("#registerPasswordStrengh").innerText = langJson['login']['.inputRegisterUsernameCantBeEmpty'];
+	}
+	catch{
+		if (!langJson){
+			(async() => {
+				const fetchResult = await fetch(`https://${hostname.host}/lang/${currentLang}.json`);
+				if (fetchResult.ok){
+					try {
+						langJson = await fetchResult.json();
+					}
+					catch {
+						popUpError(`Could not load ${currentLang} language pack`);
+					}
+				}
+				else{
+					popUpError(`Could not load ${currentLang} language pack`);
+				}
+			})()
+		}
+	}
 
 	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
 	var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
@@ -177,12 +236,51 @@ var template = `
 	})
 
 
+	document.querySelectorAll("#inputUsername, #inputRegisterUsername").forEach(function(elem) {
+		elem.onkeyup = (e) => {
+			var res = checkUsername(usernameRegisterInput.value);
+			try{
+				if (langJson['login'][res] != undefined){
+					document.querySelector("#registerPasswordStrengh").innerText = langJson['login'][res];
+					document.querySelector("#registerPasswordStrengh").className = res.replace(".", "");
+				}
+				else{
+					document.querySelector("#registerPasswordStrengh").innerText = "";
+					document.querySelector("#registerPasswordStrengh").className = "";
+				}
+			}
+			catch{
+				document.querySelector("#registerPasswordStrengh").innerText = "";
+				document.querySelector("#registerPasswordStrengh").className = "";
+			}
+		}
+	})
+
+	document.querySelectorAll("#inputPassword, #inputRegisterPassword").forEach(function(elem) {
+		elem.onkeyup = (e) => {
+			var res = checkPassword(pwRegisterInput.value);
+			try{
+				if (langJson['login'][res] != undefined){
+					document.querySelector("#registerPasswordStrengh").innerText = langJson['login'][res];
+					document.querySelector("#registerPasswordStrengh").className = res.replace(".", "");
+				}
+				else{
+					document.querySelector("#registerPasswordStrengh").innerText = "";
+					document.querySelector("#registerPasswordStrengh").className = "";
+				}
+			}
+			catch{
+				document.querySelector("#registerPasswordStrengh").innerText = "";
+				document.querySelector("#registerPasswordStrengh").className = "";
+			}
+		}
+	})
+	
 	pwLogin.addEventListener("keydown", (e) => {
 		if(e.key == "Enter"){
 			login();
 		}
-		else
-			pwRegisterInput.value = pwLogin.value;
+		pwRegisterInput.value = pwLogin.value;
 	})
 
 	pwRegisterInput.addEventListener("keydown", (e) => {
@@ -193,6 +291,12 @@ var template = `
 
 
 	cpwRegisterInput.addEventListener("keydown", (e) => {
+		if (cpwRegisterInput.value != pwRegisterInput.value){
+			if (langJson){
+				document.querySelector("#registerPasswordStrengh").innerText = langJson['login']['.mismatchPassword'];
+				document.querySelector("#registerPasswordStrengh").className = "mismatchPassword";
+			}
+		}
 		if(e.key == "Enter"){
 			register();
 		}
