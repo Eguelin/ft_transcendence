@@ -1301,11 +1301,9 @@ function friendUpdate()
 	var socket = new WebSocket("/ws/friend/");
 
 	socket.onopen = function () {
-		console.log("Connected to friend websocket");
 	}
 
 	socket.onclose = function () {
-		console.log("Disconnected from friend websocket");
 	}
 
 	window.addEventListener('beforeunload', function () {
