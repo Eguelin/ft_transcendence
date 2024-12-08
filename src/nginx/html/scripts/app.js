@@ -1337,7 +1337,7 @@ function friendUpdate()
 				document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
 			}
 		}
-		else if (currentPage == "friends")
+		else if (currentPage == "friends" && data.type === "friend_status_update")
 		{
 			if (data.is_active)
 			{
@@ -1370,7 +1370,7 @@ function friendUpdate()
 				}
 			}
 		}
-		else if (currentPage == "user" && splitPath[5] === data.username)
+		else if (currentPage == "user" && splitPath[5] === data.username && data.type === "friend_status_update")
 		{
 			if (data.is_active)
 			{
@@ -1382,7 +1382,6 @@ function friendUpdate()
 		{
 			if (currentPage === "friends")
 			{
-				console.log("friend removed");
 				if (document.querySelector(`#allFriendList #id${data.id}`))
 					document.querySelector(`#allFriendList #id${data.id}`).remove();
 
@@ -1392,7 +1391,7 @@ function friendUpdate()
 				document.getElementById("allFriendSelectorCount").innerHTML = `(${allFriendListContainer.childElementCount})`;
 				document.getElementById("onlineFriendSelectorCount").innerHTML = `(${onlineFriendListContainer.childElementCount})`;
 			}
-			else if (currentPage === "user" && splitPath[6] === data.username)
+			else if (currentPage === "user" && splitPath[5] === data.username)
 			{
 				document.getElementById("deleteFriendBtn").style.setProperty("display", "none");
 				document.getElementById("sendFriendRequestBtn").style.setProperty("display", "block");
