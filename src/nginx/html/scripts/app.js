@@ -602,15 +602,6 @@ function isMobile(){
 	return(hasTouchScreen);
 }
 
-function browser(){
-	if (navigator.userAgent.includes("Chrome")){
-		console.log("Chrome")
-	}
-	else if (navigator.userAgent.includes("Mozilla")){
-		console.log("Mozilla")
-	}
-}
-
 window.addEventListener('load', (e) => {
 	const url = new URL(window.location.href);
 	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));

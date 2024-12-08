@@ -382,6 +382,10 @@
 	font-size: 1rem;
 }
 
+#confirmChangePasswordBtn{
+	background: var(--popup-input-bg-rgb);
+}
+
 #changePasswordContainer{
 	background-color: transparent;
 }
