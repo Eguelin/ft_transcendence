@@ -114,12 +114,10 @@ def create_match(request):
 	except KeyError:
 		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 
-	if not isinstance(nbr, int) or nbr < 1 or not userOne or not userTwo or not isinstance(userOne, str) or not isinstance(userTwo, str):
+	if not isinstance(nbr, int) or nbr < 1 or nbr > 1000 or not userOne or not userTwo or not isinstance(userOne, str) or not isinstance(userTwo, str):
 		return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
 
 	matches = {}
-	if (nbr >= 10000):
-		nbr = 10000
 	for i in range(0, nbr):
 		try:
 			match = customModels.Match.objects.createWithTwoOpps(userOne, userTwo)
