@@ -4,6 +4,8 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	border: .1rem solid transparent;
+	transition: 500ms;
 	gap: 1vh;
 }
 
@@ -57,7 +59,7 @@
 	padding: 1vh 0;
 	color: var(--main-text-rgb);
 	justify-content: space-between;
-	transition: none;
+	transition: 500ms;
 }
 
 .home, .user{

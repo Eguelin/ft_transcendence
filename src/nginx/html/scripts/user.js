@@ -263,6 +263,8 @@ document.addEventListener("click", (e) => {
 			deleteFriendPopup.className = splitPath[5];
 			document.querySelector("#confirmDeleteQuestion").innerText = client.langJson['friends']['confirmDeleteQuestion'].replace("${USERNAME}", splitPath[5]);
 			document.querySelector("#confirmDelete").ariaLabel = client.langJson['friends']['aria#confirmDelete'].replace("${USERNAME}", splitPath[5]);
+			document.querySelector("#confirmDelete").focus();
+			document.querySelector("#confirmDelete").onkeydown = (e) => {if (e.key == 'Tab'){e.preventDefault()}};
 		}
 		if (e.target.id == "blockBtn"){
 			document.getElementById("popupBg").style.display = "block"
@@ -270,6 +272,8 @@ document.addEventListener("click", (e) => {
 			blockFriendPopup.className = splitPath[5];
 			document.querySelector("#confirmBlockQuestion").innerText = client.langJson['friends']['confirmBlockQuestion'].replace("${USERNAME}", splitPath[5]);
 			document.querySelector("#confirmBlock").ariaLabel = client.langJson['friends']['aria#confirmBlock'].replace("${USERNAME}", splitPath[5]);
+			document.querySelector("#confirmBlock").focus();
+			document.querySelector("#confirmBlock").onkeydown = (e) => {if (e.key == 'Tab'){e.preventDefault()}};
 		}
 		if (e.target.id == "unblockBtn"){
 			const data = {username: splitPath[5]};

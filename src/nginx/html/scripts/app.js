@@ -76,10 +76,10 @@ const accessibilitySlideTabIdxMap = {
 	"#settingsThemeHCDark" : "18",
 	"#settingsThemeDevice" : "19",
 	"#settingsDropDownLang" : "20",
-	"#EN_UK" : "21",
-	"#FR_FR" : "22",
-	"#DE_GE" : "23",
-	"#IT_IT" : "24",
+	"#settingsDropDownLang #EN_UK" : "21",
+	"#settingsDropDownLang #FR_FR" : "22",
+	"#settingsDropDownLang #DE_GE" : "23",
+	"#settingsDropDownLang #IT_IT" : "24",
 }
 
 const errorMap = {
@@ -598,15 +598,6 @@ function isMobile(){
 	return(hasTouchScreen);
 }
 
-function browser(){
-	if (navigator.userAgent.includes("Chrome")){
-		console.log("Chrome")
-	}
-	else if (navigator.userAgent.includes("Mozilla")){
-		console.log("Mozilla")
-	}
-}
-
 window.addEventListener('load', (e) => {
 	const url = new URL(window.location.href);
 	var lang = url.pathname.substring(1, url.pathname.indexOf("/", 1));
@@ -688,7 +679,7 @@ const themeMap = {
 		"--match-bg-rgb": "#393E4600",
 		"--border-rgb": "#00FFF5",
 		"--match-border-rgb": "#00FFF5",
-		"--active-selector-rgb" : "#22283100",
+		"--active-selector-rgb" : "#222831",
 		"--notif-center-border-rgb" : "#00FFF5",
 		"--contest-match-bg-rgb" : "#222831",
 		"--input-focus-border" : "#FFBFF7",
@@ -743,7 +734,7 @@ const themeMap = {
 		"--match-bg-rgb": "#F7EFE500",
 		"--border-rgb": "#7743DB",
 		"--match-border-rgb": "#7743DB",
-		"--active-selector-rgb" : "#2E073F00",
+		"--active-selector-rgb" : "#FFFBF5",
 		"--notif-center-border-rgb" : "#7743DB",
 		"--contest-match-bg-rgb" : "#FFFBF5",
 		"--input-focus-border" : "#2E073F",
@@ -806,25 +797,20 @@ function switchTheme(theme) {
 	if (currentPage == "game" && document.querySelector("#tournamentContainer").style.getPropertyValue("display") != "none") {
 		displayTournament();
 	}
-	if (currentPage == 'friends'){
-		var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
-		var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-
-		document.querySelector("#friendSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${bg} ${slideIdx * 25}%, ${bg} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
-		document.querySelector("#friendSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${underline} ${slideIdx * 25}%, ${underline} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
-	}
-	if (currentPage == "login" && document.querySelector("#loginSlideSelector")){
-		var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
-		var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		if (slideIdx != undefined){
-			if (slideIdx == 1){
-				document.querySelector("#loginSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${bg} 50%, ${bg} 100%, rgba(0,0,0,0) 100%)`;
-				document.querySelector("#loginSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${underline} 50%, ${underline} 100%, rgba(0,0,0,0) 100%)`;
-			}
-			else{
-				document.querySelector("#loginSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${bg} 0%, ${bg} 50%, rgba(0,0,0,0) 50%)`;
-				document.querySelector("#loginSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${underline} 0%, ${underline} 50%, rgba(0,0,0,0) 50%)`;
-			}
+	if (currentPage == 'friends' || currentPage == 'login' || currentPage == 'settings'){
+		const bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+		const underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+		if (currentPage == 'friends'){
+			document.querySelector("#friendSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${bg} ${slideIdx * 25}%, ${bg} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
+			document.querySelector("#friendSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${underline} ${slideIdx * 25}%, ${underline} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
+		}
+		if (currentPage == "login" && document.querySelector("#loginSlideSelector")){
+			document.querySelector("#loginSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 50}%, ${bg} ${slideIdx * 50}%, ${bg} ${(slideIdx * 50) + 50}%, rgba(0,0,0,0) ${(slideIdx * 50) + 50}%)`;
+			document.querySelector("#loginSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 50}%, ${underline} ${slideIdx * 50}%, ${underline} ${(slideIdx * 50) + 50}%, rgba(0,0,0,0) ${(slideIdx * 50) + 50}%)`;
+		}
+		if (currentPage == "settings"){
+			document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 50}%, ${bg} ${slideIdx * 50}%, ${bg} ${(slideIdx * 50) + 50}%, rgba(0,0,0,0) ${(slideIdx * 50) + 50}%)`;
+			document.querySelector("#settingsSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 50}%, ${underline} ${slideIdx * 50}%, ${underline} ${(slideIdx * 50) + 50}%, rgba(0,0,0,0) ${(slideIdx * 50) + 50}%)`;
 		}
 	}
 }
@@ -1502,7 +1488,7 @@ async function loadCurrentLang(){
 		}
 	}
 	if (langJson == null) {
-		currentLangPack = "lang${currentLang}.json";
+		currentLangPack = `lang${currentLang}.json`;
 		const fetchResult = await fetch(`https://${hostname.host}/lang${currentLang}.json`);
 		if (fetchResult.ok){
 			try {

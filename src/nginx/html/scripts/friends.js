@@ -120,6 +120,7 @@ var template = `
 				var save = slideIdx;
 				slideSelector[slideIdx].classList.remove("activeSelector");
 				slideIdx = Array.from(slideSelector).indexOf(e.target.closest(".slideSelector"));
+				slideSelector[slideIdx].blur();
 				if (friendSlides[slideIdx].childElementCount > 0){
 					friendSlides[slideIdx].firstChild.lastChild.focus();
 				}
@@ -136,7 +137,6 @@ var template = `
 	})
 
 	inputSearchUserContainer.style.setProperty("display", "block");
-	slideSelector[slideIdx].focus();
 	dropDownUserContainer.style.setProperty("display", "flex");
 	homeBtn.style.setProperty("display", "block");
 	notifCenterContainer.style.setProperty("display", "flex");
