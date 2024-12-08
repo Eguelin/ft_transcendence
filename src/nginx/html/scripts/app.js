@@ -1325,7 +1325,6 @@ function friendUpdate()
 	socket.onmessage = function (event)
 	{
 		const data = JSON.parse(event.data);
-		console.log(data);
 		if (data.type === "friend_request")
 		{
 			sendNotif(`${client.langJson.friends['incoming_pending_request'].replace("${USERNAME}", data.username)}`, data.username, "friend_request");
