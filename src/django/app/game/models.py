@@ -6,8 +6,8 @@ import random
 
 class MatchManager(models.Manager):
 	def createWithRandomOpps(self, creator):
-		startDate = datetime.datetime(2024,1,1)
-		endDate = datetime.datetime(2024,12,31)
+		startDate = datetime.datetime(datetime.datetime.now().year,1,1)
+		endDate = datetime.datetime(datetime.datetime.now().year,12,31)
 
 		try:
 			player_two = User.objects.get(username="random")
