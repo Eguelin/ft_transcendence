@@ -269,6 +269,27 @@
 	width: 100vw;
 	left: 0;
 	height: 50%;
+	top: calc(5ch + 12.1rem);
+	height: calc(100vh - (5ch + 12.1rem));
+	overflow: auto;
+}
+
+#settingSlides::-webkit-scrollbar{
+	width: .5rem;
+	height: 0rem;
+}
+
+#settingSlides::-webkit-scrollbar-thumb{
+	background-color: var(--main-text-rgb);
+}
+
+#settingSlides::-webkit-scrollbar-track, #settingSlides::-webkit-scrollbar-track-piece{
+	background-color: transparent;
+}
+
+#settingSlides::-webkit-scrollbar-button{
+	height:0rem;
+	width: 0rem;
 }
 
 #settingSlides > *{
@@ -276,17 +297,17 @@
 	flex: none;
 }
 
-.settingSlide#accoutSlide > div{
+.settingSlide#accountSlide > div{
 	text-align: center;
 	width: 20vw;
 	position: relative;
 }
 
 @media screen and (orientation:portrait) {
-	.settingSlide#accoutSlide > div{
+	.settingSlide#accountSlide > div{
 		width: 40vw;
 	}
-	.settingSlide#accoutSlide{
+	.settingSlide#accountSlide{
 	 	.deleteBtn{
 			width: 40vw;
 			border-color: transparent;
@@ -326,10 +347,10 @@
 		.settingSlide{
 			gap: 1.2rem;
 		}
-		.settingSlide#accoutSlide > div{
+		.settingSlide#accountSlide > div{
 			width: 60vw;
 		}
-		.settingSlide#accoutSlide{
+		.settingSlide#accountSlide{
 			.deleteBtn{
 				width: 60vw;
 				border-color: transparent;
@@ -405,4 +426,10 @@
 
 #saveUsernameContainer:focus-within{
 	border-color: var(--input-focus-border);
+}
+
+@media screen and (orientation:landscape) {
+	#accountSlide{
+		gap: 2.2rem;
+	}
 }
