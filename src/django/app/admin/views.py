@@ -32,12 +32,12 @@ def set_user_password(request):
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 	if not request.user.is_staff:
 		return JsonResponse({'message': 'user is not admin'}, status=403)
-	
+
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
-	
+
 	if "username" not in data:
 		return JsonResponse({'message': 'username is missing'}, status=400)
 
@@ -114,7 +114,7 @@ def create_match(request):
 	except KeyError:
 		return JsonResponse({'message':  "Missing Data: " + str(request.body)}, status=400)
 
-	if not isinstance(nbr, int) or nbr < 1 or not isinstance(userOne, str) or not isinstance(userTwo, str):
+	if not isinstance(nbr, int) or nbr < 1 or not userOne or not userTwo or not isinstance(userOne, str) or not isinstance(userTwo, str):
 		return JsonResponse({'message':  "Invalid Data: " + str(request.body)}, status=400)
 
 	matches = {}
@@ -307,12 +307,12 @@ def toggle_staff_on_user(request):
 		return JsonResponse({'message': "Client is not logged"}, status=401)
 	if not request.user.is_staff:
 		return JsonResponse({'message': 'user is not admin'}, status=403)
-	
+
 	try:
 		data = json.loads(request.body)
 	except json.JSONDecodeError:
 		return JsonResponse({'message':  "Invalid JSON: " + str(request.body)}, status=400)
-	
+
 	if "username" not in data:
 		return JsonResponse({'message': 'username is missing'}, status=400)
 
