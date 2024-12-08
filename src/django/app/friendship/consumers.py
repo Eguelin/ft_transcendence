@@ -43,6 +43,7 @@ class friend(AsyncWebsocketConsumer):
 
 	async def friend_status_update(self, event):
 		await self.send(text_data=json.dumps({
+			'type': 'friend_status_update',
 			'username': event['message']['username'],
 			'id': event['message']['id'],
 			'pfp': event['message']['pfp'],
