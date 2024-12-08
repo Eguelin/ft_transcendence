@@ -809,9 +809,9 @@ function switchTheme(theme) {
 	if (currentPage == 'friends'){
 		var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
 		var underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
-		
+
 		document.querySelector("#friendSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${bg} ${slideIdx * 25}%, ${bg} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
-		document.querySelector("#friendSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${underline} ${slideIdx * 25}%, ${underline} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`	
+		document.querySelector("#friendSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) ${slideIdx * 25}%, ${underline} ${slideIdx * 25}%, ${underline} ${(slideIdx * 25)+25}%, rgba(0,0,0,0) ${(slideIdx * 25)+25}%)`
 	}
 	if (currentPage == "login" && document.querySelector("#loginSlideSelector")){
 		var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
@@ -1331,34 +1331,13 @@ function friendUpdate()
 		if (data.type === "friend_request")
 		{
 			sendNotif(`${client.langJson.friends['incoming_pending_request'].replace("${USERNAME}", data.username)}`, data.username, "friend_request");
-			if (currentPage === "friends" && !document.getElementById(`id${data.id}`))
+			if (currentPage === "friends" && !document.querySelector(`#pendingFriendRequestList #id${data.id}`))
 			{
-				fetch('/api/user/current', {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					credentials: 'include'
-				})
-				.then(response => {
-					if (response.ok)
-					{
-						(response.json()).then((text) => {
-						friendRequest = Object.values(text.friend_requests).find(request => request.username === data.username);
-						if (friendRequest)
-						{
-							if (!document.querySelector(`#pendingFriendRequestList #id${data.id}`))
-							{
-								createFriendRequestContainer(friendRequest);
-								document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
-							}
-						}
-						});
-					}
-				});
+				createFriendRequestContainer(data);
+				document.getElementById("pendingFriendRequestSelectorCount").innerHTML = `(${pendingFriendRequestListContainer.childElementCount})`
 			}
 		}
-		else if (data.username && currentPage == "friends")
+		else if (currentPage == "friends")
 		{
 			if (data.is_active)
 			{
@@ -1384,7 +1363,6 @@ function friendUpdate()
 			}
 			else if (data.is_active === false)
 			{
-				console.log("yup1")
 				if (document.querySelector(`#onlineFriendList #id${data.id}`))
 				{
 					document.querySelector(`#onlineFriendList #id${data.id}`).remove();
@@ -1404,6 +1382,7 @@ function friendUpdate()
 		{
 			if (currentPage === "friends")
 			{
+				console.log("friend removed");
 				if (document.querySelector(`#allFriendList #id${data.id}`))
 					document.querySelector(`#allFriendList #id${data.id}`).remove();
 

@@ -38,6 +38,7 @@ class friend(AsyncWebsocketConsumer):
 			'type': "friend_request",
 			'username' : event['username'],
 			'id' : event['id'],
+			'pfp' : event['pfp']
 		}))
 
 	async def friend_status_update(self, event):
@@ -85,7 +86,8 @@ def notify_friend_request_changed(sender, instance, action, pk_set, **kwargs):
 				{
 					"type": "send_friend_request",
 					"username": new_request.user.username,
-					"id" : new_request.user.id
+					"id" : new_request.user.id,
+					"pfp" : new_request.profile_picture
 				}
 			)
 
