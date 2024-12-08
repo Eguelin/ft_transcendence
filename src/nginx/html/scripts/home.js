@@ -82,12 +82,11 @@ var template = `
 										tabIdx += 1;
 									}
 								});
-								setNotifTabIndexes(tabIdx);
 							}
 						})
 					}
 					checkMatchResumeSize();
-					setNotifTabIndexes(tabIdx);
+					setNotifTabIndexes(40);
 				}
 			}
 			catch (error){
@@ -103,6 +102,7 @@ var template = `
 		})()
 
 		document.querySelector("#saveDisplayNameBtn").onkeydown = function(e){if (e.key == "Enter"){e.target.click();}};
+		displayNameInput.onkeydown = function(e){if (e.key == "Enter"){document.querySelector("#saveDisplayNameBtn").click();}};
 
 		document.querySelector("#saveDisplayNameBtn").onclick = function (){
 			displayName = displayNameInput.value;
@@ -124,7 +124,6 @@ var template = `
 								popUpSuccess(langJson['home']['.displayNameUpdated'])
 							else
 								popUpSuccess("Display name successfully updated")
-
 						}
 						else {
 							response.json().then(response => {

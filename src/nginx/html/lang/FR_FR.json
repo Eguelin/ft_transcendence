@@ -81,8 +81,8 @@
 		".mismatchPassword" : "Les mots de passe ne correspondent pas",
 		".forbidenChars" : "Le nom d'utilisateur doit être alphanumérique",
 		".usernameTooLong" : "Le nom d'utilisateur doit comporter 15 caractères ou moins",
-		".passwordMissingLowerCase" : "Le mot de passe doit contenir au moins une lettre majuscule",
-		".passwordMissingUpperCase" : "Le mot de passe doit contenir au moins une lettre minuscule",
+		".passwordMissingUpperCase" : "Le mot de passe doit contenir au moins une lettre majuscule",
+		".passwordMissingLowerCase" : "Le mot de passe doit contenir au moins une lettre minuscule",
 		".passwordMissingDigit" : "Le mot de passe doit contenir au moins un chiffre",
 		".passwordMissingSpec" : "Le mot de passe doit contenir au moins un caractère spécial",
 		".invalidResponse": "Réponse invalide de l'API 42, veuillez réessayer plus tard",
@@ -145,6 +145,7 @@
 		"invalidValue" : "Valeur invalide",
 		"invalidLanguagePack" : "Nom du dictionnaire non valide, doit être 'DE_GE', 'EN_UK', 'FR_FR' ou 'IT_IT",
 		"invalidThemeName" : "Nom de thème non valide, doit être 'dark', 'light', 'high_dark', 'high_light' ou 'browser'",
+		"profileUpdated": "Profil mis à jour avec succès",
 		".errorReadingFile" : "Une erreur s'est produite lors de la lecture du fichier"
 	},
 	"friends":{

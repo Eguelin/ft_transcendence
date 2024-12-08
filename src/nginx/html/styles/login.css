@@ -81,15 +81,6 @@
 	background: none !important;
 }
 
-#slideSelectorBg{
-	background: var(--active-selector-rgb);
-	position: absolute;
-	width: 50%;
-	height: 2rem;
-	border-bottom: 1px solid var(--main-text-rgb);
-	z-index: -2;
-}
-
 
 #loginSlideSelector > div{
 	width: 50%;
@@ -101,7 +92,7 @@
 	color: var(--hover-text-rgb);
 }
 
-#loginSlideSelector div:hover, #loginSlideSelector .activeSelector {
+#loginSlideSelector .activeSelector {
 	font-size: calc(1em + 2px);
 }
 
@@ -183,4 +174,21 @@
 
 #loginSlideSelector .slideSelector{
 	padding: .5rem;
+}
+
+#registerPasswordStrengh{
+    width: auto;
+    display: block;
+    position: absolute;
+	left: 50%;
+    translate: -50% -1.2rem;
+    font-size: .9rem;
+	color: red;
+}
+
+.mobile{
+	#registerPasswordStrengh{
+		width: 100%;
+		translate: -50% 4.2rem;
+	}
 }
