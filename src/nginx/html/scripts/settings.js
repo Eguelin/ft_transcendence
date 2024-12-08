@@ -12,7 +12,7 @@ var leftSlideBtn;
 var confirmDeleteInput;
 var confirmPfpBtn;
 
-var accoutSlide = `
+var accountSlide = `
 <div id="saveUsernameContainer">
 	<input autoclomplete="off" tabindex="13" type="text" id="inputChangeUsername" class="formInput" name="username" placeholder="Username"/>
 	<div tabindex="14" id="saveUsernameBtn"></div>
@@ -108,7 +108,7 @@ var template = `
 			</div>
 			<div style="position: relative;">
 				<div id="settingSlides">
-					<div class="settingSlide" id="accoutSlide">${accoutSlide}</div>
+					<div class="settingSlide" id="accountSlide">${accountSlide}</div>
 					<div class="settingSlide" id="accessibilitySlide">${accessibilitySlide}</div>
 				</div>
 			</div>
@@ -155,24 +155,28 @@ function settingsSlide(formerIdx, newerIdx){
 	if (formerIdx == newerIdx)
 		return;
 
-	var tmp = document.querySelector("#settingSlides");
-	var left = tmp.getBoundingClientRect().left;
-	var move = [
-		{ left: `${left}px`},
-		{ left: `-${slideIdx}00vw`}
-	];
+	var move = [];
+	var increment = slideIdx == 0 ? -2 : 2;
+	let i = slideIdx == 0 ? 150 : 50;
+	for (;i<=150 && i >= 50;i += increment){
+		move.push({translate: `-${i}%`});
+	}
+
 	var time = {
 		duration: 500,
 		iterations: 1,
 	}
-	tmp.animate(move, time);
-	tmp.style.setProperty("left", `-${slideIdx}00vw`)
+	document.querySelector("#accessibilitySlide").animate(move, time);
+	document.querySelector("#accountSlide").animate(move, time);
+	document.querySelector("#accessibilitySlide").style.translate = `-${slideIdx * 100 + 50}%`;
+	document.querySelector("#accountSlide").style.translate = `-${slideIdx * 100 + 50}%`;
+	setTimeout(function(){document.body.offsetWidth;}, 500);
 
 	const bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
 	const underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 	var move = [], moveUnderline = [];
 	var increment = slideIdx == 1 ? 1 : -1;
-	let i = slideIdx == 1 ? 0 : 50;
+	i = slideIdx == 1 ? 0 : 50;
 	for (;i<=50 && i >= 0;i += increment){
 		move.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
 		moveUnderline.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${underline} ${i}%, ${underline} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
@@ -286,7 +290,8 @@ function settingsSlide(formerIdx, newerIdx){
 	window.onkeydown = settingsKeyDownEvent
 
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector")
-	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
+	document.querySelector("#accessibilitySlide").style.translate = `-${slideIdx * 100 + 50}%`;
+	document.querySelector("#accountSlide").style.translate = `-${slideIdx * 100 + 50}%`;
 
 	const bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
 	const underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");

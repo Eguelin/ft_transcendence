@@ -440,8 +440,8 @@
 }
 
 #replayButton:hover,#replayButton:focus, #quitBtn:hover,#quitBtn:focus{
-	color: var(--page-bg-rgb);
-	border-color: transparent;
+	color: var(--option-hover-rgb);
+	border-color: var(--hover-text-rgb);
 }
 
 #winContainer *{
