@@ -821,19 +821,5 @@ document.getElementById("fontSizeRange").addEventListener("input", (e) => {
 document.getElementById("fontSizeRange").onfocus = null;
 document.getElementById("fontSizeRange").onblur = settingsKeyDownEvent;
 
-<<<<<<< HEAD
-document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
-	window.onkeydown = settingsKeyDownEvent
-})
-
-usernameInput.addEventListener("focus", (e) => {
-	window.onkeydown = null
-})
-
-usernameInput.addEventListener("focusout", (e) => {
-	window.onkeydown = settingsKeyDownEvent
-})
-=======
 usernameInput.onfocus = null;
 usernameInput.onblur = settingsKeyDownEvent;
->>>>>>> origin/front
