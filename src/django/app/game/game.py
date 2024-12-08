@@ -9,7 +9,7 @@ import random
 import math
 import time
 
-MAX_SCORE = 1
+MAX_SCORE = 5
 
 class Matchmaking():
 	_instance = None
