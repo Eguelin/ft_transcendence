@@ -59,6 +59,9 @@ var template = `
 	history.replaceState("","",`https://${hostname.host}/${currentLang}/admin`)
 	document.getElementById("container").innerHTML = template;
 	notifCenterContainer.style.setProperty("display", "none");
+	inputSearchUserContainer.style.setProperty("display", "none");
+	dropDownUserContainer.style.setProperty("display", "flex");
+	homeBtn.style.setProperty("display", "block");
 
     createUserBtn = document.getElementById("createUserBtn");
     createUserBtn.addEventListener("click", (e) => {
