@@ -236,7 +236,7 @@
 }
 
 .slideSelector{
-	z-index: 1;
+	z-index: 0;
 	font-size: 1em;
 }
 
@@ -309,19 +309,19 @@
 	background: green;
 }
 
-#friendInfo #slideSelectorBg{
-	width: 25%;
-	height: inherit;
-	border-bottom: 2px solid var(--main-text-rgb) !important;
-	left: 0;
-}
-
 .gradient{
 	display: none;
 }
 
 @media screen and (orientation:portrait) {
 	.mobile{	
+		#deleteFriendPopup, #blockFriendPopup, #confirmDeletePopup, #confirmPasswordPopup{
+			input, button{
+				width: 70vw;
+			}
+			min-width: 70vw;
+		}
+
 		#friendSlideSelector{
 			width: 100vw;
 			z-index: 20;

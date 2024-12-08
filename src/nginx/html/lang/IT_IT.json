@@ -81,8 +81,8 @@
 		".mismatchPassword" : "Le password non corrispondono",
 		".forbidenChars" : "Il nome utente deve essere alfanumerico",
 		".usernameTooLong" : "Il nome utente deve essere di 15 caratteri o meno",
-		".passwordMissingLowerCase" : "La password deve contenere almeno una lettera maiuscola",
-		".passwordMissingUpperCase" : "La password deve contenere almeno una lettera minuscola",
+		".passwordMissingUpperCase" : "La password deve contenere almeno una lettera maiuscola",
+		".passwordMissingLowerCase" : "La password deve contenere almeno una lettera minuscola",
 		".passwordMissingDigit" : "La password deve contenere almeno una cifra",
 		".passwordMissingSpec" : "La password deve contenere almeno un carattere speciale",
 		".invalidResponse": "Risposta non valida dall'API 42, riprova più tardi",
@@ -145,6 +145,7 @@
 		"invalidValue" : "Valore non valido",
 		"invalidLanguagePack" : "Valore language_pack non valido, dovrebbe essere 'DE_GE', 'EN_UK', 'FR_FR' o 'IT_IT'",
 		"invalidThemeName" : "Valore theme_name non valido, dovrebbe essere 'dark', 'light', 'high_dark', 'high_light' o 'browser'",
+		"profileUpdated": "Profilo aggiornato con successo",
 		".errorReadingFile" : "Si è verificato un errore durante la lettura del file"
 	},
 	"friends":{

@@ -96,12 +96,14 @@ var template = `
 <div id="pageContentContainer">
 	<div id="settingsPage">
 		<div id="settingSlidesContainer">
-			<div id="settingsSlideSelector">
-				<div id="accountSelector" class="slideSelector" tabindex="12">
-					<div id="accountSelectorText">Account</div>
-				</div>
-				<div id="accessibilitySelector" class="slideSelector" tabindex="13">
-					<div id="accessibilitySelectorText">Accessibility</div>
+			<div id="settingsSlideSelectorContainer">
+				<div id="settingsSlideSelector">
+					<div id="accountSelector" class="slideSelector" tabindex="12">
+						<div id="accountSelectorText">Account</div>
+					</div>
+					<div id="accessibilitySelector" class="slideSelector" tabindex="13">
+						<div id="accessibilitySelectorText">Accessibility</div>
+					</div>
 				</div>
 			</div>
 			<div style="position: relative;">
@@ -150,6 +152,8 @@ var template = `
 
 
 function settingsSlide(formerIdx, newerIdx){
+	if (formerIdx == newerIdx)
+		return;
 
 	var tmp = document.querySelector("#settingSlides");
 	var left = tmp.getBoundingClientRect().left;
@@ -164,12 +168,14 @@ function settingsSlide(formerIdx, newerIdx){
 	tmp.animate(move, time);
 	tmp.style.setProperty("left", `-${slideIdx}00vw`)
 
-	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
-	var move = [];
+	const bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	const underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
+	var move = [], moveUnderline = [];
 	var increment = slideIdx == 1 ? 1 : -1;
 	let i = slideIdx == 1 ? 0 : 50;
 	for (;i<=50 && i >= 0;i += increment){
 		move.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${bg} ${i}%, ${bg} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
+		moveUnderline.push({background : `linear-gradient(90deg,rgba(0,0,0,0) ${i}%, ${underline} ${i}%, ${underline} ${i + 50}%, rgba(0,0,0,0) ${i + 50}%)`});
 	}
 	var time = {
 		duration: 500,
@@ -177,6 +183,8 @@ function settingsSlide(formerIdx, newerIdx){
 	}
 	document.querySelector("#settingsSlideSelector").animate(move, time);
 	document.querySelector("#settingsSlideSelector").style.background = move[move.length - 1].background;
+	document.querySelector("#settingsSlideSelectorContainer").animate(moveUnderline, time);
+	document.querySelector("#settingsSlideSelectorContainer").style.background = moveUnderline[moveUnderline.length - 1].background;
 
 	if (newerIdx == 0){
 		try{
@@ -280,12 +288,16 @@ function settingsSlide(formerIdx, newerIdx){
 	settingsSlideSelector = document.querySelectorAll("#settingsSlideSelector .slideSelector")
 	document.querySelector("#settingSlides").style.setProperty("left", `-${slideIdx}00vw`)
 
-	var bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	const bg = window.getComputedStyle(document.documentElement).getPropertyValue("--active-selector-rgb")
+	const underline = window.getComputedStyle(document.documentElement).getPropertyValue("--main-text-rgb");
 	if (slideIdx == 1){
 		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${bg} 50%, ${bg} 100%, rgba(0,0,0,0) 100%)`;
+		document.querySelector("#settingsSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 50%, ${underline} 50%, ${underline} 100%, rgba(0,0,0,0) 100%)`;
 	}
-	else
+	else{
 		document.querySelector("#settingsSlideSelector").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${bg} 0%, ${bg} 50%, rgba(0,0,0,0) 50%)`;
+		document.querySelector("#settingsSlideSelectorContainer").style.background = `linear-gradient(90deg,rgba(0,0,0,0) 0%, ${underline} 0%, ${underline} 50%, rgba(0,0,0,0) 50%)`;
+	}
 	settingsSlideSelector[slideIdx].classList.add('activeSelector');
 
 	settingsSlideSelector.forEach(function(key) {
@@ -295,6 +307,7 @@ function settingsSlide(formerIdx, newerIdx){
 			settingsSlide(save, slideIdx);
 			settingsSlideSelector[save].classList.remove("activeSelector");
 			settingsSlideSelector[slideIdx].classList.add('activeSelector');
+			settingsSlideSelector[slideIdx].blur();
 		})
 		key.onkeydown = (e) => {
 			if (e.key == "Enter")
@@ -306,6 +319,7 @@ function settingsSlide(formerIdx, newerIdx){
 	}
 	else{
 		document.querySelector("#confirmChangePasswordBtn").addEventListener("click", (e) => {
+
 			var oldPasswordInput = document.querySelector("#inputOldPassword");
 			var newPasswordInput = document.querySelector("#inputNewPassword");
 			var newCPasswordInput = document.querySelector("#inputNewCPassword");
@@ -370,13 +384,28 @@ function settingsSlide(formerIdx, newerIdx){
 				})
 			}
 		})
-		document.querySelector("#confirmChangePasswordBtn").addEventListener("keydown", (e) => {if (e.key == "Enter"){e.target.click();}});
+		document.querySelectorAll("#confirmPasswordPopup input").forEach(function(elem){elem.onkeydown = (e) => {if (e.key == "Enter") {document.querySelector("#confirmChangePasswordBtn").click()}}})
+		document.querySelector("#confirmChangePasswordBtn").addEventListener("keydown", (e) => {
+			if (e.key == 'Tab' && !e.shiftKey){
+				e.preventDefault();
+				document.querySelector("#inputOldPassword").focus();
+			}
+		});
+		document.querySelector("#inputOldPassword").addEventListener("keydown",(e)=>{
+			if (e.key == 'Tab' && e.shiftKey){
+				e.preventDefault();
+				document.querySelector("#confirmChangePasswordBtn").focus();
+			}
+		})
 
 		document.querySelector("#changePasswordBtn").addEventListener("click", (e) => {
-			window.onkeydown = null
+			window.onkeydown = settingsKeyDownEvent;
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPasswordPopup").style.setProperty("display", "flex");
+			document.querySelector("#inputOldPassword").focus();
 		});
+		document.querySelector("#changePasswordBtn").onfocus = null;
+		document.querySelector("#changePasswordBtn").onblur = settingsKeyDownEvent;
 	}
 	setNotifTabIndexes(26);
 
@@ -384,12 +413,7 @@ function settingsSlide(formerIdx, newerIdx){
 
 var buf = "";
 
-document.querySelectorAll("#pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){
-	elem.addEventListener("keydown", (e) => {
-		if (e.key == "Enter")
-			elem.click();
-	})
-})
+document.querySelectorAll("#pfpLabel, #saveUsernameBtn, #confirmDeleteBtn").forEach(function (elem){elem.onkeydown = (e) => { if(e.key == "Enter"){elem.click();}}});
 
 pfpInput.addEventListener("change", (e) => {
 	if (pfpInput.files.length >= 1){
@@ -410,10 +434,12 @@ pfpInput.addEventListener("change", (e) => {
 					popUpError("An error occurred while reading the file");
 				return;
 			}
-			window.onkeydown = null
+			window.onkeydown = settingsKeyDownEvent
 			document.getElementById("popupBg").style.setProperty("display", "block");
 			document.getElementById("confirmPfpContainer").style.setProperty("display", "flex")
 			document.getElementById("confirmPfpImg").setAttribute("src", `data:image/;base64,${buf}`);
+			confirmPfpBtn.focus();
+			confirmPfpBtn.onkeydown = (e) => {if (e.key == 'Tab'){e.preventDefault()}}
 		}
 	}
 })
@@ -448,6 +474,7 @@ confirmPfpBtn.addEventListener("click", (e) => {
 		else{
 			(async () => {
 				try {
+					popUpSuccess(langJson['settings']['profileUpdated']);
 					client = await new Client()
 					if (!client)
 						myReplaceState(`https://${hostname.host}/${currentLang}/login#login`);
@@ -501,6 +528,7 @@ saveUsernameBtn.addEventListener("click", (e) => {
 							console.error(e);
 							unsetLoader();
 						}
+						popUpSuccess(langJson['settings']['profileUpdated']);
 					})()
 				}
 				else {
@@ -521,8 +549,9 @@ saveUsernameBtn.addEventListener("click", (e) => {
 	}
 })
 
+usernameInput.onkeydown = (e)=> {if(e.key == "Enter"){saveUsernameBtn.click();}}
+
 deleteAccountBtn.addEventListener("click", (e) => {
-	window.onkeydown = null
 	document.getElementById("popupBg").style.setProperty("display", "block");
 	document.getElementById("confirmDeletePopup").style.setProperty("display", "flex");
 	document.getElementById("confirmDeleteDialogVar").innerText = client.username;
@@ -752,14 +781,14 @@ document.querySelectorAll(".settingsDropDown").forEach(function (elem) {
 })
 
 function settingsKeyDownEvent(e) {
-	if (e.key == "Escape" && document.getElementById("popupBg").style.getPropertyValue("display") != "none"){
+	if (e.key == "Escape" && window.getComputedStyle(document.getElementById("popupBg")).display != "none"){
 		document.getElementById("popupBg").style.setProperty("display", "none");
 		document.getElementById("confirmDeletePopup").style.setProperty("display", "none");
 		document.getElementById("confirmPasswordPopup").style.setProperty("display", "none");
 		document.getElementById("confirmPfpContainer").style.setProperty("display", "none")
 		window.onkeydown = settingsKeyDownEvent
 	}
-	if (e.key == "ArrowLeft" || e.key == "ArrowRight") {
+	if ((e.key == "ArrowLeft" || e.key == "ArrowRight") && window.getComputedStyle(document.getElementById("popupBg")).display == "none") {
 		var save = slideIdx;
 		var tmp = document.querySelector("#settingSlides");
 		if (e.key == "ArrowLeft")
@@ -789,10 +818,10 @@ document.getElementById("fontSizeRange").addEventListener("input", (e) => {
 	document.documentElement.style.setProperty("--font-size-amplifier", e.target.value);
 })
 
-document.getElementById("fontSizeRange").addEventListener("focus", (e) =>{
-	window.onkeydown = null
-})
+document.getElementById("fontSizeRange").onfocus = null;
+document.getElementById("fontSizeRange").onblur = settingsKeyDownEvent;
 
+<<<<<<< HEAD
 document.getElementById("fontSizeRange").addEventListener("focusout", (e) =>{
 	window.onkeydown = settingsKeyDownEvent
 })
@@ -804,3 +833,7 @@ usernameInput.addEventListener("focus", (e) => {
 usernameInput.addEventListener("focusout", (e) => {
 	window.onkeydown = settingsKeyDownEvent
 })
+=======
+usernameInput.onfocus = null;
+usernameInput.onblur = settingsKeyDownEvent;
+>>>>>>> origin/front

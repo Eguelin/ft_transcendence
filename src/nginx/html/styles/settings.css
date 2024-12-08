@@ -54,8 +54,7 @@
 	mask-position:center;
 	mask-repeat:no-repeat;
 
-	position: absolute;
-	right: 1ch;
+	position: relative;
 }
 
 #saveUsernameBtn:hover, #saveUsernameBtn:focus, #savePasswordBtn:hover, #savePasswordBtn:focus {
@@ -65,8 +64,9 @@
 #saveUsernameContainer, #changePasswordContainer{
 	display: flex;
 	align-items: center;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	border-radius: 1rem;
+	transition: 500ms;
 }
 
 #saveUsernameContainer{
@@ -79,7 +79,7 @@
 	width: 20vw;
 	background-position: center center;
 	background-repeat: no-repeat;
-	background-color: var(--hover-text-rgb);
+	background-color: var(--input-bg-rgb);
 	overflow: hidden;
 	position: absolute;
 
@@ -102,6 +102,8 @@
 	border-top: 1px solid var(--main-text-rgb);
 	outline: none;
 	align-self: center;
+	font-size: 1rem;
+	width: 100%;
 }
 
 #confirmPfpBtn:hover, #confirmPfpBtn:focus{
@@ -125,6 +127,7 @@
 	align-content: center;
 	color: var(--main-text-rgb);
 	width: 25vw;
+	word-break: break-word;
 }
 
 #fontSizeRange{
@@ -236,6 +239,10 @@
 }
 
 
+#settingsSlideSelectorContainer{
+	height: 2.1rem;
+}
+
 #settingsSlideSelector .slideSelector:focus,#settingsSlideSelector .slideSelector:hover{
 	color: var(--hover-text-rgb) !important;
 }
@@ -313,6 +320,12 @@
 
 
 	.mobile{
+		#settingSlidesContainer{
+			gap : 1.2rem;
+		}
+		.settingSlide{
+			gap: 1.2rem;
+		}
 		.settingSlide#accoutSlide > div{
 			width: 60vw;
 		}
@@ -343,6 +356,7 @@
 		}
 	
 		#fontSizeRangeText, #fontSizeRange, #fontSizeList, #fontSizeRangeContainer > div{
+			word-break: break-word;
 			width: inherit;
 		}
 	
@@ -368,12 +382,17 @@
 	font-size: 1rem;
 }
 
+#confirmChangePasswordBtn{
+	background: var(--popup-input-bg-rgb);
+}
+
 #changePasswordContainer{
 	background-color: transparent;
 }
 
 #inputChangeUsername{
 	anchor-name: --input-change-name;
+	width: calc(100% - 5rem);
 }
 
 .popupInput{

@@ -43,6 +43,7 @@ body{
 	margin: 0;
 	user-select: none;
 	color : var(--main-text-rgb);
+	transition: 500ms;
 }
 
 html{
@@ -133,6 +134,7 @@ button{
 	border-radius: 1rem;
 	background-color: var(--input-bg-rgb);
 	outline: none;
+	transition: 500ms;
 }
 
 
@@ -181,6 +183,7 @@ input{
 	padding: 1rem;
 	width: 18vw;
 	text-overflow: ellipsis;
+	transition: 500ms;
 }
 
 

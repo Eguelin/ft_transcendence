@@ -141,7 +141,7 @@ div#usernameBtn:focus, div#usernameBtn:hover {
 
 
 .incoming#pushNotif{
-	width: 20rem;
+	width: 18rem;
 	animation: pushNotifAppear 300ms forwards, pushNotifDisappearBg 5s linear 300ms forwards;
 	border: .1rem solid var(--main-text-rgb);
 }
@@ -170,6 +170,7 @@ div#usernameBtn:focus, div#usernameBtn:hover {
 	border: .1rem solid var(--border-rgb);
     border-right: 0 !important;
 	overflow: hidden;
+	transition: 500ms;
 }
 
 .openCenter #pushNotif, .quickOpenCenter #pushNotif, .closeCenter #pushNotif{
@@ -336,6 +337,7 @@ div#usernameBtn:focus, div#usernameBtn:hover {
 .openCenter#notifCenterContainer{
 	animation: pushNotifAppear 300ms linear forwards;
 	height: 50%;
+	overflow: hidden;
 }
 
 .quickOpenCenter#notifCenterContainer{
