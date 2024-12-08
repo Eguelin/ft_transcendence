@@ -1565,7 +1565,7 @@ async function loadCurrentLang(){
 		}
 	}
 	if (langJson == null) {
-		currentLangPack = "lang${currentLang}.json";
+		currentLangPack = `lang${currentLang}.json`;
 		const fetchResult = await fetch(`https://${hostname.host}/lang${currentLang}.json`);
 		if (fetchResult.ok){
 			try {
